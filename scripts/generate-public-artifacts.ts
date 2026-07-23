@@ -114,6 +114,7 @@ function catalogArtifact() {
       vocabulary: `${siteUrl}/data/v1/vocabulary.json`,
       recipeTemplate: `${siteUrl}/data/v1/recipes/{id}.json`,
       schema: `${siteUrl}/data/v1/schema.json`,
+      pricing: `${siteUrl}/pricing.txt`,
       llms: `${siteUrl}/llms.txt`,
       llmsFull: `${siteUrl}/llms-full.txt`
     },
@@ -418,6 +419,7 @@ function llmsArtifact() {
     `- Website: ${siteUrl}/en/`,
     `- Chinese website: ${siteUrl}/zh/`,
     `- Source: ${repositoryUrl}`,
+    `- Pricing: ${siteUrl}/pricing.txt (free; no account required)`,
     `- Catalog JSON: ${siteUrl}/data/v1/catalog.json`,
     `- Vocabulary JSON: ${siteUrl}/data/v1/vocabulary.json`,
     `- JSON Schema: ${siteUrl}/data/v1/schema.json`,
@@ -444,6 +446,26 @@ function llmsArtifact() {
   }
 
   return `${lines.join("\n").trim()}\n`;
+}
+
+function pricingArtifact() {
+  return `# Pricing — Motion Lexicon
+
+## Free
+
+- Price: $0
+- Billing: None
+- Account required: No
+- Website: ${siteUrl}
+- CLI: ${cliCommand}
+- Agent Skill: ${skillCommand}
+- Source: ${repositoryUrl}
+- Code license: MIT
+- Vocabulary and editorial content license: CC BY 4.0
+- Generated code snippets license: 0BSD
+- Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
+- Last updated: 2026-07-23
+`;
 }
 
 function llmsFullArtifact() {
@@ -488,6 +510,7 @@ function jsonArtifact(relativePath: string, value: unknown): Artifact {
 
 export function buildPublicArtifacts(): Artifact[] {
   return [
+    { relativePath: "pricing.txt", content: pricingArtifact() },
     { relativePath: "llms.txt", content: llmsArtifact() },
     { relativePath: "llms-full.txt", content: llmsFullArtifact() },
     jsonArtifact("data/v1/schema.json", schemaArtifact()),

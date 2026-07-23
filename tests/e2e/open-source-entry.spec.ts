@@ -27,4 +27,8 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
   const llmsResponse = await request.get("/llms.txt");
   expect(llmsResponse.ok()).toBe(true);
   expect(await llmsResponse.text()).toContain("# Motion Lexicon");
+
+  const pricingResponse = await request.get("/pricing.txt");
+  expect(pricingResponse.ok()).toBe(true);
+  expect(await pricingResponse.text()).toContain("- Price: $0");
 });

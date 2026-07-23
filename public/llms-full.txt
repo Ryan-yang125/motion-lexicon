@@ -5,6 +5,7 @@
 - Website: https://motion-lexicon.pages.dev/en/
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Source: https://github.com/Ryan-yang125/motion-lexicon
+- Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
 - Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
 - JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json

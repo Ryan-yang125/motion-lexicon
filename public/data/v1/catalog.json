@@ -22,6 +22,7 @@
     "vocabulary": "https://motion-lexicon.pages.dev/data/v1/vocabulary.json",
     "recipeTemplate": "https://motion-lexicon.pages.dev/data/v1/recipes/{id}.json",
     "schema": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+    "pricing": "https://motion-lexicon.pages.dev/pricing.txt",
     "llms": "https://motion-lexicon.pages.dev/llms.txt",
     "llmsFull": "https://motion-lexicon.pages.dev/llms-full.txt"
   },

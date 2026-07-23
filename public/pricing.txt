@@ -1,0 +1,16 @@
+# Pricing — Motion Lexicon
+
+## Free
+
+- Price: $0
+- Billing: None
+- Account required: No
+- Website: https://motion-lexicon.pages.dev
+- CLI: npx github:Ryan-yang125/motion-lexicon
+- Agent Skill: npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
+- Source: https://github.com/Ryan-yang125/motion-lexicon
+- Code license: MIT
+- Vocabulary and editorial content license: CC BY 4.0
+- Generated code snippets license: 0BSD
+- Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
+- Last updated: 2026-07-23

@@ -80,4 +80,22 @@ describe("public machine-readable artifacts", () => {
       for (const command of expectedCommands) expect(content, filename).toContain(command);
     }
   });
+
+  it("publishes a machine-readable free pricing statement", async () => {
+    const pricing = await readArtifact("pricing.txt");
+    const catalog = await parseArtifact("data/v1/catalog.json") as unknown as {
+      endpoints: { pricing: string };
+    };
+
+    expect(pricing).toContain("- Price: $0");
+    expect(pricing).toContain("- Account required: No");
+    expect(pricing).toContain("- Billing: None");
+    expect(catalog.endpoints.pricing).toBe("https://motion-lexicon.pages.dev/pricing.txt");
+
+    for (const filename of ["llms.txt", "llms-full.txt"]) {
+      expect(await readArtifact(filename), filename).toContain(
+        "https://motion-lexicon.pages.dev/pricing.txt (free; no account required)"
+      );
+    }
+  });
 });
