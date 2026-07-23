@@ -33,7 +33,7 @@
   },
   "exports": {
     ".": {
-      "types": "./packages/cli/dist/index.d.ts",
+      "types": "./packages/cli/dist/types/packages/cli/src/index.d.ts",
       "import": "./packages/cli/dist/index.js"
     },
     "./package.json": "./package.json"
@@ -101,13 +101,13 @@
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "esbuild": "^0.28.1",
     "globals": "^15.14.0",
     "jsdom": "^25.0.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
-    "tsup": "^8.5.0",
     "vite": "^6.0.5",
-    "vitest": "^2.1.8"
+    "vitest": "^4.1.10"
   }
 }
