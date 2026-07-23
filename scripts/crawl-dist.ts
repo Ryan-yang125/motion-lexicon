@@ -259,6 +259,10 @@ for (const header of [
 
 const redirects = readFileSync(path.join("dist", "_redirects"), "utf8");
 assert(redirects.includes(`/ ${pathFor(defaultLocale)} 301`), "Root redirect must point to the canonical default locale URL");
+assert(
+  redirects.includes("/.well-known/security.txt /security.txt 301"),
+  "Security contact discovery must resolve through the root fallback"
+);
 for (const redirect of staticRedirects()) {
   assert(
     redirects.includes(`${redirect.source} ${redirect.destination} ${redirect.status}`),
@@ -268,7 +272,7 @@ for (const redirect of staticRedirects()) {
   assert(sitemapRouteSet.has(destinationPath), `Redirect destination is not canonical: ${redirect.destination}`);
 }
 const redirectLines = redirects.trim().split("\n").filter(Boolean);
-assert(redirectLines.length === staticRedirects().length, "Built redirects contain unsupported or stale rules");
+assert(redirectLines.length === staticRedirects().length + 1, "Built redirects contain unsupported or stale rules");
 
 const notFoundHtml = readFileSync(path.join("dist", "404.html"), "utf8");
 assert(notFoundHtml.includes('name="robots" content="noindex,follow"'), "404 page must be excluded from indexing");

@@ -37,5 +37,7 @@
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 /.well-known/security.txt
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/security.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /404.html
   Cache-Control: no-store

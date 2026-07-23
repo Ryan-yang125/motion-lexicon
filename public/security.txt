@@ -1,0 +1,5 @@
+Contact: https://github.com/Ryan-yang125/motion-lexicon/security/advisories/new
+Expires: 2027-07-23T00:00:00.000Z
+Preferred-Languages: zh, en
+Canonical: https://motion-lexicon.pages.dev/.well-known/security.txt
+Policy: https://github.com/Ryan-yang125/motion-lexicon/security/policy

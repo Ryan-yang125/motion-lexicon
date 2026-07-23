@@ -106,6 +106,7 @@ async function writeRedirects() {
   const rules = staticRedirects().map(
     ({ source, destination, status }) => `${source} ${destination} ${status}`
   );
+  rules.push("/.well-known/security.txt /security.txt 301");
   await writeFile(path.join(distDir, "_redirects"), `${rules.join("\n")}\n`, "utf8");
 }
 
