@@ -92,7 +92,7 @@
     "react-i18next": "^15.6.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "^4.1.11",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.18",
