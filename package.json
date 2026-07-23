@@ -90,7 +90,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "esbuild": "^0.28.1",
-    "eslint": "^9.17.0",
+    "eslint": "^10.7.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
