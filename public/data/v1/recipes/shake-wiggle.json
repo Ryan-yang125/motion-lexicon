@@ -1,0 +1,127 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "shake-wiggle",
+  "canonicalId": "shake-wiggle",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "摇晃 / 抖动",
+    "en": "Shake / Wiggle"
+  },
+  "summary": {
+    "zh": "用一次短促横向摆动提示错误或需要关注的输入。",
+    "en": "Use one brief horizontal shake for errors or inputs that need attention."
+  },
+  "definition": {
+    "zh": "快速左右抖动，用来提示错误或输入被拒绝。",
+    "en": "A rapid alternating displacement flags invalid input or a rejected action."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/shake-wiggle/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/shake-wiggle.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 10,
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "cycles",
+      "kind": "range",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "摆动次数",
+        "en": "Cycles"
+      },
+      "description": {
+        "zh": "调节摆动次数。",
+        "en": "Adjusts cycles."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用一次短促横向动作提示错误、拒绝或需要关注的输入。",
+      "en": "Use one brief horizontal motion to signal an error, rejection, or input needing attention."
+    },
+    "frequency": {
+      "zh": "仅在明确错误时低频使用；连续验证期间避免反复摇晃。",
+      "en": "Use infrequently for explicit errors and avoid repetition during continuous validation."
+    },
+    "trigger": {
+      "zh": "由提交失败或服务器拒绝触发，同时展示可读错误信息。",
+      "en": "Trigger on submission failure or server rejection while showing readable error text."
+    },
+    "enterExit": {
+      "zh": "错误出现时完成 2–3 次衰减摆动，状态解除时不播放反向动画。",
+      "en": "Run 2–3 decaying oscillations when the error appears, with no reverse animation when cleared."
+    },
+    "interruptibility": {
+      "zh": "新输入立即停止摇晃；重复错误只在用户再次提交后触发。",
+      "en": "Stop shaking on new input and retrigger only after another submission."
+    },
+    "gestureRules": {
+      "zh": "无需手势；焦点移到错误摘要或首个无效字段，并保持键盘路径清楚。",
+      "en": "No gesture is required; move focus to an error summary or first invalid field with a clear keyboard path."
+    }
+  },
+  "reducedMotion": {
+    "zh": "移除位移，使用错误边框、图标和文本；必要时保留一次短颜色脉冲。",
+    "en": "Remove travel and use error border, icon, and text, with at most one brief color pulse."
+  },
+  "reviewNotes": [
+    {
+      "zh": "摇晃不能替代错误文案。",
+      "en": "Never rely on shaking in place of error copy."
+    },
+    {
+      "zh": "控制幅度，避免整页或大容器移动。",
+      "en": "Keep amplitude small and avoid moving a page or large container."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "press-tap-feedback",
+    "hold-to-confirm"
+  ]
+}

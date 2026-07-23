@@ -1,0 +1,141 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "orbit",
+  "canonicalId": "orbit",
+  "categoryId": "loops",
+  "family": "loop",
+  "surfaceType": "component",
+  "scene": "orbit",
+  "name": {
+    "zh": "环绕",
+    "en": "Orbit"
+  },
+  "summary": {
+    "zh": "让装饰节点围绕中心缓慢运行，适合低频状态展示。",
+    "en": "Move a decorative node slowly around a center for low-frequency status displays."
+  },
+  "definition": {
+    "zh": "一个元素沿连续路径围绕另一个元素旋转。",
+    "en": "An element follows a closed path around a center or companion object."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/loops/orbit/",
+    "en": "https://motion-lexicon.pages.dev/en/loops/orbit/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/orbit.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 6000,
+      "min": 2000,
+      "max": 16000,
+      "step": 100,
+      "unit": "ms",
+      "label": {
+        "zh": "单轮时长",
+        "en": "Cycle duration"
+      },
+      "description": {
+        "zh": "控制完整循环的节奏；持续动态需要支持暂停并保持低干扰。",
+        "en": "Controls the rhythm of one full cycle; continuous motion should stay pausable and low-distraction."
+      }
+    },
+    {
+      "id": "radius",
+      "kind": "range",
+      "defaultValue": 56,
+      "min": 24,
+      "max": 96,
+      "step": 4,
+      "unit": "px",
+      "label": {
+        "zh": "轨道半径",
+        "en": "Orbit radius"
+      },
+      "description": {
+        "zh": "调节轨道半径。",
+        "en": "Adjusts orbit radius."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "normal",
+      "label": {
+        "zh": "方向",
+        "en": "Direction"
+      },
+      "description": {
+        "zh": "选择方向。",
+        "en": "Selects direction."
+      },
+      "options": [
+        {
+          "value": "normal",
+          "cssValue": "normal",
+          "label": {
+            "zh": "顺时针",
+            "en": "Clockwise"
+          }
+        },
+        {
+          "value": "reverse",
+          "cssValue": "reverse",
+          "label": {
+            "zh": "逆时针",
+            "en": "Counterclockwise"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "让辅助节点围绕中心缓慢运行，用于表达持续活性、同步或环境状态。",
+      "en": "Move a secondary node slowly around a center to express ongoing activity, synchronization, or ambient status."
+    },
+    "frequency": {
+      "zh": "只用于低频环境状态，且同屏保持单一轨道焦点。",
+      "en": "Reserve for low-frequency ambient status with a single orbital focal point per view."
+    },
+    "trigger": {
+      "zh": "由持续状态启动，组件离屏、失焦或状态完成时暂停。",
+      "en": "Start from an ongoing state and pause when offscreen, unfocused, or complete."
+    },
+    "enterExit": {
+      "zh": "从稳定轨道点进入并匀速运行，结束时减速停在有意义的位置。",
+      "en": "Enter from a stable orbital point, run steadily, and settle at a meaningful position on completion."
+    },
+    "interruptibility": {
+      "zh": "暂停和恢复保持当前角度，方向切换从当前位置连续进行。",
+      "en": "Pause and resume at the current angle, changing direction continuously from that point."
+    },
+    "gestureRules": {
+      "zh": "轨道通常不响应手势；需要控制时提供独立播放按钮。",
+      "en": "Orbit motion is usually non-gestural; provide a separate playback control when needed."
+    }
+  },
+  "reducedMotion": {
+    "zh": "显示中心和轨道节点的静态关系，补充状态文字。",
+    "en": "Show a static center-node relationship with supporting status text."
+  },
+  "reviewNotes": [
+    {
+      "zh": "避免轨道节点穿过文字或操作控件。",
+      "en": "Keep orbital nodes away from text and controls."
+    },
+    {
+      "zh": "验证无限动画在后台正确暂停。",
+      "en": "Verify that infinite animation pauses in the background."
+    }
+  ],
+  "relatedRecipes": [
+    "loop",
+    "marquee",
+    "idle-animation"
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "easing",
+  "canonicalId": "easing",
+  "categoryId": "easing",
+  "family": "easing",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "缓动",
+    "en": "Easing"
+  },
+  "summary": {
+    "zh": "比较常用缓动曲线和自定义贝塞尔曲线的速度变化。",
+    "en": "Compare common easing curves and custom cubic-bezier velocity profiles."
+  },
+  "definition": {
+    "zh": "动画加速或减速的速率变化方式。",
+    "en": "An easing function maps linear timeline progress to a changing rate of property interpolation."
+  },
+  "aliases": [
+    "ease-out",
+    "ease-in",
+    "ease-in-out",
+    "linear",
+    "cubic-bezier",
+    "asymmetric-easing"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/",
+    "en": "https://motion-lexicon.pages.dev/en/easing/easing/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/easing.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 520,
+      "min": 300,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 120,
+      "min": 0,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "ease-out",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "ease-out",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "缓出",
+            "en": "Ease-out"
+          }
+        },
+        {
+          "value": "ease-in",
+          "cssValue": "cubic-bezier(0.55, 0, 1, 0.45)",
+          "label": {
+            "zh": "缓入",
+            "en": "Ease-in"
+          }
+        },
+        {
+          "value": "ease-in-out",
+          "cssValue": "cubic-bezier(0.65, 0, 0.35, 1)",
+          "label": {
+            "zh": "缓入缓出",
+            "en": "Ease-in-out"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        },
+        {
+          "value": "custom",
+          "cssValue": "cubic-bezier(0.25, 0.9, 0.3, 1)",
+          "label": {
+            "zh": "自定义",
+            "en": "Custom"
+          }
+        },
+        {
+          "value": "asymmetric",
+          "cssValue": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+          "label": {
+            "zh": "非对称",
+            "en": "Asymmetric"
+          }
+        },
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "比较速度曲线，帮助为响应动作、屏幕内移动和持续运动选择合适节奏。",
+      "en": "Compare velocity curves to choose an appropriate rhythm for responses, on-screen travel, and continuous motion."
+    },
+    "frequency": {
+      "zh": "每种交互模式在定稿前校准一次，设计系统内复用已批准曲线。",
+      "en": "Calibrate each interaction pattern before release and reuse approved curves through the design system."
+    },
+    "trigger": {
+      "zh": "由曲线选择或预览重播触发，所有选项共享相同距离和时长。",
+      "en": "Trigger from curve selection or replay with equal travel and duration across options."
+    },
+    "enterExit": {
+      "zh": "响应用户的进入动作使用强缓出，屏幕内 A 到 B 移动使用缓入缓出。",
+      "en": "Use strong ease-out for user-triggered entrances and ease-in-out for on-screen A-to-B movement."
+    },
+    "interruptibility": {
+      "zh": "目标变化时从当前速度衔接；CSS transition 的中断效果需要真实操作验证。",
+      "en": "Carry current velocity into target changes and test interrupted CSS transitions through real interaction."
+    },
+    "gestureRules": {
+      "zh": "参数控件支持键盘步进，曲线图与运动结果同步更新。",
+      "en": "Support keyboard steps in controls and update the curve graph with the motion result."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保留极短状态过渡，移除明显加速、减速和长距离运动。",
+    "en": "Keep very short state transitions and remove pronounced acceleration, deceleration, and long travel."
+  },
+  "reviewNotes": [
+    {
+      "zh": "避免将 ease-in 用于即时 UI 响应。",
+      "en": "Avoid ease-in for immediate UI response."
+    },
+    {
+      "zh": "线性曲线只用于旋转器、跑马灯等恒速运动。",
+      "en": "Reserve linear curves for constant-speed motion such as spinners and marquees."
+    }
+  ],
+  "relatedRecipes": [
+    "ripple",
+    "spring"
+  ]
+}

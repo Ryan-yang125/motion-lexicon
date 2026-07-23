@@ -1,0 +1,123 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "typewriter",
+  "canonicalId": "typewriter",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "text",
+  "name": {
+    "zh": "打字机",
+    "en": "Typewriter"
+  },
+  "summary": {
+    "zh": "按字符逐步显示短文本，并为辅助技术保留完整内容。",
+    "en": "Reveal short text character by character while preserving complete accessible text."
+  },
+  "definition": {
+    "zh": "文字像正在输入一样逐字符出现。",
+    "en": "A text sequence reveals characters at timed intervals to simulate incremental entry."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/typewriter/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/typewriter/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/typewriter.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 1200,
+      "min": 600,
+      "max": 4000,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "characters",
+      "kind": "range",
+      "defaultValue": 18,
+      "min": 6,
+      "max": 36,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "字符数",
+        "en": "Characters"
+      },
+      "description": {
+        "zh": "调节字符数。",
+        "en": "Adjusts characters."
+      }
+    },
+    {
+      "id": "caret",
+      "kind": "toggle",
+      "defaultValue": true,
+      "label": {
+        "zh": "显示光标",
+        "en": "Show caret"
+      },
+      "description": {
+        "zh": "显示闪烁输入光标。",
+        "en": "Shows a blinking text caret."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "逐字符显露短文本，模拟输入过程并控制叙事节奏。",
+      "en": "Reveal short text character by character to simulate typing and pace a narrative moment."
+    },
+    "frequency": {
+      "zh": "只用于低频短句、演示或品牌时刻；说明文字和任务文本完整显示。",
+      "en": "Reserve for low-frequency short lines, demos, or brand moments, showing instructional and task text in full."
+    },
+    "trigger": {
+      "zh": "由用户主动播放或一次性场景进入触发，完整文本在 DOM 中始终可用。",
+      "en": "Trigger from explicit playback or one-time scene entry while keeping complete text available in the DOM."
+    },
+    "enterExit": {
+      "zh": "字符按稳定节奏出现，标点可稍作停顿；离开时整体淡出。",
+      "en": "Reveal characters at a stable pace with optional punctuation pauses, and fade the whole line on exit."
+    },
+    "interruptibility": {
+      "zh": "重播先清晰重置；跳过操作立即显示完整文本。",
+      "en": "Reset clearly before replay and reveal the complete text immediately on skip."
+    },
+    "gestureRules": {
+      "zh": "提供跳过或立即显示控件，键盘可操作；打字光标不抢占焦点。",
+      "en": "Provide a keyboard-operable skip or reveal control, with the visual caret kept out of focus order."
+    }
+  },
+  "reducedMotion": {
+    "zh": "直接显示完整文本，保留静态光标或移除光标闪烁。",
+    "en": "Show the complete text immediately and keep a static caret or remove caret blinking."
+  },
+  "reviewNotes": [
+    {
+      "zh": "屏幕阅读器读取完整句子，避免逐字符播报。",
+      "en": "Expose the complete sentence to screen readers instead of character announcements."
+    },
+    {
+      "zh": "中文按字素簇切分，避免拆开 emoji 和组合字符。",
+      "en": "Segment by grapheme cluster so emoji and combined characters remain intact."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "before-after-slider",
+    "line-drawing"
+  ]
+}

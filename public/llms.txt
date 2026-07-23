@@ -1,0 +1,98 @@
+# Motion Lexicon
+
+> A free, open-source, bilingual reference for choosing, tuning, reviewing, and implementing interface motion.
+
+- Website: https://motion-lexicon.pages.dev/en/
+- Chinese website: https://motion-lexicon.pages.dev/zh/
+- Source: https://github.com/Ryan-yang125/motion-lexicon
+- Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
+- Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
+- JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json
+- Full machine-readable text: https://motion-lexicon.pages.dev/llms-full.txt
+
+## Free tools
+
+- CLI: `npx github:Ryan-yang125/motion-lexicon`
+- Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
+
+## Canonical recipes
+
+### Entrances & exits
+
+- [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/): Introduce or remove an element with opacity for low-distraction state changes. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/fade-in-fade-out.json)
+- [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/): Bring content in from a clear direction so its spatial relationship stays legible. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/slide-in.json)
+- [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/): Scale from near the final size, with an optional slight overshoot for Pop in. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scale-in.json)
+- [Reveal](https://motion-lexicon.pages.dev/en/entrances/reveal/): Reveal content with clipping and slight travel for headings, media, and sections. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reveal.json)
+
+### Sequencing & timing
+
+- [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/): Introduce list items at short intervals to communicate order and rhythm. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/stagger.json)
+- [Keyframes](https://motion-lexicon.pages.dev/en/sequencing/keyframes/): Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/keyframes.json)
+- [Duration](https://motion-lexicon.pages.dev/en/sequencing/duration/): Compare how duration and delay affect response, rhythm, and perceived waiting. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/duration.json)
+
+### Movement & transforms
+
+- [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/): Combine translation, scale, rotation, skew, perspective, and transform origin. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/translate.json)
+- [3D tilt / Flip](https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/): Use controlled perspective and rotation for card flips or hover depth. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/3d-tilt-flip.json)
+- [Origin-aware animation](https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/): Expand or scale from the trigger point to preserve spatial continuity. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json)
+
+### State transitions
+
+- [Crossfade](https://motion-lexicon.pages.dev/en/state-transitions/crossfade/): Crossfade overlapping, similarly sized states to reduce visual jumps. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/crossfade.json)
+- [Morph](https://motion-lexicon.pages.dev/en/state-transitions/morph/): Create continuous transformation between before and after layouts of a shared element. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/morph.json)
+- [Accordion / Collapse](https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/): Coordinate height, opacity, and icon state for clear disclosure transitions. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json)
+- [Direction-aware transition](https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/): Match enter and exit directions to navigation order and preserve context. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/direction-aware-transition.json)
+
+### Scroll motion
+
+- [Scroll reveal](https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/): Reveal content once as it enters the viewport with a reduced-motion fallback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scroll-reveal.json)
+- [Scroll-driven animation](https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/): Bind animation progress to a scroll range and tune its start, end, and travel. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scroll-driven-animation.json)
+- [Parallax](https://motion-lexicon.pages.dev/en/scroll/parallax/): Move foreground and background at restrained relative speeds to create depth. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/parallax.json)
+- [Page transition](https://motion-lexicon.pages.dev/en/scroll/page-transition/): Preserve continuity across page or view changes with a safe fallback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/page-transition.json)
+
+### Feedback & interaction
+
+- [Hover effect](https://motion-lexicon.pages.dev/en/feedback/hover-effect/): Reinforce interactivity on pointer hover while keeping layout stable. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/hover-effect.json)
+- [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/): Confirm input immediately with a brief scale and contrast response. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json)
+- [Hold to confirm](https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/): Show cancellable progress during hold-to-confirm interactions to reduce mistakes. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json)
+- [Drag to reorder](https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/): Keep pickup, placeholder, and drop states clear while reordering. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/drag-to-reorder.json)
+- [Swipe to dismiss](https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/): Map swipe distance to travel and opacity with resistance before the threshold. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/swipe-to-dismiss.json)
+- [Shake / Wiggle](https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/): Use one brief horizontal shake for errors or inputs that need attention. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/shake-wiggle.json)
+- [Ripple](https://motion-lexicon.pages.dev/en/feedback/ripple/): Expand a restrained ripple from the input coordinate for precise touch feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/ripple.json)
+
+### Easing
+
+- [Easing](https://motion-lexicon.pages.dev/en/easing/easing/): Compare common easing curves and custom cubic-bezier velocity profiles. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/easing.json)
+
+### Spring animations
+
+- [Spring](https://motion-lexicon.pages.dev/en/springs/spring/): Tune a physical spring response with stiffness, damping, mass, and initial velocity. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/spring.json)
+
+### Looping & ambient motion
+
+- [Loop](https://motion-lexicon.pages.dev/en/loops/loop/): Compare loop direction, count, pauses, and rhythm while controlling distraction. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/loop.json)
+- [Marquee](https://motion-lexicon.pages.dev/en/loops/marquee/): Continuously scroll overflowing content and pause it on hover or focus. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/marquee.json)
+- [Orbit](https://motion-lexicon.pages.dev/en/loops/orbit/): Move a decorative node slowly around a center for low-frequency status displays. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/orbit.json)
+- [Idle animation](https://motion-lexicon.pages.dev/en/loops/idle-animation/): Use subtle breathing or floating motion for available, waiting, or active states. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/idle-animation.json)
+
+### Polish & effects
+
+- [Blur](https://motion-lexicon.pages.dev/en/polish-effects/blur/): Reveal media or content layers with coordinated blur, opacity, and masking. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/blur.json)
+- [Before / after slider](https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/): Compare before and after states of the same visual with a draggable divider. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/before-after-slider.json)
+- [Line drawing](https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/): Draw icons, paths, or explanatory connectors with stroke offset animation. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/line-drawing.json)
+- [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/): Transition between similarly sized short labels while preserving reading position. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/text-morph.json)
+- [Skeleton / Shimmer](https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/): Communicate loading progress with a low-contrast shimmer across placeholders. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/skeleton-shimmer.json)
+- [Number ticker](https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/): Show changing values with tabular figures and stable vertical digit movement. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/number-ticker.json)
+- [Typewriter](https://motion-lexicon.pages.dev/en/polish-effects/typewriter/): Reveal short text character by character while preserving complete accessible text. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/typewriter.json)
+
+### Performance
+
+- [Frame rate (FPS)](https://motion-lexicon.pages.dev/en/performance/frame-rate/): Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/frame-rate.json)
+- [Compositing](https://motion-lexicon.pages.dev/en/performance/compositing/): Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json)
+
+### Principles
+
+- [Purposeful animation](https://motion-lexicon.pages.dev/en/principles/purposeful-animation/): Review the purpose, frequency, and spatial rules of motion for a consistent experience. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json)
+- [Anticipation](https://motion-lexicon.pages.dev/en/principles/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/anticipation.json)
+- [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json)
+- [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json)

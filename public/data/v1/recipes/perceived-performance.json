@@ -1,0 +1,75 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "perceived-performance",
+  "canonicalId": "perceived-performance",
+  "categoryId": "principles",
+  "family": "principle",
+  "surfaceType": "guide",
+  "scene": "guide",
+  "name": {
+    "zh": "感知性能",
+    "en": "Perceived performance"
+  },
+  "summary": {
+    "zh": "通过即时状态、骨架和连续反馈缩短用户感受到的等待。",
+    "en": "Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback."
+  },
+  "definition": {
+    "zh": "恰当的动画可以让界面在实际速度未变化时显得更快。",
+    "en": "Motion and progressive feedback reduce uncertainty during waiting, changing how fast the interface feels."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/principles/perceived-performance/",
+    "en": "https://motion-lexicon.pages.dev/en/principles/perceived-performance/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json",
+  "parameters": [],
+  "guidance": {
+    "purpose": {
+      "zh": "通过即时状态、稳定骨架和连续反馈缩短用户感受到的等待。",
+      "en": "Reduce perceived waiting through immediate state changes, stable skeletons, and continuous feedback."
+    },
+    "frequency": {
+      "zh": "用于所有可感知等待路径，并根据真实延迟选择反馈层级。",
+      "en": "Apply to every perceivable wait path, choosing feedback depth from actual latency."
+    },
+    "trigger": {
+      "zh": "输入确认后立即触发，随后按延迟阈值升级为进度、骨架或可取消状态。",
+      "en": "Trigger immediately after input, escalating to progress, skeleton, or cancellable state at latency thresholds."
+    },
+    "enterExit": {
+      "zh": "先确认输入，再维持布局，最终内容就绪时平滑接管；失败状态快速显现。",
+      "en": "Confirm input first, preserve layout during waiting, and hand off smoothly to ready content, surfacing failures quickly."
+    },
+    "interruptibility": {
+      "zh": "用户取消、新请求和失败重试都更新同一状态机，清理旧反馈。",
+      "en": "Handle cancel, replacement requests, and retries through one state machine that cleans up stale feedback."
+    },
+    "gestureRules": {
+      "zh": "长任务提供取消与返回；按钮保持键盘操作，进度状态可被辅助技术理解。",
+      "en": "Long tasks provide cancel and back paths, with keyboard-operable controls and accessible progress state."
+    }
+  },
+  "reducedMotion": {
+    "zh": "关闭循环扫光和大幅过渡，保留即时状态、静态骨架与进度文本。",
+    "en": "Disable looping shimmer and large transitions while preserving immediate state, static skeletons, and progress text."
+  },
+  "reviewNotes": [
+    {
+      "zh": "按真实延迟测量体验，避免用动画掩盖性能问题。",
+      "en": "Measure against real latency and keep motion from hiding performance problems."
+    },
+    {
+      "zh": "区分确定进度、未知进度和瞬时等待。",
+      "en": "Distinguish determinate progress, indeterminate progress, and momentary waiting."
+    }
+  ],
+  "relatedRecipes": [
+    "purposeful-animation",
+    "anticipation",
+    "reduced-motion"
+  ]
+}

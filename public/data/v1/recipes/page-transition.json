@@ -1,0 +1,214 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "page-transition",
+  "canonicalId": "page-transition",
+  "categoryId": "scroll",
+  "family": "scroll",
+  "surfaceType": "component",
+  "scene": "scroll",
+  "name": {
+    "zh": "页面过渡",
+    "en": "Page transition"
+  },
+  "summary": {
+    "zh": "在页面或视图切换时保持内容连续，并为旧浏览器提供降级。",
+    "en": "Preserve continuity across page or view changes with a safe fallback."
+  },
+  "definition": {
+    "zh": "从一个页面或路由导航到另一个页面或路由时播放的动画。",
+    "en": "Route navigation is accompanied by coordinated exit and entrance states for page-level content."
+  },
+  "aliases": [
+    "view-transition"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/scroll/page-transition/",
+    "en": "https://motion-lexicon.pages.dev/en/scroll/page-transition/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/page-transition.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 280,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 32,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "left",
+      "label": {
+        "zh": "方向",
+        "en": "Direction"
+      },
+      "description": {
+        "zh": "选择方向。",
+        "en": "Selects direction."
+      },
+      "options": [
+        {
+          "value": "up",
+          "cssValue": "up",
+          "label": {
+            "zh": "向上",
+            "en": "Up"
+          }
+        },
+        {
+          "value": "down",
+          "cssValue": "down",
+          "label": {
+            "zh": "向下",
+            "en": "Down"
+          }
+        },
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "向左",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "cssValue": "right",
+          "label": {
+            "zh": "向右",
+            "en": "Right"
+          }
+        },
+        {
+          "value": "out",
+          "cssValue": "out",
+          "label": {
+            "zh": "离开",
+            "en": "Exit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在页面或路由切换时维持上下文，并向用户解释新页面的层级来源。",
+      "en": "Preserve context across page or route changes and explain the new page's hierarchical source."
+    },
+    "frequency": {
+      "zh": "适合低到中频导航；主要任务路径保持简短且可跳过。",
+      "en": "Use for low- to medium-frequency navigation, keeping primary task paths brief and skippable."
+    },
+    "trigger": {
+      "zh": "由路由确认后触发，数据等待状态与视觉过渡分开管理。",
+      "en": "Trigger after route intent is confirmed, managing data waiting separately from visual transition."
+    },
+    "enterExit": {
+      "zh": "旧页面快速退出，新页面在可交互内容就绪后进入；共享元素保持身份连续。",
+      "en": "Exit the old page quickly and enter the new page when interactive content is ready, preserving shared-element identity."
+    },
+    "interruptibility": {
+      "zh": "新导航立即取代旧目标，浏览器返回从当前过渡状态恢复。",
+      "en": "New navigation replaces the previous target immediately, and browser back resumes from current transition state."
+    },
+    "gestureRules": {
+      "zh": "滑动返回遵循平台手势；链接、键盘和历史导航保持同等可达。",
+      "en": "Respect platform swipe-back gestures while keeping links, keyboard, and history navigation equally reachable."
+    }
+  },
+  "reducedMotion": {
+    "zh": "使用即时路由切换和短内容淡入，保留加载与焦点反馈。",
+    "en": "Use immediate routing with a short content fade while preserving loading and focus feedback."
+  },
+  "reviewNotes": [
+    {
+      "zh": "避免过渡遮罩延迟链接响应。",
+      "en": "Do not let transition overlays delay link response."
+    },
+    {
+      "zh": "验证前进、后退、刷新和深链接路径。",
+      "en": "Verify forward, back, refresh, and deep-link paths."
+    }
+  ],
+  "relatedRecipes": [
+    "scroll-reveal",
+    "scroll-driven-animation",
+    "parallax"
+  ]
+}

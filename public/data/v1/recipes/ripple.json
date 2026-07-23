@@ -1,0 +1,127 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "ripple",
+  "canonicalId": "ripple",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "button",
+  "name": {
+    "zh": "涟漪",
+    "en": "Ripple"
+  },
+  "summary": {
+    "zh": "从输入坐标扩散轻量波纹，提供明确的触点反馈。",
+    "en": "Expand a restrained ripple from the input coordinate for precise touch feedback."
+  },
+  "definition": {
+    "zh": "圆形从轻触点向外扩散，用来确认按压操作。",
+    "en": "A radial wave expands from the activation coordinates to mark where contact occurred."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/ripple/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/ripple/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/ripple.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 160,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "size",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 120,
+      "max": 360,
+      "step": 10,
+      "unit": "%",
+      "label": {
+        "zh": "扩散尺寸",
+        "en": "Ripple size"
+      },
+      "description": {
+        "zh": "调节扩散尺寸。",
+        "en": "Adjusts ripple size."
+      }
+    },
+    {
+      "id": "opacity",
+      "kind": "range",
+      "defaultValue": 24,
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "label": {
+        "zh": "波纹强度",
+        "en": "Ripple opacity"
+      },
+      "description": {
+        "zh": "调节波纹强度。",
+        "en": "Adjusts ripple opacity."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "从真实输入坐标扩散轻量涟漪，明确触点和按压确认。",
+      "en": "Expand a restrained ripple from the actual input coordinate to confirm the touch point."
+    },
+    "frequency": {
+      "zh": "适合中频、大面积触控目标；高密度桌面控件可采用更轻的按压反馈。",
+      "en": "Use for medium-frequency, larger touch targets; dense desktop controls can use lighter press feedback."
+    },
+    "trigger": {
+      "zh": "由 pointerdown 触发，圆心取相对控件的输入坐标。",
+      "en": "Trigger on pointerdown, positioning the center from coordinates relative to the control."
+    },
+    "enterExit": {
+      "zh": "涟漪从触点扩散并淡出，完成后移除节点；控件本身保持稳定。",
+      "en": "Expand and fade from the touch point, removing the ripple node afterward while the control stays stable."
+    },
+    "interruptibility": {
+      "zh": "重复点击允许多个涟漪独立完成，并限制并发节点数量。",
+      "en": "Allow repeated presses to finish independently while capping concurrent ripple nodes."
+    },
+    "gestureRules": {
+      "zh": "键盘激活从控件中心产生等价反馈；涟漪层不得拦截指针事件。",
+      "en": "Keyboard activation uses the control center, and the ripple layer never intercepts pointer events."
+    }
+  },
+  "reducedMotion": {
+    "zh": "取消扩散，保留即时背景色或描边变化。",
+    "en": "Remove expansion and keep an immediate background or outline change."
+  },
+  "reviewNotes": [
+    {
+      "zh": "在圆角和 overflow 裁切下检查边界。",
+      "en": "Check clipping against border radius and overflow."
+    },
+    {
+      "zh": "确保涟漪对比足够可见且不会遮挡标签。",
+      "en": "Keep the ripple visible without obscuring the label."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "press-tap-feedback",
+    "hold-to-confirm"
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "translate",
+  "canonicalId": "translate",
+  "categoryId": "transforms",
+  "family": "transform",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "位移",
+    "en": "Translate"
+  },
+  "summary": {
+    "zh": "组合位移、缩放、旋转、倾斜、透视和变换原点。",
+    "en": "Combine translation, scale, rotation, skew, perspective, and transform origin."
+  },
+  "definition": {
+    "zh": "沿 X 轴或 Y 轴移动元素。",
+    "en": "A transform shifts visual coordinates horizontally, vertically, or both while leaving layout flow unchanged."
+  },
+  "aliases": [
+    "scale",
+    "rotate",
+    "skew",
+    "perspective",
+    "transform-origin"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/",
+    "en": "https://motion-lexicon.pages.dev/en/transforms/translate/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/translate.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 280,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "transform",
+      "kind": "segmented",
+      "defaultValue": "translate",
+      "label": {
+        "zh": "变换",
+        "en": "Transform"
+      },
+      "description": {
+        "zh": "选择变换。",
+        "en": "Selects transform."
+      },
+      "options": [
+        {
+          "value": "translate",
+          "cssValue": "translate",
+          "label": {
+            "zh": "位移",
+            "en": "Translate"
+          }
+        },
+        {
+          "value": "scale",
+          "cssValue": "scale",
+          "label": {
+            "zh": "缩放",
+            "en": "Scale"
+          }
+        },
+        {
+          "value": "rotate",
+          "cssValue": "rotate",
+          "label": {
+            "zh": "旋转",
+            "en": "Rotate"
+          }
+        },
+        {
+          "value": "skew",
+          "cssValue": "skew",
+          "label": {
+            "zh": "倾斜",
+            "en": "Skew"
+          }
+        },
+        {
+          "value": "perspective",
+          "cssValue": "perspective",
+          "label": {
+            "zh": "透视",
+            "en": "Perspective"
+          }
+        }
+      ]
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 36,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "angle",
+      "kind": "range",
+      "defaultValue": 12,
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "deg",
+      "label": {
+        "zh": "角度",
+        "en": "Angle"
+      },
+      "description": {
+        "zh": "调节角度。",
+        "en": "Adjusts angle."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 92,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "origin",
+      "kind": "segmented",
+      "defaultValue": "center",
+      "label": {
+        "zh": "原点",
+        "en": "Origin"
+      },
+      "description": {
+        "zh": "选择原点。",
+        "en": "Selects origin."
+      },
+      "options": [
+        {
+          "value": "center",
+          "cssValue": "center",
+          "label": {
+            "zh": "中心",
+            "en": "Center"
+          }
+        },
+        {
+          "value": "top",
+          "cssValue": "top",
+          "label": {
+            "zh": "顶部",
+            "en": "Top"
+          }
+        },
+        {
+          "value": "bottom",
+          "cssValue": "bottom",
+          "label": {
+            "zh": "底部",
+            "en": "Bottom"
+          }
+        },
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "左侧",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "cssValue": "right",
+          "label": {
+            "zh": "右侧",
+            "en": "Right"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在统一实验台中比较位移、缩放、旋转、倾斜、透视和变换原点。",
+      "en": "Compare translation, scale, rotation, skew, perspective, and transform origin in one controlled playground."
+    },
+    "frequency": {
+      "zh": "适合实现前的参数验证；生产界面只保留与当前状态关系有关的变换。",
+      "en": "Use during implementation tuning; production UI keeps only transforms that explain the state relationship."
+    },
+    "trigger": {
+      "zh": "由模式选择或状态变化触发，单次只突出一个主要变换维度。",
+      "en": "Trigger from mode selection or state change, emphasizing one primary transform dimension at a time."
+    },
+    "enterExit": {
+      "zh": "进入从可解释的偏移状态回到 none；离开沿具有空间含义的方向退出。",
+      "en": "Enter from an explainable offset toward none; exit in a direction with spatial meaning."
+    },
+    "interruptibility": {
+      "zh": "切换变换模式时从当前矩阵继续，避免矩阵拆解造成跳变。",
+      "en": "Continue from the current transform matrix when switching modes to avoid decomposition jumps."
+    },
+    "gestureRules": {
+      "zh": "拖拽实验将位移与指针一一映射；缩放和旋转控件提供键盘步进。",
+      "en": "Map drag experiments directly to pointer travel, with keyboard steps for scale and rotation controls."
+    }
+  },
+  "reducedMotion": {
+    "zh": "去除大幅位移、旋转和透视，仅保留状态颜色或短淡入。",
+    "en": "Remove large translation, rotation, and perspective, keeping a state-color change or short fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确认变换不改变文档流和点击区域语义。",
+      "en": "Confirm transforms preserve document flow and hit-area semantics."
+    },
+    {
+      "zh": "检查 transform-origin 在缩放和旋转模式中确实可见。",
+      "en": "Verify that transform-origin is visibly meaningful in scale and rotation modes."
+    }
+  ],
+  "relatedRecipes": [
+    "3d-tilt-flip",
+    "origin-aware-animation",
+    "duration"
+  ]
+}

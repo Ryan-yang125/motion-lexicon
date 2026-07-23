@@ -1,0 +1,213 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "reveal",
+  "canonicalId": "reveal",
+  "categoryId": "entrances",
+  "family": "entrance",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "揭示",
+    "en": "Reveal"
+  },
+  "summary": {
+    "zh": "通过裁切与轻微位移逐步展示内容，适合标题、媒体和分段内容。",
+    "en": "Reveal content with clipping and slight travel for headings, media, and sections."
+  },
+  "definition": {
+    "zh": "内容逐步显露，通常通过动画化裁切路径或遮罩实现。",
+    "en": "A moving clipping boundary or mask exposes content progressively."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/entrances/reveal/",
+    "en": "https://motion-lexicon.pages.dev/en/entrances/reveal/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/reveal.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 260,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 20,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "reveal",
+      "kind": "segmented",
+      "defaultValue": "clip",
+      "label": {
+        "zh": "揭示材质",
+        "en": "Reveal mode"
+      },
+      "description": {
+        "zh": "选择揭示材质。",
+        "en": "Selects reveal mode."
+      },
+      "options": [
+        {
+          "value": "clip",
+          "cssValue": "clip",
+          "label": {
+            "zh": "裁切",
+            "en": "Clip"
+          }
+        },
+        {
+          "value": "mask",
+          "cssValue": "mask",
+          "label": {
+            "zh": "遮罩",
+            "en": "Mask"
+          }
+        },
+        {
+          "value": "blur",
+          "cssValue": "blur",
+          "label": {
+            "zh": "模糊",
+            "en": "Blur"
+          }
+        }
+      ]
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "按明确边界逐步显露标题、媒体或分段内容，帮助用户理解阅读顺序。",
+      "en": "Uncover headings, media, or sections along a clear boundary to support reading order."
+    },
+    "frequency": {
+      "zh": "适合低频重点内容；列表和常驻正文避免逐项重复揭示。",
+      "en": "Reserve for low-frequency emphasis; avoid repeating it across lists or persistent body text."
+    },
+    "trigger": {
+      "zh": "由首屏进入、章节切换或媒体准备完成触发，揭示方向跟随内容结构。",
+      "en": "Trigger on initial view, section changes, or media readiness, with direction following content structure."
+    },
+    "enterExit": {
+      "zh": "进入时裁切区域从小到完整；离开仅在信息确实被移除时反向收拢。",
+      "en": "Expand the clipped area on enter; reverse it on exit only when information is genuinely removed."
+    },
+    "interruptibility": {
+      "zh": "中断时保留当前裁切边界，并从该边界继续到新目标。",
+      "en": "Preserve the current clipping boundary on interruption and continue toward the new target."
+    },
+    "gestureRules": {
+      "zh": "无需拖拽；Before / after slider 才使用可手势控制的揭示边界。",
+      "en": "No drag is required; use Before / after slider for a gesture-controlled reveal boundary."
+    }
+  },
+  "reducedMotion": {
+    "zh": "直接显示完整内容，最多保留短淡入；禁止隐藏延迟影响阅读。",
+    "en": "Show the complete content immediately with at most a short fade, avoiding delayed readability."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确认裁切不会截断焦点轮廓。",
+      "en": "Ensure clipping never cuts off focus outlines."
+    },
+    {
+      "zh": "检查文本在动画每一帧都保持可读。",
+      "en": "Keep text readable throughout every animation frame."
+    }
+  ],
+  "relatedRecipes": [
+    "fade-in-fade-out",
+    "slide-in",
+    "scale-in"
+  ]
+}

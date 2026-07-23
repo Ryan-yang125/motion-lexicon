@@ -1,0 +1,191 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "stagger",
+  "canonicalId": "stagger",
+  "categoryId": "sequencing",
+  "family": "timeline",
+  "surfaceType": "component",
+  "scene": "list",
+  "name": {
+    "zh": "交错动画",
+    "en": "Stagger"
+  },
+  "summary": {
+    "zh": "让列表项按短间隔依次进入，表达顺序并保持整体节奏。",
+    "en": "Introduce list items at short intervals to communicate order and rhythm."
+  },
+  "definition": {
+    "zh": "让多个项目依次播放动画，并在相邻项目之间加入短延迟，形成级联节奏。",
+    "en": "Related items start at offset times, turning one transition into a readable sequence."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/sequencing/stagger/",
+    "en": "https://motion-lexicon.pages.dev/en/sequencing/stagger/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/stagger.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "stagger",
+      "kind": "range",
+      "defaultValue": 50,
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "ms",
+      "label": {
+        "zh": "间隔",
+        "en": "Stagger"
+      },
+      "description": {
+        "zh": "调节间隔。",
+        "en": "Adjusts stagger."
+      }
+    },
+    {
+      "id": "count",
+      "kind": "range",
+      "defaultValue": 4,
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "项目数",
+        "en": "Item count"
+      },
+      "description": {
+        "zh": "调节项目数。",
+        "en": "Adjusts item count."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 18,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过短间隔依次引入同组项目，表达顺序、归属和整体节奏。",
+      "en": "Introduce grouped items at short intervals to communicate order, grouping, and rhythm."
+    },
+    "frequency": {
+      "zh": "适合低频列表首次出现；持续更新的列表应缩短间隔或同时更新。",
+      "en": "Use for a list's low-frequency first appearance; shorten or remove staggering for continuously updating lists."
+    },
+    "trigger": {
+      "zh": "由整组数据就绪或容器进入视口触发，项目顺序遵循阅读方向。",
+      "en": "Trigger when the group is ready or its container enters view, following reading order."
+    },
+    "enterExit": {
+      "zh": "进入按顺序错开；离开通常整体淡出，确有层级含义时再反向错开。",
+      "en": "Stagger entrances in order; usually fade exits together and reverse-stagger only when hierarchy benefits."
+    },
+    "interruptibility": {
+      "zh": "数据变化时只动画新增或移动的项目，现有项目保持当前位置。",
+      "en": "On data changes, animate only added or moved items while existing items keep their position."
+    },
+    "gestureRules": {
+      "zh": "项目可点击时，第一项出现后即可操作；键盘顺序始终遵循 DOM。",
+      "en": "Make items operable as soon as they appear, and keep keyboard order aligned with the DOM."
+    }
+  },
+  "reducedMotion": {
+    "zh": "取消项目间延迟，让整组内容同步短淡入或立即显示。",
+    "en": "Remove inter-item delay and show the group immediately or with one short shared fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "总时长包含最后一个项目的延迟，避免列表等待过久。",
+      "en": "Include the final item's delay in the total-duration review."
+    },
+    {
+      "zh": "控制项目数量，超长列表仅动画首屏可见部分。",
+      "en": "For long lists, animate only the initially visible items."
+    }
+  ],
+  "relatedRecipes": [
+    "keyframes",
+    "duration",
+    "reveal"
+  ]
+}

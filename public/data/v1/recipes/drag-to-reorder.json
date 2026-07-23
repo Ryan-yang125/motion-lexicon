@@ -1,0 +1,176 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "drag-to-reorder",
+  "canonicalId": "drag-to-reorder",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "list",
+  "name": {
+    "zh": "拖拽排序",
+    "en": "Drag to reorder"
+  },
+  "summary": {
+    "zh": "在拖拽排序时保持拾取、占位和落点状态清楚。",
+    "en": "Keep pickup, placeholder, and drop states clear while reordering."
+  },
+  "definition": {
+    "zh": "拖动列表项来重新排序，其他项目会移动并让出位置。",
+    "en": "Dragging an item changes its list position while surrounding items animate toward their prospective slots."
+  },
+  "aliases": [
+    "drag"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/drag-to-reorder/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/drag-to-reorder.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 180,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 48,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 103,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在列表重排过程中保持拾取对象、占位位置和最终落点清楚。",
+      "en": "Keep the picked item, placeholder, and final drop location clear during list reordering."
+    },
+    "frequency": {
+      "zh": "适合用户主动整理的中低频任务；自动排序场景无需拖拽。",
+      "en": "Use for user-driven low- to medium-frequency organization; automatic sorting needs no drag interaction."
+    },
+    "trigger": {
+      "zh": "由拖拽手柄的 pointerdown 或键盘拾取命令触发。",
+      "en": "Trigger from pointerdown on a drag handle or a keyboard pickup command."
+    },
+    "enterExit": {
+      "zh": "拾取时元素升层，移动时邻项让位，放下后所有项目收敛到最终布局。",
+      "en": "Raise the item on pickup, shift neighbors during movement, and settle all items into final layout on drop."
+    },
+    "interruptibility": {
+      "zh": "拖拽可随时取消并返回原位；新目标位置实时替换旧占位。",
+      "en": "Allow cancellation back to the origin at any time, updating the placeholder live as the target changes."
+    },
+    "gestureRules": {
+      "zh": "设置专用手柄、触摸启动阈值、自动滚动边缘，并提供键盘移动与宣布位置。",
+      "en": "Provide a dedicated handle, touch activation threshold, edge auto-scroll, keyboard movement, and position announcements."
+    }
+  },
+  "reducedMotion": {
+    "zh": "取消跟手移动动画，使用拾取状态、目标位置高亮和即时排序结果。",
+    "en": "Remove follow-pointer animation and use pickup state, target highlighting, and an immediate reorder result."
+  },
+  "reviewNotes": [
+    {
+      "zh": "测试长列表、滚动容器和跨组边界。",
+      "en": "Test long lists, scroll containers, and group boundaries."
+    },
+    {
+      "zh": "确保排序结果持久化失败时可恢复。",
+      "en": "Restore the previous order if persistence fails."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "press-tap-feedback",
+    "hold-to-confirm"
+  ]
+}

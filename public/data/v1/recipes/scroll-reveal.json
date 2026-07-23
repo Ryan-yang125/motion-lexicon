@@ -1,0 +1,174 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "scroll-reveal",
+  "canonicalId": "scroll-reveal",
+  "categoryId": "scroll",
+  "family": "scroll",
+  "surfaceType": "component",
+  "scene": "scroll",
+  "name": {
+    "zh": "滚动揭示",
+    "en": "Scroll reveal"
+  },
+  "summary": {
+    "zh": "内容进入视口时触发一次轻量展示，并支持减少动态偏好。",
+    "en": "Reveal content once as it enters the viewport with a reduced-motion fallback."
+  },
+  "definition": {
+    "zh": "元素进入视口时淡入或滑动到位。",
+    "en": "Viewport entry triggers a one-time opacity or position transition for newly visible content."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-reveal/",
+    "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/scroll-reveal.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 260,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "threshold",
+      "kind": "range",
+      "defaultValue": 20,
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "触发阈值",
+        "en": "Threshold"
+      },
+      "description": {
+        "zh": "调节触发阈值。",
+        "en": "Adjusts threshold."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 28,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在内容首次进入视口时提示新的阅读区块，并保持页面滚动连续。",
+      "en": "Signal a new reading section on first viewport entry while preserving scroll continuity."
+    },
+    "frequency": {
+      "zh": "每个内容块最多触发一次；长页面仅选择具有结构意义的节点。",
+      "en": "Trigger each section at most once and select only structurally meaningful nodes on long pages."
+    },
+    "trigger": {
+      "zh": "由 IntersectionObserver 达到阈值触发，页面加载时已可见内容立即呈现。",
+      "en": "Trigger from an IntersectionObserver threshold, showing initially visible content immediately."
+    },
+    "enterExit": {
+      "zh": "进入采用短位移和淡入；滚出视口后保持稳定，避免反复隐藏。",
+      "en": "Enter with brief travel and fade, then remain stable after leaving the viewport."
+    },
+    "interruptibility": {
+      "zh": "快速滚动时直接完成当前揭示，避免队列堆积。",
+      "en": "Complete the current reveal during fast scrolling to avoid animation queues."
+    },
+    "gestureRules": {
+      "zh": "滚动本身保持原生；揭示动画不能劫持滚轮、触摸或键盘滚动。",
+      "en": "Keep scrolling native and never capture wheel, touch, or keyboard scroll input for the reveal."
+    }
+  },
+  "reducedMotion": {
+    "zh": "内容进入视口时立即显示，或只保留一次极短淡入。",
+    "en": "Show content immediately on viewport entry or keep one very brief fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "禁用 JavaScript 时内容仍应可见。",
+      "en": "Keep content visible when JavaScript is unavailable."
+    },
+    {
+      "zh": "避免首屏关键内容等待 observer 回调。",
+      "en": "Do not make critical above-the-fold content wait for an observer callback."
+    }
+  ],
+  "relatedRecipes": [
+    "scroll-driven-animation",
+    "parallax",
+    "page-transition"
+  ]
+}

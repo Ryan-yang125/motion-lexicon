@@ -1,0 +1,157 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "accordion-collapse",
+  "canonicalId": "accordion-collapse",
+  "categoryId": "state-transitions",
+  "family": "state",
+  "surfaceType": "component",
+  "scene": "disclosure",
+  "name": {
+    "zh": "手风琴 / 折叠",
+    "en": "Accordion / Collapse"
+  },
+  "summary": {
+    "zh": "同步高度、透明度与图标状态，清晰表达内容展开和收起。",
+    "en": "Coordinate height, opacity, and icon state for clear disclosure transitions."
+  },
+  "definition": {
+    "zh": "一个区域平滑地展开或收起高度，以显示或隐藏内容。",
+    "en": "A disclosure region animates its visible extent while content is opened or closed."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/accordion-collapse/",
+    "en": "https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "height",
+      "kind": "range",
+      "defaultValue": 140,
+      "min": 60,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "label": {
+        "zh": "内容高度",
+        "en": "Content height"
+      },
+      "description": {
+        "zh": "调节内容高度。",
+        "en": "Adjusts content height."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在同一上下文中展开或收起补充内容，并让空间变化可预期。",
+      "en": "Expand or collapse supporting content in place with predictable spatial change."
+    },
+    "frequency": {
+      "zh": "适合中高频信息披露；用户反复使用时将时长保持在 180–260ms。",
+      "en": "Use for medium- to high-frequency disclosure, keeping repeated interactions around 180–260ms."
+    },
+    "trigger": {
+      "zh": "由标题按钮点击、轻触、Enter 或 Space 触发，aria-expanded 同步更新。",
+      "en": "Trigger from heading-button click, tap, Enter, or Space, updating aria-expanded in sync."
+    },
+    "enterExit": {
+      "zh": "展开时高度和透明度同步增长；收起先弱化内容，再释放布局空间。",
+      "en": "Grow height and opacity together on expand; soften content before releasing layout space on collapse."
+    },
+    "interruptibility": {
+      "zh": "反向操作从当前高度立即改向，禁止等待完整展开或收起。",
+      "en": "Reverse immediately from the current height without waiting for expansion or collapse to finish."
+    },
+    "gestureRules": {
+      "zh": "点击目标覆盖整个标题行，移动端至少 44px；键盘焦点保持在触发按钮。",
+      "en": "Make the full heading row a target with at least 44px on mobile, keeping keyboard focus on the trigger."
+    }
+  },
+  "reducedMotion": {
+    "zh": "立即切换内容可见性和布局高度，保留图标与 aria-expanded 的静态状态。",
+    "en": "Switch content visibility and layout height immediately while preserving icon and aria-expanded state."
+  },
+  "reviewNotes": [
+    {
+      "zh": "避免用 height:auto 无法插值的实现造成跳变。",
+      "en": "Avoid a non-interpolable height:auto implementation that snaps."
+    },
+    {
+      "zh": "收起前处理内容内部焦点，防止焦点落入隐藏区域。",
+      "en": "Move focus out of content before it becomes hidden."
+    }
+  ],
+  "relatedRecipes": [
+    "crossfade",
+    "morph",
+    "direction-aware-transition"
+  ]
+}

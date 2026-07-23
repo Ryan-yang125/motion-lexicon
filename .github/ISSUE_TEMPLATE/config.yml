@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and implementation help
+    url: https://github.com/Ryan-yang125/motion-lexicon/discussions/categories/q-a
+    about: Ask how to choose, tune, or integrate a motion recipe.
+  - name: Private security report
+    url: https://github.com/Ryan-yang125/motion-lexicon/security/advisories/new
+    about: Report a potential vulnerability privately.

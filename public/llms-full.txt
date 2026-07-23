@@ -1,0 +1,936 @@
+# Motion Lexicon
+
+> A free, open-source, bilingual reference for choosing, tuning, reviewing, and implementing interface motion.
+
+- Website: https://motion-lexicon.pages.dev/en/
+- Chinese website: https://motion-lexicon.pages.dev/zh/
+- Source: https://github.com/Ryan-yang125/motion-lexicon
+- Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
+- Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
+- JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json
+- Full machine-readable text: https://motion-lexicon.pages.dev/llms-full.txt
+
+## Free tools
+
+- CLI: `npx github:Ryan-yang125/motion-lexicon`
+- Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
+
+## Canonical recipes
+
+### Entrances & exits
+
+- [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/): Introduce or remove an element with opacity for low-distraction state changes. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/fade-in-fade-out.json)
+- [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/): Bring content in from a clear direction so its spatial relationship stays legible. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/slide-in.json)
+- [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/): Scale from near the final size, with an optional slight overshoot for Pop in. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scale-in.json)
+- [Reveal](https://motion-lexicon.pages.dev/en/entrances/reveal/): Reveal content with clipping and slight travel for headings, media, and sections. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reveal.json)
+
+### Sequencing & timing
+
+- [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/): Introduce list items at short intervals to communicate order and rhythm. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/stagger.json)
+- [Keyframes](https://motion-lexicon.pages.dev/en/sequencing/keyframes/): Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/keyframes.json)
+- [Duration](https://motion-lexicon.pages.dev/en/sequencing/duration/): Compare how duration and delay affect response, rhythm, and perceived waiting. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/duration.json)
+
+### Movement & transforms
+
+- [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/): Combine translation, scale, rotation, skew, perspective, and transform origin. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/translate.json)
+- [3D tilt / Flip](https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/): Use controlled perspective and rotation for card flips or hover depth. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/3d-tilt-flip.json)
+- [Origin-aware animation](https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/): Expand or scale from the trigger point to preserve spatial continuity. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json)
+
+### State transitions
+
+- [Crossfade](https://motion-lexicon.pages.dev/en/state-transitions/crossfade/): Crossfade overlapping, similarly sized states to reduce visual jumps. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/crossfade.json)
+- [Morph](https://motion-lexicon.pages.dev/en/state-transitions/morph/): Create continuous transformation between before and after layouts of a shared element. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/morph.json)
+- [Accordion / Collapse](https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/): Coordinate height, opacity, and icon state for clear disclosure transitions. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json)
+- [Direction-aware transition](https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/): Match enter and exit directions to navigation order and preserve context. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/direction-aware-transition.json)
+
+### Scroll motion
+
+- [Scroll reveal](https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/): Reveal content once as it enters the viewport with a reduced-motion fallback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scroll-reveal.json)
+- [Scroll-driven animation](https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/): Bind animation progress to a scroll range and tune its start, end, and travel. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/scroll-driven-animation.json)
+- [Parallax](https://motion-lexicon.pages.dev/en/scroll/parallax/): Move foreground and background at restrained relative speeds to create depth. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/parallax.json)
+- [Page transition](https://motion-lexicon.pages.dev/en/scroll/page-transition/): Preserve continuity across page or view changes with a safe fallback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/page-transition.json)
+
+### Feedback & interaction
+
+- [Hover effect](https://motion-lexicon.pages.dev/en/feedback/hover-effect/): Reinforce interactivity on pointer hover while keeping layout stable. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/hover-effect.json)
+- [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/): Confirm input immediately with a brief scale and contrast response. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json)
+- [Hold to confirm](https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/): Show cancellable progress during hold-to-confirm interactions to reduce mistakes. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json)
+- [Drag to reorder](https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/): Keep pickup, placeholder, and drop states clear while reordering. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/drag-to-reorder.json)
+- [Swipe to dismiss](https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/): Map swipe distance to travel and opacity with resistance before the threshold. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/swipe-to-dismiss.json)
+- [Shake / Wiggle](https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/): Use one brief horizontal shake for errors or inputs that need attention. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/shake-wiggle.json)
+- [Ripple](https://motion-lexicon.pages.dev/en/feedback/ripple/): Expand a restrained ripple from the input coordinate for precise touch feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/ripple.json)
+
+### Easing
+
+- [Easing](https://motion-lexicon.pages.dev/en/easing/easing/): Compare common easing curves and custom cubic-bezier velocity profiles. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/easing.json)
+
+### Spring animations
+
+- [Spring](https://motion-lexicon.pages.dev/en/springs/spring/): Tune a physical spring response with stiffness, damping, mass, and initial velocity. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/spring.json)
+
+### Looping & ambient motion
+
+- [Loop](https://motion-lexicon.pages.dev/en/loops/loop/): Compare loop direction, count, pauses, and rhythm while controlling distraction. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/loop.json)
+- [Marquee](https://motion-lexicon.pages.dev/en/loops/marquee/): Continuously scroll overflowing content and pause it on hover or focus. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/marquee.json)
+- [Orbit](https://motion-lexicon.pages.dev/en/loops/orbit/): Move a decorative node slowly around a center for low-frequency status displays. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/orbit.json)
+- [Idle animation](https://motion-lexicon.pages.dev/en/loops/idle-animation/): Use subtle breathing or floating motion for available, waiting, or active states. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/idle-animation.json)
+
+### Polish & effects
+
+- [Blur](https://motion-lexicon.pages.dev/en/polish-effects/blur/): Reveal media or content layers with coordinated blur, opacity, and masking. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/blur.json)
+- [Before / after slider](https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/): Compare before and after states of the same visual with a draggable divider. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/before-after-slider.json)
+- [Line drawing](https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/): Draw icons, paths, or explanatory connectors with stroke offset animation. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/line-drawing.json)
+- [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/): Transition between similarly sized short labels while preserving reading position. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/text-morph.json)
+- [Skeleton / Shimmer](https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/): Communicate loading progress with a low-contrast shimmer across placeholders. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/skeleton-shimmer.json)
+- [Number ticker](https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/): Show changing values with tabular figures and stable vertical digit movement. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/number-ticker.json)
+- [Typewriter](https://motion-lexicon.pages.dev/en/polish-effects/typewriter/): Reveal short text character by character while preserving complete accessible text. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/typewriter.json)
+
+### Performance
+
+- [Frame rate (FPS)](https://motion-lexicon.pages.dev/en/performance/frame-rate/): Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/frame-rate.json)
+- [Compositing](https://motion-lexicon.pages.dev/en/performance/compositing/): Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json)
+
+### Principles
+
+- [Purposeful animation](https://motion-lexicon.pages.dev/en/principles/purposeful-animation/): Review the purpose, frequency, and spatial rules of motion for a consistent experience. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json)
+- [Anticipation](https://motion-lexicon.pages.dev/en/principles/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/anticipation.json)
+- [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json)
+- [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json)
+
+# Full recipe reference
+
+## Fade in / Fade out (fade-in-fade-out)
+
+- Chinese name: 淡入 / 淡出
+- Category: entrances
+- Surface: component
+- Definition: An opacity transition brings an element into view or carries it out without changing its geometry.
+- Purpose: Communicate appearance, disappearance, or visibility changes with minimal distraction.
+- Trigger: Trigger from mounting, async completion, filter-result changes, or an explicit visibility state.
+- Reduced motion: Keep a brief 80–120ms fade and pair important information with a static contrast change.
+- Preview: https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/fade-in-fade-out.json
+- Parameters:
+  - Duration (duration): default 220ms; range 80-1200ms; step 20ms
+  - Start opacity (opacity): default 0%; range 0-80%; step 5%
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default calm; options soft, snap, calm, linear
+
+## Slide in (slide-in)
+
+- Chinese name: 滑入
+- Category: entrances
+- Surface: component
+- Definition: A positional transition moves content from beyond an edge into its resting location.
+- Purpose: Use direction to explain where content came from and how it relates spatially to the current layout.
+- Trigger: Trigger when opening a panel, adding content, or entering deeper navigation, with direction matching the source.
+- Reduced motion: Remove large travel and keep a short fade with a clear layer boundary.
+- Preview: https://motion-lexicon.pages.dev/en/entrances/slide-in/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/slide-in.json
+- Aliases: enter-exit
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 28px; range 0-120px; step 2px
+  - Direction (direction): default up; options up, down, left, right, out
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Scale in (scale-in)
+
+- Chinese name: 缩放入场
+- Category: entrances
+- Surface: component
+- Definition: An appearing element expands from a reduced scale to its final dimensions, commonly while opacity rises.
+- Purpose: Establish overlays, badges, or compact states from a size close to their final form.
+- Trigger: Trigger on overlay opening, state confirmation, or compact object mounting, with origin near the trigger.
+- Reduced motion: Hold the final size and communicate appearance through an 80–120ms opacity change.
+- Preview: https://motion-lexicon.pages.dev/en/entrances/scale-in/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/scale-in.json
+- Aliases: pop-in
+- Parameters:
+  - Duration (duration): default 200ms; range 80-1200ms; step 20ms
+  - Start scale (scale): default 92%; range 70-105%; step 1%
+  - Subtle overshoot (overshoot): default false
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Reveal (reveal)
+
+- Chinese name: 揭示
+- Category: entrances
+- Surface: component
+- Definition: A moving clipping boundary or mask exposes content progressively.
+- Purpose: Uncover headings, media, or sections along a clear boundary to support reading order.
+- Trigger: Trigger on initial view, section changes, or media readiness, with direction following content structure.
+- Reduced motion: Show the complete content immediately with at most a short fade, avoiding delayed readability.
+- Preview: https://motion-lexicon.pages.dev/en/entrances/reveal/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/reveal.json
+- Parameters:
+  - Duration (duration): default 260ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 20px; range 0-120px; step 2px
+  - Reveal mode (reveal): default clip; options clip, mask, blur
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Stagger (stagger)
+
+- Chinese name: 交错动画
+- Category: sequencing
+- Surface: component
+- Definition: Related items start at offset times, turning one transition into a readable sequence.
+- Purpose: Introduce grouped items at short intervals to communicate order, grouping, and rhythm.
+- Trigger: Trigger when the group is ready or its container enters view, following reading order.
+- Reduced motion: Remove inter-item delay and show the group immediately or with one short shared fade.
+- Preview: https://motion-lexicon.pages.dev/en/sequencing/stagger/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/stagger.json
+- Parameters:
+  - Duration (duration): default 220ms; range 80-1200ms; step 20ms
+  - Stagger (stagger): default 50ms; range 20-120ms; step 10ms
+  - Item count (count): default 4; range 2-8; step 1
+  - Distance (distance): default 18px; range 0-120px; step 2px
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Keyframes (keyframes)
+
+- Chinese name: 关键帧
+- Category: sequencing
+- Surface: playground
+- Definition: Named timeline checkpoints assign property values at selected offsets; interpolation determines the states between them.
+- Purpose: Define multi-stage states, interpolation behavior, stepped rhythm, and post-animation styles.
+- Trigger: Trigger from an explicit state change or replay action, with each keyframe representing a meaningful phase.
+- Reduced motion: Collapse to one state change and remove anticipation, overshoot, and repeated phases.
+- Preview: https://motion-lexicon.pages.dev/en/sequencing/keyframes/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/keyframes.json
+- Aliases: interpolation-tween, orchestration, fill-mode, stepped-animation
+- Parameters:
+  - Demo duration (duration): default 720ms; range 300-2400ms; step 20ms
+  - Timeline mode (mode): default keyframes; options keyframes, tween, steps
+  - Steps (steps): default 4; range 2-12; step 1
+  - Fill mode (fill): default both; options none, forwards, both
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Duration (duration)
+
+- Chinese name: 时长
+- Category: sequencing
+- Surface: playground
+- Definition: Duration measures the elapsed time from an animation's start state to its end state.
+- Purpose: Compare how duration and delay affect responsiveness, reading rhythm, and perceived waiting.
+- Trigger: Trigger on control-state changes, using delay only to express dependency within the interaction.
+- Reduced motion: Make nonessential transitions effectively immediate and remove delay.
+- Preview: https://motion-lexicon.pages.dev/en/sequencing/duration/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/duration.json
+- Aliases: delay
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Translate (translate)
+
+- Chinese name: 位移
+- Category: transforms
+- Surface: playground
+- Definition: A transform shifts visual coordinates horizontally, vertically, or both while leaving layout flow unchanged.
+- Purpose: Compare translation, scale, rotation, skew, perspective, and transform origin in one controlled playground.
+- Trigger: Trigger from mode selection or state change, emphasizing one primary transform dimension at a time.
+- Reduced motion: Remove large translation, rotation, and perspective, keeping a state-color change or short fade.
+- Preview: https://motion-lexicon.pages.dev/en/transforms/translate/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/translate.json
+- Aliases: scale, rotate, skew, perspective, transform-origin
+- Parameters:
+  - Duration (duration): default 280ms; range 80-1200ms; step 20ms
+  - Transform (transform): default translate; options translate, scale, rotate, skew, perspective
+  - Distance (distance): default 36px; range 0-120px; step 2px
+  - Angle (angle): default 12deg; range -45-45deg; step 1deg
+  - Start scale (scale): default 92%; range 70-105%; step 1%
+  - Origin (origin): default center; options center, top, bottom, left, right
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## 3D tilt / Flip (3d-tilt-flip)
+
+- Chinese name: 3D 倾斜 / 翻转
+- Category: transforms
+- Surface: component
+- Definition: Rotation around the X or Y axis creates a plane-turning effect within a perspective scene.
+- Purpose: Use controlled perspective for card faces or subtle pointer-driven depth.
+- Trigger: Trigger from an explicit flip action or fine-pointer hover, with tap toggling on touch devices.
+- Reduced motion: Use an immediate face switch or short crossfade with 3D rotation and perspective travel removed.
+- Preview: https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/3d-tilt-flip.json
+- Parameters:
+  - Duration (duration): default 280ms; range 80-1200ms; step 20ms
+  - Flip angle (angle): default 180deg; range 45-180deg; step 5deg
+  - Perspective (perspective): default 800px; range 320-1400px; step 40px
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Origin-aware animation (origin-aware-animation)
+
+- Chinese name: 基于触发源的动画
+- Category: transforms
+- Surface: component
+- Definition: Entrance geometry begins at the control or location that triggered the new surface, preserving their spatial relationship.
+- Purpose: Grow overlays or expanded content from their trigger so the motion source remains traceable.
+- Trigger: Trigger when a specific control opens content, deriving origin from trigger and overlay placement.
+- Reduced motion: Preserve the static trigger-overlay relationship and replace scaling travel with a short fade.
+- Preview: https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json
+- Parameters:
+  - Duration (duration): default 220ms; range 80-1200ms; step 20ms
+  - Start scale (scale): default 88%; range 70-105%; step 1%
+  - Motion origin (origin): default top-left; options top-left, top-right, bottom-left, bottom-right, center
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Crossfade (crossfade)
+
+- Chinese name: 交叉淡入淡出
+- Category: state-transitions
+- Surface: component
+- Definition: Two overlapping states exchange opacity over the same interval, handing visual focus from one to the other.
+- Purpose: Switch similarly sized states in the same location while reducing abrupt replacement.
+- Trigger: Trigger from selection, content version, or media-state changes, with both states sharing one layout slot.
+- Reduced motion: Shorten to 80–120ms or switch immediately while preserving stable dimensions.
+- Preview: https://motion-lexicon.pages.dev/en/state-transitions/crossfade/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/crossfade.json
+- Parameters:
+  - Duration (duration): default 200ms; range 80-1200ms; step 20ms
+  - Overlap (overlap): default 50%; range 0-100%; step 5%
+  - Easing (ease): default calm; options soft, snap, calm, linear
+
+## Morph (morph)
+
+- Chinese name: 形变
+- Category: state-transitions
+- Surface: component
+- Definition: Interpolated geometry reshapes one visual form into another across a continuous transition.
+- Purpose: Turn one shape smoothly into another while preserving object identity.
+- Trigger: Trigger when the object's state genuinely changes, with understandable correspondence between shapes.
+- Reduced motion: Use a static state replacement or short crossfade while preserving object position and size.
+- Preview: https://motion-lexicon.pages.dev/en/state-transitions/morph/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/morph.json
+- Aliases: continuity-transition, shared-element-transition, layout-animation
+- Parameters:
+  - Duration (duration): default 260ms; range 80-1200ms; step 20ms
+  - Continuity mode (mode): default morph; options morph, continuity, shared, layout
+  - Distance (distance): default 48px; range 0-120px; step 2px
+  - Start scale (scale): default 86%; range 70-105%; step 1%
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Accordion / Collapse (accordion-collapse)
+
+- Chinese name: 手风琴 / 折叠
+- Category: state-transitions
+- Surface: component
+- Definition: A disclosure region animates its visible extent while content is opened or closed.
+- Purpose: Expand or collapse supporting content in place with predictable spatial change.
+- Trigger: Trigger from heading-button click, tap, Enter, or Space, updating aria-expanded in sync.
+- Reduced motion: Switch content visibility and layout height immediately while preserving icon and aria-expanded state.
+- Preview: https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json
+- Parameters:
+  - Duration (duration): default 220ms; range 80-1200ms; step 20ms
+  - Content height (height): default 140px; range 60-320px; step 10px
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Direction-aware transition (direction-aware-transition)
+
+- Chinese name: 方向感过渡
+- Category: state-transitions
+- Surface: component
+- Definition: Navigation motion uses the route direction to choose opposing travel paths for forward and reverse actions.
+- Purpose: Use opposite directions for forward and back navigation to preserve sequence and hierarchy.
+- Trigger: Trigger from next, previous, browser back, or ordered-index changes.
+- Reduced motion: Use a short crossfade while preserving forward/back labels and focus position.
+- Preview: https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/direction-aware-transition.json
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 40px; range 0-120px; step 2px
+  - Direction (direction): default left; options up, down, left, right, out
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Scroll reveal (scroll-reveal)
+
+- Chinese name: 滚动揭示
+- Category: scroll
+- Surface: component
+- Definition: Viewport entry triggers a one-time opacity or position transition for newly visible content.
+- Purpose: Signal a new reading section on first viewport entry while preserving scroll continuity.
+- Trigger: Trigger from an IntersectionObserver threshold, showing initially visible content immediately.
+- Reduced motion: Show content immediately on viewport entry or keep one very brief fade.
+- Preview: https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/scroll-reveal.json
+- Parameters:
+  - Duration (duration): default 260ms; range 80-1200ms; step 20ms
+  - Threshold (threshold): default 20%; range 0-80%; step 5%
+  - Distance (distance): default 28px; range 0-120px; step 2px
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Scroll-driven animation (scroll-driven-animation)
+
+- Chinese name: 滚动驱动动画
+- Category: scroll
+- Surface: playground
+- Definition: Scroll progress supplies the animation timeline, mapping page movement to visual state.
+- Purpose: Bind visual progress continuously to a scroll range to explain position, phases, or narrative progress.
+- Trigger: Drive continuously from scroll position with explicit start, end, and stable out-of-range states.
+- Reduced motion: Freeze on the most informative static frame and provide textual progress or explanation.
+- Preview: https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/scroll-driven-animation.json
+- Parameters:
+  - Start (start): default 10%; range 0-90%; step 5%
+  - End (end): default 80%; range 10-100%; step 5%
+  - Distance (distance): default 80px; range 0-240px; step 2px
+  - Axis (axis): default y; options y, x
+
+## Parallax (parallax)
+
+- Chinese name: 视差
+- Category: scroll
+- Surface: component
+- Definition: Layers respond to the same scroll input at different displacement rates, creating apparent depth.
+- Purpose: Create depth with restrained foreground-background speed differences while keeping primary content stable.
+- Trigger: Drive from page scroll, binding travel to the container's visible range.
+- Reduced motion: Fix every layer at its clearest informational position and remove differential movement.
+- Preview: https://motion-lexicon.pages.dev/en/scroll/parallax/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/parallax.json
+- Parameters:
+  - Distance (distance): default 48px; range 0-160px; step 2px
+  - Speed ratio (speed): default 35%; range 10-80%; step 5%
+  - Axis (axis): default y; options y, x
+
+## Page transition (page-transition)
+
+- Chinese name: 页面过渡
+- Category: scroll
+- Surface: component
+- Definition: Route navigation is accompanied by coordinated exit and entrance states for page-level content.
+- Purpose: Preserve context across page or route changes and explain the new page's hierarchical source.
+- Trigger: Trigger after route intent is confirmed, managing data waiting separately from visual transition.
+- Reduced motion: Use immediate routing with a short content fade while preserving loading and focus feedback.
+- Preview: https://motion-lexicon.pages.dev/en/scroll/page-transition/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/page-transition.json
+- Aliases: view-transition
+- Parameters:
+  - Duration (duration): default 280ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 32px; range 0-120px; step 2px
+  - Direction (direction): default left; options up, down, left, right, out
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Hover effect (hover-effect)
+
+- Chinese name: 悬停效果
+- Category: feedback
+- Surface: component
+- Definition: Pointer hover updates a control's visual state to signal availability or affordance.
+- Purpose: Reinforce interactivity on fine-pointer hover while keeping layout and hit targets stable.
+- Trigger: Trigger on pointerenter only when hover:hover and pointer:fine match.
+- Reduced motion: Keep static hover and focus color, border, or shadow changes while removing travel and scale.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/hover-effect/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/hover-effect.json
+- Parameters:
+  - Duration (duration): default 150ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 4px; range 0-16px; step 2px
+  - Start scale (scale): default 101%; range 70-105%; step 1%
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Press / Tap feedback (press-tap-feedback)
+
+- Chinese name: 按压 / 轻触反馈
+- Category: feedback
+- Surface: component
+- Definition: A brief response during pointer or touch activation makes a control acknowledge contact.
+- Purpose: Confirm input at press time and give the control a subtle physical response.
+- Trigger: Trigger on pointerdown, touchstart, or the press phase of Space and Enter.
+- Reduced motion: Remove scaling and keep an immediate color, border, or luminance response.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json
+- Parameters:
+  - Duration (duration): default 120ms; range 80-1200ms; step 20ms
+  - Start scale (scale): default 96%; range 70-105%; step 1%
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Hold to confirm (hold-to-confirm)
+
+- Chinese name: 长按确认
+- Category: feedback
+- Surface: component
+- Definition: A timed progress indicator advances while continuous press input is maintained and completes at a threshold.
+- Purpose: Confirm a high-risk action through cancellable sustained progress, reducing accidental activation.
+- Trigger: Begin on sustained press and submit exactly once when the threshold is reached.
+- Reduced motion: Use static progress or countdown text without filling motion, and allow a standard two-step confirmation.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json
+- Parameters:
+  - Confirmation duration (duration): default 1200ms; range 600-2400ms; step 50ms
+  - Start scale (scale): default 98%; range 70-105%; step 1%
+  - Easing (ease): default linear; options soft, snap, calm, linear
+
+## Drag to reorder (drag-to-reorder)
+
+- Chinese name: 拖拽排序
+- Category: feedback
+- Surface: component
+- Definition: Dragging an item changes its list position while surrounding items animate toward their prospective slots.
+- Purpose: Keep the picked item, placeholder, and final drop location clear during list reordering.
+- Trigger: Trigger from pointerdown on a drag handle or a keyboard pickup command.
+- Reduced motion: Remove follow-pointer animation and use pickup state, target highlighting, and an immediate reorder result.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/drag-to-reorder.json
+- Aliases: drag
+- Parameters:
+  - Duration (duration): default 180ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 48px; range 0-120px; step 2px
+  - Start scale (scale): default 103%; range 70-105%; step 1%
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Swipe to dismiss (swipe-to-dismiss)
+
+- Chinese name: 滑动关闭
+- Category: feedback
+- Surface: component
+- Definition: A directional drag removes a surface after distance or velocity crosses a dismissal threshold.
+- Purpose: Map swipe distance to travel and opacity so the dismissal outcome stays predictable.
+- Trigger: Trigger after drag crosses an activation threshold, locking to the primary axis first.
+- Reduced motion: Use a static close button and immediate removal with undo feedback, removing large off-screen travel.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/swipe-to-dismiss.json
+- Aliases: rubber-banding
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 96px; range 0-240px; step 2px
+  - Resistance (resistance): default 65%; range 0-90%; step 5%
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Shake / Wiggle (shake-wiggle)
+
+- Chinese name: 摇晃 / 抖动
+- Category: feedback
+- Surface: component
+- Definition: A rapid alternating displacement flags invalid input or a rejected action.
+- Purpose: Use one brief horizontal motion to signal an error, rejection, or input needing attention.
+- Trigger: Trigger on submission failure or server rejection while showing readable error text.
+- Reduced motion: Remove travel and use error border, icon, and text, with at most one brief color pulse.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/shake-wiggle.json
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 10px; range 0-30px; step 2px
+  - Cycles (cycles): default 3; range 1-6; step 1
+
+## Ripple (ripple)
+
+- Chinese name: 涟漪
+- Category: feedback
+- Surface: component
+- Definition: A radial wave expands from the activation coordinates to mark where contact occurred.
+- Purpose: Expand a restrained ripple from the actual input coordinate to confirm the touch point.
+- Trigger: Trigger on pointerdown, positioning the center from coordinates relative to the control.
+- Reduced motion: Remove expansion and keep an immediate background or outline change.
+- Preview: https://motion-lexicon.pages.dev/en/feedback/ripple/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/ripple.json
+- Parameters:
+  - Duration (duration): default 160ms; range 80-1200ms; step 20ms
+  - Ripple size (size): default 220%; range 120-360%; step 10%
+  - Ripple opacity (opacity): default 24%; range 8-40%; step 2%
+
+## Easing (easing)
+
+- Chinese name: 缓动
+- Category: easing
+- Surface: playground
+- Definition: An easing function maps linear timeline progress to a changing rate of property interpolation.
+- Purpose: Compare velocity curves to choose an appropriate rhythm for responses, on-screen travel, and continuous motion.
+- Trigger: Trigger from curve selection or replay with equal travel and duration across options.
+- Reduced motion: Keep very short state transitions and remove pronounced acceleration, deceleration, and long travel.
+- Preview: https://motion-lexicon.pages.dev/en/easing/easing/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/easing.json
+- Aliases: ease-out, ease-in, ease-in-out, linear, cubic-bezier, asymmetric-easing
+- Parameters:
+  - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
+  - Distance (distance): default 120px; range 0-240px; step 2px
+  - Easing (ease): default ease-out; options ease-out, ease-in, ease-in-out, linear, custom, asymmetric, soft, snap, calm
+
+## Spring (spring)
+
+- Chinese name: 弹簧
+- Category: springs
+- Surface: playground
+- Definition: A simulated oscillator approaches a target according to stiffness, damping, mass, and current velocity.
+- Purpose: Shape interruptible, velocity-preserving physical response through stiffness, damping, mass, and initial velocity.
+- Trigger: Trigger on drag release, target-position changes, or state transitions, passing current velocity.
+- Reduced motion: Use high damping or immediate arrival, removing bounce and prolonged micro-oscillation.
+- Preview: https://motion-lexicon.pages.dev/en/springs/spring/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/spring.json
+- Aliases: stiffness-tension, damping, mass, bounce, perceptual-duration, momentum, velocity, interruptible-animation
+- Parameters:
+  - Stiffness (stiffness): default 220; range 60-500; step 10
+  - Damping (damping): default 24; range 5-60; step 1
+  - Mass (mass): default 1x; range 0.5-3x; step 0.1x
+  - Initial velocity (velocity): default 0; range -20-20; step 1
+  - Distance (distance): default 48px; range 0-160px; step 2px
+
+## Loop (loop)
+
+- Chinese name: 循环
+- Category: loops
+- Surface: playground
+- Definition: A timeline restarts according to a finite iteration count or continues indefinitely.
+- Purpose: Control repeat direction, count, and pauses so loops communicate activity or waiting with limited distraction.
+- Trigger: Trigger from loading, live, demo, or explicit play state, pausing when offscreen.
+- Reduced motion: Stop automatic looping and show a representative static frame with explicit status text.
+- Preview: https://motion-lexicon.pages.dev/en/loops/loop/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/loop.json
+- Aliases: alternate
+- Parameters:
+  - Cycle duration (duration): default 1200ms; range 800-4000ms; step 100ms
+  - Loop pause (pause): default 160ms; range 0-800ms; step 20ms
+  - Loop direction (direction): default normal; options normal, alternate, reverse
+  - Iterations (iterations): default 3x; range 1-8x; step 1x
+  - Infinite (infinite): default false
+
+## Marquee (marquee)
+
+- Chinese name: 跑马灯
+- Category: loops
+- Surface: component
+- Definition: A content track translates continuously and wraps to create an uninterrupted scrolling strip.
+- Purpose: Present an overlong information stream in limited space while allowing users to pause and read.
+- Trigger: Run only when content overflows and playback is active, remaining still when content fits.
+- Reduced motion: Stop scrolling and wrap content or provide a statically browsable horizontal list.
+- Preview: https://motion-lexicon.pages.dev/en/loops/marquee/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/marquee.json
+- Parameters:
+  - Cycle duration (duration): default 8000ms; range 2000-20000ms; step 100ms
+  - Content gap (gap): default 32px; range 8-80px; step 4px
+  - Direction (direction): default left; options left, right
+  - Pause on hover (pauseOnHover): default true
+
+## Orbit (orbit)
+
+- Chinese name: 环绕
+- Category: loops
+- Surface: component
+- Definition: An element follows a closed path around a center or companion object.
+- Purpose: Move a secondary node slowly around a center to express ongoing activity, synchronization, or ambient status.
+- Trigger: Start from an ongoing state and pause when offscreen, unfocused, or complete.
+- Reduced motion: Show a static center-node relationship with supporting status text.
+- Preview: https://motion-lexicon.pages.dev/en/loops/orbit/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/orbit.json
+- Parameters:
+  - Cycle duration (duration): default 6000ms; range 2000-16000ms; step 100ms
+  - Orbit radius (radius): default 56px; range 24-96px; step 4px
+  - Direction (direction): default normal; options normal, reverse
+
+## Idle animation (idle-animation)
+
+- Chinese name: 空闲动效
+- Category: loops
+- Surface: component
+- Definition: Low-intensity ambient motion gives a waiting element activity without requiring input.
+- Purpose: Use low-amplitude float or pulse motion to indicate availability, waiting, or activity.
+- Trigger: Trigger from an idle timer or ongoing state, pausing when hidden or offscreen.
+- Reduced motion: Disable automatic float and pulse motion and use a static status indicator.
+- Preview: https://motion-lexicon.pages.dev/en/loops/idle-animation/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/idle-animation.json
+- Aliases: pulse, float
+- Parameters:
+  - Cycle duration (duration): default 2200ms; range 1000-6000ms; step 100ms
+  - Distance (distance): default 8px; range 0-24px; step 2px
+  - Idle style (style): default float; options float, pulse
+  - Pause (pause): default 300ms; range 0-1200ms; step 50ms
+
+## Blur (blur)
+
+- Chinese name: 模糊
+- Category: polish-effects
+- Surface: component
+- Definition: A blur filter blends neighboring pixels to soften edges, depth layers, or transitional artifacts.
+- Purpose: Use blur to soften media or transition edges and mask minor loading or compositing imperfections.
+- Trigger: Trigger from media readiness, layer changes, or focus changes with a restrained blur radius.
+- Reduced motion: Show crisp content directly, preserving only static hierarchy and opacity changes.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/blur/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/blur.json
+- Aliases: clip-path, mask
+- Parameters:
+  - Duration (duration): default 260ms; range 80-1200ms; step 20ms
+  - Blur radius (blur): default 14px; range 0-32px; step 1px
+  - Reveal mode (reveal): default blur; options blur, clip, mask
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Before / after slider (before-after-slider)
+
+- Chinese name: 前后对比滑杆
+- Category: polish-effects
+- Surface: component
+- Definition: A draggable boundary changes the visible share of two aligned layers for direct comparison.
+- Purpose: Compare two overlaid states of the same visual through a draggable divider.
+- Trigger: Trigger from divider drag, track click, or keyboard arrow keys.
+- Reduced motion: Keep the operable divider while removing position tweening; keyboard and pointer update the static clip immediately.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/before-after-slider.json
+- Parameters:
+  - Divider position (position): default 50%; range 10-90%; step 1%
+  - Duration (duration): default 180ms; range 80-1200ms; step 20ms
+
+## Line drawing (line-drawing)
+
+- Chinese name: 线条绘制
+- Category: polish-effects
+- Surface: component
+- Definition: Animating SVG stroke dash values reveals a path progressively along its length.
+- Purpose: Draw an SVG path progressively to emphasize how an icon, flow, or explanatory connection forms.
+- Trigger: Trigger on first presentation or explicit replay, ordering paths by visual reading direction.
+- Reduced motion: Show the complete path immediately or with one very short fade.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/line-drawing.json
+- Parameters:
+  - Demo duration (duration): default 1000ms; range 500-3000ms; step 20ms
+  - Delay (delay): default 0ms; range 0-600ms; step 20ms
+  - Easing (ease): default calm; options soft, snap, calm, linear
+
+## Text morph (text-morph)
+
+- Chinese name: 文字形变
+- Category: polish-effects
+- Surface: component
+- Definition: Characters or glyph shapes transition between text states to focus attention on updated content.
+- Purpose: Transition smoothly between similarly sized short text values and direct attention to the change.
+- Trigger: Trigger on value change and animate only the characters or phrase that changed.
+- Reduced motion: Replace the full text immediately and use static highlighting or one short fade to signal change.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/text-morph/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/text-morph.json
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Transition blur (blur): default 8px; range 0-20px; step 1px
+  - Delay (delay): default 120ms; range 0-600ms; step 20ms
+  - Easing (ease): default soft; options soft, snap, calm, linear
+
+## Skeleton / Shimmer (skeleton-shimmer)
+
+- Chinese name: 骨架屏 / 微光
+- Category: polish-effects
+- Surface: component
+- Definition: A placeholder layout uses a moving highlight to communicate that content is still loading.
+- Purpose: Preserve layout during loading and communicate ongoing work through a low-contrast shimmer.
+- Trigger: Trigger after a loading-delay threshold and stop as soon as real content is ready.
+- Reduced motion: Disable shimmer and keep a static skeleton with explicit loading text.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/skeleton-shimmer.json
+- Parameters:
+  - Cycle duration (duration): default 1400ms; range 800-3000ms; step 100ms
+  - Shimmer intensity (intensity): default 14%; range 5-30%; step 1%
+
+## Number ticker (number-ticker)
+
+- Chinese name: 数字滚动
+- Category: polish-effects
+- Surface: component
+- Definition: Numeric glyphs translate or interpolate until the display reaches an updated value.
+- Purpose: Roll or count with stable tabular digits to emphasize the direction and magnitude of a value change.
+- Trigger: Trigger from a confirmed new value, choosing roll direction from increase or decrease.
+- Reduced motion: Replace the value immediately and indicate direction through static color or an arrow.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/number-ticker.json
+- Aliases: tabular-numbers
+- Parameters:
+  - Duration (duration): default 240ms; range 80-1200ms; step 20ms
+  - Distance (distance): default 24px; range 0-60px; step 2px
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Typewriter (typewriter)
+
+- Chinese name: 打字机
+- Category: polish-effects
+- Surface: component
+- Definition: A text sequence reveals characters at timed intervals to simulate incremental entry.
+- Purpose: Reveal short text character by character to simulate typing and pace a narrative moment.
+- Trigger: Trigger from explicit playback or one-time scene entry while keeping complete text available in the DOM.
+- Reduced motion: Show the complete text immediately and keep a static caret or remove caret blinking.
+- Preview: https://motion-lexicon.pages.dev/en/polish-effects/typewriter/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/typewriter.json
+- Parameters:
+  - Demo duration (duration): default 1200ms; range 600-4000ms; step 20ms
+  - Characters (characters): default 18; range 6-36; step 1
+  - Show caret (caret): default true
+
+## Frame rate (FPS) (frame-rate)
+
+- Chinese name: 帧率（FPS）
+- Category: performance
+- Surface: guide
+- Definition: Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result.
+- Purpose: Diagnose motion jank through frame rate, long tasks, and dropped frames with a reproducible performance baseline.
+- Trigger: Trigger from performance recordings, automated benchmarks, or real-user monitoring across cold and steady states.
+- Reduced motion: Measure default and reduced-motion modes separately, confirming the low-motion path also avoids long tasks.
+- Preview: https://motion-lexicon.pages.dev/en/performance/frame-rate/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/frame-rate.json
+- Aliases: jank, dropped-frame
+
+## Compositing (compositing)
+
+- Chinese name: 合成
+- Category: performance
+- Surface: playground
+- Definition: Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout.
+- Purpose: Compare compositor-friendly properties with layout- or paint-triggering properties to choose a stable rendering path.
+- Trigger: Trigger from property selection or a performance experiment while recording main-thread, layout, paint, and compositing activity.
+- Reduced motion: Reduced-motion mode still favors transform and opacity while limiting persistent layer allocation.
+- Preview: https://motion-lexicon.pages.dev/en/performance/compositing/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json
+- Aliases: will-change, layout-thrashing, hardware-acceleration
+- Parameters:
+  - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
+  - Distance (distance): default 80px; range 0-180px; step 2px
+  - Compared property (property): default transform; options transform, left, opacity
+  - Easing (ease): default linear; options soft, snap, calm, linear
+
+## Purposeful animation (purposeful-animation)
+
+- Chinese name: 有目的的动效
+- Category: principles
+- Surface: guide
+- Definition: Purposeful motion communicates hierarchy, causality, feedback, or spatial relationships in support of a user task.
+- Purpose: Review whether every motion pattern serves orientation, feedback, relationship explanation, or perceived performance.
+- Trigger: Trigger review from new motion, interaction changes, or user feedback, documenting a testable purpose.
+- Reduced motion: Provide an equivalent low-motion expression for each purpose while preserving function and state information.
+- Preview: https://motion-lexicon.pages.dev/en/principles/purposeful-animation/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json
+- Aliases: frequency-of-use, spatial-consistency
+
+## Anticipation (anticipation)
+
+- Chinese name: 预备动作
+- Category: principles
+- Surface: playground
+- Definition: A brief preparatory movement establishes direction and energy before the primary action.
+- Purpose: Use opposite-direction anticipation, follow-through settling, and measured deformation to express direction, weight, and flexibility.
+- Trigger: Trigger from user-initiated movement, throwing, or state changes, with anticipation opposite the main travel.
+- Reduced motion: Remove wind-up, overshoot, and deformation, moving directly to the stable target or using a short fade.
+- Preview: https://motion-lexicon.pages.dev/en/principles/anticipation/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/anticipation.json
+- Aliases: follow-through, squash-and-stretch
+- Parameters:
+  - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
+  - Distance (distance): default 32px; range 0-80px; step 2px
+  - Anticipation (anticipation): default 18%; range 0-40%; step 2%
+  - Follow-through (followThrough): default 12%; range 0-30%; step 2%
+  - Easing (ease): default snap; options soft, snap, calm, linear
+
+## Perceived performance (perceived-performance)
+
+- Chinese name: 感知性能
+- Category: principles
+- Surface: guide
+- Definition: Motion and progressive feedback reduce uncertainty during waiting, changing how fast the interface feels.
+- Purpose: Reduce perceived waiting through immediate state changes, stable skeletons, and continuous feedback.
+- Trigger: Trigger immediately after input, escalating to progress, skeleton, or cancellable state at latency thresholds.
+- Reduced motion: Disable looping shimmer and large transitions while preserving immediate state, static skeletons, and progress text.
+- Preview: https://motion-lexicon.pages.dev/en/principles/perceived-performance/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json
+
+## Reduced motion (reduced-motion)
+
+- Chinese name: 减弱动效
+- Category: principles
+- Surface: guide
+- Definition: Reduced-motion behavior honors the user preference with stable spatial states and concise essential feedback.
+- Purpose: Provide information-equivalent low-motion treatments for travel, scaling, loops, parallax, and physical motion.
+- Trigger: Resolve from prefers-reduced-motion plus an explicit product setting, responding to changes live.
+- Reduced motion: Define per-pattern treatment: zero travel, fixed scale, stopped loops, frozen parallax, and static progress feedback.
+- Preview: https://motion-lexicon.pages.dev/en/principles/reduced-motion/
+- Data: https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json
+
+# Complete vocabulary
+
+- Fade in / Fade out (fade-in-fade-out): An opacity transition brings an element into view or carries it out without changing its geometry.
+- Slide in (slide-in): A positional transition moves content from beyond an edge into its resting location.
+- Scale in (scale-in): An appearing element expands from a reduced scale to its final dimensions, commonly while opacity rises.
+- Pop in (pop-in): An entrance crosses the final scale briefly, then settles back to create a compact spring-like accent. Alias of scale-in. Pop in overshoots and settles; Scale in can stop directly at its final size.
+- Reveal (reveal): A moving clipping boundary or mask exposes content progressively.
+- Enter / Exit (enter-exit): Lifecycle motion communicates when an element joins or leaves the rendered interface. Alias of slide-in. Enter / Exit names the lifecycle motion used when an element is added or removed; Slide in is one directional implementation.
+- Keyframes (keyframes): Named timeline checkpoints assign property values at selected offsets; interpolation determines the states between them.
+- Interpolation / Tween (interpolation-tween): A renderer calculates intermediate property values between defined states to produce continuous change. Alias of keyframes. Interpolation / Tween generates frames between values; Keyframes defines state checkpoints on a timeline.
+- Stagger (stagger): Related items start at offset times, turning one transition into a readable sequence.
+- Orchestration (orchestration): A coordinated timeline orders multiple motions so their starts, overlaps, and finishes express one event. Alias of keyframes. Orchestration coordinates timing across multiple animations; Keyframes describes states inside one animation.
+- Delay (delay): The delay is the interval between a trigger and the first active frame. Alias of duration. Delay is the wait before motion starts; Duration is the time the motion spends running.
+- Duration (duration): Duration measures the elapsed time from an animation's start state to its end state.
+- Fill mode (fill-mode): A fill mode selects which keyframe styles apply outside the active animation interval. Alias of keyframes. Fill mode controls which styles persist outside the active interval; Keyframes defines states inside it.
+- Stepped animation (stepped-animation): Progress advances through fixed discrete states instead of continuously interpolated values. Alias of keyframes. Stepped animation jumps between discrete states; regular keyframes usually interpolate continuously between states.
+- Translate (translate): A transform shifts visual coordinates horizontally, vertically, or both while leaving layout flow unchanged.
+- Scale (scale): A transform multiplies an element's rendered width and height around a chosen origin. Alias of translate. Scale changes an element's size; Translate changes its position.
+- Rotate (rotate): A transform changes an element's angular orientation around its transform origin. Alias of translate. Rotate changes an element's angle around an anchor; Translate changes its position.
+- Skew (skew): A shear transform offsets one axis in proportion to the other, producing a slanted silhouette. Alias of translate. Skew shears an element's shape; Translate moves it along an axis.
+- 3D tilt / Flip (3d-tilt-flip): Rotation around the X or Y axis creates a plane-turning effect within a perspective scene.
+- Perspective (perspective): Perspective sets the viewer-to-plane distance used to project three-dimensional transforms; shorter distances amplify depth. Alias of translate. Perspective controls the depth of a 3D projection; Translate controls spatial position.
+- Transform origin (transform-origin): The transform origin defines the local pivot from which scaling and rotation are calculated. Alias of translate. Transform origin anchors scale or rotation; a pure translation keeps the same path across origins.
+- Origin-aware animation (origin-aware-animation): Entrance geometry begins at the control or location that triggered the new surface, preserving their spatial relationship.
+- Crossfade (crossfade): Two overlapping states exchange opacity over the same interval, handing visual focus from one to the other.
+- Continuity transition (continuity-transition): A transition preserves recognizable geometry or position across states so viewers can follow the change. Alias of morph. Continuity transition is a principle for preserving before-and-after relationships; Morph is one technique that can create continuity.
+- Morph (morph): Interpolated geometry reshapes one visual form into another across a continuous transition.
+- Shared element transition (shared-element-transition): A persistent visual object changes position, size, or styling while connecting two layouts. Alias of morph. Shared element transition moves and transforms the same element across layouts; Morph emphasizes one shape becoming another.
+- Layout animation (layout-animation): Changes in measured position or dimensions are animated between layout snapshots. Alias of morph. Layout animation smooths size or position changes; Morph changes an element's shape.
+- Accordion / Collapse (accordion-collapse): A disclosure region animates its visible extent while content is opened or closed.
+- Direction-aware transition (direction-aware-transition): Navigation motion uses the route direction to choose opposing travel paths for forward and reverse actions.
+- Scroll reveal (scroll-reveal): Viewport entry triggers a one-time opacity or position transition for newly visible content.
+- Scroll-driven animation (scroll-driven-animation): Scroll progress supplies the animation timeline, mapping page movement to visual state.
+- Parallax (parallax): Layers respond to the same scroll input at different displacement rates, creating apparent depth.
+- Page transition (page-transition): Route navigation is accompanied by coordinated exit and entrance states for page-level content.
+- View transition (view-transition): The browser captures old and new render states, then animates their snapshots and designated shared elements. Alias of page-transition. View transition refers to the browser connecting DOM states or page snapshots; Page transition covers route-change animation more broadly.
+- Hover effect (hover-effect): Pointer hover updates a control's visual state to signal availability or affordance.
+- Press / Tap feedback (press-tap-feedback): A brief response during pointer or touch activation makes a control acknowledge contact.
+- Hold to confirm (hold-to-confirm): A timed progress indicator advances while continuous press input is maintained and completes at a threshold.
+- Drag (drag): Pointer movement directly updates an object's position from grab until release. Alias of drag-to-reorder. Drag is the general gesture of grabbing and moving an element; Drag to reorder applies it to list ordering.
+- Drag to reorder (drag-to-reorder): Dragging an item changes its list position while surrounding items animate toward their prospective slots.
+- Swipe to dismiss (swipe-to-dismiss): A directional drag removes a surface after distance or velocity crosses a dismissal threshold.
+- Rubber-banding (rubber-banding): Movement beyond a boundary is attenuated, then restored toward the valid range after release. Alias of swipe-to-dismiss. Rubber-banding resists and returns after a boundary is crossed; Swipe to dismiss removes an element after a threshold.
+- Shake / Wiggle (shake-wiggle): A rapid alternating displacement flags invalid input or a rejected action.
+- Ripple (ripple): A radial wave expands from the activation coordinates to mark where contact occurred.
+- Easing (easing): An easing function maps linear timeline progress to a changing rate of property interpolation.
+- Ease-out (ease-out): Progress advances quickly after activation and decelerates near completion, giving responsive UI motion a controlled arrival. Alias of easing. Ease-out is an easing profile that starts fast and ends slowly, fitting user-triggered responses.
+- Ease-in (ease-in): Progress accelerates from a gentle start toward a faster finish, fitting departures that should gather speed. Alias of easing. Ease-in is an easing profile that starts slowly and ends fast, which can make UI response feel sluggish.
+- Ease-in-out (ease-in-out): Progress accelerates through the middle and decelerates at both ends, supporting visible point-to-point travel. Alias of easing. Ease-in-out is slow at both ends and faster in the middle, fitting movement of elements already on screen.
+- Linear (linear): Timeline progress and property progress remain proportional, producing a constant rate suitable for continuous indicators. Alias of easing. Linear easing keeps constant speed, fitting continuous motion such as spinners and marquees.
+- Cubic-bezier (cubic-bezier): Four control points describe a cubic Bézier timing curve for custom acceleration and deceleration. Alias of easing. Cubic-bezier expresses a custom easing curve for precise acceleration and deceleration control.
+- Asymmetric easing (asymmetric-easing): Different acceleration and deceleration shapes give the entrance and arrival distinct timing characteristics. Alias of easing. Asymmetric easing uses different acceleration and deceleration rates; it is a custom easing strategy.
+- Spring (spring): A simulated oscillator approaches a target according to stiffness, damping, mass, and current velocity.
+- Stiffness / Tension (stiffness-tension): Stiffness determines the restoring force applied for a given distance from the spring's target. Alias of spring. Stiffness / Tension controls how strongly a spring pulls toward its target; it is a spring-model parameter.
+- Damping (damping): Damping removes energy from a spring over time, controlling oscillation and settlement. Alias of spring. Damping controls how quickly oscillation settles; Spring is the full physical model that includes damping.
+- Mass (mass): Mass sets inertia in the spring equation, influencing acceleration and the perceived weight of motion. Alias of spring. Mass controls perceived weight and inertia; it works with stiffness and damping to shape a spring response.
+- Bounce (bounce): A spring crosses its target one or more times before its oscillation converges. Alias of spring. Bounce is a spring overshooting and settling, commonly produced by lower damping with suitable stiffness.
+- Perceptual duration (perceptual-duration): The perceived duration ends when remaining spring movement falls below a visually meaningful threshold. Alias of spring. Perceptual duration describes when a spring feels finished to the user; it differs from a fixed CSS duration.
+- Momentum (momentum): Stored velocity continues to influence motion after direct manipulation ends. Alias of spring. Momentum preserves velocity after release or interruption; a spring can receive and carry that velocity.
+- Velocity (velocity): Velocity records both speed and direction, allowing a new transition to inherit current movement. Alias of spring. Velocity records speed and direction; a spring can use it as the initial condition for the next response.
+- Interruptible animation (interruptible-animation): An in-progress transition accepts a new target while retaining continuity of position and velocity. Alias of spring. Interruptible animation names the ability to retarget motion smoothly in flight; a spring is one way to implement it.
+- Marquee (marquee): A content track translates continuously and wraps to create an uninterrupted scrolling strip.
+- Loop (loop): A timeline restarts according to a finite iteration count or continues indefinitely.
+- Alternate (yoyo) (alternate): Successive iterations reverse playback direction so each endpoint becomes the next starting point. Alias of loop. Alternate reverses direction each iteration; Loop also includes normal, reverse, finite, and infinite strategies.
+- Orbit (orbit): An element follows a closed path around a center or companion object.
+- Pulse (pulse): A low-amplitude cycle of scale, opacity, or color periodically emphasizes an element. Alias of idle-animation. Pulse repeats scale or opacity changes to attract attention; Idle animation is the broader category that can include it.
+- Float (float): A slow repeating translation produces a light hovering impression around a stable resting point. Alias of idle-animation. Float uses continuous subtle vertical drift; Idle animation can also use pulse and other low-intensity motion.
+- Idle animation (idle-animation): Low-intensity ambient motion gives a waiting element activity without requiring input.
+- Blur (blur): A blur filter blends neighboring pixels to soften edges, depth layers, or transitional artifacts.
+- Clip-path (clip-path): A geometric clipping region controls which portion of an element is painted. Alias of blur. Clip-path hides regions with a defined shape boundary; Blur softens pixels and does not define the visible region.
+- Mask (mask): An alpha or luminance image modulates visibility, allowing gradients and soft-edged reveals. Alias of blur. Mask controls visible regions through alpha or luminance and supports soft edges; Blur only softens the image.
+- Before / after slider (before-after-slider): A draggable boundary changes the visible share of two aligned layers for direct comparison.
+- Line drawing (line-drawing): Animating SVG stroke dash values reveals a path progressively along its length.
+- Text morph (text-morph): Characters or glyph shapes transition between text states to focus attention on updated content.
+- Skeleton / Shimmer (skeleton-shimmer): A placeholder layout uses a moving highlight to communicate that content is still loading.
+- Number ticker (number-ticker): Numeric glyphs translate or interpolate until the display reaches an updated value.
+- Tabular numbers (tabular-numbers): Tabular numeral glyphs share a fixed advance width, keeping changing values spatially stable. Alias of number-ticker. Tabular numbers is a typographic feature that stabilizes digit width; Number ticker is the animation used when values change.
+- Typewriter (typewriter): A text sequence reveals characters at timed intervals to simulate incremental entry.
+- Frame rate (FPS) (frame-rate): Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result.
+- Jank (jank): Jank is a perceptible break in motion caused by irregular frame timing or delayed main-thread work. Alias of frame-rate. Jank is the visible stutter a user sees; Frame rate is the metric used to measure drawing speed.
+- Dropped frame (dropped-frame): A dropped frame occurs when rendering misses a display deadline and the previous image remains visible for another refresh. Alias of frame-rate. Dropped frame is one missed drawing deadline; Frame rate summarizes drawing frequency over time.
+- Compositing (compositing): Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout.
+- will-change (will-change): The will-change property warns the browser about an upcoming property change so it can prepare relevant rendering resources. Alias of compositing. will-change is an optimization hint; Compositing is the rendering stage that lets the GPU handle layers.
+- Layout thrashing (layout-thrashing): Repeated interleaving of layout reads and writes forces synchronous recalculation and consumes the frame budget. Alias of compositing. Layout thrashing comes from repeated layout calculation; compositor-friendly transform and opacity can avoid that work.
+- Purposeful animation (purposeful-animation): Purposeful motion communicates hierarchy, causality, feedback, or spatial relationships in support of a user task.
+- Anticipation (anticipation): A brief preparatory movement establishes direction and energy before the primary action.
+- Follow-through (follow-through): Secondary parts continue and settle after the main body reaches its destination, reinforcing weight and flexibility. Alias of anticipation. Follow-through happens after the main motion stops; Anticipation happens before the main motion starts.
+- Squash & stretch (squash-and-stretch): Temporary deformation links shape to force, speed, or impact while preserving recognizable volume. Alias of anticipation. Squash & stretch uses deformation to express weight and flexibility; Anticipation uses an opposite wind-up to preview motion.
+- Perceived performance (perceived-performance): Motion and progressive feedback reduce uncertainty during waiting, changing how fast the interface feels.
+- Frequency of use (frequency-of-use): Exposure frequency sets an animation's acceptable emphasis and length; repeated motion benefits from greater restraint. Alias of purposeful-animation. Frequency of use determines how short and subtle motion should be; Purposeful animation determines the function it serves.
+- Spatial consistency (spatial-consistency): Objects retain coherent position, direction, and identity across states so changes remain easy to trace. Alias of purposeful-animation. Spatial consistency preserves identity and position across states; Purposeful animation supplies the reason for that continuity.
+- Hardware acceleration (hardware-acceleration): Hardware acceleration uses compositor and GPU resources for eligible visual updates, helping frames meet display deadlines. Alias of compositing. Hardware acceleration describes using the GPU to keep motion smooth; Compositing is the rendering stage that hands independent layers to the GPU.
+- Reduced motion (reduced-motion): Reduced-motion behavior honors the user preference with stable spatial states and concise essential feedback.

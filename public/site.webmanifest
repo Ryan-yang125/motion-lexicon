@@ -1,0 +1,25 @@
+{
+  "name": "Motion Lexicon",
+  "short_name": "Motion Lexicon",
+  "id": "/zh/",
+  "description": "Visual animation vocabulary with previews, parameters, prompts, and code.",
+  "start_url": "/zh/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

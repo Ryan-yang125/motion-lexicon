@@ -1,0 +1,34 @@
+# Motion Lexicon Content and Generated Output License
+
+Copyright (c) 2026 Motion Lexicon contributors
+
+This file defines the license boundary for project-authored content, data, and generated code. Project source code is covered by the MIT License in `LICENSE`. Third-party material remains under its respective license.
+
+## Project-authored content and data: CC BY 4.0
+
+Motion Lexicon's original written content and data are licensed under the Creative Commons Attribution 4.0 International License (`CC BY 4.0`):
+
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+This scope includes the project-authored English definitions, Chinese translations, close-term distinctions, canonical mappings, summaries, design guidance, review notes, documentation, and catalog data.
+
+You may share and adapt this material for any purpose when you provide appropriate credit, link to the license, and indicate whether changes were made. A suitable attribution is:
+
+> Based on Motion Lexicon content, licensed under CC BY 4.0.
+
+## Generated code fragments: 0BSD
+
+HTML, CSS, and JavaScript fragments produced through Motion Lexicon's website, CLI, or Agent Skill export surfaces are licensed under the Zero-Clause BSD License (`0BSD`) below. Exported catalog data and prose remain covered by CC BY 4.0.
+
+Copyright (C) 2026 Motion Lexicon contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.

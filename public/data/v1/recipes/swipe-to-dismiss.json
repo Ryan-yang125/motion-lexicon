@@ -1,0 +1,176 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "swipe-to-dismiss",
+  "canonicalId": "swipe-to-dismiss",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "滑动关闭",
+    "en": "Swipe to dismiss"
+  },
+  "summary": {
+    "zh": "让滑动距离映射到位移与透明度，并在阈值前提供阻尼。",
+    "en": "Map swipe distance to travel and opacity with resistance before the threshold."
+  },
+  "definition": {
+    "zh": "把元素拖出屏幕以关闭它，例如抽屉或提示消息。",
+    "en": "A directional drag removes a surface after distance or velocity crosses a dismissal threshold."
+  },
+  "aliases": [
+    "rubber-banding"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/swipe-to-dismiss/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/swipe-to-dismiss.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 96,
+      "min": 0,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "resistance",
+      "kind": "range",
+      "defaultValue": 65,
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "阻尼",
+        "en": "Resistance"
+      },
+      "description": {
+        "zh": "调节阻尼。",
+        "en": "Adjusts resistance."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "把滑动距离映射到位移和透明度，让用户可预判关闭结果。",
+      "en": "Map swipe distance to travel and opacity so the dismissal outcome stays predictable."
+    },
+    "frequency": {
+      "zh": "适合中频通知、抽屉或单项操作；核心信息必须提供按钮替代。",
+      "en": "Use for medium-frequency notifications, drawers, or item actions, with a button alternative for essential content."
+    },
+    "trigger": {
+      "zh": "由水平或垂直拖拽超过启动阈值触发，并先锁定主轴。",
+      "en": "Trigger after drag crosses an activation threshold, locking to the primary axis first."
+    },
+    "enterExit": {
+      "zh": "阈值前使用阻尼跟手，越过阈值后离场；未达到阈值则回弹原位。",
+      "en": "Track with resistance before the threshold, exit after crossing it, and spring back when the threshold is missed."
+    },
+    "interruptibility": {
+      "zh": "反向拖动立即改变进度；pointercancel 使用当前位置决定回弹。",
+      "en": "Reverse progress immediately with drag direction, using current position to settle after pointercancel."
+    },
+    "gestureRules": {
+      "zh": "避免与页面滚动轴冲突，设置 touch-action，并提供撤销或显式关闭按钮。",
+      "en": "Avoid conflicts with page scrolling through touch-action, and provide undo or an explicit close button."
+    }
+  },
+  "reducedMotion": {
+    "zh": "使用静态关闭按钮与即时移除，保留撤销反馈；取消大幅滑出。",
+    "en": "Use a static close button and immediate removal with undo feedback, removing large off-screen travel."
+  },
+  "reviewNotes": [
+    {
+      "zh": "区分滑动关闭与橡皮筋回弹的交互目标。",
+      "en": "Distinguish dismissal from rubber-band boundary feedback."
+    },
+    {
+      "zh": "测试慢拖、快甩、短距离和取消路径。",
+      "en": "Test slow drag, fast flick, short travel, and cancellation paths."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "press-tap-feedback",
+    "hold-to-confirm"
+  ]
+}

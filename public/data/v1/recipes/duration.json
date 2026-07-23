@@ -1,0 +1,159 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "duration",
+  "canonicalId": "duration",
+  "categoryId": "sequencing",
+  "family": "timeline",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "时长",
+    "en": "Duration"
+  },
+  "summary": {
+    "zh": "比较时长与延迟对响应速度、节奏和可感知等待的影响。",
+    "en": "Compare how duration and delay affect response, rhythm, and perceived waiting."
+  },
+  "definition": {
+    "zh": "一段动画完成所需的时间。",
+    "en": "Duration measures the elapsed time from an animation's start state to its end state."
+  },
+  "aliases": [
+    "delay"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/sequencing/duration/",
+    "en": "https://motion-lexicon.pages.dev/en/sequencing/duration/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/duration.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "比较时长与延迟对响应速度、阅读节奏和可感知等待的影响。",
+      "en": "Compare how duration and delay affect responsiveness, reading rhythm, and perceived waiting."
+    },
+    "frequency": {
+      "zh": "每种高频交互都需要校准；低频展示动画可采用更宽松范围。",
+      "en": "Calibrate every frequent interaction; low-frequency presentation motion can use a broader range."
+    },
+    "trigger": {
+      "zh": "由控件状态变化触发，同一交互中的延迟只用于表达依赖关系。",
+      "en": "Trigger on control-state changes, using delay only to express dependency within the interaction."
+    },
+    "enterExit": {
+      "zh": "进入通常比退出稍长；关闭、撤销和返回应快速响应。",
+      "en": "Entrances can run slightly longer than exits; closing, undoing, and returning respond quickly."
+    },
+    "interruptibility": {
+      "zh": "新输入立即取消等待，并从当前值过渡到最新目标。",
+      "en": "New input cancels pending delay immediately and transitions from the current value to the latest target."
+    },
+    "gestureRules": {
+      "zh": "连续调节时实时更新目标，释放手势后只执行必要的收敛。",
+      "en": "During continuous adjustment, update the target live and settle only as needed after release."
+    }
+  },
+  "reducedMotion": {
+    "zh": "将非必要时长压缩到接近即时，延迟归零。",
+    "en": "Make nonessential transitions effectively immediate and remove delay."
+  },
+  "reviewNotes": [
+    {
+      "zh": "用真实操作频率评估时长，避免只看单次演示。",
+      "en": "Evaluate duration at real interaction frequency, beyond a single replay."
+    },
+    {
+      "zh": "确认延迟不会让用户误以为输入失效。",
+      "en": "Ensure delay never makes input appear unresponsive."
+    }
+  ],
+  "relatedRecipes": [
+    "stagger",
+    "keyframes",
+    "translate"
+  ]
+}

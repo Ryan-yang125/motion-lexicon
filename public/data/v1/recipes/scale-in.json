@@ -1,0 +1,189 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "scale-in",
+  "canonicalId": "scale-in",
+  "categoryId": "entrances",
+  "family": "entrance",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "缩放入场",
+    "en": "Scale in"
+  },
+  "summary": {
+    "zh": "从接近最终尺寸的位置放大元素，并可切换为带轻微过冲的 Pop in。",
+    "en": "Scale from near the final size, with an optional slight overshoot for Pop in."
+  },
+  "definition": {
+    "zh": "元素出现时从较小尺寸放大到完整尺寸，通常与淡入搭配。",
+    "en": "An appearing element expands from a reduced scale to its final dimensions, commonly while opacity rises."
+  },
+  "aliases": [
+    "pop-in"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/entrances/scale-in/",
+    "en": "https://motion-lexicon.pages.dev/en/entrances/scale-in/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/scale-in.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 200,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 92,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "overshoot",
+      "kind": "toggle",
+      "defaultValue": false,
+      "label": {
+        "zh": "轻微过冲",
+        "en": "Subtle overshoot"
+      },
+      "description": {
+        "zh": "开启后在落点前轻微超过最终尺寸。",
+        "en": "Briefly exceeds the final size before settling."
+      }
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "让浮层、徽标或轻量状态从接近最终尺寸的位置建立视觉存在。",
+      "en": "Establish overlays, badges, or compact states from a size close to their final form."
+    },
+    "frequency": {
+      "zh": "适合中频出现；频繁控件反馈将起始比例保持在 96% 以上。",
+      "en": "Suitable for medium-frequency appearances; keep frequent control feedback above a 96% start scale."
+    },
+    "trigger": {
+      "zh": "由浮层打开、状态确认或小型对象挂载触发，缩放原点贴近触发来源。",
+      "en": "Trigger on overlay opening, state confirmation, or compact object mounting, with origin near the trigger."
+    },
+    "enterExit": {
+      "zh": "进入从 88–96% 放大并淡入；离开轻微缩小并淡出，避免缩到零。",
+      "en": "Enter from 88–96% with a fade; exit with a slight shrink and fade, keeping scale above zero."
+    },
+    "interruptibility": {
+      "zh": "再次触发时使用当前比例为起点，保证连续缩放。",
+      "en": "Use the current scale as the next starting point when retriggered."
+    },
+    "gestureRules": {
+      "zh": "该模式由状态触发；需要按压反馈时采用独立的 Press / Tap feedback。",
+      "en": "This pattern is state-triggered; use Press / Tap feedback for direct press response."
+    }
+  },
+  "reducedMotion": {
+    "zh": "固定在最终尺寸，通过 80–120ms 透明度变化表达出现。",
+    "en": "Hold the final size and communicate appearance through an 80–120ms opacity change."
+  },
+  "reviewNotes": [
+    {
+      "zh": "核对 transform-origin 与触发来源。",
+      "en": "Verify that transform-origin matches the trigger source."
+    },
+    {
+      "zh": "控制文字缩放幅度，避免字形闪烁或模糊。",
+      "en": "Limit text scaling to avoid glyph shimmer or blur."
+    }
+  ],
+  "relatedRecipes": [
+    "fade-in-fade-out",
+    "slide-in",
+    "reveal"
+  ]
+}

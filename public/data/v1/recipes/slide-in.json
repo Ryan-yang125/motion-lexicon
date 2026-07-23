@@ -1,0 +1,231 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "slide-in",
+  "canonicalId": "slide-in",
+  "categoryId": "entrances",
+  "family": "entrance",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "滑入",
+    "en": "Slide in"
+  },
+  "summary": {
+    "zh": "沿明确方向引入内容，让新元素与界面空间关系保持清楚。",
+    "en": "Bring content in from a clear direction so its spatial relationship stays legible."
+  },
+  "definition": {
+    "zh": "元素从屏幕外沿左、右、上或下方滑入。",
+    "en": "A positional transition moves content from beyond an edge into its resting location."
+  },
+  "aliases": [
+    "enter-exit"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/entrances/slide-in/",
+    "en": "https://motion-lexicon.pages.dev/en/entrances/slide-in/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/slide-in.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 28,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "up",
+      "label": {
+        "zh": "方向",
+        "en": "Direction"
+      },
+      "description": {
+        "zh": "选择方向。",
+        "en": "Selects direction."
+      },
+      "options": [
+        {
+          "value": "up",
+          "cssValue": "up",
+          "label": {
+            "zh": "向上",
+            "en": "Up"
+          }
+        },
+        {
+          "value": "down",
+          "cssValue": "down",
+          "label": {
+            "zh": "向下",
+            "en": "Down"
+          }
+        },
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "向左",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "cssValue": "right",
+          "label": {
+            "zh": "向右",
+            "en": "Right"
+          }
+        },
+        {
+          "value": "out",
+          "cssValue": "out",
+          "label": {
+            "zh": "离开",
+            "en": "Exit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过移动方向解释内容来自哪里，以及它与现有布局的空间关系。",
+      "en": "Use direction to explain where content came from and how it relates spatially to the current layout."
+    },
+    "frequency": {
+      "zh": "适合低到中频的抽屉、面板和分层导航；高频反馈应改用更短的淡入。",
+      "en": "Use for low- to medium-frequency drawers, panels, and layered navigation; prefer shorter fades for frequent feedback."
+    },
+    "trigger": {
+      "zh": "由打开面板、添加内容或进入下一级导航触发，方向与信息来源一致。",
+      "en": "Trigger when opening a panel, adding content, or entering deeper navigation, with direction matching the source."
+    },
+    "enterExit": {
+      "zh": "进入沿来源方向移动到位；离开沿相反路径返回，并保持退出目标明确。",
+      "en": "Enter from the source direction; exit along the reverse path with a clear destination."
+    },
+    "interruptibility": {
+      "zh": "反向操作应从当前位置接管并立刻改向，禁止等待上一段完成。",
+      "en": "A reversing action takes over at the current position and changes direction immediately."
+    },
+    "gestureRules": {
+      "zh": "拖拽式面板要让位移跟随指针，并在阈值后结算；按钮打开的面板保持点击与键盘等价。",
+      "en": "Gesture-driven panels follow the pointer and settle after a threshold; button-opened panels keep click and keyboard parity."
+    }
+  },
+  "reducedMotion": {
+    "zh": "移除大幅位移，仅保留短淡入和清晰的层级边界。",
+    "en": "Remove large travel and keep a short fade with a clear layer boundary."
+  },
+  "reviewNotes": [
+    {
+      "zh": "检查进入方向与触发控件的位置关系。",
+      "en": "Check that the entry direction matches the trigger's position."
+    },
+    {
+      "zh": "确保离场结束后焦点回到合理位置。",
+      "en": "Return focus to a sensible location after exit completes."
+    }
+  ],
+  "relatedRecipes": [
+    "fade-in-fade-out",
+    "scale-in",
+    "reveal"
+  ]
+}

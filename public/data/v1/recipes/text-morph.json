@@ -1,0 +1,174 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "text-morph",
+  "canonicalId": "text-morph",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "text",
+  "name": {
+    "zh": "文字形变",
+    "en": "Text morph"
+  },
+  "summary": {
+    "zh": "在长度接近的短文本之间进行平滑替换，保留阅读位置。",
+    "en": "Transition between similarly sized short labels while preserving reading position."
+  },
+  "definition": {
+    "zh": "文字变化时逐字符播放动画，把注意力引向新值。",
+    "en": "Characters or glyph shapes transition between text states to focus attention on updated content."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/text-morph/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/text-morph/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/text-morph.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "blur",
+      "kind": "range",
+      "defaultValue": 8,
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": {
+        "zh": "过渡模糊",
+        "en": "Transition blur"
+      },
+      "description": {
+        "zh": "调节过渡模糊。",
+        "en": "Adjusts transition blur."
+      }
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 120,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在长度接近的短文本值之间平滑替换，并把注意力引向变化内容。",
+      "en": "Transition smoothly between similarly sized short text values and direct attention to the change."
+    },
+    "frequency": {
+      "zh": "适合低到中频指标、状态词和短标签；正文段落直接替换。",
+      "en": "Use for low- to medium-frequency metrics, status words, and short labels, replacing body paragraphs directly."
+    },
+    "trigger": {
+      "zh": "由值变化触发，只动画发生变化的字符或词组。",
+      "en": "Trigger on value change and animate only the characters or phrase that changed."
+    },
+    "enterExit": {
+      "zh": "旧字形弱化并让位，新字形在同一基线出现；容器宽度保持可预测。",
+      "en": "Soften and replace old glyphs as new glyphs appear on the same baseline, keeping container width predictable."
+    },
+    "interruptibility": {
+      "zh": "快速更新时合并中间值，只向最新文本收敛。",
+      "en": "Coalesce rapid updates and settle only on the latest text."
+    },
+    "gestureRules": {
+      "zh": "无需手势；实时值提供 aria-live 策略，避免逐字符播报。",
+      "en": "No gesture is required; use an aria-live strategy that avoids character-by-character announcements."
+    }
+  },
+  "reducedMotion": {
+    "zh": "立即替换完整文本，使用静态高亮或一次短淡入提示变化。",
+    "en": "Replace the full text immediately and use static highlighting or one short fade to signal change."
+  },
+  "reviewNotes": [
+    {
+      "zh": "测试不同字数、CJK 字符和换行边界。",
+      "en": "Test varying lengths, CJK characters, and wrapping boundaries."
+    },
+    {
+      "zh": "确保屏幕阅读器只接收最终值。",
+      "en": "Ensure screen readers receive only the final value."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "before-after-slider",
+    "line-drawing"
+  ]
+}

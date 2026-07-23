@@ -1,0 +1,49 @@
+name: Recipe or vocabulary proposal
+description: Propose a new motion recipe, related term, or definition improvement.
+title: "[Proposal]: "
+labels: [proposal]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Proposal type
+      options:
+        - Improve an existing definition
+        - Add a related term
+        - Add a canonical workspace
+        - Improve a motion recipe
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: User task
+      description: Explain the interface problem this motion helps someone solve.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observable behavior
+      description: Describe trigger, states, direction, timing, interruption, and gesture behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: mapping
+    attributes:
+      label: Canonical mapping
+      description: Name the existing canonical workspace that fits, or explain the need for a stable new unit.
+    validations:
+      required: true
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Accessibility and reduced motion
+      description: Describe keyboard behavior and the meaningful reduced-motion state.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: References and licenses
+      description: Link technical references and identify the license for any proposed asset.

@@ -1,0 +1,161 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "idle-animation",
+  "canonicalId": "idle-animation",
+  "categoryId": "loops",
+  "family": "loop",
+  "surfaceType": "component",
+  "scene": "orbit",
+  "name": {
+    "zh": "空闲动效",
+    "en": "Idle animation"
+  },
+  "summary": {
+    "zh": "用低幅度呼吸或漂浮提示元素仍处于可用、等待或活跃状态。",
+    "en": "Use subtle breathing or floating motion for available, waiting, or active states."
+  },
+  "definition": {
+    "zh": "元素静置并等待交互时播放的细微运动。",
+    "en": "Low-intensity ambient motion gives a waiting element activity without requiring input."
+  },
+  "aliases": [
+    "pulse",
+    "float"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/loops/idle-animation/",
+    "en": "https://motion-lexicon.pages.dev/en/loops/idle-animation/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/idle-animation.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 2200,
+      "min": 1000,
+      "max": 6000,
+      "step": 100,
+      "unit": "ms",
+      "label": {
+        "zh": "单轮时长",
+        "en": "Cycle duration"
+      },
+      "description": {
+        "zh": "控制完整循环的节奏；持续动态需要支持暂停并保持低干扰。",
+        "en": "Controls the rhythm of one full cycle; continuous motion should stay pausable and low-distraction."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 8,
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "style",
+      "kind": "segmented",
+      "defaultValue": "float",
+      "label": {
+        "zh": "方式",
+        "en": "Idle style"
+      },
+      "description": {
+        "zh": "选择方式。",
+        "en": "Selects idle style."
+      },
+      "options": [
+        {
+          "value": "float",
+          "cssValue": "float",
+          "label": {
+            "zh": "漂浮",
+            "en": "Float"
+          }
+        },
+        {
+          "value": "pulse",
+          "cssValue": "pulse",
+          "label": {
+            "zh": "呼吸",
+            "en": "Pulse"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pause",
+      "kind": "range",
+      "defaultValue": 300,
+      "min": 0,
+      "max": 1200,
+      "step": 50,
+      "unit": "ms",
+      "label": {
+        "zh": "停顿",
+        "en": "Pause"
+      },
+      "description": {
+        "zh": "调节停顿。",
+        "en": "Adjusts pause."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过低幅度漂浮或脉冲提示元素处于可用、等待或活跃状态。",
+      "en": "Use low-amplitude float or pulse motion to indicate availability, waiting, or activity."
+    },
+    "frequency": {
+      "zh": "只在长时间静置时低频出现，用户开始操作后立即停止。",
+      "en": "Appear only after a meaningful idle period and stop immediately when the user interacts."
+    },
+    "trigger": {
+      "zh": "由空闲计时器或持续状态触发，页面隐藏和元素离屏时暂停。",
+      "en": "Trigger from an idle timer or ongoing state, pausing when hidden or offscreen."
+    },
+    "enterExit": {
+      "zh": "从稳定状态渐入低幅度循环，退出时在最近的中性帧停止。",
+      "en": "Ease into a low-amplitude loop and stop on the nearest neutral frame."
+    },
+    "interruptibility": {
+      "zh": "输入到来时取消循环并平滑回到稳定值，避免与交互反馈叠加。",
+      "en": "Cancel on input and settle to a stable value without overlapping interaction feedback."
+    },
+    "gestureRules": {
+      "zh": "空闲动效不承担操作；真实控件仍提供明确点击、触摸和键盘反馈。",
+      "en": "Idle motion carries no action; real controls keep explicit click, touch, and keyboard feedback."
+    }
+  },
+  "reducedMotion": {
+    "zh": "关闭自动漂浮和脉冲，使用静态状态标记。",
+    "en": "Disable automatic float and pulse motion and use a static status indicator."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确认动效只在真正空闲后开始。",
+      "en": "Start only after the interface is genuinely idle."
+    },
+    {
+      "zh": "控制振幅和对比，避免持续吸引注意。",
+      "en": "Limit amplitude and contrast to avoid persistent attention capture."
+    }
+  ],
+  "relatedRecipes": [
+    "loop",
+    "marquee",
+    "orbit"
+  ]
+}

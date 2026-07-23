@@ -1,0 +1,194 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "anticipation",
+  "canonicalId": "anticipation",
+  "categoryId": "principles",
+  "family": "principle",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "预备动作",
+    "en": "Anticipation"
+  },
+  "summary": {
+    "zh": "调节预备、跟随与形变幅度，理解物理感对反馈的影响。",
+    "en": "Tune anticipation, follow-through, and deformation to understand physical feedback."
+  },
+  "definition": {
+    "zh": "动作开始前先向相反方向进行一小段蓄力，用来预示即将发生的运动。",
+    "en": "A brief preparatory movement establishes direction and energy before the primary action."
+  },
+  "aliases": [
+    "follow-through",
+    "squash-and-stretch"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/principles/anticipation/",
+    "en": "https://motion-lexicon.pages.dev/en/principles/anticipation/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/anticipation.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 520,
+      "min": 300,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 32,
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "anticipation",
+      "kind": "range",
+      "defaultValue": 18,
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "label": {
+        "zh": "预备幅度",
+        "en": "Anticipation"
+      },
+      "description": {
+        "zh": "调节预备幅度。",
+        "en": "Adjusts anticipation."
+      }
+    },
+    {
+      "id": "followThrough",
+      "kind": "range",
+      "defaultValue": 12,
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": {
+        "zh": "跟随幅度",
+        "en": "Follow-through"
+      },
+      "description": {
+        "zh": "调节跟随幅度。",
+        "en": "Adjusts follow-through."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过反向预备、跟随收敛和适量形变表达动作方向、重量与弹性。",
+      "en": "Use opposite-direction anticipation, follow-through settling, and measured deformation to express direction, weight, and flexibility."
+    },
+    "frequency": {
+      "zh": "适合低频、具有物理意味的对象动作；高频 UI 反馈将预备阶段压到极短。",
+      "en": "Use for low-frequency object motion with physical meaning, compressing anticipation heavily for frequent UI feedback."
+    },
+    "trigger": {
+      "zh": "由用户主动发起的移动、投掷或状态切换触发，预备方向与主运动相反。",
+      "en": "Trigger from user-initiated movement, throwing, or state changes, with anticipation opposite the main travel."
+    },
+    "enterExit": {
+      "zh": "进入先小幅蓄力再完成主运动，结束后用一次衰减跟随动作稳定。",
+      "en": "Wind up briefly before the main travel and settle with one decaying follow-through phase."
+    },
+    "interruptibility": {
+      "zh": "中断时取消剩余阶段并从当前位置与速度转向新目标。",
+      "en": "Cancel remaining phases on interruption and retarget from current position and velocity."
+    },
+    "gestureRules": {
+      "zh": "手势速度影响主运动，预备阶段不能阻止即时响应；键盘触发使用固定短预备。",
+      "en": "Let gesture velocity influence main travel without delaying response, using a fixed brief anticipation for keyboard triggers."
+    }
+  },
+  "reducedMotion": {
+    "zh": "移除反向蓄力、过冲和形变，直接进入稳定目标或短淡入。",
+    "en": "Remove wind-up, overshoot, and deformation, moving directly to the stable target or using a short fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "分别辨析 Anticipation、Follow-through 与 Squash & stretch。",
+      "en": "Review Anticipation, Follow-through, and Squash & stretch as distinct concepts."
+    },
+    {
+      "zh": "控制形变幅度，保持文字和图标可识别。",
+      "en": "Limit deformation so text and icons remain recognizable."
+    }
+  ],
+  "relatedRecipes": [
+    "purposeful-animation",
+    "perceived-performance",
+    "reduced-motion"
+  ]
+}

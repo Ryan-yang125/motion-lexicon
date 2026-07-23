@@ -1,0 +1,199 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "compositing",
+  "canonicalId": "compositing",
+  "categoryId": "performance",
+  "family": "performance",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "合成",
+    "en": "Compositing"
+  },
+  "summary": {
+    "zh": "比较合成友好属性、硬件加速提示与布局触发属性的渲染成本。",
+    "en": "Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties."
+  },
+  "definition": {
+    "zh": "让 GPU 在独立图层上移动元素或改变其透明度，无需重新执行布局或绘制。",
+    "en": "Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout."
+  },
+  "aliases": [
+    "will-change",
+    "layout-thrashing",
+    "hardware-acceleration"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/",
+    "en": "https://motion-lexicon.pages.dev/en/performance/compositing/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 520,
+      "min": 300,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 80,
+      "min": 0,
+      "max": 180,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "property",
+      "kind": "segmented",
+      "defaultValue": "transform",
+      "label": {
+        "zh": "对比属性",
+        "en": "Compared property"
+      },
+      "description": {
+        "zh": "选择对比属性。",
+        "en": "Selects compared property."
+      },
+      "options": [
+        {
+          "value": "transform",
+          "cssValue": "transform",
+          "label": {
+            "zh": "Transform",
+            "en": "Transform"
+          }
+        },
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "Left",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "opacity",
+          "cssValue": "opacity",
+          "label": {
+            "zh": "Opacity",
+            "en": "Opacity"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "linear",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "比较合成友好属性与触发布局或绘制的属性，选择稳定的渲染路径。",
+      "en": "Compare compositor-friendly properties with layout- or paint-triggering properties to choose a stable rendering path."
+    },
+    "frequency": {
+      "zh": "在新动效实现、性能回归和复杂页面集成时检查。",
+      "en": "Review during new motion implementation, performance regressions, and integration into complex pages."
+    },
+    "trigger": {
+      "zh": "由属性选择或性能实验触发，同时记录主线程、布局、绘制和合成活动。",
+      "en": "Trigger from property selection or a performance experiment while recording main-thread, layout, paint, and compositing activity."
+    },
+    "enterExit": {
+      "zh": "实验对象直接切换属性方案，指标变化保持可读，避免附加过渡污染结果。",
+      "en": "Switch property strategies directly and keep metric changes readable without extra transitions affecting results."
+    },
+    "interruptibility": {
+      "zh": "测试可中断并重置图层状态，will-change 只在需要前短暂启用。",
+      "en": "Allow tests to stop and reset layer state, enabling will-change only shortly before it is needed."
+    },
+    "gestureRules": {
+      "zh": "手势测试按同样距离和速度驱动两种方案，确保比较公平。",
+      "en": "Drive compared strategies with identical gesture distance and speed."
+    }
+  },
+  "reducedMotion": {
+    "zh": "低动态模式仍优先 transform 和 opacity，并减少持续图层占用。",
+    "en": "Reduced-motion mode still favors transform and opacity while limiting persistent layer allocation."
+  },
+  "reviewNotes": [
+    {
+      "zh": "区分 Compositing、will-change 与 Layout thrashing。",
+      "en": "Distinguish Compositing, will-change, and Layout thrashing."
+    },
+    {
+      "zh": "检查图层数量、内存和完成后的清理。",
+      "en": "Inspect layer count, memory use, and cleanup after completion."
+    }
+  ],
+  "relatedRecipes": [
+    "frame-rate",
+    "purposeful-animation"
+  ]
+}

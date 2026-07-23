@@ -1,0 +1,154 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "marquee",
+  "canonicalId": "marquee",
+  "categoryId": "loops",
+  "family": "loop",
+  "surfaceType": "component",
+  "scene": "text",
+  "name": {
+    "zh": "跑马灯",
+    "en": "Marquee"
+  },
+  "summary": {
+    "zh": "让超出容器的信息连续滚动，并在悬停或聚焦时暂停。",
+    "en": "Continuously scroll overflowing content and pause it on hover or focus."
+  },
+  "definition": {
+    "zh": "文字或内容持续循环滚动。",
+    "en": "A content track translates continuously and wraps to create an uninterrupted scrolling strip."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/loops/marquee/",
+    "en": "https://motion-lexicon.pages.dev/en/loops/marquee/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/marquee.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 8000,
+      "min": 2000,
+      "max": 20000,
+      "step": 100,
+      "unit": "ms",
+      "label": {
+        "zh": "单轮时长",
+        "en": "Cycle duration"
+      },
+      "description": {
+        "zh": "控制完整循环的节奏；持续动态需要支持暂停并保持低干扰。",
+        "en": "Controls the rhythm of one full cycle; continuous motion should stay pausable and low-distraction."
+      }
+    },
+    {
+      "id": "gap",
+      "kind": "range",
+      "defaultValue": 32,
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": {
+        "zh": "内容间距",
+        "en": "Content gap"
+      },
+      "description": {
+        "zh": "调节内容间距。",
+        "en": "Adjusts content gap."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "left",
+      "label": {
+        "zh": "方向",
+        "en": "Direction"
+      },
+      "description": {
+        "zh": "选择方向。",
+        "en": "Selects direction."
+      },
+      "options": [
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "向左",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "cssValue": "right",
+          "label": {
+            "zh": "向右",
+            "en": "Right"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pauseOnHover",
+      "kind": "toggle",
+      "defaultValue": true,
+      "label": {
+        "zh": "悬停暂停",
+        "en": "Pause on hover"
+      },
+      "description": {
+        "zh": "悬停或聚焦时暂停滚动。",
+        "en": "Pauses motion on hover or focus."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在有限空间内连续展示超长信息流，并提供暂停阅读的能力。",
+      "en": "Present an overlong information stream in limited space while allowing users to pause and read."
+    },
+    "frequency": {
+      "zh": "适合低频品牌、合作方或实时状态带；正文信息保持静态可访问。",
+      "en": "Use sparingly for brands, partners, or live status strips while keeping core text statically accessible."
+    },
+    "trigger": {
+      "zh": "由内容溢出且组件处于播放状态触发，内容不足一屏时保持静止。",
+      "en": "Run only when content overflows and playback is active, remaining still when content fits."
+    },
+    "enterExit": {
+      "zh": "副本无缝衔接形成连续轨道，停止时落在完整可读的位置。",
+      "en": "Join duplicated content into a seamless track and stop at a fully readable position."
+    },
+    "interruptibility": {
+      "zh": "悬停、聚焦或页面隐藏时暂停当前位置，恢复后继续。",
+      "en": "Pause at the current position on hover, focus, or page hide, and continue on resume."
+    },
+    "gestureRules": {
+      "zh": "用户可通过悬停、聚焦和按钮暂停；轨道内容的键盘顺序只保留一份。",
+      "en": "Let users pause through hover, focus, and a control while keeping one keyboard-accessible copy of track content."
+    }
+  },
+  "reducedMotion": {
+    "zh": "停止滚动并换行或展示可横向浏览的静态列表。",
+    "en": "Stop scrolling and wrap content or provide a statically browsable horizontal list."
+  },
+  "reviewNotes": [
+    {
+      "zh": "隐藏重复副本，避免屏幕阅读器重复朗读。",
+      "en": "Hide duplicate copies from screen readers."
+    },
+    {
+      "zh": "速度按文本长度和阅读时间校准。",
+      "en": "Calibrate speed against text length and reading time."
+    }
+  ],
+  "relatedRecipes": [
+    "loop",
+    "orbit",
+    "idle-animation"
+  ]
+}

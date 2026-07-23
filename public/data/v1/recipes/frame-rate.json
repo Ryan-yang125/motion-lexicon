@@ -1,0 +1,77 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "frame-rate",
+  "canonicalId": "frame-rate",
+  "categoryId": "performance",
+  "family": "performance",
+  "surfaceType": "guide",
+  "scene": "guide",
+  "name": {
+    "zh": "帧率（FPS）",
+    "en": "Frame rate (FPS)"
+  },
+  "summary": {
+    "zh": "检查帧率、主线程长任务和掉帧，定位动态卡顿。",
+    "en": "Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank."
+  },
+  "definition": {
+    "zh": "每秒绘制的帧数；60fps 是流畅运动的基线，新款显示器可达到 120fps。",
+    "en": "Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result."
+  },
+  "aliases": [
+    "jank",
+    "dropped-frame"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/performance/frame-rate/",
+    "en": "https://motion-lexicon.pages.dev/en/performance/frame-rate/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/frame-rate.json",
+  "parameters": [],
+  "guidance": {
+    "purpose": {
+      "zh": "通过帧率、长任务和掉帧定位运动卡顿，并建立可复现的性能基线。",
+      "en": "Diagnose motion jank through frame rate, long tasks, and dropped frames with a reproducible performance baseline."
+    },
+    "frequency": {
+      "zh": "在代表性设备、关键动效变更和发布前执行；高风险页面纳入持续监测。",
+      "en": "Run on representative devices, after key motion changes, and before release, with ongoing monitoring for high-risk pages."
+    },
+    "trigger": {
+      "zh": "由性能录制、自动基准或真实用户监测触发，覆盖冷启动和稳定状态。",
+      "en": "Trigger from performance recordings, automated benchmarks, or real-user monitoring across cold and steady states."
+    },
+    "enterExit": {
+      "zh": "指标面板即时更新，不使用会干扰测量结果的装饰入场动画。",
+      "en": "Update metrics immediately without decorative entrance motion that contaminates measurements."
+    },
+    "interruptibility": {
+      "zh": "录制可随时停止并保留样本；重复测试使用同一脚本和设备条件。",
+      "en": "Allow recording to stop while preserving samples, and repeat tests with the same script and device conditions."
+    },
+    "gestureRules": {
+      "zh": "滚动、拖拽和点击测试使用一致手势轨迹，自动化与人工路径相互校验。",
+      "en": "Use consistent gesture paths for scroll, drag, and click tests, cross-checking automated and manual runs."
+    }
+  },
+  "reducedMotion": {
+    "zh": "分别测试默认与 reduced-motion 模式，确认低动态路径也没有长任务。",
+    "en": "Measure default and reduced-motion modes separately, confirming the low-motion path also avoids long tasks."
+  },
+  "reviewNotes": [
+    {
+      "zh": "区分帧率、单次丢帧和可见卡顿。",
+      "en": "Distinguish frame rate, an individual dropped frame, and visible jank."
+    },
+    {
+      "zh": "在 60Hz 与高刷新率设备上记录目标。",
+      "en": "Record targets on both 60Hz and high-refresh displays."
+    }
+  ],
+  "relatedRecipes": [
+    "compositing",
+    "typewriter"
+  ]
+}

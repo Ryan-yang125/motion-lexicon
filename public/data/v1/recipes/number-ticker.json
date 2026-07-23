@@ -1,0 +1,159 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "number-ticker",
+  "canonicalId": "number-ticker",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "number",
+  "name": {
+    "zh": "数字滚动",
+    "en": "Number ticker"
+  },
+  "summary": {
+    "zh": "使用等宽数字与垂直滚动稳定展示数值变化。",
+    "en": "Show changing values with tabular figures and stable vertical digit movement."
+  },
+  "definition": {
+    "zh": "数字滚动或递增到目标值。",
+    "en": "Numeric glyphs translate or interpolate until the display reaches an updated value."
+  },
+  "aliases": [
+    "tabular-numbers"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/number-ticker/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/number-ticker.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 24,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用稳定的等宽数字滚动或计数到新值，突出数值变化方向和幅度。",
+      "en": "Roll or count with stable tabular digits to emphasize the direction and magnitude of a value change."
+    },
+    "frequency": {
+      "zh": "适合低到中频指标更新；高速实时数据应批量更新或直接替换。",
+      "en": "Use for low- to medium-frequency metric updates; batch or replace high-rate live data directly."
+    },
+    "trigger": {
+      "zh": "由已确认的新数值触发，并根据增减方向选择滚动方向。",
+      "en": "Trigger from a confirmed new value, choosing roll direction from increase or decrease."
+    },
+    "enterExit": {
+      "zh": "变化位数滚动到目标，未变化位保持稳定；初始加载直接显示完整值。",
+      "en": "Roll changed digits to their targets while unchanged digits remain stable, showing the full initial value immediately."
+    },
+    "interruptibility": {
+      "zh": "连续更新合并到最新值，并从当前显示数值和速度继续。",
+      "en": "Coalesce successive updates toward the latest value from the current displayed value and velocity."
+    },
+    "gestureRules": {
+      "zh": "无需手势；数值控件的增减按钮提供键盘和长按规则。",
+      "en": "No gesture is required; numeric increment controls provide keyboard and hold behavior separately."
+    }
+  },
+  "reducedMotion": {
+    "zh": "立即替换数值，使用静态颜色或箭头标明增减。",
+    "en": "Replace the value immediately and indicate direction through static color or an arrow."
+  },
+  "reviewNotes": [
+    {
+      "zh": "启用 font-variant-numeric: tabular-nums。",
+      "en": "Enable font-variant-numeric: tabular-nums."
+    },
+    {
+      "zh": "辅助技术只宣布最终值和变化含义。",
+      "en": "Announce only the final value and change meaning to assistive technology."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "before-after-slider",
+    "line-drawing"
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "name": "motion-lexicon",
+  "version": "0.1.0",
+  "description": "Open motion recipes for humans and agents, with an offline CLI and Node API.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryan-yang125/motion-lexicon.git"
+  },
+  "homepage": "https://motion-lexicon.pages.dev",
+  "bugs": {
+    "url": "https://github.com/Ryan-yang125/motion-lexicon/issues"
+  },
+  "keywords": [
+    "motion-design",
+    "animation",
+    "css-animation",
+    "motion",
+    "cli",
+    "agent-skill",
+    "reduced-motion",
+    "ui"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "bin": {
+    "motion-lexicon": "packages/cli/dist/motion-lexicon.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./packages/cli/dist/index.d.ts",
+      "import": "./packages/cli/dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "packages/cli/dist",
+    "skills/motion-lexicon",
+    "README.md",
+    "LICENSE",
+    "CONTENT-LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "preview": "vite preview",
+    "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc -b && npm run cli:typecheck",
+    "prepare": "npm run cli:build",
+    "cli:build": "npm run build -w @motion-lexicon/cli",
+    "cli:typecheck": "npm run typecheck -w @motion-lexicon/cli",
+    "cli:test": "vitest run tests/cli",
+    "i18n:check": "tsx scripts/check-i18n.ts",
+    "vocabulary:check": "tsx scripts/check-vocabulary.ts",
+    "seo:check": "tsx scripts/check-seo.ts",
+    "motion:check": "tsx scripts/check-motion.ts",
+    "assets:brand": "tsx scripts/generate-brand-assets.ts",
+    "artifacts:generate": "tsx scripts/generate-public-artifacts.ts",
+    "a11y:check": "tsx scripts/check-a11y.ts",
+    "bundle:check": "tsx scripts/check-bundle.ts",
+    "crawl:dist": "tsx scripts/crawl-dist.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:visual": "playwright test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.49.1",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/react-router": "^1.121.34",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "i18next": "^25.3.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^15.6.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss": "^4.1.11",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "tsup": "^8.5.0",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,174 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "fade-in-fade-out",
+  "canonicalId": "fade-in-fade-out",
+  "categoryId": "entrances",
+  "family": "entrance",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "淡入 / 淡出",
+    "en": "Fade in / Fade out"
+  },
+  "summary": {
+    "zh": "用透明度建立或移除元素，适合低干扰的内容出现与消失。",
+    "en": "Introduce or remove an element with opacity for low-distraction state changes."
+  },
+  "definition": {
+    "zh": "元素通过改变不透明度出现或消失。",
+    "en": "An opacity transition brings an element into view or carries it out without changing its geometry."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/entrances/fade-in-fade-out/",
+    "en": "https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/fade-in-fade-out.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "opacity",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "起始透明度",
+        "en": "Start opacity"
+      },
+      "description": {
+        "zh": "调节起始透明度。",
+        "en": "Adjusts start opacity."
+      }
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "calm",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "低干扰地表达内容出现、消失或可见性变化。",
+      "en": "Communicate appearance, disappearance, or visibility changes with minimal distraction."
+    },
+    "frequency": {
+      "zh": "适合中高频状态变化；重复出现时将时长控制在 120–220ms。",
+      "en": "Suitable for medium- to high-frequency state changes; keep repeated uses around 120–220ms."
+    },
+    "trigger": {
+      "zh": "由内容挂载、异步完成、筛选结果变化或明确的显示状态触发。",
+      "en": "Trigger from mounting, async completion, filter-result changes, or an explicit visibility state."
+    },
+    "enterExit": {
+      "zh": "进入从低透明度到完全可见；离开应在卸载前完成淡出。",
+      "en": "Enter from low opacity to fully visible; finish the exit fade before unmounting."
+    },
+    "interruptibility": {
+      "zh": "新状态到来时从当前透明度继续，避免先跳回起点。",
+      "en": "When state changes again, continue from the current opacity without resetting to the start."
+    },
+    "gestureRules": {
+      "zh": "无需手势控制；交互控件仍要立即更新可访问状态。",
+      "en": "No gesture control is required; interactive controls still update accessible state immediately."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保留一次 80–120ms 的短淡入淡出，重要信息同步使用静态对比。",
+    "en": "Keep a brief 80–120ms fade and pair important information with a static contrast change."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确认淡出期间元素不会继续接收点击。",
+      "en": "Ensure the element stops receiving clicks while it fades out."
+    },
+    {
+      "zh": "检查透明内容不会与背景形成难读的中间状态。",
+      "en": "Check that translucent intermediate states remain legible against the background."
+    }
+  ],
+  "relatedRecipes": [
+    "slide-in",
+    "scale-in",
+    "reveal"
+  ]
+}

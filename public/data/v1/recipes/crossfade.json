@@ -1,0 +1,157 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "crossfade",
+  "canonicalId": "crossfade",
+  "categoryId": "state-transitions",
+  "family": "state",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "交叉淡入淡出",
+    "en": "Crossfade"
+  },
+  "summary": {
+    "zh": "用重叠淡入淡出切换等尺寸状态，减少视觉跳变。",
+    "en": "Crossfade overlapping, similarly sized states to reduce visual jumps."
+  },
+  "definition": {
+    "zh": "一个元素淡出的同时，另一个元素在同一位置淡入。",
+    "en": "Two overlapping states exchange opacity over the same interval, handing visual focus from one to the other."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/crossfade/",
+    "en": "https://motion-lexicon.pages.dev/en/state-transitions/crossfade/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/crossfade.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 200,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "overlap",
+      "kind": "range",
+      "defaultValue": 50,
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "重叠",
+        "en": "Overlap"
+      },
+      "description": {
+        "zh": "调节重叠。",
+        "en": "Adjusts overlap."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "calm",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在同一位置切换尺寸接近的状态，减少内容瞬间替换造成的跳变。",
+      "en": "Switch similarly sized states in the same location while reducing abrupt replacement."
+    },
+    "frequency": {
+      "zh": "适合中高频标签、图标和媒体状态；连续输入期间缩短重叠时间。",
+      "en": "Use for medium- to high-frequency labels, icons, and media states; shorten overlap during continuous input."
+    },
+    "trigger": {
+      "zh": "由选中项、内容版本或媒体状态变化触发，两个状态共享布局槽位。",
+      "en": "Trigger from selection, content version, or media-state changes, with both states sharing one layout slot."
+    },
+    "enterExit": {
+      "zh": "旧状态淡出与新状态淡入部分重叠；离开元素在不可见后移除。",
+      "en": "Partially overlap old-state fade-out and new-state fade-in, removing the old element after it is hidden."
+    },
+    "interruptibility": {
+      "zh": "快速切换时从当前混合比例继续，只保留最新目标。",
+      "en": "On rapid changes, continue from the current blend ratio and retain only the latest target."
+    },
+    "gestureRules": {
+      "zh": "无需手势；滑块驱动的对比应使用 Before / after slider。",
+      "en": "No gesture is required; slider-driven comparison uses Before / after slider."
+    }
+  },
+  "reducedMotion": {
+    "zh": "缩短到 80–120ms，或直接替换并保留稳定尺寸。",
+    "en": "Shorten to 80–120ms or switch immediately while preserving stable dimensions."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确保重叠文字不会被辅助技术重复朗读。",
+      "en": "Prevent overlapping text from being announced twice by assistive technology."
+    },
+    {
+      "zh": "检查两个状态的容器尺寸不会相互挤压。",
+      "en": "Keep both states from changing the shared container size."
+    }
+  ],
+  "relatedRecipes": [
+    "morph",
+    "accordion-collapse",
+    "direction-aware-transition"
+  ]
+}

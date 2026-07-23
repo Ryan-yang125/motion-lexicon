@@ -1,0 +1,158 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "scroll-driven-animation",
+  "canonicalId": "scroll-driven-animation",
+  "categoryId": "scroll",
+  "family": "scroll",
+  "surfaceType": "playground",
+  "scene": "scroll",
+  "name": {
+    "zh": "滚动驱动动画",
+    "en": "Scroll-driven animation"
+  },
+  "summary": {
+    "zh": "把动画进度绑定到滚动区间，调节起止位置与运动幅度。",
+    "en": "Bind animation progress to a scroll range and tune its start, end, and travel."
+  },
+  "definition": {
+    "zh": "动画进度与滚动位置直接绑定。",
+    "en": "Scroll progress supplies the animation timeline, mapping page movement to visual state."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-driven-animation/",
+    "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/scroll-driven-animation.json",
+  "parameters": [
+    {
+      "id": "start",
+      "kind": "range",
+      "defaultValue": 10,
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "开始位置",
+        "en": "Start"
+      },
+      "description": {
+        "zh": "调节开始位置。",
+        "en": "Adjusts start."
+      }
+    },
+    {
+      "id": "end",
+      "kind": "range",
+      "defaultValue": 80,
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "结束位置",
+        "en": "End"
+      },
+      "description": {
+        "zh": "调节结束位置。",
+        "en": "Adjusts end."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 80,
+      "min": 0,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "axis",
+      "kind": "segmented",
+      "defaultValue": "y",
+      "label": {
+        "zh": "轴向",
+        "en": "Axis"
+      },
+      "description": {
+        "zh": "选择轴向。",
+        "en": "Selects axis."
+      },
+      "options": [
+        {
+          "value": "y",
+          "cssValue": "y",
+          "label": {
+            "zh": "垂直",
+            "en": "Vertical"
+          }
+        },
+        {
+          "value": "x",
+          "cssValue": "x",
+          "label": {
+            "zh": "水平",
+            "en": "Horizontal"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "把视觉进度连续绑定到滚动区间，用于解释位置、阶段或叙事进度。",
+      "en": "Bind visual progress continuously to a scroll range to explain position, phases, or narrative progress."
+    },
+    "frequency": {
+      "zh": "适合低频重点叙事和数据解释；常规正文保持原生静态阅读。",
+      "en": "Reserve for low-frequency featured narratives and data explanation; keep ordinary reading static."
+    },
+    "trigger": {
+      "zh": "由滚动位置持续驱动，并明确起点、终点和区间外的稳定状态。",
+      "en": "Drive continuously from scroll position with explicit start, end, and stable out-of-range states."
+    },
+    "enterExit": {
+      "zh": "进入区间前固定首态，离开区间后固定末态；反向滚动精确回放。",
+      "en": "Hold the first state before the range and the last after it, replaying exactly during reverse scroll."
+    },
+    "interruptibility": {
+      "zh": "滚动输入天然可反向，渲染进度直接跟随当前位置。",
+      "en": "Scroll input is naturally reversible, with rendering tied directly to current progress."
+    },
+    "gestureRules": {
+      "zh": "保持原生滚动和触摸惯性；键盘、滚动条拖动与辅助技术得到同一结果。",
+      "en": "Preserve native scrolling and touch momentum, with keyboard, scrollbar drag, and assistive technology reaching the same result."
+    }
+  },
+  "reducedMotion": {
+    "zh": "冻结在最能传达信息的静态帧，并提供文本化进度或说明。",
+    "en": "Freeze on the most informative static frame and provide textual progress or explanation."
+  },
+  "reviewNotes": [
+    {
+      "zh": "检查滚动区间在不同视口高度下仍合理。",
+      "en": "Test the scroll range across viewport heights."
+    },
+    {
+      "zh": "避免逐帧触发布局和大面积绘制。",
+      "en": "Avoid per-frame layout work and large paint regions."
+    }
+  ],
+  "relatedRecipes": [
+    "scroll-reveal",
+    "parallax",
+    "page-transition"
+  ]
+}

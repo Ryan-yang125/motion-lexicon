@@ -1,0 +1,212 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "origin-aware-animation",
+  "canonicalId": "origin-aware-animation",
+  "categoryId": "transforms",
+  "family": "transform",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "基于触发源的动画",
+    "en": "Origin-aware animation"
+  },
+  "summary": {
+    "zh": "让展开或缩放从触发点发生，保持动作来源的空间连续性。",
+    "en": "Expand or scale from the trigger point to preserve spatial continuity."
+  },
+  "definition": {
+    "zh": "元素从触发它的控件位置展开，例如弹出层从打开它的按钮处生长，而非沿用 CSS 默认的自身中心。",
+    "en": "Entrance geometry begins at the control or location that triggered the new surface, preserving their spatial relationship."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/transforms/origin-aware-animation/",
+    "en": "https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 88,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "origin",
+      "kind": "segmented",
+      "defaultValue": "top-left",
+      "label": {
+        "zh": "动作来源",
+        "en": "Motion origin"
+      },
+      "description": {
+        "zh": "选择动作来源。",
+        "en": "Selects motion origin."
+      },
+      "options": [
+        {
+          "value": "top-left",
+          "cssValue": "top-left",
+          "label": {
+            "zh": "左上",
+            "en": "Top left"
+          }
+        },
+        {
+          "value": "top-right",
+          "cssValue": "top-right",
+          "label": {
+            "zh": "右上",
+            "en": "Top right"
+          }
+        },
+        {
+          "value": "bottom-left",
+          "cssValue": "bottom-left",
+          "label": {
+            "zh": "左下",
+            "en": "Bottom left"
+          }
+        },
+        {
+          "value": "bottom-right",
+          "cssValue": "bottom-right",
+          "label": {
+            "zh": "右下",
+            "en": "Bottom right"
+          }
+        },
+        {
+          "value": "center",
+          "cssValue": "center",
+          "label": {
+            "zh": "中心",
+            "en": "Center"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "让弹出层或展开内容从触发控件处生长，保持动作来源可追踪。",
+      "en": "Grow overlays or expanded content from their trigger so the motion source remains traceable."
+    },
+    "frequency": {
+      "zh": "适合中频菜单、气泡和局部展开；全屏页面切换使用更稳定的空间规则。",
+      "en": "Use for medium-frequency menus, popovers, and local expansion; full-screen transitions need a more stable spatial rule."
+    },
+    "trigger": {
+      "zh": "由具体触发控件打开内容时触发，并根据触发点与浮层位置计算原点。",
+      "en": "Trigger when a specific control opens content, deriving origin from trigger and overlay placement."
+    },
+    "enterExit": {
+      "zh": "进入从触发点缩放并淡入；离开回到同一触发点，随后恢复焦点。",
+      "en": "Scale and fade in from the trigger; exit toward the same point and then restore focus."
+    },
+    "interruptibility": {
+      "zh": "浮层位置变化时平滑更新原点，关闭动作从当前几何状态开始。",
+      "en": "Update origin smoothly if placement changes, and begin closing from current geometry."
+    },
+    "gestureRules": {
+      "zh": "无需拖拽；触发控件必须支持键盘打开、Escape 关闭和正确焦点管理。",
+      "en": "No drag is required; the trigger supports keyboard opening, Escape closing, and correct focus management."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保持触发点与浮层的静态位置关联，使用短淡入淡出替代缩放位移。",
+    "en": "Preserve the static trigger-overlay relationship and replace scaling travel with a short fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "在四个边缘位置测试原点计算。",
+      "en": "Test origin calculation at all four viewport edges."
+    },
+    {
+      "zh": "确认滚动或重排后关闭路径仍指向当前触发控件。",
+      "en": "Ensure the closing path still points to the current trigger after scroll or reflow."
+    }
+  ],
+  "relatedRecipes": [
+    "translate",
+    "3d-tilt-flip",
+    "crossfade"
+  ]
+}

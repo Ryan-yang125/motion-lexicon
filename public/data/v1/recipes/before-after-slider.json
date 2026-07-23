@@ -1,0 +1,110 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "before-after-slider",
+  "canonicalId": "before-after-slider",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "comparison",
+  "name": {
+    "zh": "前后对比滑杆",
+    "en": "Before / after slider"
+  },
+  "summary": {
+    "zh": "用可拖动分割线比较同一画面的前后状态。",
+    "en": "Compare before and after states of the same visual with a draggable divider."
+  },
+  "definition": {
+    "zh": "通过可拖动分割线在两张叠放图片之间擦拭切换，以便对比。",
+    "en": "A draggable boundary changes the visible share of two aligned layers for direct comparison."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/before-after-slider/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/before-after-slider.json",
+  "parameters": [
+    {
+      "id": "position",
+      "kind": "range",
+      "defaultValue": 50,
+      "min": 10,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "分割位置",
+        "en": "Divider position"
+      },
+      "description": {
+        "zh": "调节分割位置。",
+        "en": "Adjusts divider position."
+      }
+    },
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 180,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过可拖动分割线比较同一画面的两个叠加状态。",
+      "en": "Compare two overlaid states of the same visual through a draggable divider."
+    },
+    "frequency": {
+      "zh": "适合用户主动探索的低频比较任务；默认位置应立即表达差异。",
+      "en": "Use for low-frequency, user-driven comparison with a default position that makes the difference immediately clear."
+    },
+    "trigger": {
+      "zh": "由拖动分割线、点击轨道或键盘方向键触发。",
+      "en": "Trigger from divider drag, track click, or keyboard arrow keys."
+    },
+    "enterExit": {
+      "zh": "组件初始直接显示两个状态，拖动只改变裁切边界，不播放自动入场。",
+      "en": "Show both states immediately and let dragging change only the clipping boundary, with no automatic entrance."
+    },
+    "interruptibility": {
+      "zh": "输入中断时停在当前位置；新的指针或键盘输入从当前比例继续。",
+      "en": "Stop at the current position on interruption and continue from that ratio on new input."
+    },
+    "gestureRules": {
+      "zh": "使用指针捕获、44px 手柄、方向键步进和 Home/End；标签说明两侧含义。",
+      "en": "Use pointer capture, a 44px handle, arrow-key steps, Home/End, and labels describing both sides."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保留可操作分割线，取消位置补间；键盘和指针仍即时更新静态裁切。",
+    "en": "Keep the operable divider while removing position tweening; keyboard and pointer update the static clip immediately."
+  },
+  "reviewNotes": [
+    {
+      "zh": "两张图片保持相同尺寸、构图和替代文本策略。",
+      "en": "Keep both images aligned in size, composition, and alt-text strategy."
+    },
+    {
+      "zh": "检查最小与最大位置仍可看清手柄。",
+      "en": "Keep the handle visible at minimum and maximum positions."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "line-drawing",
+    "text-morph"
+  ]
+}

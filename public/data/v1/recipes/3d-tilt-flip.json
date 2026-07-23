@@ -1,0 +1,173 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "3d-tilt-flip",
+  "canonicalId": "3d-tilt-flip",
+  "categoryId": "transforms",
+  "family": "transform",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "3D 倾斜 / 翻转",
+    "en": "3D tilt / Flip"
+  },
+  "summary": {
+    "zh": "用受控透视和旋转展示卡片正反面或悬停深度。",
+    "en": "Use controlled perspective and rotation for card flips or hover depth."
+  },
+  "definition": {
+    "zh": "在三维空间中通过 rotateX 或 rotateY 旋转，增加纵深感。",
+    "en": "Rotation around the X or Y axis creates a plane-turning effect within a perspective scene."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/transforms/3d-tilt-flip/",
+    "en": "https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/3d-tilt-flip.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 280,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "angle",
+      "kind": "range",
+      "defaultValue": 180,
+      "min": 45,
+      "max": 180,
+      "step": 5,
+      "unit": "deg",
+      "label": {
+        "zh": "翻转角度",
+        "en": "Flip angle"
+      },
+      "description": {
+        "zh": "调节翻转角度。",
+        "en": "Adjusts flip angle."
+      }
+    },
+    {
+      "id": "perspective",
+      "kind": "range",
+      "defaultValue": 800,
+      "min": 320,
+      "max": 1400,
+      "step": 40,
+      "unit": "px",
+      "label": {
+        "zh": "透视距离",
+        "en": "Perspective"
+      },
+      "description": {
+        "zh": "调节透视距离。",
+        "en": "Adjusts perspective."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用受控透视展示卡片正反面或指针悬停产生的轻微深度。",
+      "en": "Use controlled perspective for card faces or subtle pointer-driven depth."
+    },
+    "frequency": {
+      "zh": "适合低频探索和重点卡片；高密度列表避免每张卡持续倾斜。",
+      "en": "Reserve for low-frequency exploration and featured cards; avoid continuous tilt across dense lists."
+    },
+    "trigger": {
+      "zh": "由明确翻面操作或精细指针悬停触发，触摸设备使用点击切换。",
+      "en": "Trigger from an explicit flip action or fine-pointer hover, with tap toggling on touch devices."
+    },
+    "enterExit": {
+      "zh": "翻面过程中在 90° 附近切换可见面，退出时沿最短角度返回。",
+      "en": "Switch the visible face near 90° during the flip and return along the shortest angle on exit."
+    },
+    "interruptibility": {
+      "zh": "再次操作时从当前旋转角度改向，并保持正反面可见性同步。",
+      "en": "Retarget from the current angle and keep face visibility synchronized when operated again."
+    },
+    "gestureRules": {
+      "zh": "指针倾斜限制最大角度并在离开时归中；键盘只触发离散翻面。",
+      "en": "Cap pointer tilt and recenter on leave; keyboard interaction triggers a discrete flip."
+    }
+  },
+  "reducedMotion": {
+    "zh": "使用即时正反面切换或短交叉淡化，关闭 3D 旋转和透视位移。",
+    "en": "Use an immediate face switch or short crossfade with 3D rotation and perspective travel removed."
+  },
+  "reviewNotes": [
+    {
+      "zh": "检查 backface-visibility 与阅读顺序。",
+      "en": "Check backface-visibility and reading order."
+    },
+    {
+      "zh": "确保悬停倾斜不会移动按钮点击目标。",
+      "en": "Keep button hit targets stable during hover tilt."
+    }
+  ],
+  "relatedRecipes": [
+    "translate",
+    "origin-aware-animation"
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "press-tap-feedback",
+  "canonicalId": "press-tap-feedback",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "button",
+  "name": {
+    "zh": "按压 / 轻触反馈",
+    "en": "Press / Tap feedback"
+  },
+  "summary": {
+    "zh": "在按下瞬间提供短促缩放和明暗反馈，确认输入已被接收。",
+    "en": "Confirm input immediately with a brief scale and contrast response."
+  },
+  "definition": {
+    "zh": "元素被点击时轻微缩小，让操作具有实体触感。",
+    "en": "A brief response during pointer or touch activation makes a control acknowledge contact."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/press-tap-feedback/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 120,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 96,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在按下瞬间确认输入已被接收，并赋予控件轻微实体感。",
+      "en": "Confirm input at press time and give the control a subtle physical response."
+    },
+    "frequency": {
+      "zh": "适合高频按钮和可点击卡片；反馈时长保持在 70–140ms。",
+      "en": "Use for frequent buttons and clickable cards, keeping feedback around 70–140ms."
+    },
+    "trigger": {
+      "zh": "由 pointerdown、touchstart、Space 或 Enter 的按下阶段触发。",
+      "en": "Trigger on pointerdown, touchstart, or the press phase of Space and Enter."
+    },
+    "enterExit": {
+      "zh": "按下时轻微缩小并提高对比，释放或取消时立即回到稳定态。",
+      "en": "Scale down slightly and increase contrast on press, restoring immediately on release or cancel."
+    },
+    "interruptibility": {
+      "zh": "pointercancel、移出目标和重复按键都从当前比例恢复。",
+      "en": "Pointer cancel, target exit, and repeated key presses restore from the current scale."
+    },
+    "gestureRules": {
+      "zh": "视觉反馈跟随真实按压状态，不能延迟业务动作或扩大误触区域。",
+      "en": "Tie feedback to the real pressed state without delaying the action or expanding accidental hit areas."
+    }
+  },
+  "reducedMotion": {
+    "zh": "取消缩放，仅保留即时颜色、边框或亮度反馈。",
+    "en": "Remove scaling and keep an immediate color, border, or luminance response."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确保禁用控件没有按压动画。",
+      "en": "Ensure disabled controls have no press animation."
+    },
+    {
+      "zh": "检查键盘按压与指针按压得到相同反馈。",
+      "en": "Match keyboard and pointer press feedback."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "hold-to-confirm",
+    "drag-to-reorder"
+  ]
+}

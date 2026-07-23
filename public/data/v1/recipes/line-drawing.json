@@ -1,0 +1,157 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "line-drawing",
+  "canonicalId": "line-drawing",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "line",
+  "name": {
+    "zh": "线条绘制",
+    "en": "Line drawing"
+  },
+  "summary": {
+    "zh": "通过描边偏移逐步绘制图标、路径或解释性连线。",
+    "en": "Draw icons, paths, or explanatory connectors with stroke offset animation."
+  },
+  "definition": {
+    "zh": "SVG 路径像被一支隐形画笔描摹一样自行绘制出来。",
+    "en": "Animating SVG stroke dash values reveals a path progressively along its length."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/line-drawing/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/line-drawing.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 1000,
+      "min": 500,
+      "max": 3000,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "delay",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 600,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "description": {
+        "zh": "控制动效开始前的等待时间。",
+        "en": "Controls the wait before motion begins."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "calm",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "沿 SVG 路径逐步绘制图标、流程线或解释性连接，强调结构形成过程。",
+      "en": "Draw an SVG path progressively to emphasize how an icon, flow, or explanatory connection forms."
+    },
+    "frequency": {
+      "zh": "适合低频品牌时刻和解释动画；高频图标直接显示完整形态。",
+      "en": "Reserve for low-frequency brand moments and explanations, showing frequent icons immediately."
+    },
+    "trigger": {
+      "zh": "由内容首次呈现或用户主动重播触发，路径顺序遵循视觉阅读方向。",
+      "en": "Trigger on first presentation or explicit replay, ordering paths by visual reading direction."
+    },
+    "enterExit": {
+      "zh": "进入从完整 dash offset 绘制到零；离开通常淡出完整线条。",
+      "en": "Draw from full dash offset to zero on enter and usually fade the complete line on exit."
+    },
+    "interruptibility": {
+      "zh": "重播前先清晰重置，过程中被中断则保留当前可见路径。",
+      "en": "Reset clearly before replay and preserve the currently visible path if interrupted."
+    },
+    "gestureRules": {
+      "zh": "无需手势；重播按钮支持键盘，并为图形提供文本含义。",
+      "en": "No gesture is required; replay supports keyboard input and the graphic has a textual meaning."
+    }
+  },
+  "reducedMotion": {
+    "zh": "直接显示完整路径，或使用一次极短淡入。",
+    "en": "Show the complete path immediately or with one very short fade."
+  },
+  "reviewNotes": [
+    {
+      "zh": "检查 pathLength 与 dasharray 在不同 SVG 下正确归一化。",
+      "en": "Normalize pathLength and dasharray across SVG assets."
+    },
+    {
+      "zh": "保持线条绘制顺序与信息逻辑一致。",
+      "en": "Align drawing order with the information logic."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "before-after-slider",
+    "text-morph"
+  ]
+}

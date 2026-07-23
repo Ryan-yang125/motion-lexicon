@@ -1,0 +1,78 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "purposeful-animation",
+  "canonicalId": "purposeful-animation",
+  "categoryId": "principles",
+  "family": "principle",
+  "surfaceType": "guide",
+  "scene": "guide",
+  "name": {
+    "zh": "有目的的动效",
+    "en": "Purposeful animation"
+  },
+  "summary": {
+    "zh": "审核每段动效的目的、出现频率和空间规则，保持一致体验。",
+    "en": "Review the purpose, frequency, and spatial rules of motion for a consistent experience."
+  },
+  "definition": {
+    "zh": "动效应承担明确功能，例如帮助定位、提供反馈或展示关系，而非只作装饰。",
+    "en": "Purposeful motion communicates hierarchy, causality, feedback, or spatial relationships in support of a user task."
+  },
+  "aliases": [
+    "frequency-of-use",
+    "spatial-consistency"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/principles/purposeful-animation/",
+    "en": "https://motion-lexicon.pages.dev/en/principles/purposeful-animation/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json",
+  "parameters": [],
+  "guidance": {
+    "purpose": {
+      "zh": "审核每段动效是否承担定位、反馈、关系解释或感知性能等明确功能。",
+      "en": "Review whether every motion pattern serves orientation, feedback, relationship explanation, or perceived performance."
+    },
+    "frequency": {
+      "zh": "设计评审、实现评审和发布前都执行；高频动作接受更严格的克制标准。",
+      "en": "Apply during design review, implementation review, and pre-release, with stricter restraint for frequent motion."
+    },
+    "trigger": {
+      "zh": "由新增动效、交互变更或用户反馈触发审查，并记录可验证目的。",
+      "en": "Trigger review from new motion, interaction changes, or user feedback, documenting a testable purpose."
+    },
+    "enterExit": {
+      "zh": "进入与退出规则源于信息关系，删除无法解释来源或去向的位移。",
+      "en": "Derive enter and exit rules from information relationships and remove travel with no explainable source or destination."
+    },
+    "interruptibility": {
+      "zh": "要求高频交互可打断，低频叙事也要提供跳过或快速完成路径。",
+      "en": "Require frequent interactions to be interruptible and give low-frequency narratives a skip or fast-complete path."
+    },
+    "gestureRules": {
+      "zh": "手势动效必须跟手、可取消并有键盘替代；装饰动效不占用手势。",
+      "en": "Gesture motion follows input, supports cancellation, and has a keyboard alternative, while decorative motion consumes no gestures."
+    }
+  },
+  "reducedMotion": {
+    "zh": "为每个目的提供等价低动态表达，功能和状态信息完整保留。",
+    "en": "Provide an equivalent low-motion expression for each purpose while preserving function and state information."
+  },
+  "reviewNotes": [
+    {
+      "zh": "记录目的、出现频率和空间规则。",
+      "en": "Document purpose, frequency, and spatial rules."
+    },
+    {
+      "zh": "删除无法通过用户理解或反馈验证的装饰动作。",
+      "en": "Remove decorative motion with no user-understanding or feedback benefit."
+    }
+  ],
+  "relatedRecipes": [
+    "anticipation",
+    "perceived-performance",
+    "reduced-motion"
+  ]
+}

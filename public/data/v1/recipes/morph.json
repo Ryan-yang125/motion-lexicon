@@ -1,0 +1,225 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "morph",
+  "canonicalId": "morph",
+  "categoryId": "state-transitions",
+  "family": "state",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "形变",
+    "en": "Morph"
+  },
+  "summary": {
+    "zh": "在共享元素的前后布局之间建立连续形变。",
+    "en": "Create continuous transformation between before and after layouts of a shared element."
+  },
+  "definition": {
+    "zh": "一个形状平滑地变成另一个形状，例如灵动岛。",
+    "en": "Interpolated geometry reshapes one visual form into another across a continuous transition."
+  },
+  "aliases": [
+    "continuity-transition",
+    "shared-element-transition",
+    "layout-animation"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/",
+    "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/morph.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 260,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "mode",
+      "kind": "segmented",
+      "defaultValue": "morph",
+      "label": {
+        "zh": "连续方式",
+        "en": "Continuity mode"
+      },
+      "description": {
+        "zh": "选择前后状态保持连续的方式。",
+        "en": "Selects how continuity is preserved between states."
+      },
+      "options": [
+        {
+          "value": "morph",
+          "cssValue": "morph",
+          "label": {
+            "zh": "形状形变",
+            "en": "Shape morph"
+          }
+        },
+        {
+          "value": "continuity",
+          "cssValue": "continuity",
+          "label": {
+            "zh": "连续过渡",
+            "en": "Continuity transition"
+          }
+        },
+        {
+          "value": "shared",
+          "cssValue": "shared",
+          "label": {
+            "zh": "共享元素",
+            "en": "Shared element"
+          }
+        },
+        {
+          "value": "layout",
+          "cssValue": "layout",
+          "label": {
+            "zh": "布局变化",
+            "en": "Layout change"
+          }
+        }
+      ]
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 48,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 86,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "让一个形状平滑变为另一个形状，并保持对象身份连续。",
+      "en": "Turn one shape smoothly into another while preserving object identity."
+    },
+    "frequency": {
+      "zh": "适合低频品牌符号、图标和高价值状态变化；常用控件保持更克制。",
+      "en": "Reserve for low-frequency brand marks, icons, and high-value state changes; keep common controls subtler."
+    },
+    "trigger": {
+      "zh": "由对象状态真正改变时触发，前后形状应具有可理解的对应关系。",
+      "en": "Trigger when the object's state genuinely changes, with understandable correspondence between shapes."
+    },
+    "enterExit": {
+      "zh": "进入与离开共享同一几何对象和插值路径；复杂路径先统一节点数量。",
+      "en": "Use one geometric object and interpolation path across states, normalizing path points when needed."
+    },
+    "interruptibility": {
+      "zh": "中断时从当前插值形状转向新目标，避免回到任一端点。",
+      "en": "Retarget from the current interpolated shape instead of returning to an endpoint."
+    },
+    "gestureRules": {
+      "zh": "手势驱动形变要把进度连续映射到输入；离散控件提供键盘切换。",
+      "en": "Map gesture-driven morph progress continuously to input, with keyboard toggles for discrete controls."
+    }
+  },
+  "reducedMotion": {
+    "zh": "使用静态状态替换或短交叉淡化，同时保持对象位置与尺寸连续。",
+    "en": "Use a static state replacement or short crossfade while preserving object position and size."
+  },
+  "reviewNotes": [
+    {
+      "zh": "明确区分形变、共享元素过渡和布局动画。",
+      "en": "Distinguish morphing from shared-element and layout transitions."
+    },
+    {
+      "zh": "检查中间形状不会产生自相交或闪烁。",
+      "en": "Check intermediate shapes for self-intersection or flicker."
+    }
+  ],
+  "relatedRecipes": [
+    "crossfade",
+    "accordion-collapse",
+    "direction-aware-transition"
+  ]
+}

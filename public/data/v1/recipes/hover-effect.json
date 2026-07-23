@@ -1,0 +1,174 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "hover-effect",
+  "canonicalId": "hover-effect",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "button",
+  "name": {
+    "zh": "悬停效果",
+    "en": "Hover effect"
+  },
+  "summary": {
+    "zh": "在指针悬停时强化可交互性，同时保持布局稳定。",
+    "en": "Reinforce interactivity on pointer hover while keeping layout stable."
+  },
+  "definition": {
+    "zh": "光标移到元素上方时产生的视觉变化。",
+    "en": "Pointer hover updates a control's visual state to signal availability or affordance."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/hover-effect/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/hover-effect/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/hover-effect.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 150,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 4,
+      "min": 0,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 101,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "snap",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在精细指针悬停时强化可交互性，并保持布局和点击目标稳定。",
+      "en": "Reinforce interactivity on fine-pointer hover while keeping layout and hit targets stable."
+    },
+    "frequency": {
+      "zh": "适合高频控件，但幅度和时长需保持极小。",
+      "en": "Suitable for frequent controls when amplitude and duration remain very small."
+    },
+    "trigger": {
+      "zh": "仅在 hover:hover 且 pointer:fine 时由 pointerenter 触发。",
+      "en": "Trigger on pointerenter only when hover:hover and pointer:fine match."
+    },
+    "enterExit": {
+      "zh": "悬停时进入强调态，指针离开时快速恢复；两端均保持内容位置稳定。",
+      "en": "Enter the emphasized state on hover and restore quickly on leave, keeping content position stable."
+    },
+    "interruptibility": {
+      "zh": "指针快速穿过时从当前样式返回，禁止排队播放。",
+      "en": "Return from current styles during rapid pointer movement without queuing animations."
+    },
+    "gestureRules": {
+      "zh": "触摸设备不模拟悬停；焦点可见状态提供等价提示。",
+      "en": "Touch devices do not emulate hover, and focus-visible provides equivalent affordance."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保留静态悬停和焦点颜色、边框或阴影变化，取消位移与缩放。",
+    "en": "Keep static hover and focus color, border, or shadow changes while removing travel and scale."
+  },
+  "reviewNotes": [
+    {
+      "zh": "确保 hover 不承担唯一信息。",
+      "en": "Keep hover from carrying unique information."
+    },
+    {
+      "zh": "检查阴影和变换不会引发布局抖动。",
+      "en": "Ensure shadow and transform changes do not cause layout movement."
+    }
+  ],
+  "relatedRecipes": [
+    "press-tap-feedback",
+    "hold-to-confirm",
+    "drag-to-reorder"
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "hold-to-confirm",
+  "canonicalId": "hold-to-confirm",
+  "categoryId": "feedback",
+  "family": "feedback",
+  "surfaceType": "component",
+  "scene": "button",
+  "name": {
+    "zh": "长按确认",
+    "en": "Hold to confirm"
+  },
+  "summary": {
+    "zh": "用可取消的进度反馈表达长按确认，降低误触风险。",
+    "en": "Show cancellable progress during hold-to-confirm interactions to reduce mistakes."
+  },
+  "definition": {
+    "zh": "用户持续按住按钮时逐步填满的进度效果。",
+    "en": "A timed progress indicator advances while continuous press input is maintained and completes at a threshold."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/feedback/hold-to-confirm/",
+    "en": "https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 1200,
+      "min": 600,
+      "max": 2400,
+      "step": 50,
+      "unit": "ms",
+      "label": {
+        "zh": "确认时长",
+        "en": "Confirmation duration"
+      },
+      "description": {
+        "zh": "保留足够的按住时间来表达明确意图；松开后的恢复应保持短促。",
+        "en": "Leaves enough hold time to express deliberate intent; release recovery should stay brief."
+      }
+    },
+    {
+      "id": "scale",
+      "kind": "range",
+      "defaultValue": 98,
+      "min": 70,
+      "max": 105,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "起始缩放",
+        "en": "Start scale"
+      },
+      "description": {
+        "zh": "控制元素相对最终尺寸的起始比例。",
+        "en": "Controls the starting size relative to the final state."
+      }
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "linear",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用可取消的持续进度确认高风险操作，降低误触概率。",
+      "en": "Confirm a high-risk action through cancellable sustained progress, reducing accidental activation."
+    },
+    "frequency": {
+      "zh": "仅用于低频且有后果的操作；日常按钮避免增加等待。",
+      "en": "Reserve for infrequent consequential actions and keep ordinary controls immediate."
+    },
+    "trigger": {
+      "zh": "按下并持续保持时开始，达到阈值后只提交一次。",
+      "en": "Begin on sustained press and submit exactly once when the threshold is reached."
+    },
+    "enterExit": {
+      "zh": "进度从零连续填满；提前释放、移出或取消时平滑清空并回到待机。",
+      "en": "Fill progress continuously from zero, clearing and returning to idle on early release, exit, or cancel."
+    },
+    "interruptibility": {
+      "zh": "任何取消事件都立即停止计时，重新按下从零开始并提供明确状态。",
+      "en": "Every cancel event stops timing immediately; a new press restarts from zero with a clear state."
+    },
+    "gestureRules": {
+      "zh": "支持指针捕获、触摸取消和键盘长按；同时提供可访问的替代确认流程。",
+      "en": "Support pointer capture, touch cancellation, and keyboard holding, plus an accessible alternative confirmation flow."
+    }
+  },
+  "reducedMotion": {
+    "zh": "保留静态进度或倒计时文本，移除填充运动，并允许常规二次确认。",
+    "en": "Use static progress or countdown text without filling motion, and allow a standard two-step confirmation."
+  },
+  "reviewNotes": [
+    {
+      "zh": "验证 pointercancel、窗口失焦和触摸滚动取消。",
+      "en": "Test pointercancel, window blur, and touch-scroll cancellation."
+    },
+    {
+      "zh": "通过 aria-live 克制地宣布完成状态。",
+      "en": "Announce completion concisely through aria-live."
+    }
+  ],
+  "relatedRecipes": [
+    "hover-effect",
+    "press-tap-feedback",
+    "drag-to-reorder"
+  ]
+}

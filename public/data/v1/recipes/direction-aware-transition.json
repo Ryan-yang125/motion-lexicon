@@ -1,0 +1,212 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "direction-aware-transition",
+  "canonicalId": "direction-aware-transition",
+  "categoryId": "state-transitions",
+  "family": "state",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "方向感过渡",
+    "en": "Direction-aware transition"
+  },
+  "summary": {
+    "zh": "根据导航方向匹配进入和离开方向，维持前后关系。",
+    "en": "Match enter and exit directions to navigation order and preserve context."
+  },
+  "definition": {
+    "zh": "前进时内容沿一个方向滑动，返回时沿相反方向滑动，让导航具备方向感。",
+    "en": "Navigation motion uses the route direction to choose opposing travel paths for forward and reverse actions."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/direction-aware-transition/",
+    "en": "https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/direction-aware-transition.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 240,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 40,
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "left",
+      "label": {
+        "zh": "方向",
+        "en": "Direction"
+      },
+      "description": {
+        "zh": "选择方向。",
+        "en": "Selects direction."
+      },
+      "options": [
+        {
+          "value": "up",
+          "cssValue": "up",
+          "label": {
+            "zh": "向上",
+            "en": "Up"
+          }
+        },
+        {
+          "value": "down",
+          "cssValue": "down",
+          "label": {
+            "zh": "向下",
+            "en": "Down"
+          }
+        },
+        {
+          "value": "left",
+          "cssValue": "left",
+          "label": {
+            "zh": "向左",
+            "en": "Left"
+          }
+        },
+        {
+          "value": "right",
+          "cssValue": "right",
+          "label": {
+            "zh": "向右",
+            "en": "Right"
+          }
+        },
+        {
+          "value": "out",
+          "cssValue": "out",
+          "label": {
+            "zh": "离开",
+            "en": "Exit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用相反方向表达前进与返回，维持导航序列和层级关系。",
+      "en": "Use opposite directions for forward and back navigation to preserve sequence and hierarchy."
+    },
+    "frequency": {
+      "zh": "适合中频步骤流、分页和历史导航；同级标签切换只在方向有意义时使用。",
+      "en": "Use for medium-frequency step flows, pagination, and history navigation; apply to peer tabs only when direction is meaningful."
+    },
+    "trigger": {
+      "zh": "由 next、previous、浏览器返回或有序索引变化触发。",
+      "en": "Trigger from next, previous, browser back, or ordered-index changes."
+    },
+    "enterExit": {
+      "zh": "前进时新内容从前方进入、旧内容向后方退出；返回时完整反转。",
+      "en": "On forward navigation, new content enters from ahead as old content exits behind; reverse the mapping on back."
+    },
+    "interruptibility": {
+      "zh": "连续导航以当前进度接管，并只渲染当前位置与最新目标。",
+      "en": "Rapid navigation takes over at current progress and renders only the current and latest target."
+    },
+    "gestureRules": {
+      "zh": "滑动翻页时方向跟随手势；按钮与键盘导航沿用同一空间规则。",
+      "en": "Swipe pagination follows gesture direction; buttons and keyboard navigation use the same spatial rule."
+    }
+  },
+  "reducedMotion": {
+    "zh": "改用短交叉淡化，同时保留前进、返回标签和焦点位置。",
+    "en": "Use a short crossfade while preserving forward/back labels and focus position."
+  },
+  "reviewNotes": [
+    {
+      "zh": "测试 RTL 语言中的前进方向。",
+      "en": "Test forward direction under RTL layouts."
+    },
+    {
+      "zh": "确认视觉顺序、DOM 顺序和历史顺序一致。",
+      "en": "Align visual order, DOM order, and navigation history."
+    }
+  ],
+  "relatedRecipes": [
+    "crossfade",
+    "morph",
+    "accordion-collapse"
+  ]
+}

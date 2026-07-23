@@ -1,0 +1,239 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "keyframes",
+  "canonicalId": "keyframes",
+  "categoryId": "sequencing",
+  "family": "timeline",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "关键帧",
+    "en": "Keyframes"
+  },
+  "summary": {
+    "zh": "编排多阶段关键帧、插值、步进与结束状态。",
+    "en": "Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior."
+  },
+  "definition": {
+    "zh": "动画中预先定义的节点（如 0%、50%、100%），浏览器会补全节点之间的画面。",
+    "en": "Named timeline checkpoints assign property values at selected offsets; interpolation determines the states between them."
+  },
+  "aliases": [
+    "interpolation-tween",
+    "orchestration",
+    "fill-mode",
+    "stepped-animation"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/",
+    "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/keyframes.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 720,
+      "min": 300,
+      "max": 2400,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "演示时长",
+        "en": "Demo duration"
+      },
+      "description": {
+        "zh": "演示使用较长时长以便观察完整变化；生产界面的即时反馈应收敛到 300ms 内。",
+        "en": "Uses a longer demo duration so the full change stays observable; immediate production UI feedback should stay under 300ms."
+      }
+    },
+    {
+      "id": "mode",
+      "kind": "segmented",
+      "defaultValue": "keyframes",
+      "label": {
+        "zh": "编排方式",
+        "en": "Timeline mode"
+      },
+      "description": {
+        "zh": "选择编排方式。",
+        "en": "Selects timeline mode."
+      },
+      "options": [
+        {
+          "value": "keyframes",
+          "cssValue": "keyframes",
+          "label": {
+            "zh": "关键帧",
+            "en": "Keyframes"
+          }
+        },
+        {
+          "value": "tween",
+          "cssValue": "tween",
+          "label": {
+            "zh": "补间",
+            "en": "Tween"
+          }
+        },
+        {
+          "value": "steps",
+          "cssValue": "steps",
+          "label": {
+            "zh": "步进",
+            "en": "Steps"
+          }
+        }
+      ]
+    },
+    {
+      "id": "steps",
+      "kind": "range",
+      "defaultValue": 4,
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "步数",
+        "en": "Steps"
+      },
+      "description": {
+        "zh": "调节步数。",
+        "en": "Adjusts steps."
+      }
+    },
+    {
+      "id": "fill",
+      "kind": "segmented",
+      "defaultValue": "both",
+      "label": {
+        "zh": "结束状态",
+        "en": "Fill mode"
+      },
+      "description": {
+        "zh": "选择结束状态。",
+        "en": "Selects fill mode."
+      },
+      "options": [
+        {
+          "value": "none",
+          "cssValue": "none",
+          "label": {
+            "zh": "无",
+            "en": "None"
+          }
+        },
+        {
+          "value": "forwards",
+          "cssValue": "forwards",
+          "label": {
+            "zh": "保持结束",
+            "en": "Forwards"
+          }
+        },
+        {
+          "value": "both",
+          "cssValue": "both",
+          "label": {
+            "zh": "前后保持",
+            "en": "Both"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "定义多阶段状态、补间方式、步进节奏和动画结束后的样式。",
+      "en": "Define multi-stage states, interpolation behavior, stepped rhythm, and post-animation styles."
+    },
+    "frequency": {
+      "zh": "适合低频、具有阶段含义的动作；简单反馈优先使用单段 transition。",
+      "en": "Use for low-frequency motion with meaningful phases; simple feedback favors a single transition."
+    },
+    "trigger": {
+      "zh": "由明确状态变化或演示重播触发，每个关键帧承担可解释的阶段。",
+      "en": "Trigger from an explicit state change or replay action, with each keyframe representing a meaningful phase."
+    },
+    "enterExit": {
+      "zh": "首帧对应进入前状态，末帧对应稳定状态；退出动画拥有独立且更短的时间线。",
+      "en": "Map the first frame to the pre-entry state and the last to the stable state; give exit its own shorter timeline."
+    },
+    "interruptibility": {
+      "zh": "中断后根据当前计算样式建立新时间线，避免强制跳到某个关键帧。",
+      "en": "On interruption, build the next timeline from current computed styles instead of snapping to a keyframe."
+    },
+    "gestureRules": {
+      "zh": "时间线本身无需手势；交互式进度控制要支持指针、触摸和键盘。",
+      "en": "The timeline itself needs no gesture; interactive progress controls support pointer, touch, and keyboard."
+    }
+  },
+  "reducedMotion": {
+    "zh": "缩短为一次状态切换，移除预备、回弹和重复阶段。",
+    "en": "Collapse to one state change and remove anticipation, overshoot, and repeated phases."
+  },
+  "reviewNotes": [
+    {
+      "zh": "逐帧核对各阶段是否服务于理解。",
+      "en": "Review whether every phase improves understanding."
+    },
+    {
+      "zh": "验证 fill-mode 不会留下不可交互的视觉状态。",
+      "en": "Verify that fill-mode never leaves an unusable visual state."
+    }
+  ],
+  "relatedRecipes": [
+    "stagger",
+    "duration"
+  ]
+}

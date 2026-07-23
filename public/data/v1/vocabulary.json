@@ -1,0 +1,2295 @@
+{
+  "kind": "vocabulary",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "count": 91,
+  "canonicalCount": 44,
+  "aliasCount": 47,
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/",
+    "en": "https://motion-lexicon.pages.dev/en/vocabulary/"
+  },
+  "terms": [
+    {
+      "id": "fade-in-fade-out",
+      "canonicalId": "fade-in-fade-out",
+      "categoryId": "entrances",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "淡入 / 淡出",
+        "en": "Fade in / Fade out"
+      },
+      "definition": {
+        "zh": "元素通过改变不透明度出现或消失。",
+        "en": "An opacity transition brings an element into view or carries it out without changing its geometry."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-fade-in-fade-out",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-fade-in-fade-out"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/fade-in-fade-out/",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/"
+      }
+    },
+    {
+      "id": "slide-in",
+      "canonicalId": "slide-in",
+      "categoryId": "entrances",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "滑入",
+        "en": "Slide in"
+      },
+      "definition": {
+        "zh": "元素从屏幕外沿左、右、上或下方滑入。",
+        "en": "A positional transition moves content from beyond an edge into its resting location."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-slide-in",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-slide-in"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/slide-in/",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/slide-in/"
+      }
+    },
+    {
+      "id": "scale-in",
+      "canonicalId": "scale-in",
+      "categoryId": "entrances",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "缩放入场",
+        "en": "Scale in"
+      },
+      "definition": {
+        "zh": "元素出现时从较小尺寸放大到完整尺寸，通常与淡入搭配。",
+        "en": "An appearing element expands from a reduced scale to its final dimensions, commonly while opacity rises."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-scale-in",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-scale-in"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/scale-in/",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/scale-in/"
+      }
+    },
+    {
+      "id": "pop-in",
+      "canonicalId": "scale-in",
+      "categoryId": "entrances",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "弹入",
+        "en": "Pop in"
+      },
+      "definition": {
+        "zh": "元素出现时略微越过最终状态，再像回弹一样落到位。",
+        "en": "An entrance crosses the final scale briefly, then settles back to create a compact spring-like accent."
+      },
+      "distinction": {
+        "zh": "弹入会越过最终状态后回弹到位；缩放入场可以直接停在最终尺寸。",
+        "en": "Pop in overshoots and settles; Scale in can stop directly at its final size."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-pop-in",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-pop-in"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/scale-in/?term=pop-in",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/scale-in/?term=pop-in"
+      }
+    },
+    {
+      "id": "reveal",
+      "canonicalId": "reveal",
+      "categoryId": "entrances",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "揭示",
+        "en": "Reveal"
+      },
+      "definition": {
+        "zh": "内容逐步显露，通常通过动画化裁切路径或遮罩实现。",
+        "en": "A moving clipping boundary or mask exposes content progressively."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-reveal",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-reveal"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/reveal/"
+      }
+    },
+    {
+      "id": "enter-exit",
+      "canonicalId": "slide-in",
+      "categoryId": "entrances",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "进入 / 离开",
+        "en": "Enter / Exit"
+      },
+      "definition": {
+        "zh": "元素被添加到屏幕或从屏幕移除时播放的动画。",
+        "en": "Lifecycle motion communicates when an element joins or leaves the rendered interface."
+      },
+      "distinction": {
+        "zh": "进入 / 离开描述元素加入或移出界面时的生命周期动画；滑入只是其中一种带方向的实现。",
+        "en": "Enter / Exit names the lifecycle motion used when an element is added or removed; Slide in is one directional implementation."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-enter-exit",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-enter-exit"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/entrances/slide-in/?term=enter-exit",
+        "en": "https://motion-lexicon.pages.dev/en/entrances/slide-in/?term=enter-exit"
+      }
+    },
+    {
+      "id": "keyframes",
+      "canonicalId": "keyframes",
+      "categoryId": "sequencing",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "关键帧",
+        "en": "Keyframes"
+      },
+      "definition": {
+        "zh": "动画中预先定义的节点（如 0%、50%、100%），浏览器会补全节点之间的画面。",
+        "en": "Named timeline checkpoints assign property values at selected offsets; interpolation determines the states between them."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-keyframes",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-keyframes"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/"
+      }
+    },
+    {
+      "id": "interpolation-tween",
+      "canonicalId": "keyframes",
+      "categoryId": "sequencing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "插值 / 补间",
+        "en": "Interpolation / Tween"
+      },
+      "definition": {
+        "zh": "生成起始值与结束值之间的所有中间帧，让运动保持连续。",
+        "en": "A renderer calculates intermediate property values between defined states to produce continuous change."
+      },
+      "distinction": {
+        "zh": "插值 / 补间负责生成两个值之间的中间帧；关键帧负责定义时间线上的状态节点。",
+        "en": "Interpolation / Tween generates frames between values; Keyframes defines state checkpoints on a timeline."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-interpolation-tween",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-interpolation-tween"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/?term=interpolation-tween",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/?term=interpolation-tween"
+      }
+    },
+    {
+      "id": "stagger",
+      "canonicalId": "stagger",
+      "categoryId": "sequencing",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "交错动画",
+        "en": "Stagger"
+      },
+      "definition": {
+        "zh": "让多个项目依次播放动画，并在相邻项目之间加入短延迟，形成级联节奏。",
+        "en": "Related items start at offset times, turning one transition into a readable sequence."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-stagger",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-stagger"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/stagger/",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/stagger/"
+      }
+    },
+    {
+      "id": "orchestration",
+      "canonicalId": "keyframes",
+      "categoryId": "sequencing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "动效编排",
+        "en": "Orchestration"
+      },
+      "definition": {
+        "zh": "有意识地安排多段动画的时间关系，让它们呈现为一个协调的整体动作。",
+        "en": "A coordinated timeline orders multiple motions so their starts, overlaps, and finishes express one event."
+      },
+      "distinction": {
+        "zh": "动效编排协调多段动画之间的时间关系；关键帧描述一段动画内部的状态。",
+        "en": "Orchestration coordinates timing across multiple animations; Keyframes describes states inside one animation."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-orchestration",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-orchestration"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/?term=orchestration",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/?term=orchestration"
+      }
+    },
+    {
+      "id": "delay",
+      "canonicalId": "duration",
+      "categoryId": "sequencing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "延迟",
+        "en": "Delay"
+      },
+      "definition": {
+        "zh": "动画开始前等待的时间。",
+        "en": "The delay is the interval between a trigger and the first active frame."
+      },
+      "distinction": {
+        "zh": "延迟是动画开始前的等待时间；时长是动画运行所花的时间。",
+        "en": "Delay is the wait before motion starts; Duration is the time the motion spends running."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-delay",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-delay"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/duration/?term=delay",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/duration/?term=delay"
+      }
+    },
+    {
+      "id": "duration",
+      "canonicalId": "duration",
+      "categoryId": "sequencing",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "definition": {
+        "zh": "一段动画完成所需的时间。",
+        "en": "Duration measures the elapsed time from an animation's start state to its end state."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-duration",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-duration"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/duration/",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/duration/"
+      }
+    },
+    {
+      "id": "fill-mode",
+      "canonicalId": "keyframes",
+      "categoryId": "sequencing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "填充模式",
+        "en": "Fill mode"
+      },
+      "definition": {
+        "zh": "控制元素在动画开始前或结束后是否保留首帧或末帧样式，例如 forwards。",
+        "en": "A fill mode selects which keyframe styles apply outside the active animation interval."
+      },
+      "distinction": {
+        "zh": "填充模式控制动画有效区间外保留哪一帧的样式；关键帧定义有效区间内的状态。",
+        "en": "Fill mode controls which styles persist outside the active interval; Keyframes defines states inside it."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-fill-mode",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-fill-mode"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/?term=fill-mode",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/?term=fill-mode"
+      }
+    },
+    {
+      "id": "stepped-animation",
+      "canonicalId": "keyframes",
+      "categoryId": "sequencing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "步进动画",
+        "en": "Stepped animation"
+      },
+      "definition": {
+        "zh": "被划分为若干离散步骤的动画，例如倒计时器。",
+        "en": "Progress advances through fixed discrete states instead of continuously interpolated values."
+      },
+      "distinction": {
+        "zh": "步进动画在离散状态间跳变；常规关键帧通常会在状态之间连续插值。",
+        "en": "Stepped animation jumps between discrete states; regular keyframes usually interpolate continuously between states."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-stepped-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-stepped-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/?term=stepped-animation",
+        "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/?term=stepped-animation"
+      }
+    },
+    {
+      "id": "translate",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "位移",
+        "en": "Translate"
+      },
+      "definition": {
+        "zh": "沿 X 轴或 Y 轴移动元素。",
+        "en": "A transform shifts visual coordinates horizontally, vertically, or both while leaving layout flow unchanged."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-translate",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-translate"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/"
+      }
+    },
+    {
+      "id": "scale",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "缩放",
+        "en": "Scale"
+      },
+      "definition": {
+        "zh": "放大或缩小元素。",
+        "en": "A transform multiplies an element's rendered width and height around a chosen origin."
+      },
+      "distinction": {
+        "zh": "缩放改变元素尺寸；位移改变元素位置。",
+        "en": "Scale changes an element's size; Translate changes its position."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-scale",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-scale"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/?term=scale",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/?term=scale"
+      }
+    },
+    {
+      "id": "rotate",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "旋转",
+        "en": "Rotate"
+      },
+      "definition": {
+        "zh": "让元素围绕一个点旋转。",
+        "en": "A transform changes an element's angular orientation around its transform origin."
+      },
+      "distinction": {
+        "zh": "旋转改变元素围绕锚点的角度；位移改变元素位置。",
+        "en": "Rotate changes an element's angle around an anchor; Translate changes its position."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-rotate",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-rotate"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/?term=rotate",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/?term=rotate"
+      }
+    },
+    {
+      "id": "skew",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "倾斜",
+        "en": "Skew"
+      },
+      "definition": {
+        "zh": "沿 X 轴或 Y 轴倾斜元素，使其从矩形形态产生切变。",
+        "en": "A shear transform offsets one axis in proportion to the other, producing a slanted silhouette."
+      },
+      "distinction": {
+        "zh": "倾斜通过切变改变元素形状；位移沿坐标轴移动元素。",
+        "en": "Skew shears an element's shape; Translate moves it along an axis."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-skew",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-skew"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/?term=skew",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/?term=skew"
+      }
+    },
+    {
+      "id": "3d-tilt-flip",
+      "canonicalId": "3d-tilt-flip",
+      "categoryId": "transforms",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "3D 倾斜 / 翻转",
+        "en": "3D tilt / Flip"
+      },
+      "definition": {
+        "zh": "在三维空间中通过 rotateX 或 rotateY 旋转，增加纵深感。",
+        "en": "Rotation around the X or Y axis creates a plane-turning effect within a perspective scene."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-3d-tilt-flip",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-3d-tilt-flip"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/3d-tilt-flip/",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/"
+      }
+    },
+    {
+      "id": "perspective",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "透视",
+        "en": "Perspective"
+      },
+      "definition": {
+        "zh": "控制 3D 效果的强弱；较小的值会夸大纵深，像观察者距离更近。",
+        "en": "Perspective sets the viewer-to-plane distance used to project three-dimensional transforms; shorter distances amplify depth."
+      },
+      "distinction": {
+        "zh": "透视控制 3D 投影的纵深强度；位移控制元素的空间位置。",
+        "en": "Perspective controls the depth of a 3D projection; Translate controls spatial position."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-perspective",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-perspective"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/?term=perspective",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/?term=perspective"
+      }
+    },
+    {
+      "id": "transform-origin",
+      "canonicalId": "translate",
+      "categoryId": "transforms",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "变换原点",
+        "en": "Transform origin"
+      },
+      "definition": {
+        "zh": "缩放展开或旋转所围绕的锚点。",
+        "en": "The transform origin defines the local pivot from which scaling and rotation are calculated."
+      },
+      "distinction": {
+        "zh": "变换原点是缩放或旋转的锚点；纯位移不会因变换原点不同而改变轨迹。",
+        "en": "Transform origin anchors scale or rotation; a pure translation keeps the same path across origins."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-transform-origin",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-transform-origin"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/?term=transform-origin",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/translate/?term=transform-origin"
+      }
+    },
+    {
+      "id": "origin-aware-animation",
+      "canonicalId": "origin-aware-animation",
+      "categoryId": "transforms",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "基于触发源的动画",
+        "en": "Origin-aware animation"
+      },
+      "definition": {
+        "zh": "元素从触发它的控件位置展开，例如弹出层从打开它的按钮处生长，而非沿用 CSS 默认的自身中心。",
+        "en": "Entrance geometry begins at the control or location that triggered the new surface, preserving their spatial relationship."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-origin-aware-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-origin-aware-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/transforms/origin-aware-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/"
+      }
+    },
+    {
+      "id": "crossfade",
+      "canonicalId": "crossfade",
+      "categoryId": "state-transitions",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "交叉淡入淡出",
+        "en": "Crossfade"
+      },
+      "definition": {
+        "zh": "一个元素淡出的同时，另一个元素在同一位置淡入。",
+        "en": "Two overlapping states exchange opacity over the same interval, handing visual focus from one to the other."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-crossfade",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-crossfade"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/crossfade/",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/crossfade/"
+      }
+    },
+    {
+      "id": "continuity-transition",
+      "canonicalId": "morph",
+      "categoryId": "state-transitions",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "连续性过渡",
+        "en": "Continuity transition"
+      },
+      "definition": {
+        "zh": "通过视觉连接变化前后的状态来帮助用户保持方位感，例如让同一个矩形放大或缩小。",
+        "en": "A transition preserves recognizable geometry or position across states so viewers can follow the change."
+      },
+      "distinction": {
+        "zh": "连续性过渡是一条保持前后关联的设计原则；形变是实现连续性的具体方式之一。",
+        "en": "Continuity transition is a principle for preserving before-and-after relationships; Morph is one technique that can create continuity."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-continuity-transition",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-continuity-transition"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/?term=continuity-transition",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/?term=continuity-transition"
+      }
+    },
+    {
+      "id": "morph",
+      "canonicalId": "morph",
+      "categoryId": "state-transitions",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "形变",
+        "en": "Morph"
+      },
+      "definition": {
+        "zh": "一个形状平滑地变成另一个形状，例如灵动岛。",
+        "en": "Interpolated geometry reshapes one visual form into another across a continuous transition."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-morph",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-morph"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/"
+      }
+    },
+    {
+      "id": "shared-element-transition",
+      "canonicalId": "morph",
+      "categoryId": "state-transitions",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "共享元素过渡",
+        "en": "Shared element transition"
+      },
+      "definition": {
+        "zh": "同一个元素从一个位置移动并变换到另一个位置，例如缩略图展开成卡片。",
+        "en": "A persistent visual object changes position, size, or styling while connecting two layouts."
+      },
+      "distinction": {
+        "zh": "共享元素过渡让同一元素跨布局移动并变换；形变强调一个形状变成另一个形状。",
+        "en": "Shared element transition moves and transforms the same element across layouts; Morph emphasizes one shape becoming another."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-shared-element-transition",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-shared-element-transition"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/?term=shared-element-transition",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/?term=shared-element-transition"
+      }
+    },
+    {
+      "id": "layout-animation",
+      "canonicalId": "morph",
+      "categoryId": "state-transitions",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "布局动画",
+        "en": "Layout animation"
+      },
+      "definition": {
+        "zh": "元素尺寸或位置变化时，以动画移动到新状态，而非瞬间跳变。",
+        "en": "Changes in measured position or dimensions are animated between layout snapshots."
+      },
+      "distinction": {
+        "zh": "布局动画把尺寸或位置变化平滑化；形变改变元素的形状。",
+        "en": "Layout animation smooths size or position changes; Morph changes an element's shape."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-layout-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-layout-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/?term=layout-animation",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/?term=layout-animation"
+      }
+    },
+    {
+      "id": "accordion-collapse",
+      "canonicalId": "accordion-collapse",
+      "categoryId": "state-transitions",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "手风琴 / 折叠",
+        "en": "Accordion / Collapse"
+      },
+      "definition": {
+        "zh": "一个区域平滑地展开或收起高度，以显示或隐藏内容。",
+        "en": "A disclosure region animates its visible extent while content is opened or closed."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-accordion-collapse",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-accordion-collapse"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/accordion-collapse/",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/"
+      }
+    },
+    {
+      "id": "direction-aware-transition",
+      "canonicalId": "direction-aware-transition",
+      "categoryId": "state-transitions",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "方向感过渡",
+        "en": "Direction-aware transition"
+      },
+      "definition": {
+        "zh": "前进时内容沿一个方向滑动，返回时沿相反方向滑动，让导航具备方向感。",
+        "en": "Navigation motion uses the route direction to choose opposing travel paths for forward and reverse actions."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-direction-aware-transition",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-direction-aware-transition"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/direction-aware-transition/",
+        "en": "https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/"
+      }
+    },
+    {
+      "id": "scroll-reveal",
+      "canonicalId": "scroll-reveal",
+      "categoryId": "scroll",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "滚动揭示",
+        "en": "Scroll reveal"
+      },
+      "definition": {
+        "zh": "元素进入视口时淡入或滑动到位。",
+        "en": "Viewport entry triggers a one-time opacity or position transition for newly visible content."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-scroll-reveal",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-scroll-reveal"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/"
+      }
+    },
+    {
+      "id": "scroll-driven-animation",
+      "canonicalId": "scroll-driven-animation",
+      "categoryId": "scroll",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "滚动驱动动画",
+        "en": "Scroll-driven animation"
+      },
+      "definition": {
+        "zh": "动画进度与滚动位置直接绑定。",
+        "en": "Scroll progress supplies the animation timeline, mapping page movement to visual state."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-scroll-driven-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-scroll-driven-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-driven-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/"
+      }
+    },
+    {
+      "id": "parallax",
+      "canonicalId": "parallax",
+      "categoryId": "scroll",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "视差",
+        "en": "Parallax"
+      },
+      "definition": {
+        "zh": "滚动时背景与前景以不同速度移动，从而营造纵深感。",
+        "en": "Layers respond to the same scroll input at different displacement rates, creating apparent depth."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-parallax",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-parallax"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/scroll/parallax/",
+        "en": "https://motion-lexicon.pages.dev/en/scroll/parallax/"
+      }
+    },
+    {
+      "id": "page-transition",
+      "canonicalId": "page-transition",
+      "categoryId": "scroll",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "页面过渡",
+        "en": "Page transition"
+      },
+      "definition": {
+        "zh": "从一个页面或路由导航到另一个页面或路由时播放的动画。",
+        "en": "Route navigation is accompanied by coordinated exit and entrance states for page-level content."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-page-transition",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-page-transition"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/scroll/page-transition/",
+        "en": "https://motion-lexicon.pages.dev/en/scroll/page-transition/"
+      }
+    },
+    {
+      "id": "view-transition",
+      "canonicalId": "page-transition",
+      "categoryId": "scroll",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "视图过渡",
+        "en": "View transition"
+      },
+      "definition": {
+        "zh": "浏览器在两个状态或页面之间进行形变过渡，并连接共享元素。",
+        "en": "The browser captures old and new render states, then animates their snapshots and designated shared elements."
+      },
+      "distinction": {
+        "zh": "视图过渡指浏览器连接两个 DOM 状态或页面快照的机制；页面过渡涵盖更广泛的路由切换动画。",
+        "en": "View transition refers to the browser connecting DOM states or page snapshots; Page transition covers route-change animation more broadly."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-view-transition",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-view-transition"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/scroll/page-transition/?term=view-transition",
+        "en": "https://motion-lexicon.pages.dev/en/scroll/page-transition/?term=view-transition"
+      }
+    },
+    {
+      "id": "hover-effect",
+      "canonicalId": "hover-effect",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "悬停效果",
+        "en": "Hover effect"
+      },
+      "definition": {
+        "zh": "光标移到元素上方时产生的视觉变化。",
+        "en": "Pointer hover updates a control's visual state to signal availability or affordance."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-hover-effect",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-hover-effect"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/hover-effect/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/hover-effect/"
+      }
+    },
+    {
+      "id": "press-tap-feedback",
+      "canonicalId": "press-tap-feedback",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "按压 / 轻触反馈",
+        "en": "Press / Tap feedback"
+      },
+      "definition": {
+        "zh": "元素被点击时轻微缩小，让操作具有实体触感。",
+        "en": "A brief response during pointer or touch activation makes a control acknowledge contact."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-press-tap-feedback",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-press-tap-feedback"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/press-tap-feedback/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/"
+      }
+    },
+    {
+      "id": "hold-to-confirm",
+      "canonicalId": "hold-to-confirm",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "长按确认",
+        "en": "Hold to confirm"
+      },
+      "definition": {
+        "zh": "用户持续按住按钮时逐步填满的进度效果。",
+        "en": "A timed progress indicator advances while continuous press input is maintained and completes at a threshold."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-hold-to-confirm",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-hold-to-confirm"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/hold-to-confirm/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/"
+      }
+    },
+    {
+      "id": "drag",
+      "canonicalId": "drag-to-reorder",
+      "categoryId": "feedback",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "拖拽",
+        "en": "Drag"
+      },
+      "definition": {
+        "zh": "抓住元素并移动它，释放时通常带有动量。",
+        "en": "Pointer movement directly updates an object's position from grab until release."
+      },
+      "distinction": {
+        "zh": "拖拽是抓取并移动元素的通用手势；拖拽排序把该手势用于列表重排。",
+        "en": "Drag is the general gesture of grabbing and moving an element; Drag to reorder applies it to list ordering."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-drag",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-drag"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/drag-to-reorder/?term=drag",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/?term=drag"
+      }
+    },
+    {
+      "id": "drag-to-reorder",
+      "canonicalId": "drag-to-reorder",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "拖拽排序",
+        "en": "Drag to reorder"
+      },
+      "definition": {
+        "zh": "拖动列表项来重新排序，其他项目会移动并让出位置。",
+        "en": "Dragging an item changes its list position while surrounding items animate toward their prospective slots."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-drag-to-reorder",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-drag-to-reorder"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/drag-to-reorder/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/"
+      }
+    },
+    {
+      "id": "swipe-to-dismiss",
+      "canonicalId": "swipe-to-dismiss",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "滑动关闭",
+        "en": "Swipe to dismiss"
+      },
+      "definition": {
+        "zh": "把元素拖出屏幕以关闭它，例如抽屉或提示消息。",
+        "en": "A directional drag removes a surface after distance or velocity crosses a dismissal threshold."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-swipe-to-dismiss",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-swipe-to-dismiss"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/swipe-to-dismiss/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/"
+      }
+    },
+    {
+      "id": "rubber-banding",
+      "canonicalId": "swipe-to-dismiss",
+      "categoryId": "feedback",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "橡皮筋回弹",
+        "en": "Rubber-banding"
+      },
+      "definition": {
+        "zh": "拖过边界时出现阻力并回弹，类似 iOS 的过度滚动手感。",
+        "en": "Movement beyond a boundary is attenuated, then restored toward the valid range after release."
+      },
+      "distinction": {
+        "zh": "橡皮筋回弹发生在拖过边界后，并带阻力返回；滑动关闭以越过阈值后移除元素为目标。",
+        "en": "Rubber-banding resists and returns after a boundary is crossed; Swipe to dismiss removes an element after a threshold."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-rubber-banding",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-rubber-banding"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/swipe-to-dismiss/?term=rubber-banding",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/?term=rubber-banding"
+      }
+    },
+    {
+      "id": "shake-wiggle",
+      "canonicalId": "shake-wiggle",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "摇晃 / 抖动",
+        "en": "Shake / Wiggle"
+      },
+      "definition": {
+        "zh": "快速左右抖动，用来提示错误或输入被拒绝。",
+        "en": "A rapid alternating displacement flags invalid input or a rejected action."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-shake-wiggle",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-shake-wiggle"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/shake-wiggle/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/"
+      }
+    },
+    {
+      "id": "ripple",
+      "canonicalId": "ripple",
+      "categoryId": "feedback",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "涟漪",
+        "en": "Ripple"
+      },
+      "definition": {
+        "zh": "圆形从轻触点向外扩散，用来确认按压操作。",
+        "en": "A radial wave expands from the activation coordinates to mark where contact occurred."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-ripple",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-ripple"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/feedback/ripple/",
+        "en": "https://motion-lexicon.pages.dev/en/feedback/ripple/"
+      }
+    },
+    {
+      "id": "easing",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "缓动",
+        "en": "Easing"
+      },
+      "definition": {
+        "zh": "动画加速或减速的速率变化方式。",
+        "en": "An easing function maps linear timeline progress to a changing rate of property interpolation."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-easing",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-easing"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/"
+      }
+    },
+    {
+      "id": "ease-out",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "缓出",
+        "en": "Ease-out"
+      },
+      "definition": {
+        "zh": "开始快、结束慢，适合作为大多数 UI 动效和用户响应动作的默认选择。",
+        "en": "Progress advances quickly after activation and decelerates near completion, giving responsive UI motion a controlled arrival."
+      },
+      "distinction": {
+        "zh": "缓出是缓动的一种：开始快、结束慢，适合响应用户输入。",
+        "en": "Ease-out is an easing profile that starts fast and ends slowly, fitting user-triggered responses."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-ease-out",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-ease-out"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=ease-out",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=ease-out"
+      }
+    },
+    {
+      "id": "ease-in",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "缓入",
+        "en": "Ease-in"
+      },
+      "definition": {
+        "zh": "开始慢、结束快，通常应谨慎使用，因为容易显得迟缓。",
+        "en": "Progress accelerates from a gentle start toward a faster finish, fitting departures that should gather speed."
+      },
+      "distinction": {
+        "zh": "缓入是缓动的一种：开始慢、结束快，容易让 UI 响应显得迟缓。",
+        "en": "Ease-in is an easing profile that starts slowly and ends fast, which can make UI response feel sluggish."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-ease-in",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-ease-in"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=ease-in",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=ease-in"
+      }
+    },
+    {
+      "id": "ease-in-out",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "缓入缓出",
+        "en": "Ease-in-out"
+      },
+      "definition": {
+        "zh": "速度由慢到快再到慢，适合屏幕上已有元素从 A 点移动到 B 点。",
+        "en": "Progress accelerates through the middle and decelerates at both ends, supporting visible point-to-point travel."
+      },
+      "distinction": {
+        "zh": "缓入缓出两端较慢、中段较快，适合屏幕上已有元素的位移。",
+        "en": "Ease-in-out is slow at both ends and faster in the middle, fitting movement of elements already on screen."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-ease-in-out",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-ease-in-out"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=ease-in-out",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=ease-in-out"
+      }
+    },
+    {
+      "id": "linear",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "线性",
+        "en": "Linear"
+      },
+      "definition": {
+        "zh": "保持恒定速度；UI 动效应避免使用，仅保留给加载旋转器或跑马灯。",
+        "en": "Timeline progress and property progress remain proportional, producing a constant rate suitable for continuous indicators."
+      },
+      "distinction": {
+        "zh": "线性缓动保持恒定速度，适合旋转器和跑马灯等连续运动。",
+        "en": "Linear easing keeps constant speed, fitting continuous motion such as spinners and marquees."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-linear",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-linear"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=linear",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=linear"
+      }
+    },
+    {
+      "id": "cubic-bezier",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "三次贝塞尔",
+        "en": "Cubic-bezier"
+      },
+      "definition": {
+        "zh": "由开发者定义的自定义缓动曲线，用于精确控制速度变化。",
+        "en": "Four control points describe a cubic Bézier timing curve for custom acceleration and deceleration."
+      },
+      "distinction": {
+        "zh": "三次贝塞尔是自定义缓动曲线的表达方式，可精确控制加速与减速。",
+        "en": "Cubic-bezier expresses a custom easing curve for precise acceleration and deceleration control."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-cubic-bezier",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-cubic-bezier"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=cubic-bezier",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=cubic-bezier"
+      }
+    },
+    {
+      "id": "asymmetric-easing",
+      "canonicalId": "easing",
+      "categoryId": "easing",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "非对称缓动",
+        "en": "Asymmetric easing"
+      },
+      "definition": {
+        "zh": "加速与减速速率不同的曲线，通常比对称曲线更有生命力。",
+        "en": "Different acceleration and deceleration shapes give the entrance and arrival distinct timing characteristics."
+      },
+      "distinction": {
+        "zh": "非对称缓动使用不同的加速与减速速率；它属于自定义缓动策略。",
+        "en": "Asymmetric easing uses different acceleration and deceleration rates; it is a custom easing strategy."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-asymmetric-easing",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-asymmetric-easing"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/?term=asymmetric-easing",
+        "en": "https://motion-lexicon.pages.dev/en/easing/easing/?term=asymmetric-easing"
+      }
+    },
+    {
+      "id": "spring",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "弹簧",
+        "en": "Spring"
+      },
+      "definition": {
+        "zh": "由张力、质量和阻尼等物理参数驱动的运动，不依赖固定时长。",
+        "en": "A simulated oscillator approaches a target according to stiffness, damping, mass, and current velocity."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-spring",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-spring"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/"
+      }
+    },
+    {
+      "id": "stiffness-tension",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "刚度 / 张力",
+        "en": "Stiffness / Tension"
+      },
+      "definition": {
+        "zh": "弹簧拉向目标的力度，数值越高，响应越干脆。",
+        "en": "Stiffness determines the restoring force applied for a given distance from the spring's target."
+      },
+      "distinction": {
+        "zh": "刚度 / 张力决定弹簧拉向目标的力度，是弹簧模型的参数。",
+        "en": "Stiffness / Tension controls how strongly a spring pulls toward its target; it is a spring-model parameter."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-stiffness-tension",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-stiffness-tension"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=stiffness-tension",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=stiffness-tension"
+      }
+    },
+    {
+      "id": "damping",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "阻尼",
+        "en": "Damping"
+      },
+      "definition": {
+        "zh": "弹簧稳定下来的速度；阻尼越低，回弹和振荡越明显。",
+        "en": "Damping removes energy from a spring over time, controlling oscillation and settlement."
+      },
+      "distinction": {
+        "zh": "阻尼决定弹簧消除振荡的速度；弹簧是包含阻尼在内的完整物理模型。",
+        "en": "Damping controls how quickly oscillation settles; Spring is the full physical model that includes damping."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-damping",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-damping"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=damping",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=damping"
+      }
+    },
+    {
+      "id": "mass",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "质量",
+        "en": "Mass"
+      },
+      "definition": {
+        "zh": "动画元素呈现出的重量；质量越大，运动越慢、越沉。",
+        "en": "Mass sets inertia in the spring equation, influencing acceleration and the perceived weight of motion."
+      },
+      "distinction": {
+        "zh": "质量决定元素呈现的重量与惯性；它与刚度、阻尼共同塑造弹簧响应。",
+        "en": "Mass controls perceived weight and inertia; it works with stiffness and damping to shape a spring response."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-mass",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-mass"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=mass",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=mass"
+      }
+    },
+    {
+      "id": "bounce",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "弹跳",
+        "en": "Bounce"
+      },
+      "definition": {
+        "zh": "弹簧越过目标后再稳定下来，为动作增加活泼感。",
+        "en": "A spring crosses its target one or more times before its oscillation converges."
+      },
+      "distinction": {
+        "zh": "弹跳是弹簧越过目标后回落的表现，通常由较低阻尼和合适刚度产生。",
+        "en": "Bounce is a spring overshooting and settling, commonly produced by lower damping with suitable stiffness."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-bounce",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-bounce"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=bounce",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=bounce"
+      }
+    },
+    {
+      "id": "perceptual-duration",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "感知时长",
+        "en": "Perceptual duration"
+      },
+      "definition": {
+        "zh": "弹簧在感知上完成所需的时长，尽管底层仍在进行微小的收敛。",
+        "en": "The perceived duration ends when remaining spring movement falls below a visually meaningful threshold."
+      },
+      "distinction": {
+        "zh": "感知时长描述用户觉得弹簧已经结束的时刻；它区别于固定 CSS 时长。",
+        "en": "Perceptual duration describes when a spring feels finished to the user; it differs from a fixed CSS duration."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-perceptual-duration",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-perceptual-duration"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=perceptual-duration",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=perceptual-duration"
+      }
+    },
+    {
+      "id": "momentum",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "动量",
+        "en": "Momentum"
+      },
+      "definition": {
+        "zh": "保留速度并继续前进的运动，常见于拖拽释放或动画中断之后。",
+        "en": "Stored velocity continues to influence motion after direct manipulation ends."
+      },
+      "distinction": {
+        "zh": "动量让动作在拖拽释放或中断后保留速度；弹簧可以接收并延续这份速度。",
+        "en": "Momentum preserves velocity after release or interruption; a spring can receive and carry that velocity."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-momentum",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-momentum"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=momentum",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=momentum"
+      }
+    },
+    {
+      "id": "velocity",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "速度",
+        "en": "Velocity"
+      },
+      "definition": {
+        "zh": "元素移动的快慢与方向；弹簧会在中断时把它带入下一段动画，使被快速甩动的元素保留速度。",
+        "en": "Velocity records both speed and direction, allowing a new transition to inherit current movement."
+      },
+      "distinction": {
+        "zh": "速度记录运动的快慢与方向；弹簧把它作为下一段响应的初始条件。",
+        "en": "Velocity records speed and direction; a spring can use it as the initial condition for the next response."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-velocity",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-velocity"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=velocity",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=velocity"
+      }
+    },
+    {
+      "id": "interruptible-animation",
+      "canonicalId": "spring",
+      "categoryId": "springs",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "可打断动画",
+        "en": "Interruptible animation"
+      },
+      "definition": {
+        "zh": "动画可以在运行途中平滑地改变目标，无需等待当前动作完成。",
+        "en": "An in-progress transition accepts a new target while retaining continuity of position and velocity."
+      },
+      "distinction": {
+        "zh": "可打断动画描述运行中可平滑改向的交互能力；弹簧是实现这项能力的一种方式。",
+        "en": "Interruptible animation names the ability to retarget motion smoothly in flight; a spring is one way to implement it."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-interruptible-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-interruptible-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/?term=interruptible-animation",
+        "en": "https://motion-lexicon.pages.dev/en/springs/spring/?term=interruptible-animation"
+      }
+    },
+    {
+      "id": "marquee",
+      "canonicalId": "marquee",
+      "categoryId": "loops",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "跑马灯",
+        "en": "Marquee"
+      },
+      "definition": {
+        "zh": "文字或内容持续循环滚动。",
+        "en": "A content track translates continuously and wraps to create an uninterrupted scrolling strip."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-marquee",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-marquee"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/marquee/",
+        "en": "https://motion-lexicon.pages.dev/en/loops/marquee/"
+      }
+    },
+    {
+      "id": "loop",
+      "canonicalId": "loop",
+      "categoryId": "loops",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "循环",
+        "en": "Loop"
+      },
+      "definition": {
+        "zh": "按指定次数或无限重复播放的动画。",
+        "en": "A timeline restarts according to a finite iteration count or continues indefinitely."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-loop",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-loop"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/loop/",
+        "en": "https://motion-lexicon.pages.dev/en/loops/loop/"
+      }
+    },
+    {
+      "id": "alternate",
+      "canonicalId": "loop",
+      "categoryId": "loops",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "往返循环",
+        "en": "Alternate (yoyo)"
+      },
+      "definition": {
+        "zh": "每轮先正向播放再反向播放的循环，避免直接跳回起点。",
+        "en": "Successive iterations reverse playback direction so each endpoint becomes the next starting point."
+      },
+      "distinction": {
+        "zh": "往返循环每轮反向播放；循环也可以采用正向、反向或有限次数等其他策略。",
+        "en": "Alternate reverses direction each iteration; Loop also includes normal, reverse, finite, and infinite strategies."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-alternate",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-alternate"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/loop/?term=alternate",
+        "en": "https://motion-lexicon.pages.dev/en/loops/loop/?term=alternate"
+      }
+    },
+    {
+      "id": "orbit",
+      "canonicalId": "orbit",
+      "categoryId": "loops",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "环绕",
+        "en": "Orbit"
+      },
+      "definition": {
+        "zh": "一个元素沿连续路径围绕另一个元素旋转。",
+        "en": "An element follows a closed path around a center or companion object."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-orbit",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-orbit"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/orbit/",
+        "en": "https://motion-lexicon.pages.dev/en/loops/orbit/"
+      }
+    },
+    {
+      "id": "pulse",
+      "canonicalId": "idle-animation",
+      "categoryId": "loops",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "脉冲",
+        "en": "Pulse"
+      },
+      "definition": {
+        "zh": "通过轻柔重复的缩放或透明度变化吸引注意。",
+        "en": "A low-amplitude cycle of scale, opacity, or color periodically emphasizes an element."
+      },
+      "distinction": {
+        "zh": "脉冲通过重复缩放或透明度变化吸引注意；空闲动效是包含脉冲在内的更宽泛类别。",
+        "en": "Pulse repeats scale or opacity changes to attract attention; Idle animation is the broader category that can include it."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-pulse",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-pulse"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/idle-animation/?term=pulse",
+        "en": "https://motion-lexicon.pages.dev/en/loops/idle-animation/?term=pulse"
+      }
+    },
+    {
+      "id": "float",
+      "canonicalId": "idle-animation",
+      "categoryId": "loops",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "漂浮",
+        "en": "Float"
+      },
+      "definition": {
+        "zh": "轻柔、持续的上下漂移，让静态元素显得有生命力且轻盈。",
+        "en": "A slow repeating translation produces a light hovering impression around a stable resting point."
+      },
+      "distinction": {
+        "zh": "漂浮持续进行轻微上下位移；空闲动效也可以使用脉冲等其他低强度动作。",
+        "en": "Float uses continuous subtle vertical drift; Idle animation can also use pulse and other low-intensity motion."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-float",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-float"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/idle-animation/?term=float",
+        "en": "https://motion-lexicon.pages.dev/en/loops/idle-animation/?term=float"
+      }
+    },
+    {
+      "id": "idle-animation",
+      "canonicalId": "idle-animation",
+      "categoryId": "loops",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "空闲动效",
+        "en": "Idle animation"
+      },
+      "definition": {
+        "zh": "元素静置并等待交互时播放的细微运动。",
+        "en": "Low-intensity ambient motion gives a waiting element activity without requiring input."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-idle-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-idle-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/loops/idle-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/loops/idle-animation/"
+      }
+    },
+    {
+      "id": "blur",
+      "canonicalId": "blur",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "模糊",
+        "en": "Blur"
+      },
+      "definition": {
+        "zh": "用于柔化元素或掩盖细小瑕疵的模糊滤镜。",
+        "en": "A blur filter blends neighboring pixels to soften edges, depth layers, or transitional artifacts."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-blur",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-blur"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/blur/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/blur/"
+      }
+    },
+    {
+      "id": "clip-path",
+      "canonicalId": "blur",
+      "categoryId": "polish-effects",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "裁切路径",
+        "en": "Clip-path"
+      },
+      "definition": {
+        "zh": "把元素裁切成指定形状，可用于揭示、遮罩和前后对比滑杆。",
+        "en": "A geometric clipping region controls which portion of an element is painted."
+      },
+      "distinction": {
+        "zh": "裁切路径使用清晰形状边界隐藏区域；模糊滤镜柔化像素，并不定义可见区域。",
+        "en": "Clip-path hides regions with a defined shape boundary; Blur softens pixels and does not define the visible region."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-clip-path",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-clip-path"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/blur/?term=clip-path",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/blur/?term=clip-path"
+      }
+    },
+    {
+      "id": "mask",
+      "canonicalId": "blur",
+      "categoryId": "polish-effects",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "遮罩",
+        "en": "Mask"
+      },
+      "definition": {
+        "zh": "使用形状或渐变隐藏、揭示元素的部分区域；它类似裁切路径，同时支持柔和、可渐隐的边缘。",
+        "en": "An alpha or luminance image modulates visibility, allowing gradients and soft-edged reveals."
+      },
+      "distinction": {
+        "zh": "遮罩通过透明度或亮度控制可见区域并支持软边；模糊滤镜只负责柔化图像。",
+        "en": "Mask controls visible regions through alpha or luminance and supports soft edges; Blur only softens the image."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-mask",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-mask"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/blur/?term=mask",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/blur/?term=mask"
+      }
+    },
+    {
+      "id": "before-after-slider",
+      "canonicalId": "before-after-slider",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "前后对比滑杆",
+        "en": "Before / after slider"
+      },
+      "definition": {
+        "zh": "通过可拖动分割线在两张叠放图片之间擦拭切换，以便对比。",
+        "en": "A draggable boundary changes the visible share of two aligned layers for direct comparison."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-before-after-slider",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-before-after-slider"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/before-after-slider/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/"
+      }
+    },
+    {
+      "id": "line-drawing",
+      "canonicalId": "line-drawing",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "线条绘制",
+        "en": "Line drawing"
+      },
+      "definition": {
+        "zh": "SVG 路径像被一支隐形画笔描摹一样自行绘制出来。",
+        "en": "Animating SVG stroke dash values reveals a path progressively along its length."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-line-drawing",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-line-drawing"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/line-drawing/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/"
+      }
+    },
+    {
+      "id": "text-morph",
+      "canonicalId": "text-morph",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "文字形变",
+        "en": "Text morph"
+      },
+      "definition": {
+        "zh": "文字变化时逐字符播放动画，把注意力引向新值。",
+        "en": "Characters or glyph shapes transition between text states to focus attention on updated content."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-text-morph",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-text-morph"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/text-morph/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/text-morph/"
+      }
+    },
+    {
+      "id": "skeleton-shimmer",
+      "canonicalId": "skeleton-shimmer",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "骨架屏 / 微光",
+        "en": "Skeleton / Shimmer"
+      },
+      "definition": {
+        "zh": "内容加载期间显示的占位结构，表面带有移动的微光。",
+        "en": "A placeholder layout uses a moving highlight to communicate that content is still loading."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-skeleton-shimmer",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-skeleton-shimmer"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/skeleton-shimmer/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/"
+      }
+    },
+    {
+      "id": "number-ticker",
+      "canonicalId": "number-ticker",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "数字滚动",
+        "en": "Number ticker"
+      },
+      "definition": {
+        "zh": "数字滚动或递增到目标值。",
+        "en": "Numeric glyphs translate or interpolate until the display reaches an updated value."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-number-ticker",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-number-ticker"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/number-ticker/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/"
+      }
+    },
+    {
+      "id": "tabular-numbers",
+      "canonicalId": "number-ticker",
+      "categoryId": "polish-effects",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "等宽数字",
+        "en": "Tabular numbers"
+      },
+      "definition": {
+        "zh": "使用固定宽度的数字，使数值变化时不会左右跳动；它对数字滚动、计时器和计数器非常重要。",
+        "en": "Tabular numeral glyphs share a fixed advance width, keeping changing values spatially stable."
+      },
+      "distinction": {
+        "zh": "等宽数字是稳定数字宽度的排版特性；数字滚动是数值变化时播放的动画。",
+        "en": "Tabular numbers is a typographic feature that stabilizes digit width; Number ticker is the animation used when values change."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-tabular-numbers",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-tabular-numbers"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/number-ticker/?term=tabular-numbers",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/?term=tabular-numbers"
+      }
+    },
+    {
+      "id": "typewriter",
+      "canonicalId": "typewriter",
+      "categoryId": "polish-effects",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "打字机",
+        "en": "Typewriter"
+      },
+      "definition": {
+        "zh": "文字像正在输入一样逐字符出现。",
+        "en": "A text sequence reveals characters at timed intervals to simulate incremental entry."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-typewriter",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-typewriter"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/typewriter/",
+        "en": "https://motion-lexicon.pages.dev/en/polish-effects/typewriter/"
+      }
+    },
+    {
+      "id": "frame-rate",
+      "canonicalId": "frame-rate",
+      "categoryId": "performance",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "帧率（FPS）",
+        "en": "Frame rate (FPS)"
+      },
+      "definition": {
+        "zh": "每秒绘制的帧数；60fps 是流畅运动的基线，新款显示器可达到 120fps。",
+        "en": "Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-frame-rate",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-frame-rate"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/frame-rate/",
+        "en": "https://motion-lexicon.pages.dev/en/performance/frame-rate/"
+      }
+    },
+    {
+      "id": "jank",
+      "canonicalId": "frame-rate",
+      "categoryId": "performance",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "卡顿",
+        "en": "Jank"
+      },
+      "definition": {
+        "zh": "浏览器无法跟上动画并发生掉帧时出现的可见停顿。",
+        "en": "Jank is a perceptible break in motion caused by irregular frame timing or delayed main-thread work."
+      },
+      "distinction": {
+        "zh": "卡顿是用户看到的运动停顿；帧率是用于衡量绘制速度的指标。",
+        "en": "Jank is the visible stutter a user sees; Frame rate is the metric used to measure drawing speed."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-jank",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-jank"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/frame-rate/?term=jank",
+        "en": "https://motion-lexicon.pages.dev/en/performance/frame-rate/?term=jank"
+      }
+    },
+    {
+      "id": "dropped-frame",
+      "canonicalId": "frame-rate",
+      "categoryId": "performance",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "丢帧",
+        "en": "Dropped frame"
+      },
+      "definition": {
+        "zh": "浏览器未能在截止时间前绘制的一帧，会让运动出现轻微顿挫。",
+        "en": "A dropped frame occurs when rendering misses a display deadline and the previous image remains visible for another refresh."
+      },
+      "distinction": {
+        "zh": "丢帧是一次未赶上绘制截止时间的事件；帧率汇总一段时间内的绘制频率。",
+        "en": "Dropped frame is one missed drawing deadline; Frame rate summarizes drawing frequency over time."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-dropped-frame",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-dropped-frame"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/frame-rate/?term=dropped-frame",
+        "en": "https://motion-lexicon.pages.dev/en/performance/frame-rate/?term=dropped-frame"
+      }
+    },
+    {
+      "id": "compositing",
+      "canonicalId": "compositing",
+      "categoryId": "performance",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "合成",
+        "en": "Compositing"
+      },
+      "definition": {
+        "zh": "让 GPU 在独立图层上移动元素或改变其透明度，无需重新执行布局或绘制。",
+        "en": "Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-compositing",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-compositing"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/",
+        "en": "https://motion-lexicon.pages.dev/en/performance/compositing/"
+      }
+    },
+    {
+      "id": "will-change",
+      "canonicalId": "compositing",
+      "categoryId": "performance",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "will-change",
+        "en": "will-change"
+      },
+      "definition": {
+        "zh": "一种 CSS 提示，用来告知浏览器元素即将播放动画，使浏览器可以提前把它提升到独立图层。",
+        "en": "The will-change property warns the browser about an upcoming property change so it can prepare relevant rendering resources."
+      },
+      "distinction": {
+        "zh": "will-change 是浏览器优化提示；合成是浏览器把图层交给 GPU 处理的渲染阶段。",
+        "en": "will-change is an optimization hint; Compositing is the rendering stage that lets the GPU handle layers."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-will-change",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-will-change"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/?term=will-change",
+        "en": "https://motion-lexicon.pages.dev/en/performance/compositing/?term=will-change"
+      }
+    },
+    {
+      "id": "layout-thrashing",
+      "canonicalId": "compositing",
+      "categoryId": "performance",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "布局抖动",
+        "en": "Layout thrashing"
+      },
+      "definition": {
+        "zh": "动画化 width、height、top 或 left 等属性，迫使浏览器逐帧重新计算布局并引发卡顿。",
+        "en": "Repeated interleaving of layout reads and writes forces synchronous recalculation and consumes the frame budget."
+      },
+      "distinction": {
+        "zh": "布局抖动由反复触发布局计算造成；合成友好的 transform 和 opacity 可以绕开这类工作。",
+        "en": "Layout thrashing comes from repeated layout calculation; compositor-friendly transform and opacity can avoid that work."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-layout-thrashing",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-layout-thrashing"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/?term=layout-thrashing",
+        "en": "https://motion-lexicon.pages.dev/en/performance/compositing/?term=layout-thrashing"
+      }
+    },
+    {
+      "id": "purposeful-animation",
+      "canonicalId": "purposeful-animation",
+      "categoryId": "principles",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "有目的的动效",
+        "en": "Purposeful animation"
+      },
+      "definition": {
+        "zh": "动效应承担明确功能，例如帮助定位、提供反馈或展示关系，而非只作装饰。",
+        "en": "Purposeful motion communicates hierarchy, causality, feedback, or spatial relationships in support of a user task."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-purposeful-animation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-purposeful-animation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/purposeful-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/principles/purposeful-animation/"
+      }
+    },
+    {
+      "id": "anticipation",
+      "canonicalId": "anticipation",
+      "categoryId": "principles",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "预备动作",
+        "en": "Anticipation"
+      },
+      "definition": {
+        "zh": "动作开始前先向相反方向进行一小段蓄力，用来预示即将发生的运动。",
+        "en": "A brief preparatory movement establishes direction and energy before the primary action."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-anticipation",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-anticipation"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/anticipation/",
+        "en": "https://motion-lexicon.pages.dev/en/principles/anticipation/"
+      }
+    },
+    {
+      "id": "follow-through",
+      "canonicalId": "anticipation",
+      "categoryId": "principles",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "跟随动作",
+        "en": "Follow-through"
+      },
+      "definition": {
+        "zh": "主运动停止后，元素的部分结构继续移动并稍后稳定，从而增加重量感。",
+        "en": "Secondary parts continue and settle after the main body reaches its destination, reinforcing weight and flexibility."
+      },
+      "distinction": {
+        "zh": "跟随动作发生在主运动停止之后；预备动作发生在主运动开始之前。",
+        "en": "Follow-through happens after the main motion stops; Anticipation happens before the main motion starts."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-follow-through",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-follow-through"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/anticipation/?term=follow-through",
+        "en": "https://motion-lexicon.pages.dev/en/principles/anticipation/?term=follow-through"
+      }
+    },
+    {
+      "id": "squash-and-stretch",
+      "canonicalId": "anticipation",
+      "categoryId": "principles",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "挤压与拉伸",
+        "en": "Squash & stretch"
+      },
+      "definition": {
+        "zh": "在元素运动时改变其形状，用来表现重量、速度和弹性。",
+        "en": "Temporary deformation links shape to force, speed, or impact while preserving recognizable volume."
+      },
+      "distinction": {
+        "zh": "挤压与拉伸通过形变表达重量和弹性；预备动作通过反向蓄力预示运动。",
+        "en": "Squash & stretch uses deformation to express weight and flexibility; Anticipation uses an opposite wind-up to preview motion."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-squash-and-stretch",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-squash-and-stretch"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/anticipation/?term=squash-and-stretch",
+        "en": "https://motion-lexicon.pages.dev/en/principles/anticipation/?term=squash-and-stretch"
+      }
+    },
+    {
+      "id": "perceived-performance",
+      "canonicalId": "perceived-performance",
+      "categoryId": "principles",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "感知性能",
+        "en": "Perceived performance"
+      },
+      "definition": {
+        "zh": "恰当的动画可以让界面在实际速度未变化时显得更快。",
+        "en": "Motion and progressive feedback reduce uncertainty during waiting, changing how fast the interface feels."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-perceived-performance",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-perceived-performance"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/perceived-performance/",
+        "en": "https://motion-lexicon.pages.dev/en/principles/perceived-performance/"
+      }
+    },
+    {
+      "id": "frequency-of-use",
+      "canonicalId": "purposeful-animation",
+      "categoryId": "principles",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "使用频率",
+        "en": "Frequency of use"
+      },
+      "definition": {
+        "zh": "用户看到一段动画的频率越高，它就应越短、越克制。",
+        "en": "Exposure frequency sets an animation's acceptable emphasis and length; repeated motion benefits from greater restraint."
+      },
+      "distinction": {
+        "zh": "使用频率决定动效应多短、多克制；有目的的动效决定它承担什么功能。",
+        "en": "Frequency of use determines how short and subtle motion should be; Purposeful animation determines the function it serves."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-frequency-of-use",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-frequency-of-use"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/purposeful-animation/?term=frequency-of-use",
+        "en": "https://motion-lexicon.pages.dev/en/principles/purposeful-animation/?term=frequency-of-use"
+      }
+    },
+    {
+      "id": "spatial-consistency",
+      "canonicalId": "purposeful-animation",
+      "categoryId": "principles",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "空间一致性",
+        "en": "Spatial consistency"
+      },
+      "definition": {
+        "zh": "让元素在不同状态之间保持身份与空间位置的连续，使用户始终知道内容去了哪里。",
+        "en": "Objects retain coherent position, direction, and identity across states so changes remain easy to trace."
+      },
+      "distinction": {
+        "zh": "空间一致性保持元素跨状态的身份与位置连续；有目的的动效为这种连续性提供理由。",
+        "en": "Spatial consistency preserves identity and position across states; Purposeful animation supplies the reason for that continuity."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-spatial-consistency",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-spatial-consistency"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/purposeful-animation/?term=spatial-consistency",
+        "en": "https://motion-lexicon.pages.dev/en/principles/purposeful-animation/?term=spatial-consistency"
+      }
+    },
+    {
+      "id": "hardware-acceleration",
+      "canonicalId": "compositing",
+      "categoryId": "principles",
+      "canonical": false,
+      "alias": true,
+      "name": {
+        "zh": "硬件加速",
+        "en": "Hardware acceleration"
+      },
+      "definition": {
+        "zh": "动画化 transform 和 opacity，让 GPU 保持运动流畅。",
+        "en": "Hardware acceleration uses compositor and GPU resources for eligible visual updates, helping frames meet display deadlines."
+      },
+      "distinction": {
+        "zh": "硬件加速描述利用 GPU 保持动画流畅的策略；合成是浏览器把独立图层交给 GPU 处理的渲染阶段。",
+        "en": "Hardware acceleration describes using the GPU to keep motion smooth; Compositing is the rendering stage that hands independent layers to the GPU."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-hardware-acceleration",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-hardware-acceleration"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/?term=hardware-acceleration",
+        "en": "https://motion-lexicon.pages.dev/en/performance/compositing/?term=hardware-acceleration"
+      }
+    },
+    {
+      "id": "reduced-motion",
+      "canonicalId": "reduced-motion",
+      "categoryId": "principles",
+      "canonical": true,
+      "alias": false,
+      "name": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "definition": {
+        "zh": "尊重用户的 prefers-reduced-motion 设置，降低或移除动态效果。",
+        "en": "Reduced-motion behavior honors the user preference with stable spatial states and concise essential feedback."
+      },
+      "vocabularyUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/vocabulary/#term-reduced-motion",
+        "en": "https://motion-lexicon.pages.dev/en/vocabulary/#term-reduced-motion"
+      },
+      "recipeUrls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/principles/reduced-motion/",
+        "en": "https://motion-lexicon.pages.dev/en/principles/reduced-motion/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@motion-lexicon/cli",
+  "version": "0.1.0",
+  "description": "Offline CLI and Node API for Motion Lexicon recipes.",
+  "type": "module",
+  "bin": {
+    "motion-lexicon": "./dist/motion-lexicon.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

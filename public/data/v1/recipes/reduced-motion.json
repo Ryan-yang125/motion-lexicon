@@ -1,0 +1,75 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "reduced-motion",
+  "canonicalId": "reduced-motion",
+  "categoryId": "principles",
+  "family": "principle",
+  "surfaceType": "guide",
+  "scene": "guide",
+  "name": {
+    "zh": "减弱动效",
+    "en": "Reduced motion"
+  },
+  "summary": {
+    "zh": "为移动、缩放、循环和视差提供等价的低动态表达。",
+    "en": "Provide equivalent low-motion treatments for travel, scaling, loops, and parallax."
+  },
+  "definition": {
+    "zh": "尊重用户的 prefers-reduced-motion 设置，降低或移除动态效果。",
+    "en": "Reduced-motion behavior honors the user preference with stable spatial states and concise essential feedback."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/principles/reduced-motion/",
+    "en": "https://motion-lexicon.pages.dev/en/principles/reduced-motion/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json",
+  "parameters": [],
+  "guidance": {
+    "purpose": {
+      "zh": "为移动、缩放、循环、视差和物理动效提供信息等价的低动态表达。",
+      "en": "Provide information-equivalent low-motion treatments for travel, scaling, loops, parallax, and physical motion."
+    },
+    "frequency": {
+      "zh": "每个动效模式都需评审，持续运动和大幅空间移动优先处理。",
+      "en": "Review every motion pattern, prioritizing continuous motion and large spatial travel."
+    },
+    "trigger": {
+      "zh": "由 prefers-reduced-motion 与产品内显式设置共同决定，并实时响应变化。",
+      "en": "Resolve from prefers-reduced-motion plus an explicit product setting, responding to changes live."
+    },
+    "enterExit": {
+      "zh": "内容立即进入稳定位置，使用静态层级、颜色、文本或极短淡入表达状态。",
+      "en": "Place content at its stable position immediately and express state through static hierarchy, color, text, or a very short fade."
+    },
+    "interruptibility": {
+      "zh": "偏好切换时终止当前非必要动画并应用最终状态，保留任务进度。",
+      "en": "When preference changes, stop nonessential motion at its final state while preserving task progress."
+    },
+    "gestureRules": {
+      "zh": "手势功能继续可用，取消动量、回弹和自动跟随；键盘与按钮路径完整保留。",
+      "en": "Keep gesture functions available while removing momentum, bounce, and automatic following, with full keyboard and button paths."
+    }
+  },
+  "reducedMotion": {
+    "zh": "形成逐模式策略：位移归零、缩放固定、循环停止、视差冻结、进度改用静态反馈。",
+    "en": "Define per-pattern treatment: zero travel, fixed scale, stopped loops, frozen parallax, and static progress feedback."
+  },
+  "reviewNotes": [
+    {
+      "zh": "分别审核 reduced motion 与硬件加速，两者关注点独立。",
+      "en": "Review reduced motion and hardware acceleration separately because they address different concerns."
+    },
+    {
+      "zh": "在操作系统偏好和产品设置的所有组合下测试。",
+      "en": "Test every combination of operating-system preference and product setting."
+    }
+  ],
+  "relatedRecipes": [
+    "purposeful-animation",
+    "anticipation",
+    "perceived-performance"
+  ]
+}

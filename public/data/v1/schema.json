@@ -1,0 +1,502 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "title": "Motion Lexicon public data",
+  "description": "Schema for the versioned catalog, vocabulary, and individual recipe artifacts.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/catalogDocument"
+    },
+    {
+      "$ref": "#/$defs/vocabularyDocument"
+    },
+    {
+      "$ref": "#/$defs/recipeDocument"
+    }
+  ],
+  "$defs": {
+    "localizedText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zh",
+        "en"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "localizedUrls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zh",
+        "en"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string",
+          "format": "uri"
+        },
+        "en": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "rangeParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "description",
+        "defaultValue",
+        "min",
+        "max",
+        "step",
+        "unit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "range"
+        },
+        "label": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "description": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "defaultValue": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "segmentedParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "description",
+        "defaultValue",
+        "options"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "segmented"
+        },
+        "label": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "description": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "defaultValue": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "value",
+              "cssValue"
+            ],
+            "properties": {
+              "label": {
+                "$ref": "#/$defs/localizedText"
+              },
+              "value": {
+                "type": "string"
+              },
+              "cssValue": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "toggleParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "description",
+        "defaultValue"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "toggle"
+        },
+        "label": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "description": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "defaultValue": {
+          "type": "boolean"
+        }
+      }
+    },
+    "parameter": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rangeParameter"
+        },
+        {
+          "$ref": "#/$defs/segmentedParameter"
+        },
+        {
+          "$ref": "#/$defs/toggleParameter"
+        }
+      ]
+    },
+    "catalogItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "categoryId",
+        "family",
+        "surfaceType",
+        "name",
+        "summary",
+        "aliases",
+        "urls",
+        "dataUrl"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "surfaceType": {
+          "enum": [
+            "component",
+            "playground",
+            "guide"
+          ]
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "summary": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
+        },
+        "dataUrl": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "catalogDocument": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kind",
+        "schemaVersion",
+        "schemaUrl",
+        "project",
+        "endpoints",
+        "counts",
+        "categories",
+        "recipes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "catalog"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "schemaUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 1
+        },
+        "recipes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/catalogItem"
+          }
+        }
+      }
+    },
+    "vocabularyTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "canonicalId",
+        "categoryId",
+        "canonical",
+        "alias",
+        "name",
+        "definition",
+        "vocabularyUrls",
+        "recipeUrls"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canonicalId": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "canonical": {
+          "type": "boolean"
+        },
+        "alias": {
+          "type": "boolean"
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "definition": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "distinction": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "vocabularyUrls": {
+          "$ref": "#/$defs/localizedUrls"
+        },
+        "recipeUrls": {
+          "$ref": "#/$defs/localizedUrls"
+        }
+      }
+    },
+    "vocabularyDocument": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "kind",
+        "schemaVersion",
+        "schemaUrl",
+        "count",
+        "canonicalCount",
+        "aliasCount",
+        "urls",
+        "terms"
+      ],
+      "properties": {
+        "kind": {
+          "const": "vocabulary"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "schemaUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "terms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vocabularyTerm"
+          }
+        }
+      }
+    },
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "frequency",
+        "trigger",
+        "enterExit",
+        "interruptibility",
+        "gestureRules"
+      ],
+      "properties": {
+        "purpose": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "frequency": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "trigger": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "enterExit": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "interruptibility": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "gestureRules": {
+          "$ref": "#/$defs/localizedText"
+        }
+      }
+    },
+    "recipeDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schemaVersion",
+        "schemaUrl",
+        "id",
+        "canonicalId",
+        "categoryId",
+        "family",
+        "surfaceType",
+        "scene",
+        "name",
+        "summary",
+        "definition",
+        "aliases",
+        "urls",
+        "dataUrl",
+        "parameters",
+        "guidance",
+        "reducedMotion",
+        "reviewNotes",
+        "relatedRecipes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "recipe"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "schemaUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "id": {
+          "type": "string"
+        },
+        "canonicalId": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "family": {
+          "type": "string"
+        },
+        "surfaceType": {
+          "enum": [
+            "component",
+            "playground",
+            "guide"
+          ]
+        },
+        "scene": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "summary": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "definition": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
+        },
+        "dataUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/parameter"
+          }
+        },
+        "guidance": {
+          "$ref": "#/$defs/guidance"
+        },
+        "reducedMotion": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "reviewNotes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/localizedText"
+          }
+        },
+        "relatedRecipes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

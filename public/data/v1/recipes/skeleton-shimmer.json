@@ -1,0 +1,110 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "skeleton-shimmer",
+  "canonicalId": "skeleton-shimmer",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "skeleton",
+  "name": {
+    "zh": "骨架屏 / 微光",
+    "en": "Skeleton / Shimmer"
+  },
+  "summary": {
+    "zh": "在内容加载期间用低对比扫光表达进行中状态。",
+    "en": "Communicate loading progress with a low-contrast shimmer across placeholders."
+  },
+  "definition": {
+    "zh": "内容加载期间显示的占位结构，表面带有移动的微光。",
+    "en": "A placeholder layout uses a moving highlight to communicate that content is still loading."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/skeleton-shimmer/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/skeleton-shimmer.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 1400,
+      "min": 800,
+      "max": 3000,
+      "step": 100,
+      "unit": "ms",
+      "label": {
+        "zh": "单轮时长",
+        "en": "Cycle duration"
+      },
+      "description": {
+        "zh": "控制完整循环的节奏；持续动态需要支持暂停并保持低干扰。",
+        "en": "Controls the rhythm of one full cycle; continuous motion should stay pausable and low-distraction."
+      }
+    },
+    {
+      "id": "intensity",
+      "kind": "range",
+      "defaultValue": 14,
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "label": {
+        "zh": "扫光强度",
+        "en": "Shimmer intensity"
+      },
+      "description": {
+        "zh": "调节扫光强度。",
+        "en": "Adjusts shimmer intensity."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "在内容加载期间维持布局，并用低对比扫光表达仍在进行。",
+      "en": "Preserve layout during loading and communicate ongoing work through a low-contrast shimmer."
+    },
+    "frequency": {
+      "zh": "只在预期等待超过短暂阈值时显示；快速请求直接呈现结果。",
+      "en": "Show only when expected waiting exceeds a brief threshold, rendering fast results directly."
+    },
+    "trigger": {
+      "zh": "由加载延迟阈值触发，真实内容就绪后立即停止。",
+      "en": "Trigger after a loading-delay threshold and stop as soon as real content is ready."
+    },
+    "enterExit": {
+      "zh": "骨架静态占位先出现，扫光低速循环；内容进入采用短交叉淡化。",
+      "en": "Show static placeholders first, loop a slow shimmer, and crossfade briefly into real content."
+    },
+    "interruptibility": {
+      "zh": "请求取消或重试时更新状态，禁止叠加多个扫光计时器。",
+      "en": "Update state on cancel or retry without stacking shimmer timers."
+    },
+    "gestureRules": {
+      "zh": "骨架不接收操作；加载期间保留可用的取消、返回或重试控件。",
+      "en": "Skeletons are noninteractive while cancel, back, or retry controls remain available."
+    }
+  },
+  "reducedMotion": {
+    "zh": "关闭扫光，保留静态骨架和明确的加载文本。",
+    "en": "Disable shimmer and keep a static skeleton with explicit loading text."
+  },
+  "reviewNotes": [
+    {
+      "zh": "骨架尺寸应接近真实内容，避免加载完成后布局跳动。",
+      "en": "Match skeleton dimensions to real content to prevent completion shifts."
+    },
+    {
+      "zh": "页面隐藏和离屏时暂停扫光。",
+      "en": "Pause shimmer when hidden or offscreen."
+    }
+  ],
+  "relatedRecipes": [
+    "blur",
+    "before-after-slider",
+    "line-drawing"
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "spring",
+  "canonicalId": "spring",
+  "categoryId": "springs",
+  "family": "spring",
+  "surfaceType": "playground",
+  "scene": "card",
+  "name": {
+    "zh": "弹簧",
+    "en": "Spring"
+  },
+  "summary": {
+    "zh": "通过刚度、阻尼、质量和初速度调节真实的弹簧响应。",
+    "en": "Tune a physical spring response with stiffness, damping, mass, and initial velocity."
+  },
+  "definition": {
+    "zh": "由张力、质量和阻尼等物理参数驱动的运动，不依赖固定时长。",
+    "en": "A simulated oscillator approaches a target according to stiffness, damping, mass, and current velocity."
+  },
+  "aliases": [
+    "stiffness-tension",
+    "damping",
+    "mass",
+    "bounce",
+    "perceptual-duration",
+    "momentum",
+    "velocity",
+    "interruptible-animation"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/",
+    "en": "https://motion-lexicon.pages.dev/en/springs/spring/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/spring.json",
+  "parameters": [
+    {
+      "id": "stiffness",
+      "kind": "range",
+      "defaultValue": 220,
+      "min": 60,
+      "max": 500,
+      "step": 10,
+      "unit": "",
+      "label": {
+        "zh": "刚度",
+        "en": "Stiffness"
+      },
+      "description": {
+        "zh": "调节刚度。",
+        "en": "Adjusts stiffness."
+      }
+    },
+    {
+      "id": "damping",
+      "kind": "range",
+      "defaultValue": 24,
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "阻尼",
+        "en": "Damping"
+      },
+      "description": {
+        "zh": "调节阻尼。",
+        "en": "Adjusts damping."
+      }
+    },
+    {
+      "id": "mass",
+      "kind": "range",
+      "defaultValue": 1,
+      "min": 0.5,
+      "max": 3,
+      "step": 0.1,
+      "unit": "x",
+      "label": {
+        "zh": "质量",
+        "en": "Mass"
+      },
+      "description": {
+        "zh": "调节质量。",
+        "en": "Adjusts mass."
+      }
+    },
+    {
+      "id": "velocity",
+      "kind": "range",
+      "defaultValue": 0,
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "",
+      "label": {
+        "zh": "初速度",
+        "en": "Initial velocity"
+      },
+      "description": {
+        "zh": "调节初速度。",
+        "en": "Adjusts initial velocity."
+      }
+    },
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 48,
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "通过刚度、阻尼、质量和初速度塑造可中断、保留速度的物理响应。",
+      "en": "Shape interruptible, velocity-preserving physical response through stiffness, damping, mass, and initial velocity."
+    },
+    "frequency": {
+      "zh": "适合中频手势结算和对象跟随；高频微反馈使用高阻尼、短感知时长。",
+      "en": "Use for medium-frequency gesture settling and object following; frequent micro-feedback needs high damping and short perceptual duration."
+    },
+    "trigger": {
+      "zh": "由拖拽释放、目标位置变化或状态切换触发，并传入当前速度。",
+      "en": "Trigger on drag release, target-position changes, or state transitions, passing current velocity."
+    },
+    "enterExit": {
+      "zh": "从当前值向目标收敛；退出动作根据风险控制过冲，避免内容越界。",
+      "en": "Settle from current value toward the target, limiting exit overshoot so content stays within safe bounds."
+    },
+    "interruptibility": {
+      "zh": "新目标立即接管当前位移和速度，这是弹簧体验的核心要求。",
+      "en": "A new target immediately inherits current position and velocity, which is central to the spring experience."
+    },
+    "gestureRules": {
+      "zh": "手势速度以同一坐标系传入弹簧，取消时选择最近安全目标；键盘使用离散目标。",
+      "en": "Pass gesture velocity in the same coordinate space, settle to the nearest safe target on cancel, and use discrete keyboard targets."
+    }
+  },
+  "reducedMotion": {
+    "zh": "采用高阻尼或即时到达，取消回弹和持续微振荡。",
+    "en": "Use high damping or immediate arrival, removing bounce and prolonged micro-oscillation."
+  },
+  "reviewNotes": [
+    {
+      "zh": "按感知结束时间评估，禁止只看物理模拟的理论尾部。",
+      "en": "Review perceptual completion rather than only the simulation's theoretical tail."
+    },
+    {
+      "zh": "测试中途改向、快速甩动和低帧率设备。",
+      "en": "Test mid-flight retargeting, fast flicks, and low-frame-rate devices."
+    }
+  ],
+  "relatedRecipes": [
+    "easing",
+    "loop"
+  ]
+}

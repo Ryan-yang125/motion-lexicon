@@ -1,0 +1,181 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "loop",
+  "canonicalId": "loop",
+  "categoryId": "loops",
+  "family": "loop",
+  "surfaceType": "playground",
+  "scene": "orbit",
+  "name": {
+    "zh": "循环",
+    "en": "Loop"
+  },
+  "summary": {
+    "zh": "比较循环方向、次数、暂停和节奏，避免持续动态干扰阅读。",
+    "en": "Compare loop direction, count, pauses, and rhythm while controlling distraction."
+  },
+  "definition": {
+    "zh": "按指定次数或无限重复播放的动画。",
+    "en": "A timeline restarts according to a finite iteration count or continues indefinitely."
+  },
+  "aliases": [
+    "alternate"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/loops/loop/",
+    "en": "https://motion-lexicon.pages.dev/en/loops/loop/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/loop.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 1200,
+      "min": 800,
+      "max": 4000,
+      "step": 100,
+      "unit": "ms",
+      "label": {
+        "zh": "单轮时长",
+        "en": "Cycle duration"
+      },
+      "description": {
+        "zh": "控制完整循环的节奏；持续动态需要支持暂停并保持低干扰。",
+        "en": "Controls the rhythm of one full cycle; continuous motion should stay pausable and low-distraction."
+      }
+    },
+    {
+      "id": "pause",
+      "kind": "range",
+      "defaultValue": 160,
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "循环停顿",
+        "en": "Loop pause"
+      },
+      "description": {
+        "zh": "调节循环停顿。",
+        "en": "Adjusts loop pause."
+      }
+    },
+    {
+      "id": "direction",
+      "kind": "segmented",
+      "defaultValue": "normal",
+      "label": {
+        "zh": "循环方向",
+        "en": "Loop direction"
+      },
+      "description": {
+        "zh": "选择循环方向。",
+        "en": "Selects loop direction."
+      },
+      "options": [
+        {
+          "value": "normal",
+          "cssValue": "normal",
+          "label": {
+            "zh": "正向",
+            "en": "Normal"
+          }
+        },
+        {
+          "value": "alternate",
+          "cssValue": "alternate",
+          "label": {
+            "zh": "往返",
+            "en": "Alternate"
+          }
+        },
+        {
+          "value": "reverse",
+          "cssValue": "reverse",
+          "label": {
+            "zh": "反向",
+            "en": "Reverse"
+          }
+        }
+      ]
+    },
+    {
+      "id": "iterations",
+      "kind": "range",
+      "defaultValue": 3,
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "x",
+      "label": {
+        "zh": "次数",
+        "en": "Iterations"
+      },
+      "description": {
+        "zh": "调节次数。",
+        "en": "Adjusts iterations."
+      }
+    },
+    {
+      "id": "infinite",
+      "kind": "toggle",
+      "defaultValue": false,
+      "label": {
+        "zh": "持续循环",
+        "en": "Infinite"
+      },
+      "description": {
+        "zh": "开启后持续循环。",
+        "en": "Keeps the motion looping."
+      }
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "控制重复方向、次数和停顿，让循环传达活性或等待，同时限制干扰。",
+      "en": "Control repeat direction, count, and pauses so loops communicate activity or waiting with limited distraction."
+    },
+    "frequency": {
+      "zh": "仅在状态持续期间运行；普通内容避免永久循环。",
+      "en": "Run only while the underlying state persists and avoid permanent loops in ordinary content."
+    },
+    "trigger": {
+      "zh": "由加载、直播、演示或显式播放状态触发，离开视口时暂停。",
+      "en": "Trigger from loading, live, demo, or explicit play state, pausing when offscreen."
+    },
+    "enterExit": {
+      "zh": "每轮结束在稳定帧停顿；状态结束时完成当前短阶段或立即收敛。",
+      "en": "Pause on a stable frame between iterations and settle promptly when the state ends."
+    },
+    "interruptibility": {
+      "zh": "暂停后从当前进度恢复；状态改变时取消旧循环并清理计时器。",
+      "en": "Resume from current progress after pause and cancel old loops with timer cleanup on state changes."
+    },
+    "gestureRules": {
+      "zh": "悬停、聚焦和用户控制可暂停；播放控件支持键盘和辅助技术。",
+      "en": "Allow hover, focus, and user controls to pause, with keyboard and assistive-technology support."
+    }
+  },
+  "reducedMotion": {
+    "zh": "停止自动循环，显示代表性静态帧和明确状态文本。",
+    "en": "Stop automatic looping and show a representative static frame with explicit status text."
+  },
+  "reviewNotes": [
+    {
+      "zh": "验证页面隐藏和离屏时暂停。",
+      "en": "Pause when the page is hidden or the element is offscreen."
+    },
+    {
+      "zh": "避免多个循环在同一视口竞争注意力。",
+      "en": "Prevent multiple loops from competing for attention in one viewport."
+    }
+  ],
+  "relatedRecipes": [
+    "marquee",
+    "orbit",
+    "idle-animation"
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "parallax",
+  "canonicalId": "parallax",
+  "categoryId": "scroll",
+  "family": "scroll",
+  "surfaceType": "component",
+  "scene": "scroll",
+  "name": {
+    "zh": "视差",
+    "en": "Parallax"
+  },
+  "summary": {
+    "zh": "让前后景以克制的速度差移动，建立轻量层次感。",
+    "en": "Move foreground and background at restrained relative speeds to create depth."
+  },
+  "definition": {
+    "zh": "滚动时背景与前景以不同速度移动，从而营造纵深感。",
+    "en": "Layers respond to the same scroll input at different displacement rates, creating apparent depth."
+  },
+  "aliases": [],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/scroll/parallax/",
+    "en": "https://motion-lexicon.pages.dev/en/scroll/parallax/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/parallax.json",
+  "parameters": [
+    {
+      "id": "distance",
+      "kind": "range",
+      "defaultValue": 48,
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": {
+        "zh": "位移",
+        "en": "Distance"
+      },
+      "description": {
+        "zh": "控制元素移动的空间距离。",
+        "en": "Controls how far the element travels."
+      }
+    },
+    {
+      "id": "speed",
+      "kind": "range",
+      "defaultValue": 35,
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": {
+        "zh": "速度差",
+        "en": "Speed ratio"
+      },
+      "description": {
+        "zh": "调节速度差。",
+        "en": "Adjusts speed ratio."
+      }
+    },
+    {
+      "id": "axis",
+      "kind": "segmented",
+      "defaultValue": "y",
+      "label": {
+        "zh": "轴向",
+        "en": "Axis"
+      },
+      "description": {
+        "zh": "选择轴向。",
+        "en": "Selects axis."
+      },
+      "options": [
+        {
+          "value": "y",
+          "cssValue": "y",
+          "label": {
+            "zh": "垂直",
+            "en": "Vertical"
+          }
+        },
+        {
+          "value": "x",
+          "cssValue": "x",
+          "label": {
+            "zh": "水平",
+            "en": "Horizontal"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用前后景的克制速度差建立层次，同时保持主体内容稳定可读。",
+      "en": "Create depth with restrained foreground-background speed differences while keeping primary content stable."
+    },
+    "frequency": {
+      "zh": "适合低频头图和展示区；长页面重复使用会增加视觉负担。",
+      "en": "Use sparingly in hero and showcase areas; repetition across long pages adds visual load."
+    },
+    "trigger": {
+      "zh": "由页面滚动持续驱动，运动幅度与容器可见区间绑定。",
+      "en": "Drive from page scroll, binding travel to the container's visible range."
+    },
+    "enterExit": {
+      "zh": "进入视口前后保持连续位置，避免在观察阈值处突然启动。",
+      "en": "Maintain continuous position around viewport entry and avoid threshold-based jumps."
+    },
+    "interruptibility": {
+      "zh": "方向变化时直接跟随当前滚动位置，无需播放补偿动画。",
+      "en": "Follow current scroll position directly when direction changes, with no catch-up animation."
+    },
+    "gestureRules": {
+      "zh": "不接管滚动手势；背景层设置 pointer-events 规则，避免遮挡内容操作。",
+      "en": "Never capture scroll gestures, and set pointer-event rules so background layers do not block content."
+    }
+  },
+  "reducedMotion": {
+    "zh": "所有层固定在信息最清晰的位置，移除速度差。",
+    "en": "Fix every layer at its clearest informational position and remove differential movement."
+  },
+  "reviewNotes": [
+    {
+      "zh": "控制速度比，主体文字保持接近页面滚动速度。",
+      "en": "Keep text near the page's scroll speed."
+    },
+    {
+      "zh": "检查移动端地址栏变化不会放大位移。",
+      "en": "Test mobile browser chrome changes for exaggerated travel."
+    }
+  ],
+  "relatedRecipes": [
+    "scroll-reveal",
+    "scroll-driven-animation",
+    "page-transition"
+  ]
+}

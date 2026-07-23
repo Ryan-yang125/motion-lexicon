@@ -1,0 +1,19 @@
+Motion Lexicon
+Copyright (c) 2026 Motion Lexicon contributors
+
+PROJECT INSPIRATION
+
+Motion Lexicon was inspired in part by Sam Kalo's public Animation Vocabulary:
+
+https://animations.samkalok.com/
+
+That reference helped demonstrate the value of a shared animation vocabulary. Motion Lexicon independently authors and maintains its current English definitions, canonical mappings, Chinese translations, close-term distinctions, summaries, guidance, previews, prompts, generated outputs, and project code. The linked project does not sponsor or endorse Motion Lexicon.
+
+LICENSE BOUNDARIES
+
+- Project source code: MIT, as stated in LICENSE.
+- Project-authored content and data: CC BY 4.0, as stated in CONTENT-LICENSE.
+- Generated HTML, CSS, and JavaScript fragments: 0BSD, as stated in CONTENT-LICENSE.
+- Third-party packages and assets: their respective licenses and notices continue to apply.
+
+Common animation technique names are used as technical vocabulary. Product names and trademarks remain the property of their respective owners.

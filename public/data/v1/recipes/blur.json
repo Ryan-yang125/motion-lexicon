@@ -1,0 +1,199 @@
+{
+  "kind": "recipe",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "id": "blur",
+  "canonicalId": "blur",
+  "categoryId": "polish-effects",
+  "family": "effect",
+  "surfaceType": "component",
+  "scene": "card",
+  "name": {
+    "zh": "模糊",
+    "en": "Blur"
+  },
+  "summary": {
+    "zh": "结合模糊、透明度与遮罩柔和地揭示媒体或内容层。",
+    "en": "Reveal media or content layers with coordinated blur, opacity, and masking."
+  },
+  "definition": {
+    "zh": "用于柔化元素或掩盖细小瑕疵的模糊滤镜。",
+    "en": "A blur filter blends neighboring pixels to soften edges, depth layers, or transitional artifacts."
+  },
+  "aliases": [
+    "clip-path",
+    "mask"
+  ],
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/blur/",
+    "en": "https://motion-lexicon.pages.dev/en/polish-effects/blur/"
+  },
+  "dataUrl": "https://motion-lexicon.pages.dev/data/v1/recipes/blur.json",
+  "parameters": [
+    {
+      "id": "duration",
+      "kind": "range",
+      "defaultValue": 260,
+      "min": 80,
+      "max": 1200,
+      "step": 20,
+      "unit": "ms",
+      "label": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "控制一次动效完成所需的时间。",
+        "en": "Controls the time required for one motion cycle."
+      }
+    },
+    {
+      "id": "blur",
+      "kind": "range",
+      "defaultValue": 14,
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": {
+        "zh": "模糊半径",
+        "en": "Blur radius"
+      },
+      "description": {
+        "zh": "调节模糊半径。",
+        "en": "Adjusts blur radius."
+      }
+    },
+    {
+      "id": "reveal",
+      "kind": "segmented",
+      "defaultValue": "blur",
+      "label": {
+        "zh": "揭示方式",
+        "en": "Reveal mode"
+      },
+      "description": {
+        "zh": "选择揭示方式。",
+        "en": "Selects reveal mode."
+      },
+      "options": [
+        {
+          "value": "blur",
+          "cssValue": "blur",
+          "label": {
+            "zh": "模糊",
+            "en": "Blur"
+          }
+        },
+        {
+          "value": "clip",
+          "cssValue": "clip",
+          "label": {
+            "zh": "裁切",
+            "en": "Clip"
+          }
+        },
+        {
+          "value": "mask",
+          "cssValue": "mask",
+          "label": {
+            "zh": "遮罩",
+            "en": "Mask"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ease",
+      "kind": "segmented",
+      "defaultValue": "soft",
+      "label": {
+        "zh": "曲线",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "控制速度随时间变化的方式。",
+        "en": "Controls how velocity changes over time."
+      },
+      "options": [
+        {
+          "value": "soft",
+          "cssValue": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "label": {
+            "zh": "柔和",
+            "en": "Soft"
+          }
+        },
+        {
+          "value": "snap",
+          "cssValue": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "label": {
+            "zh": "清脆",
+            "en": "Snap"
+          }
+        },
+        {
+          "value": "calm",
+          "cssValue": "cubic-bezier(0.33, 1, 0.68, 1)",
+          "label": {
+            "zh": "平稳",
+            "en": "Calm"
+          }
+        },
+        {
+          "value": "linear",
+          "cssValue": "linear",
+          "label": {
+            "zh": "匀速",
+            "en": "Linear"
+          }
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "purpose": {
+      "zh": "用模糊柔化媒体或过渡边缘，并掩盖加载或合成中的细小瑕疵。",
+      "en": "Use blur to soften media or transition edges and mask minor loading or compositing imperfections."
+    },
+    "frequency": {
+      "zh": "适合低频媒体揭示和背景层；正文与高频控件避免持续滤镜。",
+      "en": "Use for low-frequency media reveals and background layers, avoiding persistent filters on text and frequent controls."
+    },
+    "trigger": {
+      "zh": "由媒体就绪、层级切换或焦点变化触发，模糊半径保持克制。",
+      "en": "Trigger from media readiness, layer changes, or focus changes with a restrained blur radius."
+    },
+    "enterExit": {
+      "zh": "进入时模糊快速归零并同步淡入；离开仅在层级关系明确时增加模糊。",
+      "en": "Resolve blur quickly to zero with a fade on enter, adding blur on exit only when hierarchy is clear."
+    },
+    "interruptibility": {
+      "zh": "状态改变时从当前滤镜值继续，并在完成后移除不必要的 filter。",
+      "en": "Continue from the current filter value on state changes and remove unnecessary filters after completion."
+    },
+    "gestureRules": {
+      "zh": "无需手势；可拖动遮罩和裁切比较归入专用交互模式。",
+      "en": "No gesture is required; draggable masks and clipping comparisons belong to dedicated interaction patterns."
+    }
+  },
+  "reducedMotion": {
+    "zh": "直接显示清晰内容，仅保留静态层级和透明度变化。",
+    "en": "Show crisp content directly, preserving only static hierarchy and opacity changes."
+  },
+  "reviewNotes": [
+    {
+      "zh": "检查 filter 对大面积绘制和低端设备的成本。",
+      "en": "Measure filter cost on large paint areas and lower-end devices."
+    },
+    {
+      "zh": "明确区分 Blur、Clip-path 与 Mask。",
+      "en": "Distinguish Blur, Clip-path, and Mask explicitly."
+    }
+  ],
+  "relatedRecipes": [
+    "before-after-slider",
+    "line-drawing",
+    "text-morph"
+  ]
+}
