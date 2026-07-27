@@ -20,6 +20,8 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // Hydration intentionally synchronizes persisted browser state after mount.
+      "react-hooks/set-state-in-effect": "off",
       "react-refresh/only-export-components": "off"
     }
   },
