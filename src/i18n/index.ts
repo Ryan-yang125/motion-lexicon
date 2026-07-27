@@ -16,7 +16,6 @@ export function initI18n(locale: Locale = defaultLocale) {
     resources,
     lng: locale,
     fallbackLng: defaultLocale,
-    showSupportNotice: false,
     interpolation: {
       escapeValue: false
     }
