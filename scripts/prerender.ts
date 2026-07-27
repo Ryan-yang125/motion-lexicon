@@ -13,7 +13,7 @@ import {
 import { locales } from "../src/data/types";
 import { render } from "../src/entry-server";
 import { generatePublicArtifacts } from "./generate-public-artifacts";
-import type { HelmetServerState } from "react-helmet-async/lib/types";
+import type { HelmetServerState } from "react-helmet-async";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(rootDir, "dist");

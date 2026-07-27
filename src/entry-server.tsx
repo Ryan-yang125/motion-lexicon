@@ -1,7 +1,7 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import * as helmetAsync from "react-helmet-async";
-import type { HelmetServerState } from "react-helmet-async/lib/types";
+import type { HelmetServerState } from "react-helmet-async";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { defaultLocale, isLocale } from "./data/site";
 import { setI18nLanguage } from "./i18n";
