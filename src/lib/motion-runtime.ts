@@ -29,6 +29,7 @@ type MotionRuntimeRoot = HTMLElement & {
 };
 
 const mountedRuntimes = new WeakMap<HTMLElement, MotionRuntimeState>();
+const mountedReplayControls = new WeakSet<HTMLButtonElement>();
 
 function prefersReducedMotion(root: HTMLElement) {
   return root.closest(".force-reduced-motion") !== null ||
@@ -68,7 +69,9 @@ function mountReplayRuntime(root: HTMLElement) {
   }
 
   replay.addEventListener("click", restart);
+  mountedReplayControls.add(replay);
   return () => {
+    mountedReplayControls.delete(replay);
     replay.removeEventListener("click", restart);
     for (const animation of root.getAnimations({ subtree: true })) {
       if (animation.playState === "paused") void animation.play();
@@ -951,6 +954,7 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
   }
 
   replay.addEventListener("click", play);
+  mountedReplayControls.add(replay);
   target.addEventListener("click", play);
   const stopObservingReducedMotion = observeReducedMotion(root, (reduced) => {
     if (reduced && frame) settleForReducedMotion(true);
@@ -964,6 +968,7 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
   return () => {
     stopObservingReducedMotion();
     stop();
+    mountedReplayControls.delete(replay);
     replay.removeEventListener("click", play);
     target.removeEventListener("click", play);
     springPosition = config.distance;
@@ -1822,7 +1827,7 @@ export function updateMotionRuntimeConfig(root: HTMLElement, config: MotionRunti
 
 export function replayMotionRuntime(root: HTMLElement) {
   const replay = root.querySelector<HTMLButtonElement>("[data-motion-replay]");
-  if (replay) {
+  if (replay && mountedReplayControls.has(replay)) {
     replay.click();
     return;
   }

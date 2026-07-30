@@ -123,6 +123,100 @@ test("Finder output tabs preserve the active preview DOM", async ({ page }, test
   await originalRuntime.dispose();
 });
 
+test("Finder replay restarts every pure CSS candidate", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The CSS replay contract runs once on desktop.");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+
+  const scenarios = [
+    {
+      query,
+      compare: "scale-in,pop-in,spring",
+      selected: "scale-in"
+    },
+    {
+      query,
+      compare: "scale-in,pop-in,spring",
+      selected: "pop-in"
+    },
+    {
+      query: "一组列表依次出现，节奏清楚一点",
+      compare: "stagger,delay,orchestration",
+      selected: "stagger"
+    },
+    {
+      query: "一组列表依次出现，节奏清楚一点",
+      compare: "stagger,delay,orchestration",
+      selected: "delay"
+    },
+    {
+      query: "一组列表依次出现，节奏清楚一点",
+      compare: "stagger,delay,orchestration",
+      selected: "orchestration"
+    }
+  ];
+
+  for (const scenario of scenarios) {
+    const params = new URLSearchParams({
+      q: scenario.query,
+      compare: scenario.compare,
+      selected: scenario.selected,
+      duration: "1200"
+    });
+    await page.goto(`/zh/finder/?${params.toString()}`);
+
+    const stage = page.locator(".finder-candidate-stage");
+    await expect(page.locator(".finder-active-preview")).toHaveAttribute(
+      "data-variant-id",
+      scenario.selected,
+      { timeout: 10_000 }
+    );
+    await expect.poll(
+      () => stage.evaluate((host) =>
+        host.shadowRoot
+          ?.querySelector<HTMLElement>(".motion-demo")
+          ?.getAnimations({ subtree: true }).length ?? 0
+      ),
+      { message: `${scenario.selected} should expose a CSS animation` }
+    ).toBeGreaterThan(0);
+
+    const primed = await stage.evaluate((host) => {
+      const root = host.shadowRoot?.querySelector<HTMLElement>(".motion-demo");
+      if (!root) throw new Error("Finder runtime root is unavailable");
+      const animations = root.getAnimations({ subtree: true });
+      for (const animation of animations) {
+        const endTime = Number(animation.effect?.getComputedTiming().endTime ?? 1200);
+        animation.pause();
+        animation.currentTime = Number.isFinite(endTime) ? endTime : 1200;
+      }
+      return animations.map((animation) => ({
+        currentTime: Number(animation.currentTime ?? 0),
+        playState: animation.playState
+      }));
+    });
+    expect(primed.length).toBeGreaterThan(0);
+    expect(primed.every((animation) => animation.playState === "paused")).toBe(true);
+
+    await page.locator(".finder-active-preview").getByRole("button", { name: "重播" }).click();
+
+    const restarted = await stage.evaluate(async (host) => {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const root = host.shadowRoot?.querySelector<HTMLElement>(".motion-demo");
+      if (!root) throw new Error("Finder runtime root is unavailable");
+      return root.getAnimations({ subtree: true }).map((animation) => {
+        const endTime = Number(animation.effect?.getComputedTiming().endTime ?? 1200);
+        return {
+          currentTime: Number(animation.currentTime ?? 0),
+          endTime: Number.isFinite(endTime) ? endTime : 1200,
+          playState: animation.playState
+        };
+      });
+    });
+    expect(restarted).toHaveLength(primed.length);
+    expect(restarted.every((animation) => animation.playState === "running")).toBe(true);
+    expect(restarted.every((animation) => animation.currentTime < animation.endTime / 2)).toBe(true);
+  }
+});
+
 test("Finder creates a shareable selection and parameter state", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Form, selection, and parameters run once on desktop.");
 
