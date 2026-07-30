@@ -60,6 +60,20 @@ describe("Motion Lexicon CLI API", () => {
     });
   });
 
+  it("keeps the full comparison trio in Finder links when --limit trims CLI items", () => {
+    for (const limit of [1, 2] as const) {
+      const result = recommend("卡片弹出来要有重量、最后收得住", {
+        locale: "zh",
+        limit
+      });
+      const compare = new URL(result.compareUrl).searchParams.get("compare");
+
+      expect(result.count).toBe(limit);
+      expect(result.items).toHaveLength(limit);
+      expect(compare).toBe("spring,pop-in,scale-in");
+    }
+  });
+
   it("resolves aliases and preserves their preset values", () => {
     const resolved = resolveRecipe("pop-in");
     expect(resolved).toMatchObject({
@@ -151,6 +165,23 @@ describe("runCli", () => {
       variantId: "shared-element-transition",
       canonicalId: "morph"
     });
+    expect(output.stderr()).toBe("");
+  });
+
+  it("keeps a Top 3 web comparison when --limit reduces JSON items", async () => {
+    const output = capture();
+    expect(
+      await runCli(
+        ["recommend", "card enters with weight", "--limit", "1", "--format", "json"],
+        output.io
+      )
+    ).toBe(0);
+    const result = JSON.parse(output.stdout());
+    const compare = new URL(result.compareUrl).searchParams.get("compare");
+
+    expect(result.count).toBe(1);
+    expect(result.items).toHaveLength(1);
+    expect(compare?.split(",")).toHaveLength(3);
     expect(output.stderr()).toBe("");
   });
 

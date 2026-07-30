@@ -78,3 +78,19 @@ test("mobile route is readable without horizontal overflow", async ({ page }) =>
   });
   expect(hasHorizontalOverflow).toBe(false);
 });
+
+test("catalog category filters keep 44px touch targets", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto("/zh/catalog/?surface=components");
+
+  const filters = page.locator(".library-category-filter-options button");
+  await expect(filters.first()).toBeVisible();
+  const heights = await filters.evaluateAll((buttons) =>
+    buttons.map((button) => button.getBoundingClientRect().height)
+  );
+  expect(heights.length).toBeGreaterThan(1);
+  expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
+
+  await filters.nth(1).click();
+  await expect(page).toHaveURL(/category=/);
+});

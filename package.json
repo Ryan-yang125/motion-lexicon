@@ -42,6 +42,7 @@
     "packages/cli/dist",
     "skills/motion-lexicon",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE",
     "CONTENT-LICENSE",
     "NOTICE"

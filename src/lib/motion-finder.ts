@@ -169,7 +169,7 @@ export function recommendMotions(
       ? "medium"
       : "low";
 
-  const candidates = selected.group.variants
+  const rankedCandidates = selected.group.variants
     .map((variant, index) => {
       const matched = selected.variants[index];
       const resolved = resolveVariant(variant.variantId);
@@ -202,10 +202,10 @@ export function recommendMotions(
       };
     })
     .sort((a, b) => b.evidence - a.evidence || a.sourceIndex - b.sourceIndex)
-    .slice(0, limit)
     .map(({ candidate }, index) => ({ ...candidate, rank: index + 1 }));
 
-  const variants = candidates.map((candidate) => candidate.variantId);
+  const candidates = rankedCandidates.slice(0, limit);
+  const variants = rankedCandidates.map((candidate) => candidate.variantId);
   return {
     query: cleanQuery,
     locale,

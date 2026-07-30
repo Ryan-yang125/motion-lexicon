@@ -30,12 +30,34 @@ test("Finder restores a shared comparison and keeps variant CSS isolated", async
   expect(isolatedStyles.every((stage) => stage.hasShadowRoot)).toBe(true);
   expect(isolatedStyles[0].css).toContain("scale(0.92)");
   expect(isolatedStyles[1].css).toContain("scale(0.86)");
-  const previewLabels = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
-    stages.map((stage) => stage.shadowRoot?.querySelector("strong")?.textContent ?? "")
+  const comparisonScenes = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
+    stages.map((stage) => {
+      const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
+      return {
+        content: scene?.innerHTML ?? "",
+        kind: scene?.dataset.comparisonKind,
+        label: scene?.querySelector("strong")?.textContent ?? ""
+      };
+    })
   );
-  expect(previewLabels).toEqual(["缩放入场", "弹入", "弹簧"]);
+  expect(comparisonScenes.map((scene) => scene.kind)).toEqual(["entrance", "entrance", "entrance"]);
+  expect(new Set(comparisonScenes.map((scene) => scene.content)).size).toBe(1);
+  expect(comparisonScenes.map((scene) => scene.label)).toEqual(["产品更新", "产品更新", "产品更新"]);
 
   await page.getByRole("button", { name: "同步重播" }).click();
+  const comparisonGeometry = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
+    stages.map((stage) => {
+      const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
+      return {
+        stageWidth: (stage as HTMLElement).offsetWidth,
+        stageHeight: (stage as HTMLElement).offsetHeight,
+        sceneWidth: scene?.offsetWidth ?? 0,
+        sceneHeight: scene?.offsetHeight ?? 0
+      };
+    })
+  );
+  expect(new Set(comparisonGeometry.map((item) => `${item.stageWidth}x${item.stageHeight}`)).size).toBe(1);
+  expect(new Set(comparisonGeometry.map((item) => `${item.sceneWidth}x${item.sceneHeight}`)).size).toBe(1);
   await expect(page.getByRole("heading", { level: 2, name: /调节.*弹入/ })).toBeVisible();
 
   await page.goto(
@@ -89,12 +111,72 @@ test("Finder creates a shareable selection and parameter state", async ({ page }
   expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
 });
 
+test("Finder keeps every intent group on one neutral comparison scene", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Shared scene geometry runs once on desktop.");
+
+  const scenarios = [
+    { query: "卡片弹出来要有重量，最后收得住", kind: "entrance" },
+    { query: "同一个缩略图展开成详情页", kind: "continuity" },
+    { query: "列表一个接一个出现", kind: "sequence" }
+  ];
+
+  for (const scenario of scenarios) {
+    await page.goto(`/zh/finder/?q=${encodeURIComponent(scenario.query)}`);
+    await expect(page.locator(".finder-candidate")).toHaveCount(3);
+    await page.getByRole("button", { name: "同步重播" }).click();
+
+    const scenes = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
+      stages.map((stage) => {
+        const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
+        return {
+          content: scene?.innerHTML ?? "",
+          kind: scene?.dataset.comparisonKind,
+          width: scene?.offsetWidth ?? 0,
+          height: scene?.offsetHeight ?? 0,
+          layers: scene
+            ? Array.from(scene.querySelectorAll<HTMLElement>(".motion-state")).map((layer) => ({
+                className: layer.className,
+                position: getComputedStyle(layer).position,
+                left: layer.offsetLeft,
+                top: layer.offsetTop,
+                width: layer.offsetWidth,
+                height: layer.offsetHeight
+              }))
+            : []
+        };
+      })
+    );
+
+    expect(scenes.map((scene) => scene.kind)).toEqual([
+      scenario.kind,
+      scenario.kind,
+      scenario.kind
+    ]);
+    expect(new Set(scenes.map((scene) => scene.content)).size).toBe(1);
+    expect(new Set(scenes.map((scene) => `${scene.width}x${scene.height}`)).size).toBe(1);
+    if (scenario.kind === "continuity") {
+      expect(new Set(scenes.map((scene) => JSON.stringify(scene.layers))).size).toBe(1);
+      expect(scenes[0].layers).toHaveLength(2);
+      expect(scenes[0].layers.every((layer) => layer.position === "absolute")).toBe(true);
+    }
+  }
+});
+
 test("Finder remains readable on a mobile viewport", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile layout runs once in the mobile project.");
 
   await page.goto(`/en/finder/?q=${encodeURIComponent("bring in a list one by one")}`);
   await expect(page.getByRole("heading", { level: 1, name: /Describe the feel/ })).toBeVisible();
   await expect(page.locator(".finder-candidate")).toHaveCount(3);
+
+  const alternative = page.locator(".apple-motion-alternative").first();
+  const alternativeId = await alternative.getAttribute("data-variant-id");
+  const selectAlternative = alternative.locator(".finder-select");
+  await expect(selectAlternative).toBeVisible();
+  const target = await selectAlternative.boundingBox();
+  expect(target?.height ?? 0).toBeGreaterThanOrEqual(44);
+  await selectAlternative.click();
+  await expect(page.locator(`[data-variant-id='${alternativeId}']`)).toHaveClass(/is-selected/);
 
   const hasHorizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > window.innerWidth

@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import type { Locale, ParamValues } from "../data/types";
 import {
   buildRecipeCss,
-  buildRecipeHtml,
   getMotionRuntimeConfig
 } from "../lib/motion-engine";
 import type { MotionFinderCandidate } from "../lib/motion-finder";
@@ -19,15 +18,74 @@ type MotionCompareProps = {
   onSelect: (candidate: MotionFinderCandidate) => void;
 };
 
+type ComparisonSceneKind = "entrance" | "continuity" | "sequence";
+
+function comparisonSceneKind(candidates: MotionFinderCandidate[]): ComparisonSceneKind {
+  const categoryId = candidates[0]?.recipe.categoryId;
+  if (categoryId === "state-transitions") return "continuity";
+  if (categoryId === "sequencing") return "sequence";
+  return "entrance";
+}
+
+function comparisonCardContent(locale: Locale, kind: ComparisonSceneKind) {
+  const title = locale === "zh" ? "产品更新" : "Product update";
+  return `<strong>${title}</strong>
+    <span class="motion-line"></span>
+    <span class="motion-line"></span>${kind === "sequence"
+      ? `<ol class="motion-list" aria-label="${title}"><li class="motion-list-item">01</li><li class="motion-list-item">02</li><li class="motion-list-item">03</li></ol>`
+      : ""}`;
+}
+
+function buildComparisonSceneHtml(
+  candidate: MotionFinderCandidate,
+  locale: Locale,
+  kind: ComparisonSceneKind
+) {
+  const id = candidate.recipe.canonicalId;
+  const content = comparisonCardContent(locale, kind);
+  const scene = kind === "continuity"
+    ? `<div class="motion-state-stack" data-comparison-scene data-comparison-kind="${kind}">
+    <article class="motion-state motion-state--from">${content}</article>
+    <article class="motion-state motion-state--to motion-surface">${content}</article>
+  </div>`
+    : `<article class="motion-surface" data-comparison-scene data-comparison-kind="${kind}" data-spring-target>
+    ${content}
+  </article>`;
+
+  return `<div class="motion-demo motion-demo--${id}" data-motion="${id}">
+  ${scene}
+  <button hidden data-motion-replay></button>
+</div>`;
+}
+
+function buildComparisonSceneCss(
+  candidate: MotionFinderCandidate,
+  kind: ComparisonSceneKind
+) {
+  const root = `.motion-demo.motion-demo--${candidate.recipe.canonicalId}`;
+  const common = `${root} .motion-list{display:grid;gap:.38rem;width:100%;margin:.2rem 0 0;padding:0;list-style:none}
+${root} .motion-list-item{padding:.35rem .5rem;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:6px}`;
+
+  if (kind === "continuity") {
+    return `${common}
+${root} .motion-state{color:#18181b;background:#fff}
+${root} .motion-state--from{transform:translate3d(-12px,7px,0) scale(.94);background:#f4f4f5}`;
+  }
+
+  return common;
+}
+
 function CandidatePreview({
   candidate,
   compact,
+  kind,
   locale,
   replayKey,
   values
 }: {
   candidate: MotionFinderCandidate;
   compact: boolean;
+  kind: ComparisonSceneKind;
   locale: Locale;
   replayKey: number;
   values: ParamValues;
@@ -36,10 +94,10 @@ function CandidatePreview({
   const previousReplayRef = useRef(replayKey);
   const output = useMemo(
     () => ({
-      css: buildRecipeCss(candidate.recipe, values),
-      html: buildRecipeHtml(candidate.recipe, values, locale, candidate.name)
+      css: `${buildRecipeCss(candidate.recipe, values)}\n\n${buildComparisonSceneCss(candidate, kind)}`,
+      html: buildComparisonSceneHtml(candidate, locale, kind)
     }),
-    [candidate.name, candidate.recipe, locale, values]
+    [candidate, kind, locale, values]
   );
 
   useEffect(() => {
@@ -89,6 +147,7 @@ export function MotionCompare({
   const { t } = useTranslation();
   const [replayKey, setReplayKey] = useState(0);
   const [isComparing, setIsComparing] = useState(false);
+  const sceneKind = comparisonSceneKind(candidates);
 
   function replayTogether() {
     setIsComparing(true);
@@ -175,6 +234,7 @@ export function MotionCompare({
               <CandidatePreview
                 candidate={candidate}
                 compact={isComparing || !selected}
+                kind={sceneKind}
                 locale={locale}
                 replayKey={replayKey}
                 values={previewValues}

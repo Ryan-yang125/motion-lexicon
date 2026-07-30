@@ -1527,7 +1527,7 @@ summary {
 .library-category-filter-options::-webkit-scrollbar { display: none; }
 
 .library-category-filter-options button {
-  min-height: 38px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1905,8 +1905,7 @@ summary {
     min-height: 118px;
   }
 
-  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-meta span,
-  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-actions {
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-meta span {
     display: none;
   }
 

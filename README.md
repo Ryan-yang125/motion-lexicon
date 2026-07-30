@@ -6,6 +6,11 @@
 
 <h1 align="center">Motion Lexicon</h1>
 
+<p align="center">
+  <a href="./README.md"><strong>English</strong></a> ·
+  <a href="./README.zh-CN.md">简体中文</a>
+</p>
+
 <p align="center"><strong>Describe how motion should feel. Leave with an exact, copy-ready recipe.</strong></p>
 
 <p align="center">
@@ -16,8 +21,7 @@
 <p align="center">
   <a href="https://motion-lexicon.pages.dev/en/finder/"><strong>Try Motion Finder</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/catalog/"><strong>Explore the Library</strong></a> ·
-  <a href="https://motion-lexicon.pages.dev/zh/">中文</a> ·
-  <a href="https://motion-lexicon.pages.dev/en/">English</a>
+  <a href="https://motion-lexicon.pages.dev/en/"><strong>Visit the Website</strong></a>
 </p>
 
 <p align="center">
@@ -32,7 +36,7 @@
 
 ## From a vague feeling to a usable motion
 
-You can start with the words already in your head:
+Start with the words already in your head:
 
 > “The card should pop in with weight, then settle cleanly.”
 
@@ -85,9 +89,10 @@ curated surface, keeping discovery broad and implementation focused.
 - **AI agents** that work better with precise prompts, structured data, and
   explicit constraints
 
-## Free CLI
+## Use it from the browser, CLI, or an agent
 
-Use the same recommendation model from your terminal:
+The website is the fastest visual path. The free CLI carries the same
+recommendation model into a terminal:
 
 ```bash
 npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend \
@@ -109,9 +114,7 @@ npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
 `recommend` returns up to three ranked variants with match reasons,
 distinctions, resolved presets, preview URLs, and a shareable comparison URL.
 
-## Free Agent Skill
-
-Install Motion Lexicon as an Agent Skill:
+Install the free Motion Lexicon Agent Skill:
 
 ```bash
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
@@ -119,7 +122,6 @@ npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 
 The Skill guides an agent from a vague request through recommendation, visual
 comparison, parameter choices, accessibility checks, and implementation output.
-
 Agent integrations can also read:
 
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
@@ -130,38 +132,91 @@ Agent integrations can also read:
 
 ## Free, open, and portable
 
-Motion Lexicon runs as a static website and keeps the public product available
+Motion Lexicon runs as a static website and keeps the complete public product
 free of charge. The browser experience, CLI, Agent Skill, catalog data, and
-generated output are designed to travel easily between people and tools.
+generated output travel easily between people and tools.
 
 - Source code: [MIT](./LICENSE)
 - Project-authored content and data: [CC BY 4.0](./CONTENT-LICENSE)
 - Generated code fragments: [0BSD](./CONTENT-LICENSE)
 
-## For contributors
+## Project snapshot
 
-Motion Lexicon is built with React, TypeScript, Vite, TanStack Router, i18next,
-and a build-time static rendering pipeline. The production site ships as static
-HTML, CSS, and JavaScript with localized metadata for 120 canonical routes.
+**v0.2.0 is live.** The current release includes the bilingual Finder, 44
+canonical workspaces, all 91 source terms, the CLI, the Agent Skill, versioned
+machine-readable data, localized SEO, and 120 prerendered canonical routes.
+
+- Finder comparison state and non-default recipe parameters stay shareable in
+  the URL.
+- Preview, parameters, prompt, portable code, and reduced-motion output come
+  from one semantic motion specification.
+- Light and dark themes, keyboard and pointer interaction, reduced-motion
+  behavior, and responsive workspaces ship across the public experience.
+
+<!-- markdownlint-disable MD013 MD033 -->
+
+<details>
+<summary><strong>Engineering reference for contributors</strong></summary>
+
+### Core routes
+
+Every public product route is available in English (`/en/`) and Chinese
+(`/zh/`).
+
+| Route shape | Purpose |
+| --- | --- |
+| `/:locale/` | Product home |
+| `/:locale/finder/` | Natural-language motion recommendation and comparison |
+| `/:locale/catalog/` | Full 44-workspace library |
+| `/:locale/vocabulary/` | Complete 91-term vocabulary |
+| `/:locale/:category/` | Motion-family discovery page |
+| `/:locale/:category/:recipe/` | Canonical recipe workspace |
+| `/data/v1/*.json` | Versioned catalog, vocabulary, and schema |
+
+### Build and static delivery
+
+Motion Lexicon uses React, TypeScript, Vite, TanStack Router, and i18next. A
+production build runs this sequence:
+
+```text
+tsc -b
+→ vite build
+→ tsx --tsconfig tsconfig.app.json scripts/prerender.ts
+```
+
+The prerender step enumerates canonical routes from `src/data/site.ts`, renders
+them through `src/entry-server.tsx`, injects localized metadata, and writes
+`dist/<route>/index.html`. It also generates `dist/sitemap.xml`,
+`dist/robots.txt`, and static redirect rules. The build also carries favicon
+assets, bilingual social images, the web manifest, `404.html`, and static
+headers into `dist/`.
+
+The finished `dist/` directory contains static HTML, CSS, JavaScript, images,
+and data. It can be served from Cloudflare Pages, Vercel static hosting,
+Netlify, or any CDN-backed file server. React server rendering runs during the
+build only; production requires no Node server.
 
 ```bash
 npm install
 npm run dev
-```
-
-Create and inspect the production build:
-
-```bash
 npm run build
 npm run preview -- --host 127.0.0.1 --port 4173
 ```
 
-The main verification commands are:
+### Quality gates
 
 ```bash
 npm run lint
 npm run typecheck
 npm run test
+npm run i18n:check
+npm run vocabulary:check
+npm run seo:check
+npm run motion:check
+npm run a11y:check
+npm run build
+npm run bundle:check
+npm run crawl:dist
 npm run test:visual
 ```
 
@@ -171,8 +226,12 @@ and [DESIGN.md](./DESIGN.md). Contribution guidelines are in
 [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md), and security reports follow
 [SECURITY.md](./SECURITY.md).
 
+</details>
+
+<!-- markdownlint-enable MD013 MD033 -->
+
 ---
 
 **[Describe a motion](https://motion-lexicon.pages.dev/en/finder/)** ·
 **[Browse all recipes](https://motion-lexicon.pages.dev/en/catalog/)** ·
-**[Open the Chinese site](https://motion-lexicon.pages.dev/zh/)**
+**[阅读中文 README](./README.zh-CN.md)**
