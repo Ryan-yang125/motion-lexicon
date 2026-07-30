@@ -210,6 +210,7 @@ export function getMotionRuntimeConfig(
 
 function baseCss(root: string) {
   return `${root} {
+  box-sizing: border-box;
   position: relative;
   display: grid;
   place-items: center;
@@ -564,7 +565,7 @@ ${root} .motion-state--to { animation: ${name}-in ${duration}ms ${ease} both; }$
 
   if (id === "scroll-reveal") {
     const threshold = numberValue(values, "threshold", 20);
-    return `${root} { max-height: 15rem; overflow-y: auto; place-items: start center; }
+    return `${root} { max-height: 15rem; overflow-x: hidden; overflow-y: auto; place-items: start center; }
 ${root} .motion-scroll-track { display: grid; place-items: center; gap: 10rem; width: 100%; min-height: 48rem; padding-block: 5rem; }
 ${root} .motion-surface { animation: ${name} ${duration}ms ${ease} both; }
 @supports (animation-timeline: view()) {
@@ -580,7 +581,7 @@ ${root} .motion-surface { animation: ${name} ${duration}ms ${ease} both; }
     const speed = numberValue(values, "speed", 35) / 100;
     const travel = id === "parallax" ? Math.round(distance * speed) : distance;
     const translate = axis === "x" ? `translateX(${travel}px)` : `translateY(${travel}px)`;
-    return `${root} { max-height: 15rem; overflow-y: auto; place-items: start center; }
+    return `${root} { max-height: 15rem; overflow-x: hidden; overflow-y: auto; place-items: start center; }
 ${root} .motion-scroll-track { display: grid; place-items: center; gap: 10rem; width: 100%; min-height: 48rem; padding-block: 5rem; }
 ${root} .motion-surface { animation: ${name} linear both; animation-timeline: scroll(nearest); animation-range: ${start}% ${end}%; }
 @keyframes ${name} { from { transform: ${translate}; } to { transform: none; } }
@@ -692,7 +693,7 @@ ${root} .motion-orbit-item { position: absolute; left: 50%; top: 50%; width: 1.4
     return `${root} .motion-comparison { position: relative; width: min(100%, 22rem); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px; background: #52525b; }
 ${root} .motion-before, ${root} .motion-after { position: absolute; inset: 0; display: grid; place-items: center; color: white; }
 ${root} .motion-after { overflow: hidden; background: #2563eb; clip-path: inset(0 ${100 - position}% 0 0); }
-${root} .motion-divider { position: absolute; inset: 0 auto 0 0; width: 2px; pointer-events: none; background: white; box-shadow: 0 0 0 1px rgb(0 0 0 / 18%); transform: translate3d(0, 0, 0); }
+${root} .motion-divider { position: absolute; inset: 0 auto 0 ${position}%; width: 2px; pointer-events: none; background: white; box-shadow: 0 0 0 1px rgb(0 0 0 / 18%); transform: translate3d(-1px, 0, 0); }
 ${root} .motion-divider::after { content: "↔"; position: absolute; top: 50%; left: 50%; width: 2.25rem; height: 2.25rem; display: grid; place-items: center; color: #18181b; background: white; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 2px 8px rgb(0 0 0 / 18%); }
 ${root} .motion-comparison-control { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; margin: 0; cursor: ew-resize; opacity: 0; }`;
   }

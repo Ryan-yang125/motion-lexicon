@@ -64,6 +64,69 @@ async function expectMinimumTargets(page: Page, selector: string) {
   }
 }
 
+type HorizontalLayoutIssue = {
+  element: string;
+  overflowX: string;
+  clientWidth: number;
+  scrollWidth: number;
+};
+
+async function horizontalLayoutSnapshot(page: Page) {
+  return page.evaluate(() => {
+    const scrollContainers: HorizontalLayoutIssue[] = [];
+
+    const visit = (root: Document | ShadowRoot) => {
+      for (const element of root.querySelectorAll<HTMLElement>("*")) {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        const visible = style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+
+        if (visible && ["auto", "scroll", "overlay"].includes(style.overflowX)) {
+          const className = element.getAttribute("class")?.trim().replace(/\s+/g, ".");
+          scrollContainers.push({
+            element: `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ""}${className ? `.${className}` : ""}`,
+            overflowX: style.overflowX,
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth
+          });
+        }
+
+        if (element.shadowRoot) visit(element.shadowRoot);
+      }
+    };
+
+    visit(document);
+    return {
+      documentClientWidth: document.documentElement.clientWidth,
+      documentScrollWidth: document.documentElement.scrollWidth,
+      scrollContainers
+    };
+  });
+}
+
+async function expectHorizontalFit(page: Page, selector: string, context: string) {
+  const locator = page.locator(selector);
+  await expect.soft(locator.first(), `${context} is missing ${selector}`).toBeVisible();
+  const metrics = await locator.evaluateAll((elements) => elements
+    .filter((element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+    })
+    .map((element) => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth
+    })));
+
+  expect.soft(metrics.length, `${context} has no visible ${selector}`).toBeGreaterThan(0);
+  for (const metric of metrics) {
+    expect.soft(
+      metric.scrollWidth,
+      `${context} ${selector} needs ${metric.scrollWidth}px inside ${metric.clientWidth}px`
+    ).toBeLessThanOrEqual(metric.clientWidth + 1);
+  }
+}
+
 test("critical routes keep the four-level SF Pro type system", async ({ page }) => {
   for (const route of productRoutes) {
     await page.goto(route);
@@ -75,39 +138,162 @@ test("critical routes keep the four-level SF Pro type system", async ({ page }) 
   }
 });
 
-test("320, 768, and 1024 pixel layouts keep controls readable without page overflow", async ({ page }, testInfo) => {
+test("key Chinese and English layouts have no horizontal scrolling at product breakpoints", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Explicit responsive widths run once in desktop Chromium.");
+  test.setTimeout(150_000);
 
-  const cases = [
-    { width: 320, route: "/en/catalog/?surface=components" },
-    { width: 768, route: productRoutes[2] },
-    { width: 1024, route: "/zh/sequencing/stagger/" }
+  const widths = [320, 390, 768, 1024, 1440];
+  const routes: Array<{
+    route: string;
+    selectors: string[];
+    codeTab?: string;
+    parameterTable?: boolean;
+  }> = [
+    {
+      route: "/en/",
+      selectors: [".apple-hero-examples", ".apple-hero-examples button", ".apple-hero-preview"]
+    },
+    {
+      route: "/zh/catalog/?surface=components",
+      selectors: [
+        ".library-surface-control.library-surface-tabs",
+        ".library-category-filter-options",
+        ".library-card-grid"
+      ]
+    },
+    {
+      route: "/en/catalog/?surface=components",
+      selectors: [
+        ".library-surface-control.library-surface-tabs",
+        ".library-category-filter-options",
+        ".library-card-grid"
+      ]
+    },
+    {
+      route: productRoutes[2],
+      codeTab: "代码",
+      selectors: [
+        ".finder-workspace-shell",
+        ".finder-active-preview",
+        ".finder-candidate-switcher",
+        ".finder-inspector-controls",
+        ".library-code-file pre"
+      ]
+    },
+    {
+      route: "/en/finder/?q=make%20a%20card%20feel%20weighty&compare=spring,pop-in,scale-in&selected=spring",
+      codeTab: "Code",
+      selectors: [
+        ".finder-workspace-shell",
+        ".finder-active-preview",
+        ".finder-candidate-switcher",
+        ".finder-inspector-controls",
+        ".library-code-file pre"
+      ]
+    },
+    {
+      route: "/zh/vocabulary/",
+      selectors: [".vocabulary-toolbar", ".vocabulary-index", ".vocabulary-groups"]
+    },
+    {
+      route: "/en/vocabulary/",
+      selectors: [".vocabulary-toolbar", ".vocabulary-index", ".vocabulary-groups"]
+    },
+    {
+      route: "/zh/sequencing/stagger/",
+      codeTab: "代码",
+      parameterTable: true,
+      selectors: [".apple-output-disclosure", ".library-code-files", ".library-code-file pre"]
+    },
+    {
+      route: "/en/sequencing/stagger/",
+      codeTab: "Code",
+      parameterTable: true,
+      selectors: [".apple-output-disclosure", ".library-code-files", ".library-code-file pre"]
+    }
   ];
 
-  for (const item of cases) {
-    await page.setViewportSize({ width: item.width, height: 900 });
-    await page.goto(item.route);
-    if (item.route.includes("/finder/")) await expect(page.locator(".finder-workspace-shell")).toBeVisible();
-    const bounds = await page.evaluate(() => ({
-      clientWidth: document.documentElement.clientWidth,
-      scrollWidth: document.documentElement.scrollWidth
-    }));
-    expect(bounds.scrollWidth, `${item.width}px ${item.route} overflows horizontally`).toBeLessThanOrEqual(bounds.clientWidth);
-  }
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 900 });
 
-  await page.setViewportSize({ width: 320, height: 900 });
-  await page.goto("/en/catalog/?surface=components");
-  const surfaceButtons = page.locator(".library-surface-tabs button");
-  await expect(surfaceButtons).toHaveCount(3);
-  for (let index = 0; index < await surfaceButtons.count(); index += 1) {
-    const button = surfaceButtons.nth(index);
-    await expect(button).toHaveCSS("white-space", "nowrap");
-    expect((await button.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
+    for (const item of routes) {
+      const context = `${width}px ${item.route}`;
+      await page.goto(item.route);
+      await expect(page.locator("#main-content"), `${context} did not render`).toBeVisible();
+
+      if (item.codeTab) {
+        await page.locator(".apple-code-output").getByRole("tab", { name: item.codeTab, exact: true }).click();
+        await expect(page.locator(".library-code-files")).toBeVisible();
+      }
+
+      if (item.parameterTable && width <= 390) {
+        const disclosure = page.locator("#implementation > .apple-disclosure");
+        await disclosure.locator("summary").click();
+        await expect(disclosure).toHaveAttribute("open", "");
+        const containment = await disclosure.evaluate((element) => {
+          const disclosureRect = element.getBoundingClientRect();
+          const tableWrapper = element.querySelector<HTMLElement>(".library-table-scroll");
+          const table = element.querySelector<HTMLElement>(".library-parameter-table");
+          if (!tableWrapper || !table) return null;
+          const wrapperRect = tableWrapper.getBoundingClientRect();
+          const tableRect = table.getBoundingClientRect();
+          return {
+            disclosureLeft: disclosureRect.left,
+            disclosureRight: disclosureRect.right,
+            wrapperLeft: wrapperRect.left,
+            wrapperRight: wrapperRect.right,
+            tableLeft: tableRect.left,
+            tableRight: tableRect.right,
+            wrapperClientWidth: tableWrapper.clientWidth,
+            wrapperScrollWidth: tableWrapper.scrollWidth
+          };
+        });
+        expect.soft(containment, `${context} parameter table is missing`).not.toBeNull();
+        if (containment) {
+          expect.soft(containment.wrapperLeft).toBeGreaterThanOrEqual(containment.disclosureLeft - 1);
+          expect.soft(containment.wrapperRight).toBeLessThanOrEqual(containment.disclosureRight + 1);
+          expect.soft(containment.tableLeft).toBeGreaterThanOrEqual(containment.disclosureLeft - 1);
+          expect.soft(containment.tableRight).toBeLessThanOrEqual(containment.disclosureRight + 1);
+          expect.soft(containment.wrapperScrollWidth).toBeLessThanOrEqual(containment.wrapperClientWidth + 1);
+        }
+      }
+
+      for (const selector of item.selectors) await expectHorizontalFit(page, selector, context);
+
+      const snapshot = await horizontalLayoutSnapshot(page);
+      expect.soft(
+        snapshot.documentScrollWidth,
+        `${context} document needs ${snapshot.documentScrollWidth}px inside ${snapshot.documentClientWidth}px`
+      ).toBeLessThanOrEqual(snapshot.documentClientWidth);
+      expect.soft(snapshot.scrollContainers, `${context} exposes horizontal scroll containers`).toEqual([]);
+    }
   }
-  const scrollCue = await page.locator(".library-category-filter-options").evaluate(
-    (element) => getComputedStyle(element).maskImage || getComputedStyle(element).webkitMaskImage
-  );
-  expect(scrollCue).not.toBe("none");
+});
+
+test("vocabulary search stays compact across stacked and horizontal toolbars", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Explicit vocabulary widths run once in desktop Chromium.");
+
+  for (const width of [320, 390, 620, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const locale of ["zh", "en"] as const) {
+      await page.goto(`/${locale}/vocabulary/`);
+      const dimensions = await page.locator(".vocabulary-toolbar").evaluate((toolbar) => {
+        const label = toolbar.querySelector<HTMLElement>("label")!;
+        const toolbarRect = toolbar.getBoundingClientRect();
+        const labelRect = label.getBoundingClientRect();
+        return {
+          toolbarHeight: toolbarRect.height,
+          labelWidth: labelRect.width,
+          labelHeight: labelRect.height
+        };
+      });
+      expect(dimensions.labelHeight, `${width}px /${locale}/ search grew vertically`).toBeLessThanOrEqual(52);
+      expect(dimensions.toolbarHeight, `${width}px /${locale}/ toolbar obscures content`).toBeLessThanOrEqual(110);
+      if (width > 620) {
+        expect(dimensions.labelWidth, `${width}px /${locale}/ search exceeds its desktop measure`).toBeLessThanOrEqual(521);
+      }
+    }
+  }
 });
 
 test("dark Finder, Catalog, and recipe states render without overflow", async ({ page }, testInfo) => {

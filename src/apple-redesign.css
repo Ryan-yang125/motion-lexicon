@@ -472,12 +472,11 @@ summary {
 }
 
 .apple-scene-card strong {
-  overflow: hidden;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--apple-ink);
   font-size: 0.86rem;
   font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .apple-scene-card div > i { width: 86%; height: 5px; }
@@ -657,9 +656,10 @@ summary {
 
   .apple-hero-examples button {
     min-height: 44px;
-    overflow: hidden;
+    padding-block: 0.65rem;
+    overflow-wrap: anywhere;
     text-align: start;
-    text-overflow: ellipsis;
+    white-space: normal;
   }
 
   .apple-hero-proof { gap: 0.55rem; }
@@ -1127,7 +1127,8 @@ summary {
 
 .finder-inspector-controls {
   max-height: min(52dvh, 570px);
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0.9rem -0.35rem 0;
   padding: 0 0.35rem;
   overscroll-behavior: contain;
@@ -1305,6 +1306,7 @@ summary {
 
 .library-category-filter {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.8rem;
 }
@@ -1343,14 +1345,12 @@ summary {
 
 .library-category-filter-options {
   min-width: 0;
+  flex: 1 1 42rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.3rem;
-  overflow-x: auto;
   padding: 0.15rem 0.2rem 0.25rem;
-  scrollbar-width: none;
 }
-
-.library-category-filter-options::-webkit-scrollbar { display: none; }
 
 .library-category-filter-options button {
   min-height: 44px;
@@ -1719,16 +1719,14 @@ summary {
   }
 
   .library-surface-control.library-surface-tabs {
-    overflow-x: auto;
-    scrollbar-width: none;
-    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .library-surface-control.library-surface-tabs::-webkit-scrollbar { display: none; }
-
   .library-surface-control.library-surface-tabs button {
-    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: 14px minmax(0, 1fr);
     padding: 0 0.7rem;
   }
 
@@ -1756,23 +1754,15 @@ summary {
   .library-catalog-layout.is-unified .library-card-grid.is-component,
   .library-catalog-layout.is-unified .library-card-grid.is-playground,
   .library-catalog-layout.is-unified .library-card-grid.is-guide {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.75rem;
-    overflow-x: auto;
-    padding: 0.15rem 0.15rem 1rem;
-    scroll-padding-inline: 0.15rem;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-  }
-
-  .library-catalog-layout.is-unified .library-card-grid::-webkit-scrollbar {
-    display: none;
+    padding: 0.15rem;
   }
 
   .library-catalog-layout.is-unified .library-card {
-    width: min(82vw, 300px);
-    flex: 0 0 min(82vw, 300px);
-    scroll-snap-align: start;
+    width: 100%;
+    min-width: 0;
   }
 
   .library-footer-compact.library-footer {
@@ -2536,23 +2526,21 @@ summary {
 }
 
 .vocabulary-index {
-  overflow-x: auto;
+  min-width: 0;
   border: 0;
   margin: 1rem 0 0;
   padding: 0.3rem;
   background: transparent;
-  scrollbar-width: none;
 }
 
-.vocabulary-index::-webkit-scrollbar { display: none; }
-
 .vocabulary-index a {
+  min-width: 0;
   min-height: 44px;
-  flex: 0 0 auto;
   border: 0;
   border-radius: var(--ui-radius-nav);
   background: var(--apple-surface);
   box-shadow: inset 0 0 0 1px var(--apple-line);
+  overflow-wrap: anywhere;
 }
 
 .vocabulary-group {
@@ -3147,17 +3135,15 @@ summary {
 
 .finder-candidate-choice > span,
 .finder-candidate-choice > small {
-  overflow: hidden;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--apple-secondary);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .finder-candidate-choice > strong {
-  overflow: hidden;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--apple-ink);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .finder-candidate-choice > svg {
@@ -3291,7 +3277,8 @@ summary {
 
 .library-code-file pre {
   max-height: 360px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0;
   padding: 16px;
   color: var(--apple-ink);
@@ -3299,6 +3286,9 @@ summary {
   font-size: 12px;
   line-height: 1.65;
   tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Catalog controls and real recipe previews. */
@@ -3319,23 +3309,11 @@ summary {
   height: 100%;
   display: grid;
   place-items: center;
-  opacity: 1;
-  transition: opacity 100ms ease-out;
 }
 
 .library-motion-thumb .motion-thumbnail-runtime {
   z-index: 2;
-  opacity: 0;
   background: var(--apple-surface-soft);
-  transition: opacity 120ms ease-out;
-}
-
-.library-motion-thumb.is-runtime-active .motion-thumbnail-fallback {
-  opacity: 0;
-}
-
-.library-motion-thumb.is-runtime-active .motion-thumbnail-runtime {
-  opacity: 1;
 }
 
 @media (max-width: 760px) {
@@ -3396,9 +3374,83 @@ summary {
   }
 
   .library-category-filter-options {
-    padding-inline-end: 32px;
-    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 30px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 30px), transparent 100%);
+    padding-inline: 0;
+  }
+
+  .apple-reference-topic,
+  .apple-reference-section .library-table-scroll {
+    min-width: 0;
+  }
+
+  .apple-reference-section .library-table-scroll {
+    border: 0;
+  }
+
+  .apple-reference-section .library-parameter-table,
+  .apple-reference-section .library-parameter-table tbody,
+  .apple-reference-section .library-parameter-table tr,
+  .apple-reference-section .library-parameter-table td {
+    width: 100%;
+    min-width: 0;
+    display: block;
+  }
+
+  .apple-reference-section .library-parameter-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .apple-reference-section .library-parameter-table tbody {
+    display: grid;
+    gap: 10px;
+  }
+
+  .apple-reference-section .library-parameter-table tr {
+    overflow: hidden;
+    border: 1px solid var(--apple-line);
+    border-radius: var(--ui-radius-card);
+    background: var(--apple-surface);
+  }
+
+  .apple-reference-section .library-parameter-table td {
+    display: grid;
+    grid-template-columns: minmax(88px, 0.36fr) minmax(0, 1fr);
+    gap: 12px;
+    border-bottom: 1px solid var(--apple-line);
+    padding: 11px 12px;
+  }
+
+  .apple-reference-section .library-parameter-table td::before {
+    content: attr(data-label);
+    color: var(--apple-secondary);
+    font-size: var(--type-xs);
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 480px) {
+  .library-surface-control.library-surface-tabs button {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 6px;
+    font-size: var(--type-xs);
+    text-align: center;
+  }
+
+  .library-surface-control.library-surface-tabs button > svg {
+    display: none;
+  }
+
+  .library-surface-control.library-surface-tabs button span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vocabulary-index {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -3408,8 +3460,6 @@ summary {
     animation: none;
   }
 
-  .library-motion-thumb .motion-thumbnail-fallback,
-  .library-motion-thumb .motion-thumbnail-runtime,
   .finder-candidate-choice {
     transition: none;
   }

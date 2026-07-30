@@ -980,6 +980,7 @@ kbd {
   inset-block-start: calc(var(--library-header-height) + 16px);
   height: calc(100dvh - var(--library-header-height) - 32px);
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   border-inline-end: 1px solid var(--library-line);
   padding: 0 1.1rem 2rem 0;
@@ -1201,16 +1202,13 @@ kbd {
   inset-block-start: var(--library-header-height);
   z-index: 12;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1.25rem;
-  overflow-x: auto;
   border-top: 1px solid var(--library-line);
   border-bottom: 1px solid var(--library-line);
   background: var(--bg);
-  scrollbar-width: none;
 }
-
-.library-entry-tabs::-webkit-scrollbar { display: none; }
 
 .library-entry-tabs a {
   min-width: 44px;
@@ -1218,7 +1216,7 @@ kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   color: var(--ink-dim);
   font-size: 0.72rem;
   font-weight: 620;
@@ -1593,7 +1591,8 @@ kbd {
 .library-code-content pre {
   min-height: 320px;
   max-height: 520px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0;
   padding: 1.2rem;
   color: var(--code-text);
@@ -1601,6 +1600,9 @@ kbd {
   font-size: 0.72rem;
   line-height: 1.75;
   tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .library-prompt-content > p {
@@ -1724,14 +1726,14 @@ kbd {
 }
 
 .library-table-scroll {
-  overflow-x: auto;
   border: 1px solid var(--library-line);
   border-radius: 8px;
 }
 
 .library-parameter-table {
   width: 100%;
-  min-width: 680px;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
   text-align: start;
 }
@@ -1755,6 +1757,7 @@ kbd {
 .library-parameter-table td {
   font-size: 0.76rem;
   line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 .library-parameter-table tr:last-child td { border-bottom: 0; }
@@ -1998,8 +2001,8 @@ kbd {
   .library-section-heading h2 { font-size: 1.9rem; }
 
   .library-directory-tools { grid-template-columns: 1fr; }
-  .library-filter-row { overflow-x: auto; }
-  .library-filter-row button { flex: 0 0 auto; }
+  .library-filter-row { flex-wrap: wrap; }
+  .library-filter-row button { flex: 0 1 auto; }
 
   .library-workflow-steps { grid-template-columns: 1fr; }
   .library-workflow-steps li,
@@ -2013,10 +2016,10 @@ kbd {
   .library-workflow-steps h3 { margin-top: 1.2rem; }
 
   .library-surface-tabs {
-    display: flex;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .library-surface-tabs button { min-width: 210px; flex: 1 0 auto; }
+  .library-surface-tabs button { min-width: 0; width: 100%; }
 
   .library-catalog-layout { grid-template-columns: 1fr; }
   .library-catalog-layout > .library-sidebar { display: none; }

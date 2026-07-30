@@ -523,10 +523,10 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                         <tbody>
                           {recipe.params.map((param) => (
                             <tr key={param.id}>
-                              <td><code>{param.id}</code></td>
-                              <td>{paramRange(param, locale)}</td>
-                              <td>{paramDefault(param, locale)}</td>
-                              <td>{text(param.description, locale)}</td>
+                              <td data-label={t("workspace.parameterName")}><code>{param.id}</code></td>
+                              <td data-label={t("workspace.parameterRange")}>{paramRange(param, locale)}</td>
+                              <td data-label={t("workspace.parameterDefault")}>{paramDefault(param, locale)}</td>
+                              <td data-label={t("workspace.parameterPurpose")}>{text(param.description, locale)}</td>
                             </tr>
                           ))}
                         </tbody>
