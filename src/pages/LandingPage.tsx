@@ -1,34 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, SlidersHorizontal, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FeatureGrid } from "../components/FeatureGrid";
 import { Hero } from "../components/Hero";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";
 import { compactCatalogEntries, getCompactCatalogEntry } from "../data/compact-catalog";
-import type { Locale, MotionSurfaceType } from "../data/types";
+import type { Locale } from "../data/types";
 import { pathFor, siteUrl, text } from "../data/site";
 
-type Surface = "components" | "playgrounds" | "guides";
-
-const featuredIds = [
-  "slide-in",
-  "stagger",
-  "press-tap-feedback",
-  "text-morph",
-  "spring",
-  "page-transition"
-];
-
-const surfaces: Array<{
-  id: Surface;
-  surfaceType: MotionSurfaceType;
-  icon: typeof Sparkles;
-}> = [
-  { id: "components", surfaceType: "component", icon: Sparkles },
-  { id: "playgrounds", surfaceType: "playground", icon: SlidersHorizontal },
-  { id: "guides", surfaceType: "guide", icon: BookOpen }
-];
+const featuredIds = ["spring", "morph", "stagger"];
 
 export function LandingPage({ locale }: { locale: Locale }) {
   const { t } = useTranslation();
@@ -64,21 +44,38 @@ export function LandingPage({ locale }: { locale: Locale }) {
           }
         ]}
       />
+
       <Hero locale={locale} />
 
-      <section className="library-featured" aria-labelledby="featured-title">
-        <div className="library-section-heading">
+      <section className="apple-home-library" aria-labelledby="home-library-title">
+        <div className="apple-home-library-heading">
           <div>
-            <span>{t("landing.featuredLabel")}</span>
-            <h2 id="featured-title">{t("landing.featuredTitle")}</h2>
+            <span>{locale === "zh" ? "动效库" : "MOTION LIBRARY"}</span>
+            <h2 id="home-library-title">
+              {locale === "zh" ? "从相近的感觉开始探索。" : "Explore motions that feel close."}
+            </h2>
           </div>
-          <p>{t("landing.featuredCopy")}</p>
+          <div>
+            <p>
+              {locale === "zh"
+                ? "每个配方都有真实预览、可调参数、准确提示词与可复制实现。"
+                : "Every recipe includes a live preview, tunable parameters, precise prompts, and portable code."}
+            </p>
+            <Link
+              to="/$locale/catalog/"
+              params={{ locale }}
+              search={{ surface: "components" }}
+            >
+              {locale === "zh" ? "浏览完整动效库" : "Browse the full library"}
+              <ArrowRight aria-hidden="true" size={16} />
+            </Link>
+          </div>
         </div>
 
-        <div className="library-card-grid library-home-feature-grid is-component">
+        <div className="library-card-grid apple-home-card-grid is-component">
           {featured.map((recipe) => (
             <Link
-              className="library-card"
+              className="library-card apple-motion-card"
               key={recipe.id}
               to="/$locale/$categoryId/$recipeId/"
               params={{ locale, categoryId: recipe.categoryId, recipeId: recipe.id }}
@@ -93,56 +90,6 @@ export function LandingPage({ locale }: { locale: Locale }) {
               </div>
             </Link>
           ))}
-        </div>
-
-        <Link
-          className="library-featured-more"
-          to="/$locale/catalog/"
-          params={{ locale }}
-          search={{ surface: "components" }}
-        >
-          {t("landing.openFullCatalog")}
-          <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
-        </Link>
-      </section>
-
-      <FeatureGrid />
-
-      <section className="library-home-surfaces" aria-labelledby="library-title">
-        <div className="library-section-heading">
-          <div>
-            <span>{t("landing.directoryLabel")}</span>
-            <h2 id="library-title">{t("landing.directoryTitle")}</h2>
-          </div>
-          <p>{t("landing.directoryCopy")}</p>
-        </div>
-
-        <div className="library-home-surface-grid">
-          {surfaces.map(({ id, surfaceType, icon: Icon }) => {
-            const count = compactCatalogEntries.filter(
-              (recipe) => recipe.surfaceType === surfaceType
-            ).length;
-            return (
-              <Link
-                className={`library-home-surface is-${surfaceType}`}
-                key={id}
-                to="/$locale/catalog/"
-                params={{ locale }}
-                search={{ surface: id }}
-              >
-                <div className="library-home-surface-head">
-                  <span><Icon aria-hidden="true" size={17} strokeWidth={1.7} /></span>
-                  <small>{count}</small>
-                </div>
-                <h3>{t(`catalog.surfaces.${surfaceType}.title`)}</h3>
-                <p>{t(`catalog.surfaces.${surfaceType}.copy`)}</p>
-                <strong>
-                  {t(`nav.${id}`)}
-                  <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
-                </strong>
-              </Link>
-            );
-          })}
         </div>
       </section>
     </>

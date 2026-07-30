@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Check, Minimize2, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale, ParamValues } from "../data/types";
@@ -21,11 +21,13 @@ type MotionCompareProps = {
 
 function CandidatePreview({
   candidate,
+  compact,
   locale,
   replayKey,
   values
 }: {
   candidate: MotionFinderCandidate;
+  compact: boolean;
   locale: Locale;
   replayKey: number;
   values: ParamValues;
@@ -46,9 +48,15 @@ function CandidatePreview({
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     const style = document.createElement("style");
     const scene = document.createElement("div");
-    style.textContent = `:host { display: grid; place-items: center; width: 100%; height: 100%; }
+    style.textContent = `:host { display: grid; place-items: center; width: 100%; min-width: 0; min-height: 0; }
 :host > div { display: grid; place-items: center; width: 100%; }
-${output.css}`;
+${output.css}
+:host([data-compact="true"]) .motion-demo {
+  box-sizing: border-box;
+  height: 7rem;
+  min-height: 7rem;
+  padding: 0.75rem;
+}`;
     scene.innerHTML = output.html;
     shadow.replaceChildren(style, scene);
     const root = scene.querySelector<HTMLElement>(".motion-demo");
@@ -65,6 +73,7 @@ ${output.css}`;
     <div
       ref={runtimeHostRef}
       className="finder-candidate-stage motion-runtime-stage"
+      data-compact={compact ? "true" : undefined}
       aria-label={`${candidate.name} — ${candidate.description}`}
     />
   );
@@ -79,42 +88,93 @@ export function MotionCompare({
 }: MotionCompareProps) {
   const { t } = useTranslation();
   const [replayKey, setReplayKey] = useState(0);
+  const [isComparing, setIsComparing] = useState(false);
+
+  function replayTogether() {
+    setIsComparing(true);
+    setReplayKey((current) => current + 1);
+  }
+
+  function selectCandidate(candidate: MotionFinderCandidate) {
+    setIsComparing(false);
+    onSelect(candidate);
+  }
 
   return (
-    <div className="finder-compare">
+    <div
+      className={`finder-compare apple-motion-chooser ${
+        isComparing ? "is-comparing" : "is-focused"
+      }`}
+    >
       <div className="finder-compare-toolbar">
-        <span>{t("finder.resultCount", { count: candidates.length })}</span>
-        <Button
-          type="button"
-          variant="soft"
-          size="sm"
-          onClick={() => setReplayKey((current) => current + 1)}
-        >
-          <RotateCcw aria-hidden="true" size={15} strokeWidth={1.8} />
-          {t("finder.replayAll")}
-        </Button>
+        <div className="finder-compare-status">
+          <span>{t("finder.resultCount", { count: candidates.length })}</span>
+          <strong>{isComparing ? t("finder.resultTitle") : t("finder.selected")}</strong>
+        </div>
+        <div className="finder-compare-actions">
+          {isComparing ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              aria-controls="finder-candidate-deck"
+              onClick={() => setIsComparing(false)}
+            >
+              <Minimize2 aria-hidden="true" size={15} strokeWidth={1.8} />
+              {locale === "zh" ? "聚焦已选" : "Focus selection"}
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            variant="soft"
+            size="sm"
+            aria-controls="finder-candidate-deck"
+            aria-pressed={isComparing}
+            onClick={replayTogether}
+          >
+            <RotateCcw aria-hidden="true" size={15} strokeWidth={1.8} />
+            {t("finder.replayAll")}
+          </Button>
+        </div>
       </div>
 
-      <div className="finder-candidate-grid" aria-live="polite">
+      <div
+        id="finder-candidate-deck"
+        className="finder-candidate-grid finder-choice-deck"
+        data-layout={isComparing ? "compare" : "focus"}
+        aria-live="polite"
+      >
         {candidates.map((candidate) => {
           const selected = candidate.variantId === selectedId;
           const previewValues = selected && selectedValues ? selectedValues : candidate.values;
           return (
             <article
-              className={selected ? "finder-candidate is-selected" : "finder-candidate"}
+              className={`finder-candidate apple-motion-card ${
+                selected
+                  ? "finder-candidate--primary apple-motion-primary is-selected"
+                  : "finder-candidate--alternative apple-motion-alternative"
+              }`}
               key={candidate.variantId}
               data-variant-id={candidate.variantId}
+              data-rank={candidate.rank}
+              aria-labelledby={`finder-candidate-title-${candidate.variantId}`}
             >
               <header className="finder-candidate-header">
                 <div>
-                  <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
-                  <h3>{candidate.name}</h3>
+                  <div className="finder-candidate-meta">
+                    <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
+                    {selected ? <strong>{t("finder.selected")}</strong> : null}
+                  </div>
+                  <h3 id={`finder-candidate-title-${candidate.variantId}`}>
+                    {candidate.name}
+                  </h3>
                   <p>{candidate.description}</p>
                 </div>
               </header>
 
               <CandidatePreview
                 candidate={candidate}
+                compact={isComparing || !selected}
                 locale={locale}
                 replayKey={replayKey}
                 values={previewValues}
@@ -135,7 +195,7 @@ export function MotionCompare({
                   type="button"
                   className={selected ? "finder-select is-selected" : "finder-select"}
                   aria-pressed={selected}
-                  onClick={() => onSelect(candidate)}
+                  onClick={() => selectCandidate(candidate)}
                 >
                   {selected ? <Check aria-hidden="true" size={15} /> : null}
                   {selected

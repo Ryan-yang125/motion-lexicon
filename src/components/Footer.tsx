@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
+const cliUrl = `${repositoryUrl}#free-cli-and-agent-skill`;
 const skillUrl = `${repositoryUrl}/tree/main/skills/motion-lexicon`;
 
 export function Footer() {
@@ -11,7 +12,7 @@ export function Footer() {
   const locale: Locale = i18n.resolvedLanguage?.startsWith("en") ? "en" : "zh";
 
   return (
-    <footer className="library-footer">
+    <footer className="library-footer library-footer-compact">
       <div className="library-footer-main">
         <div className="library-footer-brand">
           <span className="library-brand-mark" aria-hidden="true">
@@ -24,33 +25,30 @@ export function Footer() {
             <p>{t("footer.description")}</p>
           </div>
         </div>
-        <nav aria-label={t("footer.exploreLabel")}>
-          <span>{t("footer.explore")}</span>
+        <nav className="library-footer-links" aria-label={t("footer.exploreLabel")}>
           <Link to="/$locale/finder/" params={{ locale }}>
-            {t("nav.finder")}
+            {locale === "zh" ? "找动效" : "Find motion"}
           </Link>
           <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
-            {t("nav.components")}
-          </Link>
-          <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "playgrounds" }}>
-            {t("nav.playgrounds")}
-          </Link>
-          <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "guides" }}>
-            {t("nav.guides")}
+            {locale === "zh" ? "动效库" : "Library"}
           </Link>
           <Link to="/$locale/vocabulary/" params={{ locale }}>
             {locale === "zh" ? "动画词汇" : "Vocabulary"}
           </Link>
-        </nav>
-        <div className="library-footer-output">
-          <span>{locale === "zh" ? "免费开放" : "FREE & OPEN"}</span>
-          <p>CSS · HTML · JS · Prompt</p>
           <Link to="/$locale/$categoryId/$recipeId/" params={{ locale, categoryId: "entrances", recipeId: "slide-in" }}>
             {t("footer.openExample")}
-            <ArrowUpRight aria-hidden="true" size={14} />
           </Link>
+        </nav>
+        <nav
+          className="library-footer-resources"
+          aria-label={locale === "zh" ? "开源资源" : "Open source resources"}
+        >
           <a href={repositoryUrl} target="_blank" rel="noreferrer">
             GitHub
+            <ArrowUpRight aria-hidden="true" size={14} />
+          </a>
+          <a href={cliUrl} target="_blank" rel="noreferrer">
+            CLI
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
           <a href={skillUrl} target="_blank" rel="noreferrer">
@@ -61,10 +59,10 @@ export function Footer() {
             Catalog JSON
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
-        </div>
+        </nav>
       </div>
       <div className="library-footer-meta">
-        <span>Motion Lexicon</span>
+        <span>{locale === "zh" ? "免费开放 · CSS · HTML · JS · Prompt" : "Free and open · CSS · HTML · JS · Prompt"}</span>
         <span>{t("footer.staticProduct")}</span>
       </div>
     </footer>

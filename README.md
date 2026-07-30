@@ -6,14 +6,18 @@
 
 **[Live website](https://motion-lexicon.pages.dev/)** · **[Motion Finder](https://motion-lexicon.pages.dev/en/finder/)** · **[44-recipe catalog](https://motion-lexicon.pages.dev/en/catalog/)** · **[91-term vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/)** · **[Versioned JSON API](https://motion-lexicon.pages.dev/data/v1/catalog.json)**
 
-Motion Lexicon is a visual motion finder and recipe library. Describe a vague interface feeling or goal to receive three explainable candidates, compare them in one scene, select and tune a recipe, then copy agent-ready prompt text plus portable HTML, CSS, and interaction JavaScript.
+Motion Lexicon is a visual motion finder and recipe library organized around one continuous path: **Describe → Choose → Tune → Use**. Describe a vague interface feeling or goal, receive three explainable candidates, focus on the strongest match, compare all three in one scene, tune the selected recipe, then copy agent-ready prompt text plus portable HTML, CSS, and interaction JavaScript.
 
 The launch catalog contains 44 canonical units across 12 categories: 31 copy-ready components, 9 focused playgrounds, and 4 guides. A dedicated bilingual vocabulary surface covers all 91 motion terms with original English technical definitions, accurate Chinese translations, and close-term distinctions. The 47 related terms resolve into the curated workspaces without duplicating components.
 
 ## Current Status
 
 - Static React + TypeScript application is implemented.
-- The bilingual Motion Finder turns vague intent into three ranked candidates with reasons, synchronized previews, shareable comparison state, and the existing tune-and-export workflow.
+- The landing experience and bilingual Motion Finder share the same natural-language intake, examples, and product promise. A landing query continues directly into the Finder workspace.
+- The Finder presents one focused candidate with two compact alternatives. Synchronized comparison remains available through one action, followed by tuning and export in the same workspace.
+- Desktop workspaces pair a dominant preview stage with a nearby Inspector. Mobile keeps the selected candidate prominent and condenses the three-way comparison into scan-friendly rows.
+- The product header exposes Find motion and Library as the two primary destinations. Components, playgrounds, guides, vocabulary, CLI, Skill, data, theme, and locale remain available through contextual controls and the resources menu.
+- Recipe output and long-form reference material use progressive disclosures, keeping preview, common controls, and the primary copy action visually dominant.
 - 44 canonical catalog units and all 91 source terms are available in Chinese and English.
 - Motion Lexicon independently maintains all 91 English definitions; every term includes a specific Chinese translation and every alias includes a bilingual distinction.
 - Preview, parameters, prompt, HTML, CSS, JavaScript, and reduced-motion output share one semantic motion specification.
@@ -28,10 +32,11 @@ The launch catalog contains 44 canonical units across 12 categories: 31 copy-rea
 ## Documentation
 
 - `PRODUCT.md`: product promise, users, phase strategy, content rules, interaction rules, and quality bar.
-- `DESIGN.md`: launch design, routing, SEO plan, motion rules, and acceptance criteria.
+- `DESIGN.md`: experience model, visual system, routing, SEO plan, motion rules, accessibility, and acceptance criteria.
 - `AGENTS.md`: working instructions for future agents.
 - `prototype/motion-lexicon-prototype.html`: archived phase-one visual reference.
-- `src/styles.css` and `src/library.css`: current neutral component-library design system.
+- `src/styles.css` and `src/library.css`: shared primitives and library foundations.
+- `src/apple-redesign.css`: current product shell, focused Finder, unified Library, recipe workbench, materials, responsive layouts, and accessibility adaptations.
 
 ## Free CLI and Agent Skill
 
@@ -211,7 +216,7 @@ npx impeccable --json src
 Current expected test surface:
 
 - Unit tests verify recommendation ranking, web/CLI consistency, motion parameters, and export generation.
-- Playwright checks Finder comparison, desktop and mobile rendering, URL state updates, copy behavior, and horizontal overflow.
+- Playwright checks the focused Finder, synchronized comparison, desktop Inspector, mobile rendering, URL state updates, copy behavior, and horizontal overflow.
 - Static checks verify i18n coverage, SEO route coverage, motion rules, accessibility baseline, bundle budget, and built dist crawl.
 
 ## Content Standards

@@ -1,18 +1,35 @@
-# Motion Lexicon v0.2 Design
+# Motion Lexicon Product Design
 
-## Product Shape
+## Experience Model
 
-Motion Lexicon is a static, SEO-friendly motion finder and recipe library. The catalog curates 91 motion terms into 44 canonical units: 31 components, 9 playgrounds, and 4 guides. v0.2 adds an explainable decision surface for moving from vague intent to three comparable variants.
+Motion Lexicon is a static, SEO-friendly motion finder and recipe library. The catalog curates 91 motion terms into 44 canonical units: 31 components, 9 playgrounds, and 4 guides. The interface turns that depth into one calm, continuous journey:
 
-The user-facing structure is:
+```txt
+Describe → Choose → Tune → Use
+```
 
-- `/zh/` and `/en/`: landing pages with a curated component-library surface.
-- `/:locale/finder/`: bilingual natural-language recommendation, synchronized Top 3 comparison, variant selection, parameter tuning, and portable output.
-- `/:locale/catalog/`: shareable Components, Playgrounds, and Guides catalog filters.
-- `/:locale/vocabulary/`: the complete 91-term bilingual vocabulary and distinction layer.
-- `/:locale/:categoryId/`: indexable category collections.
-- `/:locale/:categoryId/:recipeId/`: canonical detail workspaces with preview, parameters, Prompt, HTML, CSS, and portable JavaScript where interaction requires it.
+- **Describe:** the landing page and Finder share one natural-language intake, three grounded examples, and the same product promise. A landing query continues to the Finder with `q` in the URL.
+- **Choose:** the Finder focuses the strongest current candidate and keeps two alternatives visible. One synchronized replay action expands all three into a direct comparison.
+- **Tune:** the selected recipe stays on the main stage while its parameters update the preview, URL, Prompt, HTML, CSS, and JavaScript together.
+- **Use:** Copy Prompt is the primary completion action. Portable output remains available through a disclosure in the same workspace.
+
+The intended emotional result is calm confidence. Purpose, Agency, Simplicity, and Craft guide the hierarchy, feedback, responsive behavior, and visual details.
+
+## Information Architecture
+
+The product header exposes two primary destinations:
+
+- **Find motion:** `/:locale/` and `/:locale/finder/` form one experiential layer. Home carries the Finder intake and representative preview; Finder carries recommendation, comparison, tuning, and export.
+- **Library:** `/:locale/catalog/` is the unified browsing entry for components, playgrounds, and guides. Search, surface, and category filters share one toolbar.
+
+Supporting routes preserve discovery depth and static acquisition value:
+
+- `/:locale/vocabulary/`: complete 91-term bilingual vocabulary and distinction layer.
+- `/:locale/:categoryId/`: indexable motion-family collection.
+- `/:locale/:categoryId/:recipeId/`: canonical recipe workspace.
 - Legacy term and playground URLs: generated redirects to canonical destinations or presets.
+
+GitHub stays visible in the desktop header. CLI, Agent Skill, JSON data, vocabulary, theme, and locale live in the resources layer and footer. Mobile keeps Library and the resources menu immediately reachable.
 
 ## Technical Stack
 
@@ -28,20 +45,59 @@ The user-facing structure is:
 - ESLint and TypeScript build mode for quality gates.
 - Playwright for browser acceptance checks.
 
+`src/styles.css` and `src/library.css` provide shared primitives and library foundations. `src/apple-redesign.css` loads after them and defines the current product shell, workspaces, materials, responsive layouts, and accessibility adaptations. `prototype/motion-lexicon-prototype.html` remains an archived phase-one artifact.
+
+## Layout System
+
+### Product shell
+
+- The 64px header uses a translucent floating material, a centered Find motion / Library control, and a source-anchored resources popover.
+- Desktop page width is capped at 1240px with 48px outer breathing room. Mobile uses a 28px total outer gutter.
+- The landing hero uses the first viewport for the description input, three example requests, product proof, and one representative live scene. The following section introduces three featured recipes and the complete Library link.
+- Footer content stays compact and groups product navigation separately from open-source resources.
+
+### Finder workspace
+
+- An empty Finder gives the description field dominant visual weight.
+- A populated Finder compresses the intake and brings recommendation evidence plus the active workspace forward.
+- Focus mode uses one large selected candidate and two compact alternatives.
+- Compare mode displays three equal desktop columns with the same scene and a shared replay cycle.
+- Mobile focus mode places the selected candidate above two compact alternatives. Mobile compare mode uses three scan-friendly rows with concise labels, previews, and selection actions.
+- At widths above 1040px, the candidate stage and a 300–340px Inspector sit side by side. Narrower layouts stack the Inspector after the stage.
+
+### Recipe workspace
+
+- Recipe identity and Copy Prompt lead the page.
+- The preview stage and Inspector form the primary workbench. Common parameters appear first; additional parameters live in an Advanced controls disclosure.
+- Device simulation and reduced-motion preview controls remain attached to the stage.
+- Portable output, vocabulary, decision guidance, review criteria, accessibility guidance, parameter reference, and related entries use native disclosures.
+- Category and vocabulary acquisition pages use a calmer editorial shell and lead into canonical workspaces.
+
+### Library
+
+- One toolbar combines keyword search, Components / Playgrounds / Guides, and category filtering.
+- Results stay grouped by motion family, with the active result count and context visible near the controls.
+- Desktop uses a responsive card grid. Mobile uses horizontally scrollable, snap-aligned recipe rows to preserve useful preview size.
+
 ## Visual System
 
-The production interface follows the established grammar of mature component-library documentation, with shadcn/ui, Motion Primitives, Magic UI, and React Bits used as structural references:
+The interface applies Apple-inspired web principles through product hierarchy and interaction craft:
 
-- True white and chroma-zero gray surfaces in light mode; zinc-black surfaces in dark mode.
-- Black primary actions, one blue state color for focus, selection, progress, and accessibility cues.
-- Thin neutral borders, compact 6-10px radii, and low-contrast secondary text.
-- Geist/Inter/system sans-serif typography with small mono metadata and code labels.
-- A 60px product header, dense catalog navigation, sticky documentation sidebars, and a restrained page-width system.
-- Large grid-backed preview canvases that carry the visual expression of each entry.
-- Dark code blocks with fixed format tabs, filenames, copy status, and horizontal scrolling.
-- Static catalog thumbnails at rest with one deliberate animation cycle on fine-pointer hover or the featured preview; keyboard focus remains immediate and still.
+- **Purpose:** every state gives the next useful action the strongest position, contrast, and scale.
+- **Agency:** the original query remains editable; candidate selection, synchronized replay, parameter changes, reset, output formats, themes, and locales remain user-controlled.
+- **Simplicity:** common tasks appear first and advanced content opens in context.
+- **Craft:** typography, spacing, radii, focus states, materials, and transitions use deliberate values across desktop and mobile.
 
-`prototype/motion-lexicon-prototype.html` remains an archived phase-one artifact. `src/styles.css` and `src/library.css` define the current production system.
+The concrete visual grammar is:
+
+- Platform system typography: `-apple-system`, `BlinkMacSystemFont`, SF Pro where available, PingFang SC, Helvetica Neue, and Arial fallbacks.
+- Large headings use tight tracking and leading; body copy uses comfortable leading; mono typography is reserved for code and precise metadata.
+- Light mode uses warm chroma-zero gray with white surfaces. Dark mode uses black with elevated near-black surfaces.
+- One blue state color carries primary actions, focus, selection, readiness, and progress.
+- Whitespace, scale, surface elevation, and restrained shadows create hierarchy. Structural boundaries receive quiet lines.
+- Major preview surfaces use 22–28px radii; inputs and controls use smaller related radii.
+- Translucency is scoped to floating navigation, popovers, toolbars, and Inspectors. Preview canvases and code surfaces retain stable legibility.
+- Real motion scenes provide visual character. Supporting chrome stays quiet, predictable, and content-led.
 
 ## Data And URL State
 
@@ -77,25 +133,33 @@ Finder query state preserves a vague request, comparison variants, and the curre
 
 The CLI provides `q` plus the ordered `compare` list. The Finder selects the first variant by default and writes `selected` after a user choice. Any non-default recipe parameters follow in the same query string. The canonical Finder URL remains `/:locale/finder/`. Web and CLI recommendations use the same intent data and ranking implementation.
 
+## Interaction And Motion
+
+- Buttons and candidate selectors respond during press with a short scale treatment and retain visible keyboard focus.
+- Finder candidates share scene dimensions and replay state, keeping comparison visually direct.
+- Selecting a candidate returns the deck to focus mode and updates the URL-backed tuning state.
+- Popovers originate near their trigger and use short scale, position, and opacity transitions.
+- Workbench controls update their affected preview and generated output immediately.
+- UI transitions use restrained, smooth settle curves. Existing gesture recipes keep their Pointer Events, capture, damping, cancellation, velocity-aware settlement, and keyboard alternatives.
+- Hover motion runs behind fine-pointer media queries.
+- `prefers-reduced-motion` replaces large transitions and illustrative movement with short opacity or color feedback.
+- `prefers-reduced-transparency` turns floating materials into solid surfaces and removes backdrop blur.
+- `prefers-contrast: more` strengthens key boundaries on the landing experience.
+
+## Accessibility
+
+- Primary mobile controls and navigation targets maintain a 44px minimum touch size.
+- Native links, buttons, forms, `details`, and `summary` elements preserve keyboard and assistive-technology semantics.
+- Finder status, result count, selection, replay, copy completion, and errors use visible text or appropriate live-region behavior.
+- Light and dark themes maintain readable text and state contrast.
+- Reduced-motion preview remains directly controllable inside each recipe workspace.
+- Layouts support desktop and mobile without horizontal page overflow.
+
 ## SEO
 
 The build pipeline renders static HTML for 120 localized canonical routes. Each route receives a self canonical, reciprocal hreflang set, Open Graph metadata, and static JSON-LD. The vocabulary routes publish a `DefinedTermSet` containing all 91 terms. Finder query variations canonicalize to their localized Finder route.
 
-Landing, Finder, catalog, category, and canonical detail pages are indexable. Alias and Finder query variations stay out of the sitemap.
-
-## Motion Rules
-
-Each recipe uses one semantic motion specification for its parameter schema, preview markup, generated CSS, generated HTML, Prompt, and reduced-motion behavior. The motion craft rules are:
-
-- Prefer transform and opacity, and use clip, filter, or layout properties only when the named pattern requires them.
-- Use custom cubic-bezier curves.
-- Keep UI interaction feedback short.
-- Keep motion interruptible and directly tied to the named behavior.
-- Respect `prefers-reduced-motion` by removing movement and keeping a short fade.
-- Gate hover movement behind fine pointer media queries.
-- Use Pointer Events and velocity-aware settlement for gesture components.
-- Keep keyboard-initiated navigation and repeated parameter editing visually immediate.
-- Replay Finder candidates from one synchronized control and use the same scene dimensions and content for direct comparison.
+Landing, Finder, catalog, category, and canonical detail pages are indexable. Alias and Finder query variations stay out of the sitemap. The focused product navigation changes visible wayfinding while preserving every static acquisition route.
 
 ## Launch Acceptance
 
@@ -114,5 +178,8 @@ Launch is complete when:
 - `npm run crawl:dist` passes.
 - `npm run test:visual` passes on desktop and mobile.
 - Web and CLI recommendations agree on ordered variants, reasons, presets, and shareable compare state.
+- Focus mode shows one selected candidate with two alternatives, and synchronized comparison remains one action away.
+- Desktop workspaces pair the active stage with the Inspector; mobile comparison remains concise and free of horizontal page overflow.
+- Landing, Finder, Library, vocabulary, category, and recipe routes keep complete Chinese and English metadata and content.
 - Both localized Finder routes are prerendered, canonicalized, crawlable, and free of horizontal overflow.
 - The local dev server runs and the site is available for manual review.

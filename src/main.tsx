@@ -8,6 +8,7 @@ import { AppRouterProvider, router } from "./router";
 import "./styles.css";
 import "./library.css";
 import "./vocabulary.css";
+import "./apple-redesign.css";
 
 const helmetModule = helmetAsync as typeof helmetAsync & Record<string, typeof helmetAsync | undefined>;
 const { HelmetProvider } = (helmetModule["default"] ?? helmetAsync) as typeof helmetAsync;

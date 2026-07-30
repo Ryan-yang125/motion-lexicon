@@ -1,8 +1,7 @@
-import { CatalogSidebar } from "../components/CatalogSidebar";
 import { RecipeWorkspace } from "../components/RecipeWorkspace";
 import { Seo } from "../components/Seo";
 import { getCategory } from "../data/categories";
-import { getMotionCatalogMeta, getRecipe } from "../data/recipes";
+import { getRecipe } from "../data/recipes";
 import type { Locale } from "../data/types";
 import { pathFor, text } from "../data/site";
 import { breadcrumbStructuredData, entryStructuredData } from "../lib/structured-data";
@@ -22,7 +21,6 @@ export function RecipePage({ locale, categoryId, recipeId }: RecipePageProps) {
   }
 
   const category = getCategory(recipe.categoryId);
-  const meta = getMotionCatalogMeta(recipe);
 
   return (
     <>
@@ -44,13 +42,7 @@ export function RecipePage({ locale, categoryId, recipeId }: RecipePageProps) {
             : []
         }
       />
-      <div className="library-doc-layout">
-        <CatalogSidebar
-          locale={locale}
-          activeCategoryId={recipe.categoryId}
-          activeRecipeId={recipe.id}
-          surfaceType={meta.surfaceType}
-        />
+      <div className="apple-recipe-page">
         <RecipeWorkspace key={recipe.id} locale={locale} recipe={recipe} mode="recipe" />
       </div>
     </>
