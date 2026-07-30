@@ -435,7 +435,7 @@ textarea:focus-visible,
   .theme-select,
   .ml-toggle-item,
   .ml-tabs-trigger {
-    min-height: 2.75rem;
+    min-height: 2.8125rem;
   }
 }
 
