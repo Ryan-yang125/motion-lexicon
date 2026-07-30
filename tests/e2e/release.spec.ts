@@ -126,6 +126,35 @@ test("catalog hover mounts one exact recipe runtime at a time while keyboard foc
   await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(0);
   await expect.poll(() => fallbackActor.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
 
+  const comparisonCard = page.locator(
+    'a.library-card[href="/zh/polish-effects/before-after-slider/"]'
+  );
+  const comparisonRuntime = comparisonCard.locator(".motion-thumbnail-runtime");
+  await comparisonCard.hover();
+  await expect(comparisonRuntime).toHaveAttribute("data-runtime-active", "true");
+  await expect(comparisonRuntime).toHaveAttribute("inert", "");
+  expect(await comparisonRuntime.evaluate((host) =>
+    Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>(
+      'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+    ) ?? []).map((element) => element.tabIndex)
+  )).toEqual(expect.arrayContaining([-1]));
+  expect(await comparisonRuntime.evaluate((host) =>
+    Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>(
+      'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+    ) ?? []).every((element) => element.tabIndex === -1)
+  )).toBe(true);
+  expect(await comparisonRuntime.evaluate((host) => {
+    host.shadowRoot?.querySelector<HTMLElement>("input,button,[tabindex]")?.focus();
+    return host.shadowRoot?.activeElement?.tagName ?? null;
+  })).toBeNull();
+  await comparisonCard.focus();
+  for (let index = 0; index < 3; index += 1) {
+    await page.keyboard.press("Tab");
+    expect(await comparisonRuntime.evaluate((host) =>
+      host.shadowRoot?.activeElement?.tagName ?? null
+    )).toBeNull();
+  }
+
   for (const recipe of componentRecipes) {
     const card = page.locator(
       `a.library-card[href="/zh/${recipe.categoryId}/${recipe.id}/"]`
@@ -287,6 +316,18 @@ test("every production copy runtime executes independently and cleans up reentra
       const spring = page.locator("[data-spring-target]");
       await spring.click();
       await expect.poll(() => spring.evaluate((target) => target.style.transform)).not.toBe("");
+      await expect.poll(() => spring.evaluate((target) => {
+        const match = target.style.transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/);
+        return match ? Math.abs(Number(match[1])) : Number.POSITIVE_INFINITY;
+      })).toBeLessThan(24);
+      await page.locator("[data-motion-replay]").click();
+      const restartedDisplacement = await spring.evaluate(async (target) => {
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        return Math.abs(Number(
+          target.style.transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/)?.[1] ?? 0
+        ));
+      });
+      expect(restartedDisplacement).toBeGreaterThan(36);
       await page.locator("body").evaluate((body) => body.classList.add("force-reduced-motion"));
       await expect.poll(() => spring.evaluate((target) => target.style.transform)).toBe("");
     }

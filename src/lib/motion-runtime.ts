@@ -953,7 +953,16 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
     frame = requestAnimationFrame(step);
   }
 
-  replay.addEventListener("click", play);
+  function restartLatest() {
+    stop();
+    configuredDistance = config.distance;
+    springPosition = config.distance;
+    springVelocity = config.velocity * 10;
+    springTarget = 0;
+    play();
+  }
+
+  replay.addEventListener("click", restartLatest);
   mountedReplayControls.add(replay);
   target.addEventListener("click", play);
   const stopObservingReducedMotion = observeReducedMotion(root, (reduced) => {
@@ -964,12 +973,12 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
       target.style.opacity = "";
     }
   });
-  if (config.autoplay) play();
+  if (config.autoplay) restartLatest();
   return () => {
     stopObservingReducedMotion();
     stop();
     mountedReplayControls.delete(replay);
-    replay.removeEventListener("click", play);
+    replay.removeEventListener("click", restartLatest);
     target.removeEventListener("click", play);
     springPosition = config.distance;
     springVelocity = config.velocity * 10;
@@ -1635,6 +1644,7 @@ const copiedSpringRuntime = String.raw`
     let position = config.distance;
     let velocity = config.velocity * 10;
     let springTarget = 0;
+    let configuredDistance = config.distance;
     let previous = 0;
     const stop = () => {
       cancelAnimationFrame(frame);
@@ -1670,16 +1680,22 @@ const copiedSpringRuntime = String.raw`
       const stiffness = Math.max(1, config.stiffness);
       const damping = Math.max(0, config.damping);
       const mass = Math.max(0.1, config.mass);
-      const amplitude = Math.max(1, Math.abs(config.distance));
+      const distance = config.distance;
+      if (!frame && Math.abs(position - configuredDistance) < 0.08) {
+        position = distance;
+        if (Math.abs(springTarget - configuredDistance) < 0.08) springTarget = distance;
+      }
+      configuredDistance = distance;
+      const amplitude = Math.max(1, Math.abs(distance));
       if (frame) {
-        springTarget = Math.abs(springTarget) < 0.01 ? config.distance : 0;
+        springTarget = Math.abs(springTarget) < 0.01 ? distance : 0;
         return;
       }
       if (Math.abs(position) < 0.08) {
-        position = config.distance;
+        position = distance;
         velocity = config.velocity * 10;
         springTarget = 0;
-      } else if (Math.abs(position - config.distance) < 0.08) {
+      } else if (Math.abs(position - distance) < 0.08) {
         springTarget = 0;
       }
       previous = performance.now();
@@ -1709,6 +1725,14 @@ const copiedSpringRuntime = String.raw`
       };
       frame = requestAnimationFrame(step);
     };
+    const restartLatest = () => {
+      stop();
+      configuredDistance = config.distance;
+      position = config.distance;
+      velocity = config.velocity * 10;
+      springTarget = 0;
+      play();
+    };
     addCleanup(() => {
       stop();
       position = config.distance;
@@ -1725,9 +1749,9 @@ const copiedSpringRuntime = String.raw`
         target.style.opacity = "";
       }
     });
-    on(replay, "click", play);
+    on(replay, "click", restartLatest);
     on(target, "click", play);
-    if (config.autoplay) play();
+    if (config.autoplay) restartLatest();
     return cleanup;
 `;
 

@@ -290,6 +290,7 @@ export function MotionThumbnail({ locale, recipe }: MotionThumbnailProps) {
     if (!host || !thumbnail || !card) return;
     const runtimeHost = host;
     const runtimeThumbnail = thumbnail;
+    runtimeHost.setAttribute("inert", "");
 
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -319,6 +320,12 @@ export function MotionThumbnail({ locale, recipe }: MotionThumbnailProps) {
 ${activeOutput.css}`;
       canvas.className = "motion-thumbnail-canvas";
       canvas.innerHTML = activeOutput.html;
+      canvas.setAttribute("inert", "");
+      for (const interactive of canvas.querySelectorAll<HTMLElement>(
+        'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+      )) {
+        interactive.tabIndex = -1;
+      }
       shadow.replaceChildren(style, canvas);
       const root = canvas.querySelector<HTMLElement>(".motion-demo");
       if (!root) return;

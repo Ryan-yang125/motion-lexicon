@@ -187,6 +187,56 @@ test.describe("motion performance budgets", () => {
     await expect(page).toHaveURL(new RegExp(`stiffness=${metrics.finalValue}`));
   });
 
+  test("Finder spring replay restarts an active integration with the latest parameters", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    const finderQuery = encodeURIComponent("卡片弹出来要有重量，最后收得住");
+    await page.goto(
+      `/zh/finder/?q=${finderQuery}&compare=spring,pop-in,scale-in&selected=spring` +
+      "&stiffness=70&damping=6&mass=2.9&velocity=-20&distance=48"
+    );
+
+    const stage = page.locator(".finder-active-preview .finder-candidate-stage");
+    await expect(stage).toBeVisible();
+    await expect.poll(() => stage.evaluate((host) =>
+      host.shadowRoot?.querySelector<HTMLElement>("[data-spring-target]")?.style.transform ?? ""
+    )).toContain("translate3d");
+
+    const latestValues = {
+      stiffness: "60",
+      damping: "5",
+      mass: "3",
+      velocity: "20",
+      distance: "160"
+    } as const;
+    for (const [id, value] of Object.entries(latestValues)) {
+      await page.locator(`#motion-control-spring-${id}`).fill(value);
+    }
+    await expect(page).toHaveURL(/stiffness=60/);
+    await expect(page).toHaveURL(/damping=5/);
+    await expect(page).toHaveURL(/mass=3/);
+    await expect(page).toHaveURL(/velocity=20/);
+    await expect(page).toHaveURL(/distance=160/);
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+
+    const displacementBeforeReplay = await stage.evaluate((host) => {
+      const transform = host.shadowRoot
+        ?.querySelector<HTMLElement>("[data-spring-target]")
+        ?.style.transform ?? "";
+      return Number(transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/)?.[1] ?? 0);
+    });
+    expect(Math.abs(displacementBeforeReplay)).toBeLessThan(100);
+
+    await page.locator(".finder-active-preview").getByRole("button", { name: "重播" }).click();
+    const displacementAfterReplay = await stage.evaluate(async (host) => {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const transform = host.shadowRoot
+        ?.querySelector<HTMLElement>("[data-spring-target]")
+        ?.style.transform ?? "";
+      return Number(transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/)?.[1] ?? 0);
+    });
+    expect(displacementAfterReplay).toBeGreaterThan(140);
+  });
+
   test("reduced motion keeps opacity feedback and removes spring travel", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/zh/springs/spring/");
