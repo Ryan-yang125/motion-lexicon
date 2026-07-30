@@ -62,7 +62,10 @@ test("Finder restores a shared comparison and keeps variant CSS isolated", async
     tabIndex: -1
   });
 
-  await page.getByRole("button", { name: "同步重播" }).click();
+  const replayTogether = page.getByRole("button", { name: "同步重播" });
+  await replayTogether.focus();
+  await expect(replayTogether).toBeFocused();
+  await replayTogether.click();
   const comparisonGeometry = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
     stages.map((stage) => {
       const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
