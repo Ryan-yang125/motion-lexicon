@@ -171,6 +171,11 @@ test("catalog reflows and preserves keyboard feedback at a 200 percent zoom-equi
 
   const search = page.getByRole("searchbox", { name: "Search" });
   await expect(search).toHaveAttribute("aria-describedby", "catalog-result-count");
+  const surfaceTabs = page.locator(".library-surface-tabs button");
+  await surfaceTabs.nth(1).click();
+  await expect(page).toHaveURL(/surface=playgrounds/);
+  await surfaceTabs.nth(0).click();
+  await expect(page).toHaveURL(/surface=components/);
   await page.keyboard.press("/");
   await expect(search).toBeFocused();
   await page.keyboard.type("slide");
