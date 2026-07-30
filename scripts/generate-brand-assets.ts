@@ -34,8 +34,8 @@ function ogMarkup(locale: "zh" | "en") {
     ? "说出感觉，<br>找到准确动效。"
     : "Describe the feeling.<br>Find the right motion.";
   const copy = locale === "zh"
-    ? "同场景比较三个候选，调好参数，再复制 Prompt 或前端实现。"
-    : "Compare three candidates, tune the recipe, then copy the prompt or implementation.";
+    ? "一个主预览，三个静态候选；选好动效并调参，再复制 Prompt 或前端实现。"
+    : "Use one active preview and three static choices, tune the motion, then copy the prompt or implementation.";
   return `
     <style>
       * { box-sizing: border-box; }

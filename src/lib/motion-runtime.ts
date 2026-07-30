@@ -19,6 +19,17 @@ type MotionRuntimeMount = (
   config: MotionRuntimeConfig
 ) => () => void;
 
+type MotionRuntimeState = {
+  config: MotionRuntimeConfig;
+  dispose: () => void;
+};
+
+type MotionRuntimeRoot = HTMLElement & {
+  __motionLexiconCleanup?: () => void;
+};
+
+const mountedRuntimes = new WeakMap<HTMLElement, MotionRuntimeState>();
+
 function prefersReducedMotion(root: HTMLElement) {
   return root.closest(".force-reduced-motion") !== null ||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -843,6 +854,7 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
   let springPosition = config.distance;
   let springVelocity = config.velocity * 10;
   let springTarget = 0;
+  let configuredDistance = config.distance;
   let previous = 0;
 
   function stop() {
@@ -870,6 +882,13 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
     }
   }
 
+  function renderPosition(amplitude: number) {
+    const displacement = springPosition - springTarget;
+    const progress = Math.min(1, Math.abs(displacement) / amplitude);
+    target.style.transform = `translate3d(0, ${springPosition.toFixed(3)}px, 0) scale(${(1 - progress * 0.06).toFixed(4)})`;
+    target.style.opacity = String(1 - progress * 0.28);
+  }
+
   function play() {
     if (prefersReducedMotion(root)) {
       settleForReducedMotion(true);
@@ -880,20 +899,26 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
     const stiffness = Math.max(1, config.stiffness);
     const damping = Math.max(0, config.damping);
     const mass = Math.max(0.1, config.mass);
-    const amplitude = Math.max(1, Math.abs(config.distance));
+    const distance = config.distance;
+    if (!frame && Math.abs(springPosition - configuredDistance) < 0.08) {
+      springPosition = distance;
+      if (Math.abs(springTarget - configuredDistance) < 0.08) springTarget = distance;
+    }
+    configuredDistance = distance;
+    const amplitude = Math.max(1, Math.abs(distance));
     if (frame) {
-      springTarget = Math.abs(springTarget) < 0.01 ? config.distance : 0;
+      springTarget = Math.abs(springTarget) < 0.01 ? distance : 0;
       return;
     }
     if (Math.abs(springPosition) < 0.08) {
-      springPosition = config.distance;
+      springPosition = distance;
       springVelocity = config.velocity * 10;
       springTarget = 0;
-    } else if (Math.abs(springPosition - config.distance) < 0.08) {
+    } else if (Math.abs(springPosition - distance) < 0.08) {
       springTarget = 0;
     }
     previous = performance.now();
-    target.style.opacity = "0.72";
+    renderPosition(amplitude);
 
     function step(now: number) {
       if (prefersReducedMotion(root)) {
@@ -902,14 +927,16 @@ function mountSpringRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
       }
       const elapsed = Math.min(0.032, Math.max(0.001, (now - previous) / 1000));
       previous = now;
-      const displacement = springPosition - springTarget;
-      const acceleration = (-stiffness * displacement - damping * springVelocity) / mass;
-      springVelocity += acceleration * elapsed;
-      springPosition += springVelocity * elapsed;
-      const progress = Math.min(1, Math.abs(displacement) / amplitude);
-      target.style.transform = `translate3d(0, ${springPosition.toFixed(3)}px, 0) scale(${(1 - progress * 0.06).toFixed(4)})`;
-      target.style.opacity = String(1 - progress * 0.28);
-      if (Math.abs(displacement) < 0.08 && Math.abs(springVelocity) < 0.08) {
+      const stepCount = Math.max(1, Math.ceil(elapsed / (1 / 120)));
+      const delta = elapsed / stepCount;
+      for (let index = 0; index < stepCount; index += 1) {
+        const displacement = springPosition - springTarget;
+        const acceleration = (-stiffness * displacement - damping * springVelocity) / mass;
+        springVelocity += acceleration * delta;
+        springPosition += springVelocity * delta;
+      }
+      renderPosition(amplitude);
+      if (Math.abs(springPosition - springTarget) < 0.08 && Math.abs(springVelocity) < 0.08) {
         springPosition = springTarget;
         springVelocity = 0;
         target.style.transform = springTarget === 0 ? "" : `translate3d(0, ${springTarget}px, 0)`;
@@ -1625,6 +1652,12 @@ const copiedSpringRuntime = String.raw`
         fade.addEventListener("finish", () => { fade = null; }, { once: true });
       }
     };
+    const renderPosition = (amplitude) => {
+      const displacement = position - springTarget;
+      const progress = Math.min(1, Math.abs(displacement) / amplitude);
+      target.style.transform = "translate3d(0, " + position.toFixed(3) + "px, 0) scale(" + (1 - progress * 0.06).toFixed(4) + ")";
+      target.style.opacity = String(1 - progress * 0.28);
+    };
     const play = () => {
       if (reduced()) { settleReduced(true); return; }
       if (fade) fade.cancel();
@@ -1645,19 +1678,21 @@ const copiedSpringRuntime = String.raw`
         springTarget = 0;
       }
       previous = performance.now();
-      target.style.opacity = "0.72";
+      renderPosition(amplitude);
       const step = (now) => {
         if (reduced()) { settleReduced(true); return; }
         const elapsed = Math.min(0.032, Math.max(0.001, (now - previous) / 1000));
         previous = now;
-        const displacement = position - springTarget;
-        const acceleration = (-stiffness * displacement - damping * velocity) / mass;
-        velocity += acceleration * elapsed;
-        position += velocity * elapsed;
-        const progress = Math.min(1, Math.abs(displacement) / amplitude);
-        target.style.transform = "translate3d(0, " + position.toFixed(3) + "px, 0) scale(" + (1 - progress * 0.06).toFixed(4) + ")";
-        target.style.opacity = String(1 - progress * 0.28);
-        if (Math.abs(displacement) < 0.08 && Math.abs(velocity) < 0.08) {
+        const stepCount = Math.max(1, Math.ceil(elapsed / (1 / 120)));
+        const delta = elapsed / stepCount;
+        for (let index = 0; index < stepCount; index += 1) {
+          const displacement = position - springTarget;
+          const acceleration = (-stiffness * displacement - damping * velocity) / mass;
+          velocity += acceleration * delta;
+          position += velocity * delta;
+        }
+        renderPosition(amplitude);
+        if (Math.abs(position - springTarget) < 0.08 && Math.abs(velocity) < 0.08) {
           position = springTarget;
           velocity = 0;
           target.style.transform = springTarget === 0 ? "" : "translate3d(0, " + String(springTarget) + "px, 0)";
@@ -1741,7 +1776,61 @@ export function hasMotionRuntime(id: string) {
 
 export function mountMotionRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
   const mount = runtimeById[config.id];
-  return mount ? mount(root, config) : () => undefined;
+  if (!mount) return () => undefined;
+
+  const existing = mountedRuntimes.get(root);
+  if (existing?.config.id === config.id) {
+    Object.assign(existing.config, config);
+    return existing.dispose;
+  }
+  existing?.dispose();
+
+  const mutableConfig = { ...config };
+  const cleanup = mount(root, mutableConfig);
+  const runtimeRoot = root as MotionRuntimeRoot;
+  let active = true;
+  const dispose = () => {
+    if (!active) return;
+    active = false;
+    cleanup();
+    if (mountedRuntimes.get(root)?.dispose === dispose) {
+      mountedRuntimes.delete(root);
+    }
+    if (runtimeRoot.__motionLexiconCleanup === dispose) {
+      delete runtimeRoot.__motionLexiconCleanup;
+    }
+    root.removeAttribute("data-motion-runtime-active");
+  };
+
+  mountedRuntimes.set(root, { config: mutableConfig, dispose });
+  runtimeRoot.__motionLexiconCleanup = dispose;
+  root.setAttribute("data-motion-runtime-active", "true");
+  root.dispatchEvent(new CustomEvent("motion:runtime-mounted", {
+    bubbles: true,
+    composed: true,
+    detail: { id: config.id }
+  }));
+  return dispose;
+}
+
+export function updateMotionRuntimeConfig(root: HTMLElement, config: MotionRuntimeConfig) {
+  const mounted = mountedRuntimes.get(root);
+  if (!mounted || mounted.config.id !== config.id) return false;
+  Object.assign(mounted.config, config);
+  return true;
+}
+
+export function replayMotionRuntime(root: HTMLElement) {
+  const replay = root.querySelector<HTMLButtonElement>("[data-motion-replay]");
+  if (replay) {
+    replay.click();
+    return;
+  }
+  for (const animation of root.getAnimations({ subtree: true })) {
+    animation.cancel();
+    animation.currentTime = 0;
+    void animation.play();
+  }
 }
 
 export function buildMotionRuntimeSource(config: MotionRuntimeConfig) {

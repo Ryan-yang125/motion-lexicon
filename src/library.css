@@ -128,7 +128,7 @@ kbd {
   place-items: center;
   border: 1px solid var(--library-line);
   border-bottom-color: var(--library-line-strong);
-  border-radius: 5px;
+  border-radius: var(--ui-radius-nav);
   color: var(--ink-dim);
   background: var(--library-subtle);
   font-family: var(--mono);
@@ -1308,7 +1308,7 @@ kbd {
   display: grid;
   place-items: center;
   border: 1px solid var(--library-line-strong);
-  border-radius: 5px;
+  border-radius: var(--ui-radius-nav);
   color: transparent;
   background: var(--panel-solid);
 }
@@ -2142,7 +2142,7 @@ kbd {
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--ink);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-nav);
   padding: 0 0.8rem;
   color: var(--bg);
   background: var(--ink);
@@ -2758,7 +2758,7 @@ kbd {
   height: 44px;
   padding: 11px;
   border: 1px solid var(--library-line);
-  border-radius: 9px;
+  border-radius: var(--ui-radius-nav);
   color: var(--accent);
   background: var(--library-subtle);
 }
@@ -2834,7 +2834,7 @@ kbd {
 .finder-match-summary > div > span { color: var(--ink-dim); }
 .finder-match-summary > div > small {
   border: 1px solid var(--library-line);
-  border-radius: 4px;
+  border-radius: var(--ui-radius-nav);
   padding: 0.15rem 0.35rem;
   color: var(--ink);
   background: var(--library-subtle);
@@ -2842,7 +2842,8 @@ kbd {
 
 .finder-low-confidence {
   margin: 0 0 1rem;
-  border-inline-start: 2px solid var(--accent);
+  border: 1px solid var(--library-line);
+  border-radius: var(--ui-radius-card);
   padding: 0.75rem 1rem;
   color: var(--ink-soft);
   background: var(--library-subtle);
@@ -2854,70 +2855,6 @@ kbd {
   overflow: hidden;
   border: 1px solid var(--library-line);
   border-radius: 9px;
-}
-
-.finder-compare-toolbar {
-  min-height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  border-bottom: 1px solid var(--library-line);
-  padding: 0.35rem 0.6rem 0.35rem 0.9rem;
-  background: var(--library-subtle);
-}
-
-.finder-compare-toolbar > span {
-  color: var(--ink-dim);
-  font-family: var(--mono);
-  font-size: 0.64rem;
-}
-
-.finder-candidate-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.finder-candidate {
-  min-width: 0;
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  border-inline-end: 1px solid var(--library-line);
-  background: var(--panel-solid);
-  transition: box-shadow 160ms var(--ease), background-color 160ms var(--ease);
-}
-
-.finder-candidate:last-child { border-inline-end: 0; }
-.finder-candidate.is-selected {
-  background: color-mix(in srgb, var(--accent) 3%, var(--panel-solid));
-  box-shadow: inset 0 2px var(--accent);
-}
-
-.finder-candidate-header {
-  min-height: 132px;
-  padding: 1.1rem;
-}
-
-.finder-candidate-header span {
-  color: var(--ink-dim);
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.finder-candidate-header h3 {
-  margin: 0.45rem 0 0.35rem;
-  font-size: 1.35rem;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
-}
-
-.finder-candidate-header p {
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: 0.72rem;
-  line-height: 1.5;
 }
 
 .finder-candidate-stage {
@@ -2934,14 +2871,6 @@ kbd {
   background-size: 18px 18px;
 }
 
-.finder-candidate-body {
-  display: grid;
-  align-content: start;
-  gap: 0.85rem;
-  padding: 1rem 1.1rem;
-}
-
-.finder-candidate-body > p,
 .finder-distinction p {
   margin: 0;
   color: var(--ink-soft);
@@ -2962,84 +2891,13 @@ kbd {
   font-size: 0.58rem;
 }
 
-.finder-candidate-actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.5rem;
-  border-top: 1px solid var(--library-line);
-  padding: 0.6rem;
-}
-
-.finder-select,
-.finder-candidate-actions a {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 620;
-}
-
-.finder-select {
-  border: 1px solid var(--library-line-strong);
-  padding: 0 0.7rem;
-  color: var(--ink);
-  background: transparent;
-}
-
-.finder-select:hover { background: var(--library-subtle); }
-.finder-select.is-selected {
-  border-color: var(--ink);
-  color: var(--bg);
-  background: var(--ink);
-}
-
-.finder-candidate-actions a {
-  padding: 0 0.45rem;
-  color: var(--ink-dim);
-}
-
-.finder-candidate-actions a:hover { color: var(--ink); }
-
 .finder-workbench {
   border-radius: 9px;
-}
-
-.finder-change-hint {
-  margin: 0.75rem 0 0;
-  color: var(--ink-dim);
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  text-align: end;
 }
 
 .finder-tune > .library-export {
   padding-bottom: 0;
   border-bottom: 0;
-}
-
-@media (max-width: 1100px) {
-  .finder-candidate-grid { grid-template-columns: 1fr; }
-  .finder-candidate {
-    grid-template-columns: minmax(190px, 0.48fr) minmax(280px, 0.72fr) minmax(220px, 0.6fr);
-    grid-template-rows: 1fr auto;
-    border-inline-end: 0;
-    border-bottom: 1px solid var(--library-line);
-  }
-  .finder-candidate:last-child { border-bottom: 0; }
-  .finder-candidate-header { min-height: 0; }
-  .finder-candidate-stage {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    border-top: 0;
-    border-bottom: 0;
-    border-inline: 1px solid var(--library-line);
-  }
-  .finder-candidate-body { grid-column: 3; }
-  .finder-candidate-actions { grid-column: 1; }
 }
 
 @media (max-width: 760px) {
@@ -3058,25 +2916,12 @@ kbd {
   .finder-examples button { width: 100%; }
   .finder-results,
   .finder-tune { padding: 2.75rem 0; }
-  .finder-candidate {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-  }
   .finder-candidate-stage {
-    grid-column: 1;
-    grid-row: auto;
     min-height: 260px;
     border: 0;
     border-top: 1px solid var(--library-line);
     border-bottom: 1px solid var(--library-line);
   }
-  .finder-candidate-body,
-  .finder-candidate-actions { grid-column: 1; }
-  .finder-candidate-actions {
-    grid-template-columns: 1fr;
-  }
-  .finder-candidate-actions a { border: 1px solid var(--library-line); }
   .finder-workbench { grid-template-columns: 1fr; }
   .finder-workbench .library-parameter-panel {
     border-inline-start: 0;
@@ -3085,10 +2930,8 @@ kbd {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .finder-candidate,
   .finder-search-field,
-  .finder-search-field button,
-  .finder-select {
+  .finder-search-field button {
     transition: none !important;
   }
 }

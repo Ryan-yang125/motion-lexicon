@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Minimize2, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Check, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale, ParamValues } from "../data/types";
@@ -7,7 +7,11 @@ import {
   getMotionRuntimeConfig
 } from "../lib/motion-engine";
 import type { MotionFinderCandidate } from "../lib/motion-finder";
-import { mountMotionRuntime } from "../lib/motion-runtime";
+import {
+  mountMotionRuntime,
+  replayMotionRuntime,
+  updateMotionRuntimeConfig
+} from "../lib/motion-runtime";
 import { Button } from "./ui/button";
 
 type MotionCompareProps = {
@@ -20,10 +24,9 @@ type MotionCompareProps = {
 
 type ComparisonSceneKind = "entrance" | "continuity" | "sequence";
 
-function comparisonSceneKind(candidates: MotionFinderCandidate[]): ComparisonSceneKind {
-  const categoryId = candidates[0]?.recipe.categoryId;
-  if (categoryId === "state-transitions") return "continuity";
-  if (categoryId === "sequencing") return "sequence";
+function comparisonSceneKind(candidate: MotionFinderCandidate): ComparisonSceneKind {
+  if (candidate.recipe.categoryId === "state-transitions") return "continuity";
+  if (candidate.recipe.categoryId === "sequencing") return "sequence";
   return "entrance";
 }
 
@@ -64,12 +67,12 @@ function buildComparisonSceneCss(
 ) {
   const root = `.motion-demo.motion-demo--${candidate.recipe.canonicalId}`;
   const common = `${root} .motion-list{display:grid;gap:.4rem;margin:0;padding:0;list-style:none}
-${root} .motion-list-item{padding:.35rem .5rem;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:6px}
+${root} .motion-list-item{padding:.35rem .5rem;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:8px}
 ${root} [data-spring-target]{pointer-events:none;cursor:default!important}`;
 
   if (kind === "continuity") {
     return `${common}
-${root} .motion-state{color:#18181b;background:#fff}
+${root} .motion-state{color:#292929;background:#fff}
 ${root} .motion-state--from{transform:translate3d(-12px,7px,0) scale(.94);background:#f4f4f5}`;
   }
 
@@ -78,28 +81,40 @@ ${root} .motion-state--from{transform:translate3d(-12px,7px,0) scale(.94);backgr
 
 function CandidatePreview({
   candidate,
-  compact,
   kind,
   locale,
   replayKey,
   values
 }: {
   candidate: MotionFinderCandidate;
-  compact: boolean;
   kind: ComparisonSceneKind;
   locale: Locale;
   replayKey: number;
   values: ParamValues;
 }) {
   const runtimeHostRef = useRef<HTMLDivElement>(null);
+  const styleRef = useRef<HTMLStyleElement | null>(null);
+  const runtimeRootRef = useRef<HTMLElement | null>(null);
   const previousReplayRef = useRef(replayKey);
-  const output = useMemo(
-    () => ({
-      css: `${buildRecipeCss(candidate.recipe, values)}\n\n${buildComparisonSceneCss(candidate, kind)}`,
-      html: buildComparisonSceneHtml(candidate, locale, kind)
-    }),
-    [candidate, kind, locale, values]
+  const sceneHtml = useMemo(
+    () => buildComparisonSceneHtml(candidate, locale, kind),
+    [candidate, kind, locale]
   );
+  const css = useMemo(
+    () => `${buildRecipeCss(candidate.recipe, values)}\n\n${buildComparisonSceneCss(candidate, kind)}`,
+    [candidate, kind, values]
+  );
+  const runtimeConfig = useMemo(
+    () => getMotionRuntimeConfig(candidate.recipe, values, false),
+    [candidate.recipe, values]
+  );
+  const latestCssRef = useRef(css);
+  const runtimeConfigRef = useRef(runtimeConfig);
+
+  useEffect(() => {
+    latestCssRef.current = css;
+    runtimeConfigRef.current = runtimeConfig;
+  }, [css, runtimeConfig]);
 
   useEffect(() => {
     const host = runtimeHostRef.current;
@@ -107,32 +122,47 @@ function CandidatePreview({
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     const style = document.createElement("style");
     const scene = document.createElement("div");
-    style.textContent = `:host { display: grid; place-items: center; width: 100%; min-width: 0; min-height: 0; }
-:host > div { display: grid; place-items: center; width: 100%; }
-${output.css}
-:host([data-compact="true"]) .motion-demo {
-  box-sizing: border-box;
-  height: 7rem;
-  min-height: 7rem;
-  padding: 0.75rem;
-}`;
-    scene.innerHTML = output.html;
+    style.textContent = `:host { display:grid;place-items:center;width:100%;min-width:0;min-height:0; }
+:host > div { display:grid;place-items:center;width:100%; }
+${latestCssRef.current}`;
+    scene.innerHTML = sceneHtml;
     shadow.replaceChildren(style, scene);
     const root = scene.querySelector<HTMLElement>(".motion-demo");
     if (!root) return;
-    const autoplay = previousReplayRef.current !== replayKey;
+    styleRef.current = style;
+    runtimeRootRef.current = root;
+    const cleanup = mountMotionRuntime(root, {
+      ...runtimeConfigRef.current,
+      autoplay: true
+    });
+    return () => {
+      cleanup();
+      styleRef.current = null;
+      runtimeRootRef.current = null;
+    };
+  }, [sceneHtml]);
+
+  useEffect(() => {
+    const style = styleRef.current;
+    const root = runtimeRootRef.current;
+    if (style) {
+      style.textContent = `:host { display:grid;place-items:center;width:100%;min-width:0;min-height:0; }
+:host > div { display:grid;place-items:center;width:100%; }
+${css}`;
+    }
+    if (root) updateMotionRuntimeConfig(root, runtimeConfig);
+  }, [css, runtimeConfig]);
+
+  useEffect(() => {
+    if (previousReplayRef.current === replayKey) return;
     previousReplayRef.current = replayKey;
-    return mountMotionRuntime(
-      root,
-      getMotionRuntimeConfig(candidate.recipe, values, autoplay)
-    );
-  }, [candidate.recipe, output.css, output.html, replayKey, values]);
+    if (runtimeRootRef.current) replayMotionRuntime(runtimeRootRef.current);
+  }, [replayKey]);
 
   return (
     <div
       ref={runtimeHostRef}
       className="finder-candidate-stage motion-runtime-stage"
-      data-compact={compact ? "true" : undefined}
       aria-label={`${candidate.name} — ${candidate.description}`}
     />
   );
@@ -147,128 +177,85 @@ export function MotionCompare({
 }: MotionCompareProps) {
   const { t } = useTranslation();
   const [replayKey, setReplayKey] = useState(0);
-  const [isComparing, setIsComparing] = useState(false);
-  const sceneKind = comparisonSceneKind(candidates);
+  const selectedCandidate = candidates.find(
+    (candidate) => candidate.variantId === selectedId
+  ) ?? candidates[0];
 
-  function replayTogether() {
-    setIsComparing(true);
-    setReplayKey((current) => current + 1);
-  }
+  if (!selectedCandidate) return null;
 
-  function selectCandidate(candidate: MotionFinderCandidate) {
-    setIsComparing(false);
-    onSelect(candidate);
-  }
+  const sceneKind = comparisonSceneKind(selectedCandidate);
+  const previewValues = selectedValues ?? selectedCandidate.values;
 
   return (
-    <div
-      className={`finder-compare apple-motion-chooser ${
-        isComparing ? "is-comparing" : "is-focused"
-      }`}
-    >
-      <div className="finder-compare-toolbar">
-        <div className="finder-compare-status">
-          <span>{t("finder.resultCount", { count: candidates.length })}</span>
-          <strong>{isComparing ? t("finder.resultTitle") : t("finder.selected")}</strong>
-        </div>
-        <div className="finder-compare-actions">
-          {isComparing ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              aria-controls="finder-candidate-deck"
-              onClick={() => setIsComparing(false)}
-            >
-              <Minimize2 aria-hidden="true" size={15} strokeWidth={1.8} />
-              {locale === "zh" ? "聚焦已选" : "Focus selection"}
-            </Button>
-          ) : null}
+    <div className="finder-compare apple-motion-chooser">
+      <article
+        id="finder-active-preview"
+        className="finder-active-preview"
+        data-variant-id={selectedCandidate.variantId}
+        aria-labelledby={`finder-active-title-${selectedCandidate.variantId}`}
+      >
+        <header className="finder-active-preview-header">
+          <div>
+            <span>{t("finder.candidateLabel", { rank: selectedCandidate.rank })}</span>
+            <h3 id={`finder-active-title-${selectedCandidate.variantId}`}>
+              {selectedCandidate.name}
+            </h3>
+            <p>{selectedCandidate.description}</p>
+          </div>
           <Button
             type="button"
             variant="soft"
             size="sm"
-            aria-controls="finder-candidate-deck"
-            aria-pressed={isComparing}
-            onClick={replayTogether}
+            onClick={() => setReplayKey((current) => current + 1)}
           >
-            <RotateCcw aria-hidden="true" size={15} strokeWidth={1.8} />
-            {t("finder.replayAll")}
+            <RotateCcw aria-hidden="true" size={14} strokeWidth={1.8} />
+            {t("common.replay")}
           </Button>
-        </div>
-      </div>
+        </header>
 
-      <div
-        id="finder-candidate-deck"
-        className="finder-candidate-grid finder-choice-deck"
-        data-layout={isComparing ? "compare" : "focus"}
-        aria-live="polite"
-      >
+        <CandidatePreview
+          key={selectedCandidate.variantId}
+          candidate={selectedCandidate}
+          kind={sceneKind}
+          locale={locale}
+          replayKey={replayKey}
+          values={previewValues}
+        />
+
+        <div className="finder-active-preview-copy">
+          <p>{selectedCandidate.reason}</p>
+          {selectedCandidate.distinction ? (
+            <div className="finder-distinction">
+              <span>{t("finder.distinction")}</span>
+              <p>{selectedCandidate.distinction}</p>
+            </div>
+          ) : null}
+          <a href={selectedCandidate.recipePath}>
+            {t("finder.openRecipe")}
+            <ArrowUpRight aria-hidden="true" size={14} />
+          </a>
+        </div>
+      </article>
+
+      <div className="finder-candidate-switcher" aria-label={t("finder.resultTitle")}>
         {candidates.map((candidate) => {
-          const selected = candidate.variantId === selectedId;
-          const previewValues = selected && selectedValues ? selectedValues : candidate.values;
+          const selected = candidate.variantId === selectedCandidate.variantId;
           return (
-            <article
-              className={`finder-candidate apple-motion-card ${
-                selected
-                  ? "finder-candidate--primary apple-motion-primary is-selected"
-                  : "finder-candidate--alternative apple-motion-alternative"
-              }`}
+            <button
+              type="button"
+              className={`finder-candidate-choice${selected ? " is-selected" : ""}`}
               key={candidate.variantId}
               data-variant-id={candidate.variantId}
               data-rank={candidate.rank}
-              aria-labelledby={`finder-candidate-title-${candidate.variantId}`}
+              aria-controls="finder-active-preview"
+              aria-pressed={selected}
+              onClick={() => onSelect(candidate)}
             >
-              <header className="finder-candidate-header">
-                <div>
-                  <div className="finder-candidate-meta">
-                    <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
-                    {selected ? <strong>{t("finder.selected")}</strong> : null}
-                  </div>
-                  <h3 id={`finder-candidate-title-${candidate.variantId}`}>
-                    {candidate.name}
-                  </h3>
-                  <p>{candidate.description}</p>
-                </div>
-              </header>
-
-              <CandidatePreview
-                candidate={candidate}
-                compact={isComparing || !selected}
-                kind={sceneKind}
-                locale={locale}
-                replayKey={replayKey}
-                values={previewValues}
-              />
-
-              <div className="finder-candidate-body">
-                <p>{candidate.reason}</p>
-                {candidate.distinction ? (
-                  <div className="finder-distinction">
-                    <span>{t("finder.distinction")}</span>
-                    <p>{candidate.distinction}</p>
-                  </div>
-                ) : null}
-              </div>
-
-              <footer className="finder-candidate-actions">
-                <button
-                  type="button"
-                  className={selected ? "finder-select is-selected" : "finder-select"}
-                  aria-pressed={selected}
-                  onClick={() => selectCandidate(candidate)}
-                >
-                  {selected ? <Check aria-hidden="true" size={15} /> : null}
-                  {selected
-                    ? t("finder.selected")
-                    : t("finder.select", { name: candidate.name })}
-                </button>
-                <a href={candidate.recipePath}>
-                  {t("finder.openRecipe")}
-                  <ArrowUpRight aria-hidden="true" size={14} />
-                </a>
-              </footer>
-            </article>
+              <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
+              <strong>{candidate.name}</strong>
+              <small>{candidate.description}</small>
+              {selected ? <Check aria-hidden="true" size={14} /> : null}
+            </button>
           );
         })}
       </div>

@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 
 const query = "卡片弹出来要有重量，最后收得住";
 
-test("Finder restores a shared comparison and keeps variant CSS isolated", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name.includes("mobile"), "The complete comparison contract runs once on desktop.");
+test("Finder restores one active runtime and switches through three static candidates", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The complete selection contract runs once on desktop.");
 
   const runtimeErrors: string[] = [];
   page.on("pageerror", (error) => runtimeErrors.push(error.message));
@@ -17,80 +17,110 @@ test("Finder restores a shared comparison and keeps variant CSS isolated", async
 
   await expect(page).toHaveTitle(/动效选择器/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-  await expect(page.locator(".finder-candidate")).toHaveCount(3);
-  await expect(page.locator(".finder-candidate").nth(0)).toHaveAttribute("data-variant-id", "scale-in");
-  await expect(page.locator("[data-variant-id='pop-in']")).toHaveClass(/is-selected/);
+  await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "pop-in");
+  await expect(page.locator(".finder-candidate-choice[data-variant-id='pop-in']")).toHaveAttribute(
+    "aria-pressed",
+    "true"
+  );
 
-  const isolatedStyles = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
-    stages.map((stage) => ({
-      hasShadowRoot: Boolean(stage.shadowRoot),
-      css: stage.shadowRoot?.querySelector("style")?.textContent ?? ""
+  const initialRuntime = await page.locator(".finder-candidate-stage").evaluate((stage) => ({
+    hasShadowRoot: Boolean(stage.shadowRoot),
+    runtimeCount: stage.shadowRoot?.querySelectorAll(".motion-demo").length ?? 0,
+    css: stage.shadowRoot?.querySelector("style")?.textContent ?? "",
+    sceneKind: stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]")?.dataset.comparisonKind
+  }));
+  expect(initialRuntime.hasShadowRoot).toBe(true);
+  expect(initialRuntime.runtimeCount).toBe(1);
+  expect(initialRuntime.css).toContain("scale(0.86)");
+  expect(initialRuntime.sceneKind).toBe("entrance");
+
+  const staticChoices = await page.locator(".finder-candidate-choice").evaluateAll((choices) =>
+    choices.map((choice) => ({
+      hasShadowRoot: Boolean(choice.shadowRoot),
+      runtimeCount: choice.querySelectorAll(".motion-demo, .finder-candidate-stage").length
     }))
   );
-  expect(isolatedStyles.every((stage) => stage.hasShadowRoot)).toBe(true);
-  expect(isolatedStyles[0].css).toContain("scale(0.92)");
-  expect(isolatedStyles[1].css).toContain("scale(0.86)");
-  const comparisonScenes = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
-    stages.map((stage) => {
-      const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
-      return {
-        content: scene?.innerHTML ?? "",
-        kind: scene?.dataset.comparisonKind,
-        label: scene?.querySelector("strong")?.textContent ?? ""
-      };
-    })
-  );
-  expect(comparisonScenes.map((scene) => scene.kind)).toEqual(["entrance", "entrance", "entrance"]);
-  expect(new Set(comparisonScenes.map((scene) => scene.content)).size).toBe(1);
-  expect(comparisonScenes.map((scene) => scene.label)).toEqual(["产品更新", "产品更新", "产品更新"]);
+  expect(staticChoices.every((choice) => !choice.hasShadowRoot && choice.runtimeCount === 0)).toBe(true);
 
-  const springComparisonTarget = await page
-    .locator("[data-variant-id='spring'] .finder-candidate-stage")
-    .evaluate((stage) => {
-      const target = stage.shadowRoot?.querySelector<HTMLElement>("[data-spring-target]");
-      return target
-        ? {
-            cursor: getComputedStyle(target).cursor,
-            pointerEvents: getComputedStyle(target).pointerEvents,
-            tabIndex: target.tabIndex
-          }
-        : null;
-    });
-  expect(springComparisonTarget).toEqual({
+  await page.locator(".finder-candidate-choice[data-variant-id='scale-in']").click();
+  await expect(page).toHaveURL(/selected=scale-in/);
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "scale-in");
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
+  await expect(page.getByRole("heading", { level: 2, name: /调节.*缩放入场/ })).toBeVisible();
+  const scaleCss = await page.locator(".finder-candidate-stage").evaluate(
+    (stage) => stage.shadowRoot?.querySelector("style")?.textContent ?? ""
+  );
+  expect(scaleCss).toContain("scale(0.92)");
+
+  await page.locator(".finder-candidate-choice[data-variant-id='spring']").click();
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "spring");
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
+  const springTarget = await page.locator(".finder-candidate-stage").evaluate((stage) => {
+    const target = stage.shadowRoot?.querySelector<HTMLElement>("[data-spring-target]");
+    return target
+      ? {
+          cursor: getComputedStyle(target).cursor,
+          pointerEvents: getComputedStyle(target).pointerEvents,
+          tabIndex: target.tabIndex
+        }
+      : null;
+  });
+  expect(springTarget).toEqual({
     cursor: "default",
     pointerEvents: "none",
     tabIndex: -1
   });
 
-  const replayTogether = page.getByRole("button", { name: "同步重播" });
-  await replayTogether.focus();
-  await expect(replayTogether).toBeFocused();
-  await replayTogether.click();
-  const comparisonGeometry = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
-    stages.map((stage) => {
-      const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
-      return {
-        stageWidth: (stage as HTMLElement).offsetWidth,
-        stageHeight: (stage as HTMLElement).offsetHeight,
-        sceneWidth: scene?.offsetWidth ?? 0,
-        sceneHeight: scene?.offsetHeight ?? 0
-      };
-    })
-  );
-  expect(new Set(comparisonGeometry.map((item) => `${item.stageWidth}x${item.stageHeight}`)).size).toBe(1);
-  expect(new Set(comparisonGeometry.map((item) => `${item.sceneWidth}x${item.sceneHeight}`)).size).toBe(1);
-  await expect(page.getByRole("heading", { level: 2, name: /调节.*弹入/ })).toBeVisible();
+  const replay = page.locator(".finder-active-preview").getByRole("button", { name: "重播" });
+  await replay.focus();
+  await expect(replay).toBeFocused();
+  await replay.click();
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+
+  await expect(page.getByText("高度匹配", { exact: true })).toHaveCount(0);
+  await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-active-preview").getByRole("button", { name: "重播" })).toHaveCount(1);
+  expect(runtimeErrors).toEqual([]);
+});
+
+test("Finder output tabs preserve the active preview DOM", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The output and preview identity contract runs once on desktop.");
 
   await page.goto(
-    `/zh/finder/?q=${encodeURIComponent(query)}&compare=scale-in,scale-in,pop-in&selected=scale-in`
+    `/zh/finder/?q=${encodeURIComponent(query)}&compare=scale-in,pop-in,spring&selected=pop-in`
   );
-  await expect(page.locator(".finder-candidate")).toHaveCount(3);
-  const normalizedVariants = await page.locator(".finder-candidate").evaluateAll((candidates) =>
-    candidates.map((candidate) => candidate.getAttribute("data-variant-id"))
+
+  const stage = page.locator(".finder-candidate-stage");
+  await expect(stage).toHaveCount(1);
+  await expect(page.getByRole("tab", { name: "提示词" })).toHaveAttribute("aria-selected", "true");
+  const originalRuntime = await stage.evaluateHandle(
+    (element) => element.shadowRoot?.querySelector(".motion-demo") ?? null
   );
-  expect(normalizedVariants).toEqual(["scale-in", "pop-in", "spring"]);
-  expect(new Set(normalizedVariants).size).toBe(3);
-  expect(runtimeErrors).toEqual([]);
+
+  await page.getByRole("tab", { name: "代码" }).click();
+  await expect(page).toHaveURL(/tab=code/);
+  await expect(page.getByRole("tab", { name: "代码" })).toHaveAttribute("aria-selected", "true");
+  expect(await stage.evaluate(
+    (element, runtime) => element.shadowRoot?.querySelector(".motion-demo") === runtime,
+    originalRuntime
+  )).toBe(true);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
+
+  await page.getByRole("tab", { name: "提示词" }).click();
+  await expect(page).not.toHaveURL(/(?:\?|&)tab=/);
+  await expect(page.getByRole("tab", { name: "提示词" })).toHaveAttribute("aria-selected", "true");
+  expect(await stage.evaluate(
+    (element, runtime) => element.shadowRoot?.querySelector(".motion-demo") === runtime,
+    originalRuntime
+  )).toBe(true);
+
+  await originalRuntime.dispose();
 });
 
 test("Finder creates a shareable selection and parameter state", async ({ page }, testInfo) => {
@@ -105,35 +135,35 @@ test("Finder creates a shareable selection and parameter state", async ({ page }
   await expect(page).toHaveURL(/q=/);
   await expect(page).toHaveURL(/compare=/);
   await expect(page).toHaveURL(/selected=spring/);
+  await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
 
-  await page.getByRole("button", { name: /选择.*弹入/ }).click();
+  const popInChoice = page.locator(".finder-candidate-choice[data-variant-id='pop-in']");
+  await popInChoice.click();
   await expect(page).toHaveURL(/selected=pop-in/);
-  await expect(page.locator("[data-variant-id='pop-in']")).toHaveClass(/is-selected/);
+  await expect(popInChoice).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "pop-in");
 
   const firstSlider = page.locator(".finder-tune").getByRole("slider").first();
   await firstSlider.press("ArrowRight");
   await expect(page).toHaveURL(/duration=/);
 
-  await page.locator(".apple-export-disclosure summary").click();
-  await page.getByRole("tab", { name: "Prompt" }).click();
-  await expect(page).toHaveURL(/tab=prompt/);
+  await page.getByRole("tab", { name: "代码" }).click();
+  await expect(page).toHaveURL(/tab=code/);
   await firstSlider.press("ArrowRight");
-  await expect(page).toHaveURL(/tab=prompt/);
+  await expect(page).toHaveURL(/tab=code/);
   await page.reload();
-  await expect(page.getByRole("tab", { name: "Prompt" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tab", { name: "代码" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
 
   const draft = "列表需要更轻、更连续地出现";
   await page.getByRole("searchbox", { name: "描述你想要的动效" }).fill(draft);
   await page.locator(".finder-tune").getByRole("slider").first().press("ArrowRight");
   await expect(page.getByRole("searchbox", { name: "描述你想要的动效" })).toHaveValue(draft);
-
-  const selectButton = page.locator("[data-variant-id='pop-in'] .finder-select");
-  const box = await selectButton.boundingBox();
-  expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
 });
 
-test("Finder keeps every intent group on one neutral comparison scene", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name.includes("mobile"), "Shared scene geometry runs once on desktop.");
+test("Finder keeps every intent group on one neutral active scene", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The active scene contract runs once on desktop.");
 
   const scenarios = [
     { query: "卡片弹出来要有重量，最后收得住", kind: "entrance" },
@@ -143,62 +173,58 @@ test("Finder keeps every intent group on one neutral comparison scene", async ({
 
   for (const scenario of scenarios) {
     await page.goto(`/zh/finder/?q=${encodeURIComponent(scenario.query)}`);
-    await expect(page.locator(".finder-candidate")).toHaveCount(3);
-    await page.getByRole("button", { name: "同步重播" }).click();
+    await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+    await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+    await expect(page.locator(".motion-demo")).toHaveCount(1);
 
-    const scenes = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
-      stages.map((stage) => {
-        const scene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
-        return {
-          content: scene?.innerHTML ?? "",
-          kind: scene?.dataset.comparisonKind,
-          width: scene?.offsetWidth ?? 0,
-          height: scene?.offsetHeight ?? 0,
-          layers: scene
-            ? Array.from(scene.querySelectorAll<HTMLElement>(".motion-state")).map((layer) => ({
-                className: layer.className,
-                position: getComputedStyle(layer).position,
-                left: layer.offsetLeft,
-                top: layer.offsetTop,
-                width: layer.offsetWidth,
-                height: layer.offsetHeight
-              }))
-            : []
-        };
-      })
-    );
+    const scene = await page.locator(".finder-candidate-stage").evaluate((stage) => {
+      const activeScene = stage.shadowRoot?.querySelector<HTMLElement>("[data-comparison-scene]");
+      return {
+        kind: activeScene?.dataset.comparisonKind,
+        layers: activeScene
+          ? Array.from(activeScene.querySelectorAll<HTMLElement>(".motion-state")).map((layer) => ({
+              position: getComputedStyle(layer).position,
+              width: layer.offsetWidth,
+              height: layer.offsetHeight
+            }))
+          : []
+      };
+    });
 
-    expect(scenes.map((scene) => scene.kind)).toEqual([
-      scenario.kind,
-      scenario.kind,
-      scenario.kind
-    ]);
-    expect(new Set(scenes.map((scene) => scene.content)).size).toBe(1);
-    expect(new Set(scenes.map((scene) => `${scene.width}x${scene.height}`)).size).toBe(1);
+    expect(scene.kind).toBe(scenario.kind);
     if (scenario.kind === "continuity") {
-      expect(new Set(scenes.map((scene) => JSON.stringify(scene.layers))).size).toBe(1);
-      expect(scenes[0].layers).toHaveLength(2);
-      expect(scenes[0].layers.every((layer) => layer.position === "absolute")).toBe(true);
+      expect(scene.layers).toHaveLength(2);
+      expect(scene.layers.every((layer) => layer.position === "absolute")).toBe(true);
     }
   }
 });
 
-test("Finder remains readable on a mobile viewport", async ({ page }, testInfo) => {
+test("Finder candidate switches remain usable on a mobile viewport", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile layout runs once in the mobile project.");
 
   await page.goto(`/en/finder/?q=${encodeURIComponent("bring in a list one by one")}`);
   await expect(page.locator("h1#finder-title")).toHaveText(/Describe the feel/);
   await expect(page.getByRole("region", { name: /Describe the feel/ })).toBeVisible();
-  await expect(page.locator(".finder-candidate")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
 
-  const alternative = page.locator(".apple-motion-alternative").first();
+  const choiceHeights = await page.locator(".finder-candidate-choice").evaluateAll((choices) =>
+    choices.map((choice) => (choice as HTMLElement).getBoundingClientRect().height)
+  );
+  expect(choiceHeights.every((height) => height >= 44)).toBe(true);
+
+  const alternative = page.locator(".finder-candidate-choice[aria-pressed='false']").first();
   const alternativeId = await alternative.getAttribute("data-variant-id");
-  const selectAlternative = alternative.locator(".finder-select");
-  await expect(selectAlternative).toBeVisible();
-  const target = await selectAlternative.boundingBox();
-  expect(target?.height ?? 0).toBeGreaterThanOrEqual(44);
-  await selectAlternative.click();
-  await expect(page.locator(`[data-variant-id='${alternativeId}']`)).toHaveClass(/is-selected/);
+  expect(alternativeId).toBeTruthy();
+  await alternative.click();
+  const selectedChoice = page.locator(
+    `.finder-candidate-choice[data-variant-id='${alternativeId!}']`
+  );
+  await expect(selectedChoice).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", alternativeId!);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
+  await expect(page.locator(".motion-demo")).toHaveCount(1);
 
   const hasHorizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > window.innerWidth
@@ -211,7 +237,8 @@ test("Finder header fits a narrow desktop viewport", async ({ page }, testInfo) 
 
   await page.setViewportSize({ width: 390, height: 900 });
   await page.goto(`/zh/finder/?q=${encodeURIComponent(query)}`);
-  await expect(page.locator(".finder-candidate")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
 
   const hasHorizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth > window.innerWidth

@@ -1,5 +1,5 @@
 import { RotateCcw } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale, MotionRecipe, ParamValues } from "../data/types";
 import { text } from "../data/site";
@@ -8,7 +8,11 @@ import {
   buildRecipeHtml,
   getMotionRuntimeConfig
 } from "../lib/motion-engine";
-import { mountMotionRuntime } from "../lib/motion-runtime";
+import {
+  mountMotionRuntime,
+  replayMotionRuntime,
+  updateMotionRuntimeConfig
+} from "../lib/motion-runtime";
 import { Button } from "./ui/button";
 
 type MotionPreviewProps = {
@@ -19,9 +23,7 @@ type MotionPreviewProps = {
 
 export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
   const { t } = useTranslation();
-  const [replayKey, setReplayKey] = useState(0);
   const runtimeHostRef = useRef<HTMLDivElement>(null);
-  const mountedReplayRef = useRef(0);
   const output = useMemo(
     () => ({
       css: buildRecipeCss(recipe, values),
@@ -29,14 +31,28 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
     }),
     [locale, recipe, values]
   );
+  const runtimeConfig = useMemo(
+    () => getMotionRuntimeConfig(recipe, values, false),
+    [recipe, values]
+  );
+  const runtimeConfigRef = useRef(runtimeConfig);
+
+  useEffect(() => {
+    runtimeConfigRef.current = runtimeConfig;
+    const root = runtimeHostRef.current?.querySelector<HTMLElement>(".motion-demo");
+    if (root) updateMotionRuntimeConfig(root, runtimeConfig);
+  }, [runtimeConfig]);
 
   useEffect(() => {
     const root = runtimeHostRef.current?.querySelector<HTMLElement>(".motion-demo");
     if (!root) return;
-    const autoplay = mountedReplayRef.current !== replayKey;
-    mountedReplayRef.current = replayKey;
-    return mountMotionRuntime(root, getMotionRuntimeConfig(recipe, values, autoplay));
-  }, [output.html, recipe, replayKey, values]);
+    return mountMotionRuntime(root, runtimeConfigRef.current);
+  }, [output.html, recipe.id]);
+
+  function replay() {
+    const root = runtimeHostRef.current?.querySelector<HTMLElement>(".motion-demo");
+    if (root) replayMotionRuntime(root);
+  }
 
   return (
     <div className="preview-panel">
@@ -46,7 +62,7 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
           type="button"
           variant="soft"
           size="sm"
-          onClick={() => setReplayKey((current) => current + 1)}
+          onClick={replay}
         >
           <RotateCcw aria-hidden="true" size={15} strokeWidth={1.8} />
           {t("common.replay")}
@@ -63,7 +79,6 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
         />
         <div
           className="motion-preview-runtime"
-          key={`${recipe.id}:${replayKey}`}
           ref={runtimeHostRef}
           // This HTML is generated exclusively from the local, typed motion catalog.
           dangerouslySetInnerHTML={{ __html: output.html }}

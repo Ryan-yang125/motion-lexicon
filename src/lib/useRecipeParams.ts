@@ -10,15 +10,24 @@ export function useRecipeParams(recipe: MotionRecipe) {
   // React has attached to the complete document.
   const [values, setValues] = useState<ParamValues>(() => getDefaultParamValues(recipe));
   const valuesRef = useRef(values);
+  const pendingValuesRef = useRef<ParamValues | null>(null);
+  const frameRef = useRef(0);
+
+  const cancelPendingFrame = useCallback(() => {
+    if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+    frameRef.current = 0;
+    pendingValuesRef.current = null;
+  }, []);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
+      cancelPendingFrame();
       const next = parseParamValues(recipe, new URLSearchParams(window.location.search));
       valuesRef.current = next;
       setValues(next);
     }, 0);
     return () => window.clearTimeout(timeout);
-  }, [recipe]);
+  }, [cancelPendingFrame, recipe]);
 
   const writeUrlState = useCallback((next: ParamValues) => {
     if (typeof window === "undefined") {
@@ -40,22 +49,33 @@ export function useRecipeParams(recipe: MotionRecipe) {
     });
   }, [navigate, recipe]);
 
+  useEffect(() => cancelPendingFrame, [cancelPendingFrame]);
+
   const updateValue = useCallback(
     (paramId: string, value: ParamValue) => {
       const next = { ...valuesRef.current, [paramId]: value };
       valuesRef.current = next;
-      setValues(next);
-      writeUrlState(next);
+      pendingValuesRef.current = next;
+      if (frameRef.current) return;
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = 0;
+        const pending = pendingValuesRef.current;
+        pendingValuesRef.current = null;
+        if (!pending) return;
+        setValues(pending);
+        writeUrlState(pending);
+      });
     },
     [writeUrlState]
   );
 
   const resetValues = useCallback(() => {
+    cancelPendingFrame();
     const defaults = getDefaultParamValues(recipe);
     valuesRef.current = defaults;
     setValues(defaults);
     writeUrlState(defaults);
-  }, [recipe, writeUrlState]);
+  }, [cancelPendingFrame, recipe, writeUrlState]);
 
   return { values, updateValue, resetValues };
 }

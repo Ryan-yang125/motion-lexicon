@@ -1,4 +1,4 @@
 interface:
   display_name: "Motion Lexicon"
-  short_description: "Turn vague motion intent into comparable recipes"
-  default_prompt: "Use $motion-lexicon to recommend three UI motion candidates with reasons and a compare URL, then inspect and export the selected recipe."
+  short_description: "Turn vague motion intent into ranked motion choices"
+  default_prompt: "Use $motion-lexicon to recommend three UI motion candidates with reasons and a Finder URL from compareUrl, then inspect and export the selected recipe."

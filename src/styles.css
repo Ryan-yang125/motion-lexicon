@@ -98,7 +98,7 @@ textarea:focus-visible,
 }
 
 ::selection {
-  color: #ffffff;
+  color: var(--apple-action-fg);
   background: var(--accent);
 }
 
@@ -130,13 +130,13 @@ textarea:focus-visible,
 
 /* Local UI primitives */
 .ml-button {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
   border: 1px solid var(--ink-faint);
-  border-radius: 6px;
+  border-radius: var(--ui-radius-nav);
   padding: 0 0.85rem;
   color: var(--ink);
   background: transparent;
@@ -152,12 +152,12 @@ textarea:focus-visible,
 .ml-button:active { transform: scale(0.98); }
 
 .ml-button-sm {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   padding: 0 0.7rem;
 }
 
 .ml-button-icon {
-  width: 2.5rem;
+  width: 2.75rem;
   padding: 0;
 }
 
@@ -195,7 +195,7 @@ textarea:focus-visible,
   width: 100%;
   min-height: 2.75rem;
   border: 1px solid var(--ink-faint);
-  border-radius: 7px;
+  border-radius: var(--ui-radius-nav);
   padding: 0 0.8rem;
   color: var(--ink);
   background: var(--panel-solid);
@@ -262,15 +262,15 @@ textarea:focus-visible,
   gap: 0.25rem;
   padding: 0.25rem;
   border: 1px solid var(--ink-faint);
-  border-radius: 7px;
+  border-radius: var(--ui-radius-nav);
   background: var(--panel-raised);
 }
 
 .ml-toggle-item,
 .ml-tabs-trigger {
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--ui-radius-nav);
   color: var(--ink-dim);
   background: transparent;
   font-size: 0.72rem;
@@ -406,7 +406,7 @@ textarea:focus-visible,
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--ink-faint);
-  border-radius: 5px;
+  border-radius: var(--ui-radius-nav);
   padding: 0 0.5rem;
   color: var(--ink);
   background: var(--panel-raised);

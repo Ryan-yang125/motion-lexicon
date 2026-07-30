@@ -220,7 +220,7 @@ function baseCss(root: string) {
   color: #18181b;
   background: #fafafa;
   border: 1px solid #e4e4e7;
-  border-radius: 12px;
+  border-radius: 16px;
   isolation: isolate;
 }
 
@@ -236,9 +236,11 @@ ${root} .motion-surface {
   padding: 1.25rem;
   background: #ffffff;
   border: 1px solid #e4e4e7;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 10px 28px rgb(0 0 0 / 7%);
+  border-radius: 16px;
+  box-shadow: none;
 }
+
+${root} .motion-surface strong { font-weight: 500; }
 
 ${root} .motion-line {
   display: block;
@@ -259,7 +261,7 @@ ${root} .motion-button {
   font-weight: 700;
   background: #18181b;
   border: 0;
-  border-radius: 7px;
+  border-radius: 999px;
   cursor: pointer;
 }
 
@@ -301,7 +303,7 @@ ${root} .motion-pause-button {
   font: 650 0.78rem/1 ui-sans-serif, system-ui, sans-serif;
   background: #ffffff;
   border: 1px solid #d4d4d8;
-  border-radius: 7px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -339,7 +341,7 @@ ${root} .motion-ripple-ink {
 }
 
 ${root} .motion-state-stack { position: relative; width: min(100%, 18rem); height: 9rem; }
-${root} .motion-state { position: absolute; inset: 0; display: grid; place-items: center; padding: 1rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; }
+${root} .motion-state { position: absolute; inset: 0; display: grid; place-items: center; padding: 1rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; }
 ${root} .motion-state--to { background: #18181b; color: white; }
 
 ${root} .motion-scroll-track > span { color: #71717a; font: 600 0.72rem/1.2 ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -460,7 +462,7 @@ function behaviorCss(recipe: MotionRecipe, inputValues: ParamValues) {
   if (id === "stagger") {
     const stagger = numberValue(values, "stagger", 60);
     return `${root} .motion-list { display: grid; gap: 0.6rem; width: min(100%, 18rem); margin: 0; padding: 0; list-style: none; }
-${root} .motion-list-item { padding: 0.8rem 1rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; animation: ${name} ${duration}ms ${ease} both; }
+${root} .motion-list-item { padding: 0.8rem 1rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; animation: ${name} ${duration}ms ${ease} both; }
 ${root} .motion-list-item:nth-child(2) { animation-delay: ${stagger}ms; }
 ${root} .motion-list-item:nth-child(3) { animation-delay: ${stagger * 2}ms; }
 ${root} .motion-list-item:nth-child(4) { animation-delay: ${stagger * 3}ms; }
@@ -501,7 +503,7 @@ ${root} .motion-list-item:nth-child(8) { animation-delay: ${stagger * 7}ms; }
     const perspective = numberValue(values, "perspective", 800);
     return `${root} { perspective: ${perspective}px; }
 ${root} .motion-flip { position: relative; width: 14rem; height: 9rem; transform-style: preserve-3d; animation: ${name} ${duration}ms ${ease} both; }
-${root} .motion-face { position: absolute; inset: 0; display: grid; place-items: center; backface-visibility: hidden; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; }
+${root} .motion-face { position: absolute; inset: 0; display: grid; place-items: center; backface-visibility: hidden; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; }
 ${root} .motion-face--back { transform: rotateY(180deg); background: #18181b; color: white; }
 @keyframes ${name} { from { transform: rotateY(0); } to { transform: rotateY(${angle}deg); } }`;
   }
@@ -516,7 +518,7 @@ ${root} .motion-face--back { transform: rotateY(180deg); background: #18181b; co
   if (id === "crossfade") {
     const overlap = numberValue(values, "overlap", 50);
     return `${root} .motion-state-stack { position: relative; width: min(100%, 18rem); height: 9rem; }
-${root} .motion-state { position: absolute; inset: 0; display: grid; place-items: center; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; }
+${root} .motion-state { position: absolute; inset: 0; display: grid; place-items: center; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; }
 ${root} .motion-state--from { animation: ${name}-out ${duration}ms linear both; }
 ${root} .motion-state--to { animation: ${name}-in ${duration}ms linear ${Math.round(duration * (1 - overlap / 100))}ms both; }
 @keyframes ${name}-out { to { opacity: 0; } }
@@ -540,7 +542,7 @@ ${root} .motion-state--to { animation: ${name}-in ${duration}ms linear ${Math.ro
 
   if (id === "accordion-collapse") {
     const height = numberValue(values, "height", 140);
-    return `${root} details { width: min(100%, 20rem); background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; overflow: hidden; }
+    return `${root} details { width: min(100%, 20rem); background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; }
 ${root} summary { padding: 1rem; cursor: pointer; font-weight: 650; }
 ${root} .motion-disclosure-content { min-height: ${height}px; padding: 0 1rem 1rem; overflow: hidden; }
 ${root} details[open] .motion-disclosure-content { animation: ${name} ${Math.min(duration, 240)}ms ${ease} both; }
@@ -610,11 +612,11 @@ ${root} .motion-button[data-state="complete"] { background: #166534; }`;
 
   if (id === "drag-to-reorder") {
     return `${root} .motion-list { display: grid; gap: 0.5rem; width: min(100%, 18rem); margin: 0; padding: 0; list-style: none; }
-${root} .motion-list-item { position: relative; padding: 0.85rem 1rem; touch-action: none; cursor: grab; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; }
-${root} .motion-list-item.is-dragging { cursor: grabbing; box-shadow: 0 18px 34px rgb(0 0 0 / 18%); }
-${root} .motion-list-item.is-drop-target { box-shadow: inset 0 2px #2563eb; }
+${root} .motion-list-item { position: relative; padding: 0.85rem 1rem; touch-action: none; cursor: grab; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; }
+${root} .motion-list-item.is-dragging { cursor: grabbing; border-color: #2563eb; background: rgb(37 99 235 / 8%); box-shadow: none; }
+${root} .motion-list-item.is-drop-target { border-color: #2563eb; background: rgb(37 99 235 / 8%); box-shadow: none; }
 ${root} .motion-list-item.is-keyboard-dragging { outline: 3px solid rgb(37 99 235 / 32%); outline-offset: 3px; }
-${root} .motion-drop-placeholder { min-height: 2.75rem; border: 1px dashed #2563eb; border-radius: 8px; background: rgb(37 99 235 / 8%); }`;
+${root} .motion-drop-placeholder { min-height: 2.75rem; border: 1px dashed #2563eb; border-radius: 16px; background: rgb(37 99 235 / 8%); }`;
   }
 
   if (id === "swipe-to-dismiss") {
@@ -687,7 +689,7 @@ ${root} .motion-orbit-item { position: absolute; left: 50%; top: 50%; width: 1.4
 
   if (id === "before-after-slider") {
     const position = numberValue(values, "position", 50);
-    return `${root} .motion-comparison { position: relative; width: min(100%, 22rem); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: #52525b; }
+    return `${root} .motion-comparison { position: relative; width: min(100%, 22rem); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px; background: #52525b; }
 ${root} .motion-before, ${root} .motion-after { position: absolute; inset: 0; display: grid; place-items: center; color: white; }
 ${root} .motion-after { overflow: hidden; background: #2563eb; clip-path: inset(0 ${100 - position}% 0 0); }
 ${root} .motion-divider { position: absolute; inset: 0 auto 0 0; width: 2px; pointer-events: none; background: white; box-shadow: 0 0 0 1px rgb(0 0 0 / 18%); transform: translate3d(0, 0, 0); }
@@ -746,7 +748,7 @@ ${caret ? `${root} .motion-typewriter::after { content: ""; display: inline-bloc
 @keyframes ${name} { 0% { transform: none; } 18% { transform: translateX(-${Math.round(distance * anticipation)}px) scaleX(${(1 - anticipation / 4).toFixed(3)}); } 72% { transform: translateX(${distance}px) scaleX(${(1 + followThrough / 3).toFixed(3)}); } 88% { transform: translateX(${Math.round(distance * (1 - followThrough))}px); } 100% { transform: translateX(${distance}px); } }`;
   }
 
-  return `${root} .motion-guide { max-width: 26rem; padding: 1.25rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; box-shadow: inset 0 3px #2563eb; }
+  return `${root} .motion-guide { max-width: 26rem; padding: 1.25rem; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; box-shadow: none; }
 ${root} .motion-guide strong { display: block; margin-bottom: 0.5rem; }`;
 }
 

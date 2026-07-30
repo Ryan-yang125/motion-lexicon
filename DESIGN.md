@@ -9,7 +9,7 @@ Describe → Choose → Tune → Use
 ```
 
 - **Describe:** the landing page and Finder share one natural-language intake, three grounded examples, and the same product promise. A landing query continues to the Finder with `q` in the URL.
-- **Choose:** the Finder focuses the strongest current candidate and keeps two alternatives visible. One synchronized replay action expands all three into a direct comparison.
+- **Choose:** the Finder plays the selected candidate in one primary preview and keeps all three ranked candidates visible as static choices. Switching a choice updates the primary preview; replay restarts the current candidate.
 - **Tune:** the selected recipe stays on the main stage while its parameters update the preview, URL, Prompt, HTML, CSS, and JavaScript together.
 - **Use:** Copy Prompt is the primary completion action. Portable output remains available through a disclosure in the same workspace.
 
@@ -19,7 +19,7 @@ The intended emotional result is calm confidence. Purpose, Agency, Simplicity, a
 
 The product header exposes two primary destinations:
 
-- **Find motion:** `/:locale/` and `/:locale/finder/` form one experiential layer. Home carries the Finder intake and representative preview; Finder carries recommendation, comparison, tuning, and export.
+- **Find motion:** `/:locale/` and `/:locale/finder/` form one experiential layer. Home carries the Finder intake and representative preview; Finder carries recommendation, candidate selection, tuning, and export.
 - **Library:** `/:locale/catalog/` is the unified browsing entry for components, playgrounds, and guides. Search, surface, and category filters share one toolbar.
 
 Supporting routes preserve discovery depth and static acquisition value:
@@ -60,9 +60,10 @@ GitHub stays visible in the desktop header. CLI, Agent Skill, JSON data, vocabul
 
 - An empty Finder gives the description field dominant visual weight.
 - A populated Finder compresses the intake and brings recommendation evidence plus the active workspace forward.
-- Focus mode uses one large selected candidate and two compact alternatives.
-- Compare mode displays three equal desktop columns with the same scene and a shared replay cycle.
-- Mobile focus mode places the selected candidate above two compact alternatives. Mobile compare mode uses three scan-friendly rows with concise labels, previews, and selection actions.
+- One large primary preview renders the selected candidate.
+- Three static candidate choices show rank, name, and concise description; the selected choice carries the active state.
+- The replay control belongs to the primary preview and restarts only the current candidate.
+- Mobile places the primary preview above three scan-friendly static choice rows.
 - At widths above 1040px, the candidate stage and a 300–340px Inspector sit side by side. Narrower layouts stack the Inspector after the stage.
 
 ### Recipe workspace
@@ -84,7 +85,7 @@ GitHub stays visible in the desktop header. CLI, Agent Skill, JSON data, vocabul
 The interface applies Apple-inspired web principles through product hierarchy and interaction craft:
 
 - **Purpose:** every state gives the next useful action the strongest position, contrast, and scale.
-- **Agency:** the original query remains editable; candidate selection, synchronized replay, parameter changes, reset, output formats, themes, and locales remain user-controlled.
+- **Agency:** the original query remains editable; candidate switching, current-candidate replay, parameter changes, reset, output formats, themes, and locales remain user-controlled.
 - **Simplicity:** common tasks appear first and advanced content opens in context.
 - **Craft:** typography, spacing, radii, focus states, materials, and transitions use deliberate values across desktop and mobile.
 
@@ -111,7 +112,7 @@ Categories and entries live as frontend data. Each entry contains a project-main
 
 Data ownership stays explicit across these layers:
 
-- Motion Lexicon maintains the bilingual intent phrases, comparison groups, scoring weights, match reasons, distinctions, and variant presets used by the Finder and CLI.
+- Motion Lexicon maintains the bilingual intent phrases, recommendation groups, scoring weights, match reasons, distinctions, and variant presets used by the Finder and CLI.
 - Motion Lexicon independently maintains English definitions, Chinese translations, alias-to-workspace mapping, and bilingual distinction copy in `src/data/glossary.ts`.
 - Motion Lexicon maintains the product contracts and review guidance in `src/data/motion-guidance.ts`.
 - Preview behavior and portable output are Motion Lexicon implementation artifacts.
@@ -131,19 +132,20 @@ Query state identifies current entry parameters:
 
 Default parameter values are omitted from the query string. Changed values update the preview, generated HTML/CSS/JavaScript, prompt text, and URL. Alias redirects preserve the focused vocabulary term through `?term=`.
 
-Finder query state preserves a vague request, comparison variants, and the current selection:
+Finder query state preserves a vague request, the ordered candidate list, and the current selection:
 
 ```txt
 /:locale/finder/?q=<encoded-intent>&compare=<variant-ids>&selected=<variant-id>
 ```
 
-The CLI provides `q` plus the ordered `compare` list. The Finder selects the first variant by default and writes `selected` after a user choice. Any non-default recipe parameters follow in the same query string. The canonical Finder URL remains `/:locale/finder/`. Web and CLI recommendations use the same intent data and ranking implementation.
+The CLI provides `q` plus the ordered `compare` list. The `compare` key remains the compatibility container for candidate order; it does not activate a separate visual mode. The Finder selects the first variant by default and writes `selected` after a user choice. Any non-default recipe parameters follow in the same query string. The canonical Finder URL remains `/:locale/finder/`. Web and CLI recommendations use the same intent data and ranking implementation.
 
 ## Interaction And Motion
 
 - Buttons and candidate selectors respond during press with a short scale treatment and retain visible keyboard focus.
-- Finder candidates share scene dimensions and replay state, keeping comparison visually direct.
-- Selecting a candidate returns the deck to focus mode and updates the URL-backed tuning state.
+- Switching Finder candidates reuses the same primary scene dimensions, keeping visual judgment stable.
+- Replay restarts the current candidate in the primary preview.
+- Selecting a candidate updates the primary preview and URL-backed tuning state.
 - Popovers originate near their trigger and use short scale, position, and opacity transitions.
 - Workbench controls update their affected preview and generated output immediately.
 - UI transitions use restrained, smooth settle curves. Existing gesture recipes keep their Pointer Events, capture, damping, cancellation, velocity-aware settlement, and keyboard alternatives.
@@ -183,9 +185,9 @@ Launch is complete when:
 - `npm run bundle:check` passes.
 - `npm run crawl:dist` passes.
 - `npm run test:visual` passes on desktop and mobile.
-- Web and CLI recommendations agree on ordered variants, reasons, presets, and shareable compare state.
-- Focus mode shows one selected candidate with two alternatives, and synchronized comparison remains one action away.
-- Desktop workspaces pair the active stage with the Inspector; mobile comparison remains concise and free of horizontal page overflow.
+- Web and CLI recommendations agree on ordered variants, reasons, presets, and shareable selected state.
+- Finder shows one primary preview, three static candidate choices, and a replay action for the current candidate.
+- Desktop workspaces pair the active stage with the Inspector; mobile candidate choices remain concise and free of horizontal page overflow.
 - Landing, Finder, Library, vocabulary, category, and recipe routes keep complete Chinese and English metadata and content.
 - Both localized Finder routes are prerendered, canonicalized, crawlable, and free of horizontal overflow.
 - The local dev server runs and the site is available for manual review.

@@ -43,14 +43,14 @@ Start with the words already in your head:
 Motion Finder turns that request into a focused workflow:
 
 1. **Describe** the feeling, purpose, or behavior in Chinese or English.
-2. **Choose** from three ranked candidates with clear match reasons and distinctions.
-3. **Tune** the selected motion while watching the preview update in real time.
+2. **Choose** from three ranked static candidates while the current choice plays in one primary preview.
+3. **Tune** and replay the selected motion while watching the primary preview update in real time.
 4. **Use** the result as an agent-ready prompt or portable HTML, CSS, and JavaScript.
 
 The full state lives in the URL, so a motion decision can be shared with a
 teammate or reopened later.
 
-![Motion Finder — ranked candidates and synchronized comparison](docs/assets/readme-finder.webp)
+![Motion Finder — one primary preview with three ranked candidate choices](docs/assets/readme-finder.webp)
 
 ## A visual workbench for every recipe
 
@@ -112,7 +112,8 @@ npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
 ```
 
 `recommend` returns up to three ranked variants with match reasons,
-distinctions, resolved presets, preview URLs, and a shareable comparison URL.
+distinctions, resolved presets, preview URLs, and a shareable Finder URL. The
+compatibility field remains named `compareUrl` and preserves candidate order.
 
 Install the free Motion Lexicon Agent Skill:
 
@@ -120,8 +121,9 @@ Install the free Motion Lexicon Agent Skill:
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 ```
 
-The Skill guides an agent from a vague request through recommendation, visual
-comparison, parameter choices, accessibility checks, and implementation output.
+The Skill guides an agent from a vague request through ranked recommendations,
+primary-preview selection, parameter choices, accessibility checks, and
+implementation output.
 Agent integrations can also read:
 
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
@@ -146,8 +148,8 @@ generated output travel easily between people and tools.
 canonical workspaces, all 91 source terms, the CLI, the Agent Skill, versioned
 machine-readable data, localized SEO, and 120 prerendered canonical routes.
 
-- Finder comparison state and non-default recipe parameters stay shareable in
-  the URL.
+- Finder candidate order, current selection, and non-default recipe parameters
+  stay shareable in the URL.
 - Preview, parameters, prompt, portable code, and reduced-motion output come
   from one semantic motion specification.
 - Light and dark themes, keyboard and pointer interaction, reduced-motion
@@ -166,7 +168,7 @@ Every public product route is available in English (`/en/`) and Chinese
 | Route shape | Purpose |
 | --- | --- |
 | `/:locale/` | Product home |
-| `/:locale/finder/` | Natural-language motion recommendation and comparison |
+| `/:locale/finder/` | Natural-language recommendation, candidate selection, and primary preview |
 | `/:locale/catalog/` | Full 44-workspace library |
 | `/:locale/vocabulary/` | Complete 91-term vocabulary |
 | `/:locale/:category/` | Motion-family discovery page |
