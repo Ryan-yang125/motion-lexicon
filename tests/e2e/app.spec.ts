@@ -108,7 +108,7 @@ test("catalog category filters keep 44px touch targets", async ({ page }) => {
   await expect(page).toHaveURL(/category=/);
 });
 
-test("Chinese catalog surface tabs stay on one line and omit the results summary", async ({ page }) => {
+test("Chinese catalog surface tabs stay on one line with a compact live result summary", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
   await page.goto("/zh/catalog/?surface=components");
 
@@ -132,6 +132,46 @@ test("Chinese catalog surface tabs stay on one line and omit the results summary
     { lineBoxes: 1, whiteSpace: "nowrap" }
   ]);
   await expect(page.locator(".library-results-meta")).toHaveCount(0);
+
+  const visibleResultSummary = page.locator(".library-category-filter-heading");
+  await expect(visibleResultSummary).toBeVisible();
+  await expect(visibleResultSummary).toContainText("全部条目");
+  await expect(visibleResultSummary).toContainText("31 个结果");
+
+  const search = page.getByRole("searchbox", { name: "搜索" });
+  await search.fill("slide");
+  await expect(page).toHaveURL(/q=slide/);
+  await expect(visibleResultSummary).toContainText("“slide”");
+  const filteredCount = await page.locator(".library-card").count();
+  await expect(visibleResultSummary).toContainText(`${filteredCount} 个结果`);
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
+test("English catalog result summary handles a single match", async ({ page }) => {
+  await page.goto("/en/catalog/?surface=components&q=ripple");
+
+  const visibleResultSummary = page.locator(".library-category-filter-heading");
+  await expect(visibleResultSummary).toBeVisible();
+  await expect(visibleResultSummary).toContainText("“ripple”");
+  await expect(visibleResultSummary).toContainText("1 result");
+  await expect(visibleResultSummary).not.toContainText("1 results");
+  await expect(page.locator(".library-card")).toHaveCount(1);
+});
+
+test("long catalog queries keep the desktop result summary compact", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Desktop width cap is covered once.");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/en/catalog/?surface=components&q=long%20descriptive%20motion%20query%20for%20a%20product%20interface");
+
+  const visibleResultSummary = page.locator(".library-category-filter-heading");
+  await expect(visibleResultSummary).toBeVisible();
+  const summaryWidth = await visibleResultSummary.evaluate((element) => element.getBoundingClientRect().width);
+  expect(summaryWidth).toBeLessThanOrEqual(256.5);
+
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
 });
 
 test("Apple product tokens control type, hierarchy, radii, and icon sizes", async ({ page }, testInfo) => {

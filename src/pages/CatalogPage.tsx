@@ -105,6 +105,12 @@ export function CatalogPage({
   const selectedCategory = categoryId
     ? categories.find((category) => category.id === categoryId)
     : undefined;
+  const visibleResultContext = [
+    selectedCategory ? text(selectedCategory.name, locale) : t("common.allEntries"),
+    deferredQuery.trim() ? `“${deferredQuery.trim()}”` : null
+  ]
+    .filter((part): part is string => Boolean(part))
+    .join(" · ");
   const resultAnnouncement = [
     t(`catalog.surfaces.${activeFilter.surfaceType}.title`),
     selectedCategory ? text(selectedCategory.name, locale) : t("common.allEntries"),
@@ -199,6 +205,8 @@ export function CatalogPage({
             compact
             filterMode
             surfaceType={activeFilter.surfaceType}
+            resultContext={visibleResultContext}
+            resultCount={filteredRecipes.length}
             selectedCategoryId={categoryId}
             onCategoryChange={(nextCategoryId) => updateUrl(surface, query, nextCategoryId)}
           />

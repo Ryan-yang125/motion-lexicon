@@ -1310,6 +1310,8 @@ summary {
 }
 
 .library-category-filter-heading {
+  min-width: 0;
+  max-width: min(100%, 24rem);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -1317,6 +1319,26 @@ summary {
   color: var(--apple-secondary);
   font-size: 0.68rem;
   white-space: nowrap;
+}
+
+.library-category-filter-heading > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.library-category-filter-heading > small {
+  flex: 0 0 auto;
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-ui);
+}
+
+@media (min-width: 761px) {
+  .library-category-filter-heading {
+    max-width: 16rem;
+  }
 }
 
 .library-category-filter-options {

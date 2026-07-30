@@ -15,6 +15,8 @@ type CatalogSidebarProps = {
   compact?: boolean;
   surfaceType?: MotionSurfaceType;
   filterMode?: boolean;
+  resultContext?: string;
+  resultCount?: number;
   selectedCategoryId?: string;
   onCategoryChange?: (categoryId?: string) => void;
 };
@@ -26,6 +28,8 @@ export function CatalogSidebar({
   compact = false,
   surfaceType,
   filterMode = false,
+  resultContext,
+  resultCount,
   selectedCategoryId,
   onCategoryChange
 }: CatalogSidebarProps) {
@@ -53,9 +57,9 @@ export function CatalogSidebar({
   if (filterMode) {
     return (
       <div className="library-category-filter" aria-label={t("common.category")}>
-        <div className="library-category-filter-heading">
-          <span>{t("common.category")}</span>
-          <small>{filteredRecipes.length}</small>
+        <div className="library-category-filter-heading" aria-hidden="true">
+          <span>{resultContext ?? t("common.allEntries")}</span>
+          <small>{t("catalog.results", { count: resultCount ?? filteredRecipes.length })}</small>
         </div>
         <div className="library-category-filter-options" role="group" aria-label={t("catalog.indexTitle")}>
           <button
