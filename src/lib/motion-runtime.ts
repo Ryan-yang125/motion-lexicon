@@ -161,7 +161,7 @@ function mountRippleRuntime(root: HTMLElement, config: MotionRuntimeConfig) {
   return () => {
     button.removeEventListener("pointerdown", showRipple);
     for (const animation of active) animation.cancel();
-    for (const ink of button.querySelectorAll(".motion-ripple-ink")) ink.remove();
+    for (const ink of button.querySelectorAll(".motion-ripple-ink:not([data-catalog-sample-ripple])")) ink.remove();
   };
 }
 
@@ -820,13 +820,15 @@ function mountComparisonRuntime(root: HTMLElement, config: MotionRuntimeConfig) 
   if (!comparison || !after || !divider || !input) return () => undefined;
   const initialValue = input.value;
   const initialClipPath = after.style.clipPath;
+  const initialDividerInset = divider.style.insetInlineStart;
   const initialDividerTransform = divider.style.transform;
   const initialValueText = input.getAttribute("aria-valuetext");
 
   function update() {
     const value = Math.min(100, Math.max(0, Number(input.value || config.position)));
     after.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
-    divider.style.transform = `translate3d(${comparison.clientWidth * value / 100}px, 0, 0)`;
+    divider.style.insetInlineStart = `${value}%`;
+    divider.style.transform = "translate3d(-1px, 0, 0)";
     input.setAttribute("aria-valuetext", `${Math.round(value)}%`);
   }
 
@@ -839,6 +841,7 @@ function mountComparisonRuntime(root: HTMLElement, config: MotionRuntimeConfig) 
     observer?.disconnect();
     input.value = initialValue;
     after.style.clipPath = initialClipPath;
+    divider.style.insetInlineStart = initialDividerInset;
     divider.style.transform = initialDividerTransform;
     if (initialValueText === null) input.removeAttribute("aria-valuetext");
     else input.setAttribute("aria-valuetext", initialValueText);
@@ -1101,7 +1104,7 @@ const copiedRippleRuntime = String.raw`
     };
     addCleanup(() => {
       active.forEach((animation) => animation.cancel());
-      button.querySelectorAll(".motion-ripple-ink").forEach((ink) => ink.remove());
+      button.querySelectorAll(".motion-ripple-ink:not([data-catalog-sample-ripple])").forEach((ink) => ink.remove());
     });
     on(button, "pointerdown", show);
     return cleanup;
@@ -1116,13 +1119,15 @@ const copiedComparisonRuntime = String.raw`
     const initial = {
       value: input.value,
       clipPath: after.style.clipPath,
+      insetInlineStart: divider.style.insetInlineStart,
       transform: divider.style.transform,
       valueText: input.getAttribute("aria-valuetext")
     };
     const update = () => {
       const value = Math.min(100, Math.max(0, Number(input.value || config.position)));
       after.style.clipPath = "inset(0 " + String(100 - value) + "% 0 0)";
-      divider.style.transform = "translate3d(" + String(comparison.clientWidth * value / 100) + "px, 0, 0)";
+      divider.style.insetInlineStart = String(value) + "%";
+      divider.style.transform = "translate3d(-1px, 0, 0)";
       input.setAttribute("aria-valuetext", String(Math.round(value)) + "%");
     };
     const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
@@ -1130,6 +1135,7 @@ const copiedComparisonRuntime = String.raw`
       if (observer) observer.disconnect();
       input.value = initial.value;
       after.style.clipPath = initial.clipPath;
+      divider.style.insetInlineStart = initial.insetInlineStart;
       divider.style.transform = initial.transform;
       if (initial.valueText === null) input.removeAttribute("aria-valuetext");
       else input.setAttribute("aria-valuetext", initial.valueText);

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { catalogRecipes } from "../../src/data/recipes";
 import { text } from "../../src/data/site";
 import {
@@ -9,6 +9,47 @@ import {
 } from "../../src/lib/motion-engine";
 
 const hydrationError = /hydration|server rendered html|did not match|React error #(?:418|423)/i;
+
+async function expectScrollCatalogContinuity(page: Page, scrollRecipe: string) {
+  const scrollCard = page.locator(`a.library-card[href="/zh/scroll/${scrollRecipe}/"]`);
+  const scrollRuntime = scrollCard.locator(".motion-thumbnail-runtime");
+  await scrollCard.scrollIntoViewIfNeeded();
+  await expect(scrollRuntime).toHaveAttribute("data-runtime-ready", "true");
+  const continuity = await scrollRuntime.evaluate(async (host) => {
+    const card = host.closest<HTMLElement>(".library-card")!;
+    const shadow = host.shadowRoot!;
+    const surface = shadow.querySelector<HTMLElement>(".motion-surface")!;
+    const root = shadow.querySelector(".motion-demo");
+    const snapshot = () => {
+      const style = getComputedStyle(surface);
+      return {
+        active: host.hasAttribute("data-runtime-active"),
+        opacity: style.opacity,
+        transform: style.transform,
+        root: shadow.querySelector(".motion-demo")
+      };
+    };
+    const resting = snapshot();
+    card.dispatchEvent(new PointerEvent("pointerenter"));
+    const entered = snapshot();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const playing = snapshot();
+    card.dispatchEvent(new PointerEvent("pointerleave"));
+    const left = snapshot();
+    return {
+      activeStates: [resting.active, entered.active, playing.active, left.active],
+      enterStable: resting.opacity === entered.opacity && resting.transform === entered.transform,
+      moved: resting.opacity !== playing.opacity || resting.transform !== playing.transform,
+      leaveStable: playing.opacity === left.opacity && playing.transform === left.transform,
+      rootStable: root === resting.root && resting.root === entered.root && entered.root === playing.root && playing.root === left.root
+    };
+  });
+  expect(continuity.activeStates, scrollRecipe).toEqual([false, true, true, false]);
+  expect(continuity.enterStable, `${scrollRecipe} jumps on pointer enter`).toBe(true);
+  expect(continuity.moved, `${scrollRecipe} does not play on pointer enter`).toBe(true);
+  expect(continuity.leaveStable, `${scrollRecipe} jumps on pointer leave`).toBe(true);
+  expect(continuity.rootStable, `${scrollRecipe} replaces its preview root`).toBe(true);
+}
 
 test("query presets hydrate cleanly and become the active output", async ({ page }) => {
   const runtimeErrors: string[] = [];
@@ -106,9 +147,135 @@ test("parameter edits preserve the reader's scroll position", async ({ page }) =
   expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
 });
 
-test("catalog hover mounts one exact recipe runtime at a time while keyboard focus stays static", async ({ page }, testInfo) => {
+test("catalog HTML contains every exact recipe preview without JavaScript", async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The server-rendered catalog contract is verified once on desktop.");
+
+  const baseURL = testInfo.project.use.baseURL as string;
+  const context = await browser.newContext({
+    baseURL,
+    javaScriptEnabled: false,
+    viewport: { width: 1440, height: 1100 }
+  });
+  const page = await context.newPage();
+  await page.goto("/zh/catalog/?surface=components");
+
+  const componentRecipes = catalogRecipes.filter((recipe) => recipe.surfaceType === "component");
+  const runtimeHosts = page.locator(".motion-thumbnail-runtime");
+  await expect(runtimeHosts).toHaveCount(componentRecipes.length);
+  await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(componentRecipes.length);
+  await expect(page.locator(".motion-thumbnail-fallback")).toHaveCount(0);
+
+  const serverRenderedRecipes = await runtimeHosts.evaluateAll((hosts) => hosts.map((host) => ({
+    hostId: host.getAttribute("data-motion-thumbnail"),
+    canonicalId: host.shadowRoot?.querySelector<HTMLElement>(".motion-demo")?.dataset.motion ?? null,
+    rootCount: host.shadowRoot?.querySelectorAll(".motion-demo").length ?? 0,
+    runningAnimations: host.shadowRoot
+      ? host.shadowRoot.querySelector<HTMLElement>(".motion-demo")
+        ?.getAnimations({ subtree: true })
+        .filter((animation) => animation.playState !== "paused")
+        .length ?? 0
+      : 0
+  })));
+  expect(serverRenderedRecipes.every(({ hostId, canonicalId, rootCount, runningAnimations }) =>
+    rootCount === 1 && hostId === canonicalId && runningAnimations === 0
+  )).toBe(true);
+  expect(serverRenderedRecipes.map(({ canonicalId }) => canonicalId).sort()).toEqual(
+    componentRecipes.map(({ canonicalId }) => canonicalId).sort()
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    await page.evaluate(() => document.documentElement.clientWidth)
+  );
+
+  await context.close();
+});
+
+test("catalog hydration preserves server preview nodes and first-frame styles", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The production hydration boundary is verified once on desktop.");
+  const runtimeErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") runtimeErrors.push(message.text());
+  });
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+
+  await page.route("**/zh/catalog/**", async (route) => {
+    if (route.request().resourceType() !== "document") {
+      await route.continue();
+      return;
+    }
+    const response = await route.fetch();
+    const body = (await response.text()).replace(
+      '<script type="module" crossorigin src=',
+      '<script type="application/x-motion-delayed" data-delayed-module crossorigin src='
+    );
+    await route.fulfill({ response, body });
+  });
+
+  await page.goto("/zh/catalog/?surface=components");
+  const runtimeHosts = page.locator(".motion-thumbnail-runtime");
+  await expect(runtimeHosts).toHaveCount(31);
+  const firstRuntime = runtimeHosts.first();
+
+  const serverRoots = await runtimeHosts.evaluateAll((hosts) => hosts.map((host) => {
+    const root = host.shadowRoot?.querySelector<HTMLElement>(".motion-demo") ?? null;
+    (host as HTMLElement & { __motionLexiconServerRoot?: HTMLElement | null }).__motionLexiconServerRoot = root;
+    return root?.dataset.motion ?? null;
+  }));
+  expect(serverRoots.filter(Boolean)).toHaveLength(31);
+
+  const visualSnapshot = () => firstRuntime.evaluate((host) => {
+    const hostRect = host.getBoundingClientRect();
+    return Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>("*") ?? []).map((element) => {
+      const style = getComputedStyle(element);
+      const before = getComputedStyle(element, "::before");
+      const after = getComputedStyle(element, "::after");
+      const rect = element.getBoundingClientRect();
+      const pseudo = (value: CSSStyleDeclaration) => ({
+        content: value.content,
+        opacity: value.opacity,
+        transform: value.transform,
+        clipPath: value.clipPath,
+        backgroundImage: value.backgroundImage
+      });
+      return {
+        tag: element.tagName,
+        className: element.getAttribute("class"),
+        opacity: style.opacity,
+        transform: style.transform,
+        clipPath: style.clipPath,
+        filter: style.filter,
+        backgroundColor: style.backgroundColor,
+        backgroundImage: style.backgroundImage,
+        rect: [
+          Math.round((rect.left - hostRect.left) * 100) / 100,
+          Math.round((rect.top - hostRect.top) * 100) / 100,
+          Math.round(rect.width * 100) / 100,
+          Math.round(rect.height * 100) / 100
+        ],
+        before: pseudo(before),
+        after: pseudo(after)
+      };
+    });
+  });
+  const beforeHydration = await visualSnapshot();
+  const moduleSource = await page.locator("script[data-delayed-module]").getAttribute("src");
+  expect(moduleSource).toBeTruthy();
+  await page.addScriptTag({
+    type: "module",
+    url: new URL(moduleSource!, testInfo.project.use.baseURL as string).href
+  });
+  await expect(firstRuntime).toHaveAttribute("data-runtime-ready", "true");
+
+  expect(await runtimeHosts.evaluateAll((hosts) => hosts.every((host) =>
+    host.shadowRoot?.querySelector(".motion-demo") ===
+      (host as HTMLElement & { __motionLexiconServerRoot?: HTMLElement | null }).__motionLexiconServerRoot
+  ))).toBe(true);
+  expect(await visualSnapshot()).toEqual(beforeHydration);
+  expect(runtimeErrors).toEqual([]);
+});
+
+test("catalog keeps every exact recipe preview mounted while hover only changes playback", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Fine-pointer hover is verified once on desktop.");
-  test.setTimeout(45_000);
+  test.setTimeout(60_000);
   const runtimeErrors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") runtimeErrors.push(message.text());
@@ -117,22 +284,152 @@ test("catalog hover mounts one exact recipe runtime at a time while keyboard foc
 
   await page.goto("/zh/catalog/?surface=components");
   const componentRecipes = catalogRecipes.filter((recipe) => recipe.surfaceType === "component");
+  const runtimeHosts = page.locator(".motion-thumbnail-runtime");
+
+  await expect(runtimeHosts).toHaveCount(componentRecipes.length);
+  await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(componentRecipes.length);
+
+  const mountedBeforeHover = await runtimeHosts.evaluateAll((hosts) => hosts.map((host) => {
+    const root = host.shadowRoot?.querySelector<HTMLElement>(".motion-demo") ?? null;
+    (host as HTMLElement & { __motionLexiconRoot?: HTMLElement | null }).__motionLexiconRoot = root;
+    return {
+      canonicalId: root?.dataset.motion ?? null,
+      rootCount: host.shadowRoot?.querySelectorAll(".motion-demo").length ?? 0,
+      nodeCount: root?.querySelectorAll("*").length ?? 0
+    };
+  }));
+  expect(mountedBeforeHover.every(({ rootCount }) => rootCount === 1)).toBe(true);
+  expect(mountedBeforeHover.map(({ canonicalId }) => canonicalId).sort()).toEqual(
+    componentRecipes.map(({ canonicalId }) => canonicalId).sort()
+  );
+
   const firstCard = page.locator(
     `a.library-card[href="/zh/${componentRecipes[0].categoryId}/${componentRecipes[0].id}/"]`
   );
-  const fallbackActor = firstCard.locator(".thumb-actor").first();
+  const firstRuntime = firstCard.locator(".motion-thumbnail-runtime");
+  const lastRuntime = page.locator(
+    `a.library-card[href="/zh/${componentRecipes.at(-1)?.categoryId}/${componentRecipes.at(-1)?.id}/"] .motion-thumbnail-runtime`
+  );
+
+  await expect(firstRuntime).toHaveAttribute("data-runtime-ready", "true");
+  await expect(lastRuntime).not.toHaveAttribute("data-runtime-ready", "true");
+  const initialReadyCount = await page.locator('.motion-thumbnail-runtime[data-runtime-ready="true"]').count();
+  expect(initialReadyCount).toBeGreaterThan(0);
+  expect(initialReadyCount).toBeLessThan(componentRecipes.length);
 
   await firstCard.focus();
   await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(0);
-  await expect.poll(() => fallbackActor.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
+  expect(await firstRuntime.evaluate((host) =>
+    host.shadowRoot?.querySelector(".motion-demo") ===
+      (host as HTMLElement & { __motionLexiconRoot?: HTMLElement | null }).__motionLexiconRoot
+  )).toBe(true);
+  const restingAnimationStates = await firstRuntime.locator(".motion-demo").evaluate((root) =>
+    root.getAnimations({ subtree: true }).map((animation) => animation.playState)
+  );
+  expect(restingAnimationStates.length).toBeGreaterThan(0);
+  expect(restingAnimationStates.every((state) => state === "paused")).toBe(true);
+  const restingTimeline = await firstRuntime.locator(".motion-demo").evaluate((root) => {
+    const currentTime = root.getAnimations({ subtree: true })[0]?.currentTime;
+    return typeof currentTime === "number" ? currentTime : null;
+  });
+
+  await firstCard.hover();
+  const enteredTimeline = await firstRuntime.locator(".motion-demo").evaluate((root) => {
+    const animation = root.getAnimations({ subtree: true })[0];
+    return {
+      currentTime: typeof animation?.currentTime === "number" ? animation.currentTime : null,
+      playState: animation?.playState ?? null
+    };
+  });
+  expect(enteredTimeline.playState).toBe("running");
+  if (restingTimeline !== null && enteredTimeline.currentTime !== null) {
+    expect(Math.abs(enteredTimeline.currentTime - restingTimeline)).toBeLessThan(50);
+  }
+  await page.getByRole("heading", { level: 1 }).hover();
+  await expect(firstRuntime).not.toHaveAttribute("data-runtime-active", "true");
 
   const comparisonCard = page.locator(
     'a.library-card[href="/zh/polish-effects/before-after-slider/"]'
   );
   const comparisonRuntime = comparisonCard.locator(".motion-thumbnail-runtime");
-  await comparisonCard.hover();
-  await expect(comparisonRuntime).toHaveAttribute("data-runtime-active", "true");
+  await expect(comparisonRuntime).not.toHaveAttribute("data-runtime-ready", "true");
+  const comparisonBeforeHover = await comparisonRuntime.evaluate((host) => {
+    const shadow = host.shadowRoot;
+    const surface = shadow?.querySelector<HTMLElement>(".motion-comparison");
+    const divider = shadow?.querySelector<HTMLElement>(".motion-divider");
+    if (!surface || !divider) return null;
+    const surfaceRect = surface.getBoundingClientRect();
+    const dividerRect = divider.getBoundingClientRect();
+    return {
+      dividerRatio: (dividerRect.left - surfaceRect.left) / surfaceRect.width,
+      rootCount: shadow?.querySelectorAll(".motion-demo").length ?? 0
+    };
+  });
+  await comparisonCard.scrollIntoViewIfNeeded();
+  await expect(comparisonRuntime).toHaveAttribute("data-runtime-ready", "true");
+  const comparisonAfterInitialization = await comparisonRuntime.evaluate((host) => {
+    const shadow = host.shadowRoot;
+    const surface = shadow?.querySelector<HTMLElement>(".motion-comparison");
+    const divider = shadow?.querySelector<HTMLElement>(".motion-divider");
+    if (!surface || !divider) return null;
+    const surfaceRect = surface.getBoundingClientRect();
+    const dividerRect = divider.getBoundingClientRect();
+    return {
+      dividerRatio: (dividerRect.left - surfaceRect.left) / surfaceRect.width,
+      rootCount: shadow?.querySelectorAll(".motion-demo").length ?? 0
+    };
+  });
+  expect(comparisonBeforeHover).not.toBeNull();
+  expect(comparisonAfterInitialization).not.toBeNull();
+  if (comparisonBeforeHover && comparisonAfterInitialization) {
+    expect(Math.abs(comparisonAfterInitialization.dividerRatio - comparisonBeforeHover.dividerRatio)).toBeLessThan(0.005);
+    expect(comparisonAfterInitialization.rootCount).toBe(comparisonBeforeHover.rootCount);
+  }
+
+  const comparisonContinuity = await comparisonRuntime.evaluate(async (host) => {
+    const card = host.closest<HTMLElement>(".library-card")!;
+    const shadow = host.shadowRoot!;
+    const surface = shadow.querySelector<HTMLElement>(".motion-comparison")!;
+    const divider = shadow.querySelector<HTMLElement>(".motion-divider")!;
+    const after = shadow.querySelector<HTMLElement>(".motion-after")!;
+    const snapshot = () => {
+      const surfaceRect = surface.getBoundingClientRect();
+      const dividerRect = divider.getBoundingClientRect();
+      return {
+        active: host.hasAttribute("data-runtime-active"),
+        clipPath: getComputedStyle(after).clipPath,
+        dividerRatio: (dividerRect.left - surfaceRect.left) / surfaceRect.width,
+        root: shadow.querySelector(".motion-demo")
+      };
+    };
+    const resting = snapshot();
+    card.dispatchEvent(new PointerEvent("pointerenter"));
+    const entered = snapshot();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const playing = snapshot();
+    card.dispatchEvent(new PointerEvent("pointerleave"));
+    const left = snapshot();
+    return {
+      activeStates: [resting.active, entered.active, playing.active, left.active],
+      enterClipStable: resting.clipPath === entered.clipPath,
+      enterDividerDelta: Math.abs(resting.dividerRatio - entered.dividerRatio),
+      leaveClipStable: playing.clipPath === left.clipPath,
+      leaveDividerDelta: Math.abs(playing.dividerRatio - left.dividerRatio),
+      rootStable: resting.root === entered.root && entered.root === playing.root && playing.root === left.root
+    };
+  });
+  expect(comparisonContinuity.activeStates).toEqual([false, true, true, false]);
+  expect(comparisonContinuity.enterClipStable).toBe(true);
+  expect(comparisonContinuity.enterDividerDelta).toBeLessThan(0.005);
+  expect(comparisonContinuity.leaveClipStable).toBe(true);
+  expect(comparisonContinuity.leaveDividerDelta).toBeLessThan(0.005);
+  expect(comparisonContinuity.rootStable).toBe(true);
+
   await expect(comparisonRuntime).toHaveAttribute("inert", "");
+  expect(await comparisonRuntime.evaluate((host) =>
+    host.shadowRoot?.querySelector(".motion-demo") ===
+      (host as HTMLElement & { __motionLexiconRoot?: HTMLElement | null }).__motionLexiconRoot
+  )).toBe(true);
   expect(await comparisonRuntime.evaluate((host) =>
     Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>(
       'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
@@ -155,6 +452,23 @@ test("catalog hover mounts one exact recipe runtime at a time while keyboard foc
     )).toBeNull();
   }
 
+  const rippleCard = page.locator('a.library-card[href="/zh/feedback/ripple/"]');
+  const rippleRuntime = rippleCard.locator(".motion-thumbnail-runtime");
+  const rippleStyle = () => rippleRuntime.evaluate((host) => {
+    const ink = host.shadowRoot?.querySelector<HTMLElement>("[data-catalog-sample-ripple]");
+    if (!ink) return null;
+    const style = getComputedStyle(ink);
+    return { opacity: style.opacity, transform: style.transform };
+  });
+  const rippleBeforeInitialization = await rippleStyle();
+  await rippleCard.scrollIntoViewIfNeeded();
+  await expect(rippleRuntime).toHaveAttribute("data-runtime-ready", "true");
+  expect(await rippleStyle()).toEqual(rippleBeforeInitialization);
+
+  for (const scrollRecipe of ["scroll-reveal", "parallax"]) {
+    await expectScrollCatalogContinuity(page, scrollRecipe);
+  }
+
   for (const recipe of componentRecipes) {
     const card = page.locator(
       `a.library-card[href="/zh/${recipe.categoryId}/${recipe.id}/"]`
@@ -162,10 +476,27 @@ test("catalog hover mounts one exact recipe runtime at a time while keyboard foc
     const runtimeHost = card.locator(".motion-thumbnail-runtime");
 
     await card.hover();
+    await expect(runtimeHost).toHaveAttribute("data-runtime-ready", "true");
     await expect(runtimeHost).toHaveAttribute("data-runtime-active", "true");
     await expect(runtimeHost.locator(".motion-demo")).toHaveAttribute("data-motion", recipe.canonicalId);
+    expect(await runtimeHost.evaluate((host) =>
+      host.shadowRoot?.querySelector(".motion-demo") ===
+        (host as HTMLElement & { __motionLexiconRoot?: HTMLElement | null }).__motionLexiconRoot
+    )).toBe(true);
     await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(1);
-    await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(1);
+    await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(componentRecipes.length);
+
+    if (recipe.canonicalId === componentRecipes[0].canonicalId) {
+      await expect.poll(() => runtimeHost.locator(".motion-demo").evaluate((root) =>
+        root.getAnimations({ subtree: true }).some((animation) => animation.playState === "running")
+      )).toBe(true);
+    }
+
+    if (recipe.canonicalId === "ripple") {
+      const beforeNodeCount = mountedBeforeHover.find(({ canonicalId }) => canonicalId === "ripple")?.nodeCount;
+      expect(await runtimeHost.locator(".motion-demo").evaluate((root) => root.querySelectorAll("*").length))
+        .toBe(beforeNodeCount);
+    }
 
     if ([
       "hover-effect",
@@ -183,8 +514,21 @@ test("catalog hover mounts one exact recipe runtime at a time while keyboard foc
 
   await page.getByRole("heading", { level: 1 }).hover();
   await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(0);
-  await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(0);
+  await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(componentRecipes.length);
+  expect(await firstRuntime.locator(".motion-demo").evaluate((root) =>
+    root.getAnimations({ subtree: true }).every((animation) => animation.playState === "paused")
+  )).toBe(true);
+  expect(await runtimeHosts.evaluateAll((hosts) => hosts.every((host) =>
+    host.shadowRoot?.querySelector(".motion-demo") ===
+      (host as HTMLElement & { __motionLexiconRoot?: HTMLElement | null }).__motionLexiconRoot
+  ))).toBe(true);
   expect(runtimeErrors).toEqual([]);
+});
+
+test("scroll-driven playground preview keeps continuous hover playback", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Fine-pointer hover is verified once on desktop.");
+  await page.goto("/zh/catalog/?surface=playgrounds");
+  await expectScrollCatalogContinuity(page, "scroll-driven-animation");
 });
 
 test("continuous motion can pause and resume its active animation", async ({ page }, testInfo) => {

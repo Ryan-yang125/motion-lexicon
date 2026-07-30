@@ -54,8 +54,11 @@
 }
 
 .vocabulary-toolbar label {
-  min-width: min(520px, 65vw);
+  width: min(520px, 100%);
+  max-width: 520px;
+  min-width: 0;
   min-height: 44px;
+  flex: 1 1 320px;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -81,10 +84,11 @@
 }
 
 .vocabulary-toolbar > span {
+  min-width: 0;
   color: var(--ink-dim);
   font-family: var(--mono);
   font-size: 0.66rem;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .vocabulary-index {
@@ -371,7 +375,12 @@
 
   .vocabulary-hero h1 { font-size: clamp(2.8rem, 15vw, 4.5rem); }
   .vocabulary-toolbar { align-items: flex-start; flex-direction: column; gap: 0; padding: 0.45rem 0; }
-  .vocabulary-toolbar label { min-width: 100%; }
+  .vocabulary-toolbar label {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
   .vocabulary-toolbar > span { padding: 0 0 0.4rem 1.65rem; }
   .vocabulary-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vocabulary-group > header { grid-template-columns: 2rem minmax(0, 1fr) auto; }
