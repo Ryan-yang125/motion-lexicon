@@ -4,11 +4,8 @@ test("desktop landing page renders without horizontal overflow", async ({ page }
   await page.goto("/zh/");
   await expect(page).toHaveTitle(/Motion Lexicon/);
   await expect(page.getByRole("heading", { name: /说出你要的感觉/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /开始描述动效/ })).toHaveAttribute(
-    "href",
-    "/zh/finder/"
-  );
-  await expect(page.locator(".library-card")).toHaveCount(6);
+  await expect(page.getByRole("button", { name: /开始描述动效/ })).toBeVisible();
+  await expect(page.locator(".library-card")).toHaveCount(3);
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     return document.documentElement.scrollWidth > window.innerWidth;
@@ -25,6 +22,7 @@ test("english landing page renders english copy", async ({ page }) => {
 test("recipe controls update generated CSS, prompt, and URL query", async ({ page }) => {
   await page.goto("/zh/entrances/slide-in/");
   await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();
+  await page.locator(".apple-output-disclosure summary").click();
 
   await page.getByRole("slider").first().press("ArrowRight");
 

@@ -71,6 +71,7 @@ test("Finder creates a shareable selection and parameter state", async ({ page }
   await firstSlider.press("ArrowRight");
   await expect(page).toHaveURL(/duration=/);
 
+  await page.locator(".apple-export-disclosure summary").click();
   await page.getByRole("tab", { name: "Prompt" }).click();
   await expect(page).toHaveURL(/tab=prompt/);
   await firstSlider.press("ArrowRight");

@@ -1,0 +1,2807 @@
+/* Motion Lexicon — calm, direct, Apple-inspired product shell. */
+:root {
+  --apple-bg: #f5f5f7;
+  --apple-surface: #ffffff;
+  --apple-surface-raised: rgba(255, 255, 255, 0.82);
+  --apple-surface-soft: #ececf0;
+  --apple-ink: #1d1d1f;
+  --apple-secondary: #6e6e73;
+  --apple-tertiary: #86868b;
+  --apple-line: rgba(29, 29, 31, 0.1);
+  --apple-line-strong: rgba(29, 29, 31, 0.18);
+  --apple-blue: #1671d9;
+  --apple-blue-hover: #0f62c5;
+  --apple-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03), 0 8px 24px rgba(0, 0, 0, 0.05);
+  --apple-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(0, 0, 0, 0.1);
+  --apple-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --bg: var(--apple-bg);
+  --panel: var(--apple-surface);
+  --panel-solid: var(--apple-surface);
+  --panel-raised: var(--apple-surface-soft);
+  --ink: var(--apple-ink);
+  --ink-soft: var(--apple-secondary);
+  --ink-dim: var(--apple-tertiary);
+  --ink-faint: var(--apple-line);
+  --accent: var(--apple-blue);
+  --accent-strong: var(--apple-blue-hover);
+  --library-line: var(--apple-line);
+  --library-line-strong: var(--apple-line-strong);
+  --library-subtle: var(--apple-surface-soft);
+  --library-sidebar: rgba(255, 255, 255, 0.58);
+  --library-max: 1240px;
+  --library-content: 920px;
+  --library-header-height: 64px;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root.dark {
+  --apple-bg: #000000;
+  --apple-surface: #1c1c1e;
+  --apple-surface-raised: rgba(36, 36, 38, 0.82);
+  --apple-surface-soft: #2c2c2e;
+  --apple-ink: #f5f5f7;
+  --apple-secondary: #aeaeb2;
+  --apple-tertiary: #8e8e93;
+  --apple-line: rgba(255, 255, 255, 0.12);
+  --apple-line-strong: rgba(255, 255, 255, 0.2);
+  --apple-blue: #2997ff;
+  --apple-blue-hover: #52a9ff;
+  --apple-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24), 0 10px 28px rgba(0, 0, 0, 0.28);
+  --apple-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.28), 0 32px 84px rgba(0, 0, 0, 0.48);
+  --bg: var(--apple-bg);
+  --panel: var(--apple-surface);
+  --panel-solid: var(--apple-surface);
+  --panel-raised: var(--apple-surface-soft);
+  --ink: var(--apple-ink);
+  --ink-soft: var(--apple-secondary);
+  --ink-dim: var(--apple-tertiary);
+  --ink-faint: var(--apple-line);
+  --accent: var(--apple-blue);
+  --accent-strong: var(--apple-blue-hover);
+  --library-line: var(--apple-line);
+  --library-line-strong: var(--apple-line-strong);
+  --library-subtle: var(--apple-surface-soft);
+  --library-sidebar: rgba(28, 28, 30, 0.72);
+}
+
+html {
+  background: var(--apple-bg);
+  scroll-padding-top: calc(var(--library-header-height) + 20px);
+}
+
+body {
+  color: var(--apple-ink);
+  background: var(--apple-bg);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-optical-sizing: auto;
+}
+
+.page {
+  width: min(var(--library-max), calc(100% - 48px));
+}
+
+button,
+a,
+input,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.library-button,
+.ml-button,
+.finder-select,
+.apple-hero-finder button,
+.apple-hero-examples button {
+  transition:
+    transform 120ms ease-out,
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 240ms var(--apple-spring);
+}
+
+.library-button:active,
+.ml-button:active,
+.finder-select:active,
+.apple-hero-finder button:active,
+.apple-hero-examples button:active {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Home / Finder entry */
+.apple-hero.library-hero {
+  min-height: calc(100dvh - var(--library-header-height));
+  grid-template-columns: minmax(0, 1.05fr) minmax(480px, 0.95fr);
+  gap: clamp(3rem, 5vw, 5rem);
+  padding: clamp(4.5rem, 8vh, 7.5rem) 0;
+  border: 0;
+}
+
+.apple-hero-copy {
+  max-width: 610px;
+}
+
+.apple-status-line.library-status-line {
+  min-height: auto;
+  gap: 0.4rem;
+  border: 0;
+  padding: 0;
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.apple-status-line svg {
+  fill: color-mix(in srgb, var(--apple-blue) 12%, transparent);
+}
+
+.apple-hero.library-hero h1 {
+  max-width: 10em;
+  margin: 1.25rem 0 1.3rem;
+  font-size: clamp(3.65rem, 4.75vw, 4.35rem);
+  font-weight: 650;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.apple-hero .apple-hero-copy > p {
+  max-width: 34em;
+  color: var(--apple-secondary);
+  font-size: 1.08rem;
+  line-height: 1.62;
+}
+
+.apple-hero-finder {
+  margin-top: 2.2rem;
+}
+
+.apple-hero-finder > label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.apple-hero-finder > div {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 85%, transparent);
+  border-radius: 18px;
+  padding: 0.45rem 0.45rem 0.45rem 1rem;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+  transition: border-color 180ms ease, box-shadow 240ms var(--apple-spring), transform 240ms var(--apple-spring);
+}
+
+.apple-hero-finder > div:focus-within {
+  border-color: color-mix(in srgb, var(--apple-blue) 58%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--apple-blue) 12%, transparent), var(--apple-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.apple-hero-finder svg {
+  color: var(--apple-tertiary);
+}
+
+.apple-hero-finder input {
+  min-width: 0;
+  height: 52px;
+  border: 0;
+  outline: 0;
+  color: var(--apple-ink);
+  background: transparent;
+  font-size: 1rem;
+}
+
+.apple-hero-finder input::placeholder {
+  color: var(--apple-tertiary);
+}
+
+.apple-hero-finder button {
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 0;
+  border-radius: 13px;
+  padding: 0 1.05rem;
+  color: #fff;
+  background: var(--apple-blue);
+  font-size: 0.88rem;
+  font-weight: 650;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--apple-blue) 22%, transparent);
+}
+
+.apple-hero-finder button:hover {
+  background: var(--apple-blue-hover);
+}
+
+.apple-hero-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.apple-hero-examples button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 0.8rem;
+  color: var(--apple-secondary);
+  background: color-mix(in srgb, var(--apple-surface) 74%, transparent);
+  font-size: 0.73rem;
+  white-space: nowrap;
+}
+
+.apple-hero-examples button:hover {
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  box-shadow: 0 0 0 1px var(--apple-line);
+}
+
+.apple-hero-proof {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.35rem;
+  color: var(--apple-tertiary);
+  font-size: 0.74rem;
+}
+
+.apple-hero-proof span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.apple-hero-proof strong {
+  color: var(--apple-ink);
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.apple-hero-proof > i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--apple-line-strong);
+}
+
+.apple-hero-preview.library-hero-preview {
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 72%, transparent);
+  border-radius: 28px;
+  background: var(--apple-surface-raised);
+  box-shadow: var(--apple-shadow-lg);
+  transform: translateZ(0);
+  transition: transform 420ms var(--apple-spring), box-shadow 420ms var(--apple-spring);
+}
+
+.apple-hero-preview:hover {
+  transform: translateY(-5px) scale(1.006);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 42px 96px rgba(0, 0, 0, 0.13);
+}
+
+.apple-hero-preview .apple-preview-toolbar,
+.apple-hero-preview .apple-preview-footer {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0 1.1rem;
+  color: var(--apple-tertiary);
+  font-size: 0.73rem;
+}
+
+.apple-hero-preview .apple-preview-toolbar {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--apple-line);
+}
+
+.apple-hero-preview .apple-preview-toolbar > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--apple-secondary);
+  font-weight: 600;
+}
+
+.apple-hero-preview .apple-preview-toolbar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #30d158;
+  box-shadow: 0 0 0 4px color-mix(in srgb, #30d158 12%, transparent);
+}
+
+.apple-preview-scene {
+  min-height: 430px;
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  overflow: hidden;
+  background: var(--apple-surface-soft);
+}
+
+.apple-scene-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.05rem;
+  border-right: 1px solid var(--apple-line);
+  padding: 1.35rem 0;
+  background: color-mix(in srgb, var(--apple-surface) 72%, transparent);
+}
+
+.apple-scene-sidebar span,
+.apple-scene-sidebar i {
+  display: block;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--apple-ink) 9%, transparent);
+}
+
+.apple-scene-sidebar span {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 0.35rem;
+  background: var(--apple-ink);
+}
+
+.apple-scene-sidebar i {
+  width: 28px;
+  height: 9px;
+}
+
+.apple-scene-content {
+  display: grid;
+  align-content: center;
+  gap: 1.15rem;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.apple-scene-heading {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.apple-scene-heading span,
+.apple-scene-heading i,
+.apple-scene-card div > i {
+  display: block;
+  height: 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--apple-ink) 11%, transparent);
+}
+
+.apple-scene-heading span { width: 42%; height: 13px; }
+.apple-scene-heading i { width: 68%; }
+
+.apple-scene-card {
+  min-height: 108px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 75%, transparent);
+  border-radius: 20px;
+  padding: 1.1rem;
+  background: var(--apple-surface);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.09);
+  animation: apple-scene-arrive 720ms var(--apple-spring) both;
+}
+
+.apple-hero-preview:hover .apple-scene-card {
+  animation: apple-scene-arrive 720ms var(--apple-spring) both;
+}
+
+.apple-scene-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--apple-blue);
+  box-shadow: inset 0 0 0 8px color-mix(in srgb, white 18%, transparent);
+}
+
+.apple-scene-card div {
+  min-width: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.apple-scene-card strong {
+  overflow: hidden;
+  color: var(--apple-ink);
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.apple-scene-card div > i { width: 86%; height: 5px; }
+.apple-scene-card div > i:last-child { width: 58%; }
+.apple-scene-card b { font-size: 1.1rem; font-weight: 500; }
+
+.apple-scene-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.apple-scene-list span {
+  height: 70px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--apple-surface) 72%, transparent);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.apple-hero-preview .apple-preview-footer {
+  border-top: 1px solid var(--apple-line);
+}
+
+.apple-hero-preview .apple-preview-footer strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-inline-start: auto;
+  color: var(--apple-blue);
+  font-weight: 600;
+}
+
+@keyframes apple-scene-arrive {
+  0% { opacity: 0; transform: translateX(34px) scale(0.97); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* Quiet second screen */
+.apple-home-library {
+  padding: clamp(5.5rem, 9vw, 8rem) 0 clamp(6rem, 10vw, 9rem);
+}
+
+.apple-home-library-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.6fr);
+  align-items: end;
+  gap: clamp(2rem, 6vw, 6rem);
+  margin-bottom: 2.4rem;
+}
+
+.apple-home-library-heading > div:first-child > span {
+  color: var(--apple-blue);
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.apple-home-library-heading h2 {
+  max-width: 12em;
+  margin: 0.8rem 0 0;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 630;
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+}
+
+.apple-home-library-heading p {
+  margin: 0 0 1.15rem;
+  color: var(--apple-secondary);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.apple-home-library-heading a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--apple-blue);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.apple-home-card-grid.library-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.apple-motion-card.library-card {
+  overflow: hidden;
+  border: 0;
+  border-radius: 24px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+  transition: transform 360ms var(--apple-spring), box-shadow 360ms var(--apple-spring);
+}
+
+.apple-motion-card.library-card:hover {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 24px 56px rgba(0, 0, 0, 0.09);
+}
+
+.apple-motion-card .motion-thumb {
+  aspect-ratio: 16 / 11;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--apple-surface-soft);
+  background-image: none;
+}
+
+.apple-motion-card .library-card-body {
+  min-height: 132px;
+  padding: 1.15rem 1.2rem 1.3rem;
+}
+
+.apple-motion-card .library-card-body h3 {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.apple-motion-card .library-card-body p {
+  color: var(--apple-secondary);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 1040px) {
+  .apple-hero.library-hero {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    padding-top: 5rem;
+  }
+
+  .apple-hero-copy { max-width: 720px; }
+  .apple-hero-preview.library-hero-preview { width: min(100%, 820px); }
+  .apple-home-library-heading { grid-template-columns: 1fr; gap: 1.4rem; }
+  .apple-home-library-heading > div:last-child { max-width: 620px; }
+}
+
+@media (max-width: 720px) {
+  .page { width: min(100% - 28px, var(--library-max)); }
+
+  .apple-hero.library-hero {
+    min-height: auto;
+    gap: 3rem;
+    padding: 4.25rem 0 3.5rem;
+  }
+
+  .apple-hero.library-hero h1 {
+    max-width: 9em;
+    font-size: clamp(2.65rem, 12vw, 3.65rem);
+    line-height: 0.99;
+    letter-spacing: -0.052em;
+  }
+
+  .apple-hero .apple-hero-copy > p {
+    font-size: 0.98rem;
+    line-height: 1.62;
+  }
+
+  .apple-hero-finder > div {
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+    padding: 0.45rem 0.55rem 0.55rem 0.9rem;
+  }
+
+  .apple-hero-finder button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .apple-hero-examples {
+    display: grid;
+  }
+
+  .apple-hero-examples button {
+    min-height: 44px;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+  }
+
+  .apple-hero-proof { gap: 0.55rem; }
+
+  .apple-hero-preview.library-hero-preview {
+    border-radius: 22px;
+  }
+
+  .apple-preview-scene {
+    min-height: 310px;
+    grid-template-columns: 52px 1fr;
+  }
+
+  .apple-scene-sidebar { gap: 0.8rem; padding-top: 1rem; }
+  .apple-scene-sidebar span { width: 28px; height: 28px; border-radius: 8px; }
+  .apple-scene-sidebar i { width: 20px; }
+  .apple-scene-content { padding: 1.3rem; }
+  .apple-scene-card { min-height: 96px; gap: 0.7rem; padding: 0.85rem; border-radius: 17px; }
+  .apple-scene-avatar { width: 38px; height: 38px; border-radius: 11px; }
+  .apple-scene-card strong { font-size: 0.73rem; }
+  .apple-scene-list span { height: 48px; }
+  .apple-hero-preview .apple-preview-footer span:nth-child(2),
+  .apple-hero-preview .apple-preview-footer span:nth-child(3) { display: none; }
+
+  .apple-home-library {
+    padding: 5rem 0 6rem;
+  }
+
+  .apple-home-library-heading h2 {
+    font-size: clamp(2.35rem, 10vw, 3rem);
+  }
+
+  .apple-home-card-grid.library-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-scene-card {
+    animation: apple-scene-fade 180ms ease both;
+  }
+
+  .apple-hero-preview,
+  .apple-motion-card,
+  .apple-hero-finder > div {
+    transition: opacity 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    transform: none !important;
+  }
+}
+
+@keyframes apple-scene-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-hero-preview.library-hero-preview {
+    background: var(--apple-surface);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .apple-hero-finder > div,
+  .apple-hero-preview.library-hero-preview,
+  .apple-motion-card.library-card {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Floating product navigation */
+.library-header.library-header-compact {
+  min-height: var(--library-header-height);
+  border: 0;
+  background: color-mix(in srgb, var(--apple-bg) 76%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--apple-line) 75%, transparent);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+
+.library-header-compact .library-header-inner {
+  width: min(var(--library-max), calc(100% - 48px));
+  grid-template-columns: minmax(190px, 1fr) auto minmax(190px, 1fr);
+  gap: 1rem;
+}
+
+.library-header-compact .library-brand {
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.library-header-compact .library-brand-mark {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.library-header-compact .library-primary-nav {
+  gap: 0.15rem;
+  border-radius: 999px;
+  padding: 0.2rem;
+  background: color-mix(in srgb, var(--apple-ink) 5%, transparent);
+}
+
+.library-header-compact .library-primary-nav a {
+  min-height: 36px;
+  border-radius: 999px;
+  padding: 0 1rem;
+  color: var(--apple-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.library-header-compact .library-primary-nav a:hover {
+  color: var(--apple-ink);
+  background: color-mix(in srgb, var(--apple-surface) 56%, transparent);
+}
+
+.library-header-compact .library-primary-nav a.is-active {
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.library-header-compact .library-header-actions {
+  gap: 0.35rem;
+}
+
+.library-header-compact .library-github-link,
+.library-utility-menu > summary {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 0.78rem;
+  color: var(--apple-secondary);
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 560;
+  list-style: none;
+  cursor: pointer;
+}
+
+.library-header-compact .library-github-link:hover,
+.library-utility-menu > summary:hover,
+.library-utility-menu[open] > summary {
+  color: var(--apple-ink);
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+.library-utility-menu {
+  position: relative;
+}
+
+.library-utility-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.library-utility-popover {
+  position: absolute;
+  inset-block-start: calc(100% + 12px);
+  inset-inline-end: 0;
+  width: min(320px, calc(100vw - 28px));
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 72%, transparent);
+  border-radius: 22px;
+  padding: 0.55rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 92%, transparent);
+  box-shadow: var(--apple-shadow-lg);
+  backdrop-filter: blur(30px) saturate(170%);
+  -webkit-backdrop-filter: blur(30px) saturate(170%);
+  transform-origin: top right;
+  animation: apple-popover-in 240ms var(--apple-spring) both;
+}
+
+.library-utility-popover nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+}
+
+.library-utility-popover nav a {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 13px;
+  padding: 0 0.75rem;
+  color: var(--apple-secondary);
+  font-size: 0.78rem;
+}
+
+.library-utility-popover nav a:hover,
+.library-utility-popover nav a.is-active {
+  color: var(--apple-ink);
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+.library-utility-settings {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.45rem;
+  border-top: 1px solid var(--apple-line);
+  padding: 0.8rem 0.45rem 0.35rem;
+}
+
+.library-utility-settings > span {
+  color: var(--apple-tertiary);
+  font-size: 0.67rem;
+  font-weight: 600;
+}
+
+.library-utility-settings .header-controls {
+  width: 100%;
+  justify-content: stretch;
+}
+
+.library-utility-settings .theme-select,
+.library-utility-settings .icon-link {
+  min-height: 40px;
+  flex: 1;
+  justify-content: center;
+  border: 1px solid var(--apple-line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--apple-surface) 68%, transparent);
+}
+
+@keyframes apple-popover-in {
+  from { opacity: 0; transform: translateY(-5px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Motion Finder workspace */
+.apple-finder-intake.finder-hero {
+  min-height: min(720px, calc(100dvh - var(--library-header-height)));
+  display: grid;
+  align-content: center;
+  border: 0;
+  padding: 5.5rem 0;
+}
+
+.apple-finder-intake .finder-hero-copy {
+  max-width: 780px;
+}
+
+.apple-finder-intake .finder-hero-copy > span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.apple-finder-intake .finder-hero-copy h1 {
+  max-width: 8.8em;
+  margin: 1rem 0 1.15rem;
+  font-size: clamp(3.8rem, 6vw, 5.7rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.057em;
+}
+
+.apple-finder-intake .finder-hero-copy p {
+  max-width: 44em;
+  color: var(--apple-secondary);
+  font-size: 1.05rem;
+  line-height: 1.62;
+}
+
+.apple-search-pill.finder-search {
+  max-width: 980px;
+  margin-top: 2.5rem;
+}
+
+.apple-search-pill .finder-search-field {
+  min-height: 68px;
+  grid-template-columns: auto 1fr auto;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 82%, transparent);
+  border-radius: 19px;
+  padding: 0.45rem 0.45rem 0.45rem 1rem;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-search-pill .finder-search-field:focus-within {
+  border-color: color-mix(in srgb, var(--apple-blue) 58%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--apple-blue) 12%, transparent), var(--apple-shadow-sm);
+}
+
+.apple-search-pill .finder-search-field input {
+  font-size: 1rem;
+}
+
+.apple-search-pill .finder-search-field button {
+  min-height: 50px;
+  border: 0;
+  border-radius: 13px;
+  padding: 0 1.15rem;
+  color: #fff;
+  background: var(--apple-blue);
+}
+
+.apple-search-pill .finder-search-field button:hover {
+  background: var(--apple-blue-hover);
+}
+
+.apple-finder-intake .finder-examples > span,
+.apple-search-pill > label,
+.apple-search-pill > small {
+  color: var(--apple-tertiary);
+  font-family: var(--sans);
+  font-size: 0.7rem;
+}
+
+.apple-finder-intake .finder-examples button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 0.9rem;
+  color: var(--apple-secondary);
+  background: color-mix(in srgb, var(--apple-surface) 74%, transparent);
+}
+
+.apple-finder-intake.has-result {
+  min-height: auto;
+  grid-template-columns: minmax(280px, 0.62fr) minmax(460px, 1.38fr);
+  align-items: end;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: 3.25rem 0 2.4rem;
+}
+
+.apple-finder-intake.has-result .finder-hero-copy h1 {
+  max-width: 9em;
+  margin: 0.65rem 0 0;
+  font-size: clamp(2.3rem, 3.8vw, 3.4rem);
+  line-height: 1;
+}
+
+.apple-finder-intake.has-result .finder-hero-copy p,
+.apple-finder-intake.has-result .finder-examples {
+  display: none;
+}
+
+.apple-finder-intake.has-result .apple-search-pill {
+  margin: 0;
+}
+
+.apple-finder-workspace.finder-results {
+  border: 0;
+  padding: 2.5rem 0 7rem;
+}
+
+.finder-workspace-heading {
+  align-items: start;
+  margin-bottom: 1.35rem;
+}
+
+.finder-workspace-heading h2 {
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 630;
+  letter-spacing: -0.04em;
+}
+
+.finder-workspace-heading > div > span,
+.finder-inspector-heading span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.69rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+}
+
+.finder-match-summary {
+  max-width: 480px;
+  color: var(--apple-secondary);
+}
+
+.finder-match-summary strong {
+  border: 0;
+  color: var(--apple-blue);
+  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
+}
+
+.apple-workspace-shell.finder-workspace-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  align-items: start;
+  gap: 1rem;
+}
+
+.finder-workspace-stage {
+  min-width: 0;
+}
+
+.apple-motion-chooser.finder-compare {
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-motion-chooser .finder-compare-toolbar {
+  min-height: 58px;
+  border-bottom: 1px solid var(--apple-line);
+  padding: 0 0.9rem 0 1.15rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 78%, transparent);
+}
+
+.finder-compare-status {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.finder-compare-status span {
+  color: var(--apple-tertiary);
+  font-size: 0.7rem;
+}
+
+.finder-compare-status strong {
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  color: var(--apple-blue);
+  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+
+.finder-compare-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.finder-compare-actions .ml-button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+.finder-choice-deck.finder-candidate-grid {
+  gap: 0;
+  padding: 0;
+  background: var(--apple-line);
+}
+
+.finder-choice-deck[data-layout="focus"] {
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.34fr);
+  grid-template-rows: auto auto;
+}
+
+.finder-choice-deck[data-layout="focus"] .finder-candidate.is-selected {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+.finder-choice-deck[data-layout="compare"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 1fr;
+}
+
+.apple-motion-card.finder-candidate {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
+  background: var(--apple-surface);
+  box-shadow: 0 0 0 0.5px var(--apple-line);
+  transition: background-color 220ms ease, opacity 220ms ease;
+}
+
+.apple-motion-card.finder-candidate.is-selected {
+  background: var(--apple-surface);
+  box-shadow: inset 0 3px 0 var(--apple-blue), 0 0 0 0.5px var(--apple-line);
+}
+
+.apple-motion-card .finder-candidate-header {
+  min-height: 126px;
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.apple-motion-card .finder-candidate-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.apple-motion-card .finder-candidate-meta span,
+.apple-motion-card .finder-candidate-meta strong {
+  color: var(--apple-tertiary);
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.apple-motion-card .finder-candidate-meta strong {
+  color: var(--apple-blue);
+}
+
+.apple-motion-card .finder-candidate-header h3 {
+  margin-top: 0.55rem;
+  font-size: 1.55rem;
+  font-weight: 640;
+  letter-spacing: -0.035em;
+}
+
+.apple-motion-card .finder-candidate-header p {
+  color: var(--apple-secondary);
+  font-size: 0.77rem;
+  line-height: 1.5;
+}
+
+.apple-motion-card .finder-candidate-stage {
+  min-height: 340px;
+  border-block: 1px solid var(--apple-line);
+  background-color: var(--apple-surface-soft);
+  background-image: none;
+}
+
+.apple-motion-card .finder-candidate-body {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  color: var(--apple-secondary);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+.apple-motion-card .finder-distinction {
+  margin-top: 0.8rem;
+  border: 0;
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: var(--apple-surface-soft);
+}
+
+.apple-motion-card .finder-candidate-actions {
+  min-height: 60px;
+  gap: 0.5rem;
+  border-top: 1px solid var(--apple-line);
+  padding: 0.55rem 0.7rem;
+}
+
+.apple-motion-card .finder-select {
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--apple-ink);
+  background: var(--apple-surface-soft);
+}
+
+.apple-motion-card .finder-select.is-selected {
+  color: #fff;
+  background: var(--apple-blue);
+}
+
+.apple-motion-card .finder-candidate-actions a {
+  color: var(--apple-blue);
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-header {
+  min-height: auto;
+  padding: 1rem;
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-header h3 {
+  font-size: 1rem;
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-header p,
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-body,
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-actions a {
+  display: none;
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-stage {
+  height: 145px;
+  min-height: 145px;
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-primary .finder-candidate-stage {
+  height: 380px;
+  min-height: 380px;
+}
+
+.finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-actions {
+  min-height: 54px;
+  padding: 0.35rem 0.55rem;
+}
+
+.finder-choice-deck[data-layout="compare"] .apple-motion-card .finder-candidate-stage {
+  height: 270px;
+  min-height: 270px;
+}
+
+.finder-choice-deck[data-layout="compare"] .apple-motion-card .finder-candidate-header {
+  min-height: 132px;
+}
+
+.finder-choice-deck[data-layout="compare"] .apple-motion-card .finder-candidate-body {
+  min-height: 156px;
+}
+
+.apple-inspector.finder-inspector {
+  position: sticky;
+  inset-block-start: calc(var(--library-header-height) + 16px);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 75%, transparent);
+  border-radius: 24px;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 88%, transparent);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: blur(26px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+}
+
+.finder-inspector-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.finder-inspector-heading h2 {
+  margin: 0.35rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 640;
+  letter-spacing: -0.03em;
+}
+
+.finder-inspector-heading > svg {
+  box-sizing: content-box;
+  border-radius: 10px;
+  padding: 0.55rem;
+  color: var(--apple-blue);
+  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
+}
+
+.finder-inspector-copy {
+  margin: 0.75rem 0 0;
+  color: var(--apple-secondary);
+  font-size: 0.74rem;
+  line-height: 1.55;
+}
+
+.finder-inspector-status.library-sync-status {
+  margin-top: 0.9rem;
+  border: 0;
+  padding: 0;
+  color: var(--apple-tertiary);
+  background: transparent;
+  font-family: var(--sans);
+}
+
+.finder-inspector-controls {
+  max-height: min(52dvh, 570px);
+  overflow: auto;
+  margin: 0.9rem -0.35rem 0;
+  padding: 0 0.35rem;
+  overscroll-behavior: contain;
+}
+
+.finder-inspector-controls .controls-head {
+  padding-block: 0.4rem 0.75rem;
+}
+
+.finder-inspector-controls .control {
+  padding: 0.9rem 0;
+}
+
+.finder-inspector-controls .control-description {
+  display: none;
+}
+
+.finder-inspector-controls .control-number {
+  border: 0;
+  border-radius: 9px;
+  background: var(--apple-surface-soft);
+}
+
+.finder-primary-copy.apple-primary-action {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 0.9rem;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  background: var(--apple-blue);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--apple-blue) 20%, transparent);
+}
+
+.finder-workspace-output {
+  margin-top: 1rem;
+}
+
+.finder-change-hint {
+  color: var(--apple-tertiary);
+  font-size: 0.72rem;
+  text-align: end;
+}
+
+.apple-export-disclosure {
+  overflow: hidden;
+  border: 1px solid var(--apple-line);
+  border-radius: 22px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-export-disclosure > summary {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.1rem;
+  list-style: none;
+  cursor: pointer;
+}
+
+.apple-export-disclosure > summary::-webkit-details-marker { display: none; }
+
+.apple-export-disclosure > summary > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.apple-export-disclosure > summary strong {
+  font-size: 0.88rem;
+  font-weight: 640;
+}
+
+.apple-export-disclosure > summary small {
+  color: var(--apple-secondary);
+  font-size: 0.72rem;
+}
+
+.apple-export-disclosure > summary svg {
+  transition: transform 240ms var(--apple-spring);
+}
+
+.apple-export-disclosure[open] > summary svg { transform: rotate(180deg); }
+.apple-export-disclosure > .library-export { padding: 0 1rem 1rem; }
+.apple-export-disclosure > .library-export > .library-doc-section-heading { display: none; }
+.apple-export-disclosure .library-code-panel { border-radius: 16px; }
+
+/* Unified motion library */
+.library-catalog-hero-unified {
+  max-width: 900px;
+  padding: clamp(5rem, 9vw, 8rem) 0 2.8rem;
+}
+
+.library-catalog-hero-unified > span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.library-catalog-hero-unified h1 {
+  margin: 0.9rem 0 1.1rem;
+  font-size: clamp(3.7rem, 6vw, 5.6rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.057em;
+}
+
+.library-catalog-hero-unified p {
+  max-width: 42em;
+  color: var(--apple-secondary);
+  font-size: 1.05rem;
+  line-height: 1.62;
+}
+
+.library-catalog-toolbar {
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 72%, transparent);
+  border-radius: 26px;
+  padding: 0.85rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 88%, transparent);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
+.library-catalog-toolbar-primary {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto;
+  gap: 0.75rem;
+}
+
+.library-catalog-toolbar .library-catalog-search {
+  min-height: 52px;
+  border: 0;
+  border-radius: 15px;
+  padding: 0 0.9rem;
+  background: var(--apple-surface);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.library-catalog-toolbar .library-catalog-search:focus-within {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--apple-blue) 65%, transparent), 0 0 0 4px color-mix(in srgb, var(--apple-blue) 10%, transparent);
+}
+
+.library-surface-control.library-surface-tabs {
+  display: flex;
+  gap: 0.2rem;
+  border: 0;
+  border-radius: 15px;
+  padding: 0.25rem;
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+.library-surface-control.library-surface-tabs button {
+  min-height: 44px;
+  flex: 1;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 0.8rem;
+  color: var(--apple-secondary);
+  background: transparent;
+}
+
+.library-surface-control.library-surface-tabs button.is-active {
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.library-catalog-toolbar-secondary {
+  margin-top: 0.7rem;
+}
+
+.library-category-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.library-category-filter-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-inline-start: 0.4rem;
+  color: var(--apple-tertiary);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.library-category-filter-options {
+  min-width: 0;
+  display: flex;
+  gap: 0.3rem;
+  overflow-x: auto;
+  padding: 0.15rem 0.2rem 0.25rem;
+  scrollbar-width: none;
+}
+
+.library-category-filter-options::-webkit-scrollbar { display: none; }
+
+.library-category-filter-options button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 0.75rem;
+  color: var(--apple-secondary);
+  background: transparent;
+  font-size: 0.72rem;
+}
+
+.library-category-filter-options button:hover,
+.library-category-filter-options button.is-active {
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.library-category-filter-options button small {
+  color: var(--apple-tertiary);
+  font-size: 0.63rem;
+}
+
+.library-catalog-toolbar .library-results-meta {
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--apple-line);
+  margin-top: 0.55rem;
+  padding: 0.7rem 0.5rem 0;
+}
+
+.library-catalog-toolbar .library-results-meta > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.library-catalog-toolbar .library-results-meta strong {
+  font-size: 0.88rem;
+  font-weight: 640;
+}
+
+.library-catalog-toolbar .library-results-meta span,
+.library-catalog-toolbar .library-results-meta p {
+  color: var(--apple-tertiary);
+  font-size: 0.7rem;
+}
+
+.library-catalog-toolbar .library-results-meta p {
+  margin: 0;
+  text-align: center;
+}
+
+.library-catalog-toolbar .library-results-meta button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 0.8rem;
+  color: var(--apple-blue);
+  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
+}
+
+.library-catalog-layout.is-unified {
+  display: block;
+  padding: 2rem 0 7rem;
+}
+
+.library-catalog-layout.is-unified .library-catalog-results {
+  min-width: 0;
+}
+
+.library-catalog-layout.is-unified .library-catalog-group {
+  padding: 2.7rem 0 1.2rem;
+}
+
+.library-catalog-layout.is-unified .library-section-heading h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 630;
+  letter-spacing: -0.035em;
+}
+
+.library-catalog-layout.is-unified .library-section-heading > div > span {
+  color: var(--apple-tertiary);
+  font-family: var(--sans);
+}
+
+.library-catalog-layout.is-unified .library-section-heading > a {
+  color: var(--apple-blue);
+}
+
+.library-catalog-layout.is-unified .library-card-grid.is-component,
+.library-catalog-layout.is-unified .library-card-grid.is-playground,
+.library-catalog-layout.is-unified .library-card-grid.is-guide {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.library-catalog-layout.is-unified .library-card {
+  overflow: hidden;
+  border: 0;
+  border-radius: 20px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+  transition: transform 320ms var(--apple-spring), box-shadow 320ms var(--apple-spring);
+}
+
+.library-catalog-layout.is-unified .library-card:hover {
+  border-color: transparent;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 22px 50px rgba(0, 0, 0, 0.08);
+}
+
+.library-catalog-layout.is-unified .library-card .motion-thumb,
+.library-catalog-layout.is-unified .library-guide-art {
+  border: 0;
+  border-radius: 0;
+  background-color: var(--apple-surface-soft);
+  background-image: none;
+}
+
+.library-catalog-layout.is-unified .library-card-body {
+  min-height: 138px;
+  padding: 1rem 1.05rem 1.2rem;
+}
+
+.library-catalog-layout.is-unified .library-card-body h3 {
+  font-size: 1rem;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+}
+
+.library-catalog-layout.is-unified .library-card-body p {
+  color: var(--apple-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* Compact open-source footer */
+.library-footer-compact.library-footer {
+  width: min(var(--library-max), calc(100% - 48px));
+  border-top: 1px solid var(--apple-line);
+  padding: 3.5rem 0 1.5rem;
+}
+
+.library-footer-compact .library-footer-main {
+  grid-template-columns: minmax(260px, 1.2fr) minmax(160px, 0.7fr) minmax(180px, 0.7fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  padding: 0 0 3rem;
+}
+
+.library-footer-compact .library-footer-brand p {
+  max-width: 26em;
+  color: var(--apple-tertiary);
+  font-size: 0.75rem;
+}
+
+.library-footer-links,
+.library-footer-resources {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.library-footer-links a,
+.library-footer-resources a {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--apple-secondary);
+  font-size: 0.75rem;
+}
+
+.library-footer-links a:hover,
+.library-footer-resources a:hover {
+  color: var(--apple-blue);
+}
+
+.library-footer-compact .library-footer-meta {
+  color: var(--apple-tertiary);
+  font-size: 0.67rem;
+}
+
+@media (max-width: 1040px) {
+  .apple-workspace-shell.finder-workspace-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .apple-inspector.finder-inspector {
+    position: relative;
+    inset-block-start: auto;
+  }
+
+  .finder-inspector-controls {
+    max-height: none;
+  }
+
+  .library-catalog-toolbar-primary {
+    grid-template-columns: 1fr;
+  }
+
+  .library-catalog-layout.is-unified .library-card-grid.is-component,
+  .library-catalog-layout.is-unified .library-card-grid.is-playground,
+  .library-catalog-layout.is-unified .library-card-grid.is-guide {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .library-header-compact .library-header-inner {
+    width: min(100% - 28px, var(--library-max));
+    grid-template-columns: 1fr auto auto;
+    gap: 0.25rem;
+  }
+
+  .library-header-compact .library-primary-nav {
+    border-radius: 12px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .library-header-compact .library-primary-nav .is-finder {
+    display: none;
+  }
+
+  .library-header-compact .library-primary-nav .is-library {
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 12px;
+    padding: 0 0.65rem;
+    background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+  }
+
+  .library-header-compact .library-github-link {
+    display: none;
+  }
+
+  .library-utility-menu > summary {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    padding: 0;
+    background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+  }
+
+  .library-utility-menu > summary span { display: none; }
+
+  .apple-finder-intake.finder-hero {
+    min-height: auto;
+    padding: 4.25rem 0 3.5rem;
+  }
+
+  .apple-finder-intake .finder-hero-copy h1 {
+    max-width: 8em;
+    font-size: clamp(2.75rem, 13vw, 3.8rem);
+  }
+
+  .apple-finder-intake .finder-hero-copy p {
+    font-size: 0.96rem;
+  }
+
+  .apple-finder-intake.has-result {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  .apple-finder-intake.has-result .finder-hero-copy {
+    display: none;
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill > label,
+  .apple-finder-intake.has-result .apple-search-pill > small {
+    display: none;
+  }
+
+  .apple-search-pill .finder-search-field {
+    grid-template-columns: auto 1fr;
+    padding: 0.5rem 0.55rem 0.55rem 0.9rem;
+  }
+
+  .apple-search-pill .finder-search-field button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill .finder-search-field {
+    min-height: 58px;
+    grid-template-columns: auto 1fr auto;
+    padding: 0.25rem 0.3rem 0.25rem 0.85rem;
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill .finder-search-field button {
+    width: 48px;
+    min-height: 48px;
+    grid-column: auto;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .apple-finder-workspace.finder-results {
+    padding: 1.8rem 0 5rem;
+  }
+
+  .finder-workspace-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .finder-workspace-heading > div > span {
+    display: none;
+  }
+
+  .finder-workspace-heading h2 {
+    margin: 0;
+    font-size: 1.65rem;
+  }
+
+  .finder-match-summary { max-width: none; }
+
+  .finder-match-summary > p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .finder-match-summary > div {
+    display: none;
+  }
+
+  .apple-motion-chooser.finder-compare {
+    border-radius: 22px;
+  }
+
+  .apple-motion-chooser .finder-compare-toolbar {
+    align-items: center;
+    padding: 0.55rem 0.65rem 0.55rem 0.85rem;
+  }
+
+  .finder-compare-status strong { display: none; }
+
+  .finder-compare-actions .ml-button {
+    min-width: 44px;
+    padding: 0 0.65rem;
+  }
+
+  .finder-choice-deck[data-layout="focus"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .finder-candidate.is-selected {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative {
+    grid-row: 2;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .apple-motion-primary .finder-candidate-stage {
+    height: 300px;
+    min-height: 300px;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-stage {
+    height: 118px;
+    min-height: 118px;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-meta span,
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-actions {
+    display: none;
+  }
+
+  .finder-choice-deck[data-layout="focus"] .apple-motion-alternative .finder-candidate-header {
+    min-height: 76px;
+  }
+
+  .finder-choice-deck[data-layout="compare"] {
+    grid-template-columns: 1fr;
+  }
+
+  .finder-choice-deck[data-layout="compare"] .apple-motion-card {
+    display: grid;
+    grid-template-columns: minmax(110px, 0.6fr) minmax(0, 1.4fr);
+    grid-template-rows: auto auto;
+  }
+
+  .finder-choice-deck[data-layout="compare"] .finder-candidate-header {
+    min-height: auto;
+    padding: 0.8rem;
+  }
+
+  .finder-choice-deck[data-layout="compare"] .finder-candidate-header p,
+  .finder-choice-deck[data-layout="compare"] .finder-candidate-body {
+    display: none;
+  }
+
+  .finder-choice-deck[data-layout="compare"] .apple-motion-card .finder-candidate-stage {
+    height: 150px;
+    min-height: 150px;
+    grid-column: 2;
+    grid-row: 1 / 3;
+    border-block: 0;
+    border-left: 1px solid var(--apple-line);
+  }
+
+  .finder-choice-deck[data-layout="compare"] .finder-candidate-actions {
+    min-height: 52px;
+    border-top: 1px solid var(--apple-line);
+    padding: 0.3rem 0.4rem;
+  }
+
+  .finder-choice-deck[data-layout="compare"] .finder-candidate-actions a { display: none; }
+
+  .apple-inspector.finder-inspector {
+    border-radius: 22px;
+  }
+
+  .apple-export-disclosure > summary {
+    min-height: 78px;
+  }
+
+  .library-catalog-hero-unified {
+    padding: 4.5rem 0 2.2rem;
+  }
+
+  .library-catalog-hero-unified h1 {
+    font-size: clamp(3rem, 14vw, 4.2rem);
+  }
+
+  .library-catalog-toolbar {
+    border-radius: 22px;
+    padding: 0.65rem;
+  }
+
+  .library-surface-control.library-surface-tabs {
+    overflow-x: auto;
+  }
+
+  .library-surface-control.library-surface-tabs button {
+    flex: 0 0 auto;
+    padding: 0 0.7rem;
+  }
+
+  .library-surface-control.library-surface-tabs button small {
+    display: none;
+  }
+
+  .library-category-filter {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .library-category-filter-heading {
+    padding: 0 0.35rem;
+  }
+
+  .library-catalog-toolbar .library-results-meta {
+    grid-template-columns: 1fr auto;
+  }
+
+  .library-catalog-toolbar .library-results-meta p {
+    display: none;
+  }
+
+  .library-catalog-layout.is-unified .library-card-grid.is-component,
+  .library-catalog-layout.is-unified .library-card-grid.is-playground,
+  .library-catalog-layout.is-unified .library-card-grid.is-guide {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0.15rem 0.15rem 1rem;
+    scroll-padding-inline: 0.15rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .library-catalog-layout.is-unified .library-card-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .library-catalog-layout.is-unified .library-card {
+    width: min(82vw, 300px);
+    flex: 0 0 min(82vw, 300px);
+    scroll-snap-align: start;
+  }
+
+  .library-footer-compact.library-footer {
+    width: min(100% - 28px, var(--library-max));
+  }
+
+  .library-footer-compact .library-footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.25rem 1rem;
+  }
+
+  .library-footer-compact .library-footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .library-footer-compact .library-footer-meta {
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .library-header.library-header-compact,
+  .library-utility-popover,
+  .library-catalog-toolbar,
+  .apple-inspector.finder-inspector {
+    background: var(--apple-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library-utility-popover {
+    animation: apple-fade-in 180ms ease both;
+  }
+
+  .apple-motion-card.finder-candidate,
+  .library-catalog-layout.is-unified .library-card,
+  .apple-export-disclosure > summary svg {
+    transition: opacity 180ms ease, color 180ms ease, background-color 180ms ease;
+    transform: none !important;
+  }
+}
+
+@keyframes apple-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Recipe workspace */
+.apple-recipe-page {
+  padding: 0 0 7rem;
+}
+
+.apple-recipe-workspace.library-entry {
+  display: block;
+}
+
+.apple-recipe-main.library-entry-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.apple-recipe-breadcrumbs.library-breadcrumbs {
+  min-height: 44px;
+  gap: 0.55rem;
+  margin-top: 2rem;
+  color: var(--apple-tertiary);
+  font-size: 0.72rem;
+}
+
+.apple-recipe-breadcrumbs a:hover {
+  color: var(--apple-blue);
+}
+
+.apple-recipe-hero.library-entry-header {
+  min-height: 280px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem;
+  border: 0;
+  padding: 3.2rem 0 3.5rem;
+}
+
+.apple-recipe-identity {
+  max-width: 820px;
+}
+
+.apple-recipe-meta.library-entry-meta {
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.apple-recipe-meta span,
+.apple-recipe-meta code {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+}
+
+.apple-recipe-meta code {
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  color: var(--apple-tertiary);
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+.apple-recipe-hero h1,
+.apple-recipe-hero h2 {
+  max-width: 10em;
+  margin: 0.75rem 0 1rem;
+  font-size: clamp(3.8rem, 6vw, 5.8rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.057em;
+}
+
+.apple-recipe-hero p {
+  max-width: 42em;
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: 1.03rem;
+  line-height: 1.6;
+}
+
+.apple-recipe-primary-action .ml-button {
+  min-height: 50px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 1.1rem;
+  color: #fff;
+  background: var(--apple-blue);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--apple-blue) 20%, transparent);
+}
+
+.apple-recipe-primary-action .ml-button:hover {
+  background: var(--apple-blue-hover);
+}
+
+.apple-workbench-stage.library-preview-section {
+  border: 0;
+  padding: 0 0 1rem;
+}
+
+.apple-workbench-heading.library-doc-section-heading {
+  align-items: end;
+  margin-bottom: 1.25rem;
+}
+
+.apple-workbench-heading > div > span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.apple-workbench-heading h2,
+.apple-workbench-heading h3 {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.9rem, 3vw, 2.75rem);
+  font-weight: 630;
+  letter-spacing: -0.04em;
+}
+
+.apple-workbench-heading p {
+  color: var(--apple-secondary);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar {
+  min-height: 52px;
+  border: 1px solid var(--apple-line);
+  border-bottom: 0;
+  border-radius: 18px 18px 0 0;
+  padding: 0 0.55rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 82%, transparent);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+}
+
+.apple-workbench-stage .library-device-switcher {
+  border-radius: 12px;
+  padding: 0.15rem;
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+.apple-workbench-stage .library-device-switcher button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.apple-workbench-stage .library-device-switcher button.is-active {
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.apple-workbench-stage .library-reduced-toggle {
+  border-radius: 11px;
+  padding: 0 0.65rem;
+}
+
+.apple-workbench.library-workbench {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  align-items: stretch;
+  gap: 1rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.apple-preview-stage.library-preview-frame {
+  min-height: 650px;
+  overflow: hidden;
+  border: 1px solid var(--apple-line);
+  border-radius: 0 0 26px 26px;
+  padding: 1rem;
+  background: var(--apple-surface-soft);
+  background-image: none;
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-preview-stage.library-preview-frame .preview-panel {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.apple-preview-stage.library-preview-frame .stage {
+  min-height: 520px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--apple-surface);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.apple-preview-stage .preview-toolbar .ml-button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 11px;
+  color: var(--apple-ink);
+  background: color-mix(in srgb, var(--apple-surface-raised) 88%, transparent);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.library-parameter-panel.apple-inspector {
+  align-self: stretch;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 72%, transparent);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--apple-surface-raised) 90%, transparent);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: blur(26px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+}
+
+.library-parameter-panel .apple-inspector-status.library-sync-status {
+  min-height: 48px;
+  border-bottom: 1px solid var(--apple-line);
+  padding: 0 1rem;
+  color: var(--apple-tertiary);
+  font-family: var(--sans);
+}
+
+.library-parameter-panel.apple-inspector .controls-head {
+  padding: 0.9rem 1rem;
+}
+
+.library-parameter-panel.apple-inspector .control {
+  padding: 0.95rem 1rem;
+}
+
+.library-parameter-panel.apple-inspector .control-description {
+  display: none;
+}
+
+.library-parameter-panel.apple-inspector .control-number {
+  border: 0;
+  border-radius: 9px;
+  background: var(--apple-surface-soft);
+}
+
+.apple-inspector-disclosure {
+  border-top: 1px solid var(--apple-line);
+}
+
+.apple-inspector-disclosure > summary {
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 1rem;
+  color: var(--apple-secondary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.apple-inspector-disclosure > summary::-webkit-details-marker { display: none; }
+
+.apple-inspector-disclosure > summary small {
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--apple-tertiary);
+  background: var(--apple-surface-soft);
+}
+
+.apple-inspector-disclosure > summary svg {
+  transition: transform 240ms var(--apple-spring);
+}
+
+.apple-inspector-disclosure[open] > summary svg { transform: rotate(180deg); }
+
+.apple-inspector-disclosure-body {
+  border-top: 1px solid var(--apple-line);
+}
+
+.apple-inspector-disclosure-body .controls-head {
+  display: none;
+}
+
+.apple-output-disclosure {
+  margin-top: 1rem;
+}
+
+.apple-disclosure {
+  overflow: hidden;
+  border: 1px solid var(--apple-line);
+  border-radius: 20px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-disclosure-summary {
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  list-style: none;
+  cursor: pointer;
+}
+
+.apple-disclosure-summary::-webkit-details-marker { display: none; }
+
+.apple-disclosure-summary > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.apple-disclosure-summary small {
+  color: var(--apple-blue);
+  font-size: 0.65rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.apple-disclosure-summary strong {
+  color: var(--apple-ink);
+  font-size: 0.95rem;
+  font-weight: 640;
+}
+
+.apple-disclosure-summary em {
+  max-width: 60em;
+  color: var(--apple-secondary);
+  font-size: 0.72rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.apple-disclosure-summary > svg {
+  flex: 0 0 auto;
+  color: var(--apple-tertiary);
+  transition: transform 240ms var(--apple-spring);
+}
+
+.apple-disclosure[open] > .apple-disclosure-summary > svg {
+  transform: rotate(180deg);
+}
+
+.apple-disclosure-body {
+  border-top: 1px solid var(--apple-line);
+  padding: 1rem 1.2rem 1.3rem;
+  animation: apple-disclosure-in 240ms var(--apple-spring) both;
+}
+
+@keyframes apple-disclosure-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.apple-output-body .library-export {
+  border: 0;
+  padding: 0;
+}
+
+.apple-output-body .library-export > .library-doc-section-heading {
+  display: none;
+}
+
+.apple-output-body .library-code-panel {
+  border-radius: 17px;
+}
+
+.apple-reference-library {
+  padding: clamp(5rem, 8vw, 7rem) 0 2rem;
+}
+
+.apple-reference-library-heading {
+  margin-bottom: 1.25rem;
+}
+
+.apple-reference-library-heading h2,
+.apple-reference-library-heading h3 {
+  margin: 0;
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-weight: 630;
+  letter-spacing: -0.04em;
+}
+
+.apple-reference-section.library-content-section {
+  border: 0;
+  padding: 0 0 0.7rem;
+}
+
+.apple-reference-section .library-vocabulary-list,
+.apple-reference-section .library-guidance-grid {
+  margin-top: 0;
+}
+
+.apple-reference-section .library-vocabulary-list article,
+.apple-reference-section .library-guidance-grid article,
+.apple-reference-section .library-accessibility-note {
+  border: 0;
+  border-radius: 16px;
+  background: var(--apple-surface-soft);
+}
+
+.apple-reference-section .library-check-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.apple-reference-section .library-check-list li {
+  border: 0;
+  border-radius: 14px;
+  background: var(--apple-surface-soft);
+}
+
+.apple-reference-section .library-parameter-table {
+  overflow: hidden;
+  border: 0;
+  border-radius: 14px;
+  background: var(--apple-surface-soft);
+}
+
+.apple-reference-section .library-related-links {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.apple-reference-section .library-related-links a {
+  border: 0;
+  border-radius: 14px;
+  background: var(--apple-surface-soft);
+}
+
+.apple-reference-section .library-inline-link {
+  color: var(--apple-blue);
+}
+
+.apple-recipe-pagination.library-entry-pagination {
+  gap: 0.75rem;
+  border: 0;
+  padding: 3rem 0 0;
+}
+
+.apple-recipe-pagination a {
+  min-height: 70px;
+  border: 0;
+  border-radius: 18px;
+  padding: 0.9rem 1rem;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-recipe-pagination a:hover {
+  color: var(--apple-blue);
+}
+
+/* Category acquisition pages */
+.apple-category-page {
+  display: block;
+  padding: 2rem 0 7rem;
+}
+
+.apple-category-page .library-category-main {
+  min-width: 0;
+}
+
+.apple-category-page .library-category-header {
+  min-height: 360px;
+  display: grid;
+  align-content: center;
+  border: 0;
+  padding: 4rem 0;
+}
+
+.apple-category-page .library-category-header > span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.apple-category-page .library-category-header h1 {
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(3.8rem, 6vw, 5.6rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.apple-category-page .library-category-header p {
+  max-width: 42em;
+  color: var(--apple-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.apple-category-page .library-category-stats {
+  width: max-content;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  margin-top: 1.4rem;
+  padding: 0 1rem;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-category-page .library-category-group {
+  border: 0;
+  padding: 3rem 0 1rem;
+}
+
+.apple-category-page .library-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.apple-category-page .library-card {
+  overflow: hidden;
+  border: 0;
+  border-radius: 20px;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.apple-category-page .library-card .motion-thumb,
+.apple-category-page .library-guide-art {
+  border: 0;
+  border-radius: 0;
+  background-color: var(--apple-surface-soft);
+}
+
+/* Vocabulary keeps its long-form SEO value with a calmer editorial shell. */
+.vocabulary-page {
+  padding-bottom: 8rem;
+}
+
+.vocabulary-hero {
+  max-width: 920px;
+  padding: clamp(5rem, 9vw, 8rem) 0 3rem;
+}
+
+.vocabulary-hero > span {
+  color: var(--apple-blue);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.vocabulary-hero h1 {
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(3.8rem, 6vw, 5.6rem);
+  font-weight: 640;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.vocabulary-hero p {
+  max-width: 44em;
+  color: var(--apple-secondary);
+  font-size: 1.02rem;
+  line-height: 1.62;
+}
+
+.vocabulary-toolbar {
+  min-height: 70px;
+  border: 1px solid var(--apple-line);
+  border-radius: 22px;
+  padding: 0.7rem;
+  background: color-mix(in srgb, var(--apple-surface-raised) 88%, transparent);
+  box-shadow: var(--apple-shadow-sm);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+
+.vocabulary-toolbar label {
+  min-height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--apple-surface);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.vocabulary-index {
+  overflow-x: auto;
+  border: 0;
+  margin: 1rem 0 0;
+  padding: 0.3rem;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.vocabulary-index::-webkit-scrollbar { display: none; }
+
+.vocabulary-index a {
+  min-height: 40px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 999px;
+  background: var(--apple-surface);
+  box-shadow: inset 0 0 0 1px var(--apple-line);
+}
+
+.vocabulary-group {
+  border: 0;
+  padding: 5rem 0 0;
+}
+
+.vocabulary-group > header {
+  border: 0;
+  padding: 0 0 1.4rem;
+}
+
+.vocabulary-group > header h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 630;
+  letter-spacing: -0.04em;
+}
+
+.vocabulary-term-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  border: 0;
+}
+
+.vocabulary-term-list article {
+  border: 0;
+  border-radius: 20px;
+  padding: 1.2rem;
+  background: var(--apple-surface);
+  box-shadow: var(--apple-shadow-sm);
+}
+
+.vocabulary-term-list article.is-canonical {
+  box-shadow: inset 0 3px 0 var(--apple-blue), var(--apple-shadow-sm);
+}
+
+.vocabulary-definition,
+.vocabulary-translation,
+.vocabulary-distinction {
+  border: 0;
+  border-radius: 13px;
+  background: var(--apple-surface-soft);
+}
+
+.vocabulary-open-link {
+  min-height: 44px;
+  color: var(--apple-blue);
+}
+
+@media (max-width: 1040px) {
+  .apple-workbench.library-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .library-parameter-panel.apple-inspector {
+    border-radius: 22px;
+  }
+
+  .apple-category-page .library-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .apple-recipe-breadcrumbs.library-breadcrumbs {
+    margin-top: 1.2rem;
+  }
+
+  .apple-recipe-hero.library-entry-header {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding: 3rem 0 2.8rem;
+  }
+
+  .apple-recipe-hero h1,
+  .apple-recipe-hero h2 {
+    font-size: clamp(3rem, 15vw, 4.25rem);
+  }
+
+  .apple-recipe-primary-action .ml-button {
+    width: 100%;
+  }
+
+  .apple-workbench-heading.library-doc-section-heading {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar {
+    min-height: 56px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .apple-preview-stage.library-preview-frame {
+    min-height: 440px;
+    border-radius: 0 0 20px 20px;
+    padding: 0.65rem;
+  }
+
+  .apple-preview-stage.library-preview-frame .stage {
+    min-height: 350px;
+    border-radius: 15px;
+  }
+
+  .apple-preview-stage.library-preview-frame .preview-panel {
+    border-radius: 15px;
+  }
+
+  .library-parameter-panel.apple-inspector {
+    border-radius: 20px;
+  }
+
+  .apple-disclosure-summary {
+    min-height: 78px;
+    padding: 0.85rem 1rem;
+  }
+
+  .apple-disclosure-summary em {
+    max-width: 30em;
+  }
+
+  .apple-disclosure-body {
+    padding: 0.85rem 1rem 1rem;
+  }
+
+  .apple-reference-section .library-check-list,
+  .apple-reference-section .library-related-links,
+  .apple-category-page .library-card-grid,
+  .vocabulary-term-list {
+    grid-template-columns: 1fr;
+  }
+
+  .apple-category-page {
+    padding-top: 1rem;
+  }
+
+  .apple-category-page .library-category-header {
+    min-height: auto;
+    padding: 3rem 0;
+  }
+
+  .apple-category-page .library-category-header h1,
+  .vocabulary-hero h1 {
+    font-size: clamp(3rem, 14vw, 4.1rem);
+  }
+
+  .vocabulary-toolbar {
+    align-items: stretch;
+    border-radius: 19px;
+  }
+
+  .vocabulary-toolbar > span {
+    padding-inline: 0.45rem;
+  }
+
+  .vocabulary-group > header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .vocabulary-group > header > small {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar,
+  .library-parameter-panel.apple-inspector,
+  .vocabulary-toolbar {
+    background: var(--apple-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-disclosure-body {
+    animation: apple-fade-in 180ms ease both;
+  }
+}

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -33,12 +33,18 @@ function isSurfaceFilter(value: string | null): value is SurfaceFilter {
   return value === "components" || value === "playgrounds" || value === "guides";
 }
 
-function readCatalogState(fallback: SurfaceFilter) {
-  const params = new URLSearchParams(window.location.search);
+function isCategoryId(value: string | null): value is string {
+  return value !== null && categories.some((category) => category.id === value);
+}
+
+function readCatalogState(search: string, fallback: SurfaceFilter) {
+  const params = new URLSearchParams(search);
   const surface = params.get("surface");
+  const category = params.get("category");
   return {
     surface: isSurfaceFilter(surface) ? surface : fallback,
-    query: params.get("q") ?? ""
+    query: params.get("q") ?? "",
+    categoryId: isCategoryId(category) ? category : undefined
   };
 }
 
@@ -50,21 +56,27 @@ export function CatalogPage({
   initialSurface?: SurfaceFilter;
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
   const [surface, setSurface] = useState<SurfaceFilter>(initialSurface);
   const [query, setQuery] = useState("");
+  const [categoryId, setCategoryId] = useState<string>();
   const deferredQuery = useDeferredValue(query);
   const searchRef = useRef<HTMLInputElement>(null);
   const activeFilter = surfaceFilterById.get(surface) ?? surfaceFilters[0];
+  const clearFiltersLabel = query
+    ? t("catalog.clearSearch")
+    : locale === "zh" ? "清除筛选" : "Clear filters";
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const state = readCatalogState(initialSurface);
+      const state = readCatalogState(location.searchStr, initialSurface);
       setSurface(state.surface);
       setQuery(state.query);
+      setCategoryId(state.categoryId);
     }, 0);
     return () => window.clearTimeout(timeout);
-  }, [initialSurface, locale]);
+  }, [initialSurface, locale, location.searchStr]);
 
   useEffect(() => {
     function focusSearch(event: KeyboardEvent) {
@@ -83,20 +95,25 @@ export function CatalogPage({
     const normalized = deferredQuery.trim().toLowerCase();
     return catalogRecipes.filter((recipe) => {
       const meta = getMotionCatalogMeta(recipe);
-      return meta.surfaceType === activeFilter.surfaceType && (!normalized || createRecipeSearchIndex(recipe, locale).includes(normalized));
+      const matchesCategory = !categoryId || recipe.categoryId === categoryId;
+      return meta.surfaceType === activeFilter.surfaceType
+        && matchesCategory
+        && (!normalized || createRecipeSearchIndex(recipe, locale).includes(normalized));
     });
-  }, [activeFilter.surfaceType, deferredQuery, locale]);
+  }, [activeFilter.surfaceType, categoryId, deferredQuery, locale]);
 
   const grouped = categories
     .map((category) => ({ category, entries: filteredRecipes.filter((recipe) => recipe.categoryId === category.id) }))
     .filter((group) => group.entries.length > 0);
 
-  function updateUrl(nextSurface: SurfaceFilter, nextQuery: string) {
+  function updateUrl(nextSurface: SurfaceFilter, nextQuery: string, nextCategoryId?: string) {
     setSurface(nextSurface);
     setQuery(nextQuery);
+    setCategoryId(nextCategoryId);
     const params = new URLSearchParams();
     params.set("surface", nextSurface);
     if (nextQuery.trim()) params.set("q", nextQuery.trim());
+    if (nextCategoryId) params.set("category", nextCategoryId);
     void navigate({
       href: `${pathFor(locale, ["catalog"])}?${params.toString()}`,
       replace: true,
@@ -121,31 +138,14 @@ export function CatalogPage({
         ]}
       />
 
-      <section className="library-catalog-hero">
+      <section className="library-catalog-hero library-catalog-hero-unified">
         <span>{t("catalog.libraryLabel")}</span>
-        <h1>{t(`catalog.surfaces.${activeFilter.surfaceType}.title`)}</h1>
-        <p>{t(`catalog.surfaces.${activeFilter.surfaceType}.copy`)}</p>
+        <h1>{t("catalog.title")}</h1>
+        <p>{t("catalog.copy")}</p>
       </section>
 
-      <div className="library-surface-tabs" aria-label={t("catalog.surfaceLabel")}>
-        {surfaceFilters.map(({ id, icon: Icon }) => (
-          <button
-            type="button"
-            aria-pressed={surface === id}
-            className={surface === id ? "is-active" : undefined}
-            key={id}
-            onClick={() => updateUrl(id, query)}
-          >
-            <Icon aria-hidden="true" size={16} strokeWidth={1.7} />
-            <span>{t(`nav.${id}`)}</span>
-            <small>{surfaceCounts.get(id) ?? 0}</small>
-          </button>
-        ))}
-      </div>
-
-      <div className="library-catalog-layout" id="catalog-content">
-        <CatalogSidebar locale={locale} compact surfaceType={activeFilter.surfaceType} />
-        <div className="library-catalog-results">
+      <section className="library-catalog-toolbar" aria-label={t("catalog.surfaceLabel")}>
+        <div className="library-catalog-toolbar-primary">
           <label className="library-catalog-search" id="catalog-search">
             <Search aria-hidden="true" size={18} strokeWidth={1.8} />
             <input
@@ -154,17 +154,55 @@ export function CatalogPage({
               autoComplete="off"
               spellCheck={false}
               value={query}
-              onChange={(event) => updateUrl(surface, event.currentTarget.value)}
+              onChange={(event) => updateUrl(surface, event.currentTarget.value, categoryId)}
               placeholder={t("catalog.searchPlaceholder")}
               aria-label={t("common.search")}
             />
             <kbd>/</kbd>
           </label>
 
-          <div className="library-results-meta">
-            <span>{t("catalog.results", { count: filteredRecipes.length })}</span>
-            {query ? <button type="button" onClick={() => updateUrl(surface, "")}>{t("catalog.clearSearch")}</button> : null}
+          <div className="library-surface-tabs library-surface-control" aria-label={t("catalog.surfaceLabel")}>
+            {surfaceFilters.map(({ id, icon: Icon }) => (
+              <button
+                type="button"
+                aria-pressed={surface === id}
+                className={surface === id ? "is-active" : undefined}
+                key={id}
+                onClick={() => updateUrl(id, query)}
+              >
+                <Icon aria-hidden="true" size={16} strokeWidth={1.7} />
+                <span>{t(`nav.${id}`)}</span>
+                <small>{surfaceCounts.get(id) ?? 0}</small>
+              </button>
+            ))}
           </div>
+        </div>
+
+        <div className="library-catalog-toolbar-secondary">
+          <CatalogSidebar
+            locale={locale}
+            compact
+            filterMode
+            surfaceType={activeFilter.surfaceType}
+            selectedCategoryId={categoryId}
+            onCategoryChange={(nextCategoryId) => updateUrl(surface, query, nextCategoryId)}
+          />
+        </div>
+
+        <div className="library-results-meta">
+          <div>
+            <strong>{t(`catalog.surfaces.${activeFilter.surfaceType}.title`)}</strong>
+            <span>{t("catalog.results", { count: filteredRecipes.length })}</span>
+          </div>
+          <p>{t(`catalog.surfaces.${activeFilter.surfaceType}.copy`)}</p>
+          {query || categoryId ? (
+            <button type="button" onClick={() => updateUrl(surface, "")}>{clearFiltersLabel}</button>
+          ) : null}
+        </div>
+      </section>
+
+      <div className="library-catalog-layout is-unified" id="catalog-content">
+        <div className="library-catalog-results">
 
           {grouped.length > 0 ? grouped.map(({ category, entries }) => (
             <section className="library-catalog-group" key={category.id} aria-labelledby={`${category.id}-catalog-title`}>
@@ -230,7 +268,7 @@ export function CatalogPage({
             <section className="library-empty-state">
               <h2>{t("common.noRecipesTitle")}</h2>
               <p>{t("catalog.noResultsCopy")}</p>
-              <button className="library-button" type="button" onClick={() => updateUrl(surface, "")}>{t("catalog.clearSearch")}</button>
+              <button className="library-button" type="button" onClick={() => updateUrl(surface, "")}>{clearFiltersLabel}</button>
             </section>
           )}
         </div>

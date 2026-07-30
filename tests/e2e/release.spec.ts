@@ -142,6 +142,7 @@ test("all canonical catalog entries expose a working surface contract", async ({
       await expect(page.locator("#exports")).toHaveCount(0);
       await expect(page.locator(".library-parameter-panel")).toHaveCount(0);
     } else {
+      await page.locator(".apple-output-disclosure summary").click();
       await expect(page.getByRole("tab", { name: "CSS" })).toBeVisible();
       await expect(page.getByRole("tab", { name: "HTML" })).toBeVisible();
       await expect(page.getByRole("tab", { name: "Prompt" })).toBeVisible();

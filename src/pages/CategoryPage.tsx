@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { CatalogSidebar } from "../components/CatalogSidebar";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";
 import { getCategory } from "../data/categories";
@@ -49,8 +48,7 @@ export function CategoryPage({ locale, categoryId }: CategoryPageProps) {
         ]}
       />
 
-      <div className="library-category-layout">
-        <CatalogSidebar locale={locale} activeCategoryId={category.id} compact />
+      <div className="library-category-layout apple-category-page">
         <div className="library-category-main">
           <nav className="library-breadcrumbs" aria-label={t("workspace.breadcrumbLabel")}>
             <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>

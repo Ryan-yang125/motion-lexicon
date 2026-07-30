@@ -14,6 +14,9 @@ type CatalogSidebarProps = {
   activeRecipeId?: string;
   compact?: boolean;
   surfaceType?: MotionSurfaceType;
+  filterMode?: boolean;
+  selectedCategoryId?: string;
+  onCategoryChange?: (categoryId?: string) => void;
 };
 
 export function CatalogSidebar({
@@ -21,7 +24,10 @@ export function CatalogSidebar({
   activeCategoryId,
   activeRecipeId,
   compact = false,
-  surfaceType
+  surfaceType,
+  filterMode = false,
+  selectedCategoryId,
+  onCategoryChange
 }: CatalogSidebarProps) {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
@@ -43,6 +49,40 @@ export function CatalogSidebar({
       entries: filteredRecipes.filter((recipe) => recipe.categoryId === category.id)
     }))
     .filter((group) => group.entries.length > 0);
+
+  if (filterMode) {
+    return (
+      <div className="library-category-filter" aria-label={t("common.category")}>
+        <div className="library-category-filter-heading">
+          <span>{t("common.category")}</span>
+          <small>{filteredRecipes.length}</small>
+        </div>
+        <div className="library-category-filter-options" role="group" aria-label={t("catalog.indexTitle")}>
+          <button
+            type="button"
+            className={!selectedCategoryId ? "is-active" : undefined}
+            aria-pressed={!selectedCategoryId}
+            onClick={() => onCategoryChange?.()}
+          >
+            <span>{t("common.allEntries")}</span>
+            <small>{filteredRecipes.length}</small>
+          </button>
+          {groupedCategories.map(({ category, entries }) => (
+            <button
+              type="button"
+              key={category.id}
+              className={selectedCategoryId === category.id ? "is-active" : undefined}
+              aria-pressed={selectedCategoryId === category.id}
+              onClick={() => onCategoryChange?.(category.id)}
+            >
+              <span>{text(category.name, locale)}</span>
+              <small>{entries.length}</small>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <aside className={compact ? "library-sidebar is-compact" : "library-sidebar"} aria-label={t("catalog.indexTitle")}>

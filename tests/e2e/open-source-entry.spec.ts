@@ -5,16 +5,24 @@ const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 test("landing page exposes GitHub, CLI, Skill, and versioned public data", async ({ page, request }) => {
   await page.goto("/zh/");
 
-  await expect(page.getByRole("link", { name: "Motion Lexicon on GitHub" })).toHaveAttribute(
+  await expect(page.getByRole("contentinfo").getByRole("link", { name: "GitHub" })).toHaveAttribute(
     "href",
     repositoryUrl
   );
-  await expect(page.getByText("npx github:Ryan-yang125/motion-lexicon", { exact: true })).toBeVisible();
-  await expect(
-    page.getByText("npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon", {
-      exact: true
-    })
-  ).toBeVisible();
+  await page.locator(".library-utility-menu summary").click();
+  const resources = page.locator(".library-utility-popover");
+  await expect(resources.getByRole("link", { name: "CLI", exact: true })).toHaveAttribute(
+    "href",
+    `${repositoryUrl}#free-cli-and-agent-skill`
+  );
+  await expect(resources.getByRole("link", { name: "Agent Skill", exact: true })).toHaveAttribute(
+    "href",
+    `${repositoryUrl}/tree/main/skills/motion-lexicon`
+  );
+  await expect(resources.getByRole("link", { name: "Catalog JSON", exact: true })).toHaveAttribute(
+    "href",
+    "/data/v1/catalog.json"
+  );
 
   const catalogResponse = await request.get("/data/v1/catalog.json");
   expect(catalogResponse.ok()).toBe(true);

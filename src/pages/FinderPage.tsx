@@ -1,16 +1,17 @@
-import { ArrowRight, Search, Sparkles } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ExportPanel } from "../components/ExportPanel";
+import { FinderExportDisclosure } from "../components/FinderExportDisclosure";
 import { MotionCompare } from "../components/MotionCompare";
-import { MotionPreview } from "../components/MotionPreview";
 import { ParameterControls } from "../components/ParameterControls";
+import { CopyButton } from "../components/CopyButton";
 import { Seo } from "../components/Seo";
 import { pathFor, siteUrl } from "../data/site";
 import type { Locale, ParamValue, ParamValues } from "../data/types";
 import {
   buildRecipeJs,
+  buildRecipePrompt,
   parseParamValues,
   valuesToSearchParams
 } from "../lib/motion-engine";
@@ -241,14 +242,17 @@ export function FinderPage({ locale }: { locale: Locale }) {
         ]}
       />
 
-      <section className="finder-hero" aria-labelledby="finder-title">
+      <section
+        className={`finder-hero apple-finder-intake ${result ? "has-result" : "is-empty"}`}
+        aria-labelledby="finder-title"
+      >
         <div className="finder-hero-copy">
           <span>{t("finder.eyebrow")}</span>
           <h1 id="finder-title">{t("finder.title")}</h1>
           <p>{t("finder.copy")}</p>
         </div>
 
-        <form className="finder-search" role="search" onSubmit={handleSubmit}>
+        <form className="finder-search apple-search-pill" role="search" onSubmit={handleSubmit}>
           <label htmlFor="finder-query">{t("finder.formLabel")}</label>
           <div className="finder-search-field">
             <Search aria-hidden="true" size={20} strokeWidth={1.7} />
@@ -286,8 +290,11 @@ export function FinderPage({ locale }: { locale: Locale }) {
       </section>
 
       {result && candidates.length > 0 ? (
-        <section className="finder-results" aria-labelledby="finder-results-title">
-          <div className="library-doc-section-heading finder-results-heading">
+        <section
+          className="finder-results finder-workspace apple-finder-workspace"
+          aria-labelledby="finder-results-title"
+        >
+          <div className="library-doc-section-heading finder-results-heading finder-workspace-heading">
             <div>
               <span>{t("finder.resultEyebrow")}</span>
               <h2 id="finder-results-title">{t("finder.resultTitle")}</h2>
@@ -311,13 +318,68 @@ export function FinderPage({ locale }: { locale: Locale }) {
             <p className="finder-low-confidence" role="note">{t("finder.lowConfidence")}</p>
           ) : null}
 
-          <MotionCompare
-            locale={locale}
-            candidates={candidates}
-            selectedId={selectedId}
-            selectedValues={values}
-            onSelect={selectCandidate}
-          />
+          <div className="finder-workspace-shell apple-workspace-shell">
+            <div className="finder-workspace-stage">
+              <MotionCompare
+                locale={locale}
+                candidates={candidates}
+                selectedId={selectedId}
+                selectedValues={values}
+                onSelect={selectCandidate}
+              />
+            </div>
+
+            {selectedCandidate && values ? (
+              <aside
+                className="finder-tune finder-inspector apple-inspector"
+                aria-labelledby="finder-tune-title"
+                aria-label={t("finder.paramsLabel")}
+              >
+                <header className="finder-inspector-heading">
+                  <div>
+                    <span>{t("finder.tuneEyebrow")}</span>
+                    <h2 id="finder-tune-title">
+                      {t("finder.tuneTitle", { name: selectedCandidate.name })}
+                    </h2>
+                  </div>
+                  <SlidersHorizontal aria-hidden="true" size={18} strokeWidth={1.7} />
+                </header>
+
+                <p className="finder-inspector-copy">{t("finder.tuneCopy")}</p>
+                <div className="library-sync-status finder-inspector-status">
+                  <i aria-hidden="true" />
+                  {t("finder.readyStatus")}
+                </div>
+                <div className="finder-inspector-controls">
+                  <ParameterControls
+                    locale={locale}
+                    recipe={selectedCandidate.recipe}
+                    values={values}
+                    onChange={updateValue}
+                    onReset={resetValues}
+                  />
+                </div>
+                <CopyButton
+                  className="finder-primary-copy apple-primary-action"
+                  label={t("common.copyCurrentPrompt")}
+                  getText={() =>
+                    buildRecipePrompt(selectedCandidate.recipe, values, locale)
+                  }
+                />
+              </aside>
+            ) : null}
+          </div>
+
+          {selectedCandidate && values ? (
+            <div className="finder-workspace-output">
+              <p className="finder-change-hint">{t("finder.changeHint")}</p>
+              <FinderExportDisclosure
+                locale={locale}
+                recipe={selectedCandidate.recipe}
+                values={values}
+              />
+            </div>
+          ) : null}
         </section>
       ) : (
         <section className="finder-empty" aria-labelledby="finder-empty-title">
@@ -327,49 +389,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
         </section>
       )}
 
-      {selectedCandidate && values ? (
-        <section className="finder-tune" aria-labelledby="finder-tune-title">
-          <div className="library-doc-section-heading">
-            <div>
-              <span>{t("finder.tuneEyebrow")}</span>
-              <h2 id="finder-tune-title">
-                {t("finder.tuneTitle", { name: selectedCandidate.name })}
-              </h2>
-            </div>
-            <p>{t("finder.tuneCopy")}</p>
-          </div>
-
-          <div className="library-workbench finder-workbench">
-            <div className="library-preview-frame">
-              <MotionPreview
-                locale={locale}
-                recipe={selectedCandidate.recipe}
-                values={values}
-              />
-            </div>
-            <aside className="library-parameter-panel" aria-label={t("finder.paramsLabel")}>
-              <div className="library-sync-status">
-                <i aria-hidden="true" />
-                {t("finder.readyStatus")}
-              </div>
-              <ParameterControls
-                locale={locale}
-                recipe={selectedCandidate.recipe}
-                values={values}
-                onChange={updateValue}
-                onReset={resetValues}
-              />
-            </aside>
-          </div>
-
-          <p className="finder-change-hint">{t("finder.changeHint")}</p>
-          <ExportPanel
-            locale={locale}
-            recipe={selectedCandidate.recipe}
-            values={values}
-          />
-        </section>
-      ) : null}
     </>
   );
 }
