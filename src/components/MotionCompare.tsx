@@ -63,8 +63,9 @@ function buildComparisonSceneCss(
   kind: ComparisonSceneKind
 ) {
   const root = `.motion-demo.motion-demo--${candidate.recipe.canonicalId}`;
-  const common = `${root} .motion-list{display:grid;gap:.38rem;width:100%;margin:.2rem 0 0;padding:0;list-style:none}
-${root} .motion-list-item{padding:.35rem .5rem;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:6px}`;
+  const common = `${root} .motion-list{display:grid;gap:.4rem;margin:0;padding:0;list-style:none}
+${root} .motion-list-item{padding:.35rem .5rem;background:#f4f4f5;border:1px solid #e4e4e7;border-radius:6px}
+${root} [data-spring-target]{pointer-events:none;cursor:default!important}`;
 
   if (kind === "continuity") {
     return `${common}

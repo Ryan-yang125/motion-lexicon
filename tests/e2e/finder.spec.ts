@@ -44,6 +44,24 @@ test("Finder restores a shared comparison and keeps variant CSS isolated", async
   expect(new Set(comparisonScenes.map((scene) => scene.content)).size).toBe(1);
   expect(comparisonScenes.map((scene) => scene.label)).toEqual(["产品更新", "产品更新", "产品更新"]);
 
+  const springComparisonTarget = await page
+    .locator("[data-variant-id='spring'] .finder-candidate-stage")
+    .evaluate((stage) => {
+      const target = stage.shadowRoot?.querySelector<HTMLElement>("[data-spring-target]");
+      return target
+        ? {
+            cursor: getComputedStyle(target).cursor,
+            pointerEvents: getComputedStyle(target).pointerEvents,
+            tabIndex: target.tabIndex
+          }
+        : null;
+    });
+  expect(springComparisonTarget).toEqual({
+    cursor: "default",
+    pointerEvents: "none",
+    tabIndex: -1
+  });
+
   await page.getByRole("button", { name: "同步重播" }).click();
   const comparisonGeometry = await page.locator(".finder-candidate-stage").evaluateAll((stages) =>
     stages.map((stage) => {
@@ -166,7 +184,8 @@ test("Finder remains readable on a mobile viewport", async ({ page }, testInfo) 
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile layout runs once in the mobile project.");
 
   await page.goto(`/en/finder/?q=${encodeURIComponent("bring in a list one by one")}`);
-  await expect(page.getByRole("heading", { level: 1, name: /Describe the feel/ })).toBeVisible();
+  await expect(page.locator("h1#finder-title")).toHaveText(/Describe the feel/);
+  await expect(page.getByRole("region", { name: /Describe the feel/ })).toBeVisible();
   await expect(page.locator(".finder-candidate")).toHaveCount(3);
 
   const alternative = page.locator(".apple-motion-alternative").first();
