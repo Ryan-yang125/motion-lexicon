@@ -3,7 +3,7 @@ import path from "node:path";
 import { gzipSync } from "node:zlib";
 import { readFileSync } from "node:fs";
 
-function assert(condition: unknown, message: string) {
+function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
     throw new Error(message);
   }
@@ -20,7 +20,7 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-const maxTotalJsGzipBytes = 220 * 1024;
+const maxTotalJsGzipBytes = 230 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 
@@ -32,6 +32,13 @@ for (const file of jsFiles) {
   assert(rawSize <= maxChunkRawBytes, `${file} raw size ${rawSize} exceeds ${maxChunkRawBytes}`);
   assert(gzipSize <= maxChunkGzipBytes, `${file} gzip size ${gzipSize} exceeds ${maxChunkGzipBytes}`);
 }
+
+const finderChunk = jsFiles.find((file) => file.startsWith("finder.lazy-"));
+assert(finderChunk, "Motion Finder route chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, finderChunk))).length <= 12 * 1024,
+  "Motion Finder route chunk exceeds 12 KiB gzip"
+);
 
 const totalCssGzipBytes = cssFiles.reduce((total, file) => {
   return total + gzipSync(readFileSync(path.join(assetsDir, file))).length;

@@ -13,7 +13,8 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const publicDir = path.join(rootDir, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const cliCommand = "npx github:Ryan-yang125/motion-lexicon";
+const cliCommand = "npx -y github:Ryan-yang125/motion-lexicon#v0.2.0";
+const cliRecommendCommand = `${cliCommand} recommend "describe the motion you want" --locale en --format json`;
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 
 type Artifact = {
@@ -100,8 +101,8 @@ function catalogArtifact() {
     project: {
       name: "Motion Lexicon",
       description: {
-        zh: "可视、可调、可复制的界面动效词典。",
-        en: "A visual, tunable, and copy-ready lexicon for interface motion."
+        zh: "从模糊描述推荐候选，并提供可视、可调、可复制配方的界面动效词典。",
+        en: "An interface motion finder that turns fuzzy descriptions into comparable, tunable, and copy-ready recipes."
       },
       siteUrl,
       repositoryUrl,
@@ -110,6 +111,10 @@ function catalogArtifact() {
       skillCommand
     },
     endpoints: {
+      finder: {
+        zh: absoluteUrl(pathFor("zh", ["finder"])),
+        en: absoluteUrl(pathFor("en", ["finder"]))
+      },
       catalog: `${siteUrl}/data/v1/catalog.json`,
       vocabulary: `${siteUrl}/data/v1/vocabulary.json`,
       recipeTemplate: `${siteUrl}/data/v1/recipes/{id}.json`,
@@ -414,10 +419,12 @@ function llmsArtifact() {
   const lines = [
     "# Motion Lexicon",
     "",
-    "> A free, open-source, bilingual reference for choosing, tuning, reviewing, and implementing interface motion.",
+    "> A free, open-source, bilingual motion finder and recipe reference for choosing, comparing, tuning, reviewing, and implementing interface motion.",
     "",
     `- Website: ${siteUrl}/en/`,
     `- Chinese website: ${siteUrl}/zh/`,
+    `- Motion Finder: ${siteUrl}/en/finder/`,
+    `- 中文动效选择器: ${siteUrl}/zh/finder/`,
     `- Source: ${repositoryUrl}`,
     `- Pricing: ${siteUrl}/pricing.txt (free; no account required)`,
     `- Catalog JSON: ${siteUrl}/data/v1/catalog.json`,
@@ -428,6 +435,7 @@ function llmsArtifact() {
     "## Free tools",
     "",
     `- CLI: \`${cliCommand}\``,
+    `- Fuzzy recommendation: \`${cliRecommendCommand}\``,
     `- Agent Skill: \`${skillCommand}\``,
     "",
     "## Canonical recipes",
@@ -464,7 +472,7 @@ function pricingArtifact() {
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
 - Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
-- Last updated: 2026-07-23
+- Last updated: 2026-07-30
 `;
 }
 

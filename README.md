@@ -4,15 +4,16 @@
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-black.svg)](./LICENSE)
 [![Content license: CC BY 4.0](https://img.shields.io/badge/content-CC_BY_4.0-2457ff.svg)](./CONTENT-LICENSE)
 
-**[Live website](https://motion-lexicon.pages.dev/)** · **[44-recipe catalog](https://motion-lexicon.pages.dev/en/catalog/)** · **[91-term vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/)** · **[Versioned JSON API](https://motion-lexicon.pages.dev/data/v1/catalog.json)**
+**[Live website](https://motion-lexicon.pages.dev/)** · **[Motion Finder](https://motion-lexicon.pages.dev/en/finder/)** · **[44-recipe catalog](https://motion-lexicon.pages.dev/en/catalog/)** · **[91-term vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/)** · **[Versioned JSON API](https://motion-lexicon.pages.dev/data/v1/catalog.json)**
 
-Motion Lexicon is a visual motion recipe library. It helps users find a production-ready motion pattern, inspect its real behavior, tune relevant parameters, and copy agent-ready prompt text plus portable HTML, CSS, and interaction JavaScript.
+Motion Lexicon is a visual motion finder and recipe library. Describe a vague interface feeling or goal to receive three explainable candidates, compare them in one scene, select and tune a recipe, then copy agent-ready prompt text plus portable HTML, CSS, and interaction JavaScript.
 
 The launch catalog contains 44 canonical units across 12 categories: 31 copy-ready components, 9 focused playgrounds, and 4 guides. A dedicated bilingual vocabulary surface covers all 91 motion terms with original English technical definitions, accurate Chinese translations, and close-term distinctions. The 47 related terms resolve into the curated workspaces without duplicating components.
 
 ## Current Status
 
 - Static React + TypeScript application is implemented.
+- The bilingual Motion Finder turns vague intent into three ranked candidates with reasons, synchronized previews, shareable comparison state, and the existing tune-and-export workflow.
 - 44 canonical catalog units and all 91 source terms are available in Chinese and English.
 - Motion Lexicon independently maintains all 91 English definitions; every term includes a specific Chinese translation and every alias includes a bilingual distinction.
 - Preview, parameters, prompt, HTML, CSS, JavaScript, and reduced-motion output share one semantic motion specification.
@@ -37,10 +38,13 @@ The launch catalog contains 44 canonical units across 12 categories: 31 copy-rea
 Run the versioned CLI directly from GitHub:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v0.1.0 search "shared element" --locale en --format json
-npx -y github:Ryan-yang125/motion-lexicon#v0.1.0 show slide-in --locale en --format json
-npx -y github:Ryan-yang125/motion-lexicon#v0.1.0 export slide-in --locale en --format bundle
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "卡片弹出来要有重量，最后收得住" --locale zh --format json
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 search "shared element" --locale en --format json
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 show spring --locale en --format json
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring --locale en --format bundle
 ```
+
+`recommend` returns up to three ranked variants with match reasons, distinctions, resolved presets, preview URLs, and a shareable Finder comparison URL. `search` remains the exact vocabulary and catalog lookup command. Agent workflows continue from `recommend` or `search` through `show` and `export`.
 
 Install the Agent Skill:
 
@@ -57,6 +61,8 @@ Agent and tool integrations can use [llms.txt](https://motion-lexicon.pages.dev/
 /en/
 /zh/catalog/
 /en/catalog/
+/zh/finder/
+/en/finder/
 /zh/vocabulary/
 /en/vocabulary/
 /zh/:categoryId/
@@ -122,7 +128,15 @@ dist/sitemap.xml
 dist/robots.txt
 ```
 
-The public sitemap contains 118 canonical URLs: localized landing pages, catalogs, vocabulary pages, 12 category pages, and 44 canonical entries. Alias routes stay out of the sitemap.
+The public sitemap contains 120 canonical URLs: localized landing pages, Finders, catalogs, vocabulary pages, 12 category pages, and 44 canonical entries. Alias routes stay out of the sitemap.
+
+Finder input and comparison state live in the query string:
+
+```txt
+?q=card%20should%20land%20with%20weight&compare=spring%2Cpop-in%2Cscale-in&selected=spring
+```
+
+The canonical Finder URL omits query state. The CLI supplies `q` and the ordered `compare` variants; selecting a candidate adds `selected`, followed by any non-default recipe parameters.
 
 The deployed site is static HTML, CSS, and JavaScript. A Node server is not required at runtime. The code uses a React server renderer during the build step only.
 
@@ -196,8 +210,8 @@ npx impeccable --json src
 
 Current expected test surface:
 
-- Unit tests verify motion parameter and export generation.
-- Playwright checks desktop and mobile rendering, URL state updates, copy behavior, and horizontal overflow.
+- Unit tests verify recommendation ranking, web/CLI consistency, motion parameters, and export generation.
+- Playwright checks Finder comparison, desktop and mobile rendering, URL state updates, copy behavior, and horizontal overflow.
 - Static checks verify i18n coverage, SEO route coverage, motion rules, accessibility baseline, bundle budget, and built dist crawl.
 
 ## Content Standards

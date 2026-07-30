@@ -1,5 +1,6 @@
 import type {
   CatalogDocument,
+  RecommendDocument,
   RecipeDocument,
   SearchDocument
 } from "./types.js";
@@ -46,6 +47,32 @@ export function formatSearchMarkdown(document: SearchDocument) {
   return [
     "| ID | Name | Score | Description |",
     "| --- | --- | ---: | --- |",
+    ...rows
+  ].join("\n");
+}
+
+export function formatRecommendText(document: RecommendDocument) {
+  const heading = `${document.groupName}\t${document.confidence}\t${document.compareUrl}`;
+  const items = document.items.map(
+    (item) => `${item.rank}\t${item.variantId}\t${item.name}\t${item.score}\t${item.confidence}\t${item.reason}`
+  );
+  return [heading, ...items].join("\n");
+}
+
+export function formatRecommendMarkdown(document: RecommendDocument) {
+  const rows = document.items.map(
+    (item) => `| ${item.rank} | ${escapeCell(item.variantId)} | ${escapeCell(item.name)} | ${item.score} | ${item.confidence} | ${escapeCell(item.reason)} |`
+  );
+  return [
+    `# ${escapeCell(document.groupName)}`,
+    "",
+    document.reason,
+    "",
+    `- Confidence: \`${document.confidence}\` (${document.confidenceScore})`,
+    `- Compare: ${document.compareUrl}`,
+    "",
+    "| Rank | Variant | Name | Score | Confidence | Reason |",
+    "| ---: | --- | --- | ---: | ---: | --- |",
     ...rows
   ].join("\n");
 }

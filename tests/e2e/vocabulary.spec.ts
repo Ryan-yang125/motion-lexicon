@@ -19,6 +19,7 @@ test("vocabulary publishes all 91 independently maintained terms", async ({ page
 
 test("vocabulary search finds aliases and links to their working component", async ({ page }) => {
   await page.goto("/zh/vocabulary/");
+  await expect(page.getByRole("combobox", { name: "主题" })).toBeEnabled();
   const search = page.getByRole("searchbox", { name: "搜索动画词汇" });
   await search.fill("共享元素");
 

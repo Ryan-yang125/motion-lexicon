@@ -27,6 +27,7 @@ import {
   getDefaultParamValues,
   valuesToSearchParams
 } from "../../../src/lib/motion-engine.js";
+import { recommendMotions } from "../../../src/lib/motion-finder.js";
 import {
   MotionLexiconError,
   schemaVersion,
@@ -38,6 +39,8 @@ import {
   type RecipeExportDocument,
   type RecipeOptions,
   type ResolvedRecipe,
+  type RecommendDocument,
+  type RecommendOptions,
   type SchemaName,
   type SearchDocument,
   type SearchOptions
@@ -286,6 +289,55 @@ export function search(query: string, options: SearchOptions = {}): SearchDocume
   return { schemaVersion, query: cleanQuery, locale, count: items.length, items };
 }
 
+export function recommend(
+  query: string,
+  options: RecommendOptions = {}
+): RecommendDocument {
+  const cleanQuery = query.trim();
+  if (!cleanQuery) throw new MotionLexiconError("A motion description is required.");
+  const locale = validateLocale(options.locale);
+  const limit = options.limit ?? 3;
+  if (!Number.isInteger(limit) || limit < 1 || limit > 3) {
+    throw new MotionLexiconError(
+      "Motion Finder limit must be an integer from 1 to 3."
+    );
+  }
+  const result = recommendMotions(cleanQuery, locale, limit);
+  return {
+    schemaVersion,
+    query: result.query,
+    locale,
+    confidence: result.confidence,
+    confidenceScore: result.confidenceScore,
+    matchedTerms: result.matchedTerms,
+    groupId: result.groupId,
+    groupName: result.groupName,
+    reason: result.reason,
+    finderPath: result.finderPath,
+    finderUrl: absolutePreviewUrl(result.finderPath),
+    comparePath: result.comparePath,
+    compareUrl: absolutePreviewUrl(result.comparePath),
+    count: result.candidates.length,
+    items: result.candidates.map((candidate) => ({
+      rank: candidate.rank,
+      variantId: candidate.variantId,
+      canonicalId: candidate.canonicalId,
+      name: candidate.name,
+      description: candidate.description,
+      reason: candidate.reason,
+      ...(candidate.distinction ? { distinction: candidate.distinction } : {}),
+      score: candidate.score,
+      confidence: candidate.confidence,
+      matchedTerms: candidate.matchedTerms,
+      ...(candidate.presetQuery ? { presetQuery: candidate.presetQuery } : {}),
+      presetValues: candidate.presetValues,
+      values: candidate.values,
+      path: candidate.recipePath,
+      previewUrl: absolutePreviewUrl(candidate.recipePath)
+    }))
+  };
+}
+
 export function show(id: string, options: RecipeOptions = {}): RecipeDocument {
   const locale = validateLocale(options.locale);
   const { recipe } = requireRecipe(id);
@@ -425,6 +477,61 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
             path: { type: "string", pattern: "^/" },
             previewUrl: { type: "string", format: "uri" },
             score: { type: "number", minimum: 0 }
+          }
+        }
+      }
+    }
+  },
+  recommend: {
+    type: "object",
+    required: [
+      "schemaVersion",
+      "query",
+      "locale",
+      "confidence",
+      "confidenceScore",
+      "groupId",
+      "finderUrl",
+      "compareUrl",
+      "count",
+      "items"
+    ],
+    properties: {
+      schemaVersion: { const: schemaVersion },
+      query: { type: "string" },
+      locale: { enum: ["zh", "en"] },
+      confidence: { enum: ["high", "medium", "low"] },
+      confidenceScore: { type: "number", minimum: 0, maximum: 1 },
+      groupId: { type: "string" },
+      finderUrl: { type: "string", format: "uri" },
+      compareUrl: { type: "string", format: "uri" },
+      count: { type: "integer", minimum: 0, maximum: 3 },
+      items: {
+        type: "array",
+        maxItems: 3,
+        items: {
+          type: "object",
+          required: [
+            "rank",
+            "variantId",
+            "canonicalId",
+            "score",
+            "confidence",
+            "presetValues",
+            "values",
+            "path",
+            "previewUrl"
+          ],
+          properties: {
+            rank: { type: "integer", minimum: 1, maximum: 3 },
+            variantId: { type: "string" },
+            canonicalId: { type: "string" },
+            score: { type: "number", minimum: 0, maximum: 100 },
+            confidence: { type: "number", minimum: 0, maximum: 1 },
+            presetValues: { type: "object" },
+            values: { type: "object" },
+            path: { type: "string", pattern: "^/" },
+            previewUrl: { type: "string", format: "uri" }
           }
         }
       }

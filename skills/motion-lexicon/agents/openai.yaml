@@ -1,4 +1,4 @@
 interface:
   display_name: "Motion Lexicon"
-  short_description: "Find and export portable UI motion recipes"
-  default_prompt: "Use $motion-lexicon to find the best UI motion recipe and return a live preview with portable implementation output."
+  short_description: "Turn vague motion intent into comparable recipes"
+  default_prompt: "Use $motion-lexicon to recommend three UI motion candidates with reasons and a compare URL, then inspect and export the selected recipe."

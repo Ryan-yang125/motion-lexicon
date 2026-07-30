@@ -86,6 +86,11 @@ const vocabularyRoute = createRoute({
   path: "$locale/vocabulary"
 }).lazy(() => import("./routes/vocabulary.lazy").then((module) => module.Route));
 
+const finderRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/finder"
+}).lazy(() => import("./routes/finder.lazy").then((module) => module.Route));
+
 const recipeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "$locale/$categoryId/$recipeId"
@@ -102,6 +107,7 @@ const routeTree = rootRoute.addChildren([
   catalogRoute,
   playgroundRoute,
   vocabularyRoute,
+  finderRoute,
   recipeRoute,
   categoryRoute
 ]);

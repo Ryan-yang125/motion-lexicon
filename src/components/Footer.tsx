@@ -26,6 +26,9 @@ export function Footer() {
         </div>
         <nav aria-label={t("footer.exploreLabel")}>
           <span>{t("footer.explore")}</span>
+          <Link to="/$locale/finder/" params={{ locale }}>
+            {t("nav.finder")}
+          </Link>
           <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
             {t("nav.components")}
           </Link>

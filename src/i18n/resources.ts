@@ -6,6 +6,9 @@ export const resources = {
       nav: {
         primaryLabel: "主导航",
         mobileLabel: "移动端导航",
+        finder: "动效选择器",
+        finderShort: "Finder",
+        openFinder: "打开动效选择器",
         components: "动效组件",
         playgrounds: "参数工具",
         guides: "指南",
@@ -64,9 +67,11 @@ export const resources = {
         searchPlaceholder: "搜索 fade、slide、stagger、press"
       },
       landing: {
-        heroStatus: "用于产品界面的动效组件库",
-        heroTitle: "看得见、调得动，\n复制就能用的动效库。",
-        heroCopy: "从按钮反馈到页面过渡，每个条目都提供实时预览、参数控制、CSS、HTML、行为所需的 JS 和可交给 Agent 的提示词。",
+        heroStatus: "Motion Finder v0.2 · 免费开源",
+        heroTitle: "说出你要的感觉，\n找到准确动效。",
+        heroCopy: "输入一句模糊需求，获得三个最接近的动效候选；同场景比较、选择、调参，再复制 Prompt、CSS、HTML 和行为所需的 JS。",
+        openFinder: "开始描述动效",
+        finderExample: "卡片弹出来要有重量，最后收得住",
         browseComponents: "浏览动效组件",
         openPlaygrounds: "打开参数工具",
         searchLibrary: "搜索 fade、spring、drag 或 reduced motion",
@@ -136,6 +141,45 @@ export const resources = {
         notFoundTitle: "这个分类还没有内容",
         notFoundCopy: "返回动效库，选择一个已有分类继续浏览。"
       },
+      finder: {
+        eyebrow: "Motion Finder / 动效选择器",
+        title: "描述感觉，找到准确动效。",
+        copy: "写下界面、动作和你期待的质感。Motion Lexicon 会给出三个候选，让你在同一节奏里比较、选择并复制实现。",
+        formLabel: "描述你想要的动效",
+        placeholder: "例如：卡片弹出来要有重量，最后收得住",
+        submit: "查找候选",
+        shortcut: "按 Enter 查找",
+        examplesLabel: "试试这些描述",
+        examples: {
+          weight: "卡片弹出来要有重量，最后收得住",
+          continuity: "两个页面里的同一个元素要连贯地移动过去",
+          sequence: "一组列表依次出现，节奏清楚一点"
+        },
+        emptyTitle: "从一句真实需求开始",
+        emptyCopy: "描述界面里谁在动、怎么动，以及你希望它给人的感觉。",
+        resultEyebrow: "候选比较",
+        resultTitle: "同场景比较三个候选",
+        resultCount: "已找到 {{count}} 个候选",
+        confidence: {
+          high: "高度匹配",
+          medium: "可用匹配",
+          low: "探索性匹配"
+        },
+        lowConfidence: "这段描述比较宽泛。候选会先覆盖最接近的意图，你可以补充界面对象、方向或节奏。",
+        matchedTerms: "匹配线索",
+        replayAll: "同步重播",
+        candidateLabel: "候选 {{rank}}",
+        select: "选择 {{name}}",
+        selected: "已选择",
+        distinction: "辨析",
+        openRecipe: "打开完整条目",
+        tuneEyebrow: "确认与导出",
+        tuneTitle: "调节 {{name}}",
+        tuneCopy: "参数、预览和复制输出保持同步；链接会保存当前选择。",
+        paramsLabel: "当前候选参数",
+        readyStatus: "当前选择已同步到链接",
+        changeHint: "你可以继续比较候选，或调好参数后复制实现。"
+      },
       workspace: {
         kicker: "交互式条目",
         title: "条目预览",
@@ -181,12 +225,14 @@ export const resources = {
         staticProduct: "静态构建 · 中英文 · 支持减弱动效"
       },
       seo: {
-        homeTitle: "Motion Lexicon | 可复制的产品动效库",
-        homeDescription: "浏览产品动效组件，实时调节参数，并复制 CSS、HTML、行为所需的 JS 和 Agent 提示词。",
+        homeTitle: "Motion Lexicon | 从模糊描述找到准确动效",
+        homeDescription: "描述产品动效的感觉，比较三个候选，实时调节参数，并复制 Prompt、CSS、HTML 和行为所需的 JS。",
         catalogTitle: "动效目录 | Motion Lexicon",
         catalogDescription: "按动效组件、参数工具和指南浏览 Motion Lexicon。",
         playgroundTitle: "参数工具 | Motion Lexicon",
-        playgroundDescription: "比较和调整动效参数，并复制可用输出。"
+        playgroundDescription: "比较和调整动效参数，并复制可用输出。",
+        finderTitle: "动效选择器 | Motion Lexicon",
+        finderDescription: "描述你想要的动效感觉，比较三个候选，调节参数并复制 Prompt、CSS、HTML 和 JS。"
       }
     }
   },
@@ -195,6 +241,9 @@ export const resources = {
       nav: {
         primaryLabel: "Primary navigation",
         mobileLabel: "Mobile navigation",
+        finder: "Motion Finder",
+        finderShort: "Finder",
+        openFinder: "Open Motion Finder",
         components: "Components",
         playgrounds: "Playgrounds",
         guides: "Guides",
@@ -253,9 +302,11 @@ export const resources = {
         searchPlaceholder: "Search fade, slide, stagger, press"
       },
       landing: {
-        heroStatus: "A motion component library for product interfaces",
-        heroTitle: "See it. Tune it.\nCopy motion that is ready to use.",
-        heroCopy: "From button feedback to page transitions, every entry includes a live preview, focused controls, CSS, HTML, behavior-ready JS when required, and an agent-ready prompt.",
+        heroStatus: "Motion Finder v0.2 · free and open source",
+        heroTitle: "Describe the feel.\nFind the right motion.",
+        heroCopy: "Turn one fuzzy request into three close motion candidates. Compare them in one scene, choose, tune, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
+        openFinder: "Describe your motion",
+        finderExample: "Make the card arrive with weight and settle cleanly",
         browseComponents: "Browse components",
         openPlaygrounds: "Open playgrounds",
         searchLibrary: "Search fade, spring, drag, or reduced motion",
@@ -325,6 +376,45 @@ export const resources = {
         notFoundTitle: "This category has no content yet",
         notFoundCopy: "Return to the motion library and choose an available category."
       },
+      finder: {
+        eyebrow: "Motion Finder / intent to motion",
+        title: "Describe the feel. Find the right motion.",
+        copy: "Name the interface, the action, and the quality you want. Motion Lexicon returns three candidates to compare, choose, tune, and copy.",
+        formLabel: "Describe the motion you want",
+        placeholder: "For example: make the card arrive with weight and settle cleanly",
+        submit: "Find candidates",
+        shortcut: "Press Enter to find",
+        examplesLabel: "Try an example",
+        examples: {
+          weight: "Make the card arrive with weight and settle cleanly",
+          continuity: "Move the same element smoothly between two screens",
+          sequence: "Bring in a list item by item with a clear rhythm"
+        },
+        emptyTitle: "Start with a real interface need",
+        emptyCopy: "Describe what moves, how it moves, and the quality the interaction should convey.",
+        resultEyebrow: "Candidate comparison",
+        resultTitle: "Compare three candidates in one scene",
+        resultCount: "{{count}} candidates found",
+        confidence: {
+          high: "High match",
+          medium: "Useful match",
+          low: "Exploratory match"
+        },
+        lowConfidence: "This description is broad. The candidates cover the closest intent; add the interface object, direction, or rhythm for a tighter match.",
+        matchedTerms: "Matched cues",
+        replayAll: "Replay together",
+        candidateLabel: "Candidate {{rank}}",
+        select: "Choose {{name}}",
+        selected: "Selected",
+        distinction: "Distinction",
+        openRecipe: "Open full entry",
+        tuneEyebrow: "Confirm and export",
+        tuneTitle: "Tune {{name}}",
+        tuneCopy: "Parameters, preview, and copied output stay in sync. The link preserves your selection.",
+        paramsLabel: "Current candidate parameters",
+        readyStatus: "Current selection synced to URL",
+        changeHint: "Keep comparing candidates, or tune this one and copy the implementation."
+      },
       workspace: {
         kicker: "Interactive entry",
         title: "Entry preview",
@@ -370,12 +460,14 @@ export const resources = {
         staticProduct: "Static build · bilingual · reduced-motion ready"
       },
       seo: {
-        homeTitle: "Motion Lexicon | Copyable product motion library",
-        homeDescription: "Browse product motion components, tune parameters live, and copy CSS, HTML, behavior-ready JS when required, or agent-ready prompts.",
+        homeTitle: "Motion Lexicon | Find the right motion from a fuzzy description",
+        homeDescription: "Describe the feel of a product motion, compare three candidates, tune parameters live, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
         catalogTitle: "Motion catalog | Motion Lexicon",
         catalogDescription: "Browse Motion Lexicon by components, playgrounds, and guides.",
         playgroundTitle: "Motion playgrounds | Motion Lexicon",
-        playgroundDescription: "Compare and tune motion parameters, then copy usable output."
+        playgroundDescription: "Compare and tune motion parameters, then copy usable output.",
+        finderTitle: "Motion Finder | Motion Lexicon",
+        finderDescription: "Describe the motion you want, compare three candidates, tune parameters, and copy a prompt, CSS, HTML, and JavaScript."
       }
     }
   }

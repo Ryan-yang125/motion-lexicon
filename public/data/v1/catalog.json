@@ -5,8 +5,8 @@
   "project": {
     "name": "Motion Lexicon",
     "description": {
-      "zh": "可视、可调、可复制的界面动效词典。",
-      "en": "A visual, tunable, and copy-ready lexicon for interface motion."
+      "zh": "从模糊描述推荐候选，并提供可视、可调、可复制配方的界面动效词典。",
+      "en": "An interface motion finder that turns fuzzy descriptions into comparable, tunable, and copy-ready recipes."
     },
     "siteUrl": "https://motion-lexicon.pages.dev",
     "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
@@ -14,10 +14,14 @@
       "zh",
       "en"
     ],
-    "cliCommand": "npx github:Ryan-yang125/motion-lexicon",
+    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v0.2.0",
     "skillCommand": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
   },
   "endpoints": {
+    "finder": {
+      "zh": "https://motion-lexicon.pages.dev/zh/finder/",
+      "en": "https://motion-lexicon.pages.dev/en/finder/"
+    },
     "catalog": "https://motion-lexicon.pages.dev/data/v1/catalog.json",
     "vocabulary": "https://motion-lexicon.pages.dev/data/v1/vocabulary.json",
     "recipeTemplate": "https://motion-lexicon.pages.dev/data/v1/recipes/{id}.json",
