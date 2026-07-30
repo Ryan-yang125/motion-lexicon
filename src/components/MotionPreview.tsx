@@ -8,7 +8,10 @@ import {
   buildRecipeHtml,
   getMotionRuntimeConfig
 } from "../lib/motion-engine";
-import { mountMotionRuntime } from "../lib/motion-runtime";
+import {
+  mountMotionRuntime,
+  updateMotionRuntimeConfig
+} from "../lib/motion-runtime";
 import { Button } from "./ui/button";
 
 type MotionPreviewProps = {
@@ -21,7 +24,6 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
   const { t } = useTranslation();
   const [replayKey, setReplayKey] = useState(0);
   const runtimeHostRef = useRef<HTMLDivElement>(null);
-  const mountedReplayRef = useRef(0);
   const output = useMemo(
     () => ({
       css: buildRecipeCss(recipe, values),
@@ -29,14 +31,30 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
     }),
     [locale, recipe, values]
   );
+  const runtimeConfig = useMemo(
+    () => getMotionRuntimeConfig(recipe, values, false),
+    [recipe, values]
+  );
+  const runtimeConfigRef = useRef(runtimeConfig);
+
+  useEffect(() => {
+    runtimeConfigRef.current = runtimeConfig;
+    const root = runtimeHostRef.current?.querySelector<HTMLElement>(".motion-demo");
+    if (root) updateMotionRuntimeConfig(root, runtimeConfig);
+  }, [runtimeConfig]);
 
   useEffect(() => {
     const root = runtimeHostRef.current?.querySelector<HTMLElement>(".motion-demo");
     if (!root) return;
-    const autoplay = mountedReplayRef.current !== replayKey;
-    mountedReplayRef.current = replayKey;
-    return mountMotionRuntime(root, getMotionRuntimeConfig(recipe, values, autoplay));
-  }, [output.html, recipe, replayKey, values]);
+    return mountMotionRuntime(root, {
+      ...runtimeConfigRef.current,
+      autoplay: replayKey > 0
+    });
+  }, [output.html, recipe.id, replayKey]);
+
+  function replay() {
+    setReplayKey((current) => current + 1);
+  }
 
   return (
     <div className="preview-panel">
@@ -46,7 +64,7 @@ export function MotionPreview({ locale, recipe, values }: MotionPreviewProps) {
           type="button"
           variant="soft"
           size="sm"
-          onClick={() => setReplayKey((current) => current + 1)}
+          onClick={replay}
         >
           <RotateCcw aria-hidden="true" size={15} strokeWidth={1.8} />
           {t("common.replay")}

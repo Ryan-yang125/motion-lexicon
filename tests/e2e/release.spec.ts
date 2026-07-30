@@ -20,8 +20,23 @@ test("query presets hydrate cleanly and become the active output", async ({ page
   page.on("pageerror", (error) => runtimeErrors.push(error.message));
 
   await page.goto("/zh/easing/easing/?ease=linear");
-  await expect(page.getByTestId("css-output")).toContainText("linear");
+  await expect(page.getByRole("tab", { name: "提示词" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByTestId("prompt-output")).toContainText("linear");
   expect(runtimeErrors).toEqual([]);
+});
+
+test("legacy output tab URLs open the consolidated code view", async ({ page }) => {
+  for (const legacyTab of ["css", "html", "js"] as const) {
+    await page.goto(`/zh/springs/spring/?tab=${legacyTab}`);
+
+    const disclosure = page.locator(".apple-output-disclosure");
+    await expect(disclosure).toHaveAttribute("open", "");
+    await expect(disclosure.getByRole("tab")).toHaveCount(2);
+    await expect(disclosure.getByRole("tab", { name: "代码" })).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByTestId("code-output-bundle")).toBeVisible();
+    await expect(page.getByTestId(`${legacyTab}-output`)).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`tab=${legacyTab}`));
+  }
 });
 
 test("persisted theme hydrates without a first-render mismatch", async ({ page }) => {
@@ -91,20 +106,85 @@ test("parameter edits preserve the reader's scroll position", async ({ page }) =
   expect(Math.abs(after - before)).toBeLessThanOrEqual(1);
 });
 
-test("keyboard focus keeps catalog specimens static while fine-pointer hover previews motion", async ({ page }, testInfo) => {
+test("catalog hover mounts one exact recipe runtime at a time while keyboard focus stays static", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Fine-pointer hover is verified once on desktop.");
+  test.setTimeout(45_000);
+  const runtimeErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") runtimeErrors.push(message.text());
+  });
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
 
   await page.goto("/zh/catalog/?surface=components");
-  const card = page.locator(".library-card").first();
-  const actor = card.locator(".thumb-actor").first();
+  const componentRecipes = catalogRecipes.filter((recipe) => recipe.surfaceType === "component");
+  const firstCard = page.locator(
+    `a.library-card[href="/zh/${componentRecipes[0].categoryId}/${componentRecipes[0].id}/"]`
+  );
+  const fallbackActor = firstCard.locator(".thumb-actor").first();
 
-  await card.focus();
-  await expect.poll(() => actor.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
+  await firstCard.focus();
+  await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(0);
+  await expect.poll(() => fallbackActor.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
 
-  await card.hover();
-  await expect.poll(() => actor.evaluate((element) => getComputedStyle(element).animationName)).not.toBe("none");
-  const duration = await actor.evaluate((element) => Number.parseFloat(getComputedStyle(element).animationDuration) * 1000);
-  expect(duration).toBeLessThanOrEqual(280);
+  const comparisonCard = page.locator(
+    'a.library-card[href="/zh/polish-effects/before-after-slider/"]'
+  );
+  const comparisonRuntime = comparisonCard.locator(".motion-thumbnail-runtime");
+  await comparisonCard.hover();
+  await expect(comparisonRuntime).toHaveAttribute("data-runtime-active", "true");
+  await expect(comparisonRuntime).toHaveAttribute("inert", "");
+  expect(await comparisonRuntime.evaluate((host) =>
+    Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>(
+      'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+    ) ?? []).map((element) => element.tabIndex)
+  )).toEqual(expect.arrayContaining([-1]));
+  expect(await comparisonRuntime.evaluate((host) =>
+    Array.from(host.shadowRoot?.querySelectorAll<HTMLElement>(
+      'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+    ) ?? []).every((element) => element.tabIndex === -1)
+  )).toBe(true);
+  expect(await comparisonRuntime.evaluate((host) => {
+    host.shadowRoot?.querySelector<HTMLElement>("input,button,[tabindex]")?.focus();
+    return host.shadowRoot?.activeElement?.tagName ?? null;
+  })).toBeNull();
+  await comparisonCard.focus();
+  for (let index = 0; index < 3; index += 1) {
+    await page.keyboard.press("Tab");
+    expect(await comparisonRuntime.evaluate((host) =>
+      host.shadowRoot?.activeElement?.tagName ?? null
+    )).toBeNull();
+  }
+
+  for (const recipe of componentRecipes) {
+    const card = page.locator(
+      `a.library-card[href="/zh/${recipe.categoryId}/${recipe.id}/"]`
+    );
+    const runtimeHost = card.locator(".motion-thumbnail-runtime");
+
+    await card.hover();
+    await expect(runtimeHost).toHaveAttribute("data-runtime-active", "true");
+    await expect(runtimeHost.locator(".motion-demo")).toHaveAttribute("data-motion", recipe.canonicalId);
+    await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(1);
+    await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(1);
+
+    if ([
+      "hover-effect",
+      "press-tap-feedback",
+      "hold-to-confirm",
+      "drag-to-reorder",
+      "swipe-to-dismiss",
+      "before-after-slider"
+    ].includes(recipe.canonicalId)) {
+      await expect.poll(() => runtimeHost.locator(".motion-demo").evaluate(
+        (root) => root.getAnimations({ subtree: true }).length
+      )).toBeGreaterThan(0);
+    }
+  }
+
+  await page.getByRole("heading", { level: 1 }).hover();
+  await expect(page.locator('.motion-thumbnail-runtime[data-runtime-active="true"]')).toHaveCount(0);
+  await expect(page.locator(".motion-thumbnail-runtime .motion-demo")).toHaveCount(0);
+  expect(runtimeErrors).toEqual([]);
 });
 
 test("continuous motion can pause and resume its active animation", async ({ page }, testInfo) => {
@@ -125,6 +205,7 @@ test("continuous motion can pause and resume its active animation", async ({ pag
 
 test("all canonical catalog entries expose a working surface contract", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "The complete catalog contract runs once on desktop.");
+  test.setTimeout(120_000);
 
   const runtimeErrors: string[] = [];
   page.on("console", (message) => {
@@ -142,10 +223,26 @@ test("all canonical catalog entries expose a working surface contract", async ({
       await expect(page.locator("#exports")).toHaveCount(0);
       await expect(page.locator(".library-parameter-panel")).toHaveCount(0);
     } else {
-      await page.locator(".apple-output-disclosure summary").click();
-      await expect(page.getByRole("tab", { name: "CSS" })).toBeVisible();
-      await expect(page.getByRole("tab", { name: "HTML" })).toBeVisible();
-      await expect(page.getByRole("tab", { name: "Prompt" })).toBeVisible();
+      const disclosure = page.locator(".apple-output-disclosure");
+      const promptTab = disclosure.getByRole("tab", { name: "提示词" });
+      const codeTab = disclosure.getByRole("tab", { name: "代码" });
+
+      await expect(disclosure).toHaveAttribute("open", "");
+      await expect(disclosure.getByRole("tab")).toHaveCount(2);
+      await expect(promptTab).toHaveAttribute("aria-selected", "true");
+      await expect(page.getByTestId("prompt-output")).toBeVisible();
+
+      await codeTab.click();
+      await expect(codeTab).toHaveAttribute("aria-selected", "true");
+      await expect(page).toHaveURL(/(?:\?|&)tab=code(?:&|$)/);
+      await expect(page.getByTestId("code-output-bundle")).toBeVisible();
+      await expect(page.getByTestId("html-output")).toBeVisible();
+      await expect(page.getByTestId("css-output")).toBeVisible();
+      if (buildRecipeJs(recipe, getDefaultParamValues(recipe))) {
+        await expect(page.getByTestId("js-output")).toBeVisible();
+      } else {
+        await expect(page.getByTestId("js-output")).toHaveCount(0);
+      }
       await expect(page.locator(".library-parameter-panel")).toBeVisible();
     }
 
@@ -219,6 +316,18 @@ test("every production copy runtime executes independently and cleans up reentra
       const spring = page.locator("[data-spring-target]");
       await spring.click();
       await expect.poll(() => spring.evaluate((target) => target.style.transform)).not.toBe("");
+      await expect.poll(() => spring.evaluate((target) => {
+        const match = target.style.transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/);
+        return match ? Math.abs(Number(match[1])) : Number.POSITIVE_INFINITY;
+      })).toBeLessThan(24);
+      await page.locator("[data-motion-replay]").click();
+      const restartedDisplacement = await spring.evaluate(async (target) => {
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        return Math.abs(Number(
+          target.style.transform.match(/translate3d\(0(?:px)?,\s*(-?[\d.]+)px,/)?.[1] ?? 0
+        ));
+      });
+      expect(restartedDisplacement).toBeGreaterThan(36);
       await page.locator("body").evaluate((body) => body.classList.add("force-reduced-motion"));
       await expect.poll(() => spring.evaluate((target) => target.style.transform)).toBe("");
     }

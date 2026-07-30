@@ -16,7 +16,7 @@ export function FinderExportDisclosure({
   values
 }: FinderExportDisclosureProps) {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const toggleLabel =
     locale === "zh"
       ? isOpen
@@ -28,7 +28,7 @@ export function FinderExportDisclosure({
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      setIsOpen(Boolean(new URLSearchParams(window.location.search).get("tab")));
+      setIsOpen(true);
     }, 0);
     return () => window.clearTimeout(timeout);
   }, [recipe.id]);

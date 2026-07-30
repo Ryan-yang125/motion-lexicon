@@ -213,7 +213,7 @@
   max-width: 44%;
   overflow-wrap: anywhere;
   border: 1px solid var(--library-line);
-  border-radius: 5px;
+  border-radius: var(--ui-radius-nav);
   padding: 0.25rem 0.4rem;
   color: var(--ink-dim);
   background: var(--library-subtle);

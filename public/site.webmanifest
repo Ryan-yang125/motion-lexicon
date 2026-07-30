@@ -2,7 +2,7 @@
   "name": "Motion Lexicon",
   "short_name": "Motion Lexicon",
   "id": "/zh/",
-  "description": "Describe a motion feeling, compare three candidates, tune the recipe, and copy a precise implementation.",
+  "description": "Describe a motion feeling, switch among three candidates in one primary preview, replay the current motion, tune the recipe, and copy a precise implementation.",
   "start_url": "/zh/",
   "scope": "/",
   "display": "standalone",

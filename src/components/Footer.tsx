@@ -58,10 +58,6 @@ export function Footer() {
           </a>
         </nav>
       </div>
-      <div className="library-footer-meta">
-        <span>{locale === "zh" ? "免费开放 · CSS · HTML · JS · Prompt" : "Free and open · CSS · HTML · JS · Prompt"}</span>
-        <span>{t("footer.staticProduct")}</span>
-      </div>
     </footer>
   );
 }

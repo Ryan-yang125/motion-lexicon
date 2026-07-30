@@ -20,7 +20,9 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-const maxTotalJsGzipBytes = 230 * 1024;
+// v0.2 keeps real catalog previews and the Finder runtime inside a strict
+// sub-1% expansion from the 230 KiB launch baseline.
+const maxTotalJsGzipBytes = 232 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 

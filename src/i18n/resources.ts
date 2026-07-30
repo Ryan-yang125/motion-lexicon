@@ -21,7 +21,7 @@ export const resources = {
       },
       common: {
         brand: "Motion Lexicon",
-        copied: "已复制",
+        copied: "已复制，可直接使用",
         copyFailed: "复制失败，请手动选择内容",
         open: "打开",
         openPlayground: "打开参数工具",
@@ -69,7 +69,7 @@ export const resources = {
       landing: {
         heroStatus: "Motion Finder v0.2 · 免费开源",
         heroTitle: "说出你要的感觉，\n找到准确动效。",
-        heroCopy: "输入一句模糊需求，获得三个最接近的动效候选；同场景比较、选择、调参，再复制 Prompt、CSS、HTML 和行为所需的 JS。",
+        heroCopy: "输入一句模糊需求，获得三个最接近的动效候选；主预览播放当前选择，三个静态候选用于切换，再重播、调参并复制 Prompt、CSS、HTML 和行为所需的 JS。",
         openFinder: "开始描述动效",
         finderExample: "卡片弹出来要有重量，最后收得住",
         browseComponents: "浏览动效组件",
@@ -133,6 +133,8 @@ export const resources = {
         },
         searchPlaceholder: "搜索名称、用途或别名",
         results: "{{count}} 个结果",
+        results_one: "{{count}} 个结果",
+        results_other: "{{count}} 个结果",
         clearSearch: "清除搜索",
         viewCategory: "查看分类",
         canonicalEntries: "个正式条目",
@@ -144,7 +146,7 @@ export const resources = {
       finder: {
         eyebrow: "Motion Finder / 动效选择器",
         title: "描述感觉，找到准确动效。",
-        copy: "写下界面、动作和你期待的质感。Motion Lexicon 会给出三个候选，让你在同一节奏里比较、选择并复制实现。",
+        copy: "写下界面、动作和你期待的质感。Motion Lexicon 会给出三个候选，在主预览中播放当前选择，并让你切换、重播、调参和复制实现。",
         formLabel: "描述你想要的动效",
         placeholder: "例如：卡片弹出来要有重量，最后收得住",
         submit: "查找候选",
@@ -157,17 +159,16 @@ export const resources = {
         },
         emptyTitle: "从一句真实需求开始",
         emptyCopy: "描述界面里谁在动、怎么动，以及你希望它给人的感觉。",
-        resultEyebrow: "候选比较",
-        resultTitle: "同场景比较三个候选",
+        resultEyebrow: "候选选择",
+        resultTitle: "一个主预览，三个候选",
         resultCount: "已找到 {{count}} 个候选",
         confidence: {
           high: "高度匹配",
           medium: "可用匹配",
           low: "探索性匹配"
         },
-        lowConfidence: "这段描述比较宽泛。候选会先覆盖最接近的意图，你可以补充界面对象、方向或节奏。",
+        lowConfidence: "按“界面或对象 + 动作 + 感觉”补充描述，可以获得更准确的候选。例如：卡片弹出来要有重量，最后收得住。",
         matchedTerms: "匹配线索",
-        replayAll: "同步重播",
         candidateLabel: "候选 {{rank}}",
         select: "选择 {{name}}",
         selected: "已选择",
@@ -177,8 +178,7 @@ export const resources = {
         tuneTitle: "调节 {{name}}",
         tuneCopy: "参数、预览和复制输出保持同步；链接会保存当前选择。",
         paramsLabel: "当前候选参数",
-        readyStatus: "当前选择已同步到链接",
-        changeHint: "你可以继续比较候选，或调好参数后复制实现。"
+        readyStatus: "当前选择已同步到链接"
       },
       workspace: {
         kicker: "交互式条目",
@@ -226,13 +226,13 @@ export const resources = {
       },
       seo: {
         homeTitle: "Motion Lexicon | 从模糊描述找到准确动效",
-        homeDescription: "描述产品动效的感觉，比较三个候选，实时调节参数，并复制 Prompt、CSS、HTML 和行为所需的 JS。",
+        homeDescription: "描述产品动效的感觉，在一个主预览中切换三个候选，重播当前动效，实时调节参数，并复制 Prompt、CSS、HTML 和行为所需的 JS。",
         catalogTitle: "动效目录 | Motion Lexicon",
         catalogDescription: "按动效组件、参数工具和指南浏览 Motion Lexicon。",
         playgroundTitle: "参数工具 | Motion Lexicon",
         playgroundDescription: "比较和调整动效参数，并复制可用输出。",
         finderTitle: "动效选择器 | Motion Lexicon",
-        finderDescription: "描述你想要的动效感觉，比较三个候选，调节参数并复制 Prompt、CSS、HTML 和 JS。"
+        finderDescription: "描述你想要的动效感觉，在主预览中切换三个候选，重播当前动效，调节参数并复制 Prompt、CSS、HTML 和 JS。"
       }
     }
   },
@@ -256,7 +256,7 @@ export const resources = {
       },
       common: {
         brand: "Motion Lexicon",
-        copied: "Copied",
+        copied: "Copied — ready to use",
         copyFailed: "Copy failed; select the content manually",
         open: "Open",
         openPlayground: "Open playgrounds",
@@ -304,7 +304,7 @@ export const resources = {
       landing: {
         heroStatus: "Motion Finder v0.2 · free and open source",
         heroTitle: "Describe the feel.\nFind the right motion.",
-        heroCopy: "Turn one fuzzy request into three close motion candidates. Compare them in one scene, choose, tune, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
+        heroCopy: "Turn one fuzzy request into three close motion candidates. Play the current choice in one primary preview, switch among three static choices, replay, tune, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
         openFinder: "Describe your motion",
         finderExample: "Make the card arrive with weight and settle cleanly",
         browseComponents: "Browse components",
@@ -368,6 +368,8 @@ export const resources = {
         },
         searchPlaceholder: "Search names, uses, or aliases",
         results: "{{count}} results",
+        results_one: "{{count}} result",
+        results_other: "{{count}} results",
         clearSearch: "Clear search",
         viewCategory: "View category",
         canonicalEntries: "canonical entries",
@@ -379,7 +381,7 @@ export const resources = {
       finder: {
         eyebrow: "Motion Finder / intent to motion",
         title: "Describe the feel. Find the right motion.",
-        copy: "Name the interface, the action, and the quality you want. Motion Lexicon returns three candidates to compare, choose, tune, and copy.",
+        copy: "Name the interface, the action, and the quality you want. Motion Lexicon returns three candidates, plays the current choice in the primary preview, and lets you switch, replay, tune, and copy.",
         formLabel: "Describe the motion you want",
         placeholder: "For example: make the card arrive with weight and settle cleanly",
         submit: "Find candidates",
@@ -392,17 +394,16 @@ export const resources = {
         },
         emptyTitle: "Start with a real interface need",
         emptyCopy: "Describe what moves, how it moves, and the quality the interaction should convey.",
-        resultEyebrow: "Candidate comparison",
-        resultTitle: "Compare three candidates in one scene",
+        resultEyebrow: "Candidate choices",
+        resultTitle: "One primary preview, three candidates",
         resultCount: "{{count}} candidates found",
         confidence: {
           high: "High match",
           medium: "Useful match",
           low: "Exploratory match"
         },
-        lowConfidence: "This description is broad. The candidates cover the closest intent; add the interface object, direction, or rhythm for a tighter match.",
+        lowConfidence: "Describe the interface or object, the action, and the desired feel for tighter candidates. For example: make the card arrive with weight and settle cleanly.",
         matchedTerms: "Matched cues",
-        replayAll: "Replay together",
         candidateLabel: "Candidate {{rank}}",
         select: "Choose {{name}}",
         selected: "Selected",
@@ -412,8 +413,7 @@ export const resources = {
         tuneTitle: "Tune {{name}}",
         tuneCopy: "Parameters, preview, and copied output stay in sync. The link preserves your selection.",
         paramsLabel: "Current candidate parameters",
-        readyStatus: "Current selection synced to URL",
-        changeHint: "Keep comparing candidates, or tune this one and copy the implementation."
+        readyStatus: "Current selection synced to URL"
       },
       workspace: {
         kicker: "Interactive entry",
@@ -461,13 +461,13 @@ export const resources = {
       },
       seo: {
         homeTitle: "Motion Lexicon | Find the right motion from a fuzzy description",
-        homeDescription: "Describe the feel of a product motion, compare three candidates, tune parameters live, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
+        homeDescription: "Describe the feel of a product motion, switch among three candidates in one primary preview, replay the current motion, tune parameters live, and copy the prompt, CSS, HTML, and behavior-ready JavaScript.",
         catalogTitle: "Motion catalog | Motion Lexicon",
         catalogDescription: "Browse Motion Lexicon by components, playgrounds, and guides.",
         playgroundTitle: "Motion playgrounds | Motion Lexicon",
         playgroundDescription: "Compare and tune motion parameters, then copy usable output.",
         finderTitle: "Motion Finder | Motion Lexicon",
-        finderDescription: "Describe the motion you want, compare three candidates, tune parameters, and copy a prompt, CSS, HTML, and JavaScript."
+        finderDescription: "Describe the motion you want, switch among three candidates in the primary preview, replay the current motion, tune parameters, and copy a prompt, CSS, HTML, and JavaScript."
       }
     }
   }

@@ -176,7 +176,6 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
             {groupedTerms.map(({ category, terms }) => (
               <section key={category.id} id={`vocabulary-${category.id}`} className="vocabulary-group">
                 <header>
-                  <span>{String(category.order).padStart(2, "0")}</span>
                   <div>
                     <h2>{text(category.name, locale)}</h2>
                     <p>{text(category.description, locale)}</p>

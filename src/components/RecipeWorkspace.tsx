@@ -38,7 +38,7 @@ const deviceOptions = [
   { value: "mobile", icon: Smartphone }
 ] as const;
 
-const exportTabs = new Set(["css", "html", "js", "prompt"]);
+const exportTabs = new Set(["code", "css", "html", "js", "prompt"]);
 
 const guidanceLabels = {
   zh: {
@@ -66,10 +66,16 @@ const guidanceLabels = {
     output: "复制实现",
     outputCopy: "提示词和前端代码保持同步，可随时收起。",
     references: "深入了解",
+    understand: "理解动效",
+    understandCopy: "从词义、近义词和使用场景确认选择。",
+    implementation: "实现规则",
+    implementationCopy: "把目的、时序、可访问性和参数约束放在一起检查。",
     review: "发布检查",
+    reviewCopy: "在交付前完成一组短检查。",
     accessibility: "可访问性",
     parameters: "参数参考",
-    relatedSection: "相关动效"
+    relatedSection: "相关动效",
+    relatedCopy: "继续浏览相邻的动效配方。"
   },
   en: {
     vocabulary: "Motion vocabulary",
@@ -96,10 +102,16 @@ const guidanceLabels = {
     output: "Copy implementation",
     outputCopy: "Prompt and frontend code stay synchronized and can be tucked away at any time.",
     references: "Learn more",
+    understand: "Understand the motion",
+    understandCopy: "Confirm the choice through meaning, close terms, and usage context.",
+    implementation: "Implementation rules",
+    implementationCopy: "Review purpose, timing, accessibility, and parameter constraints together.",
     review: "Ship checklist",
+    reviewCopy: "Finish a short set of checks before delivery.",
     accessibility: "Accessibility",
     parameters: "Parameter reference",
-    relatedSection: "Related motion"
+    relatedSection: "Related motion",
+    relatedCopy: "Continue with adjacent motion recipes."
   }
 } as const;
 
@@ -164,7 +176,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
   const [device, setDevice] = useState<DeviceWidth>("desktop");
   const [reduced, setReduced] = useState(false);
   const [focusedTermId, setFocusedTermId] = useState(recipe.id);
-  const [outputOpen, setOutputOpen] = useState(false);
+  const [outputOpen, setOutputOpen] = useState(true);
   const lastRequestedTermRef = useRef<string | null | undefined>(undefined);
   const vocabularyDisclosureRef = useRef<HTMLDetailsElement>(null);
   const advancedControlsRef = useRef<HTMLDetailsElement>(null);
@@ -221,7 +233,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
 
   useEffect(() => {
     const tab = new URLSearchParams(window.location.search).get("tab");
-    setOutputOpen(Boolean(tab && exportTabs.has(tab)));
+    setOutputOpen(!tab || exportTabs.has(tab));
   }, [recipe.id]);
 
   useEffect(() => {
@@ -385,93 +397,146 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
             <SectionHeading id="reference-library-title">{labels.references}</SectionHeading>
           </header>
 
-          <section className="library-content-section apple-reference-section" id="vocabulary" aria-labelledby="vocabulary-summary-title">
+          <section className="library-content-section apple-reference-section" id="understand" aria-labelledby="understand-summary-title">
             <details className="apple-disclosure" ref={vocabularyDisclosureRef}>
               <summary className="apple-disclosure-summary">
                 <span>
                   <small>{labels.vocabulary}</small>
-                  <strong id="vocabulary-summary-title">{labels.vocabularyTitle}</strong>
-                  <span className="apple-disclosure-copy">{labels.vocabularyCopy}</span>
+                  <strong id="understand-summary-title">{labels.understand}</strong>
+                  <span className="apple-disclosure-copy">{labels.understandCopy}</span>
                 </span>
                 <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
               </summary>
               <div className="apple-disclosure-body">
-                <DisclosureHeading className="sr-only" id="vocabulary-title">{labels.vocabularyTitle}</DisclosureHeading>
-                <div className="library-vocabulary-list">
-                  {glossaryTerms.map((term) => (
-                    <article
-                      key={term.id}
-                      id={`workspace-term-${term.id}`}
-                      tabIndex={-1}
-                      aria-labelledby={`workspace-term-title-${term.id}`}
-                      className={`${term.canonical ? "is-canonical" : "is-related"}${focusedTermId === term.id ? " is-focused" : ""}`}
-                    >
-                      <header>
-                        <span>{term.canonical ? labels.canonical : labels.related}</span>
-                        <code>{term.id}</code>
-                      </header>
-                      <h4 id={`workspace-term-title-${term.id}`}>{text(term.name, locale)}</h4>
-                      <small lang={locale === "zh" ? "en" : "zh-CN"}>
-                        {locale === "zh" ? term.name.en : term.name.zh}
-                      </small>
-                      <div>
-                        <span>{labels.definition}</span>
-                        <p lang="en">{term.definition.en}</p>
-                      </div>
-                      <div>
-                        <span>{labels.translation}</span>
-                        <p lang="zh-CN">{term.definition.zh}</p>
-                      </div>
-                      {term.distinction ? (
-                        <div className="library-vocabulary-distinction">
-                          <span>{labels.distinction}</span>
-                          <p>{text(term.distinction, locale)}</p>
+                <section className="apple-reference-topic" aria-labelledby="vocabulary-title">
+                  <header className="apple-reference-topic-heading">
+                    <DisclosureHeading id="vocabulary-title">{labels.vocabularyTitle}</DisclosureHeading>
+                    <p>{labels.vocabularyCopy}</p>
+                  </header>
+                  <div className="library-vocabulary-list">
+                    {glossaryTerms.map((term) => (
+                      <article
+                        key={term.id}
+                        id={`workspace-term-${term.id}`}
+                        tabIndex={-1}
+                        aria-labelledby={`workspace-term-title-${term.id}`}
+                        className={`${term.canonical ? "is-canonical" : "is-related"}${focusedTermId === term.id ? " is-focused" : ""}`}
+                      >
+                        <header>
+                          <span>{term.canonical ? labels.canonical : labels.related}</span>
+                          <code>{term.id}</code>
+                        </header>
+                        <h4 id={`workspace-term-title-${term.id}`}>{text(term.name, locale)}</h4>
+                        <small lang={locale === "zh" ? "en" : "zh-CN"}>
+                          {locale === "zh" ? term.name.en : term.name.zh}
+                        </small>
+                        <div>
+                          <span>{labels.definition}</span>
+                          <p lang="en">{term.definition.en}</p>
                         </div>
-                      ) : null}
-                    </article>
-                  ))}
-                </div>
-                <Link className="library-inline-link" to="/$locale/vocabulary/" params={{ locale }}>
-                  {labels.openVocabulary}
-                  <ChevronRight aria-hidden="true" size={15} />
-                </Link>
+                        <div>
+                          <span>{labels.translation}</span>
+                          <p lang="zh-CN">{term.definition.zh}</p>
+                        </div>
+                        {term.distinction ? (
+                          <div className="library-vocabulary-distinction">
+                            <span>{labels.distinction}</span>
+                            <p>{text(term.distinction, locale)}</p>
+                          </div>
+                        ) : null}
+                      </article>
+                    ))}
+                  </div>
+                  <Link className="library-inline-link" to="/$locale/vocabulary/" params={{ locale }}>
+                    {labels.openVocabulary}
+                    <ChevronRight aria-hidden="true" size={15} />
+                  </Link>
+                </section>
               </div>
             </details>
           </section>
 
-          {guidance ? (
-            <section className="library-content-section apple-reference-section" id="decision" aria-labelledby="decision-summary-title">
-              <details className="apple-disclosure">
-                <summary className="apple-disclosure-summary">
-                  <span>
-                    <small>{labels.decision}</small>
-                    <strong id="decision-summary-title">{labels.decisionTitle}</strong>
-                    <span className="apple-disclosure-copy">{labels.decisionCopy}</span>
-                  </span>
-                  <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-                </summary>
-                <div className="apple-disclosure-body">
-                  <DisclosureHeading className="sr-only" id="decision-title">{labels.decisionTitle}</DisclosureHeading>
-                  <div className="library-guidance-grid">
-                    {([
-                      [labels.purpose, guidance.purpose],
-                      [labels.frequency, guidance.frequency],
-                      [labels.trigger, guidance.trigger],
-                      [labels.enterExit, guidance.enterExit],
-                      [labels.interruptibility, guidance.interruptibility],
-                      [labels.gestureRules, guidance.gestureRules],
-                      [labels.reducedMotionStrategy, guidance.reducedMotionStrategy]
-                    ] as const).map(([label, value]) => (
-                      <article key={label}>
-                        <span>{label}</span>
-                        <p>{text(value, locale)}</p>
-                      </article>
-                    ))}
+          <section className="library-content-section apple-reference-section" id="implementation" aria-labelledby="implementation-summary-title">
+            <details className="apple-disclosure">
+              <summary className="apple-disclosure-summary">
+                <span>
+                  <small>{labels.decision}</small>
+                  <strong id="implementation-summary-title">{labels.implementation}</strong>
+                  <span className="apple-disclosure-copy">{labels.implementationCopy}</span>
+                </span>
+                <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
+              </summary>
+              <div className="apple-disclosure-body apple-implementation-body">
+                {guidance ? (
+                  <section className="apple-reference-topic" aria-labelledby="decision-title">
+                    <header className="apple-reference-topic-heading">
+                      <DisclosureHeading id="decision-title">{labels.decisionTitle}</DisclosureHeading>
+                      <p>{labels.decisionCopy}</p>
+                    </header>
+                    <dl className="library-guidance-list">
+                      {([
+                        [labels.purpose, guidance.purpose],
+                        [labels.frequency, guidance.frequency],
+                        [labels.trigger, guidance.trigger],
+                        [labels.enterExit, guidance.enterExit],
+                        [labels.interruptibility, guidance.interruptibility],
+                        [labels.gestureRules, guidance.gestureRules],
+                        [labels.reducedMotionStrategy, guidance.reducedMotionStrategy]
+                      ] as const).map(([label, value]) => (
+                        <div key={label}>
+                          <dt>{label}</dt>
+                          <dd>{text(value, locale)}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                ) : null}
+
+                <section className="apple-reference-topic" aria-labelledby="accessibility-title">
+                  <header className="apple-reference-topic-heading">
+                    <DisclosureHeading id="accessibility-title">{labels.accessibility}</DisclosureHeading>
+                  </header>
+                  <div className="library-accessibility-note">
+                    <Accessibility aria-hidden="true" size={20} strokeWidth={1.7} />
+                    <div>
+                      <strong>{t("common.reducedMotion")}</strong>
+                      <p>{text(recipe.reducedMotion, locale)}</p>
+                    </div>
                   </div>
-                </div>
-              </details>
-            </section>
-          ) : null}
+                </section>
+
+                {!isGuide ? (
+                  <section className="apple-reference-topic" aria-labelledby="parameters-title">
+                    <header className="apple-reference-topic-heading">
+                      <DisclosureHeading id="parameters-title">{labels.parameters}</DisclosureHeading>
+                    </header>
+                    <div className="library-table-scroll">
+                      <table className="library-parameter-table">
+                        <thead>
+                          <tr>
+                            <th>{t("workspace.parameterName")}</th>
+                            <th>{t("workspace.parameterRange")}</th>
+                            <th>{t("workspace.parameterDefault")}</th>
+                            <th>{t("workspace.parameterPurpose")}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {recipe.params.map((param) => (
+                            <tr key={param.id}>
+                              <td><code>{param.id}</code></td>
+                              <td>{paramRange(param, locale)}</td>
+                              <td>{paramDefault(param, locale)}</td>
+                              <td>{text(param.description, locale)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                ) : null}
+              </div>
+            </details>
+          </section>
 
           <section className="library-content-section apple-reference-section" id="review" aria-labelledby="review-summary-title">
             <details className="apple-disclosure">
@@ -479,6 +544,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                 <span>
                   <small>{t("common.reviewNotes")}</small>
                   <strong id="review-summary-title">{labels.review}</strong>
+                  <span className="apple-disclosure-copy">{labels.reviewCopy}</span>
                 </span>
                 <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
               </summary>
@@ -492,97 +558,31 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
               </div>
             </details>
           </section>
-
-          <section className="library-content-section apple-reference-section" id="accessibility" aria-labelledby="accessibility-summary-title">
-            <details className="apple-disclosure">
-              <summary className="apple-disclosure-summary">
-                <span>
-                  <small>{t("common.accessibility")}</small>
-                  <strong id="accessibility-summary-title">{labels.accessibility}</strong>
-                </span>
-                <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-              </summary>
-              <div className="apple-disclosure-body">
-                <DisclosureHeading className="sr-only" id="accessibility-title">{t("workspace.accessibilityTitle")}</DisclosureHeading>
-                <div className="library-accessibility-note">
-                  <Accessibility aria-hidden="true" size={20} strokeWidth={1.7} />
-                  <div>
-                    <strong>{t("common.reducedMotion")}</strong>
-                    <p>{text(recipe.reducedMotion, locale)}</p>
-                  </div>
-                </div>
-              </div>
-            </details>
-          </section>
-
-          {!isGuide ? (
-            <section className="library-content-section apple-reference-section" id="parameters" aria-labelledby="parameters-summary-title">
-              <details className="apple-disclosure">
-                <summary className="apple-disclosure-summary">
-                  <span>
-                    <small>{t("common.parameter")}</small>
-                    <strong id="parameters-summary-title">{labels.parameters}</strong>
-                  </span>
-                  <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-                </summary>
-                <div className="apple-disclosure-body">
-                  <DisclosureHeading className="sr-only" id="parameters-title">{t("workspace.parameterReference")}</DisclosureHeading>
-                  <div className="library-table-scroll">
-                    <table className="library-parameter-table">
-                      <thead>
-                        <tr>
-                          <th>{t("workspace.parameterName")}</th>
-                          <th>{t("workspace.parameterRange")}</th>
-                          <th>{t("workspace.parameterDefault")}</th>
-                          <th>{t("workspace.parameterPurpose")}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {recipe.params.map((param) => (
-                          <tr key={param.id}>
-                            <td><code>{param.id}</code></td>
-                            <td>{paramRange(param, locale)}</td>
-                            <td>{paramDefault(param, locale)}</td>
-                            <td>{text(param.description, locale)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </details>
-            </section>
-          ) : null}
-
-          {relatedEntries.length > 0 ? (
-            <section className="library-content-section apple-reference-section" id="related" aria-labelledby="related-summary-title">
-              <details className="apple-disclosure">
-                <summary className="apple-disclosure-summary">
-                  <span>
-                    <small>{t("common.related")}</small>
-                    <strong id="related-summary-title">{labels.relatedSection}</strong>
-                  </span>
-                  <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-                </summary>
-                <div className="apple-disclosure-body">
-                  <DisclosureHeading className="sr-only" id="related-title">{t("workspace.relatedTitle")}</DisclosureHeading>
-                  <div className="library-related-links">
-                    {relatedEntries.map((entry) => (
-                      <Link
-                        key={entry.id}
-                        to="/$locale/$categoryId/$recipeId/"
-                        params={{ locale, categoryId: entry.categoryId, recipeId: entry.id }}
-                      >
-                        <span>{text(entry.name, locale)}</span>
-                        <ChevronRight aria-hidden="true" size={15} />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </details>
-            </section>
-          ) : null}
         </section>
+
+        {relatedEntries.length > 0 ? (
+          <section className="apple-related-motion" id="related" aria-labelledby="related-title">
+            <header>
+              <div>
+                <small>{t("common.related")}</small>
+                <SectionHeading id="related-title">{labels.relatedSection}</SectionHeading>
+              </div>
+              <p>{labels.relatedCopy}</p>
+            </header>
+            <div className="library-related-links">
+              {relatedEntries.map((entry) => (
+                <Link
+                  key={entry.id}
+                  to="/$locale/$categoryId/$recipeId/"
+                  params={{ locale, categoryId: entry.categoryId, recipeId: entry.id }}
+                >
+                  <span>{text(entry.name, locale)}</span>
+                  <ChevronRight aria-hidden="true" size={15} />
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <nav className="library-entry-pagination apple-recipe-pagination" aria-label={t("workspace.paginationLabel")}>
           {previousRecipe ? (

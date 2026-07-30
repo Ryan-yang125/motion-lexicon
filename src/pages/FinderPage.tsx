@@ -1,6 +1,6 @@
 import { ArrowRight, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FinderExportDisclosure } from "../components/FinderExportDisclosure";
 import { MotionCompare } from "../components/MotionCompare";
@@ -11,7 +11,6 @@ import { pathFor, siteUrl } from "../data/site";
 import { publisherStructuredData } from "../lib/structured-data";
 import type { Locale, ParamValue, ParamValues } from "../data/types";
 import {
-  buildRecipeJs,
   buildRecipePrompt,
   parseParamValues,
   valuesToSearchParams
@@ -74,15 +73,35 @@ export function FinderPage({ locale }: { locale: Locale }) {
   const [isHydrated, setIsHydrated] = useState(false);
   const valuesRef = useRef<ParamValues | null>(null);
   const syncedQueryRef = useRef<string | null>(null);
+  const parameterFrameRef = useRef(0);
+  const pendingParameterUpdateRef = useRef<{
+    query: string;
+    candidates: MotionFinderCandidate[];
+    selected: MotionFinderCandidate;
+    values: ParamValues;
+  } | null>(null);
+
+  const cancelPendingParameterCommit = useCallback(() => {
+    if (parameterFrameRef.current) window.cancelAnimationFrame(parameterFrameRef.current);
+    parameterFrameRef.current = 0;
+    pendingParameterUpdateRef.current = null;
+  }, []);
 
   const selectedCandidate = useMemo(
     () => candidates.find((candidate) => candidate.variantId === selectedId) ?? null,
     [candidates, selectedId]
   );
+  const finderStateSearch = useMemo(() => {
+    const params = new URLSearchParams(location.searchStr);
+    params.delete("tab");
+    return params.toString();
+  }, [location.searchStr]);
+
+  useEffect(() => cancelPendingParameterCommit, [cancelPendingParameterCommit]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams(finderStateSearch);
       const query = params.get("q")?.trim() ?? "";
       const previousQuery = syncedQueryRef.current;
       const isInitialLocationSync = previousQuery === null;
@@ -118,7 +137,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
       setIsHydrated(true);
     }, 0);
     return () => window.clearTimeout(timeout);
-  }, [locale, location.searchStr]);
+  }, [finderStateSearch, locale]);
 
   function finderUrl(
     query: string,
@@ -134,12 +153,8 @@ export function FinderPage({ locale }: { locale: Locale }) {
     );
     params.set("selected", selected.variantId);
     const activeTab = new URLSearchParams(window.location.search).get("tab");
-    if (
-      activeTab === "html" ||
-      activeTab === "prompt" ||
-      (activeTab === "js" && buildRecipeJs(selected.recipe, nextValues).length > 0)
-    ) {
-      params.set("tab", activeTab);
+    if (activeTab === "code" || activeTab === "css" || activeTab === "html" || activeTab === "js") {
+      params.set("tab", "code");
     }
     const withValues = valuesToSearchParams(selected.recipe, nextValues, params);
     return `${pathFor(locale, ["finder"])}?${withValues.toString()}`;
@@ -160,6 +175,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
   }
 
   function runFinder(query: string) {
+    cancelPendingParameterCommit();
     const normalized = query.trim();
     if (!normalized) {
       setResult(null);
@@ -198,6 +214,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
   }
 
   function selectCandidate(candidate: MotionFinderCandidate) {
+    cancelPendingParameterCommit();
     const nextValues = { ...candidate.values };
     setSelectedId(candidate.variantId);
     valuesRef.current = nextValues;
@@ -209,12 +226,26 @@ export function FinderPage({ locale }: { locale: Locale }) {
     if (!selectedCandidate || !valuesRef.current) return;
     const nextValues = { ...valuesRef.current, [paramId]: value };
     valuesRef.current = nextValues;
-    setValues(nextValues);
-    writeFinderUrl(result?.query ?? input.trim(), candidates, selectedCandidate, nextValues);
+    pendingParameterUpdateRef.current = {
+      query: result?.query ?? input.trim(),
+      candidates,
+      selected: selectedCandidate,
+      values: nextValues
+    };
+    if (parameterFrameRef.current) return;
+    parameterFrameRef.current = window.requestAnimationFrame(() => {
+      parameterFrameRef.current = 0;
+      const pending = pendingParameterUpdateRef.current;
+      pendingParameterUpdateRef.current = null;
+      if (!pending) return;
+      setValues(pending.values);
+      writeFinderUrl(pending.query, pending.candidates, pending.selected, pending.values);
+    });
   }
 
   function resetValues() {
     if (!selectedCandidate) return;
+    cancelPendingParameterCommit();
     const nextValues = { ...selectedCandidate.values };
     valuesRef.current = nextValues;
     setValues(nextValues);
@@ -304,10 +335,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
               <h2 id="finder-results-title">{t("finder.resultTitle")}</h2>
             </div>
             <div className="finder-match-summary">
-              <strong className={`is-${result.confidence}`}>
-                <Sparkles aria-hidden="true" size={14} />
-                {t(`finder.confidence.${result.confidence}`)}
-              </strong>
               <p>{result.reason}</p>
               {result.matchedTerms.length > 0 ? (
                 <div>
@@ -376,7 +403,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
 
           {selectedCandidate && values ? (
             <div className="finder-workspace-output">
-              <p className="finder-change-hint">{t("finder.changeHint")}</p>
               <FinderExportDisclosure
                 locale={locale}
                 recipe={selectedCandidate.recipe}

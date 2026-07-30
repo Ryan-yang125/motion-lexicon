@@ -69,7 +69,7 @@ export function formatRecommendMarkdown(document: RecommendDocument) {
     document.reason,
     "",
     `- Confidence: \`${document.confidence}\` (${document.confidenceScore})`,
-    `- Compare: ${document.compareUrl}`,
+    `- Finder: ${document.compareUrl}`,
     "",
     "| Rank | Variant | Name | Score | Confidence | Reason |",
     "| ---: | --- | --- | ---: | ---: | --- |",

@@ -1,6 +1,6 @@
-import { Braces, Code2, FileCode2, MessageSquareText } from "lucide-react";
+import { Code2, MessageSquareText } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale, MotionRecipe, ParamValues } from "../data/types";
 import {
@@ -19,41 +19,65 @@ type ExportPanelProps = {
   values: ParamValues;
 };
 
-type ExportTab = "css" | "html" | "js" | "prompt";
+type ExportTab = "prompt" | "code";
 
 function readExportTab(): ExportTab {
   const value = new URLSearchParams(window.location.search).get("tab");
-  return value === "html" || value === "js" || value === "prompt" ? value : "css";
+  return value === "code" || value === "css" || value === "html" || value === "js"
+    ? "code"
+    : "prompt";
 }
 
 export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<ExportTab>("css");
+  const [tab, setTab] = useState<ExportTab>("prompt");
   const css = buildRecipeCss(recipe, values);
   const html = buildRecipeHtml(recipe, values, locale);
   const js = buildRecipeJs(recipe, values);
-  const hasJs = js.length > 0;
   const prompt = buildRecipePrompt(recipe, values, locale);
   const teachingNotice = getRecipeTeachingNotice(recipe, values, locale);
+  const labels = locale === "zh"
+    ? {
+        prompt: "提示词",
+        code: "代码",
+        copyAllCode: "复制全部代码",
+        fullCode: "完整实现"
+      }
+    : {
+        prompt: "Prompt",
+        code: "Code",
+        copyAllCode: "Copy all code",
+        fullCode: "Complete implementation"
+      };
+  const codeFiles = useMemo(
+    () => [
+      { id: "html", filename: "markup.html", content: html },
+      { id: "css", filename: "motion.css", content: css },
+      ...(js ? [{ id: "js", filename: "motion.js", content: js }] : [])
+    ],
+    [css, html, js]
+  );
+  const codeBundle = useMemo(
+    () => [
+      `<style>\n${css}\n</style>`,
+      html,
+      js ? `<script>\n${js}\n</script>` : ""
+    ].filter(Boolean).join("\n\n"),
+    [css, html, js]
+  );
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      const next = readExportTab();
-      setTab(next === "js" && !hasJs ? "css" : next);
-    }, 0);
+    const timeout = window.setTimeout(() => setTab(readExportTab()), 0);
     return () => window.clearTimeout(timeout);
-  }, [hasJs, recipe.id]);
+  }, [recipe.id]);
 
   function changeTab(next: string) {
     const nextTab = next as ExportTab;
     setTab(nextTab);
     const params = new URLSearchParams(window.location.search);
-    if (nextTab === "css") {
-      params.delete("tab");
-    } else {
-      params.set("tab", nextTab);
-    }
+    if (nextTab === "prompt") params.delete("tab");
+    else params.set("tab", "code");
     const query = params.toString();
     void navigate({
       href: `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
@@ -73,25 +97,17 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
         <p>{t("workspace.outputCopy")}</p>
       </div>
 
-      <div className="library-code-panel">
+      <div className="library-code-panel apple-code-output">
         <Tabs value={tab} onValueChange={changeTab}>
           <div className="library-code-toolbar">
             <TabsList aria-label={t("workspace.outputTabsLabel")}>
-              <TabsTrigger value="css">
-                <FileCode2 aria-hidden="true" size={14} strokeWidth={1.8} />
-                CSS
-              </TabsTrigger>
-              <TabsTrigger value="html">
-                <Code2 aria-hidden="true" size={14} strokeWidth={1.8} />
-                HTML
-              </TabsTrigger>
-              {js ? <TabsTrigger value="js">
-                <Braces aria-hidden="true" size={14} strokeWidth={1.8} />
-                JS
-              </TabsTrigger> : null}
               <TabsTrigger value="prompt">
                 <MessageSquareText aria-hidden="true" size={14} strokeWidth={1.8} />
-                Prompt
+                {labels.prompt}
+              </TabsTrigger>
+              <TabsTrigger value="code">
+                <Code2 aria-hidden="true" size={14} strokeWidth={1.8} />
+                {labels.code}
               </TabsTrigger>
             </TabsList>
             <span className="library-code-status" role={teachingNotice ? "note" : undefined}>
@@ -99,40 +115,30 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
             </span>
           </div>
 
-          <TabsContent value="css" className="library-code-content">
-            <div className="library-code-filebar">
-              <span>motion.css</span>
-              <CopyButton label={t("common.copyCss")} getText={() => css} variant="ghost" size="sm" />
-            </div>
-            <pre data-testid="css-output"><code>{css}</code></pre>
-          </TabsContent>
-
-          <TabsContent value="html" className="library-code-content">
-            <div className="library-code-filebar">
-              <span>markup.html</span>
-              <CopyButton label={t("common.copyHtml")} getText={() => html} variant="ghost" size="sm" />
-            </div>
-            <pre data-testid="html-output"><code>{html}</code></pre>
-          </TabsContent>
-
-          {js ? <TabsContent value="js" className="library-code-content">
-            <div className="library-code-filebar">
-              <span>motion.js</span>
-              <CopyButton label={t("common.copyJs")} getText={() => js} variant="ghost" size="sm" />
-            </div>
-            <pre data-testid="js-output"><code>{js}</code></pre>
-          </TabsContent> : null}
-
           <TabsContent value="prompt" className="library-prompt-content">
             <div className="library-code-filebar">
               <span>agent-prompt.txt</span>
-              <CopyButton label={t("common.copyCurrentPrompt")} getText={() => prompt} variant="ghost" size="sm" />
             </div>
             <p data-testid="prompt-output">{prompt}</p>
-            <div className="library-prompt-meta">
-              <span>{t("workspace.promptIntent")}</span>
-              <span>{t("workspace.promptFeel")}</span>
-              <span>{t("workspace.promptContext")}</span>
+          </TabsContent>
+
+          <TabsContent value="code" className="library-code-bundle">
+            <div className="library-code-filebar library-code-bundle-toolbar">
+              <span>{labels.fullCode}</span>
+              <CopyButton
+                label={labels.copyAllCode}
+                getText={() => codeBundle}
+                variant="ghost"
+                size="sm"
+              />
+            </div>
+            <div className="library-code-files" data-testid="code-output-bundle">
+              {codeFiles.map((file) => (
+                <section className="library-code-file" key={file.id}>
+                  <header>{file.filename}</header>
+                  <pre data-testid={`${file.id}-output`}><code>{file.content}</code></pre>
+                </section>
+              ))}
             </div>
           </TabsContent>
         </Tabs>

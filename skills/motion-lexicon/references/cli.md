@@ -19,11 +19,11 @@ npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "卡片弹出来要�
 `recommend` accepts `--limit 1..3` and defaults to three candidates. Its JSON document uses `schemaVersion: 1` and includes:
 
 - `query`, `locale`, `confidence`, `matchedTerms`, and an explainable `reason`.
-- `groupId` and `groupName` for the matched comparison set.
-- `finderPath`, `finderUrl`, `comparePath`, and `compareUrl` for the static web Finder.
+- `groupId` and `groupName` for the matched recommendation group.
+- `finderPath`, `finderUrl`, `comparePath`, and `compareUrl` for the static web Finder. The `compare*` names remain compatibility fields for the ordered candidate state; the page uses one primary preview, three static choices, and current-candidate replay.
 - `items[]` in ranked order with `rank`, `variantId`, `canonicalId`, `reason`, optional `distinction`, `confidence`, `matchedTerms`, presets, resolved values, and preview links.
 
-Keep `items[]` in CLI order. Use `variantId` with `show` and `export` so alias presets remain active; use `canonicalId` to identify the implementation workspace. Return `compareUrl` unchanged.
+Keep `items[]` in CLI order. Use `variantId` with `show` and `export` so alias presets remain active; use `canonicalId` to identify the implementation workspace. Return `compareUrl` unchanged and describe it to users as the Finder URL.
 
 ## Discover exact recipes
 

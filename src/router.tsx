@@ -38,7 +38,7 @@ function AppShell() {
         {locale === "zh" ? "跳到主要内容" : "Skip to content"}
       </a>
       <Header locale={locale} />
-      <main className="page" id="main-content" tabIndex={-1}>
+      <main className="page product-type-system" id="main-content" tabIndex={-1}>
         <Outlet />
       </main>
       <Footer />

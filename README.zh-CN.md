@@ -43,13 +43,13 @@
 Motion Finder 会把这句话转化成一条清晰的工作流：
 
 1. **描述**感觉、目的或行为，支持中文和英文。
-2. **选择**三个排序后的候选，查看匹配原因和关键区别。
-3. **调整**选中的动效，在实时预览中确认参数变化。
+2. **选择**三个排序后的静态候选，在一个主预览中查看当前选择。
+3. **调整并重播**选中的动效，在主预览中确认参数变化。
 4. **使用**适合 Agent 的 Prompt，或可移植的 HTML、CSS 和 JavaScript。
 
 完整状态保存在 URL 中，方便分享给团队成员，也能随时回到同一个动效决策。
 
-![Motion Finder——候选推荐与同步比较](docs/assets/readme-finder.webp)
+![Motion Finder——一个主预览与三个排序后的候选](docs/assets/readme-finder.webp)
 
 ## 每个动效都有一张可视化工作台
 
@@ -103,7 +103,7 @@ npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
   --locale zh --format bundle
 ```
 
-`recommend` 最多返回三个排序后的候选，包含匹配原因、差异说明、完整预设、预览链接和可分享的比较链接。
+`recommend` 最多返回三个排序后的候选，包含匹配原因、差异说明、完整预设、预览链接和可分享的 Finder 链接。兼容字段继续使用 `compareUrl`，用于保存候选顺序。
 
 安装免费的 Motion Lexicon Agent Skill：
 
@@ -111,7 +111,7 @@ npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 ```
 
-Skill 会引导 Agent 从模糊需求进入候选推荐、视觉比较、参数选择、无障碍检查和实现输出。Agent 也可以直接读取：
+Skill 会引导 Agent 从模糊需求进入候选推荐、主预览选择、参数选择、无障碍检查和实现输出。Agent 也可以直接读取：
 
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
 - [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt)
@@ -133,7 +133,7 @@ Motion Lexicon 以静态网站运行，完整公共产品永久免费。浏览�
 个源术语、CLI、Agent Skill、版本化机器可读数据、本地化 SEO，以及 120
 条预渲染标准路由。
 
-- Finder 比较状态和动效方案的非默认参数保存在 URL 中，随时可以分享。
+- Finder 候选顺序、当前选择和动效方案的非默认参数保存在 URL 中，随时可以分享。
 - 预览、参数、Prompt、可移植代码和减少动态效果输出来自同一份语义化动效规范。
 - 浅色与深色主题、键盘与指针交互、减少动态效果和响应式工作台已经覆盖公共体验。
 
@@ -149,7 +149,7 @@ Motion Lexicon 以静态网站运行，完整公共产品永久免费。浏览�
 | 路由形式 | 用途 |
 | --- | --- |
 | `/:locale/` | 产品首页 |
-| `/:locale/finder/` | 自然语言动效推荐与比较 |
+| `/:locale/finder/` | 自然语言动效推荐、候选选择与主预览 |
 | `/:locale/catalog/` | 包含 44 张工作台的完整动效库 |
 | `/:locale/vocabulary/` | 包含 91 个术语的完整词汇表 |
 | `/:locale/:category/` | 动效类别发现页 |
