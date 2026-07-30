@@ -9,6 +9,12 @@ export const publisherStructuredData = {
   "@type": "Organization",
   name: "Motion Lexicon",
   url: siteUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: `${siteUrl}/icon-512.png`,
+    width: 512,
+    height: 512
+  },
   sameAs: [repositoryUrl]
 };
 

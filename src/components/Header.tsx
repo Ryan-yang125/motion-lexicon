@@ -3,6 +3,7 @@ import { BookOpen, Braces, Github, Menu, SlidersHorizontal, Terminal } from "luc
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
+import { BrandMark } from "./BrandMark";
 import { ThemeLanguageControls } from "./ThemeLanguageControls";
 
 type HeaderProps = {
@@ -52,11 +53,7 @@ export function Header({ locale }: HeaderProps) {
     <header className="library-header library-header-compact">
       <div className="library-header-inner">
         <Link className="library-brand" to="/$locale/" params={{ locale }} aria-label={t("common.brand")}>
-          <span className="library-brand-mark" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </span>
+          <BrandMark className="library-brand-mark" />
           <span>{t("common.brand")}</span>
         </Link>
 

@@ -7,6 +7,7 @@ import { Seo } from "../components/Seo";
 import { compactCatalogEntries, getCompactCatalogEntry } from "../data/compact-catalog";
 import type { Locale } from "../data/types";
 import { pathFor, siteUrl, text } from "../data/site";
+import { publisherStructuredData } from "../lib/structured-data";
 
 const featuredIds = ["spring", "morph", "stagger"];
 
@@ -34,6 +35,9 @@ export function LandingPage({ locale }: { locale: Locale }) {
             operatingSystem: "Any",
             inLanguage: locale === "zh" ? "zh-CN" : "en",
             isAccessibleForFree: true,
+            image: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
+            screenshot: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
+            publisher: publisherStructuredData,
             license: "https://github.com/Ryan-yang125/motion-lexicon/blob/main/LICENSE",
             sameAs: "https://github.com/Ryan-yang125/motion-lexicon",
             offers: {

@@ -99,6 +99,12 @@ The concrete visual grammar is:
 - Translucency is scoped to floating navigation, popovers, toolbars, and Inspectors. Preview canvases and code surfaces retain stable legibility.
 - Real motion scenes provide visual character. Supporting chrome stays quiet, predictable, and content-led.
 
+### Brand mark
+
+The Motion Lexicon mark reduces the product to an easing curve rising between two keyframes. The muted axes communicate precision, the white curve keeps the motion legible at favicon scale, and the blue endpoint represents an intentional selection. The surrounding squircle gives the mark a stable app-icon silhouette across the website, GitHub, browsers, and operating-system surfaces.
+
+`src/components/BrandMark.tsx` is the interface implementation. `public/brand/` holds the light and inverse SVG masters, and `npm run assets:brand` generates favicon, Apple Touch Icon, PWA icons, and bilingual social cards from the same geometry. Light mode uses the black mark; dark mode uses the inverse mark while retaining the blue endpoint.
+
 ## Data And URL State
 
 Categories and entries live as frontend data. Each entry contains a project-maintained glossary definition, product summary, structured design guidance, examples, parameters, review notes, related terms, SEO metadata, content metadata, and code generation inputs.

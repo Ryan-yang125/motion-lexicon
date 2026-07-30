@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
+import { BrandMark } from "./BrandMark";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const cliUrl = `${repositoryUrl}#free-cli-and-agent-skill`;
@@ -15,11 +16,7 @@ export function Footer() {
     <footer className="library-footer library-footer-compact">
       <div className="library-footer-main">
         <div className="library-footer-brand">
-          <span className="library-brand-mark" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </span>
+          <BrandMark className="library-brand-mark" />
           <div>
             <strong>{t("common.brand")}</strong>
             <p>{t("footer.description")}</p>

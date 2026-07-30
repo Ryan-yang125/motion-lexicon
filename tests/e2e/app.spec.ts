@@ -19,6 +19,31 @@ test("english landing page renders english copy", async ({ page }) => {
   await expect(page.getByText("一个能看")).toHaveCount(0);
 });
 
+test("brand mark keeps its easing geometry and theme contrast", async ({ page }) => {
+  await page.goto("/en/");
+  const marks = page.locator(".brand-mark-svg");
+  await expect(marks).toHaveCount(2);
+  await expect(marks.first().locator(".brand-mark-curve")).toHaveAttribute(
+    "d",
+    "M23 62C26 35 37 27 65 25"
+  );
+
+  const lightBackground = await marks.first().locator(".brand-mark-background").evaluate(
+    (element) => getComputedStyle(element).fill
+  );
+  expect(lightBackground).toBe("rgb(21, 21, 22)");
+
+  await page.evaluate(() => document.documentElement.classList.add("dark"));
+  const darkBackground = await marks.first().locator(".brand-mark-background").evaluate(
+    (element) => getComputedStyle(element).fill
+  );
+  const keyframe = await marks.first().locator(".brand-mark-keyframe").evaluate(
+    (element) => getComputedStyle(element).fill
+  );
+  expect(darkBackground).toBe("rgb(245, 245, 247)");
+  expect(keyframe).toBe("rgb(10, 132, 255)");
+});
+
 test("recipe controls update generated CSS, prompt, and URL query", async ({ page }) => {
   await page.goto("/zh/entrances/slide-in/");
   await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();

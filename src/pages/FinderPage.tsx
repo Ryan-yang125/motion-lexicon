@@ -8,6 +8,7 @@ import { ParameterControls } from "../components/ParameterControls";
 import { CopyButton } from "../components/CopyButton";
 import { Seo } from "../components/Seo";
 import { pathFor, siteUrl } from "../data/site";
+import { publisherStructuredData } from "../lib/structured-data";
 import type { Locale, ParamValue, ParamValues } from "../data/types";
 import {
   buildRecipeJs,
@@ -237,7 +238,10 @@ export function FinderPage({ locale }: { locale: Locale }) {
             applicationCategory: "DesignApplication",
             operatingSystem: "Any",
             inLanguage: locale === "zh" ? "zh-CN" : "en",
-            isAccessibleForFree: true
+            isAccessibleForFree: true,
+            image: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
+            screenshot: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
+            publisher: publisherStructuredData
           }
         ]}
       />
