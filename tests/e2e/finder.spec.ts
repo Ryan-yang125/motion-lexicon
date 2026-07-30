@@ -100,3 +100,16 @@ test("Finder remains readable on a mobile viewport", async ({ page }, testInfo) 
   );
   expect(hasHorizontalOverflow).toBe(false);
 });
+
+test("Finder header fits a narrow desktop viewport", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Narrow desktop layout runs once in the desktop project.");
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.goto(`/zh/finder/?q=${encodeURIComponent(query)}`);
+  await expect(page.locator(".finder-candidate")).toHaveCount(3);
+
+  const hasHorizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth
+  );
+  expect(hasHorizontalOverflow).toBe(false);
+});

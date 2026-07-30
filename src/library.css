@@ -2070,6 +2070,8 @@ kbd {
 }
 
 @media (max-width: 580px) {
+  .library-header-actions > .library-search-link { display: none; }
+
   .library-hero { padding: 3.5rem 0; }
   .library-hero h1 { font-size: 2.2rem; letter-spacing: -0.035em; }
   .library-hero-actions { display: grid; }
