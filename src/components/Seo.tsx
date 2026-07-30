@@ -41,10 +41,22 @@ export function Seo({
     inLanguage: htmlLang(locale),
     isAccessibleForFree: true,
     license: "https://creativecommons.org/licenses/by/4.0/",
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: imageUrl,
+      width: 1200,
+      height: 630
+    },
     publisher: {
       "@type": "Organization",
       name: "Motion Lexicon",
       url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/icon-512.png`,
+        width: 512,
+        height: 512
+      },
       sameAs: ["https://github.com/Ryan-yang125/motion-lexicon"]
     },
     isPartOf: {

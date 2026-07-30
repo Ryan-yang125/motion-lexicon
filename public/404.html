@@ -8,10 +8,10 @@
     <style>
       :root {
         color-scheme: light;
-        --bg: #ffffff;
-        --ink: #0a0a0a;
-        --dim: #737373;
-        --line: #e5e5e5;
+        --bg: #f5f5f7;
+        --ink: #1d1d1f;
+        --dim: #6e6e73;
+        --accent: #0a84ff;
       }
 
       * {
@@ -33,10 +33,26 @@
         width: min(36rem, 100%);
       }
 
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-bottom: 3rem;
+        font-weight: 680;
+        letter-spacing: -0.02em;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 34px;
+      }
+
       h1 {
         margin: 0 0 0.75rem;
-        font-size: 3rem;
-        line-height: 1;
+        font-size: clamp(4.5rem, 16vw, 7rem);
+        font-weight: 680;
+        line-height: 0.9;
+        letter-spacing: -0.06em;
       }
 
       p {
@@ -48,17 +64,19 @@
         min-height: 44px;
         display: inline-flex;
         align-items: center;
-        border: 1px solid var(--ink);
-        border-radius: 6px;
-        padding: 0 0.9rem;
-        color: var(--bg);
-        background: var(--ink);
+        border: 0;
+        border-radius: 13px;
+        padding: 0 1rem;
+        color: #ffffff;
+        background: var(--accent);
+        font-weight: 650;
         text-decoration: none;
       }
     </style>
   </head>
   <body>
     <main>
+      <div class="brand"><img src="/brand/motion-lexicon-mark.svg" alt="" /><span>Motion Lexicon</span></div>
       <h1>404</h1>
       <p>This Motion Lexicon page does not exist. Return to the catalog to keep browsing animation vocabulary.</p>
       <a href="/zh/catalog/">Open catalog</a>

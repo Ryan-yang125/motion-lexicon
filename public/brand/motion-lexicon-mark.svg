@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88" role="img" aria-labelledby="title description">
+  <title id="title">Motion Lexicon</title>
+  <desc id="description">An easing curve rising between two keyframes.</desc>
+  <rect width="88" height="88" rx="23" fill="#151516"/>
+  <path d="M22 64V24M22 64H66" fill="none" stroke="#fff" stroke-opacity=".32" stroke-linecap="round" stroke-width="4"/>
+  <path d="M23 62C26 35 37 27 65 25" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="6"/>
+  <circle cx="23" cy="62" r="5" fill="#fff"/>
+  <circle cx="65" cy="25" r="6.5" fill="#0a84ff"/>
+</svg>

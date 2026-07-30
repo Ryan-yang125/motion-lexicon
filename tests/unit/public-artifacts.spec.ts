@@ -15,6 +15,20 @@ async function parseArtifact(relativePath: string) {
 }
 
 describe("public machine-readable artifacts", () => {
+  it("publishes the easing-curve brand mark across browser assets", async () => {
+    const geometry = "M23 62C26 35 37 27 65 25";
+    const axis = "M22 64V24M22 64H66";
+    const favicon = await readArtifact("favicon.svg");
+    const mark = await readArtifact("brand/motion-lexicon-mark.svg");
+    const inverse = await readArtifact("brand/motion-lexicon-mark-inverse.svg");
+
+    for (const asset of [favicon, mark, inverse]) {
+      expect(asset).toContain(geometry);
+      expect(asset).toContain(axis);
+      expect(asset.toLowerCase()).toContain("#0a84ff");
+    }
+  });
+
   it("publishes the complete canonical catalog and vocabulary", async () => {
     const catalog = await parseArtifact("data/v1/catalog.json") as unknown as {
       schemaVersion: number;

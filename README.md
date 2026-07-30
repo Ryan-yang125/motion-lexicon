@@ -1,252 +1,178 @@
-# Motion Lexicon
+<!-- markdownlint-disable MD013 MD033 MD041 -->
 
-[![CI](https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg)](https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml)
-[![Code license: MIT](https://img.shields.io/badge/code-MIT-black.svg)](./LICENSE)
-[![Content license: CC BY 4.0](https://img.shields.io/badge/content-CC_BY_4.0-2457ff.svg)](./CONTENT-LICENSE)
+<p align="center">
+  <img src="public/brand/motion-lexicon-mark.svg" width="88" height="88" alt="Motion Lexicon logo" />
+</p>
 
-**[Live website](https://motion-lexicon.pages.dev/)** · **[Motion Finder](https://motion-lexicon.pages.dev/en/finder/)** · **[44-recipe catalog](https://motion-lexicon.pages.dev/en/catalog/)** · **[91-term vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/)** · **[Versioned JSON API](https://motion-lexicon.pages.dev/data/v1/catalog.json)**
+<h1 align="center">Motion Lexicon</h1>
 
-Motion Lexicon is a visual motion finder and recipe library organized around one continuous path: **Describe → Choose → Tune → Use**. Describe a vague interface feeling or goal, receive three explainable candidates, focus on the strongest match, compare all three in one scene, tune the selected recipe, then copy agent-ready prompt text plus portable HTML, CSS, and interaction JavaScript.
+<p align="center"><strong>Describe how motion should feel. Leave with an exact, copy-ready recipe.</strong></p>
 
-The launch catalog contains 44 canonical units across 12 categories: 31 copy-ready components, 9 focused playgrounds, and 4 guides. A dedicated bilingual vocabulary surface covers all 91 motion terms with original English technical definitions, accurate Chinese translations, and close-term distinctions. The 47 related terms resolve into the curated workspaces without duplicating components.
+<p align="center">
+  A free visual motion finder for product builders, designers, developers, and AI agents.<br />
+  <strong>Describe → Choose → Tune → Use</strong>
+</p>
 
-## Current Status
+<p align="center">
+  <a href="https://motion-lexicon.pages.dev/en/finder/"><strong>Try Motion Finder</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/catalog/"><strong>Explore the Library</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/">中文</a> ·
+  <a href="https://motion-lexicon.pages.dev/en/">English</a>
+</p>
 
-- Static React + TypeScript application is implemented.
-- The landing experience and bilingual Motion Finder share the same natural-language intake, examples, and product promise. A landing query continues directly into the Finder workspace.
-- The Finder presents one focused candidate with two compact alternatives. Synchronized comparison remains available through one action, followed by tuning and export in the same workspace.
-- Desktop workspaces pair a dominant preview stage with a nearby Inspector. Mobile keeps the selected candidate prominent and condenses the three-way comparison into scan-friendly rows.
-- The product header exposes Find motion and Library as the two primary destinations. Components, playgrounds, guides, vocabulary, CLI, Skill, data, theme, and locale remain available through contextual controls and the resources menu.
-- Recipe output and long-form reference material use progressive disclosures, keeping preview, common controls, and the primary copy action visually dominant.
-- 44 canonical catalog units and all 91 source terms are available in Chinese and English.
-- Motion Lexicon independently maintains all 91 English definitions; every term includes a specific Chinese translation and every alias includes a bilingual distinction.
-- Preview, parameters, prompt, HTML, CSS, JavaScript, and reduced-motion output share one semantic motion specification.
-- Gesture components use real pointer and keyboard behavior, including pointer capture, damping, velocity thresholds, cancellation, and accessible alternatives.
-- Every canonical workspace includes a specific purpose, frequency, trigger, enter/exit, interruptibility, gesture, reduced-motion, and review contract.
-- Light and dark themes are available.
-- Entry query state is shareable through the URL.
-- Landing, catalog, category, and canonical entry routes are prerendered during build.
-- Legacy vocabulary URLs redirect to their canonical recipe or playground preset.
-- `sitemap.xml`, `robots.txt`, favicon assets, OG images, manifest, `404.html`, `_headers`, and `_redirects` are generated or copied into `dist`.
+<p align="center">
+  <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-black.svg" alt="Code license: MIT" /></a>
+  <a href="./CONTENT-LICENSE"><img src="https://img.shields.io/badge/content-CC_BY_4.0-0A84FF.svg" alt="Content license: CC BY 4.0" /></a>
+</p>
 
-## Documentation
+<!-- markdownlint-enable MD013 MD033 MD041 -->
 
-- `PRODUCT.md`: product promise, users, phase strategy, content rules, interaction rules, and quality bar.
-- `DESIGN.md`: experience model, visual system, routing, SEO plan, motion rules, accessibility, and acceptance criteria.
-- `AGENTS.md`: working instructions for future agents.
-- `prototype/motion-lexicon-prototype.html`: archived phase-one visual reference.
-- `src/styles.css` and `src/library.css`: shared primitives and library foundations.
-- `src/apple-redesign.css`: current product shell, focused Finder, unified Library, recipe workbench, materials, responsive layouts, and accessibility adaptations.
+![Motion Lexicon home — describe the motion you want](docs/assets/readme-home.webp)
 
-## Free CLI and Agent Skill
+## From a vague feeling to a usable motion
 
-Run the versioned CLI directly from GitHub:
+You can start with the words already in your head:
+
+> “The card should pop in with weight, then settle cleanly.”
+
+Motion Finder turns that request into a focused workflow:
+
+1. **Describe** the feeling, purpose, or behavior in Chinese or English.
+2. **Choose** from three ranked candidates with clear match reasons and distinctions.
+3. **Tune** the selected motion while watching the preview update in real time.
+4. **Use** the result as an agent-ready prompt or portable HTML, CSS, and JavaScript.
+
+The full state lives in the URL, so a motion decision can be shared with a
+teammate or reopened later.
+
+![Motion Finder — ranked candidates and synchronized comparison](docs/assets/readme-finder.webp)
+
+## A visual workbench for every recipe
+
+Each recipe brings the motion, controls, implementation, and design guidance
+into one place.
+
+- Large live preview with replay, device, and reduced-motion controls
+- Focused Inspector for the parameters that matter most
+- Prompt, HTML, CSS, and framework-independent JavaScript generated from one
+  motion specification
+- Purpose, usage frequency, interaction rules, review criteria, and
+  accessibility guidance
+- Stable, shareable URLs for every recipe and parameter state
+
+![Motion recipe workspace — preview, Inspector, and copy-ready output](docs/assets/readme-workspace.webp)
+
+## What you can explore
+
+| Surface | What it gives you |
+| --- | --- |
+| [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | Three explainable recommendations from a natural-language request |
+| [Motion Library](https://motion-lexicon.pages.dev/en/catalog/) | 44 curated, visual workspaces across 12 motion families |
+| [Vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/) | 91 bilingual motion terms with precise definitions and close-term distinctions |
+| [Recipe workspaces](https://motion-lexicon.pages.dev/en/entrances/slide-in/) | Live previews, parameters, prompts, portable code, and review guidance |
+| [Versioned data](https://motion-lexicon.pages.dev/data/v1/catalog.json) | Structured catalog, vocabulary, and schema for tools and agents |
+
+The 44 canonical workspaces include 31 copy-ready components, 9 focused
+playgrounds, and 4 practical guides. All 91 source terms resolve into this
+curated surface, keeping discovery broad and implementation focused.
+
+## Who it is for
+
+- **Product builders** who know the desired feeling and want the right motion language
+- **Designers** who need a visual reference for comparing close animation patterns
+- **Developers** who want concrete parameters and portable implementation code
+- **AI agents** that work better with precise prompts, structured data, and
+  explicit constraints
+
+## Free CLI
+
+Use the same recommendation model from your terminal:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "卡片弹出来要有重量，最后收得住" --locale zh --format json
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 search "shared element" --locale en --format json
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 show spring --locale en --format json
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring --locale en --format bundle
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend \
+  "卡片弹出来要有重量，最后收得住" \
+  --locale zh \
+  --format json
 ```
 
-`recommend` returns up to three ranked variants with match reasons, distinctions, resolved presets, preview URLs, and a shareable Finder comparison URL. `search` remains the exact vocabulary and catalog lookup command. Agent workflows continue from `recommend` or `search` through `show` and `export`.
+Continue from discovery to implementation:
 
-Install the Agent Skill:
+```bash
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 search \
+  "shared element" --locale en
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 show spring --locale en
+npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
+  --locale en --format bundle
+```
+
+`recommend` returns up to three ranked variants with match reasons,
+distinctions, resolved presets, preview URLs, and a shareable comparison URL.
+
+## Free Agent Skill
+
+Install Motion Lexicon as an Agent Skill:
 
 ```bash
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 ```
 
-Agent and tool integrations can use [llms.txt](https://motion-lexicon.pages.dev/llms.txt), [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt), the [catalog JSON](https://motion-lexicon.pages.dev/data/v1/catalog.json), [vocabulary JSON](https://motion-lexicon.pages.dev/data/v1/vocabulary.json), and [JSON Schema](https://motion-lexicon.pages.dev/data/v1/schema.json).
+The Skill guides an agent from a vague request through recommendation, visual
+comparison, parameter choices, accessibility checks, and implementation output.
 
-## Routes
+Agent integrations can also read:
 
-```txt
-/zh/
-/en/
-/zh/catalog/
-/en/catalog/
-/zh/finder/
-/en/finder/
-/zh/vocabulary/
-/en/vocabulary/
-/zh/:categoryId/
-/en/:categoryId/
-/zh/:categoryId/:recipeId/
-/en/:categoryId/:recipeId/
-```
+- [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
+- [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt)
+- [Catalog JSON](https://motion-lexicon.pages.dev/data/v1/catalog.json)
+- [Vocabulary JSON](https://motion-lexicon.pages.dev/data/v1/vocabulary.json)
+- [JSON Schema](https://motion-lexicon.pages.dev/data/v1/schema.json)
 
-Compatibility routes remain available through generated redirects:
+## Free, open, and portable
 
-```txt
-/zh/playground/
-/en/playground/
-/:locale/:categoryId/:legacyTerm/
-```
+Motion Lexicon runs as a static website and keeps the public product available
+free of charge. The browser experience, CLI, Agent Skill, catalog data, and
+generated output are designed to travel easily between people and tools.
 
-The seed entry route is:
+- Source code: [MIT](./LICENSE)
+- Project-authored content and data: [CC BY 4.0](./CONTENT-LICENSE)
+- Generated code fragments: [0BSD](./CONTENT-LICENSE)
 
-```txt
-/zh/entrances/slide-in
-```
+## For contributors
 
-Recipe parameters live in the query string:
-
-```txt
-?duration=420&distance=28&delay=0&ease=soft
-```
-
-Default values are omitted from the URL.
-
-## SEO Architecture
-
-SEO is handled through build-time static prerendering.
-
-The app uses `react-helmet-async` in `src/components/Seo.tsx` for:
-
-- `<title>`
-- meta description
-- canonical URL
-- hreflang alternates
-- Open Graph tags
-- Twitter card tag
-- JSON-LD BreadcrumbList
-- JSON-LD ItemList on catalog/category compatibility pages
-- JSON-LD TechArticle or DefinedTerm on entry pages
-
-`npm run build` runs this sequence:
-
-```bash
-tsc -b
-vite build
-tsx --tsconfig tsconfig.app.json scripts/prerender.ts
-```
-
-`scripts/prerender.ts` reads static paths from `src/data/site.ts`, calls `src/entry-server.tsx`, injects Helmet output into route HTML, then writes:
-
-```txt
-dist/index.html
-dist/zh/index.html
-dist/zh/catalog/index.html
-dist/zh/entrances/slide-in/index.html
-dist/sitemap.xml
-dist/robots.txt
-```
-
-The public sitemap contains 120 canonical URLs: localized landing pages, Finders, catalogs, vocabulary pages, 12 category pages, and 44 canonical entries. Alias routes stay out of the sitemap.
-
-Finder input and comparison state live in the query string:
-
-```txt
-?q=card%20should%20land%20with%20weight&compare=spring%2Cpop-in%2Cscale-in&selected=spring
-```
-
-The canonical Finder URL omits query state. The CLI supplies `q` and the ordered `compare` variants; selecting a candidate adds `selected`, followed by any non-default recipe parameters.
-
-The deployed site is static HTML, CSS, and JavaScript. A Node server is not required at runtime. The code uses a React server renderer during the build step only.
-
-Catalog, vocabulary, category, and recipe code is split at the TanStack Router boundary. The landing page uses `src/data/compact-catalog.ts`, so detailed guidance, the editor, Radix controls, and portable runtime source load only when a user opens the library. The verified landing JavaScript entry is about 116 KiB gzip including the shared vendor chunk; the full published JavaScript remains inside the 220 KiB gzip budget.
-
-## Tech Stack
-
-- Vite
-- React
-- TypeScript
-- Tailwind CSS v4
-- Local shadcn-style components with Radix UI primitives
-- lucide-react
-- TanStack Router
-- i18next and react-i18next
-- react-helmet-async
-- Vitest
-- Playwright
-
-## Development
-
-Install dependencies:
+Motion Lexicon is built with React, TypeScript, Vite, TanStack Router, i18next,
+and a build-time static rendering pipeline. The production site ships as static
+HTML, CSS, and JavaScript with localized metadata for 120 canonical routes.
 
 ```bash
 npm install
-```
-
-Run the local dev server:
-
-```bash
 npm run dev
 ```
 
-Default local URL:
-
-```txt
-http://127.0.0.1:5173/zh
-```
-
-Build static output:
+Create and inspect the production build:
 
 ```bash
 npm run build
-```
-
-Preview production output:
-
-```bash
 npm run preview -- --host 127.0.0.1 --port 4173
 ```
 
-## Quality Gates
-
-Run these before handing work back:
+The main verification commands are:
 
 ```bash
 npm run lint
 npm run typecheck
 npm run test
-npm run i18n:check
-npm run vocabulary:check
-npm run seo:check
-npm run motion:check
-npm run a11y:check
-npm run build
-npm run bundle:check
-npm run crawl:dist
 npm run test:visual
-npx impeccable --json src
 ```
 
-Current expected test surface:
+Product intent and implementation decisions live in [PRODUCT.md](./PRODUCT.md)
+and [DESIGN.md](./DESIGN.md). Contribution guidelines are in
+[CONTRIBUTING.md](./CONTRIBUTING.md), community participation follows
+[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md), and security reports follow
+[SECURITY.md](./SECURITY.md).
 
-- Unit tests verify recommendation ranking, web/CLI consistency, motion parameters, and export generation.
-- Playwright checks the focused Finder, synchronized comparison, desktop Inspector, mobile rendering, URL state updates, copy behavior, and horizontal overflow.
-- Static checks verify i18n coverage, SEO route coverage, motion rules, accessibility baseline, bundle budget, and built dist crawl.
+---
 
-## Content Standards
-
-Motion Lexicon maintains a self-contained content contract:
-
-- `src/data/glossary.ts` contains 91 independently written English technical definitions, Chinese translations, and bilingual close-term distinctions.
-- `src/data/motion-catalog.ts` preserves a stable 44-unit canonical discovery surface and maps 47 related terms into those workspaces.
-- `src/data/motion-guidance.ts` defines purpose, frequency, physicality, gestures, interruptibility, performance, accessibility, and review guidance.
-- Preview behavior, parameters, prompts, portable output, and reduced-motion behavior share one project-owned motion specification.
-
-Canonical runtime data lives in:
-
-- `src/data/glossary.ts`
-- `src/data/compact-catalog.ts`
-- `src/data/motion-guidance.ts`
-- `src/data/motion-catalog.ts`
-- `src/data/motion-specs.ts`
-- `src/data/categories.ts`
-- `src/data/recipes.ts`
-
-The landing surface reads the validated 44-item compact index. Detailed routes assemble runtime recipes from the 91-term glossary, 44-unit catalog, and specific guidance contracts.
-
-Every canonical unit includes a Motion Lexicon definition, localized summary, term distinctions, a structured design contract, motion-specific parameters, reduced-motion behavior, SEO metadata, and synchronized Prompt/HTML/CSS/JavaScript generation. React remains an implementation detail of the website; user-facing exports stay framework-independent.
-
-## Licensing
-
-- Project source code is available under the [MIT License](./LICENSE).
-- Motion Lexicon written content and data are available under [CC BY 4.0](./CONTENT-LICENSE).
-- Code fragments generated by the website, CLI, or Skill are available under the [Zero-Clause BSD License](./CONTENT-LICENSE).
-- [NOTICE](./NOTICE) records project inspiration, ownership, attribution guidance, and third-party boundaries.
-
-Contributions are welcome through [CONTRIBUTING.md](./CONTRIBUTING.md). Community participation follows [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md), and security reports follow [SECURITY.md](./SECURITY.md).
+**[Describe a motion](https://motion-lexicon.pages.dev/en/finder/)** ·
+**[Browse all recipes](https://motion-lexicon.pages.dev/en/catalog/)** ·
+**[Open the Chinese site](https://motion-lexicon.pages.dev/zh/)**

@@ -10,7 +10,7 @@ import {
 import { aliasMetadata } from "../data/motion-catalog";
 import { pathFor, siteUrl, text } from "../data/site";
 import type { Locale } from "../data/types";
-import { breadcrumbStructuredData } from "../lib/structured-data";
+import { breadcrumbStructuredData, publisherStructuredData } from "../lib/structured-data";
 
 const copy = {
   zh: {
@@ -104,12 +104,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
             inLanguage: locale === "zh" ? "zh-CN" : "en",
             isAccessibleForFree: true,
             license: "https://creativecommons.org/licenses/by/4.0/",
-            publisher: {
-              "@type": "Organization",
-              name: "Motion Lexicon",
-              url: siteUrl,
-              sameAs: ["https://github.com/Ryan-yang125/motion-lexicon"]
-            },
+            publisher: publisherStructuredData,
             hasDefinedTerm: glossaryTerms.map((term) => {
               const canonical = getGlossaryTerm(term.canonicalId);
               return {

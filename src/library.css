@@ -70,37 +70,11 @@ html {
 }
 
 .library-brand-mark {
-  position: relative;
   width: 26px;
   height: 26px;
   display: block;
-  overflow: hidden;
-  border: 1px solid var(--ink);
-  border-radius: 6px;
-  background: var(--ink);
-}
-
-.library-brand-mark i { display: none; }
-
-.library-brand-mark::before,
-.library-brand-mark::after {
-  content: "";
-  position: absolute;
-  border: 1.5px solid var(--bg);
-}
-
-.library-brand-mark::before {
-  inset: 6px;
-  border-radius: 50%;
-}
-
-.library-brand-mark::after {
-  width: 8px;
-  height: 1px;
-  inset-inline-start: 8px;
-  inset-block-start: 12px;
-  border-width: 1.5px 0 0;
-  transform: rotate(-35deg);
+  flex: 0 0 auto;
+  overflow: visible;
 }
 
 .library-primary-nav {
