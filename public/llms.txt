@@ -1,9 +1,11 @@
 # Motion Lexicon
 
-> A free, open-source, bilingual reference for choosing, tuning, reviewing, and implementing interface motion.
+> A free, open-source, bilingual motion finder and recipe reference for choosing, comparing, tuning, reviewing, and implementing interface motion.
 
 - Website: https://motion-lexicon.pages.dev/en/
 - Chinese website: https://motion-lexicon.pages.dev/zh/
+- Motion Finder: https://motion-lexicon.pages.dev/en/finder/
+- 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
@@ -13,7 +15,8 @@
 
 ## Free tools
 
-- CLI: `npx github:Ryan-yang125/motion-lexicon`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 
 ## Canonical recipes

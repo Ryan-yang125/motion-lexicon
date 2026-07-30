@@ -71,13 +71,15 @@ describe("public machine-readable artifacts", () => {
 
   it("advertises the free CLI and Agent Skill in both LLM indexes", async () => {
     const expectedCommands = [
-      "npx github:Ryan-yang125/motion-lexicon",
+      "npx -y github:Ryan-yang125/motion-lexicon#v0.2.0",
+      "recommend \"describe the motion you want\" --locale en --format json",
       "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
     ];
 
     for (const filename of ["llms.txt", "llms-full.txt"]) {
       const content = await readArtifact(filename);
       for (const command of expectedCommands) expect(content, filename).toContain(command);
+      expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/finder/");
     }
   });
 

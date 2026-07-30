@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Bot, Search, SlidersHorizontal, Terminal } from "lucide-react";
+import { ArrowRight, Bot, Search, Sparkles, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getCompactCatalogEntry } from "../data/compact-catalog";
 import type { Locale } from "../data/types";
@@ -25,33 +25,30 @@ export function Hero({ locale }: { locale: Locale }) {
         <div className="library-hero-actions">
           <Link
             className="library-button is-primary"
-            to="/$locale/catalog/"
+            to="/$locale/finder/"
             params={{ locale }}
-            search={{ surface: "components" }}
           >
-            {t("landing.browseComponents")}
+            <Sparkles aria-hidden="true" size={16} strokeWidth={1.8} />
+            {t("landing.openFinder")}
             <ArrowRight aria-hidden="true" size={16} strokeWidth={1.8} />
           </Link>
           <Link
             className="library-button"
             to="/$locale/catalog/"
             params={{ locale }}
-            search={{ surface: "playgrounds" }}
+            search={{ surface: "components" }}
           >
-            <SlidersHorizontal aria-hidden="true" size={16} strokeWidth={1.8} />
-            {t("landing.openPlaygrounds")}
+            {t("landing.browseComponents")}
           </Link>
         </div>
         <Link
           className="library-hero-search"
-          to="/$locale/catalog/"
+          to="/$locale/finder/"
           params={{ locale }}
-          search={{ surface: "components" }}
-          hash="catalog-search"
         >
           <Search aria-hidden="true" size={17} strokeWidth={1.8} />
-          <span>{t("landing.searchLibrary")}</span>
-          <kbd>/</kbd>
+          <span>{t("landing.finderExample")}</span>
+          <span aria-hidden="true">→</span>
         </Link>
         <a
           className="library-hero-search"

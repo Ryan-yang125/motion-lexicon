@@ -47,6 +47,7 @@ export function sitemapPaths() {
   for (const locale of ["zh", "en"] as const) {
     paths.add(pathFor(locale));
     paths.add(pathFor(locale, ["catalog"]));
+    paths.add(pathFor(locale, ["finder"]));
     paths.add(pathFor(locale, ["vocabulary"]));
 
     for (const category of categories) {

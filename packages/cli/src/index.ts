@@ -4,6 +4,7 @@ export {
   getSchema,
   listCanonicalIds,
   listCategories,
+  recommend,
   resolveRecipe,
   search,
   show
@@ -24,6 +25,9 @@ export {
   type RecipeExportDocument,
   type RecipeOptions,
   type ResolvedRecipe,
+  type RecommendDocument,
+  type RecommendItem,
+  type RecommendOptions,
   type SchemaName,
   type SearchDocument,
   type SearchItem,

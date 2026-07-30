@@ -771,12 +771,13 @@ function surfaceMarkup(label: string) {
 export function buildRecipeHtml(
   recipe: MotionRecipe,
   inputValues: ParamValues = {},
-  locale: Locale = "en"
+  locale: Locale = "en",
+  labelOverride?: string
 ) {
   const spec = getMotionSpec(recipe);
   const id = spec.canonicalId;
   const values = resolvedValues(recipe, inputValues);
-  const label = escapeHtml(text(recipe.name, locale));
+  const label = escapeHtml(labelOverride ?? text(recipe.name, locale));
   const root = `motion-demo motion-demo--${classToken(id)}`;
   const copy = locale === "zh"
     ? {

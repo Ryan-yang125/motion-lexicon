@@ -1,12 +1,13 @@
-# Motion Lexicon Launch Design
+# Motion Lexicon v0.2 Design
 
 ## Product Shape
 
-Motion Lexicon is a static, SEO-friendly motion recipe library. The launch version curates 91 motion terms into 44 canonical units: 31 components, 9 playgrounds, and 4 guides.
+Motion Lexicon is a static, SEO-friendly motion finder and recipe library. The catalog curates 91 motion terms into 44 canonical units: 31 components, 9 playgrounds, and 4 guides. v0.2 adds an explainable decision surface for moving from vague intent to three comparable variants.
 
 The user-facing structure is:
 
 - `/zh/` and `/en/`: landing pages with a curated component-library surface.
+- `/:locale/finder/`: bilingual natural-language recommendation, synchronized Top 3 comparison, variant selection, parameter tuning, and portable output.
 - `/:locale/catalog/`: shareable Components, Playgrounds, and Guides catalog filters.
 - `/:locale/vocabulary/`: the complete 91-term bilingual vocabulary and distinction layer.
 - `/:locale/:categoryId/`: indexable category collections.
@@ -48,6 +49,7 @@ Categories and entries live as frontend data. Each entry contains a project-main
 
 Data ownership stays explicit across these layers:
 
+- Motion Lexicon maintains the bilingual intent phrases, comparison groups, scoring weights, match reasons, distinctions, and variant presets used by the Finder and CLI.
 - Motion Lexicon independently maintains English definitions, Chinese translations, alias-to-workspace mapping, and bilingual distinction copy in `src/data/glossary.ts`.
 - Motion Lexicon maintains the product contracts and review guidance in `src/data/motion-guidance.ts`.
 - Preview behavior and portable output are Motion Lexicon implementation artifacts.
@@ -67,11 +69,19 @@ Query state identifies current entry parameters:
 
 Default parameter values are omitted from the query string. Changed values update the preview, generated HTML/CSS/JavaScript, prompt text, and URL. Alias redirects preserve the focused vocabulary term through `?term=`.
 
+Finder query state preserves a vague request, comparison variants, and the current selection:
+
+```txt
+/:locale/finder/?q=<encoded-intent>&compare=<variant-ids>&selected=<variant-id>
+```
+
+The CLI provides `q` plus the ordered `compare` list. The Finder selects the first variant by default and writes `selected` after a user choice. Any non-default recipe parameters follow in the same query string. The canonical Finder URL remains `/:locale/finder/`. Web and CLI recommendations use the same intent data and ranking implementation.
+
 ## SEO
 
-The build pipeline renders static HTML for 118 localized canonical routes. Each route receives a self canonical, reciprocal hreflang set, Open Graph metadata, and static JSON-LD. The vocabulary routes publish a `DefinedTermSet` containing all 91 terms.
+The build pipeline renders static HTML for 120 localized canonical routes. Each route receives a self canonical, reciprocal hreflang set, Open Graph metadata, and static JSON-LD. The vocabulary routes publish a `DefinedTermSet` containing all 91 terms. Finder query variations canonicalize to their localized Finder route.
 
-Landing, catalog, category, and canonical detail pages are indexable. Alias routes redirect and stay out of the sitemap.
+Landing, Finder, catalog, category, and canonical detail pages are indexable. Alias and Finder query variations stay out of the sitemap.
 
 ## Motion Rules
 
@@ -85,6 +95,7 @@ Each recipe uses one semantic motion specification for its parameter schema, pre
 - Gate hover movement behind fine pointer media queries.
 - Use Pointer Events and velocity-aware settlement for gesture components.
 - Keep keyboard-initiated navigation and repeated parameter editing visually immediate.
+- Replay Finder candidates from one synchronized control and use the same scene dimensions and content for direct comparison.
 
 ## Launch Acceptance
 
@@ -102,4 +113,6 @@ Launch is complete when:
 - `npm run bundle:check` passes.
 - `npm run crawl:dist` passes.
 - `npm run test:visual` passes on desktop and mobile.
+- Web and CLI recommendations agree on ordered variants, reasons, presets, and shareable compare state.
+- Both localized Finder routes are prerendered, canonicalized, crawlable, and free of horizontal overflow.
 - The local dev server runs and the site is available for manual review.

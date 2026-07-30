@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Github, Menu, Search } from "lucide-react";
+import { Github, Menu, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
 import { ThemeLanguageControls } from "./ThemeLanguageControls";
@@ -18,6 +18,7 @@ export function Header({ locale }: HeaderProps) {
   const location = useLocation();
   const surface = new URLSearchParams(location.searchStr).get("surface") ?? "components";
   const isCatalog = /\/catalog\/?$/.test(location.pathname);
+  const isFinder = /\/finder\/?$/.test(location.pathname);
   const isVocabulary = /\/vocabulary\/?$/.test(location.pathname);
   const vocabularyLabel = locale === "zh" ? "动画词汇" : "Vocabulary";
 
@@ -38,6 +39,14 @@ export function Header({ locale }: HeaderProps) {
         </Link>
 
         <nav className="library-primary-nav" aria-label={t("nav.primaryLabel")}>
+          <Link
+            to="/$locale/finder/"
+            params={{ locale }}
+            className={isFinder ? "is-active" : undefined}
+            aria-current={isFinder ? "page" : undefined}
+          >
+            {t("nav.finder")}
+          </Link>
           {surfaces.map((item) => (
             <Link
               key={item}
@@ -63,15 +72,12 @@ export function Header({ locale }: HeaderProps) {
         <div className="library-header-actions">
           <Link
             className="library-search-link"
-            to="/$locale/catalog/"
+            to="/$locale/finder/"
             params={{ locale }}
-            search={{ surface: "components" }}
-            hash="catalog-search"
-            aria-label={t("nav.searchLibrary")}
+            aria-label={t("nav.openFinder")}
           >
-            <Search aria-hidden="true" size={15} strokeWidth={1.8} />
-            <span>{t("common.search")}</span>
-            <kbd>/</kbd>
+            <Sparkles aria-hidden="true" size={15} strokeWidth={1.8} />
+            <span>{t("nav.finderShort")}</span>
           </Link>
           <a
             className="icon-link"
@@ -89,6 +95,9 @@ export function Header({ locale }: HeaderProps) {
               <Menu aria-hidden="true" size={18} strokeWidth={1.8} />
             </summary>
             <nav aria-label={t("nav.mobileLabel")}>
+              <Link to="/$locale/finder/" params={{ locale }}>
+                {t("nav.finder")}
+              </Link>
               {surfaces.map((item) => (
                 <Link
                   key={item}

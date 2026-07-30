@@ -80,12 +80,13 @@ const sitemap = sitemapPaths();
 const expectedPaths = locales.flatMap((locale) => [
   pathFor(locale),
   pathFor(locale, ["catalog"]),
+  pathFor(locale, ["finder"]),
   pathFor(locale, ["vocabulary"]),
   ...categories.map((category) => pathFor(locale, [category.id])),
   ...canonicalMotionCatalog.map((item) => pathFor(locale, [item.categoryId, item.id]))
 ]);
 
-assert(expectedPaths.length === 118, `Expected 118 localized canonical paths, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 120, `Expected 120 localized canonical paths, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static paths, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap URLs, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static paths contain duplicates");

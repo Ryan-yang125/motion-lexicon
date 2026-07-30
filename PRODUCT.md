@@ -21,6 +21,7 @@ The product helps a user move from a vague motion idea to a precise recipe they 
 The site is a static, SEO-friendly application with these public surfaces:
 
 - Landing page: introduces the library and highlights representative motion recipes.
+- Motion Finder: turns a vague bilingual description into three ranked variants, explains their differences, compares them in one scene, and continues into tuning and export.
 - Components: 31 copy-ready patterns with real previews, relevant controls, and synchronized exports.
 - Playgrounds: 9 focused labs for timing, easing, spring physics, transforms, scroll, and review principles.
 - Guides: 4 reference hubs for performance, purposeful motion, perceived performance, and reduced motion.
@@ -30,9 +31,19 @@ The site is a static, SEO-friendly application with these public surfaces:
 
 Recipe URLs are canonical content URLs. Query parameters carry only tunable state such as duration, delay, distance, and easing.
 
-## Launch Strategy
+## Version Strategy
 
-The launch version ships 44 canonical units backed by all 91 vocabulary terms. Architecture, routing, SEO, i18n, themes, controls, exports, content, assets, and test gates are part of the production surface.
+The v0.1 launch ships 44 canonical units backed by all 91 vocabulary terms. Architecture, routing, SEO, i18n, themes, controls, exports, content, assets, and test gates are part of the production surface.
+
+The v0.2 release adds Motion Finder as the decision layer above that catalog:
+
+1. Accept a vague feeling, interface goal, or behavior in Chinese or English.
+2. Return up to three ranked variants with a concise reason and close-term distinction.
+3. Replay the candidates in the same scene for direct comparison.
+4. Preserve variants and aliases as meaningful presets while resolving implementation through canonical recipes.
+5. Continue into the existing parameter, Prompt, HTML, CSS, JavaScript, and reduced-motion workflow.
+
+The recommendation engine, web Finder, CLI `recommend` command, and Agent Skill share one versioned intent model. The entire path runs locally in the static frontend or CLI and requires no account or runtime server.
 
 ## Content Principles
 
@@ -56,6 +67,8 @@ The launch version ships 44 canonical units backed by all 91 vocabulary terms. A
 - Controls must update preview, generated CSS, generated HTML, generated prompt, and URL state together.
 - Gesture components must perform the named behavior in the preview and copied output, with pointer capture, multi-touch protection, damping, velocity-aware settlement, cancellation, and keyboard parity where applicable.
 - The current recipe should stay shareable through its URL.
+- Finder URLs should preserve the original query, candidate comparison, selected variant, and non-default parameter values.
+- Finder candidates should replay from one control and use a shared scene so visual differences remain directly comparable.
 - Copy actions need explicit success and failure states.
 - Touch targets should meet 44px on mobile and remain comfortable on desktop.
 - Motion controls should respect `prefers-reduced-motion` while preserving meaning.
@@ -78,6 +91,8 @@ Avoid generic SaaS decoration, oversized marketing card stacks, ornamental gradi
 Before a change is considered done:
 
 - Static pages build with route-level SEO metadata.
+- Finder pages prerender in both locales and publish stable canonical URLs.
+- Web and CLI recommendation tests return the same ordered variants, reasons, presets, and compare state for the same intent.
 - Recipe pages contain a real H1 and stable canonical path.
 - Desktop and mobile have no horizontal overflow.
 - Functional text passes accessible contrast in light and dark themes.

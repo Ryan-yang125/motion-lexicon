@@ -9,7 +9,7 @@ import type {
 } from "../../../src/data/types.js";
 
 export const schemaVersion = 1 as const;
-export const version = "0.1.0";
+export const version = "0.2.0";
 
 export type CliLocale = "zh" | "en";
 export type DiscoveryFormat = "text" | "json" | "md";
@@ -29,6 +29,11 @@ export type CatalogOptions = {
 };
 
 export type SearchOptions = CatalogOptions & {
+  limit?: number;
+};
+
+export type RecommendOptions = {
+  locale?: CliLocale;
   limit?: number;
 };
 
@@ -67,6 +72,42 @@ export type SearchDocument = {
   locale: CliLocale;
   count: number;
   items: SearchItem[];
+};
+
+export type RecommendItem = {
+  rank: number;
+  variantId: string;
+  canonicalId: string;
+  name: string;
+  description: string;
+  reason: string;
+  distinction?: string;
+  score: number;
+  confidence: number;
+  matchedTerms: string[];
+  presetQuery?: string;
+  presetValues: ParamValues;
+  values: ParamValues;
+  path: string;
+  previewUrl: string;
+};
+
+export type RecommendDocument = {
+  schemaVersion: typeof schemaVersion;
+  query: string;
+  locale: CliLocale;
+  confidence: "high" | "medium" | "low";
+  confidenceScore: number;
+  matchedTerms: string[];
+  groupId: string;
+  groupName: string;
+  reason: string;
+  finderPath: string;
+  finderUrl: string;
+  comparePath: string;
+  compareUrl: string;
+  count: number;
+  items: RecommendItem[];
 };
 
 export type RecipeParamOption = {
@@ -146,7 +187,7 @@ export type ResolvedRecipe = {
   values: ParamValues;
 };
 
-export type SchemaName = "recipe" | "catalog" | "search" | "export";
+export type SchemaName = "recipe" | "catalog" | "search" | "recommend" | "export";
 
 export class MotionLexiconError extends Error {
   readonly code: string;

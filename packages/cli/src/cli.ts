@@ -1,10 +1,12 @@
 import { resolve } from "node:path";
-import { catalog, exportRecipe, getSchema, search, show } from "./core.js";
+import { catalog, exportRecipe, getSchema, recommend, search, show } from "./core.js";
 import {
   formatCatalogMarkdown,
   formatCatalogText,
   formatRecipeMarkdown,
   formatRecipeText,
+  formatRecommendMarkdown,
+  formatRecommendText,
   formatSearchMarkdown,
   formatSearchText,
   json
@@ -30,9 +32,10 @@ const help = `Motion Lexicon ${version}
 Usage:
   motion-lexicon catalog [options]
   motion-lexicon search <query> [options]
+  motion-lexicon recommend <description> [options]
   motion-lexicon show <id-or-alias> [options]
   motion-lexicon export <id-or-alias> [options]
-  motion-lexicon schema [recipe|catalog|search|export]
+  motion-lexicon schema [recipe|catalog|search|recommend|export]
 
 Common options:
   --locale <zh|en>                Output language (default: en)
@@ -52,6 +55,7 @@ Export formats:
 
 Examples:
   motion-lexicon search "弹簧"
+  motion-lexicon recommend "卡片弹出来要有重量、最后收得住" --locale zh
   motion-lexicon show pop-in --locale zh --format json
   motion-lexicon export slide-in -p duration=260 --format bundle
   motion-lexicon export ripple --format files --out ./ripple-demo
@@ -197,6 +201,32 @@ async function runSearch(parsed: Parsed, io: CliIo) {
   write(io, format === "json" ? json(document) : format === "md" ? formatSearchMarkdown(document) : formatSearchText(document));
 }
 
+async function runRecommend(parsed: Parsed, io: CliIo) {
+  rejectOptions(parsed, ["--locale", "--format", "--limit"]);
+  if (!parsed.positionals.length) {
+    throw new MotionLexiconError("recommend requires a motion description.");
+  }
+  const format = discoveryFormat(parsed);
+  const rawLimit = option(parsed, "--limit");
+  if (rawLimit !== undefined && !/^\d+$/.test(rawLimit)) {
+    throw new MotionLexiconError(
+      "Motion Finder limit must be an integer from 1 to 3."
+    );
+  }
+  const document = recommend(parsed.positionals.join(" "), {
+    locale: locale(parsed),
+    limit: rawLimit === undefined ? undefined : Number(rawLimit)
+  });
+  write(
+    io,
+    format === "json"
+      ? json(document)
+      : format === "md"
+        ? formatRecommendMarkdown(document)
+        : formatRecommendText(document)
+  );
+}
+
 async function runShow(parsed: Parsed, io: CliIo) {
   rejectOptions(parsed, ["--locale", "--format", "--param"]);
   const id = onePositional(parsed, "show");
@@ -228,7 +258,7 @@ async function runSchema(parsed: Parsed, io: CliIo) {
   rejectOptions(parsed, []);
   if (parsed.positionals.length > 1) throw new MotionLexiconError("schema accepts one schema name.");
   const name = (parsed.positionals[0] ?? "recipe") as SchemaName;
-  if (!["recipe", "catalog", "search", "export"].includes(name)) {
+  if (!["recipe", "catalog", "search", "recommend", "export"].includes(name)) {
     throw new MotionLexiconError(`Unknown schema: ${name}.`);
   }
   write(io, json(getSchema(name)));
@@ -252,6 +282,7 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     }
     if (command === "catalog") await runCatalog(parsed, io);
     else if (command === "search") await runSearch(parsed, io);
+    else if (command === "recommend") await runRecommend(parsed, io);
     else if (command === "show") await runShow(parsed, io);
     else if (command === "export") await runExport(parsed, io);
     else if (command === "schema") await runSchema(parsed, io);

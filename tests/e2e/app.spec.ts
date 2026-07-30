@@ -3,7 +3,11 @@ import { expect, test } from "@playwright/test";
 test("desktop landing page renders without horizontal overflow", async ({ page }) => {
   await page.goto("/zh/");
   await expect(page).toHaveTitle(/Motion Lexicon/);
-  await expect(page.getByRole("heading", { name: /看得见、调得动/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /说出你要的感觉/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /开始描述动效/ })).toHaveAttribute(
+    "href",
+    "/zh/finder/"
+  );
   await expect(page.locator(".library-card")).toHaveCount(6);
 
   const hasHorizontalOverflow = await page.evaluate(() => {
@@ -14,7 +18,7 @@ test("desktop landing page renders without horizontal overflow", async ({ page }
 
 test("english landing page renders english copy", async ({ page }) => {
   await page.goto("/en/");
-  await expect(page.getByRole("heading", { name: /See it\. Tune it\./ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Describe the feel/ })).toBeVisible();
   await expect(page.getByText("一个能看")).toHaveCount(0);
 });
 

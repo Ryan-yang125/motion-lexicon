@@ -5,14 +5,21 @@ import { describe, expect, it } from "vitest";
 import {
   catalog,
   exportRecipe,
+  getSchema,
+  recommend,
   resolveRecipe,
   runCli,
   search,
   show,
+  version,
   writeRecipeFiles
 } from "motion-lexicon";
 
 describe("Motion Lexicon CLI API", () => {
+  it("reports the v0.2.0 release version", () => {
+    expect(version).toBe("0.2.0");
+  });
+
   it("returns the 44 canonical recipes with schema version 1", () => {
     const result = catalog({ locale: "zh" });
     expect(result.schemaVersion).toBe(1);
@@ -28,6 +35,29 @@ describe("Motion Lexicon CLI API", () => {
     expect(search("弹簧", { locale: "zh" }).items[0].id).toBe("spring");
     expect(search("pop-in", { locale: "en" }).items[0].id).toBe("scale-in");
     expect(search("shared element", { locale: "en" }).items[0].id).toBe("morph");
+  });
+
+  it("recommends three explainable variants with shareable finder links", () => {
+    const result = recommend("卡片弹出来要有重量、最后收得住", {
+      locale: "zh"
+    });
+    expect(result).toMatchObject({
+      schemaVersion: 1,
+      groupId: "entrance-feel",
+      confidence: "high",
+      count: 3
+    });
+    expect(result.items.map((item) => item.variantId)).toEqual([
+      "spring",
+      "pop-in",
+      "scale-in"
+    ]);
+    expect(result.compareUrl).toContain("/zh/finder/?q=");
+    expect(result.compareUrl).toContain("compare=spring%2Cpop-in%2Cscale-in");
+    expect(getSchema("recommend")).toMatchObject({
+      schemaVersion: 1,
+      title: "Motion Lexicon recommend schema"
+    });
   });
 
   it("resolves aliases and preserves their preset values", () => {
@@ -101,6 +131,26 @@ describe("runCli", () => {
     const output = capture();
     expect(await runCli(["show", "pop-in", "--format", "json"], output.io)).toBe(0);
     expect(JSON.parse(output.stdout())).toMatchObject({ schemaVersion: 1, id: "scale-in" });
+    expect(output.stderr()).toBe("");
+  });
+
+  it("prints machine-readable recommendations", async () => {
+    const output = capture();
+    expect(
+      await runCli(
+        ["recommend", "same thumbnail expands into detail", "--format", "json"],
+        output.io
+      )
+    ).toBe(0);
+    const result = JSON.parse(output.stdout());
+    expect(result).toMatchObject({
+      groupId: "state-continuity",
+      count: 3
+    });
+    expect(result.items[0]).toMatchObject({
+      variantId: "shared-element-transition",
+      canonicalId: "morph"
+    });
     expect(output.stderr()).toBe("");
   });
 
