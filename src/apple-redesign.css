@@ -888,7 +888,7 @@ summary {
 
 .library-utility-settings .theme-select,
 .library-utility-settings .icon-link {
-  min-height: 44px;
+  min-height: 45px;
   flex: 1;
   justify-content: center;
   border: 1px solid var(--apple-line);
