@@ -6,18 +6,36 @@ import {
   catalog,
   exportRecipe,
   getSchema,
+  packs,
   recommend,
   resolveRecipe,
   runCli,
   search,
+  showPack,
   show,
   version,
   writeRecipeFiles
 } from "motion-lexicon";
 
 describe("Motion Lexicon CLI API", () => {
-  it("reports the v0.2.0 release version", () => {
-    expect(version).toBe("0.2.0");
+  it("reports the v1.0.0 release version", () => {
+    expect(version).toBe("1.0.0");
+  });
+
+  it("lists real product Motion Packs with a portable implementation", () => {
+    const result = packs({ locale: "zh" });
+    expect(result).toMatchObject({ schemaVersion: 1, count: 16 });
+    expect(result.items[0]).toMatchObject({
+      id: "save-confirmation",
+      name: "保存确认",
+      previewUrl: "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/"
+    });
+    expect(showPack("archive-undo", { locale: "en" })).toMatchObject({
+      id: "archive-undo",
+      name: "Archive undo",
+      guidance: { reducedMotion: expect.any(String) },
+      source: { html: expect.any(String), css: expect.any(String), js: expect.any(String) }
+    });
   });
 
   it("returns the 44 canonical recipes with schema version 1", () => {
@@ -146,6 +164,19 @@ describe("runCli", () => {
     expect(await runCli(["show", "pop-in", "--format", "json"], output.io)).toBe(0);
     expect(JSON.parse(output.stdout())).toMatchObject({ schemaVersion: 1, id: "scale-in" });
     expect(output.stderr()).toBe("");
+  });
+
+  it("prints Motion Pack listings and portable bundles", async () => {
+    const listing = capture();
+    expect(await runCli(["packs", "--locale", "en", "--format", "json"], listing.io)).toBe(0);
+    expect(JSON.parse(listing.stdout())).toMatchObject({ count: 16 });
+
+    const bundle = capture();
+    expect(
+      await runCli(["pack", "save-confirmation", "--locale", "en", "--format", "bundle"], bundle.io)
+    ).toBe(0);
+    expect(bundle.stdout()).toContain("/* Prompt */");
+    expect(bundle.stdout()).toContain("<!-- HTML -->");
   });
 
   it("prints machine-readable recommendations", async () => {

@@ -7,6 +7,11 @@ import {
   catalogRecipes,
   getCanonicalRecipe
 } from "../../../src/data/recipes.js";
+import {
+  motionPackGroups,
+  motionPacks,
+  type MotionPack
+} from "../../../src/data/motion-packs.js";
 import { siteUrl } from "../../../src/data/site.js";
 import type {
   Locale,
@@ -35,6 +40,10 @@ import {
   type CatalogItem,
   type CatalogOptions,
   type CliLocale,
+  type MotionPackDocument,
+  type MotionPackItem,
+  type MotionPackOptions,
+  type MotionPacksDocument,
   type RecipeDocument,
   type RecipeExportDocument,
   type RecipeOptions,
@@ -98,6 +107,59 @@ function catalogItem(recipe: MotionRecipe, locale: CliLocale): CatalogItem {
     path,
     previewUrl: absolutePreviewUrl(path)
   };
+}
+
+function motionPackPath(pack: MotionPack, locale: CliLocale) {
+  return `/${locale}/packs/${pack.id}/`;
+}
+
+function motionPackItem(pack: MotionPack, locale: CliLocale): MotionPackItem {
+  const group = motionPackGroups.find((entry) => entry.id === pack.groupId);
+  if (!group) throw new MotionLexiconError(`Missing Motion Pack group: ${pack.groupId}.`);
+  const path = motionPackPath(pack, locale);
+  return {
+    id: pack.id,
+    groupId: pack.groupId,
+    groupName: localize(group.name, locale),
+    name: localize(pack.name, locale),
+    description: localize(pack.shortDescription, locale),
+    scene: localize(pack.scene, locale),
+    timing: pack.timing,
+    path,
+    previewUrl: absolutePreviewUrl(path)
+  };
+}
+
+function motionPackBundle(pack: MotionPack, locale: CliLocale) {
+  return [
+    "/* Prompt */",
+    localize(pack.prompt, locale),
+    "",
+    "<!-- HTML -->",
+    pack.source.html,
+    "",
+    "/* CSS */",
+    pack.source.css,
+    "",
+    "/* JavaScript */",
+    pack.source.js
+  ].join("\n");
+}
+
+function validateMotionPackGroup(group: string | undefined) {
+  if (group && !motionPackGroups.some((entry) => entry.id === group)) {
+    throw new MotionLexiconError(
+      `Unknown Motion Pack group: ${group}. Use ${motionPackGroups.map((entry) => entry.id).join(", ")}.`
+    );
+  }
+}
+
+function requireMotionPack(id: string) {
+  const normalized = normalizeId(id);
+  if (!normalized) throw new MotionLexiconError("A Motion Pack id is required.");
+  const pack = motionPacks.find((entry) => entry.id === normalized);
+  if (!pack) throw new MotionLexiconError(`Unknown Motion Pack: ${id}.`, "NOT_FOUND");
+  return pack;
 }
 
 function normalizeId(id: string) {
@@ -223,6 +285,50 @@ export function catalog(options: CatalogOptions = {}): CatalogDocument {
     .filter((recipe) => !options.surface || recipe.surfaceType === options.surface)
     .map((recipe) => catalogItem(recipe, locale));
   return { schemaVersion, locale, count: items.length, items };
+}
+
+export function packs(options: MotionPackOptions = {}): MotionPacksDocument {
+  const locale = validateLocale(options.locale);
+  validateMotionPackGroup(options.group);
+  const items = motionPacks
+    .filter((pack) => !options.group || pack.groupId === options.group)
+    .map((pack) => motionPackItem(pack, locale));
+  return {
+    schemaVersion,
+    locale,
+    count: items.length,
+    groups: motionPackGroups.map((group) => ({
+      id: group.id,
+      name: localize(group.name, locale),
+      description: localize(group.description, locale)
+    })),
+    items
+  };
+}
+
+export function showPack(id: string, options: MotionPackOptions = {}): MotionPackDocument {
+  const locale = validateLocale(options.locale);
+  const pack = requireMotionPack(id);
+  const item = motionPackItem(pack, locale);
+  return {
+    schemaVersion,
+    locale,
+    ...item,
+    useCase: localize(pack.useCase, locale),
+    prompt: localize(pack.prompt, locale),
+    guidance: {
+      trigger: localize(pack.guidance.trigger, locale),
+      outcome: localize(pack.guidance.outcome, locale),
+      reducedMotion: localize(pack.guidance.reducedMotion, locale)
+    },
+    keywords: [...pack.keywords],
+    source: {
+      html: pack.source.html,
+      css: pack.source.css,
+      js: pack.source.js,
+      bundle: motionPackBundle(pack, locale)
+    }
+  };
 }
 
 function normalizedSearchText(value: string) {
@@ -455,6 +561,64 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
             path: { type: "string", pattern: "^/" },
             previewUrl: { type: "string", format: "uri" }
           }
+        }
+      }
+    }
+  },
+  packs: {
+    type: "object",
+    required: ["schemaVersion", "locale", "count", "groups", "items"],
+    properties: {
+      schemaVersion: { const: schemaVersion },
+      locale: { enum: ["zh", "en"] },
+      count: { type: "integer", minimum: 0 },
+      groups: { type: "array" },
+      items: {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["id", "groupId", "name", "path", "previewUrl"],
+          properties: {
+            id: { type: "string" },
+            groupId: { type: "string" },
+            name: { type: "string" },
+            path: { type: "string", pattern: "^/" },
+            previewUrl: { type: "string", format: "uri" }
+          }
+        }
+      }
+    }
+  },
+  pack: {
+    type: "object",
+    required: [
+      "schemaVersion",
+      "id",
+      "groupId",
+      "locale",
+      "path",
+      "previewUrl",
+      "prompt",
+      "guidance",
+      "source"
+    ],
+    properties: {
+      schemaVersion: { const: schemaVersion },
+      id: { type: "string" },
+      groupId: { type: "string" },
+      locale: { enum: ["zh", "en"] },
+      path: { type: "string", pattern: "^/" },
+      previewUrl: { type: "string", format: "uri" },
+      prompt: { type: "string" },
+      guidance: { type: "object" },
+      source: {
+        type: "object",
+        required: ["html", "css", "js", "bundle"],
+        properties: {
+          html: { type: "string" },
+          css: { type: "string" },
+          js: { type: "string" },
+          bundle: { type: "string" }
         }
       }
     }

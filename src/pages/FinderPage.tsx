@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FinderExportDisclosure } from "../components/FinderExportDisclosure";
+import { FinderPackBridge } from "../components/FinderPackBridge";
 import { MotionCompare } from "../components/MotionCompare";
 import { ParameterControls } from "../components/ParameterControls";
 import { CopyButton } from "../components/CopyButton";
@@ -408,6 +409,8 @@ export function FinderPage({ locale }: { locale: Locale }) {
               />
             </div>
           ) : null}
+
+          <FinderPackBridge locale={locale} finderGroupId={result.groupId} />
         </section>
       ) : null}
 

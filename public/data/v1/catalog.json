@@ -5,8 +5,8 @@
   "project": {
     "name": "Motion Lexicon",
     "description": {
-      "zh": "从模糊描述推荐候选，并提供可视、可调、可复制配方的界面动效词典。",
-      "en": "An interface motion finder that turns fuzzy descriptions into comparable, tunable, and copy-ready recipes."
+      "zh": "把真实产品瞬间做成可预览、可复制、可直接接入界面的 Motion Pack，并保留完整动效词典与选择器。",
+      "en": "A collection of previewable, copy-ready Motion Packs for real product moments, with a full motion vocabulary and Finder."
     },
     "siteUrl": "https://motion-lexicon.pages.dev",
     "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
@@ -14,7 +14,7 @@
       "zh",
       "en"
     ],
-    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v0.2.0",
+    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v1.0.0",
     "skillCommand": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
   },
   "endpoints": {
@@ -22,6 +22,12 @@
       "zh": "https://motion-lexicon.pages.dev/zh/finder/",
       "en": "https://motion-lexicon.pages.dev/en/finder/"
     },
+    "packs": {
+      "zh": "https://motion-lexicon.pages.dev/zh/packs/",
+      "en": "https://motion-lexicon.pages.dev/en/packs/"
+    },
+    "packsData": "https://motion-lexicon.pages.dev/data/v1/packs.json",
+    "packTemplate": "https://motion-lexicon.pages.dev/data/v1/packs.json#{id}",
     "catalog": "https://motion-lexicon.pages.dev/data/v1/catalog.json",
     "vocabulary": "https://motion-lexicon.pages.dev/data/v1/vocabulary.json",
     "recipeTemplate": "https://motion-lexicon.pages.dev/data/v1/recipes/{id}.json",
@@ -33,6 +39,7 @@
   "counts": {
     "categories": 12,
     "recipes": 44,
+    "packs": 16,
     "vocabularyTerms": 91,
     "aliases": 47
   },

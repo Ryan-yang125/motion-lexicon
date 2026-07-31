@@ -26,7 +26,7 @@ export function Footer() {
           <Link to="/$locale/finder/" params={{ locale }}>
             {locale === "zh" ? "找动效" : "Find motion"}
           </Link>
-          <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
+          <Link to="/$locale/packs/" params={{ locale }}>
             {locale === "zh" ? "动效库" : "Library"}
           </Link>
           <Link to="/$locale/vocabulary/" params={{ locale }}>

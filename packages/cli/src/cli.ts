@@ -1,8 +1,21 @@
 import { resolve } from "node:path";
-import { catalog, exportRecipe, getSchema, recommend, search, show } from "./core.js";
+import {
+  catalog,
+  exportRecipe,
+  getSchema,
+  packs,
+  recommend,
+  search,
+  show,
+  showPack
+} from "./core.js";
 import {
   formatCatalogMarkdown,
   formatCatalogText,
+  formatMotionPackMarkdown,
+  formatMotionPackText,
+  formatMotionPacksMarkdown,
+  formatMotionPacksText,
   formatRecipeMarkdown,
   formatRecipeText,
   formatRecommendMarkdown,
@@ -30,17 +43,20 @@ export type CliIo = {
 const help = `Motion Lexicon ${version}
 
 Usage:
+  motion-lexicon packs [options]
+  motion-lexicon pack <id> [options]
   motion-lexicon catalog [options]
   motion-lexicon search <query> [options]
   motion-lexicon recommend <description> [options]
   motion-lexicon show <id-or-alias> [options]
   motion-lexicon export <id-or-alias> [options]
-  motion-lexicon schema [recipe|catalog|search|recommend|export]
+  motion-lexicon schema [recipe|catalog|search|recommend|export|packs|pack]
 
 Common options:
   --locale <zh|en>                Output language (default: en)
   --format <format>               Output format
   --category <id>                 Filter by category
+  --group <id>                    Filter Motion Packs by group
   --surface <type>                component, playground, or guide
   -h, --help                      Show help
   -v, --version                   Show version
@@ -54,6 +70,8 @@ Export formats:
   --force                         Replace generated files in a non-empty destination
 
 Examples:
+  motion-lexicon packs --locale zh
+  motion-lexicon pack save-confirmation --locale zh --format bundle
   motion-lexicon search "弹簧"
   motion-lexicon recommend "卡片弹出来要有重量、最后收得住" --locale zh
   motion-lexicon show pop-in --locale zh --format json
@@ -77,6 +95,7 @@ const valuedOptions = new Set([
   "--locale",
   "--format",
   "--category",
+  "--group",
   "--surface",
   "--limit",
   "--param",
@@ -184,6 +203,41 @@ async function runCatalog(parsed: Parsed, io: CliIo) {
   write(io, format === "json" ? json(document) : format === "md" ? formatCatalogMarkdown(document) : formatCatalogText(document));
 }
 
+async function runPacks(parsed: Parsed, io: CliIo) {
+  rejectOptions(parsed, ["--locale", "--format", "--group"]);
+  if (parsed.positionals.length) throw new MotionLexiconError("packs does not take positional values.");
+  const format = discoveryFormat(parsed);
+  const document = packs({ locale: locale(parsed), group: option(parsed, "--group") });
+  write(
+    io,
+    format === "json"
+      ? json(document)
+      : format === "md"
+        ? formatMotionPacksMarkdown(document)
+        : formatMotionPacksText(document)
+  );
+}
+
+async function runPack(parsed: Parsed, io: CliIo) {
+  rejectOptions(parsed, ["--locale", "--format"]);
+  const id = onePositional(parsed, "pack");
+  const format = option(parsed, "--format") ?? "text";
+  if (!["text", "json", "md", "prompt", "html", "css", "js", "bundle"].includes(format)) {
+    throw new MotionLexiconError(
+      "Motion Pack format must be text, json, md, prompt, html, css, js, or bundle."
+    );
+  }
+  const document = showPack(id, { locale: locale(parsed) });
+  if (format === "json") write(io, json(document));
+  else if (format === "md") write(io, formatMotionPackMarkdown(document));
+  else if (format === "prompt") write(io, document.prompt);
+  else if (format === "html") write(io, document.source.html);
+  else if (format === "css") write(io, document.source.css);
+  else if (format === "js") write(io, document.source.js);
+  else if (format === "bundle") write(io, document.source.bundle);
+  else write(io, formatMotionPackText(document));
+}
+
 async function runSearch(parsed: Parsed, io: CliIo) {
   rejectOptions(parsed, ["--locale", "--format", "--category", "--surface", "--limit"]);
   if (!parsed.positionals.length) throw new MotionLexiconError("search requires a query.");
@@ -258,7 +312,7 @@ async function runSchema(parsed: Parsed, io: CliIo) {
   rejectOptions(parsed, []);
   if (parsed.positionals.length > 1) throw new MotionLexiconError("schema accepts one schema name.");
   const name = (parsed.positionals[0] ?? "recipe") as SchemaName;
-  if (!["recipe", "catalog", "search", "recommend", "export"].includes(name)) {
+  if (!["recipe", "catalog", "search", "recommend", "export", "packs", "pack"].includes(name)) {
     throw new MotionLexiconError(`Unknown schema: ${name}.`);
   }
   write(io, json(getSchema(name)));
@@ -280,7 +334,9 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
       write(io, version);
       return 0;
     }
-    if (command === "catalog") await runCatalog(parsed, io);
+    if (command === "packs") await runPacks(parsed, io);
+    else if (command === "pack") await runPack(parsed, io);
+    else if (command === "catalog") await runCatalog(parsed, io);
     else if (command === "search") await runSearch(parsed, io);
     else if (command === "recommend") await runRecommend(parsed, io);
     else if (command === "show") await runShow(parsed, io);

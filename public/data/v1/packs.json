@@ -1,0 +1,1034 @@
+{
+  "kind": "packs",
+  "schemaVersion": 1,
+  "schemaUrl": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+  "count": 16,
+  "urls": {
+    "zh": "https://motion-lexicon.pages.dev/zh/packs/",
+    "en": "https://motion-lexicon.pages.dev/en/packs/"
+  },
+  "groups": [
+    {
+      "id": "feedback",
+      "name": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "description": {
+        "zh": "让一次已发生的操作被立刻看见。",
+        "en": "Make a completed action immediately legible."
+      }
+    },
+    {
+      "id": "choice",
+      "name": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "description": {
+        "zh": "让焦点、偏好和下一步保持清楚。",
+        "en": "Keep focus, preference, and the next step clear."
+      }
+    },
+    {
+      "id": "change",
+      "name": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "description": {
+        "zh": "让新增、移除和筛选保留空间关系。",
+        "en": "Preserve spatial context through additions, removals, and filters."
+      }
+    },
+    {
+      "id": "workflow",
+      "name": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "description": {
+        "zh": "让连续任务的状态与进度始终可读。",
+        "en": "Keep state and progress readable across multi-step work."
+      }
+    }
+  ],
+  "packs": [
+    {
+      "id": "save-confirmation",
+      "kind": "save-confirmation",
+      "groupId": "feedback",
+      "name": {
+        "zh": "保存确认",
+        "en": "Save confirmation"
+      },
+      "summary": {
+        "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+        "en": "A submission lands across the action, status marker, and document state together."
+      },
+      "scene": {
+        "zh": "产品更新编辑器中的一条已保存状态。",
+        "en": "A saved state inside a product-update editor."
+      },
+      "useCase": {
+        "zh": "编辑器、设置页、表单提交和草稿保存。",
+        "en": "Editors, settings, form submission, and draft saving."
+      },
+      "prompt": {
+        "zh": "实现一个保存确认：点击“保存更新”后立即给出轻微按压反馈，按钮在 180ms 内变为“已保存”，顶部状态标记同步切换。使用 transform 和 opacity，并提供减弱动效版本。",
+        "en": "Build a save confirmation: pressing Save update gives immediate tactile feedback, changes to Saved within 180ms, and updates the status marker in sync. Use transform and opacity with a reduced-motion treatment."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "点击保存后立刻给出轻微按压反馈。",
+          "en": "Give a slight press response immediately after Save is clicked."
+        },
+        "outcome": {
+          "zh": "按钮和顶部状态标记在同一节奏内变为已保存。",
+          "en": "The action and top status marker reach Saved in the same cadence."
+        },
+        "reducedMotion": {
+          "zh": "保留状态文本与颜色切换，移除旋转与位移。",
+          "en": "Keep text and color state changes while removing spin and travel."
+        }
+      },
+      "keywords": [
+        "保存",
+        "已保存",
+        "提交",
+        "完成",
+        "按钮反馈",
+        "草稿",
+        "save",
+        "saved",
+        "submit",
+        "draft"
+      ],
+      "timing": "180ms · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+      },
+      "source": {
+        "html": "<section class=\"ml-save-confirmation\" data-motion-pack=\"save-confirmation\" aria-label=\"Save update\">\n  <div class=\"ml-save-card\" data-state=\"draft\">\n    <div class=\"ml-save-topline\"><span>Release notes</span><span class=\"ml-save-dot\"></span></div>\n    <div class=\"ml-save-copy\"><strong>New motion defaults</strong><span>Ready for review</span></div>\n    <div class=\"ml-save-footer\">\n      <span class=\"ml-save-status\" data-save-status role=\"status\">Draft changes</span>\n      <button type=\"button\" data-save-action><span aria-hidden=\"true\">✓</span><span data-save-label>Save update</span></button>\n    </div>\n  </div>\n</section>",
+        "css": ".ml-save-confirmation { color: #292929; font: 500 14px/1.35 Inter, system-ui, sans-serif; }\n.ml-save-card { width: min(100%, 380px); margin: 0 auto; padding: 18px; border: 1px solid #dededc; border-radius: 16px; background: #fff; box-shadow: 0 14px 30px rgb(25 25 25 / 7%); }\n.ml-save-topline, .ml-save-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }.ml-save-topline { color: #5d5d5d; font-size: 12px; }\n.ml-save-dot { width: 8px; height: 8px; border-radius: 999px; background: #e3a33a; transition: background 180ms ease; }.ml-save-copy { display: grid; gap: 4px; margin: 28px 0; }.ml-save-copy span { color: #9e9e9e; font-size: 13px; }\n.ml-save-status { color: #9e9e9e; font-size: 12px; transition: color 180ms ease, transform 180ms cubic-bezier(.23,1,.32,1); }.ml-save-confirmation button { display: inline-flex; min-height: 36px; align-items: center; gap: 7px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; transition: transform 120ms ease, background 180ms ease; }.ml-save-confirmation button:active { transform: scale(.96); }.ml-save-confirmation button:disabled { cursor: wait; }\n.ml-save-card[data-state=\"saving\"] button { background: #5d5d5d; }.ml-save-card[data-state=\"saved\"] .ml-save-dot { background: #2d8c5f; }.ml-save-card[data-state=\"saved\"] .ml-save-status { color: #2d8c5f; transform: translateY(-1px); }.ml-save-card[data-state=\"saved\"] button { background: #2d8c5f; }.ml-save-card[data-state=\"saving\"] button > span:first-child { animation: ml-save-spin 700ms linear infinite; } @keyframes ml-save-spin { to { transform: rotate(1turn); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"save-confirmation\"]');\n  if (!root) return;\n  const card = root.querySelector('.ml-save-card'); const button = root.querySelector('[data-save-action]');\n  const label = root.querySelector('[data-save-label]'); const status = root.querySelector('[data-save-status]');\n  button.addEventListener('click', () => {\n    if (card.dataset.state === 'saving') return;\n    card.dataset.state = 'saving'; button.disabled = true; label.textContent = 'Saving'; status.textContent = 'Saving changes';\n    window.setTimeout(() => { card.dataset.state = 'saved'; button.disabled = false; label.textContent = 'Saved'; status.textContent = 'Saved just now'; }, 540);\n  });\n})();"
+      }
+    },
+    {
+      "id": "publish-release",
+      "kind": "publish-release",
+      "groupId": "feedback",
+      "name": {
+        "zh": "发布版本",
+        "en": "Publish release"
+      },
+      "summary": {
+        "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+        "en": "Resolve a ready update into a release with a clear landing point."
+      },
+      "scene": {
+        "zh": "发布 V1.0 更新时的版本面板。",
+        "en": "A version panel while publishing a V1.0 update."
+      },
+      "useCase": {
+        "zh": "发布文章、上线版本、提交审批和发送公告。",
+        "en": "Publishing articles, shipping releases, submitting approvals, and sending announcements."
+      },
+      "prompt": {
+        "zh": "实现一个版本发布动作：用户点击“发布版本”后，按钮短暂显示进行中，发布卡片变为已上线状态，并在时间线里留下“刚刚发布”的记录。动作集中在 240ms 内完成。",
+        "en": "Build a release publish action: after Publish release, briefly show progress, turn the release card live, and leave a Just published entry in the timeline. Complete the motion within 240ms."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "点击发布后先明确动作已被接收。",
+          "en": "Make it clear that Publish has been received before the release lands."
+        },
+        "outcome": {
+          "zh": "当前版本状态与时间线记录连续更新。",
+          "en": "Update the current version state and timeline record as one sequence."
+        },
+        "reducedMotion": {
+          "zh": "保留状态和记录的内容变化，取消进入位移。",
+          "en": "Keep state and record changes while removing entrance travel."
+        }
+      },
+      "keywords": [
+        "发布",
+        "上线",
+        "版本",
+        "发布完成",
+        "时间线",
+        "公告",
+        "publish",
+        "release",
+        "ship",
+        "live"
+      ],
+      "timing": "240ms + 60ms follow-through · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+      },
+      "source": {
+        "html": "<section class=\"ml-publish-release\" data-motion-pack=\"publish-release\" aria-label=\"Publish release\">\n  <div class=\"ml-release-card\" data-state=\"ready\">\n    <div class=\"ml-release-head\"><span class=\"ml-release-version\">v1.0</span><span class=\"ml-release-state\" data-release-state>Ready</span></div>\n    <strong>Quiet Product Motion</strong><p>16 product moments are ready to ship.</p>\n    <button type=\"button\" data-publish-action><span data-publish-label>Publish release</span><span aria-hidden=\"true\">→</span></button>\n    <ol class=\"ml-release-history\" data-release-history><li><i></i><span>Notes approved</span></li></ol>\n  </div>\n</section>",
+        "css": ".ml-publish-release { color: #292929; font: 500 14px/1.4 Inter, system-ui, sans-serif; }.ml-release-card { width: min(100%, 400px); margin: 0 auto; padding: 20px; border: 1px solid #dededc; border-radius: 16px; background: linear-gradient(145deg,#fff,#fafaf8); box-shadow: 0 16px 34px rgb(25 25 25 / 7%); }.ml-release-head, .ml-release-history li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }.ml-release-version { padding: 4px 8px; border-radius: 999px; color: #5d5d5d; background: #f0f0ee; font: 600 12px ui-monospace, monospace; }.ml-release-state { color: #9e9e9e; font-size: 12px; }.ml-release-card > strong { display: block; margin-top: 22px; font-size: 17px; letter-spacing: -.2px; }.ml-release-card > p { margin: 5px 0 18px; color: #5d5d5d; font-size: 13px; }.ml-publish-release button { display: inline-flex; width: 100%; min-height: 40px; align-items: center; justify-content: space-between; border: 0; border-radius: 999px; padding: 0 15px; color: #fff; background: #292929; cursor: pointer; font: inherit; transition: transform 120ms ease, background 180ms ease; }.ml-publish-release button:active { transform: scale(.98); }.ml-release-history { display: grid; gap: 9px; margin: 18px 0 0; padding: 0; list-style: none; color: #9e9e9e; font-size: 12px; }.ml-release-history li { justify-content: flex-start; }.ml-release-history i { width: 7px; height: 7px; border-radius: 99px; background: #c8c8c5; }.ml-release-history li.is-new { animation: ml-release-enter 240ms cubic-bezier(.16,1,.3,1) both; color: #2d8c5f; }.ml-release-history li.is-new i { background: #2d8c5f; }.ml-release-card[data-state=\"live\"] .ml-release-state { color: #2d8c5f; }.ml-release-card[data-state=\"live\"] button { background: #2d8c5f; } @keyframes ml-release-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"publish-release\"]');\n  if (!root) return;\n  const card = root.querySelector('.ml-release-card'); const button = root.querySelector('[data-publish-action]');\n  const state = root.querySelector('[data-release-state]'); const label = root.querySelector('[data-publish-label]'); const history = root.querySelector('[data-release-history]');\n  button.addEventListener('click', () => {\n    if (card.dataset.state !== 'ready') return;\n    card.dataset.state = 'publishing'; button.disabled = true; label.textContent = 'Publishing'; state.textContent = 'Preparing release';\n    window.setTimeout(() => { card.dataset.state = 'live'; button.disabled = false; label.textContent = 'Release is live'; state.textContent = 'Live'; history.insertAdjacentHTML('beforeend', '<li class=\"is-new\"><i></i><span>Published just now</span></li>'); }, 620);\n  });\n})();"
+      }
+    },
+    {
+      "id": "share-link",
+      "kind": "share-link",
+      "groupId": "feedback",
+      "name": {
+        "zh": "复制分享链接",
+        "en": "Copy share link"
+      },
+      "summary": {
+        "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+        "en": "Copy success is confirmed through the action and a light, temporary cue."
+      },
+      "scene": {
+        "zh": "项目设置中的公开预览链接。",
+        "en": "A public preview link in project settings."
+      },
+      "useCase": {
+        "zh": "分享链接、邀请链接、嵌入代码和 API Token。",
+        "en": "Share links, invitation links, embed snippets, and API tokens."
+      },
+      "prompt": {
+        "zh": "实现一个复制链接反馈：点击后复制链接，按钮从链接图标变成对勾，旁边出现一条短提示并在约 1.6 秒后自然恢复。保持按钮宽度稳定。",
+        "en": "Build copy-link feedback: copy the link on click, morph the link icon to a check, show a short nearby cue, and restore naturally after about 1.6 seconds. Keep the button width stable."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "复制后在原按钮上显示对勾。",
+          "en": "Show a check on the original action after copying."
+        },
+        "outcome": {
+          "zh": "一条短提示确认结果，再恢复为可复制。",
+          "en": "A short cue confirms the result, then returns the control to copy-ready."
+        },
+        "reducedMotion": {
+          "zh": "保留文案与颜色变化，提示直接出现与消失。",
+          "en": "Keep text and color changes; let the cue appear and leave directly."
+        }
+      },
+      "keywords": [
+        "复制",
+        "链接",
+        "分享",
+        "已复制",
+        "剪贴板",
+        "Token",
+        "copy",
+        "link",
+        "share",
+        "copied"
+      ],
+      "timing": "160ms + 1.6s confirmation window · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+      },
+      "source": {
+        "html": "<section class=\"ml-share-link\" data-motion-pack=\"share-link\" aria-label=\"Share link\">\n  <div class=\"ml-share-card\"><span class=\"ml-share-label\">Public preview</span><div class=\"ml-share-row\"><code>motion.site/p/quiet-v1</code><button type=\"button\" data-copy-link aria-live=\"polite\"><span data-copy-icon aria-hidden=\"true\">⧉</span><span data-copy-label>Copy link</span></button></div><span class=\"ml-share-toast\" role=\"status\">Link copied</span></div>\n</section>",
+        "css": ".ml-share-link { color: #292929; font: 500 14px/1.35 Inter, system-ui, sans-serif; }.ml-share-card { position: relative; width: min(100%, 390px); margin: 0 auto; padding: 18px; border: 1px solid #dededc; border-radius: 16px; background: #fff; }.ml-share-label { color: #5d5d5d; font-size: 12px; }.ml-share-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }.ml-share-row code { overflow: hidden; color: #292929; text-overflow: ellipsis; white-space: nowrap; font: 13px ui-monospace, SFMono-Regular, monospace; }.ml-share-link button { display: inline-flex; flex: 0 0 auto; min-height: 34px; min-width: 112px; align-items: center; justify-content: center; gap: 7px; border: 1px solid #d5d5d3; border-radius: 999px; padding: 0 12px; color: #292929; background: #fff; cursor: pointer; font: inherit; transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 120ms ease; }.ml-share-link button:active { transform: scale(.97); }.ml-share-link[data-copied=\"true\"] button { border-color: #cce5d6; color: #206848; background: #f0faf4; }.ml-share-toast { position: absolute; right: 18px; bottom: -30px; padding: 5px 8px; border-radius: 8px; color: #fff; background: #292929; font-size: 12px; opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity 160ms ease, transform 160ms cubic-bezier(.23,1,.32,1); }.ml-share-link[data-copied=\"true\"] .ml-share-toast { opacity: 1; transform: translateY(0); }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"share-link\"]');\n  if (!root) return;\n  const button = root.querySelector('[data-copy-link]'); const icon = root.querySelector('[data-copy-icon]'); const label = root.querySelector('[data-copy-label]'); let restoreTimer;\n  button.addEventListener('click', async () => {\n    try { await navigator.clipboard?.writeText('https://motion.site/p/quiet-v1'); } catch (_) { /* the visual result remains useful */ }\n    window.clearTimeout(restoreTimer); root.dataset.copied = 'true'; icon.textContent = '✓'; label.textContent = 'Copied';\n    restoreTimer = window.setTimeout(() => { delete root.dataset.copied; icon.textContent = '⧉'; label.textContent = 'Copy link'; }, 1600);\n  });\n})();"
+      }
+    },
+    {
+      "id": "card-selection",
+      "kind": "card-selection",
+      "groupId": "choice",
+      "name": {
+        "zh": "卡片选择",
+        "en": "Card selection"
+      },
+      "summary": {
+        "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+        "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+      },
+      "scene": {
+        "zh": "新建项目时选择一个内容布局。",
+        "en": "Choosing a content layout for a new project."
+      },
+      "useCase": {
+        "zh": "选择版式、套餐、封面、主题或工作方式。",
+        "en": "Choosing layouts, plans, covers, themes, or ways of working."
+      },
+      "prompt": {
+        "zh": "实现一个三选一卡片选择器：点击任一卡片后，将选中态移到新卡片，勾选出现，底部摘要切换为当前选择。位移只表达焦点移动，保持布局稳定。",
+        "en": "Build a three-option card selector: clicking a card moves selection to it, reveals a checkmark, and updates the current-choice summary. Use travel only to communicate focus while keeping layout stable."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "点击任一选项后，把焦点移到被选卡片。",
+          "en": "Move focus to the chosen card after any option is clicked."
+        },
+        "outcome": {
+          "zh": "边界、勾选与选择摘要同步表达当前方向。",
+          "en": "Boundary, checkmark, and summary show the active direction together."
+        },
+        "reducedMotion": {
+          "zh": "直接更新选中边界和勾选，不使用位移。",
+          "en": "Update the selection boundary and check directly without travel."
+        }
+      },
+      "keywords": [
+        "卡片选择",
+        "单选",
+        "布局",
+        "选中态",
+        "套餐",
+        "模板",
+        "card selection",
+        "radio",
+        "layout",
+        "plan"
+      ],
+      "timing": "200ms · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+      },
+      "source": {
+        "html": "<section class=\"ml-card-selection\" data-motion-pack=\"card-selection\" aria-label=\"Choose a layout\">\n  <div class=\"ml-layout-options\" role=\"radiogroup\" aria-label=\"Layout\">\n    <button type=\"button\" role=\"radio\" aria-checked=\"true\" data-layout=\"Focus\"><span class=\"ml-layout-preview focus\"><i></i><i></i></span><span>Focus</span><b>✓</b></button>\n    <button type=\"button\" role=\"radio\" aria-checked=\"false\" data-layout=\"Split\"><span class=\"ml-layout-preview split\"><i></i><i></i></span><span>Split</span><b>✓</b></button>\n    <button type=\"button\" role=\"radio\" aria-checked=\"false\" data-layout=\"Stack\"><span class=\"ml-layout-preview stack\"><i></i><i></i></span><span>Stack</span><b>✓</b></button>\n  </div><p class=\"ml-layout-summary\" aria-live=\"polite\">Selected <strong data-layout-summary>Focus</strong><span aria-hidden=\"true\">→</span></p>\n</section>",
+        "css": ".ml-card-selection { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-layout-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }.ml-layout-options button { display: grid; min-height: 128px; gap: 10px; align-content: space-between; border: 1px solid #dededc; border-radius: 14px; padding: 11px; color: #5d5d5d; background: #fff; cursor: pointer; font: inherit; text-align: left; transition: border-color 200ms ease, box-shadow 200ms ease, color 200ms ease, transform 200ms cubic-bezier(.23,1,.32,1); }.ml-layout-options button:hover { transform: translateY(-2px); }.ml-layout-options button[aria-checked=\"true\"] { border-color: #292929; color: #292929; box-shadow: 0 8px 18px rgb(25 25 25 / 8%); }.ml-layout-options b { justify-self: end; display: grid; width: 19px; height: 19px; place-items: center; border-radius: 999px; color: #fff; background: #292929; font-size: 11px; opacity: 0; transform: scale(.72); transition: opacity 160ms ease, transform 160ms cubic-bezier(.23,1,.32,1); }.ml-layout-options button[aria-checked=\"true\"] b { opacity: 1; transform: scale(1); }.ml-layout-preview { display: grid; min-height: 64px; gap: 5px; padding: 7px; border-radius: 8px; background: #f2f2f0; }.ml-layout-preview i { display: block; border-radius: 3px; background: #c5c5c2; }.ml-layout-preview.focus { grid-template-columns: 1fr; }.ml-layout-preview.focus i:first-child { min-height: 37px; }.ml-layout-preview.split { grid-template-columns: 1fr 1fr; }.ml-layout-preview.stack { grid-template-rows: 1fr 1fr; }.ml-layout-summary { display: flex; align-items: center; justify-content: space-between; margin: 11px 0 0; padding: 11px 12px; border-radius: 10px; color: #5d5d5d; background: #f4f4f2; }.ml-layout-summary strong { color: #292929; } @media (max-width: 420px) { .ml-layout-options { gap: 6px; }.ml-layout-options button { min-height: 112px; padding: 8px; } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"card-selection\"]');\n  if (!root) return;\n  const options = [...root.querySelectorAll('[role=\"radio\"]')]; const summary = root.querySelector('[data-layout-summary]');\n  options.forEach((option) => option.addEventListener('click', () => { options.forEach((item) => item.setAttribute('aria-checked', String(item === option))); summary.textContent = option.dataset.layout; }));\n})();"
+      }
+    },
+    {
+      "id": "workspace-switch",
+      "kind": "workspace-switch",
+      "groupId": "choice",
+      "name": {
+        "zh": "工作区切换",
+        "en": "Workspace switch"
+      },
+      "summary": {
+        "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+        "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+      },
+      "scene": {
+        "zh": "项目工作区里的设计、撰写和评审视图。",
+        "en": "Design, writing, and review views inside a project workspace."
+      },
+      "useCase": {
+        "zh": "工作区、项目模块、文档视图和详情子页面。",
+        "en": "Workspaces, project modules, document views, and nested detail pages."
+      },
+      "prompt": {
+        "zh": "实现一个工作区切换器：点击标签后，活动底板平滑移到新标签，内容区在极短的淡入和上移里替换。保留键盘 tab 语义与减弱动效版本。",
+        "en": "Build a workspace switcher: clicking a tab moves the active pill to it, while the content surface swaps with a very short fade and upward settle. Keep tab semantics and a reduced-motion treatment."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "标签本身承担切换的起点与焦点位置。",
+          "en": "The tab itself carries both the switch origin and focus location."
+        },
+        "outcome": {
+          "zh": "活动底板先到达，内容随后在相同上下文中换页。",
+          "en": "The active pill lands first, then content changes within the same context."
+        },
+        "reducedMotion": {
+          "zh": "直接更新标签与内容，保留键盘焦点。",
+          "en": "Update tab and content directly while retaining keyboard focus."
+        }
+      },
+      "keywords": [
+        "工作区",
+        "标签",
+        "切换",
+        "视图",
+        "导航",
+        "workspace",
+        "tabs",
+        "switch",
+        "view",
+        "navigation"
+      ],
+      "timing": "180ms tab · 160ms content · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+      },
+      "source": {
+        "html": "<section class=\"ml-workspace-switch\" data-motion-pack=\"workspace-switch\" data-active=\"design\" aria-label=\"Workspace views\">\n  <div class=\"ml-workspace-tabs\" role=\"tablist\" aria-label=\"Workspace\">\n    <button type=\"button\" role=\"tab\" aria-selected=\"true\" data-workspace-tab=\"design\">Design</button>\n    <button type=\"button\" role=\"tab\" aria-selected=\"false\" data-workspace-tab=\"write\">Writing</button>\n    <button type=\"button\" role=\"tab\" aria-selected=\"false\" data-workspace-tab=\"review\">Review</button>\n  </div>\n  <div class=\"ml-workspace-surface\" aria-live=\"polite\"><span data-workspace-eyebrow>CANVAS</span><strong data-workspace-title>Homepage direction</strong><p data-workspace-copy>Three reviewed frames are ready to share.</p><span class=\"ml-workspace-count\" data-workspace-count>03</span></div>\n</section>",
+        "css": ".ml-workspace-switch { width: min(100%, 410px); margin: 0 auto; color: #292929; font: 500 13px/1.4 Inter, system-ui, sans-serif; }.ml-workspace-tabs { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; border: 1px solid #dededc; border-radius: 10px; background: #f4f4f2; }.ml-workspace-tabs::before { position: absolute; inset: 3px auto 3px 3px; width: calc((100% - 6px) / 3); border-radius: 7px; background: #fff; box-shadow: 0 1px 3px rgb(25 25 25 / 10%); content: \"\"; transition: transform 180ms cubic-bezier(.23,1,.32,1); }.ml-workspace-switch[data-active=\"write\"] .ml-workspace-tabs::before { transform: translateX(100%); }.ml-workspace-switch[data-active=\"review\"] .ml-workspace-tabs::before { transform: translateX(200%); }.ml-workspace-tabs button { position: relative; z-index: 1; min-height: 34px; border: 0; border-radius: 7px; color: #7a7a78; background: transparent; cursor: pointer; font: inherit; }.ml-workspace-tabs button[aria-selected=\"true\"] { color: #292929; }.ml-workspace-surface { position: relative; display: grid; min-height: 154px; align-content: end; gap: 6px; margin-top: 12px; overflow: hidden; border: 1px solid #dededc; border-radius: 16px; padding: 19px; background: linear-gradient(145deg,#fff,#f5f5f3); }.ml-workspace-surface > span:first-child { color: #9e9e9e; font: 600 11px ui-monospace, monospace; letter-spacing: .08em; }.ml-workspace-surface strong { font-size: 17px; letter-spacing: -.2px; }.ml-workspace-surface p { max-width: 250px; margin: 0; color: #5d5d5d; }.ml-workspace-count { position: absolute; top: 18px; right: 18px; display: grid; width: 35px; height: 35px; place-items: center; border-radius: 50%; color: #292929; background: #e8e8e5; font: 600 12px ui-monospace, monospace; }.ml-workspace-surface.is-changing > * { animation: ml-workspace-content 160ms cubic-bezier(.23,1,.32,1) both; } @keyframes ml-workspace-content { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"workspace-switch\"]');\n  if (!root) return;\n  const presets = { design: ['CANVAS', 'Homepage direction', 'Three reviewed frames are ready to share.', '03'], write: ['DRAFT', 'Release notes', 'A short opening is ready for editing.', '12'], review: ['REVIEW', 'Comments resolved', 'Everything is clear for the next handoff.', '08'] };\n  const tabs = [...root.querySelectorAll('[data-workspace-tab]')]; const surface = root.querySelector('.ml-workspace-surface');\n  tabs.forEach((tab) => tab.addEventListener('click', () => {\n    const id = tab.dataset.workspaceTab; const values = presets[id]; root.dataset.active = id;\n    tabs.forEach((item) => item.setAttribute('aria-selected', String(item === tab)));\n    surface.classList.remove('is-changing'); void surface.offsetWidth; surface.classList.add('is-changing');\n    root.querySelector('[data-workspace-eyebrow]').textContent = values[0]; root.querySelector('[data-workspace-title]').textContent = values[1]; root.querySelector('[data-workspace-copy]').textContent = values[2]; root.querySelector('[data-workspace-count]').textContent = values[3];\n  }));\n})();"
+      }
+    },
+    {
+      "id": "template-choice",
+      "kind": "template-choice",
+      "groupId": "choice",
+      "name": {
+        "zh": "模板选择",
+        "en": "Template choice"
+      },
+      "summary": {
+        "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+        "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+      },
+      "scene": {
+        "zh": "创建新页面时选择一个起始模板。",
+        "en": "Choosing a starting template when creating a new page."
+      },
+      "useCase": {
+        "zh": "创建项目、选封面、挑邮件模板和生成报告。",
+        "en": "Creating projects, choosing covers, selecting email templates, and generating reports."
+      },
+      "prompt": {
+        "zh": "实现一个模板选择器：三张模板卡片可切换，选中的模板呈现清晰边界和角标，下方主按钮同步带出当前模板名。动作轻、短，并支持重复选择。",
+        "en": "Build a template chooser: three cards can switch, the chosen card has a clear boundary and corner mark, and the main action below adopts the active template name. Keep the motion light, short, and repeatable."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "点击模板时先更新可视选择，再更新下一步动作。",
+          "en": "Update the visual choice first, then update the next action."
+        },
+        "outcome": {
+          "zh": "主按钮直接说明即将从哪个模板开始。",
+          "en": "The primary action directly states which template will start the flow."
+        },
+        "reducedMotion": {
+          "zh": "保留边界、角标和按钮文案更新。",
+          "en": "Keep boundary, corner mark, and action-label updates."
+        }
+      },
+      "keywords": [
+        "模板",
+        "选择",
+        "创建",
+        "封面",
+        "选项",
+        "template",
+        "chooser",
+        "create",
+        "cover",
+        "option"
+      ],
+      "timing": "200ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+      },
+      "source": {
+        "html": "<section class=\"ml-template-choice\" data-motion-pack=\"template-choice\" aria-label=\"Choose a template\">\n  <div class=\"ml-template-grid\" role=\"radiogroup\" aria-label=\"Templates\">\n    <button type=\"button\" role=\"radio\" aria-checked=\"true\" data-template=\"Brief\"><span class=\"ml-template-art brief\"><i></i><i></i><i></i></span><strong>Brief</strong><em>✓</em></button>\n    <button type=\"button\" role=\"radio\" aria-checked=\"false\" data-template=\"Gallery\"><span class=\"ml-template-art gallery\"><i></i><i></i><i></i></span><strong>Gallery</strong><em>✓</em></button>\n    <button type=\"button\" role=\"radio\" aria-checked=\"false\" data-template=\"Roadmap\"><span class=\"ml-template-art roadmap\"><i></i><i></i><i></i></span><strong>Roadmap</strong><em>✓</em></button>\n  </div><button class=\"ml-template-cta\" type=\"button\" data-template-cta>Use Brief <span aria-hidden=\"true\">→</span></button>\n</section>",
+        "css": ".ml-template-choice { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-template-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; }.ml-template-grid > button { position: relative; display: grid; gap: 9px; border: 1px solid #dededc; border-radius: 14px; padding: 8px; color: #5d5d5d; background: #fff; cursor: pointer; font: inherit; text-align: left; transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms cubic-bezier(.16,1,.3,1); }.ml-template-grid > button:hover { transform: translateY(-2px); }.ml-template-grid > button[aria-checked=\"true\"] { border-color: #292929; box-shadow: 0 9px 20px rgb(25 25 25 / 8%); color: #292929; }.ml-template-grid em { position: absolute; top: 7px; right: 7px; display: grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; color: #fff; background: #292929; font: 700 11px/1 Inter, sans-serif; font-style: normal; opacity: 0; transform: scale(.65); transition: opacity 160ms ease, transform 160ms cubic-bezier(.16,1,.3,1); }.ml-template-grid > button[aria-checked=\"true\"] em { opacity: 1; transform: scale(1); }.ml-template-art { display: grid; min-height: 74px; gap: 4px; padding: 6px; border-radius: 8px; background: #f0f0ed; }.ml-template-art i { display: block; border-radius: 3px; background: #c8c8c5; }.ml-template-art.brief i:first-child { min-height: 30px; }.ml-template-art.gallery { grid-template-columns: repeat(2,1fr); }.ml-template-art.gallery i:first-child { grid-row: span 2; }.ml-template-art.roadmap { grid-template-columns: 11px 1fr; }.ml-template-art.roadmap i:nth-child(odd) { border-radius: 99px; }.ml-template-cta { display: flex; width: 100%; min-height: 40px; align-items: center; justify-content: space-between; margin-top: 12px; border: 0; border-radius: 999px; padding: 0 15px; color: #fff; background: #292929; cursor: pointer; font: inherit; transition: transform 120ms ease; }.ml-template-cta:active { transform: scale(.98); }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"template-choice\"]');\n  if (!root) return;\n  const choices = [...root.querySelectorAll('[role=\"radio\"]')]; const action = root.querySelector('[data-template-cta]');\n  choices.forEach((choice) => choice.addEventListener('click', () => { choices.forEach((item) => item.setAttribute('aria-checked', String(item === choice))); action.innerHTML = 'Use ' + choice.dataset.template + ' <span aria-hidden=\"true\">→</span>'; }));\n})();"
+      }
+    },
+    {
+      "id": "layer-insertion",
+      "kind": "layer-insertion",
+      "groupId": "change",
+      "name": {
+        "zh": "图层插入",
+        "en": "Layer insertion"
+      },
+      "summary": {
+        "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+        "en": "New content reserves its correct position, then reveals itself with very small travel."
+      },
+      "scene": {
+        "zh": "设计工具中新增一个标题或强调图层。",
+        "en": "Adding a title or accent layer inside a design tool."
+      },
+      "useCase": {
+        "zh": "列表新增、评论插入、图层面板和待办创建。",
+        "en": "Adding list items, inserting comments, layer panels, and creating tasks."
+      },
+      "prompt": {
+        "zh": "实现一个图层插入动作：点击“添加图层”后，新行先进入最终布局位置，再在 220ms 内从轻微下方和低透明度出现。已有行保持稳定。",
+        "en": "Build a layer insertion action: after Add layer, the new row first occupies its final layout position, then appears from slight downward travel and low opacity over 220ms. Existing rows remain stable."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "新增动作应立刻在当前列表区域被看见。",
+          "en": "Make the addition visible immediately inside the current list area."
+        },
+        "outcome": {
+          "zh": "新行进入准确位置，已有内容避免被大幅推开。",
+          "en": "The new row enters its exact position while existing content avoids large displacement."
+        },
+        "reducedMotion": {
+          "zh": "新行直接出现，并维持项目顺序。",
+          "en": "Show the new row directly while preserving item order."
+        }
+      },
+      "keywords": [
+        "新增",
+        "插入",
+        "图层",
+        "列表",
+        "添加",
+        "insert",
+        "add",
+        "layer",
+        "list",
+        "new item"
+      ],
+      "timing": "220ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+      },
+      "source": {
+        "html": "<section class=\"ml-layer-insertion\" data-motion-pack=\"layer-insertion\" aria-label=\"Layer insertion\">\n  <div class=\"ml-layer-window\"><div class=\"ml-layer-bar\"><strong>Layers</strong><button type=\"button\" data-add-layer>＋ Add layer</button></div><ul data-layer-list><li><i></i><strong>Title</strong><small>Fade in</small></li><li><i></i><strong>Meta</strong><small>Delay 40ms</small></li></ul></div>\n</section>",
+        "css": ".ml-layer-insertion { width: min(100%, 400px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-layer-window { overflow: hidden; border: 1px solid #dededc; border-radius: 16px; background: #fff; }.ml-layer-bar { display: flex; min-height: 48px; align-items: center; justify-content: space-between; padding: 0 13px; border-bottom: 1px solid #ebebe8; }.ml-layer-bar button { min-height: 30px; border: 0; border-radius: 8px; padding: 0 8px; color: #292929; background: #f0f0ed; cursor: pointer; font: inherit; }.ml-layer-bar button:active { transform: scale(.97); }.ml-layer-insertion ul { display: grid; gap: 5px; margin: 0; padding: 11px; list-style: none; }.ml-layer-insertion li { display: grid; grid-template-columns: 13px 1fr auto; align-items: center; gap: 8px; min-height: 39px; border-radius: 9px; padding: 0 10px; background: #f7f7f5; }.ml-layer-insertion li > i { width: 11px; height: 11px; border-radius: 3px; background: #c6c6c2; }.ml-layer-insertion li small { color: #9e9e9e; font-size: 11px; }.ml-layer-insertion li.is-entering { animation: ml-layer-enter 220ms cubic-bezier(.16,1,.3,1) both; } @keyframes ml-layer-enter { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"layer-insertion\"]');\n  if (!root) return;\n  const list = root.querySelector('[data-layer-list]'); const button = root.querySelector('[data-add-layer]'); let count = 2;\n  button.addEventListener('click', () => { count += 1; const item = document.createElement('li'); item.className = 'is-entering'; item.innerHTML = '<i></i><strong>' + (count % 2 ? 'Accent' : 'Thumbnail') + '</strong><small>' + (count % 2 ? 'Scale 96%' : 'Slide up') + '</small>'; list.append(item); });\n})();"
+      }
+    },
+    {
+      "id": "archive-undo",
+      "kind": "archive-undo",
+      "groupId": "change",
+      "name": {
+        "zh": "归档撤销",
+        "en": "Archive undo"
+      },
+      "summary": {
+        "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+        "en": "After an item leaves, an undo affordance catches the user in the same context."
+      },
+      "scene": {
+        "zh": "任务列表中把一条评审移到归档。",
+        "en": "Moving a review task to archive from a task list."
+      },
+      "useCase": {
+        "zh": "归档、删除、移除成员、完成待办和取消订阅。",
+        "en": "Archiving, deleting, removing members, completing tasks, and unsubscribing."
+      },
+      "prompt": {
+        "zh": "实现一个归档撤销：点击归档后，任务卡片在 200ms 内缩小淡出，底部出现带撤销按钮的短提示。点击撤销后，原卡片从相同位置恢复。",
+        "en": "Build archive undo: after Archive, fade and scale the task card out within 200ms, then reveal a short toast with Undo. Clicking Undo restores the original card at the same location."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "离开动作的开始位置保留在用户正在看的列表里。",
+          "en": "Keep the departure origin inside the list the person is viewing."
+        },
+        "outcome": {
+          "zh": "撤销入口贴近刚刚发生的结果，并能恢复原项目。",
+          "en": "Place Undo near the just-completed result and restore the original item."
+        },
+        "reducedMotion": {
+          "zh": "卡片直接隐藏或恢复，撤销提示保持可见。",
+          "en": "Hide or restore the card directly while keeping Undo available."
+        }
+      },
+      "keywords": [
+        "归档",
+        "撤销",
+        "删除",
+        "恢复",
+        "toast",
+        "archive",
+        "undo",
+        "delete",
+        "restore",
+        "forgiveness"
+      ],
+      "timing": "200ms exit + 180ms restore · cubic-bezier(0.4, 0, 1, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+      },
+      "source": {
+        "html": "<section class=\"ml-archive-undo\" data-motion-pack=\"archive-undo\" aria-label=\"Archive task\">\n  <div class=\"ml-archive-row\" data-archive-row><span class=\"ml-archive-check\">✓</span><div><strong>Motion review</strong><small>4 changes ready</small></div><button type=\"button\" data-archive-action>Archive</button></div>\n  <div class=\"ml-archive-toast\" data-archive-toast role=\"status\"><span>Moved to archive</span><button type=\"button\" data-undo-action>Undo</button></div>\n</section>",
+        "css": ".ml-archive-undo { width: min(100%, 405px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-archive-row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px; border: 1px solid #dededc; border-radius: 14px; padding: 13px; background: #fff; transition: opacity 200ms ease, transform 200ms cubic-bezier(.4,0,1,1), max-height 200ms ease, margin 200ms ease; }.ml-archive-row.is-archived { max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; border-width: 0; opacity: 0; transform: scale(.97) translateY(-5px); }.ml-archive-check { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; color: #2d8c5f; background: #eff9f2; }.ml-archive-row small { display: block; margin-top: 2px; color: #9e9e9e; }.ml-archive-undo button { min-height: 32px; border: 0; border-radius: 999px; padding: 0 11px; color: #292929; background: #f0f0ed; cursor: pointer; font: inherit; }.ml-archive-toast { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; border-radius: 11px; padding: 10px 12px; color: #fff; background: #292929; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 180ms ease, transform 180ms cubic-bezier(.23,1,.32,1); }.ml-archive-toast button { color: #292929; background: #fff; }.ml-archive-undo[data-archived=\"true\"] .ml-archive-toast { opacity: 1; pointer-events: auto; transform: translateY(0); }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"archive-undo\"]');\n  if (!root) return;\n  const row = root.querySelector('[data-archive-row]'); const archive = root.querySelector('[data-archive-action]'); const undo = root.querySelector('[data-undo-action]');\n  archive.addEventListener('click', () => { row.classList.add('is-archived'); root.dataset.archived = 'true'; });\n  undo.addEventListener('click', () => { row.classList.remove('is-archived'); delete root.dataset.archived; });\n})();"
+      }
+    },
+    {
+      "id": "filter-results",
+      "kind": "filter-results",
+      "groupId": "change",
+      "name": {
+        "zh": "筛选结果",
+        "en": "Filter results"
+      },
+      "summary": {
+        "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+        "en": "When a filter changes, update the result count and visible items together."
+      },
+      "scene": {
+        "zh": "资源库中按状态过滤设计文件。",
+        "en": "Filtering design files by status in a resource library."
+      },
+      "useCase": {
+        "zh": "搜索结果、内容列表、订单、任务和标签页。",
+        "en": "Search results, content lists, orders, tasks, and tag views."
+      },
+      "prompt": {
+        "zh": "实现一个筛选结果切换：点击筛选条件后，活动筛选清晰移动，符合条件的卡片在 180ms 内淡入上移，不符合条件的卡片淡出，顶部结果数量同步更新。",
+        "en": "Build a filter-results switch: after a filter is clicked, clearly move the active filter, fade qualifying cards in with slight upward travel over 180ms, fade non-matches out, and update the count in sync."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "筛选条件本身需要持续可见，帮助用户理解当前范围。",
+          "en": "Keep the filter itself continuously visible so people understand the active scope."
+        },
+        "outcome": {
+          "zh": "结果数量、活动条件和网格内容在同一个事件内更新。",
+          "en": "Update count, active condition, and grid content as one event."
+        },
+        "reducedMotion": {
+          "zh": "直接替换可见结果，同时保留数量和选中筛选。",
+          "en": "Replace visible results directly while retaining count and active filter."
+        }
+      },
+      "keywords": [
+        "筛选",
+        "结果",
+        "搜索",
+        "标签",
+        "列表",
+        "filter",
+        "results",
+        "search",
+        "tag",
+        "list"
+      ],
+      "timing": "180ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+      },
+      "source": {
+        "html": "<section class=\"ml-filter-results\" data-motion-pack=\"filter-results\" data-filter=\"all\" aria-label=\"Filter library\">\n  <div class=\"ml-filter-head\"><div class=\"ml-filter-tabs\" role=\"group\" aria-label=\"Filter\"><button type=\"button\" aria-pressed=\"true\" data-filter-option=\"all\">All</button><button type=\"button\" aria-pressed=\"false\" data-filter-option=\"review\">Review</button><button type=\"button\" aria-pressed=\"false\" data-filter-option=\"draft\">Draft</button></div><span data-filter-count>4 results</span></div>\n  <ul class=\"ml-filter-grid\" data-filter-grid><li data-kind=\"review\"><i></i><strong>Homepage</strong><small>Review</small></li><li data-kind=\"draft\"><i></i><strong>Release notes</strong><small>Draft</small></li><li data-kind=\"review\"><i></i><strong>Pricing page</strong><small>Review</small></li><li data-kind=\"draft\"><i></i><strong>Onboarding</strong><small>Draft</small></li></ul>\n</section>",
+        "css": ".ml-filter-results { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-filter-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; color: #9e9e9e; font-size: 12px; }.ml-filter-tabs { display: inline-flex; gap: 3px; padding: 3px; border-radius: 9px; background: #eaeae7; }.ml-filter-tabs button { min-height: 29px; border: 0; border-radius: 6px; padding: 0 9px; color: #6e6e6b; background: transparent; cursor: pointer; font: inherit; transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease; }.ml-filter-tabs button[aria-pressed=\"true\"] { color: #292929; background: #fff; box-shadow: 0 1px 3px rgb(25 25 25 / 10%); }.ml-filter-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin: 0; padding: 0; list-style: none; }.ml-filter-grid li { display: grid; gap: 7px; min-height: 96px; border: 1px solid #dededc; border-radius: 13px; padding: 10px; background: #fff; transition: opacity 180ms ease, transform 180ms cubic-bezier(.16,1,.3,1); }.ml-filter-grid li.is-hidden { display: none; }.ml-filter-grid li.is-entering { animation: ml-filter-enter 180ms cubic-bezier(.16,1,.3,1) both; }.ml-filter-grid i { display: block; width: 25px; height: 18px; border-radius: 5px; background: #d1d1ce; }.ml-filter-grid small { color: #9e9e9e; } @keyframes ml-filter-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"filter-results\"]');\n  if (!root) return;\n  const buttons = [...root.querySelectorAll('[data-filter-option]')]; const cards = [...root.querySelectorAll('[data-kind]')]; const count = root.querySelector('[data-filter-count]');\n  buttons.forEach((button) => button.addEventListener('click', () => {\n    const filter = button.dataset.filterOption; root.dataset.filter = filter; buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button))); let visible = 0;\n    cards.forEach((card) => { const show = filter === 'all' || card.dataset.kind === filter; card.classList.toggle('is-hidden', !show); if (show) { visible += 1; card.classList.remove('is-entering'); void card.offsetWidth; card.classList.add('is-entering'); } });\n    count.textContent = visible + (visible === 1 ? ' result' : ' results');\n  }));\n})();"
+      }
+    },
+    {
+      "id": "inline-validation",
+      "kind": "inline-validation",
+      "groupId": "workflow",
+      "name": {
+        "zh": "行内校验",
+        "en": "Inline validation"
+      },
+      "summary": {
+        "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+        "en": "Offer direction close to the field while people stay in the current task."
+      },
+      "scene": {
+        "zh": "邀请协作者时填写电子邮箱。",
+        "en": "Entering an email address while inviting a collaborator."
+      },
+      "useCase": {
+        "zh": "表单字段、账户设置、付款信息和邀请流程。",
+        "en": "Form fields, account settings, payment information, and invite flows."
+      },
+      "prompt": {
+        "zh": "实现一个行内邮箱校验：用户输入后，根据邮箱格式切换输入框边界、辅助文字和状态图标。有效状态快速抵达，错误信息保持简洁并位于字段附近。",
+        "en": "Build inline email validation: after input, switch the field boundary, helper copy, and status icon based on email format. Let valid state land quickly; keep error copy concise and near the field."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "在用户完成一段可判断的输入后更新状态。",
+          "en": "Update state after the person completes an input that can be evaluated."
+        },
+        "outcome": {
+          "zh": "边界、图标与辅助说明指向同一个明确结论。",
+          "en": "Boundary, icon, and helper copy point to one clear conclusion."
+        },
+        "reducedMotion": {
+          "zh": "保留颜色、图标和文字的状态变化。",
+          "en": "Keep the state changes in color, icon, and text."
+        }
+      },
+      "keywords": [
+        "表单",
+        "校验",
+        "错误",
+        "输入",
+        "邮箱",
+        "form",
+        "validation",
+        "error",
+        "input",
+        "email"
+      ],
+      "timing": "140ms · ease-out",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+      },
+      "source": {
+        "html": "<section class=\"ml-inline-validation\" data-motion-pack=\"inline-validation\" data-state=\"idle\" aria-label=\"Email validation\">\n  <label for=\"ml-validation-email\">Invite email</label>\n  <div class=\"ml-validation-field\"><input id=\"ml-validation-email\" type=\"email\" autocomplete=\"email\" placeholder=\"name@company.com\" data-validation-input aria-describedby=\"ml-validation-help\"><span data-validation-icon aria-hidden=\"true\">•</span></div>\n  <p id=\"ml-validation-help\" data-validation-help aria-live=\"polite\">Use a work email to keep this project private.</p>\n</section>",
+        "css": ".ml-inline-validation { width: min(100%, 380px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-inline-validation label { display: block; margin-bottom: 7px; }.ml-validation-field { position: relative; }.ml-validation-field input { box-sizing: border-box; width: 100%; min-height: 42px; border: 1px solid #cfcfcd; border-radius: 10px; padding: 0 38px 0 12px; outline: none; color: #292929; background: #fff; font: inherit; transition: border-color 140ms ease, box-shadow 140ms ease; }.ml-validation-field input:focus { border-color: #292929; box-shadow: 0 0 0 3px rgb(41 41 41 / 8%); }.ml-validation-field span { position: absolute; top: 50%; right: 13px; color: #9e9e9e; transform: translateY(-50%) scale(.8); transition: color 140ms ease, transform 140ms cubic-bezier(.23,1,.32,1); }.ml-inline-validation p { min-height: 18px; margin: 7px 0 0; color: #9e9e9e; font-size: 12px; }.ml-inline-validation[data-state=\"valid\"] input { border-color: #55a879; box-shadow: 0 0 0 3px rgb(85 168 121 / 10%); }.ml-inline-validation[data-state=\"valid\"] span, .ml-inline-validation[data-state=\"valid\"] p { color: #2d8c5f; }.ml-inline-validation[data-state=\"valid\"] span { transform: translateY(-50%) scale(1); }.ml-inline-validation[data-state=\"invalid\"] input { border-color: #c65b5b; box-shadow: 0 0 0 3px rgb(198 91 91 / 9%); }.ml-inline-validation[data-state=\"invalid\"] span, .ml-inline-validation[data-state=\"invalid\"] p { color: #b54747; }.ml-inline-validation[data-state=\"invalid\"] span { transform: translateY(-50%) scale(1); }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"inline-validation\"]');\n  if (!root) return;\n  const input = root.querySelector('[data-validation-input]'); const help = root.querySelector('[data-validation-help]'); const icon = root.querySelector('[data-validation-icon]');\n  input.addEventListener('input', () => { const value = input.value.trim(); if (!value) { root.dataset.state = 'idle'; icon.textContent = '•'; help.textContent = 'Use a work email to keep this project private.'; return; } const valid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value); root.dataset.state = valid ? 'valid' : 'invalid'; icon.textContent = valid ? '✓' : '!'; help.textContent = valid ? 'Email looks ready to invite.' : 'Enter a complete email address.'; });\n})();"
+      }
+    },
+    {
+      "id": "command-menu",
+      "kind": "command-menu",
+      "groupId": "choice",
+      "name": {
+        "zh": "命令菜单",
+        "en": "Command menu"
+      },
+      "summary": {
+        "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+        "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+      },
+      "scene": {
+        "zh": "文档工作区中快速跳转到一个常用动作。",
+        "en": "Jumping quickly to a common action from a document workspace."
+      },
+      "useCase": {
+        "zh": "快速操作、全局搜索、文件跳转和创建入口。",
+        "en": "Quick actions, global search, file jumping, and creation entry points."
+      },
+      "prompt": {
+        "zh": "实现一个命令菜单：按下按钮或 Cmd/Ctrl+K 打开面板，输入时筛选命令，方向键移动高亮，Enter 执行当前项，Esc 关闭。进入和离开保持 160ms 的短节奏。",
+        "en": "Build a command menu: open it with the button or Cmd/Ctrl+K, filter commands while typing, move highlight with arrow keys, run the active item with Enter, and close with Escape. Keep entrance and exit to a short 160ms cadence."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "从原按钮打开，键盘焦点立即进入搜索框。",
+          "en": "Open from the original action and move keyboard focus into search immediately."
+        },
+        "outcome": {
+          "zh": "高亮项始终表达下一次 Enter 会执行什么。",
+          "en": "The highlighted row always communicates what Enter will run next."
+        },
+        "reducedMotion": {
+          "zh": "面板直接出现与关闭，保持焦点管理和键盘操作。",
+          "en": "Open and close the panel directly while retaining focus management and keyboard controls."
+        }
+      },
+      "keywords": [
+        "命令菜单",
+        "快捷操作",
+        "搜索",
+        "键盘",
+        "Cmd K",
+        "command menu",
+        "quick action",
+        "search",
+        "keyboard",
+        "cmd k"
+      ],
+      "timing": "160ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+      },
+      "source": {
+        "html": "<section class=\"ml-command-menu\" data-motion-pack=\"command-menu\" data-open=\"false\" aria-label=\"Command menu\">\n  <button class=\"ml-command-trigger\" type=\"button\" data-command-trigger><span>⌘</span> Find a command <kbd>⌘ K</kbd></button>\n  <div class=\"ml-command-popover\" data-command-popover hidden><input type=\"search\" placeholder=\"Search actions\" data-command-input aria-label=\"Search commands\"><ul data-command-list><li data-command=\"Create page\" data-index=\"0\" class=\"is-active\"><span>＋</span>Create page<kbd>↵</kbd></li><li data-command=\"Open library\" data-index=\"1\"><span>◫</span>Open library<kbd>↵</kbd></li><li data-command=\"Share project\" data-index=\"2\"><span>↗</span>Share project<kbd>↵</kbd></li></ul><p data-command-status role=\"status\"></p></div>\n</section>",
+        "css": ".ml-command-menu { position: relative; width: min(100%, 400px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-command-trigger { display: flex; width: 100%; min-height: 42px; align-items: center; gap: 9px; border: 1px solid #d8d8d5; border-radius: 10px; padding: 0 12px; color: #5d5d5d; background: #fff; cursor: pointer; font: inherit; text-align: left; }.ml-command-trigger > span { color: #292929; font-size: 17px; }.ml-command-trigger kbd, .ml-command-popover kbd { margin-left: auto; color: #9e9e9e; font: 11px ui-monospace, monospace; }.ml-command-popover { position: absolute; z-index: 1; width: 100%; box-sizing: border-box; margin-top: 7px; overflow: hidden; border: 1px solid #d8d8d5; border-radius: 13px; padding: 7px; background: #fff; box-shadow: 0 15px 30px rgb(25 25 25 / 12%); transform-origin: top center; }.ml-command-menu[data-open=\"true\"] .ml-command-popover { animation: ml-command-open 160ms cubic-bezier(.16,1,.3,1) both; }.ml-command-popover input { box-sizing: border-box; width: 100%; min-height: 35px; border: 0; border-bottom: 1px solid #ecece9; outline: 0; padding: 0 7px 7px; color: #292929; background: transparent; font: inherit; }.ml-command-popover ul { display: grid; gap: 2px; margin: 6px 0; padding: 0; list-style: none; }.ml-command-popover li { display: flex; min-height: 36px; align-items: center; gap: 8px; border-radius: 8px; padding: 0 8px; color: #5d5d5d; cursor: pointer; }.ml-command-popover li span { color: #9e9e9e; }.ml-command-popover li.is-active { color: #292929; background: #f0f0ed; }.ml-command-popover li[hidden] { display: none; }.ml-command-popover p { min-height: 16px; margin: 3px 7px 0; color: #2d8c5f; font-size: 12px; } @keyframes ml-command-open { from { opacity: 0; transform: translateY(-5px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"command-menu\"]');\n  if (!root) return;\n  const trigger = root.querySelector('[data-command-trigger]'); const popover = root.querySelector('[data-command-popover]'); const input = root.querySelector('[data-command-input]'); const rows = [...root.querySelectorAll('[data-command]')]; const status = root.querySelector('[data-command-status]'); let active = 0;\n  const open = () => { root.dataset.open = 'true'; popover.hidden = false; input.focus(); };\n  const close = () => { root.dataset.open = 'false'; popover.hidden = true; trigger.focus(); };\n  const setActive = (index) => { const available = rows.filter((row) => !row.hidden); active = Math.max(0, Math.min(index, available.length - 1)); available.forEach((row, rowIndex) => row.classList.toggle('is-active', rowIndex === active)); };\n  trigger.addEventListener('click', open); document.addEventListener('keydown', (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); open(); } });\n  input.addEventListener('input', () => { const term = input.value.toLowerCase(); rows.forEach((row) => { row.hidden = !row.dataset.command.toLowerCase().includes(term); }); setActive(0); });\n  input.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); if (event.key === 'ArrowDown') { event.preventDefault(); setActive(active + 1); } if (event.key === 'ArrowUp') { event.preventDefault(); setActive(active - 1); } if (event.key === 'Enter') { const row = rows.filter((item) => !item.hidden)[active]; status.textContent = row.dataset.command + ' selected'; } });\n})();"
+      }
+    },
+    {
+      "id": "details-disclosure",
+      "kind": "details-disclosure",
+      "groupId": "change",
+      "name": {
+        "zh": "详情展开",
+        "en": "Details disclosure"
+      },
+      "summary": {
+        "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+        "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+      },
+      "scene": {
+        "zh": "发布前检查清单中的一项展开说明。",
+        "en": "An expanded explanation in a pre-publish checklist."
+      },
+      "useCase": {
+        "zh": "设置说明、FAQ、检查项、表格详情和高级参数。",
+        "en": "Settings explanations, FAQs, checklists, table details, and advanced parameters."
+      },
+      "prompt": {
+        "zh": "实现一个详情展开：点击标题行后，箭头旋转，内容区通过高度和透明度在 220ms 内展开；再次点击平稳收起。避免让页面其余部分发生突兀跳动。",
+        "en": "Build a details disclosure: after clicking the title row, rotate the arrow and expand content through height and opacity over 220ms; click again to settle closed. Keep surrounding layout from jumping abruptly."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "标题行始终是完整可点击的触发面。",
+          "en": "The title row remains one complete clickable trigger surface."
+        },
+        "outcome": {
+          "zh": "箭头、可见内容和辅助说明同步表达展开状态。",
+          "en": "Arrow, visible content, and helper copy express expanded state together."
+        },
+        "reducedMotion": {
+          "zh": "直接展开或收起内容，保留 aria-expanded 状态。",
+          "en": "Open or close content directly while retaining aria-expanded state."
+        }
+      },
+      "keywords": [
+        "展开",
+        "收起",
+        "详情",
+        "折叠",
+        "FAQ",
+        "disclosure",
+        "expand",
+        "collapse",
+        "details",
+        "accordion"
+      ],
+      "timing": "220ms · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+      },
+      "source": {
+        "html": "<section class=\"ml-details-disclosure\" data-motion-pack=\"details-disclosure\" data-expanded=\"false\" aria-label=\"Release checks\">\n  <button type=\"button\" aria-expanded=\"false\" data-disclosure-trigger><span><strong>Release checklist</strong><small>3 checks before publishing</small></span><b aria-hidden=\"true\">⌄</b></button>\n  <div class=\"ml-disclosure-panel\" data-disclosure-panel><div><p>Confirm the title, share image, and redirect rules before this version goes live.</p><a href=\"#release-notes\">Open release notes →</a></div></div>\n</section>",
+        "css": ".ml-details-disclosure { width: min(100%, 410px); margin: 0 auto; overflow: hidden; border: 1px solid #dededc; border-radius: 14px; color: #292929; background: #fff; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-details-disclosure > button { display: flex; width: 100%; min-height: 58px; align-items: center; justify-content: space-between; border: 0; padding: 0 14px; color: inherit; background: transparent; cursor: pointer; font: inherit; text-align: left; }.ml-details-disclosure strong, .ml-details-disclosure small { display: block; }.ml-details-disclosure small { margin-top: 3px; color: #9e9e9e; }.ml-details-disclosure b { color: #5d5d5d; font-size: 17px; transition: transform 220ms cubic-bezier(.23,1,.32,1); }.ml-disclosure-panel { display: grid; grid-template-rows: 0fr; border-top: 1px solid transparent; transition: grid-template-rows 220ms cubic-bezier(.23,1,.32,1), border-color 220ms ease; }.ml-disclosure-panel > div { min-height: 0; overflow: hidden; }.ml-disclosure-panel p { margin: 0; padding: 13px 14px 6px; color: #5d5d5d; }.ml-disclosure-panel a { display: inline-block; margin: 0 14px 14px; color: #292929; font-size: 12px; }.ml-details-disclosure[data-expanded=\"true\"] b { transform: rotate(180deg); }.ml-details-disclosure[data-expanded=\"true\"] .ml-disclosure-panel { grid-template-rows: 1fr; border-color: #ecece9; }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"details-disclosure\"]');\n  if (!root) return;\n  const trigger = root.querySelector('[data-disclosure-trigger]');\n  trigger.addEventListener('click', () => { const expanded = root.dataset.expanded === 'true'; root.dataset.expanded = String(!expanded); trigger.setAttribute('aria-expanded', String(!expanded)); });\n})();"
+      }
+    },
+    {
+      "id": "notification-triage",
+      "kind": "notification-triage",
+      "groupId": "feedback",
+      "name": {
+        "zh": "通知处理",
+        "en": "Notification triage"
+      },
+      "summary": {
+        "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+        "en": "After handling a notification, let completion and the next pending item follow naturally."
+      },
+      "scene": {
+        "zh": "项目收件箱里清理两条待处理的更新。",
+        "en": "Clearing two pending updates from a project inbox."
+      },
+      "useCase": {
+        "zh": "通知中心、评论收件箱、审批队列和客服工单。",
+        "en": "Notification centers, comment inboxes, approval queues, and support tickets."
+      },
+      "prompt": {
+        "zh": "实现一个通知处理动作：点击“标记已读”后，当前通知降低层级并离开队列，下一条通知轻微上移接替；当全部处理完成时，用短暂的“已清空”状态确认。",
+        "en": "Build a notification-triage action: after Mark read, lower the current notification's hierarchy and remove it from the queue, then let the next item rise slightly into place; when all are handled, confirm with a brief All clear state."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "处理入口贴着当前通知，减少视线来回移动。",
+          "en": "Keep the handling action next to the current notification to reduce eye travel."
+        },
+        "outcome": {
+          "zh": "队列自然向上补位，剩余数量同步变化。",
+          "en": "Let the queue fill upward naturally while the remaining count changes in sync."
+        },
+        "reducedMotion": {
+          "zh": "直接移除已处理项并更新数量。",
+          "en": "Remove the handled item directly and update the count."
+        }
+      },
+      "keywords": [
+        "通知",
+        "已读",
+        "收件箱",
+        "处理",
+        "队列",
+        "notification",
+        "read",
+        "inbox",
+        "triage",
+        "queue"
+      ],
+      "timing": "180ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+      },
+      "source": {
+        "html": "<section class=\"ml-notification-triage\" data-motion-pack=\"notification-triage\" aria-label=\"Notification triage\">\n  <div class=\"ml-triage-head\"><span>Inbox</span><strong data-triage-count>2 to review</strong></div>\n  <ol data-triage-list><li><span class=\"ml-triage-avatar\">M</span><div><strong>Mei left a review</strong><small>Homepage direction · now</small></div><button type=\"button\" data-triage-action>Mark read</button></li><li><span class=\"ml-triage-avatar\">J</span><div><strong>Jules shared a file</strong><small>Research board · 3m</small></div><button type=\"button\" data-triage-action>Mark read</button></li></ol>\n  <p data-triage-empty role=\"status\">All clear</p>\n</section>",
+        "css": ".ml-notification-triage { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-triage-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; color: #5d5d5d; }.ml-triage-head strong { color: #9e9e9e; font-size: 12px; }.ml-notification-triage ol { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }.ml-notification-triage li { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 9px; border: 1px solid #dededc; border-radius: 13px; padding: 10px; background: #fff; transition: opacity 180ms ease, transform 180ms cubic-bezier(.16,1,.3,1), max-height 180ms ease, padding 180ms ease, border-width 180ms ease; }.ml-notification-triage li.is-done { max-height: 0; overflow: hidden; border-width: 0; padding-top: 0; padding-bottom: 0; opacity: 0; transform: translateX(10px); }.ml-triage-avatar { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 9px; color: #fff; background: #5f75d8; font-size: 12px; }.ml-notification-triage small { display: block; margin-top: 2px; color: #9e9e9e; }.ml-notification-triage button { min-height: 29px; border: 0; border-radius: 8px; padding: 0 8px; color: #5d5d5d; background: #f0f0ed; cursor: pointer; font: inherit; font-size: 12px; }.ml-notification-triage p { margin: 10px 0 0; border-radius: 10px; padding: 10px; color: #2d8c5f; background: #eff9f2; opacity: 0; transform: translateY(-5px); transition: opacity 180ms ease, transform 180ms cubic-bezier(.16,1,.3,1); }.ml-notification-triage[data-empty=\"true\"] p { opacity: 1; transform: translateY(0); }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"notification-triage\"]');\n  if (!root) return;\n  const list = root.querySelector('[data-triage-list]'); const count = root.querySelector('[data-triage-count]');\n  list.addEventListener('click', (event) => { const button = event.target.closest('[data-triage-action]'); if (!button) return; const row = button.closest('li'); row.classList.add('is-done'); const left = [...list.children].filter((item) => !item.classList.contains('is-done')).length; count.textContent = left ? left + ' to review' : '0 to review'; if (!left) root.dataset.empty = 'true'; });\n})();"
+      }
+    },
+    {
+      "id": "progress-steps",
+      "kind": "progress-steps",
+      "groupId": "workflow",
+      "name": {
+        "zh": "进度步骤",
+        "en": "Progress steps"
+      },
+      "summary": {
+        "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+        "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+      },
+      "scene": {
+        "zh": "设置公开页面时依次完成内容、分享和发布。",
+        "en": "Completing content, sharing, and publishing while setting up a public page."
+      },
+      "useCase": {
+        "zh": "引导流程、结账、发布向导、导入和申请表。",
+        "en": "Onboarding, checkout, publish wizards, imports, and application forms."
+      },
+      "prompt": {
+        "zh": "实现一个三步进度流程：继续后，当前步骤变为完成，连接线延伸到下一步，右侧说明切换为新任务。使用 240ms 的顺序动作，避免同时让全部元素运动。",
+        "en": "Build a three-step progress flow: on Continue, complete the current step, extend the connector to the next, and switch the task on the right. Use a 240ms ordered sequence and avoid moving every element at once."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "主按钮只推进一个明确的下一步。",
+          "en": "The primary action advances one explicit next step."
+        },
+        "outcome": {
+          "zh": "完成标记先到位，连接线和新步骤随后接续。",
+          "en": "The completion mark lands first, followed by connector and next step."
+        },
+        "reducedMotion": {
+          "zh": "直接更新步骤状态与进度文本。",
+          "en": "Update step state and progress text directly."
+        }
+      },
+      "keywords": [
+        "进度",
+        "步骤",
+        "向导",
+        "流程",
+        "引导",
+        "progress",
+        "steps",
+        "wizard",
+        "flow",
+        "onboarding"
+      ],
+      "timing": "240ms staged · cubic-bezier(0.23, 1, 0.32, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+      },
+      "source": {
+        "html": "<section class=\"ml-progress-steps\" data-motion-pack=\"progress-steps\" data-step=\"0\" aria-label=\"Publish steps\">\n  <div class=\"ml-step-track\" aria-label=\"Progress\"><span class=\"is-current\"><i>1</i>Content</span><b></b><span><i>2</i>Share</span><b></b><span><i>3</i>Publish</span></div>\n  <div class=\"ml-step-card\"><span data-step-label>Step 1 of 3</span><strong data-step-title>Write the page title</strong><p data-step-copy>Give this page a clear name before sharing it.</p><button type=\"button\" data-step-next>Continue <span aria-hidden=\"true\">→</span></button></div>\n</section>",
+        "css": ".ml-progress-steps { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-step-track { display: grid; grid-template-columns: auto 1fr auto 1fr auto; align-items: center; gap: 7px; margin: 0 5px 13px; color: #9e9e9e; font-size: 12px; }.ml-step-track span { display: grid; justify-items: center; gap: 4px; }.ml-step-track i { display: grid; width: 22px; height: 22px; place-items: center; border: 1px solid #d0d0cd; border-radius: 50%; color: #7d7d7a; background: #fff; font: 11px ui-monospace, monospace; font-style: normal; transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms cubic-bezier(.23,1,.32,1); }.ml-step-track b { height: 1px; background: #d8d8d5; transform-origin: left; transition: background 200ms ease, transform 200ms cubic-bezier(.23,1,.32,1); }.ml-step-track .is-current, .ml-step-track .is-complete { color: #292929; }.ml-step-track .is-current i { border-color: #292929; transform: scale(1.08); }.ml-step-track .is-complete i { border-color: #2d8c5f; color: #fff; background: #2d8c5f; }.ml-step-track b.is-complete { background: #2d8c5f; transform: scaleX(1); }.ml-step-card { display: grid; gap: 6px; border: 1px solid #dededc; border-radius: 16px; padding: 17px; background: #fff; }.ml-step-card > span { color: #9e9e9e; font-size: 12px; }.ml-step-card strong { font-size: 16px; letter-spacing: -.2px; }.ml-step-card p { min-height: 36px; margin: 0; color: #5d5d5d; }.ml-step-card button { display: flex; min-height: 38px; align-items: center; justify-content: space-between; margin-top: 9px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; }.ml-step-card.is-changing > * { animation: ml-step-copy 180ms cubic-bezier(.23,1,.32,1) both; } @keyframes ml-step-copy { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"progress-steps\"]');\n  if (!root) return;\n  const content = [['Step 1 of 3', 'Write the page title', 'Give this page a clear name before sharing it.', 'Continue'], ['Step 2 of 3', 'Choose who can view it', 'Set sharing before this page becomes public.', 'Continue'], ['Step 3 of 3', 'Publish your page', 'Everything is ready for a final review.', 'Publish']];\n  const button = root.querySelector('[data-step-next]'); const card = root.querySelector('.ml-step-card'); const steps = [...root.querySelectorAll('.ml-step-track span')]; const links = [...root.querySelectorAll('.ml-step-track b')]; let step = 0;\n  button.addEventListener('click', () => { if (step === 2) { button.textContent = 'Published ✓'; button.disabled = true; return; } steps[step].className = 'is-complete'; links[step].className = 'is-complete'; step += 1; steps[step].className = 'is-current'; const next = content[step]; card.classList.remove('is-changing'); void card.offsetWidth; card.classList.add('is-changing'); root.querySelector('[data-step-label]').textContent = next[0]; root.querySelector('[data-step-title]').textContent = next[1]; root.querySelector('[data-step-copy]').textContent = next[2]; button.innerHTML = next[3] + ' <span aria-hidden=\"true\">→</span>'; });\n})();"
+      }
+    },
+    {
+      "id": "member-invite",
+      "kind": "member-invite",
+      "groupId": "workflow",
+      "name": {
+        "zh": "成员邀请",
+        "en": "Member invite"
+      },
+      "summary": {
+        "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+        "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+      },
+      "scene": {
+        "zh": "在项目设置中邀请新的设计协作者。",
+        "en": "Inviting a new design collaborator from project settings."
+      },
+      "useCase": {
+        "zh": "团队邀请、共享文档、项目权限和审批分配。",
+        "en": "Team invitations, shared documents, project permissions, and approval assignment."
+      },
+      "prompt": {
+        "zh": "实现一个成员邀请表单：填写邮箱并发送后，按钮进入短暂发送状态，表单下方插入一个带角色和待接受状态的成员行。保留输入校验与再次邀请能力。",
+        "en": "Build a member-invite form: after entering an email and sending, let the action briefly enter a sending state, then insert a member row with role and pending status below. Keep input validation and the ability to invite again."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "发送入口需要解释邀请的对象和角色。",
+          "en": "The send action should make the invitee and role understandable."
+        },
+        "outcome": {
+          "zh": "新成员以待接受状态进入团队列表，形成可追踪的后续。",
+          "en": "The new member enters the team list as pending, creating a traceable next step."
+        },
+        "reducedMotion": {
+          "zh": "直接插入成员行，保留待接受文字。",
+          "en": "Insert the member row directly and retain pending copy."
+        }
+      },
+      "keywords": [
+        "邀请",
+        "成员",
+        "团队",
+        "权限",
+        "角色",
+        "invite",
+        "member",
+        "team",
+        "permission",
+        "role"
+      ],
+      "timing": "220ms · cubic-bezier(0.16, 1, 0.3, 1)",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+      },
+      "source": {
+        "html": "<section class=\"ml-member-invite\" data-motion-pack=\"member-invite\" aria-label=\"Invite member\">\n  <div class=\"ml-invite-fields\"><input type=\"email\" placeholder=\"name@company.com\" data-invite-email aria-label=\"Member email\"><select data-invite-role aria-label=\"Member role\"><option>Editor</option><option>Viewer</option></select><button type=\"button\" data-invite-action>Invite</button></div>\n  <ul data-invite-list><li><span class=\"ml-invite-avatar\">R</span><div><strong>Rui Yang</strong><small>Owner</small></div><em>Active</em></li></ul><p data-invite-status role=\"status\"></p>\n</section>",
+        "css": ".ml-member-invite { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-invite-fields { display: grid; grid-template-columns: minmax(0,1fr) 92px auto; gap: 7px; }.ml-invite-fields input, .ml-invite-fields select { box-sizing: border-box; min-width: 0; min-height: 38px; border: 1px solid #d0d0cd; border-radius: 9px; padding: 0 10px; color: #292929; background: #fff; font: inherit; }.ml-invite-fields input:focus { outline: 2px solid rgb(41 41 41 / 14%); outline-offset: 1px; }.ml-invite-fields button { min-height: 38px; border: 0; border-radius: 999px; padding: 0 13px; color: #fff; background: #292929; cursor: pointer; font: inherit; }.ml-member-invite ul { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }.ml-member-invite li { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 9px; min-height: 42px; border-radius: 11px; padding: 5px 9px; background: #f5f5f3; }.ml-member-invite li.is-new { animation: ml-invite-enter 220ms cubic-bezier(.16,1,.3,1) both; }.ml-invite-avatar { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; color: #fff; background: #7b7b78; font-size: 11px; }.ml-member-invite small { display: block; margin-top: 2px; color: #9e9e9e; }.ml-member-invite em { color: #5d5d5d; font-size: 12px; font-style: normal; }.ml-member-invite li.is-new em { color: #a8781f; }.ml-member-invite p { min-height: 16px; margin: 6px 0 0; color: #b54747; font-size: 12px; } @keyframes ml-invite-enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } } @media (max-width: 420px) { .ml-invite-fields { grid-template-columns: 1fr auto; }.ml-invite-fields select { grid-row: 2; }.ml-invite-fields button { grid-row: 2; } }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"member-invite\"]');\n  if (!root) return;\n  const email = root.querySelector('[data-invite-email]'); const role = root.querySelector('[data-invite-role]'); const button = root.querySelector('[data-invite-action]'); const list = root.querySelector('[data-invite-list]'); const status = root.querySelector('[data-invite-status]');\n  button.addEventListener('click', () => { const value = email.value.trim(); if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) { status.textContent = 'Enter a complete email address.'; email.focus(); return; } button.disabled = true; button.textContent = 'Sending'; status.textContent = ''; window.setTimeout(() => { const item = document.createElement('li'); item.className = 'is-new'; item.innerHTML = '<span class=\"ml-invite-avatar\">' + value.charAt(0).toUpperCase() + '</span><div><strong>' + value + '</strong><small>' + role.value + '</small></div><em>Pending</em>'; list.append(item); email.value = ''; button.disabled = false; button.textContent = 'Invite'; }, 460); });\n})();"
+      }
+    },
+    {
+      "id": "media-scrub",
+      "kind": "media-scrub",
+      "groupId": "workflow",
+      "name": {
+        "zh": "媒体拖动",
+        "en": "Media scrub"
+      },
+      "summary": {
+        "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+        "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+      },
+      "scene": {
+        "zh": "在视频编辑器里精确预览一个镜头片段。",
+        "en": "Precisely previewing a shot inside a video editor."
+      },
+      "useCase": {
+        "zh": "视频播放器、音频剪辑、图像前后帧和时间轴编辑。",
+        "en": "Video players, audio editing, before-and-after frames, and timeline editing."
+      },
+      "prompt": {
+        "zh": "实现一个媒体拖动预览：用户拖动原生 range 时间线时，画面中的播放头、时间文字与进度填充连续更新。拖动停止后保持当前帧，避免额外的装饰性循环。",
+        "en": "Build a media-scrub preview: while a user drags a native range timeline, continuously update the playhead, time label, and progress fill in the frame. Keep the current frame after dragging and avoid decorative looping."
+      },
+      "guidance": {
+        "trigger": {
+          "zh": "拖动中始终用同一条时间线表达当前位置。",
+          "en": "Use the same timeline to communicate current position throughout dragging."
+        },
+        "outcome": {
+          "zh": "画面、时间和轨道的更新必须来自同一个进度值。",
+          "en": "Frame, time, and track must update from the same progress value."
+        },
+        "reducedMotion": {
+          "zh": "保持拖动与内容同步，省略画面内部的过渡。",
+          "en": "Keep drag and content in sync while omitting transitions inside the frame."
+        }
+      },
+      "keywords": [
+        "视频",
+        "时间线",
+        "拖动",
+        "播放头",
+        "预览",
+        "media",
+        "timeline",
+        "scrub",
+        "playhead",
+        "preview"
+      ],
+      "timing": "Continuous input · linear",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+      },
+      "source": {
+        "html": "<section class=\"ml-media-scrub\" data-motion-pack=\"media-scrub\" style=\"--progress: 31%\" aria-label=\"Media scrub\">\n  <div class=\"ml-scrub-frame\" data-scrub-frame><span class=\"ml-scrub-chip\">Motion reel</span><strong data-scrub-title>Frame 08</strong><i class=\"ml-scrub-playhead\" aria-hidden=\"true\"></i></div>\n  <div class=\"ml-scrub-controls\"><input type=\"range\" min=\"0\" max=\"100\" value=\"31\" data-scrub-input aria-label=\"Timeline position\"><div><span data-scrub-time>00:08</span><span>00:26</span></div></div>\n</section>",
+        "css": ".ml-media-scrub { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }.ml-scrub-frame { position: relative; display: grid; min-height: 165px; align-content: end; overflow: hidden; border-radius: 16px; padding: 17px; color: #fff; background: linear-gradient(135deg,#24272f 0%,#5262aa var(--progress),#d8b56a 100%); }.ml-scrub-frame::before { position: absolute; top: 0; bottom: 0; left: var(--progress); width: 1px; background: rgb(255 255 255 / 72%); box-shadow: 0 0 0 3px rgb(255 255 255 / 12%); content: \"\"; }.ml-scrub-chip { position: absolute; top: 13px; left: 13px; border-radius: 999px; padding: 4px 7px; background: rgb(0 0 0 / 22%); font-size: 11px; }.ml-scrub-frame strong { position: relative; z-index: 1; font-size: 20px; letter-spacing: -.4px; }.ml-scrub-playhead { position: absolute; top: 47%; left: calc(var(--progress) - 8px); width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; background: #292929; transform: translate(-50%,-50%); }.ml-scrub-controls { margin-top: 12px; }.ml-scrub-controls input { width: 100%; accent-color: #292929; cursor: ew-resize; }.ml-scrub-controls div { display: flex; justify-content: space-between; margin-top: 4px; color: #9e9e9e; font: 12px ui-monospace, monospace; }.ml-scrub-controls div span:first-child { color: #292929; }\n\n@media (prefers-reduced-motion: reduce) {\n  [data-motion-pack] *,\n  [data-motion-pack] *::before,\n  [data-motion-pack] *::after {\n    animation-duration: 1ms !important;\n    animation-iteration-count: 1 !important;\n    scroll-behavior: auto !important;\n    transition-duration: 1ms !important;\n  }\n}",
+        "js": "(() => {\n  const root = document.querySelector('[data-motion-pack=\"media-scrub\"]');\n  if (!root) return;\n  const input = root.querySelector('[data-scrub-input]'); const title = root.querySelector('[data-scrub-title]'); const time = root.querySelector('[data-scrub-time]');\n  input.addEventListener('input', () => { const value = Number(input.value); root.style.setProperty('--progress', value + '%'); const seconds = Math.round(value * 26 / 100); title.textContent = 'Frame ' + String(seconds).padStart(2, '0'); time.textContent = '00:' + String(seconds).padStart(2, '0'); });\n})();"
+      }
+    }
+  ]
+}

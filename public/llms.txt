@@ -6,6 +6,8 @@
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Motion Finder: https://motion-lexicon.pages.dev/en/finder/
 - 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
+- Motion Packs: https://motion-lexicon.pages.dev/en/packs/
+- Motion Packs JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
@@ -15,9 +17,28 @@
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
+
+## Motion Packs
+
+- [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/): A submission lands across the action, status marker, and document state together.
+- [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/): Resolve a ready update into a release with a clear landing point.
+- [Copy share link](https://motion-lexicon.pages.dev/en/packs/share-link/): Copy success is confirmed through the action and a light, temporary cue.
+- [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/): After selecting a layout, its boundary, checkmark, and selection summary express the result together.
+- [Workspace switch](https://motion-lexicon.pages.dev/en/packs/workspace-switch/): When switching context, keep the active tab and content surface on one continuous focus path.
+- [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/): Choose direction from visual templates, then attach the next action steadily to that choice.
+- [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/): New content reserves its correct position, then reveals itself with very small travel.
+- [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/): After an item leaves, an undo affordance catches the user in the same context.
+- [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/): When a filter changes, update the result count and visible items together.
+- [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/): Offer direction close to the field while people stay in the current task.
+- [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/): Filter actions inside a compact surface with equal focus feedback for keyboard and pointer.
+- [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/): Open collapsed information in place while preserving a clear relationship with its trigger.
+- [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/): After handling a notification, let completion and the next pending item follow naturally.
+- [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/): Across a multi-step task, make completed, current, and next steps form a clear cadence.
+- [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
+- [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
 
 ## Canonical recipes
 
