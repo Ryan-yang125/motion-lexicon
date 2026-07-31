@@ -118,6 +118,7 @@
     "postcss": "8.5.23"
   },
   "dependencies": {
+    "@radix-ui/react-slider": "^1.4.7",
     "motion": "^12.43.0"
   }
 }

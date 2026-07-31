@@ -8,7 +8,6 @@ import { pathFor } from "../data/site";
 import { ExpandingSearch } from "./interior/expanding-search";
 import { Ripple } from "./interior/ripple";
 import { CardLink } from "./interior/card-link";
-import { Button } from "./ui/button";
 
 const exampleKeys = ["weight", "continuity", "sequence"] as const;
 
@@ -42,28 +41,21 @@ export function Hero({ locale }: { locale: Locale }) {
         <h1 id="hero-title">{t("landing.heroTitle")}</h1>
         <p>{t("landing.heroCopy")}</p>
 
-        <form className="apple-hero-finder" role="search" onSubmit={handleSubmit}>
-          <span className="sr-only">{t("finder.formLabel")}</span>
-          <div>
-            <ExpandingSearch
-              id="home-finder-query"
-              name="q"
-              value={query}
-              onChange={setQuery}
-              onSubmit={openFinder}
-              open
-              collapseOnBlur={false}
-              align="left"
-              label={t("finder.formLabel")}
-              clearLabel={t("catalog.clearSearch")}
-              placeholder={t("landing.finderExample")}
-              className="interior-hero-search"
-            />
-            <Button type="submit" variant="accent">
-              <span>{t("landing.openFinder")}</span>
-              <ArrowRight aria-hidden="true" size={17} strokeWidth={1.9} />
-            </Button>
-          </div>
+        <form className="apple-hero-finder" onSubmit={handleSubmit}>
+          <ExpandingSearch
+            id="home-finder-query"
+            name="q"
+            value={query}
+            onChange={setQuery}
+            onSubmit={openFinder}
+            open
+            collapseOnBlur={false}
+            align="left"
+            label={t("finder.formLabel")}
+            clearLabel={t("catalog.clearSearch")}
+            placeholder={t("landing.finderExample")}
+            className="interior-hero-search"
+          />
         </form>
 
         <div className="apple-hero-examples" aria-label={t("finder.examplesLabel")}>

@@ -309,8 +309,8 @@ test("dark Finder, Catalog, and recipe states render without overflow", async ({
 test("primary actions keep a neutral high-contrast treatment in both themes", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Theme action tokens only need one browser audit.");
 
-  await page.goto("/zh/");
-  const action = page.getByRole("button", { name: "开始描述动效", exact: true });
+  await page.goto("/zh/entrances/slide-in/");
+  const action = page.getByRole("button", { name: "复制提示词", exact: true }).first();
   await expect(action).toHaveCSS("background-color", "rgb(41, 41, 41)");
   await expect(action).toHaveCSS("color", "rgb(239, 238, 234)");
   await action.hover();
@@ -333,7 +333,7 @@ test("Interior product surfaces keep compact geometry and restrained elevation",
     {
       route: "/zh/",
       surfaces: [
-        { selector: ".apple-hero-finder > div", radius: "16px" },
+        { selector: ".apple-hero-finder .interior-hero-search > div", radius: "10px" },
         { selector: ".apple-hero-preview.library-hero-preview", radius: "16px" },
         { selector: ".apple-scene-card", radius: "16px" }
       ]
@@ -403,7 +403,7 @@ test("coarse-pointer product controls preserve 44 pixel targets", async ({ page 
     ".apple-code-output [role='tab']"
   ]) await expectMinimumTargets(page, selector);
   await page.getByRole("tab", { name: "代码" }).click();
-  await expectMinimumTargets(page, ".apple-code-output .library-code-filebar .ml-button");
+  await expectMinimumTargets(page, ".apple-code-output .interior-tabs-action .ml-button");
 
   await page.goto("/zh/sequencing/stagger/");
   for (const selector of [

@@ -21,9 +21,9 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
 // The Interior interaction system keeps Motion in its own vendor chunk. The
-// total budget includes that runtime while preserving a narrow growth margin.
+// total budget also includes the accessible Radix slider used by recipe controls.
 const maxMotionVendorGzipBytes = 48 * 1024;
-const maxTotalJsGzipBytes = 280 * 1024;
+const maxTotalJsGzipBytes = 286 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 

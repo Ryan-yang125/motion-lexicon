@@ -67,7 +67,7 @@ export const resources = {
         heroTitle: "说出你要的感觉，\n找到准确动效。",
         heroCopy: "描述界面、动作和质感，获得三个可预览候选。",
         openFinder: "开始描述动效",
-        finderExample: "让卡片带着重量感进入，最后稳稳收住",
+        finderExample: "例如：卡片切入后慢慢停下来",
         browseComponents: "浏览动效组件",
         openPlaygrounds: "打开参数工具",
         searchLibrary: "搜索 fade、spring、drag 或 reduced motion",
@@ -142,11 +142,11 @@ export const resources = {
         title: "描述感觉，找到准确动效。",
         copy: "写下界面、动作和质感，获得三个候选。",
         formLabel: "描述你想要的动效",
-        placeholder: "例如：让卡片带着重量感进入，最后稳稳收住",
+        placeholder: "例如：卡片先切入进来，然后慢慢停下来",
         submit: "查找候选",
         examplesLabel: "试试这些描述",
         examples: {
-          weight: "让卡片带着重量感进入，最后稳稳收住",
+          weight: "卡片先切入进来，然后慢慢停下来",
           continuity: "让同一个元素在两个页面之间连贯移动",
           sequence: "让一组列表项依次出现，节奏清楚一点"
         },
@@ -157,7 +157,7 @@ export const resources = {
           medium: "可用匹配",
           low: "探索性匹配"
         },
-        lowConfidence: "按“界面或对象 + 动作 + 感觉”补充描述，可以获得更准确的候选。例如：让卡片带着重量感进入，最后稳稳收住。",
+        lowConfidence: "按“界面或对象 + 动作 + 感觉”补充描述，可以获得更准确的候选。例如：卡片先切入进来，然后慢慢停下来。",
         matchedTerms: "匹配线索",
         candidateLabel: "候选 {{rank}}",
         select: "选择 {{name}}",
@@ -285,7 +285,7 @@ export const resources = {
         heroTitle: "Describe the feel.\nFind the right motion.",
         heroCopy: "Describe the interface, action, and feel to get three previewable candidates.",
         openFinder: "Describe your motion",
-        finderExample: "Make the card enter with a sense of weight, then settle cleanly",
+        finderExample: "For example: let the card enter, then slow to a stop",
         browseComponents: "Browse components",
         openPlaygrounds: "Open playgrounds",
         searchLibrary: "Search fade, spring, drag, or reduced motion",
@@ -360,11 +360,11 @@ export const resources = {
         title: "Describe the feel. Find the right motion.",
         copy: "Describe the interface, action, and feel to get three candidates.",
         formLabel: "Describe the motion you want",
-        placeholder: "For example: make the card enter with a sense of weight, then settle cleanly",
+        placeholder: "For example: let the card enter, then slow to a stop",
         submit: "Find candidates",
         examplesLabel: "Try an example",
         examples: {
-          weight: "Make the card enter with a sense of weight, then settle cleanly",
+          weight: "Let the card enter, then slow to a stop",
           continuity: "Move the same element smoothly between two screens",
           sequence: "Bring in a list item by item with a clear rhythm"
         },
@@ -375,7 +375,7 @@ export const resources = {
           medium: "Useful match",
           low: "Exploratory match"
         },
-        lowConfidence: "Describe the interface or object, the action, and the desired feel for tighter candidates. For example: make the card enter with a sense of weight, then settle cleanly.",
+        lowConfidence: "Describe the interface or object, the action, and the desired feel for tighter candidates. For example: let the card enter, then slow to a stop.",
         matchedTerms: "Matched cues",
         candidateLabel: "Candidate {{rank}}",
         select: "Choose {{name}}",

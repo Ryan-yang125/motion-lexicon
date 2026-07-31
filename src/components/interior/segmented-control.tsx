@@ -12,7 +12,7 @@ import {
 const CELL = { type: "spring", stiffness: 520, damping: 34, mass: 0.45 } as const;
 
 const SEG =
-  "px-3 py-[7px] text-center text-[13px] font-medium leading-[18px] tracking-[-0.01em] whitespace-nowrap";
+  "flex min-h-9 items-center justify-center px-3 text-center text-[13px] font-medium leading-[18px] tracking-[-0.01em] whitespace-nowrap";
 
 export type SegmentedOption = {
   value: string;
@@ -27,6 +27,7 @@ export type SegmentedControlProps = {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  columns?: number;
   className?: string;
 };
 
@@ -36,9 +37,12 @@ export function SegmentedControl({
   value,
   defaultValue,
   onValueChange,
+  columns: requestedColumns,
   className = "",
 }: SegmentedControlProps) {
   const count = Math.max(1, options.length);
+  const columns = Math.max(1, Math.min(count, requestedColumns ?? count));
+  const wraps = columns < count;
   const template = `repeat(${count}, minmax(0, 1fr))`;
 
   const [internal, setInternal] = useState(
@@ -129,58 +133,16 @@ export function SegmentedControl({
     <div
       role="radiogroup"
       aria-label={label}
+      data-segmented-layout={wraps ? "wrapped" : "single"}
       className={`relative inline-block select-none rounded-[9px] border border-stone-200 bg-stone-100/70 p-[3px] shadow-[inset_0_1px_2px_rgba(28,25,23,0.07)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.45)] ${className}`}
     >
-      <div
-        className="relative grid"
-        style={{ gridTemplateColumns: template, touchAction: "manipulation" }}
-      >
-        {options.map((option, i) => (
-          <span
-            key={option.value}
-            aria-hidden
-            className={`${SEG} pointer-events-none ${
-              option.disabled
-                ? "text-stone-300 dark:text-stone-600"
-                : hovered === i && i !== index
-                  ? "text-stone-700 dark:text-stone-200"
-                  : "text-stone-500 dark:text-stone-400"
-            }`}
-          >
-            {option.label}
-          </span>
-        ))}
-
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 overflow-hidden rounded-[6px] bg-stone-800 shadow-[0_1px_2px_rgba(28,25,23,0.28)] dark:bg-stone-100 dark:shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
-          style={{ width: `${100 / count}%`, transform: thumbTransform }}
-          initial={false}
-        >
-          <motion.div
-            className="absolute inset-0"
-            style={{ transform: maskTransform }}
-            initial={false}
-          >
-            <div
-              className="absolute inset-y-0 left-0 grid"
-              style={{ width: `${count * 100}%`, gridTemplateColumns: template }}
-            >
-              {options.map((option) => (
-                <span
-                  key={option.value}
-                  className={`${SEG} text-stone-50 dark:text-stone-900`}
-                >
-                  {option.label}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
+      {wraps ? (
         <div
-          className="absolute inset-0 grid"
-          style={{ gridTemplateColumns: template }}
-          onPointerLeave={() => setHovered(-1)}
+          className="grid gap-[3px]"
+          style={{
+            gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+            touchAction: "manipulation",
+          }}
         >
           {options.map((option, i) => (
             <button
@@ -196,14 +158,97 @@ export function SegmentedControl({
               tabIndex={i === index ? 0 : -1}
               onClick={() => !option.disabled && select(option.value)}
               onKeyDown={(e) => onKeyDown(e, i)}
-              onPointerEnter={() => !option.disabled && setHovered(i)}
-              className="cursor-default rounded-[6px] outline-none focus-visible:bg-[#4568FF]/[0.06] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:bg-[#93B0FF]/[0.08] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+              className="group min-h-11 min-w-0 cursor-default rounded-[6px] bg-transparent p-[3px] text-center text-[12px] font-medium leading-4 outline-none focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
             >
-              <span className="sr-only">{option.label}</span>
+              <span
+                className={`interior-segment-option flex min-h-8 min-w-0 items-center justify-center rounded-[6px] px-1.5 py-1 whitespace-normal break-words transition-colors duration-150 ${
+                  option.disabled
+                    ? "text-stone-300 dark:text-stone-600"
+                    : i === index
+                      ? "is-selected bg-stone-800 text-stone-50 shadow-[0_1px_2px_rgba(28,25,23,0.22)] dark:bg-stone-100 dark:text-stone-900"
+                      : "text-stone-500 group-hover:bg-stone-200/60 group-hover:text-stone-700 dark:text-stone-400 dark:group-hover:bg-white/[0.06] dark:group-hover:text-stone-200"
+                }`}
+              >
+                {option.label}
+              </span>
             </button>
           ))}
         </div>
-      </div>
+      ) : (
+        <div
+          className="relative grid"
+          style={{ gridTemplateColumns: template, touchAction: "manipulation" }}
+        >
+          {options.map((option, i) => (
+            <span
+              key={option.value}
+              aria-hidden
+              className={`${SEG} pointer-events-none ${
+                option.disabled
+                  ? "text-stone-300 dark:text-stone-600"
+                  : hovered === i && i !== index
+                    ? "text-stone-700 dark:text-stone-200"
+                    : "text-stone-500 dark:text-stone-400"
+              }`}
+            >
+              {option.label}
+            </span>
+          ))}
+
+          <motion.div
+            aria-hidden
+            className="interior-segment-thumb pointer-events-none absolute inset-y-0 left-0 overflow-hidden rounded-[6px] bg-stone-800 shadow-[0_1px_2px_rgba(28,25,23,0.28)] dark:bg-stone-100 dark:shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+            style={{ width: `${100 / count}%`, transform: thumbTransform }}
+            initial={false}
+          >
+            <motion.div
+              className="absolute inset-0"
+              style={{ transform: maskTransform }}
+              initial={false}
+            >
+              <div
+                className="absolute inset-y-0 left-0 grid"
+                style={{ width: `${count * 100}%`, gridTemplateColumns: template }}
+              >
+                {options.map((option) => (
+                  <span
+                    key={option.value}
+                    className={`${SEG} text-stone-50 dark:text-stone-900`}
+                  >
+                    {option.label}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+          <div
+            className="absolute inset-0 grid"
+            style={{ gridTemplateColumns: template }}
+            onPointerLeave={() => setHovered(-1)}
+          >
+            {options.map((option, i) => (
+              <button
+                key={option.value}
+                ref={(node) => {
+                  buttons.current[i] = node;
+                }}
+                type="button"
+                role="radio"
+                aria-label={option.ariaLabel}
+                aria-checked={i === index}
+                aria-disabled={option.disabled || undefined}
+                tabIndex={i === index ? 0 : -1}
+                onClick={() => !option.disabled && select(option.value)}
+                onKeyDown={(e) => onKeyDown(e, i)}
+                onPointerEnter={() => !option.disabled && setHovered(i)}
+                className="cursor-default rounded-[6px] outline-none focus-visible:bg-[#4568FF]/[0.06] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:bg-[#93B0FF]/[0.08] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+              >
+                <span className="sr-only">{option.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -16,9 +16,8 @@ import { getMotionGuidance } from "../data/motion-guidance";
 import { catalogRecipes, getCanonicalRecipe } from "../data/recipes";
 import type { Locale, MotionParam, MotionRecipe } from "../data/types";
 import { text } from "../data/site";
-import { buildRecipePrompt, getParamDisplayValue } from "../lib/motion-engine";
+import { getParamDisplayValue } from "../lib/motion-engine";
 import { useRecipeParams } from "../lib/useRecipeParams";
-import { CopyButton } from "./CopyButton";
 import { ExportPanel } from "./ExportPanel";
 import { MotionPreview } from "./MotionPreview";
 import { ParameterControls } from "./ParameterControls";
@@ -262,15 +261,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
             <SectionTitle id="workspace-title">{text(recipe.name, locale)}</SectionTitle>
             <p>{text(recipe.shortDescription, locale)}</p>
           </div>
-          {!isGuide ? (
-            <div className="apple-recipe-primary-action">
-              <CopyButton
-                label={t("common.copyPrompt")}
-                getText={() => buildRecipePrompt(recipe, values, locale)}
-                variant="accent"
-              />
-            </div>
-          ) : null}
         </header>
 
         <section className="library-preview-section apple-workbench-stage" id="preview" aria-labelledby="preview-title">

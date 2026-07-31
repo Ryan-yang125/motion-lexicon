@@ -69,7 +69,8 @@ export function CatalogSidebar({
         <Dropdown
           value={selectedCategoryId ?? "all"}
           onChange={(next) => onCategoryChange?.(next === "all" ? undefined : next)}
-          label={currentLabel}
+          label={t("common.category")}
+          placeholder={currentLabel}
           className="library-category-filter-options interior-category-dropdown"
           items={[
             {
