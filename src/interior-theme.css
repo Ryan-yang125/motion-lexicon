@@ -361,7 +361,7 @@ a,
 
 .library-utility-settings .interior-theme-select > button {
   width: 100%;
-  min-height: 44px;
+  min-height: 45px;
   justify-content: center;
   border-color: var(--interior-line);
   border-radius: 9px;
