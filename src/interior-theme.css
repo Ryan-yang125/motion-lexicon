@@ -1,0 +1,728 @@
+/* Interior interaction layer — copied hooks, Motion feedback, Motion Lexicon skin. */
+:root {
+  --interior-bezel: #efeeea;
+  --interior-panel: #ffffff;
+  --interior-well: #f6f6f4;
+  --interior-ink: #292929;
+  --interior-secondary: #5d5d5d;
+  --interior-tertiary: #9e9e9e;
+  --interior-focus: #3656df;
+  --interior-line: rgba(41, 41, 41, 0.13);
+  --interior-shadow: 0 1px 2px rgba(28, 25, 23, 0.07), 0 12px 28px -20px rgba(28, 25, 23, 0.5);
+  --interior-shadow-raised: 0 2px 4px rgba(28, 25, 23, 0.08), 0 22px 46px -28px rgba(28, 25, 23, 0.56);
+  --interior-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root.dark {
+  --interior-bezel: #141312;
+  --interior-panel: #1d1d1a;
+  --interior-well: #252522;
+  --interior-ink: #f5f5f4;
+  --interior-secondary: #a8a29e;
+  --interior-tertiary: #78716c;
+  --interior-focus: #93b0ff;
+  --interior-line: rgba(255, 255, 255, 0.16);
+  --interior-shadow: 0 1px 6px rgba(0, 0, 0, 0.42);
+  --interior-shadow-raised: 0 18px 40px -24px rgba(0, 0, 0, 0.88);
+}
+
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  background: var(--interior-bezel);
+}
+
+button,
+input,
+a,
+[role="slider"] {
+  letter-spacing: -0.15px;
+}
+
+/* Shared tactile controls */
+.ml-button {
+  height: auto;
+  min-height: 44px;
+  border-color: var(--interior-line);
+  border-radius: 9px;
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(28, 25, 23, 0.06),
+    var(--interior-shadow);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms var(--interior-ease);
+}
+
+.ml-button[data-pressed] {
+  will-change: transform;
+}
+
+:root.dark .ml-button {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    var(--interior-shadow);
+}
+
+.ml-button:hover {
+  border-color: color-mix(in srgb, var(--interior-ink) 22%, var(--interior-line));
+  background: color-mix(in srgb, var(--interior-panel) 86%, var(--interior-well));
+}
+
+.ml-button:active {
+  transition-duration: 150ms;
+}
+
+.ml-button-accent {
+  border-color: var(--interior-ink);
+  border-radius: 999px;
+  color: var(--interior-bezel);
+  background: var(--interior-ink);
+  box-shadow: 0 7px 18px -12px rgba(28, 25, 23, 0.58);
+}
+
+.ml-button-accent:hover {
+  border-color: var(--interior-ink);
+  background: color-mix(in srgb, var(--interior-ink) 88%, var(--interior-panel));
+}
+
+.ml-button-ghost {
+  color: var(--interior-secondary);
+  background: var(--interior-well);
+  box-shadow: none;
+}
+
+.interior-example-chip {
+  min-height: 44px;
+  border-color: var(--interior-line);
+  border-radius: 999px;
+  color: var(--interior-secondary);
+  background: color-mix(in srgb, var(--interior-panel) 78%, transparent);
+  box-shadow: none;
+  font-size: 12px;
+}
+
+.interior-example-chip:hover {
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+/* Search fields */
+.interior-hero-search,
+.interior-finder-search,
+.interior-catalog-search,
+.interior-vocabulary-search {
+  min-width: 0;
+  height: 44px;
+}
+
+.interior-hero-search > div,
+.interior-finder-search > div,
+.interior-catalog-search > div,
+.interior-vocabulary-search > div {
+  border-color: var(--interior-line);
+  background: var(--interior-well);
+}
+
+.interior-hero-search input,
+.interior-finder-search input,
+.interior-catalog-search input,
+.interior-vocabulary-search input {
+  height: 40px;
+  color: var(--interior-ink);
+  font-size: 14px;
+}
+
+.interior-hero-search button,
+.interior-finder-search button,
+.interior-catalog-search button,
+.interior-vocabulary-search button {
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  color: var(--interior-secondary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.apple-hero-finder .interior-hero-search button,
+.apple-search-pill .finder-search-field .interior-finder-search button {
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  color: var(--interior-secondary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.apple-hero-finder .interior-hero-search > button,
+.apple-search-pill .finder-search-field .interior-finder-search > button {
+  width: 40px;
+}
+
+.apple-hero-finder .interior-hero-search > div button,
+.apple-search-pill .finder-search-field .interior-finder-search > div button {
+  width: 36px;
+}
+
+.interior-hero-search > button,
+.interior-finder-search > button,
+.interior-catalog-search > button,
+.interior-vocabulary-search > button {
+  width: 40px;
+}
+
+.interior-hero-search > div button,
+.interior-finder-search > div button,
+.interior-catalog-search > div button,
+.interior-vocabulary-search > div button {
+  width: 36px;
+}
+
+.apple-hero-finder > div,
+.apple-search-pill .finder-search-field {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 58px;
+  border-color: var(--interior-line);
+  border-radius: 16px;
+  padding: 6px;
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.apple-hero-finder > div:focus-within,
+.apple-search-pill .finder-search-field:focus-within {
+  border-color: var(--interior-focus);
+  outline: 0;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interior-focus) 26%, transparent), var(--interior-shadow);
+}
+
+.apple-hero-finder > div > .ml-button,
+.apple-search-pill .finder-search-field > .ml-button {
+  min-width: max-content;
+  min-height: 44px;
+  padding-inline: 16px;
+}
+
+.library-catalog-toolbar .interior-catalog-search {
+  min-height: 44px;
+  border: 0;
+  border-radius: 10px;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.library-catalog-toolbar .interior-catalog-search:focus-within {
+  outline: 0;
+  box-shadow: none;
+}
+
+.vocabulary-toolbar {
+  min-height: 64px;
+  display: block;
+  padding: 9px;
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+/* Segmented controls and sliders */
+.interior-surface-control,
+.interior-device-switcher,
+.interior-motion-mode,
+.interior-parameter-segment,
+.interior-toggle-switch {
+  max-width: 100%;
+  border-color: var(--interior-line);
+  background: var(--interior-well);
+}
+
+.interior-surface-control {
+  display: block;
+  border: 1px solid var(--interior-line);
+  border-radius: 9px;
+  padding: 3px;
+}
+
+.library-surface-control.library-surface-tabs button {
+  min-width: 0;
+  min-height: 44px;
+  border-radius: 6px;
+  padding-inline: 10px;
+}
+
+.interior-surface-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.interior-surface-option small {
+  color: inherit;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.interior-device-switcher,
+.interior-motion-mode {
+  display: inline-block;
+  border-radius: 9px;
+}
+
+.library-device-switcher.interior-device-switcher button,
+.library-reduced-toggle.interior-motion-mode button {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 6px;
+}
+
+.control-switch.interior-toggle-switch,
+.ml-toggle-group.interior-parameter-segment {
+  width: 100%;
+  display: block;
+  padding: 3px;
+}
+
+.control-switch.interior-toggle-switch button,
+.ml-toggle-group.interior-parameter-segment button {
+  min-height: 44px;
+}
+
+.ml-slider.interior-slider {
+  height: auto;
+  display: block;
+}
+
+.ml-slider.interior-slider [role="slider"] {
+  min-height: 44px;
+}
+
+/* Header overlays */
+.library-header-compact .library-utility-trigger {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--interior-secondary);
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+}
+
+.library-header-compact .library-utility-trigger:hover,
+.library-header-compact .library-utility-trigger[aria-expanded="true"] {
+  color: var(--interior-ink);
+  background: color-mix(in srgb, var(--interior-ink) 6%, transparent);
+}
+
+.library-utility-popover {
+  position: relative;
+  inset: auto;
+  width: min(320px, calc(100vw - 28px));
+  border-color: var(--interior-line);
+  border-radius: 11px;
+  padding: 8px;
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow-raised);
+  animation: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.library-utility-popover nav a,
+.library-utility-settings .icon-link {
+  border-radius: 8px;
+}
+
+.interior-theme-select {
+  display: inline-block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.library-utility-settings .interior-theme-select > button {
+  width: 100%;
+  min-height: 44px;
+  justify-content: center;
+  border-color: var(--interior-line);
+  border-radius: 9px;
+  color: var(--interior-secondary);
+  background: var(--interior-panel);
+}
+
+.interior-theme-select > div {
+  inset-inline: auto 0;
+  min-width: 180px;
+}
+
+/* Catalog filtering and cards */
+.library-category-filter-options.interior-category-dropdown {
+  min-width: 0;
+  flex: 0 1 auto;
+  display: inline-block;
+  padding: 0;
+}
+
+.library-category-filter-options.interior-category-dropdown > button {
+  min-width: 168px;
+  min-height: 44px;
+  justify-content: space-between;
+  border: 1px solid var(--interior-line);
+  border-radius: 9px;
+  padding-inline: 12px;
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.library-category-filter-options.interior-category-dropdown > div {
+  min-width: min(260px, calc(100vw - 48px));
+}
+
+.library-card[data-interior-card],
+.library-hero-preview[data-interior-card] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: var(--interior-line);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.library-card[data-interior-card][data-pressed],
+.library-hero-preview[data-interior-card][data-pressed] {
+  will-change: transform;
+}
+
+.library-card[data-interior-card]:hover,
+.library-card[data-interior-card]:focus-visible,
+.library-hero-preview[data-interior-card]:hover,
+.library-hero-preview[data-interior-card]:focus-visible {
+  border-color: color-mix(in srgb, var(--interior-ink) 22%, var(--interior-line));
+  box-shadow: var(--interior-shadow-raised);
+}
+
+.interior-card-ripples {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.interior-card-ripple {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--interior-focus) 13%, transparent);
+}
+
+/* Finder candidate tabs */
+.finder-candidate-choice {
+  isolation: isolate;
+  overflow: hidden;
+  border-color: var(--interior-line);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.finder-candidate-choice-content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  color: var(--interior-secondary);
+}
+
+.finder-candidate-choice-content > strong {
+  color: var(--interior-ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.finder-candidate-choice-content > span,
+.finder-candidate-choice-content > small {
+  color: var(--interior-secondary);
+  font-size: 12px;
+}
+
+.finder-candidate-choice-content > svg {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  color: var(--interior-focus);
+}
+
+.finder-candidate-selection {
+  position: absolute;
+  inset: 3px;
+  z-index: 0;
+  border: 1px solid color-mix(in srgb, var(--interior-focus) 30%, var(--interior-line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--interior-focus) 8%, var(--interior-panel));
+}
+
+.finder-candidate-choice.is-selected {
+  border-color: color-mix(in srgb, var(--interior-focus) 42%, var(--interior-line));
+  box-shadow: var(--interior-shadow);
+}
+
+/* Auto-height disclosures */
+[data-interior-disclosure] button.apple-disclosure-summary,
+[data-interior-disclosure] button.finder-export-summary,
+[data-interior-disclosure] button.apple-inspector-disclosure-summary {
+  width: 100%;
+  border: 0;
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  text-align: start;
+}
+
+[data-interior-disclosure] button.apple-disclosure-summary:hover,
+[data-interior-disclosure] button.finder-export-summary:hover,
+[data-interior-disclosure] button.apple-inspector-disclosure-summary:hover {
+  background: var(--interior-well);
+}
+
+.apple-inspector-disclosure-summary {
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.apple-inspector-disclosure-summary small {
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--interior-secondary);
+  background: var(--interior-well);
+}
+
+.apple-disclosure-body {
+  animation: none;
+}
+
+.finder-export-summary {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.finder-export-body {
+  border-top: 1px solid var(--interior-line);
+  padding: 12px;
+}
+
+.interior-disclosure-chevron {
+  flex: 0 0 auto;
+  color: var(--interior-tertiary);
+}
+
+/* Prompt and code tabs */
+.apple-code-output.library-code-panel {
+  overflow: visible;
+}
+
+.interior-output-tabs {
+  border-color: var(--interior-line);
+  border-radius: 12px;
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.interior-output-tabs > [role="tablist"] {
+  min-height: 48px;
+  border-color: var(--interior-line);
+  background: var(--interior-well);
+}
+
+.interior-output-tabs [role="tab"] {
+  min-height: 44px;
+  font-size: 13px;
+}
+
+.interior-tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.interior-output-panel {
+  min-width: 0;
+}
+
+.apple-code-output .library-code-status {
+  display: block;
+  max-width: none;
+  padding: 12px 18px 0;
+  text-align: start;
+}
+
+.library-code-file pre,
+.library-prompt-content > p {
+  max-width: 100%;
+  overflow-x: clip;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* No layout-owned horizontal scrollers. */
+.library-table-scroll,
+.library-code-files,
+.library-code-file,
+.apple-reference-topic,
+.finder-workspace-shell,
+.library-catalog-toolbar,
+.library-card-grid,
+.vocabulary-page,
+.vocabulary-term-list {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.library-table-scroll {
+  overflow-x: clip;
+}
+
+@media (max-width: 760px) {
+  .page {
+    width: min(100% - 24px, var(--library-max));
+  }
+
+  .library-catalog-toolbar-primary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .library-category-filter {
+    align-items: stretch;
+  }
+
+  .library-category-filter-heading,
+  .library-category-filter-options.interior-category-dropdown,
+  .library-category-filter-options.interior-category-dropdown > button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .finder-candidate-switcher {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .finder-candidate-choice {
+    min-height: 88px;
+  }
+
+  .apple-preview-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .interior-device-switcher,
+  .interior-motion-mode {
+    width: 100%;
+  }
+
+  .apple-hero-finder > div,
+  .apple-search-pill .finder-search-field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill .finder-search-field {
+    min-height: 58px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill .finder-search-field > .ml-button {
+    width: 48px;
+    min-width: 48px;
+    min-height: 44px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .apple-finder-intake.has-result .apple-search-pill .finder-search-field > .ml-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .apple-hero-finder > div > .ml-button,
+  .apple-search-pill .finder-search-field > .ml-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .interior-surface-option {
+    gap: 4px;
+  }
+
+  .interior-surface-option > svg {
+    display: none;
+  }
+
+  .library-surface-control.library-surface-tabs button {
+    padding-inline: 5px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .library-card[data-interior-card]:hover,
+  .library-hero-preview[data-interior-card]:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .ml-button,
+  .library-card[data-interior-card],
+  .library-hero-preview[data-interior-card] {
+    transform: none !important;
+    transition-property: opacity, color, background-color, border-color !important;
+    transition-duration: 150ms !important;
+  }
+
+  .interior-card-ripple {
+    display: none;
+  }
+}

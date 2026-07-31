@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, Languages, Monitor, Moon, Sun } from "lucide-react";
+import { Languages } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "@tanstack/react-router";
 import type { Locale } from "../data/types";
 import { localeLabel, switchLocalePath } from "../data/site";
 import { useTheme, type ThemeMode } from "./ThemeProvider";
+import { Dropdown } from "./interior/dropdown";
 
 type ControlsProps = {
   locale: Locale;
@@ -30,23 +31,17 @@ export function ThemeLanguageControls({ locale }: ControlsProps) {
         <Languages aria-hidden="true" size={16} strokeWidth={1.8} />
         <span>{localeLabel(nextLocale)}</span>
       </a>
-      <div className="theme-select">
-        {mounted && theme === "light" ? <Sun aria-hidden="true" size={14} strokeWidth={1.8} /> : null}
-        {mounted && theme === "dark" ? <Moon aria-hidden="true" size={14} strokeWidth={1.8} /> : null}
-        {!mounted || theme === "system" ? <Monitor aria-hidden="true" size={14} strokeWidth={1.8} /> : null}
-        <span>{t(`common.${mounted ? theme : "system"}`)}</span>
-        <ChevronDown aria-hidden="true" size={14} strokeWidth={1.8} />
-        <select
-          aria-label={t("common.theme")}
-          disabled={!mounted}
-          value={mounted ? theme : "system"}
-          onChange={(event) => setTheme(event.currentTarget.value as ThemeMode)}
-        >
-          <option value="system">{t("common.system")}</option>
-          <option value="light">{t("common.light")}</option>
-          <option value="dark">{t("common.dark")}</option>
-        </select>
-      </div>
+      <Dropdown
+        items={(["system", "light", "dark"] as const).map((value) => ({
+          value,
+          label: t(`common.${value}`)
+        }))}
+        value={mounted ? theme : "system"}
+        onChange={(value) => setTheme(value as ThemeMode)}
+        label={t(`common.${mounted ? theme : "system"}`)}
+        disabled={!mounted}
+        className="theme-select interior-theme-select"
+      />
     </div>
   );
 }

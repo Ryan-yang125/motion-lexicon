@@ -1,6 +1,7 @@
 import { ArrowUpRight, Check, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { motion, useReducedMotion } from "motion/react";
 import type { Locale, ParamValues } from "../data/types";
 import {
   buildRecipeCss,
@@ -13,6 +14,7 @@ import {
   updateMotionRuntimeConfig
 } from "../lib/motion-runtime";
 import { Button } from "./ui/button";
+import { useTabs } from "./interior/tabs";
 
 type MotionCompareProps = {
   locale: Locale;
@@ -124,6 +126,9 @@ function CandidatePreview({
     const scene = document.createElement("div");
     style.textContent = `:host { display:grid;place-items:center;width:100%;min-width:0;min-height:0; }
 :host > div { display:grid;place-items:center;width:100%; }
+:host([data-preview-static]) .motion-demo *,
+:host([data-preview-static]) .motion-demo *::before,
+:host([data-preview-static]) .motion-demo *::after { animation-delay:-5000ms!important;animation-play-state:paused!important;transition:none!important; }
 ${latestCssRef.current}`;
     scene.innerHTML = sceneHtml;
     shadow.replaceChildren(style, scene);
@@ -133,7 +138,7 @@ ${latestCssRef.current}`;
     runtimeRootRef.current = root;
     const cleanup = mountMotionRuntime(root, {
       ...runtimeConfigRef.current,
-      autoplay: true
+      autoplay: false
     });
     return () => {
       cleanup();
@@ -148,6 +153,9 @@ ${latestCssRef.current}`;
     if (style) {
       style.textContent = `:host { display:grid;place-items:center;width:100%;min-width:0;min-height:0; }
 :host > div { display:grid;place-items:center;width:100%; }
+:host([data-preview-static]) .motion-demo *,
+:host([data-preview-static]) .motion-demo *::before,
+:host([data-preview-static]) .motion-demo *::after { animation-delay:-5000ms!important;animation-play-state:paused!important;transition:none!important; }
 ${css}`;
     }
     if (root) updateMotionRuntimeConfig(root, runtimeConfig);
@@ -156,12 +164,14 @@ ${css}`;
   useEffect(() => {
     if (previousReplayRef.current === replayKey) return;
     previousReplayRef.current = replayKey;
+    runtimeHostRef.current?.removeAttribute("data-preview-static");
     if (runtimeRootRef.current) replayMotionRuntime(runtimeRootRef.current);
   }, [replayKey]);
 
   return (
     <div
       ref={runtimeHostRef}
+      data-preview-static=""
       className="finder-candidate-stage motion-runtime-stage"
       aria-label={`${candidate.name} — ${candidate.description}`}
     />
@@ -180,6 +190,23 @@ export function MotionCompare({
   const selectedCandidate = candidates.find(
     (candidate) => candidate.variantId === selectedId
   ) ?? candidates[0];
+  const reduced = useReducedMotion();
+  const candidateTabItems = useMemo(
+    () => candidates.map((candidate) => ({
+      value: candidate.variantId,
+      label: candidate.name
+    })),
+    [candidates]
+  );
+  const candidateTabs = useTabs({
+    items: candidateTabItems,
+    value: selectedCandidate?.variantId ?? "",
+    activation: "manual",
+    onValueChange: (next) => {
+      const candidate = candidates.find((entry) => entry.variantId === next);
+      if (candidate) onSelect(candidate);
+    }
+  });
 
   if (!selectedCandidate) return null;
 
@@ -237,11 +264,16 @@ export function MotionCompare({
         </div>
       </article>
 
-      <div className="finder-candidate-switcher" aria-label={t("finder.resultTitle")}>
-        {candidates.map((candidate) => {
+      <div
+        {...candidateTabs.tabListProps}
+        className="finder-candidate-switcher interior-candidate-tabs"
+        aria-label={t("finder.resultTitle")}
+      >
+        {candidates.map((candidate, index) => {
           const selected = candidate.variantId === selectedCandidate.variantId;
           return (
             <button
+              {...candidateTabs.getTabProps(candidateTabItems[index], index)}
               type="button"
               className={`finder-candidate-choice${selected ? " is-selected" : ""}`}
               key={candidate.variantId}
@@ -249,12 +281,21 @@ export function MotionCompare({
               data-rank={candidate.rank}
               aria-controls="finder-active-preview"
               aria-pressed={selected}
-              onClick={() => onSelect(candidate)}
             >
-              <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
-              <strong>{candidate.name}</strong>
-              <small>{candidate.description}</small>
-              {selected ? <Check aria-hidden="true" size={14} /> : null}
+              {selected ? (
+                <motion.span
+                  aria-hidden="true"
+                  layoutId={reduced ? undefined : "finder-candidate-selection"}
+                  className="finder-candidate-selection"
+                  transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 38, mass: 0.55 }}
+                />
+              ) : null}
+              <span className="finder-candidate-choice-content">
+                <span>{t("finder.candidateLabel", { rank: candidate.rank })}</span>
+                <strong>{candidate.name}</strong>
+                <small>{candidate.description}</small>
+                {selected ? <Check aria-hidden="true" size={14} /> : null}
+              </span>
             </button>
           );
         })}

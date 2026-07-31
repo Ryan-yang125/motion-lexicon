@@ -20,9 +20,10 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// v0.2 keeps real catalog previews and the Finder runtime inside a strict
-// sub-1% expansion from the 230 KiB launch baseline.
-const maxTotalJsGzipBytes = 232 * 1024;
+// The Interior interaction system keeps Motion in its own vendor chunk. The
+// total budget includes that runtime while preserving a narrow growth margin.
+const maxMotionVendorGzipBytes = 48 * 1024;
+const maxTotalJsGzipBytes = 280 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 
@@ -40,6 +41,13 @@ assert(finderChunk, "Motion Finder route chunk is missing");
 assert(
   gzipSync(readFileSync(path.join(assetsDir, finderChunk))).length <= 12 * 1024,
   "Motion Finder route chunk exceeds 12 KiB gzip"
+);
+
+const motionVendorChunk = jsFiles.find((file) => file.startsWith("motion-vendor-"));
+assert(motionVendorChunk, "Interior Motion vendor chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, motionVendorChunk))).length <= maxMotionVendorGzipBytes,
+  `Motion vendor chunk exceeds ${Math.round(maxMotionVendorGzipBytes / 1024)} KiB gzip`
 );
 
 const totalCssGzipBytes = cssFiles.reduce((total, file) => {

@@ -1,10 +1,14 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, LayoutGrid, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, BookOpen, LayoutGrid, SlidersHorizontal } from "lucide-react";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CatalogSidebar } from "../components/CatalogSidebar";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";
+import { ExpandingSearch } from "../components/interior/expanding-search";
+import { SegmentedControl } from "../components/interior/segmented-control";
+import { CardLink } from "../components/interior/card-link";
+import { Button } from "../components/ui/button";
 import { categories } from "../data/categories";
 import { getGlossaryTermsForCanonical } from "../data/glossary";
 import { catalogRecipes, getMotionCatalogMeta } from "../data/recipes";
@@ -162,39 +166,41 @@ export function CatalogPage({
 
       <section className="library-catalog-toolbar" aria-label={t("catalog.surfaceLabel")}>
         <div className="library-catalog-toolbar-primary">
-          <label className="library-catalog-search" id="catalog-search">
-            <Search aria-hidden="true" size={18} strokeWidth={1.8} />
-            <input
-              ref={searchRef}
-              name="catalog-search"
-              type="search"
-              autoComplete="off"
-              spellCheck={false}
-              value={query}
-              onChange={(event) => updateUrl(surface, event.currentTarget.value, categoryId)}
-              placeholder={t("catalog.searchPlaceholder")}
-              aria-label={t("common.search")}
-              aria-controls="catalog-content"
-              aria-describedby="catalog-result-count"
-            />
-            <kbd>/</kbd>
-          </label>
+          <ExpandingSearch
+            id="catalog-search"
+            name="catalog-search"
+            inputRef={searchRef}
+            value={query}
+            onChange={(next) => updateUrl(surface, next, categoryId)}
+            open
+            collapseOnBlur={false}
+            align="left"
+            label={t("common.search")}
+            clearLabel={t("catalog.clearSearch")}
+            placeholder={t("catalog.searchPlaceholder")}
+            resultCount={filteredRecipes.length}
+            controls="catalog-content"
+            describedBy="catalog-result-count"
+            className="library-catalog-search interior-catalog-search"
+          />
 
-          <div className="library-surface-tabs library-surface-control" aria-label={t("catalog.surfaceLabel")}>
-            {surfaceFilters.map(({ id, icon: Icon }) => (
-              <button
-                type="button"
-                aria-pressed={surface === id}
-                className={surface === id ? "is-active" : undefined}
-                key={id}
-                onClick={() => updateUrl(id, query)}
-              >
-                <Icon aria-hidden="true" size={14} strokeWidth={1.7} />
-                <span>{t(`nav.${id}`)}</span>
-                <small>{surfaceCounts.get(id) ?? 0}</small>
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            value={surface}
+            onValueChange={(next) => updateUrl(next as SurfaceFilter, query)}
+            label={t("catalog.surfaceLabel")}
+            className="library-surface-tabs library-surface-control interior-surface-control"
+            options={surfaceFilters.map(({ id, icon: Icon }) => ({
+              value: id,
+              ariaLabel: t(`nav.${id}`),
+              label: (
+                <span className="interior-surface-option">
+                  <Icon aria-hidden="true" size={14} strokeWidth={1.7} />
+                  <span>{t(`nav.${id}`)}</span>
+                  <small>{surfaceCounts.get(id) ?? 0}</small>
+                </span>
+              )
+            }))}
+          />
         </div>
 
         <div className="library-catalog-toolbar-secondary">
@@ -255,7 +261,7 @@ export function CatalogPage({
                     : [];
                   const visibleAliases = matchingAliases.length > 0 ? matchingAliases : aliasTerms;
                   return (
-                    <Link
+                    <CardLink
                       className="library-card"
                       key={recipe.id}
                       to="/$locale/$categoryId/$recipeId/"
@@ -280,7 +286,7 @@ export function CatalogPage({
                           </small>
                         ) : null}
                       </div>
-                    </Link>
+                    </CardLink>
                   );
                 })}
               </div>
@@ -289,7 +295,7 @@ export function CatalogPage({
             <section className="library-empty-state">
               <h2>{t("common.noRecipesTitle")}</h2>
               <p>{t("catalog.noResultsCopy")}</p>
-              <button className="library-button" type="button" onClick={() => updateUrl(surface, "")}>{clearFiltersLabel}</button>
+              <Button type="button" variant="soft" onClick={() => updateUrl(surface, "")}>{clearFiltersLabel}</Button>
             </section>
           )}
         </div>

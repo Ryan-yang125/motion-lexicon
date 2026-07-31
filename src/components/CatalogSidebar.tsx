@@ -7,6 +7,7 @@ import { catalogRecipes, getMotionCatalogMeta } from "../data/recipes";
 import type { Locale, MotionSurfaceType } from "../data/types";
 import { text } from "../data/site";
 import { createRecipeSearchIndex } from "../lib/motion-engine";
+import { Dropdown } from "./interior/dropdown";
 
 type CatalogSidebarProps = {
   locale: Locale;
@@ -55,35 +56,34 @@ export function CatalogSidebar({
     .filter((group) => group.entries.length > 0);
 
   if (filterMode) {
+    const selectedGroup = groupedCategories.find(({ category }) => category.id === selectedCategoryId);
+    const currentLabel = selectedGroup
+      ? text(selectedGroup.category.name, locale)
+      : t("common.allEntries");
     return (
       <div className="library-category-filter" aria-label={t("common.category")}>
         <div className="library-category-filter-heading" aria-hidden="true">
           <span>{resultContext ?? t("common.allEntries")}</span>
           <small>{t("catalog.results", { count: resultCount ?? filteredRecipes.length })}</small>
         </div>
-        <div className="library-category-filter-options" role="group" aria-label={t("catalog.indexTitle")}>
-          <button
-            type="button"
-            className={!selectedCategoryId ? "is-active" : undefined}
-            aria-pressed={!selectedCategoryId}
-            onClick={() => onCategoryChange?.()}
-          >
-            <span>{t("common.allEntries")}</span>
-            <small>{filteredRecipes.length}</small>
-          </button>
-          {groupedCategories.map(({ category, entries }) => (
-            <button
-              type="button"
-              key={category.id}
-              className={selectedCategoryId === category.id ? "is-active" : undefined}
-              aria-pressed={selectedCategoryId === category.id}
-              onClick={() => onCategoryChange?.(category.id)}
-            >
-              <span>{text(category.name, locale)}</span>
-              <small>{entries.length}</small>
-            </button>
-          ))}
-        </div>
+        <Dropdown
+          value={selectedCategoryId ?? "all"}
+          onChange={(next) => onCategoryChange?.(next === "all" ? undefined : next)}
+          label={currentLabel}
+          className="library-category-filter-options interior-category-dropdown"
+          items={[
+            {
+              value: "all",
+              label: t("common.allEntries"),
+              hint: String(filteredRecipes.length)
+            },
+            ...groupedCategories.map(({ category, entries }) => ({
+              value: category.id,
+              label: text(category.name, locale),
+              hint: String(entries.length)
+            }))
+          ]}
+        />
       </div>
     );
   }

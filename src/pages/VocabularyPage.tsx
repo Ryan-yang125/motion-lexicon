@@ -1,6 +1,7 @@
-import { ArrowUpRight, Search } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Seo } from "../components/Seo";
+import { ExpandingSearch } from "../components/interior/expanding-search";
 import { categories } from "../data/categories";
 import {
   getGlossaryTerm,
@@ -143,21 +144,22 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
         </header>
 
         <div className="vocabulary-toolbar">
-          <label htmlFor="vocabulary-search">
-            <Search aria-hidden="true" size={17} strokeWidth={1.8} />
-            <span className="sr-only">{labels.searchLabel}</span>
-            <input
-              id="vocabulary-search"
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.currentTarget.value)}
-              placeholder={labels.searchPlaceholder}
-              autoComplete="off"
-              aria-controls="vocabulary-results"
-              aria-describedby="vocabulary-result-count"
-            />
-          </label>
-          <span id="vocabulary-result-count" role="status" aria-live="polite">
+          <ExpandingSearch
+            id="vocabulary-search"
+            value={query}
+            onChange={setQuery}
+            open
+            collapseOnBlur={false}
+            align="left"
+            label={labels.searchLabel}
+            clearLabel={locale === "zh" ? "清除搜索" : "Clear search"}
+            placeholder={labels.searchPlaceholder}
+            resultCount={visibleTerms.length}
+            controls="vocabulary-results"
+            describedBy="vocabulary-result-count"
+            className="interior-vocabulary-search"
+          />
+          <span id="vocabulary-result-count" className="sr-only" role="status" aria-live="polite">
             {labels.count(visibleTerms.length)}
           </span>
         </div>

@@ -102,7 +102,7 @@ function durationParam(params: MotionParam[]): RangeParam | undefined {
   return params.find((param): param is RangeParam => param.id === "duration" && param.kind === "range");
 }
 
-const staticStylePaths = ["src/styles.css", "src/library.css"];
+const staticStylePaths = ["src/styles.css", "src/library.css", "src/interior-theme.css"];
 const staticStyles = staticStylePaths.map((filePath) => ({ filePath, css: readFileSync(filePath, "utf8") }));
 const staticCss = staticStyles.map(({ css }) => css).join("\n");
 

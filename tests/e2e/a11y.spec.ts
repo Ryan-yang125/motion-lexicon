@@ -105,19 +105,21 @@ test("catalog announces localized result changes for category, surface, and sear
   await expect(status).toHaveAttribute("aria-live", "polite");
   await expect(status).toHaveAttribute("aria-atomic", "true");
   await expect(search).toHaveAttribute("aria-controls", "catalog-content");
-  await expect(search).toHaveAttribute("aria-describedby", "catalog-result-count");
+  await expect(search).toHaveAttribute("aria-describedby", /(?:^|\s)catalog-result-count(?:\s|$)/);
   await expect(status).toHaveText("动效组件，全部条目，31 个结果");
 
-  const categoryButtons = page.locator(".library-category-filter-options button");
-  expect(await categoryButtons.count()).toBeGreaterThan(1);
-  const categoryName = (await categoryButtons.nth(1).locator("span").innerText()).trim();
-  await categoryButtons.nth(1).click();
+  const categoryTrigger = page.locator(".library-category-filter-options").getByRole("button");
+  await categoryTrigger.click();
+  const categoryOptions = page.getByRole("listbox", { name: "全部条目" }).getByRole("option");
+  expect(await categoryOptions.count()).toBeGreaterThan(1);
+  const categoryName = (await categoryOptions.nth(1).locator(".truncate").innerText()).trim();
+  await categoryOptions.nth(1).click();
   await expect(page).toHaveURL(/category=/);
   await expect(status).toContainText(categoryName);
   const categoryResultCount = await cards.count();
   await expect(status).toContainText(`${categoryName}，${categoryResultCount} 个结果`);
 
-  await page.getByRole("button", { name: /参数工具/ }).click();
+  await page.getByRole("radio", { name: /参数工具/ }).click();
   await expect(page).toHaveURL(/surface=playgrounds/);
   await expect(status).toHaveText("参数实验室，全部条目，9 个结果");
 
@@ -170,8 +172,8 @@ test("catalog reflows and preserves keyboard feedback at a 200 percent zoom-equi
   await page.goto("/en/catalog/?surface=components");
 
   const search = page.getByRole("searchbox", { name: "Search" });
-  await expect(search).toHaveAttribute("aria-describedby", "catalog-result-count");
-  const surfaceTabs = page.locator(".library-surface-tabs button");
+  await expect(search).toHaveAttribute("aria-describedby", /(?:^|\s)catalog-result-count(?:\s|$)/);
+  const surfaceTabs = page.locator(".library-surface-tabs").getByRole("radio");
   await surfaceTabs.nth(1).click();
   await expect(page).toHaveURL(/surface=playgrounds/);
   await surfaceTabs.nth(0).click();
@@ -181,15 +183,28 @@ test("catalog reflows and preserves keyboard feedback at a 200 percent zoom-equi
   await page.keyboard.type("slide");
   await expect(page.locator("#catalog-result-count")).toContainText("“slide”");
 
-  await page.keyboard.press("Tab");
-  const activeSurface = page.locator(".library-surface-tabs button[aria-pressed='true']");
-  await expect(activeSurface).toBeFocused();
-  await expect(activeSurface).toHaveCSS("outline-style", "solid");
-  await expect(activeSurface).toHaveCSS("outline-width", "2px");
+  const activeSurface = page.locator(".library-surface-tabs [role='radio'][aria-checked='true']");
+  await expect(activeSurface).toHaveAttribute("tabindex", "0");
 
   const layout = await page.evaluate(() => ({
     clientWidth: document.documentElement.clientWidth,
     scrollWidth: document.documentElement.scrollWidth
   }));
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+});
+
+test("catalog segmented control moves focus and URL state with arrow keys", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Keyboard roving focus only needs one browser audit.");
+
+  await page.goto("/en/catalog/?surface=components");
+  const options = page.locator(".library-surface-tabs").getByRole("radio");
+
+  await options.first().focus();
+  await options.first().press("ArrowRight");
+  await expect(options.nth(1)).toHaveAttribute("aria-checked", "true");
+  await expect(page).toHaveURL(/surface=playgrounds/);
+
+  await options.nth(1).press("End");
+  await expect(options.last()).toHaveAttribute("aria-checked", "true");
+  await expect(page).toHaveURL(/surface=guides/);
 });

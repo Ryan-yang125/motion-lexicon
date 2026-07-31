@@ -9,7 +9,7 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
     "href",
     repositoryUrl
   );
-  await page.locator(".library-utility-menu summary").click();
+  await page.locator(".library-utility-trigger").click();
   const resources = page.locator(".library-utility-popover");
   await expect(resources.getByRole("link", { name: "CLI", exact: true })).toHaveAttribute(
     "href",

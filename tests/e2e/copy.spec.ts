@@ -27,13 +27,13 @@ test("finder and recipe workspaces keep bilingual UI copy concise", async ({ pag
     await page.goto(`/${entry.locale}/finder/?q=${encodeURIComponent(entry.query)}`);
     await expect(page.locator("#finder-results-title")).toHaveText(entry.title);
     await expect(page.locator(".finder-inspector-copy, .finder-inspector-status")).toHaveCount(0);
-    await expect(page.locator(".finder-export-disclosure > summary strong")).toHaveText(entry.output);
+    await expect(page.locator(".finder-export-summary strong")).toHaveText(entry.output);
     await expect(page.locator(".library-code-status")).toHaveCount(0);
 
     await page.goto(`/${entry.locale}/entrances/slide-in/`);
     await expect(page.locator(".library-sync-status")).toHaveCount(0);
     await expect(page.locator(".apple-disclosure-copy")).toHaveCount(0);
-    await expect(page.locator(".apple-disclosure-summary strong")).toHaveText(entry.recipeSummaries);
+    await expect(page.locator("button.apple-disclosure-summary strong")).toHaveText(entry.recipeSummaries);
   }
 });
 

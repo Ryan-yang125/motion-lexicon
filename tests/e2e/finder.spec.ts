@@ -123,6 +123,33 @@ test("Finder output tabs preserve the active preview DOM", async ({ page }, test
   await originalRuntime.dispose();
 });
 
+test("Finder candidate arrows move focus without replaying or changing selection", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Keyboard selection runs once on desktop.");
+
+  await page.goto(
+    `/zh/finder/?q=${encodeURIComponent(query)}&compare=scale-in,pop-in,spring&selected=pop-in`
+  );
+  const selected = page.locator(".finder-candidate-choice[data-variant-id='pop-in']");
+  const next = page.locator(".finder-candidate-choice[data-variant-id='spring']");
+  const stage = page.locator(".finder-candidate-stage");
+
+  await expect(stage).toHaveAttribute("data-preview-static", "");
+  await selected.focus();
+  await selected.press("ArrowRight");
+  await expect(next).toBeFocused();
+  await expect(selected).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "pop-in");
+  await expect(stage).toHaveAttribute("data-preview-static", "");
+
+  await next.press("Enter");
+  await expect(next).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "spring");
+  await expect(page.locator(".finder-candidate-stage")).toHaveAttribute("data-preview-static", "");
+
+  await page.locator(".finder-active-preview").getByRole("button", { name: "重播" }).click();
+  await expect(page.locator(".finder-candidate-stage")).not.toHaveAttribute("data-preview-static", "");
+});
+
 test("Finder replay restarts every pure CSS candidate", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "The CSS replay contract runs once on desktop.");
   await page.emulateMedia({ reducedMotion: "no-preference" });

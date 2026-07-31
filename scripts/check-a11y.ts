@@ -8,7 +8,8 @@ const css = [
   "src/styles.css",
   "src/library.css",
   "src/vocabulary.css",
-  "src/apple-redesign.css"
+  "src/apple-redesign.css",
+  "src/interior-theme.css"
 ].map((file) => readFileSync(file, "utf8")).join("\n");
 
 function assert(condition: unknown, message: string): asserts condition {

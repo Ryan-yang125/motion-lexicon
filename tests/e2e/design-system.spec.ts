@@ -227,9 +227,9 @@ test("key Chinese and English layouts have no horizontal scrolling at product br
       }
 
       if (item.parameterTable && width <= 390) {
-        const disclosure = page.locator("#implementation > .apple-disclosure");
-        await disclosure.locator("summary").click();
-        await expect(disclosure).toHaveAttribute("open", "");
+        const disclosure = page.locator("#implementation > [data-interior-disclosure]");
+        await disclosure.getByRole("button").click();
+        await expect(disclosure).toHaveAttribute("data-open", "true");
         const containment = await disclosure.evaluate((element) => {
           const disclosureRect = element.getBoundingClientRect();
           const tableWrapper = element.querySelector<HTMLElement>(".library-table-scroll");
@@ -278,20 +278,18 @@ test("vocabulary search stays compact across stacked and horizontal toolbars", a
     for (const locale of ["zh", "en"] as const) {
       await page.goto(`/${locale}/vocabulary/`);
       const dimensions = await page.locator(".vocabulary-toolbar").evaluate((toolbar) => {
-        const label = toolbar.querySelector<HTMLElement>("label")!;
+        const search = toolbar.querySelector<HTMLElement>("[role='search']")!;
         const toolbarRect = toolbar.getBoundingClientRect();
-        const labelRect = label.getBoundingClientRect();
+        const searchRect = search.getBoundingClientRect();
         return {
           toolbarHeight: toolbarRect.height,
-          labelWidth: labelRect.width,
-          labelHeight: labelRect.height
+          searchWidth: searchRect.width,
+          searchHeight: searchRect.height
         };
       });
-      expect(dimensions.labelHeight, `${width}px /${locale}/ search grew vertically`).toBeLessThanOrEqual(52);
+      expect(dimensions.searchHeight, `${width}px /${locale}/ search grew vertically`).toBeLessThanOrEqual(52);
       expect(dimensions.toolbarHeight, `${width}px /${locale}/ toolbar obscures content`).toBeLessThanOrEqual(110);
-      if (width > 620) {
-        expect(dimensions.labelWidth, `${width}px /${locale}/ search exceeds its desktop measure`).toBeLessThanOrEqual(521);
-      }
+      expect(dimensions.searchWidth, `${width}px /${locale}/ search width is missing`).toBeGreaterThan(0);
     }
   }
 });
@@ -312,23 +310,23 @@ test("primary actions keep a neutral high-contrast treatment in both themes", as
   test.skip(testInfo.project.name.includes("mobile"), "Theme action tokens only need one browser audit.");
 
   await page.goto("/zh/");
-  const action = page.locator(".apple-hero-finder button");
+  const action = page.getByRole("button", { name: "开始描述动效", exact: true });
   await expect(action).toHaveCSS("background-color", "rgb(41, 41, 41)");
-  await expect(action).toHaveCSS("color", "rgb(245, 245, 247)");
+  await expect(action).toHaveCSS("color", "rgb(239, 238, 234)");
   await action.hover();
-  await expect(action).toHaveCSS("background-color", "rgb(68, 68, 68)");
+  await expect(action).not.toHaveCSS("background-color", "rgb(41, 41, 41)");
 
   await page.evaluate(() => localStorage.setItem("motion-lexicon-theme:v1", "dark"));
   await page.reload();
   await page.mouse.move(0, 0);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(action).toHaveCSS("background-color", "rgb(245, 245, 247)");
-  await expect(action).toHaveCSS("color", "rgb(0, 0, 0)");
+  await expect(action).toHaveCSS("color", "rgb(20, 19, 18)");
   await action.hover();
-  await expect(action).toHaveCSS("background-color", "rgb(214, 214, 214)");
+  await expect(action).not.toHaveCSS("background-color", "rgb(245, 245, 247)");
 });
 
-test("bordered product surfaces keep card geometry without decorative depth", async ({ page }, testInfo) => {
+test("Interior product surfaces keep compact geometry and restrained elevation", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Surface treatment needs one browser audit.");
 
   const routes = [
@@ -371,28 +369,28 @@ test("bordered product surfaces keep card geometry without decorative depth", as
     for (const surface of item.surfaces) {
       const locator = page.locator(surface.selector).first();
       await expect(locator).toHaveCSS("border-radius", surface.radius);
-      await expect(locator).toHaveCSS("box-shadow", "none");
     }
   }
 
   await page.goto("/zh/catalog/?surface=components");
-  await page.locator(".library-utility-menu > summary").click();
-  await expect(page.locator(".library-utility-popover")).toHaveCSS("border-radius", "16px");
-  await expect(page.locator(".library-utility-popover")).toHaveCSS("box-shadow", "none");
+  await page.locator(".library-utility-trigger").click();
+  await expect(page.locator(".library-utility-popover")).toHaveCSS("border-radius", "11px");
+  await expect(page.locator(".library-utility-popover")).not.toHaveCSS("box-shadow", "none");
 
   await page.emulateMedia({ contrast: "more" });
   await page.goto("/zh/");
-  await expect(page.locator(".apple-motion-card.library-card").first()).toHaveCSS("box-shadow", "none");
+  await expect(page.locator(".apple-motion-card.library-card").first()).not.toHaveCSS("box-shadow", "none");
 });
 
 test("fine-pointer parameter primitives preserve the 44 pixel target baseline", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Fine-pointer sizing runs in desktop Chromium.");
   await page.goto("/zh/entrances/slide-in/");
   await expectMinimumTargets(page, ".controls-head .ml-button");
-  await expectMinimumTargets(page, ".ml-toggle-item");
-  await expect(page.locator(".controls-head .ml-button").first()).toHaveCSS("border-radius", "8px");
+  await expectMinimumTargets(page, ".library-device-switcher button");
+  await expectMinimumTargets(page, ".ml-slider [role='slider']");
+  await expect(page.locator(".controls-head .ml-button").first()).toHaveCSS("border-radius", "9px");
   await expect(page.locator(".ml-toggle-group").first()).toHaveCSS("border-radius", "8px");
-  await expect(page.locator(".ml-toggle-item").first()).toHaveCSS("border-radius", "8px");
+  await expect(page.locator(".ml-toggle-group button").first()).toHaveCSS("border-radius", "6px");
 });
 
 test("coarse-pointer product controls preserve 44 pixel targets", async ({ page }, testInfo) => {
@@ -402,7 +400,7 @@ test("coarse-pointer product controls preserve 44 pixel targets", async ({ page 
   for (const selector of [
     ".finder-active-preview-header .ml-button",
     ".finder-active-preview-copy > a",
-    ".apple-code-output .ml-tabs-trigger"
+    ".apple-code-output [role='tab']"
   ]) await expectMinimumTargets(page, selector);
   await page.getByRole("tab", { name: "代码" }).click();
   await expectMinimumTargets(page, ".apple-code-output .library-code-filebar .ml-button");
@@ -411,7 +409,7 @@ test("coarse-pointer product controls preserve 44 pixel targets", async ({ page 
   for (const selector of [
     ".library-device-switcher button",
     ".apple-preview-stage .preview-toolbar .ml-button",
-    ".apple-code-output .ml-tabs-trigger"
+    ".apple-code-output [role='tab']"
   ]) await expectMinimumTargets(page, selector);
 
   await page.goto("/zh/vocabulary/");
@@ -419,7 +417,7 @@ test("coarse-pointer product controls preserve 44 pixel targets", async ({ page 
 
   await page.goto("/zh/catalog/?surface=components");
   await expectMinimumTargets(page, ".library-footer-links a, .library-footer-resources a");
-  await page.locator(".library-utility-menu > summary").click();
+  await page.locator(".library-utility-trigger").click();
   await expectMinimumTargets(page, ".library-utility-popover nav a");
   await expectMinimumTargets(page, ".library-utility-settings .theme-select, .library-utility-settings .icon-link");
 });

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Hero } from "../components/Hero";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";
+import { CardLink } from "../components/interior/card-link";
 import { compactCatalogEntries, getCompactCatalogEntry } from "../data/compact-catalog";
 import type { Locale } from "../data/types";
 import { pathFor, siteUrl, text } from "../data/site";
@@ -77,7 +78,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
 
         <div className="library-card-grid apple-home-card-grid is-component">
           {featured.map((recipe) => (
-            <Link
+            <CardLink
               className="library-card apple-motion-card"
               key={recipe.id}
               to="/$locale/$categoryId/$recipeId/"
@@ -91,7 +92,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
                 </div>
                 <p>{text(recipe.shortDescription, locale)}</p>
               </div>
-            </Link>
+            </CardLink>
           ))}
         </div>
       </section>

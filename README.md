@@ -141,6 +141,8 @@ generated output travel easily between people and tools.
 - Source code: [MIT](./LICENSE)
 - Project-authored content and data: [CC BY 4.0](./CONTENT-LICENSE)
 - Generated code fragments: [0BSD](./CONTENT-LICENSE)
+- Interaction primitives: [Interior](https://github.com/ddoemonn/interior),
+  adapted under MIT with attribution in [NOTICE](./NOTICE)
 
 ## Project snapshot
 
@@ -177,7 +179,7 @@ Every public product route is available in English (`/en/`) and Chinese
 
 ### Build and static delivery
 
-Motion Lexicon uses React, TypeScript, Vite, TanStack Router, and i18next. A
+Motion Lexicon uses React, TypeScript, Vite, Motion, TanStack Router, and i18next. A
 production build runs this sequence:
 
 ```text

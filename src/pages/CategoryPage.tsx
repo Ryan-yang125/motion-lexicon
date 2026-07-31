@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";
+import { CardLink } from "../components/interior/card-link";
 import { getCategory } from "../data/categories";
 import { getCatalogRecipesByCategory, getMotionCatalogMeta } from "../data/recipes";
 import type { Locale, MotionSurfaceType } from "../data/types";
@@ -73,7 +74,7 @@ export function CategoryPage({ locale, categoryId }: CategoryPageProps) {
               </div>
               <div className={`library-card-grid is-${surfaceType}`}>
                 {entries.map((recipe) => (
-                  <Link
+                  <CardLink
                     className="library-card"
                     key={recipe.id}
                     to="/$locale/$categoryId/$recipeId/"
@@ -92,7 +93,7 @@ export function CategoryPage({ locale, categoryId }: CategoryPageProps) {
                       </div>
                       <p>{text(recipe.shortDescription, locale)}</p>
                     </div>
-                  </Link>
+                  </CardLink>
                 ))}
               </div>
             </section>

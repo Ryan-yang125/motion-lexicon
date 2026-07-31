@@ -197,9 +197,7 @@ test.describe("motion performance budgets", () => {
 
     const stage = page.locator(".finder-active-preview .finder-candidate-stage");
     await expect(stage).toBeVisible();
-    await expect.poll(() => stage.evaluate((host) =>
-      host.shadowRoot?.querySelector<HTMLElement>("[data-spring-target]")?.style.transform ?? ""
-    )).toContain("translate3d");
+    await expect(stage).toHaveAttribute("data-preview-static", "");
 
     const latestValues = {
       stiffness: "60",

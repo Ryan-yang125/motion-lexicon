@@ -1,10 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { BookOpen, Braces, Github, Menu, SlidersHorizontal, Terminal } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
 import { BrandMark } from "./BrandMark";
 import { ThemeLanguageControls } from "./ThemeLanguageControls";
+import { Popover } from "./interior/popover";
 
 type HeaderProps = {
   locale: Locale;
@@ -26,7 +27,7 @@ const surfaceIcons = {
 export function Header({ locale }: HeaderProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const utilityMenuRef = useRef<HTMLDetailsElement>(null);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
   const surface = new URLSearchParams(location.searchStr).get("surface") ?? "components";
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const isHome = pathSegments.length === 1;
@@ -46,7 +47,7 @@ export function Header({ locale }: HeaderProps) {
   }
 
   useEffect(() => {
-    if (utilityMenuRef.current) utilityMenuRef.current.open = false;
+    setResourcesOpen(false);
   }, [location.pathname, location.searchStr]);
 
   return (
@@ -88,12 +89,23 @@ export function Header({ locale }: HeaderProps) {
             <Github aria-hidden="true" size={16} strokeWidth={1.8} />
             <span>GitHub</span>
           </a>
-          <details ref={utilityMenuRef} className="library-utility-menu">
-            <summary aria-label={resourcesLabel}>
-              <Menu aria-hidden="true" size={18} strokeWidth={1.8} />
-              <span>{locale === "zh" ? "资源" : "Resources"}</span>
-            </summary>
-            <div className="library-utility-popover">
+          <div className="library-utility-menu">
+            <Popover
+              label={resourcesLabel}
+              open={resourcesOpen}
+              onOpenChange={setResourcesOpen}
+              side="bottom"
+              align="end"
+              offset={8}
+              triggerClassName="library-utility-trigger"
+              className="library-utility-popover"
+              trigger={(
+                <>
+                  <Menu aria-hidden="true" size={18} strokeWidth={1.8} />
+                  <span>{locale === "zh" ? "资源" : "Resources"}</span>
+                </>
+              )}
+            >
               <nav aria-label={t("nav.mobileLabel")}>
                 <Link to="/$locale/finder/" params={{ locale }}>
                   {finderLabel}
@@ -138,8 +150,8 @@ export function Header({ locale }: HeaderProps) {
                 <span>{settingsLabel}</span>
                 <ThemeLanguageControls locale={locale} />
               </div>
-            </div>
-          </details>
+            </Popover>
+          </div>
         </div>
       </div>
     </header>
