@@ -17,7 +17,7 @@
     "en": "Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank."
   },
   "definition": {
-    "zh": "每秒绘制的帧数；60fps 是流畅运动的基线，新款显示器可达到 120fps。",
+    "zh": "每秒渲染的帧数；动画与显示器刷新节奏匹配时通常最流畅。",
     "en": "Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result."
   },
   "aliases": [

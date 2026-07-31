@@ -17,7 +17,7 @@
     "en": "Bring content in from a clear direction so its spatial relationship stays legible."
   },
   "definition": {
-    "zh": "元素从屏幕外沿左、右、上或下方滑入。",
+    "zh": "元素从容器或视口边界外滑入并停在目标位置。",
     "en": "A positional transition moves content from beyond an edge into its resting location."
   },
   "aliases": [

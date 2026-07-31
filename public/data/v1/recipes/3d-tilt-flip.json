@@ -71,11 +71,11 @@
       "unit": "px",
       "label": {
         "zh": "透视距离",
-        "en": "Perspective"
+        "en": "Perspective distance"
       },
       "description": {
         "zh": "调节透视距离。",
-        "en": "Adjusts perspective."
+        "en": "Adjusts perspective distance."
       }
     },
     {

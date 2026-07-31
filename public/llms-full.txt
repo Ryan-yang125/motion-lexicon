@@ -265,7 +265,7 @@
 - Parameters:
   - Duration (duration): default 280ms; range 80-1200ms; step 20ms
   - Flip angle (angle): default 180deg; range 45-180deg; step 5deg
-  - Perspective (perspective): default 800px; range 320-1400px; step 40px
+  - Perspective distance (perspective): default 800px; range 320-1400px; step 40px
   - Easing (ease): default soft; options soft, snap, calm, linear
 
 ## Origin-aware animation (origin-aware-animation)
@@ -435,7 +435,7 @@
 - Parameters:
   - Duration (duration): default 150ms; range 80-1200ms; step 20ms
   - Distance (distance): default 4px; range 0-16px; step 2px
-  - Start scale (scale): default 101%; range 70-105%; step 1%
+  - Hover scale (scale): default 101%; range 70-105%; step 1%
   - Easing (ease): default snap; options soft, snap, calm, linear
 
 ## Press / Tap feedback (press-tap-feedback)
@@ -451,7 +451,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json
 - Parameters:
   - Duration (duration): default 120ms; range 80-1200ms; step 20ms
-  - Start scale (scale): default 96%; range 70-105%; step 1%
+  - Pressed scale (scale): default 96%; range 70-105%; step 1%
   - Easing (ease): default snap; options soft, snap, calm, linear
 
 ## Hold to confirm (hold-to-confirm)
@@ -467,7 +467,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json
 - Parameters:
   - Confirmation duration (duration): default 1200ms; range 600-2400ms; step 50ms
-  - Start scale (scale): default 98%; range 70-105%; step 1%
+  - Hold scale (scale): default 98%; range 70-105%; step 1%
   - Easing (ease): default linear; options soft, snap, calm, linear
 
 ## Drag to reorder (drag-to-reorder)
@@ -485,7 +485,7 @@
 - Parameters:
   - Duration (duration): default 180ms; range 80-1200ms; step 20ms
   - Distance (distance): default 48px; range 0-120px; step 2px
-  - Start scale (scale): default 103%; range 70-105%; step 1%
+  - Pickup scale (scale): default 103%; range 70-105%; step 1%
   - Easing (ease): default snap; options soft, snap, calm, linear
 
 ## Swipe to dismiss (swipe-to-dismiss)

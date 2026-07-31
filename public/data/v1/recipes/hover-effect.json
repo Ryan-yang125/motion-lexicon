@@ -70,12 +70,12 @@
       "step": 1,
       "unit": "%",
       "label": {
-        "zh": "起始缩放",
-        "en": "Start scale"
+        "zh": "悬停缩放",
+        "en": "Hover scale"
       },
       "description": {
-        "zh": "控制元素相对最终尺寸的起始比例。",
-        "en": "Controls the starting size relative to the final state."
+        "zh": "控制激活状态的缩放比例。",
+        "en": "Controls scale in the active state."
       }
     },
     {
