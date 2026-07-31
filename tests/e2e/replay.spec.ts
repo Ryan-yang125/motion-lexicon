@@ -4,6 +4,11 @@ function replayControl(page: Page) {
   return page.locator(".preview-toolbar").getByRole("button");
 }
 
+async function expectRuntimeReady(page: Page) {
+  await expect(page.locator(".motion-preview-runtime .motion-demo"))
+    .toHaveAttribute("data-motion-runtime-active", "true");
+}
+
 const persistentRecipeRoutes = [
   "/en/feedback/hold-to-confirm/",
   "/en/feedback/drag-to-reorder/",
@@ -31,6 +36,7 @@ test.describe("recipe replay state", () => {
 
   test("replay restores completed drag, hold, and swipe interactions", async ({ page }) => {
     await page.goto("/en/feedback/drag-to-reorder/");
+    await expectRuntimeReady(page);
     const dragItems = page.locator("[data-reorder-item]");
     const initialOrder = await dragItems.allTextContents();
     await dragItems.first().focus();
@@ -46,6 +52,7 @@ test.describe("recipe replay state", () => {
     )).toEqual(initialOrder.map(() => "false"));
 
     await page.goto("/en/feedback/hold-to-confirm/?duration=600");
+    await expectRuntimeReady(page);
     const hold = page.locator("[data-hold-button]");
     await hold.focus();
     await page.keyboard.down("Space");
@@ -64,6 +71,7 @@ test.describe("recipe replay state", () => {
     );
 
     await page.goto("/en/feedback/swipe-to-dismiss/");
+    await expectRuntimeReady(page);
     const swipeTarget = page.locator("[data-swipe-target]");
     const dismiss = page.locator("[data-swipe-dismiss]");
     const undo = page.locator("[data-swipe-undo]");
@@ -80,6 +88,7 @@ test.describe("recipe replay state", () => {
 
   test("replay restores pause, comparison, and disclosure controls", async ({ page }) => {
     await page.goto("/en/loops/marquee/");
+    await expectRuntimeReady(page);
     const pause = page.locator("[data-motion-pause]");
     const marquee = page.locator(".motion-marquee-track");
     await pause.click();
@@ -91,6 +100,7 @@ test.describe("recipe replay state", () => {
     await expect.poll(() => marquee.evaluate((element) => element.getAnimations()[0]?.playState)).toBe("running");
 
     await page.goto("/en/polish-effects/before-after-slider/");
+    await expectRuntimeReady(page);
     const comparison = page.locator("[data-comparison-input]");
     const initialValue = await comparison.inputValue();
     await comparison.focus();
