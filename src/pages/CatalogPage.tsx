@@ -64,9 +64,9 @@ export function CatalogPage({
   const deferredQuery = useDeferredValue(query);
   const searchRef = useRef<HTMLInputElement>(null);
   const activeFilter = surfaceFilterById.get(surface) ?? surfaceFilters[0];
-  const clearFiltersLabel = query
+  const clearFiltersLabel = query && !categoryId
     ? t("catalog.clearSearch")
-    : locale === "zh" ? "清除筛选" : "Clear filters";
+    : t("catalog.clearFilters");
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -157,9 +157,7 @@ export function CatalogPage({
       />
 
       <section className="library-catalog-hero library-catalog-hero-unified">
-        <span>{t("catalog.libraryLabel")}</span>
         <h1>{t("catalog.title")}</h1>
-        <p>{t("catalog.copy")}</p>
       </section>
 
       <section className="library-catalog-toolbar" aria-label={t("catalog.surfaceLabel")}>

@@ -22,7 +22,11 @@ export function ThemeLanguageControls({ locale }: ControlsProps) {
 
   return (
     <div className="header-controls">
-      <a className="icon-link" href={languageHref} aria-label={t("common.language")}>
+      <a
+        className="icon-link"
+        href={languageHref}
+        aria-label={locale === "zh" ? "切换到 English" : "Switch to Chinese"}
+      >
         <Languages aria-hidden="true" size={16} strokeWidth={1.8} />
         <span>{localeLabel(nextLocale)}</span>
       </a>

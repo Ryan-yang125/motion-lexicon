@@ -57,7 +57,7 @@ const principles = "Principles to Know — concepts that guide when and how to a
 /** Motion Lexicon maintains these 91 original, implementation-oriented definitions. */
 const glossaryEntries: readonly GlossaryEntryInput[] = [
   term("fade-in-fade-out", "entrances", entrances, "Fade in / Fade out", "淡入 / 淡出", "An opacity transition brings an element into view or carries it out without changing its geometry.", "元素通过改变不透明度出现或消失。"),
-  term("slide-in", "entrances", entrances, "Slide in", "滑入", "A positional transition moves content from beyond an edge into its resting location.", "元素从屏幕外沿左、右、上或下方滑入。"),
+  term("slide-in", "entrances", entrances, "Slide in", "滑入", "A positional transition moves content from beyond an edge into its resting location.", "元素从容器或视口边界外滑入并停在目标位置。"),
   term("scale-in", "entrances", entrances, "Scale in", "缩放入场", "An appearing element expands from a reduced scale to its final dimensions, commonly while opacity rises.", "元素出现时从较小尺寸放大到完整尺寸，通常与淡入搭配。"),
   term("pop-in", "entrances", entrances, "Pop in", "弹入", "An entrance crosses the final scale briefly, then settles back to create a compact spring-like accent.", "元素出现时略微越过最终状态，再像回弹一样落到位。"),
   term("reveal", "entrances", entrances, "Reveal", "揭示", "A moving clipping boundary or mask exposes content progressively.", "内容逐步显露，通常通过动画化裁切路径或遮罩实现。"),
@@ -96,11 +96,11 @@ const glossaryEntries: readonly GlossaryEntryInput[] = [
   term("view-transition", "scroll", scroll, "View transition", "视图过渡", "The browser captures old and new render states, then animates their snapshots and designated shared elements.", "浏览器在两个状态或页面之间进行形变过渡，并连接共享元素。"),
 
   term("hover-effect", "feedback", feedback, "Hover effect", "悬停效果", "Pointer hover updates a control's visual state to signal availability or affordance.", "光标移到元素上方时产生的视觉变化。"),
-  term("press-tap-feedback", "feedback", feedback, "Press / Tap feedback", "按压 / 轻触反馈", "A brief response during pointer or touch activation makes a control acknowledge contact.", "元素被点击时轻微缩小，让操作具有实体触感。"),
+  term("press-tap-feedback", "feedback", feedback, "Press / Tap feedback", "按压 / 轻触反馈", "A brief response during pointer or touch activation makes a control acknowledge contact.", "指针或触摸按下时提供短促视觉反馈，让控件确认已接收到输入。"),
   term("hold-to-confirm", "feedback", feedback, "Hold to confirm", "长按确认", "A timed progress indicator advances while continuous press input is maintained and completes at a threshold.", "用户持续按住按钮时逐步填满的进度效果。"),
-  term("drag", "feedback", feedback, "Drag", "拖拽", "Pointer movement directly updates an object's position from grab until release.", "抓住元素并移动它，释放时通常带有动量。"),
+  term("drag", "feedback", feedback, "Drag", "拖拽", "Pointer movement directly updates an object's position from grab until release.", "从抓取到释放期间，指针移动会直接更新对象位置。"),
   term("drag-to-reorder", "feedback", feedback, "Drag to reorder", "拖拽排序", "Dragging an item changes its list position while surrounding items animate toward their prospective slots.", "拖动列表项来重新排序，其他项目会移动并让出位置。"),
-  term("swipe-to-dismiss", "feedback", feedback, "Swipe to dismiss", "滑动关闭", "A directional drag removes a surface after distance or velocity crosses a dismissal threshold.", "把元素拖出屏幕以关闭它，例如抽屉或提示消息。"),
+  term("swipe-to-dismiss", "feedback", feedback, "Swipe to dismiss", "滑动关闭", "A directional drag removes a surface after distance or velocity crosses a dismissal threshold.", "定向拖动越过距离或速度阈值后关闭当前界面元素。"),
   term("rubber-banding", "feedback", feedback, "Rubber-banding", "橡皮筋回弹", "Movement beyond a boundary is attenuated, then restored toward the valid range after release.", "拖过边界时出现阻力并回弹，类似 iOS 的过度滚动手感。"),
   term("shake-wiggle", "feedback", feedback, "Shake / Wiggle", "摇晃 / 抖动", "A rapid alternating displacement flags invalid input or a rejected action.", "快速左右抖动，用来提示错误或输入被拒绝。"),
   term("ripple", "feedback", feedback, "Ripple", "涟漪", "A radial wave expands from the activation coordinates to mark where contact occurred.", "圆形从轻触点向外扩散，用来确认按压操作。"),
@@ -109,7 +109,7 @@ const glossaryEntries: readonly GlossaryEntryInput[] = [
   term("ease-out", "easing", easing, "Ease-out", "缓出", "Progress advances quickly after activation and decelerates near completion, giving responsive UI motion a controlled arrival.", "开始快、结束慢，适合作为大多数 UI 动效和用户响应动作的默认选择。"),
   term("ease-in", "easing", easing, "Ease-in", "缓入", "Progress accelerates from a gentle start toward a faster finish, fitting departures that should gather speed.", "开始慢、结束快，通常应谨慎使用，因为容易显得迟缓。"),
   term("ease-in-out", "easing", easing, "Ease-in-out", "缓入缓出", "Progress accelerates through the middle and decelerates at both ends, supporting visible point-to-point travel.", "速度由慢到快再到慢，适合屏幕上已有元素从 A 点移动到 B 点。"),
-  term("linear", "easing", easing, "Linear", "线性", "Timeline progress and property progress remain proportional, producing a constant rate suitable for continuous indicators.", "保持恒定速度；UI 动效应避免使用，仅保留给加载旋转器或跑马灯。"),
+  term("linear", "easing", easing, "Linear", "线性", "Timeline progress and property progress remain proportional, producing a constant rate suitable for continuous indicators.", "保持恒定速度，适合加载旋转器、跑马灯等持续运动。"),
   term("cubic-bezier", "easing", easing, "Cubic-bezier", "三次贝塞尔", "Four control points describe a cubic Bézier timing curve for custom acceleration and deceleration.", "由开发者定义的自定义缓动曲线，用于精确控制速度变化。"),
   term("asymmetric-easing", "easing", easing, "Asymmetric easing", "非对称缓动", "Different acceleration and deceleration shapes give the entrance and arrival distinct timing characteristics.", "加速与减速速率不同的曲线，通常比对称曲线更有生命力。"),
 
@@ -142,12 +142,12 @@ const glossaryEntries: readonly GlossaryEntryInput[] = [
   term("tabular-numbers", "polish-effects", effects, "Tabular numbers", "等宽数字", "Tabular numeral glyphs share a fixed advance width, keeping changing values spatially stable.", "使用固定宽度的数字，使数值变化时不会左右跳动；它对数字滚动、计时器和计数器非常重要。"),
   term("typewriter", "polish-effects", effects, "Typewriter", "打字机", "A text sequence reveals characters at timed intervals to simulate incremental entry.", "文字像正在输入一样逐字符出现。"),
 
-  term("frame-rate", "performance", performance, "Frame rate (FPS)", "帧率（FPS）", "Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result.", "每秒绘制的帧数；60fps 是流畅运动的基线，新款显示器可达到 120fps。"),
+  term("frame-rate", "performance", performance, "Frame rate (FPS)", "帧率（FPS）", "Frame rate counts rendered frames per second; matching the display refresh cadence produces the smoothest result.", "每秒渲染的帧数；动画与显示器刷新节奏匹配时通常最流畅。"),
   term("jank", "performance", performance, "Jank", "卡顿", "Jank is a perceptible break in motion caused by irregular frame timing or delayed main-thread work.", "浏览器无法跟上动画并发生掉帧时出现的可见停顿。"),
   term("dropped-frame", "performance", performance, "Dropped frame", "丢帧", "A dropped frame occurs when rendering misses a display deadline and the previous image remains visible for another refresh.", "浏览器未能在截止时间前绘制的一帧，会让运动出现轻微顿挫。"),
-  term("compositing", "performance", performance, "Compositing", "合成", "Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout.", "让 GPU 在独立图层上移动元素或改变其透明度，无需重新执行布局或绘制。"),
-  term("will-change", "performance", performance, "will-change", "will-change", "The will-change property warns the browser about an upcoming property change so it can prepare relevant rendering resources.", "一种 CSS 提示，用来告知浏览器元素即将播放动画，使浏览器可以提前把它提升到独立图层。"),
-  term("layout-thrashing", "performance", performance, "Layout thrashing", "布局抖动", "Repeated interleaving of layout reads and writes forces synchronous recalculation and consumes the frame budget.", "动画化 width、height、top 或 left 等属性，迫使浏览器逐帧重新计算布局并引发卡顿。"),
+  term("compositing", "performance", performance, "Compositing", "合成", "Compositing assembles painted layers into the final frame and can update transforms or opacity without repeating layout.", "合成会把已绘制的图层组合成最终画面；独立图层上的 transform 或 opacity 更新可跳过布局，并可能跳过重绘。"),
+  term("will-change", "performance", performance, "will-change", "will-change", "The will-change property warns the browser about an upcoming property change so it can prepare relevant rendering resources.", "一种 CSS 渲染提示，告知浏览器某项属性即将变化，以便浏览器按需提前准备优化。"),
+  term("layout-thrashing", "performance", performance, "Layout thrashing", "布局抖动", "Repeated interleaving of layout reads and writes forces synchronous recalculation and consumes the frame budget.", "交替读取布局信息并写入样式，会反复触发同步布局计算并耗尽帧预算。"),
 
   term("purposeful-animation", "principles", principles, "Purposeful animation", "有目的的动效", "Purposeful motion communicates hierarchy, causality, feedback, or spatial relationships in support of a user task.", "动效应承担明确功能，例如帮助定位、提供反馈或展示关系，而非只作装饰。"),
   term("anticipation", "principles", principles, "Anticipation", "预备动作", "A brief preparatory movement establishes direction and energy before the primary action.", "动作开始前先向相反方向进行一小段蓄力，用来预示即将发生的运动。"),
@@ -156,7 +156,7 @@ const glossaryEntries: readonly GlossaryEntryInput[] = [
   term("perceived-performance", "principles", principles, "Perceived performance", "感知性能", "Motion and progressive feedback reduce uncertainty during waiting, changing how fast the interface feels.", "恰当的动画可以让界面在实际速度未变化时显得更快。"),
   term("frequency-of-use", "principles", principles, "Frequency of use", "使用频率", "Exposure frequency sets an animation's acceptable emphasis and length; repeated motion benefits from greater restraint.", "用户看到一段动画的频率越高，它就应越短、越克制。"),
   term("spatial-consistency", "principles", principles, "Spatial consistency", "空间一致性", "Objects retain coherent position, direction, and identity across states so changes remain easy to trace.", "让元素在不同状态之间保持身份与空间位置的连续，使用户始终知道内容去了哪里。"),
-  term("hardware-acceleration", "principles", principles, "Hardware acceleration", "硬件加速", "Hardware acceleration uses compositor and GPU resources for eligible visual updates, helping frames meet display deadlines.", "动画化 transform 和 opacity，让 GPU 保持运动流畅。"),
+  term("hardware-acceleration", "principles", principles, "Hardware acceleration", "硬件加速", "Hardware acceleration uses compositor and GPU resources for eligible visual updates, helping frames meet display deadlines.", "符合条件的视觉更新可利用合成线程和 GPU 资源，帮助画面赶上显示刷新期限。"),
   term("reduced-motion", "principles", principles, "Reduced motion", "减弱动效", "Reduced-motion behavior honors the user preference with stable spatial states and concise essential feedback.", "尊重用户的 prefers-reduced-motion 设置，降低或移除动态效果。")
 ];
 

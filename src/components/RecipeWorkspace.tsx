@@ -42,18 +42,14 @@ const exportTabs = new Set(["code", "css", "html", "js", "prompt"]);
 
 const guidanceLabels = {
   zh: {
-    vocabulary: "动效词义",
-    vocabularyTitle: "术语定义与近义词辨析",
-    vocabularyCopy: "Motion Lexicon 独立编写英文技术定义；中文翻译和辨析帮助你选对术语。",
+    vocabularyTitle: "术语与辨析",
     definition: "英文定义",
     translation: "中文翻译",
     distinction: "辨析",
     canonical: "核心术语",
     related: "相关术语",
     openVocabulary: "查看全部 91 个术语",
-    decision: "设计规范",
-    decisionTitle: "使用这段动效前的判断",
-    decisionCopy: "目的、频率、触发、时序、可打断性和手势规则共同决定实现。",
+    decisionTitle: "实现前检查",
     purpose: "目的",
     frequency: "频率",
     trigger: "触发",
@@ -64,32 +60,23 @@ const guidanceLabels = {
     commonControls: "常用调节",
     moreControls: "更多参数",
     output: "复制实现",
-    outputCopy: "提示词和前端代码保持同步，可随时收起。",
     references: "深入了解",
-    understand: "理解动效",
-    understandCopy: "从词义、近义词和使用场景确认选择。",
+    understand: "动效词义",
     implementation: "实现规则",
-    implementationCopy: "把目的、时序、可访问性和参数约束放在一起检查。",
     review: "发布检查",
-    reviewCopy: "在交付前完成一组短检查。",
     accessibility: "可访问性",
     parameters: "参数参考",
-    relatedSection: "相关动效",
-    relatedCopy: "继续浏览相邻的动效配方。"
+    relatedSection: "相关动效"
   },
   en: {
-    vocabulary: "Motion vocabulary",
-    vocabularyTitle: "Definition and close-term distinctions",
-    vocabularyCopy: "Motion Lexicon maintains the original English technical definitions; translations and distinctions support precise selection.",
+    vocabularyTitle: "Terms and distinctions",
     definition: "English definition",
     translation: "Chinese translation",
     distinction: "Distinction",
     canonical: "Canonical term",
     related: "Related term",
     openVocabulary: "Browse all 91 terms",
-    decision: "Design contract",
-    decisionTitle: "Decide before this motion ships",
-    decisionCopy: "Purpose, frequency, trigger, timing, interruptibility, and gesture rules shape the implementation.",
+    decisionTitle: "Before implementation",
     purpose: "Purpose",
     frequency: "Frequency",
     trigger: "Trigger",
@@ -100,18 +87,13 @@ const guidanceLabels = {
     commonControls: "Essential controls",
     moreControls: "More parameters",
     output: "Copy implementation",
-    outputCopy: "Prompt and frontend code stay synchronized and can be tucked away at any time.",
     references: "Learn more",
-    understand: "Understand the motion",
-    understandCopy: "Confirm the choice through meaning, close terms, and usage context.",
+    understand: "Motion vocabulary",
     implementation: "Implementation rules",
-    implementationCopy: "Review purpose, timing, accessibility, and parameter constraints together.",
     review: "Ship checklist",
-    reviewCopy: "Finish a short set of checks before delivery.",
     accessibility: "Accessibility",
     parameters: "Parameter reference",
-    relatedSection: "Related motion",
-    relatedCopy: "Continue with adjacent motion recipes."
+    relatedSection: "Related motions"
   }
 } as const;
 
@@ -193,7 +175,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
   const guidance = getMotionGuidance(recipe.canonicalId);
   const inspectorRecipe = useMemo(() => splitInspectorRecipe(recipe), [recipe]);
   const surfaceSearch = recipe.surfaceType === "component" ? "components" : recipe.surfaceType === "playground" ? "playgrounds" : "guides";
-  const surfaceLabel = isGuide ? t("common.guide") : recipe.surfaceType === "playground" ? t("common.playground") : t("common.motionPattern");
   const relatedEntries = Array.from(
     new Map(
       recipe.relatedEntries
@@ -277,7 +258,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
         <header className="library-entry-header apple-recipe-hero">
           <div className="apple-recipe-identity">
             <div className="library-entry-meta apple-recipe-meta">
-              <span>{surfaceLabel}</span>
               <code>{recipe.id}</code>
             </div>
             <SectionTitle id="workspace-title">{text(recipe.name, locale)}</SectionTitle>
@@ -286,7 +266,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           {!isGuide ? (
             <div className="apple-recipe-primary-action">
               <CopyButton
-                label={t("common.copyCurrentPrompt")}
+                label={t("common.copyPrompt")}
                 getText={() => buildRecipePrompt(recipe, values, locale)}
                 variant="accent"
               />
@@ -297,7 +277,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
         <section className="library-preview-section apple-workbench-stage" id="preview" aria-labelledby="preview-title">
           <div className="library-doc-section-heading is-compact apple-workbench-heading">
             <div>
-              <span>{t("workspace.previewLabel")}</span>
               <SectionHeading id="preview-title">{t("workspace.previewTitle")}</SectionHeading>
             </div>
             <p>{text(recipe.definition, locale)}</p>
@@ -338,10 +317,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
             </div>
             {!isGuide ? (
               <aside className="library-parameter-panel apple-inspector" aria-label={labels.commonControls}>
-                <div className="library-sync-status apple-inspector-status">
-                  <i aria-hidden="true" />
-                  {t("common.ready")}
-                </div>
                 <ParameterControls
                   locale={locale}
                   recipe={inspectorRecipe.common}
@@ -379,11 +354,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
             onToggle={(event) => setOutputOpen(event.currentTarget.open)}
           >
             <summary className="apple-disclosure-summary">
-              <span>
-                <small>{t("workspace.outputLabel")}</small>
-                <strong>{labels.output}</strong>
-                <span className="apple-disclosure-copy">{labels.outputCopy}</span>
-              </span>
+              <strong>{labels.output}</strong>
               <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
             </summary>
             <div className="apple-disclosure-body apple-output-body">
@@ -400,18 +371,13 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           <section className="library-content-section apple-reference-section" id="understand" aria-labelledby="understand-summary-title">
             <details className="apple-disclosure" ref={vocabularyDisclosureRef}>
               <summary className="apple-disclosure-summary">
-                <span>
-                  <small>{labels.vocabulary}</small>
-                  <strong id="understand-summary-title">{labels.understand}</strong>
-                  <span className="apple-disclosure-copy">{labels.understandCopy}</span>
-                </span>
+                <strong id="understand-summary-title">{labels.understand}</strong>
                 <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
               </summary>
               <div className="apple-disclosure-body">
                 <section className="apple-reference-topic" aria-labelledby="vocabulary-title">
                   <header className="apple-reference-topic-heading">
                     <DisclosureHeading id="vocabulary-title">{labels.vocabularyTitle}</DisclosureHeading>
-                    <p>{labels.vocabularyCopy}</p>
                   </header>
                   <div className="library-vocabulary-list">
                     {glossaryTerms.map((term) => (
@@ -459,11 +425,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           <section className="library-content-section apple-reference-section" id="implementation" aria-labelledby="implementation-summary-title">
             <details className="apple-disclosure">
               <summary className="apple-disclosure-summary">
-                <span>
-                  <small>{labels.decision}</small>
-                  <strong id="implementation-summary-title">{labels.implementation}</strong>
-                  <span className="apple-disclosure-copy">{labels.implementationCopy}</span>
-                </span>
+                <strong id="implementation-summary-title">{labels.implementation}</strong>
                 <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
               </summary>
               <div className="apple-disclosure-body apple-implementation-body">
@@ -471,7 +433,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                   <section className="apple-reference-topic" aria-labelledby="decision-title">
                     <header className="apple-reference-topic-heading">
                       <DisclosureHeading id="decision-title">{labels.decisionTitle}</DisclosureHeading>
-                      <p>{labels.decisionCopy}</p>
                     </header>
                     <dl className="library-guidance-list">
                       {([
@@ -541,11 +502,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           <section className="library-content-section apple-reference-section" id="review" aria-labelledby="review-summary-title">
             <details className="apple-disclosure">
               <summary className="apple-disclosure-summary">
-                <span>
-                  <small>{t("common.reviewNotes")}</small>
-                  <strong id="review-summary-title">{labels.review}</strong>
-                  <span className="apple-disclosure-copy">{labels.reviewCopy}</span>
-                </span>
+                <strong id="review-summary-title">{labels.review}</strong>
                 <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
               </summary>
               <div className="apple-disclosure-body">
@@ -563,11 +520,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
         {relatedEntries.length > 0 ? (
           <section className="apple-related-motion" id="related" aria-labelledby="related-title">
             <header>
-              <div>
-                <small>{t("common.related")}</small>
-                <SectionHeading id="related-title">{labels.relatedSection}</SectionHeading>
-              </div>
-              <p>{labels.relatedCopy}</p>
+              <SectionHeading id="related-title">{labels.relatedSection}</SectionHeading>
             </header>
             <div className="library-related-links">
               {relatedEntries.map((entry) => (

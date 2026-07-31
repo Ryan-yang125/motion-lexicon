@@ -29,7 +29,7 @@ test("vocabulary search finds aliases and links to their working component", asy
   const sharedElementTerm = page.locator("#term-shared-element-transition");
   await expect(sharedElementTerm).toContainText("共享元素过渡");
   const workspaceLink = sharedElementTerm.getByRole("link", {
-    name: "打开对应工作区: 共享元素过渡"
+    name: "查看工作区: 共享元素过渡"
   });
   await expect(workspaceLink).toHaveAttribute(
     "href",

@@ -63,8 +63,8 @@ async function catalogTextContrastSamples(page: Page) {
       pseudo?: string;
       reportSelector?: string;
     }> = [
-      { label: "hero body", selector: ".library-catalog-hero-unified p" },
-      { label: "hero eyebrow", selector: ".library-catalog-hero-unified > span" },
+      { label: "hero title", selector: ".library-catalog-hero-unified h1" },
+      { label: "search text", selector: ".library-catalog-search input" },
       { label: "category count", selector: ".library-category-filter-heading" },
       { label: "card description", selector: ".library-card-body p" },
       { label: "card alias", selector: ".library-card-body small" },
@@ -140,7 +140,7 @@ test("catalog text keeps WCAG AA computed contrast in light and dark themes", as
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/en/catalog/?surface=components");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect(page.locator(".library-catalog-hero-unified p")).toBeVisible();
+  await expect(page.locator(".library-catalog-hero-unified h1")).toBeVisible();
   await expect(page.locator(".library-card-body small").first()).toBeVisible();
 
   const lightSamples = await catalogTextContrastSamples(page);
@@ -148,7 +148,7 @@ test("catalog text keeps WCAG AA computed contrast in light and dark themes", as
   await page.evaluate(() => localStorage.setItem("motion-lexicon-theme:v1", "dark"));
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(page.locator(".library-catalog-hero-unified p")).toBeVisible();
+  await expect(page.locator(".library-catalog-hero-unified h1")).toBeVisible();
 
   const darkSamples = await catalogTextContrastSamples(page);
   const failures = [

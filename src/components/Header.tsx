@@ -83,7 +83,7 @@ export function Header({ locale }: HeaderProps) {
             href={repositoryUrl}
             target="_blank"
             rel="noreferrer"
-            aria-label="Motion Lexicon on GitHub"
+            aria-label={locale === "zh" ? "在 GitHub 上查看 Motion Lexicon" : "View Motion Lexicon on GitHub"}
           >
             <Github aria-hidden="true" size={16} strokeWidth={1.8} />
             <span>GitHub</span>

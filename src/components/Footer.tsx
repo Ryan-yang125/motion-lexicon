@@ -32,9 +32,6 @@ export function Footer() {
           <Link to="/$locale/vocabulary/" params={{ locale }}>
             {locale === "zh" ? "动画词汇" : "Vocabulary"}
           </Link>
-          <Link to="/$locale/$categoryId/$recipeId/" params={{ locale, categoryId: "entrances", recipeId: "slide-in" }}>
-            {t("footer.openExample")}
-          </Link>
         </nav>
         <nav
           className="library-footer-resources"

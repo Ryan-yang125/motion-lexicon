@@ -1,4 +1,4 @@
-import { ArrowRight, Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -282,7 +282,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
         aria-labelledby="finder-title"
       >
         <div className="finder-hero-copy">
-          <span>{t("finder.eyebrow")}</span>
           <h1 id="finder-title">{t("finder.title")}</h1>
           <p>{t("finder.copy")}</p>
         </div>
@@ -306,7 +305,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
               <ArrowRight aria-hidden="true" size={16} />
             </button>
           </div>
-          <small>{t("finder.shortcut")}</small>
         </form>
 
         <div className="finder-examples" aria-label={t("finder.examplesLabel")}>
@@ -331,7 +329,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
         >
           <div className="library-doc-section-heading finder-results-heading finder-workspace-heading">
             <div>
-              <span>{t("finder.resultEyebrow")}</span>
               <h2 id="finder-results-title">{t("finder.resultTitle")}</h2>
             </div>
             <div className="finder-match-summary">
@@ -368,7 +365,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
               >
                 <header className="finder-inspector-heading">
                   <div>
-                    <span>{t("finder.tuneEyebrow")}</span>
                     <h2 id="finder-tune-title">
                       {t("finder.tuneTitle", { name: selectedCandidate.name })}
                     </h2>
@@ -376,11 +372,6 @@ export function FinderPage({ locale }: { locale: Locale }) {
                   <SlidersHorizontal aria-hidden="true" size={18} strokeWidth={1.7} />
                 </header>
 
-                <p className="finder-inspector-copy">{t("finder.tuneCopy")}</p>
-                <div className="library-sync-status finder-inspector-status">
-                  <i aria-hidden="true" />
-                  {t("finder.readyStatus")}
-                </div>
                 <div className="finder-inspector-controls">
                   <ParameterControls
                     locale={locale}
@@ -392,7 +383,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
                 </div>
                 <CopyButton
                   className="finder-primary-copy apple-primary-action"
-                  label={t("common.copyCurrentPrompt")}
+                  label={t("common.copyPrompt")}
                   getText={() =>
                     buildRecipePrompt(selectedCandidate.recipe, values, locale)
                   }
@@ -411,13 +402,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
             </div>
           ) : null}
         </section>
-      ) : (
-        <section className="finder-empty" aria-labelledby="finder-empty-title">
-          <Sparkles aria-hidden="true" size={20} strokeWidth={1.6} />
-          <h2 id="finder-empty-title">{t("finder.emptyTitle")}</h2>
-          <p>{t("finder.emptyCopy")}</p>
-        </section>
-      )}
+      ) : null}
 
     </>
   );

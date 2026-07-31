@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex,follow" />
-    <title>Page not found | Motion Lexicon</title>
+    <title>页面未找到 | Motion Lexicon</title>
     <style>
       :root {
         color-scheme: light;
@@ -49,10 +49,10 @@
 
       h1 {
         margin: 0 0 0.75rem;
-        font-size: clamp(4.5rem, 16vw, 7rem);
+        font-size: clamp(4.5rem, 16vw, 6rem);
         font-weight: 680;
         line-height: 0.9;
-        letter-spacing: -0.06em;
+        letter-spacing: -0.04em;
       }
 
       p {
@@ -78,8 +78,18 @@
     <main>
       <div class="brand"><img src="/brand/motion-lexicon-mark.svg" alt="" /><span>Motion Lexicon</span></div>
       <h1>404</h1>
-      <p>This Motion Lexicon page does not exist. Return to the catalog to keep browsing animation vocabulary.</p>
-      <a href="/zh/catalog/">Open catalog</a>
+      <p id="message">页面未找到。返回动效库继续浏览。</p>
+      <a id="library-link" href="/zh/catalog/">打开动效库</a>
     </main>
+    <script>
+      if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) {
+        document.documentElement.lang = "en";
+        document.title = "Page not found | Motion Lexicon";
+        document.getElementById("message").textContent = "This page doesn’t exist. Return to the motion library.";
+        const link = document.getElementById("library-link");
+        link.href = "/en/catalog/";
+        link.textContent = "Open library";
+      }
+    </script>
   </body>
 </html>

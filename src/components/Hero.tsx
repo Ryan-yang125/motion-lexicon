@@ -70,11 +70,9 @@ export function Hero({ locale }: { locale: Locale }) {
         </div>
 
         <div className="apple-hero-proof" aria-label={locale === "zh" ? "产品规模" : "Product scope"}>
-          <span><strong>44</strong>{locale === "zh" ? " 个动效配方" : " motion recipes"}</span>
+          <span><strong>44</strong>{locale === "zh" ? " 个动效条目" : " motion entries"}</span>
           <i aria-hidden="true" />
           <span><strong>91</strong>{locale === "zh" ? " 个专业术语" : " vocabulary terms"}</span>
-          <i aria-hidden="true" />
-          <span>{locale === "zh" ? "免费 · 本地运行" : "Free · Runs locally"}</span>
         </div>
       </div>
 

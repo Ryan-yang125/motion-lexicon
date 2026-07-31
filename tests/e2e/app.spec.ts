@@ -78,7 +78,7 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
 test("copy prompt button reports success", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/en/entrances/slide-in/");
-  await page.getByRole("button", { name: /Copy current prompt/ }).first().click();
+  await page.getByRole("button", { name: /Copy prompt/ }).first().click();
   await expect(page.getByRole("button", { name: /Copied/ }).first()).toBeVisible();
 });
 
@@ -217,7 +217,7 @@ test("Apple product tokens control type, hierarchy, radii, and icon sizes", asyn
     return {
       heading: read(".library-catalog-hero h1"),
       cardHeading: read(".library-card-body h3"),
-      body: read(".library-catalog-hero p"),
+      body: read(".library-card-body p"),
       metadata: read(".library-card-body small")
     };
   });
