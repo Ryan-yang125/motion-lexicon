@@ -1,4 +1,4 @@
-import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, SlidersHorizontal } from "lucide-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,9 @@ import { MotionCompare } from "../components/MotionCompare";
 import { ParameterControls } from "../components/ParameterControls";
 import { CopyButton } from "../components/CopyButton";
 import { Seo } from "../components/Seo";
+import { ExpandingSearch } from "../components/interior/expanding-search";
+import { Ripple } from "../components/interior/ripple";
+import { Button } from "../components/ui/button";
 import { pathFor, siteUrl } from "../data/site";
 import { publisherStructuredData } from "../lib/structured-data";
 import type { Locale, ParamValue, ParamValues } from "../data/types";
@@ -287,23 +290,27 @@ export function FinderPage({ locale }: { locale: Locale }) {
         </div>
 
         <form className="finder-search apple-search-pill" role="search" onSubmit={handleSubmit}>
-          <label htmlFor="finder-query">{t("finder.formLabel")}</label>
+          <span className="sr-only">{t("finder.formLabel")}</span>
           <div className="finder-search-field">
-            <Search aria-hidden="true" size={20} strokeWidth={1.7} />
-            <input
+            <ExpandingSearch
               id="finder-query"
               name="q"
-              type="search"
-              autoComplete="off"
               disabled={!isHydrated}
               value={input}
-              onChange={(event) => setInput(event.currentTarget.value)}
+              onChange={setInput}
+              onSubmit={runFinder}
+              open
+              collapseOnBlur={false}
+              align="left"
+              label={t("finder.formLabel")}
+              clearLabel={t("catalog.clearSearch")}
               placeholder={t("finder.placeholder")}
+              className="interior-finder-search"
             />
-            <button type="submit" disabled={!isHydrated}>
+            <Button type="submit" variant="accent" disabled={!isHydrated}>
               {t("finder.submit")}
               <ArrowRight aria-hidden="true" size={16} />
-            </button>
+            </Button>
           </div>
         </form>
 
@@ -313,9 +320,9 @@ export function FinderPage({ locale }: { locale: Locale }) {
             {exampleKeys.map((key) => {
               const example = t(`finder.examples.${key}`);
               return (
-                <button type="button" key={key} onClick={() => runFinder(example)}>
+                <Ripple key={key} onPress={() => runFinder(example)} className="interior-example-chip">
                   {example}
-                </button>
+                </Ripple>
               );
             })}
           </div>

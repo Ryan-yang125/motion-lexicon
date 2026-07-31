@@ -1,10 +1,14 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Search, Sparkles } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Sparkles } from "lucide-react";
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
 import { pathFor } from "../data/site";
+import { ExpandingSearch } from "./interior/expanding-search";
+import { Ripple } from "./interior/ripple";
+import { CardLink } from "./interior/card-link";
+import { Button } from "./ui/button";
 
 const exampleKeys = ["weight", "continuity", "sequence"] as const;
 
@@ -39,22 +43,26 @@ export function Hero({ locale }: { locale: Locale }) {
         <p>{t("landing.heroCopy")}</p>
 
         <form className="apple-hero-finder" role="search" onSubmit={handleSubmit}>
-          <label htmlFor="home-finder-query">{t("finder.formLabel")}</label>
+          <span className="sr-only">{t("finder.formLabel")}</span>
           <div>
-            <Search aria-hidden="true" size={20} strokeWidth={1.7} />
-            <input
+            <ExpandingSearch
               id="home-finder-query"
               name="q"
-              type="search"
               value={query}
-              autoComplete="off"
-              onChange={(event) => setQuery(event.currentTarget.value)}
+              onChange={setQuery}
+              onSubmit={openFinder}
+              open
+              collapseOnBlur={false}
+              align="left"
+              label={t("finder.formLabel")}
+              clearLabel={t("catalog.clearSearch")}
               placeholder={t("landing.finderExample")}
+              className="interior-hero-search"
             />
-            <button type="submit">
+            <Button type="submit" variant="accent">
               <span>{t("landing.openFinder")}</span>
               <ArrowRight aria-hidden="true" size={17} strokeWidth={1.9} />
-            </button>
+            </Button>
           </div>
         </form>
 
@@ -62,9 +70,9 @@ export function Hero({ locale }: { locale: Locale }) {
           {exampleKeys.map((key) => {
             const example = t(`finder.examples.${key}`);
             return (
-              <button type="button" key={key} onClick={() => openFinder(example)}>
+              <Ripple key={key} onPress={() => openFinder(example)} className="interior-example-chip">
                 {example}
-              </button>
+              </Ripple>
             );
           })}
         </div>
@@ -76,7 +84,7 @@ export function Hero({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <Link
+      <CardLink
         className="library-hero-preview apple-hero-preview"
         to="/$locale/$categoryId/$recipeId/"
         params={{ locale, categoryId: "entrances", recipeId: "slide-in" }}
@@ -109,7 +117,7 @@ export function Hero({ locale }: { locale: Locale }) {
           <span>ease-out</span>
           <strong>{locale === "zh" ? "打开配方" : "Open recipe"}<ArrowRight aria-hidden="true" size={14} /></strong>
         </div>
-      </Link>
+      </CardLink>
     </section>
   );
 }

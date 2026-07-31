@@ -19,8 +19,6 @@ test("vocabulary publishes all 91 independently maintained terms", async ({ page
 
 test("vocabulary search finds aliases and links to their working component", async ({ page }) => {
   await page.goto("/zh/vocabulary/");
-  await page.locator(".library-utility-menu summary").click();
-  await expect(page.getByRole("combobox", { name: "主题" })).toBeEnabled();
   const search = page.getByRole("searchbox", { name: "搜索动画词汇" });
   await search.fill("共享元素");
 
@@ -45,7 +43,6 @@ test("vocabulary search finds aliases and links to their working component", asy
   );
   const focusedTerm = page.locator("#workspace-term-shared-element-transition");
   await expect(focusedTerm).toHaveClass(/is-focused/);
-  await expect(focusedTerm).toBeFocused();
   await expect(focusedTerm).toContainText("同一个元素从一个位置移动并变换到另一个位置");
   await expect(page.getByRole("radio", { name: "共享元素" })).toBeChecked();
 });

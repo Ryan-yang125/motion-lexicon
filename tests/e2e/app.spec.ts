@@ -49,13 +49,16 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
   await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();
 
   const output = page.locator(".apple-output-disclosure");
-  await expect(output).toHaveAttribute("open", "");
+  await expect(output).toHaveAttribute("data-open", "true");
+  await expect(output.getByRole("button", { name: "复制实现" })).toHaveAttribute("aria-expanded", "true");
   await expect(output.getByRole("tab")).toHaveCount(2);
-  await expect(output.getByRole("tab", { name: "提示词", exact: true })).toHaveAttribute(
+  const promptTab = output.getByRole("tab", { name: "提示词", exact: true });
+  const codeTab = output.getByRole("tab", { name: "代码", exact: true });
+  await expect(promptTab).toHaveAttribute(
     "aria-selected",
     "true"
   );
-  await expect(output.getByRole("tab", { name: "代码", exact: true })).toHaveAttribute(
+  await expect(codeTab).toHaveAttribute(
     "aria-selected",
     "false"
   );
@@ -65,7 +68,9 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
   await expect(page.getByTestId("prompt-output")).toContainText("260ms");
   await expect(page).toHaveURL(/duration=260/);
 
-  await output.getByRole("tab", { name: "代码", exact: true }).click();
+  await promptTab.focus();
+  await promptTab.press("ArrowRight");
+  await expect(codeTab).toHaveAttribute("aria-selected", "true");
   await expect(page).toHaveURL(/tab=code/);
   await expect(page.getByTestId("css-output")).toContainText("260ms");
   await expect(page.getByTestId("html-output")).toContainText('data-motion="slide-in"');
@@ -78,8 +83,64 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
 test("copy prompt button reports success", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/en/entrances/slide-in/");
-  await page.getByRole("button", { name: /Copy prompt/ }).first().click();
-  await expect(page.getByRole("button", { name: /Copied/ }).first()).toBeVisible();
+  const copyButton = page.getByRole("button", { name: /Copy prompt/ }).first();
+  await copyButton.click();
+  await expect(copyButton).toHaveAttribute("data-copy-state", "copied");
+  await expect(copyButton.getByRole("status")).toHaveText("Copied");
+});
+
+test("resource popover closes on Escape and restores trigger focus", async ({ page }) => {
+  await page.goto("/zh/");
+  const trigger = page.locator(".library-utility-trigger");
+
+  await trigger.focus();
+  await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("dialog", { name: "资源" })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("dialog", { name: "资源" })).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test("nested theme dropdown consumes its first Escape before the resource popover", async ({ page }) => {
+  await page.goto("/zh/");
+  const resources = page.locator(".library-utility-trigger");
+  await resources.click();
+
+  const theme = page.locator(".library-utility-popover .interior-theme-select > button");
+  await theme.click();
+  await expect(theme).toHaveAttribute("aria-expanded", "true");
+
+  await page.keyboard.press("Escape");
+  await expect(theme).toHaveAttribute("aria-expanded", "false");
+  await expect(resources).toHaveAttribute("aria-expanded", "true");
+  await expect(theme).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(resources).toHaveAttribute("aria-expanded", "false");
+  await expect(resources).toBeFocused();
+});
+
+test("recipe disclosures expose their expanded state and keep hidden content inert", async ({ page }) => {
+  await page.goto("/zh/sequencing/stagger/");
+  const implementation = page.locator("#implementation > [data-interior-disclosure]");
+  const trigger = implementation.getByRole("button", { name: "实现规则" });
+  const panel = implementation.locator("[role='region']");
+
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(panel).toHaveAttribute("aria-hidden", "true");
+
+  await trigger.click();
+  await expect(implementation).toHaveAttribute("data-open", "true");
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(panel).not.toHaveAttribute("aria-hidden", "true");
+  await expect(panel.locator(".library-guidance-list")).toBeVisible();
+
+  await trigger.click();
+  await expect(implementation).toHaveAttribute("data-open", "false");
+  await expect(panel).toHaveAttribute("aria-hidden", "true");
 });
 
 test("mobile route is readable without horizontal overflow", async ({ page }) => {
@@ -96,15 +157,18 @@ test("catalog category filters keep 44px touch targets", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
   await page.goto("/zh/catalog/?surface=components");
 
-  const filters = page.locator(".library-category-filter-options button");
-  await expect(filters.first()).toBeVisible();
-  const heights = await filters.evaluateAll((buttons) =>
+  const categoryFilter = page.locator(".library-category-filter-options");
+  const trigger = categoryFilter.getByRole("button");
+  await expect(trigger).toBeVisible();
+  const heights = await trigger.evaluateAll((buttons) =>
     buttons.map((button) => button.getBoundingClientRect().height)
   );
-  expect(heights.length).toBeGreaterThan(1);
   expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
-  await filters.nth(1).click();
+  await trigger.click();
+  const options = page.getByRole("listbox", { name: "全部条目" }).getByRole("option");
+  expect(await options.count()).toBeGreaterThan(1);
+  await options.nth(1).click();
   await expect(page).toHaveURL(/category=/);
 });
 
@@ -113,7 +177,7 @@ test("Chinese catalog surface tabs stay on one line with a compact live result s
   await page.goto("/zh/catalog/?surface=components");
 
   const surfaceTabs = page.locator(".library-surface-control.library-surface-tabs");
-  const labels = surfaceTabs.locator("button > span");
+  const labels = surfaceTabs.locator("[role='radio'] .interior-surface-option > span");
   await expect(labels).toHaveCount(3);
 
   const labelMetrics = await labels.evaluateAll((elements) =>
@@ -229,7 +293,7 @@ test("Apple product tokens control type, hierarchy, radii, and icon sizes", asyn
   });
 
   const navigationButton = page.locator(".library-surface-control button").first();
-  await expect(navigationButton).toHaveCSS("border-radius", "8px");
+  await expect(navigationButton).toHaveCSS("border-radius", "6px");
   await expect(navigationButton.locator("svg")).toHaveCSS("width", "14px");
   await expect(navigationButton.locator("svg")).toHaveCSS("height", "14px");
   await expect(page.locator(".library-card").first()).toHaveCSS("border-radius", "16px");
@@ -250,7 +314,7 @@ test("implementation guidance uses one motion timeline and reflows cleanly", asy
   test.skip(testInfo.project.name.includes("mobile"), "Desktop and mobile layouts are audited in one pass.");
   await page.setViewportSize({ width: 1200, height: 1000 });
   await page.goto("/zh/sequencing/stagger/");
-  await page.locator("#implementation summary").click();
+  await page.locator("#implementation").getByRole("button", { name: "实现规则" }).click();
 
   const timeline = page.locator("#implementation .library-guidance-list");
   const rows = timeline.locator(":scope > div");

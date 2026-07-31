@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
   Accessibility,
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Monitor,
@@ -23,6 +22,8 @@ import { CopyButton } from "./CopyButton";
 import { ExportPanel } from "./ExportPanel";
 import { MotionPreview } from "./MotionPreview";
 import { ParameterControls } from "./ParameterControls";
+import { Disclosure } from "./interior/disclosure";
+import { SegmentedControl } from "./interior/segmented-control";
 
 type RecipeWorkspaceProps = {
   locale: Locale;
@@ -159,9 +160,9 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
   const [reduced, setReduced] = useState(false);
   const [focusedTermId, setFocusedTermId] = useState(recipe.id);
   const [outputOpen, setOutputOpen] = useState(true);
+  const [vocabularyOpen, setVocabularyOpen] = useState(false);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const lastRequestedTermRef = useRef<string | null | undefined>(undefined);
-  const vocabularyDisclosureRef = useRef<HTMLDetailsElement>(null);
-  const advancedControlsRef = useRef<HTMLDetailsElement>(null);
   const SectionTitle = mode === "embedded" ? "h2" : "h1";
   const SectionHeading = mode === "embedded" ? "h3" : "h2";
   const DisclosureHeading = mode === "embedded" ? "h4" : "h3";
@@ -198,9 +199,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
       setFocusedTermId(validTerm ?? recipe.id);
 
       if (validTerm && lastRequestedTermRef.current !== validTerm) {
-        if (vocabularyDisclosureRef.current) {
-          vocabularyDisclosureRef.current.open = true;
-        }
+        setVocabularyOpen(true);
         window.requestAnimationFrame(() => {
           const target = document.getElementById(`workspace-term-${validTerm}`);
           target?.focus({ preventScroll: true });
@@ -218,9 +217,9 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
   }, [recipe.id]);
 
   useEffect(() => {
-    if (!inspectorRecipe.advanced || !advancedControlsRef.current) return;
+    if (!inspectorRecipe.advanced) return;
     const params = new URLSearchParams(window.location.search);
-    advancedControlsRef.current.open = inspectorRecipe.advanced.params.some((param) => params.has(param.id));
+    setAdvancedOpen(inspectorRecipe.advanced.params.some((param) => params.has(param.id)));
   }, [inspectorRecipe.advanced, recipe.id]);
 
   function writeViewState(nextDevice: DeviceWidth, nextReduced: boolean) {
@@ -284,30 +283,27 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
 
           {!isGuide ? (
             <div className="library-preview-toolbar apple-preview-toolbar">
-              <div className="library-device-switcher" aria-label={t("workspace.deviceLabel")}>
-                {deviceOptions.map(({ value, icon: Icon }) => (
-                  <button
-                    type="button"
-                    key={value}
-                    className={device === value ? "is-active" : undefined}
-                    aria-pressed={device === value}
-                    aria-label={t(`workspace.devices.${value}`)}
-                    onClick={() => writeViewState(value, reduced)}
-                  >
-                    <Icon aria-hidden="true" size={15} strokeWidth={1.8} />
-                  </button>
-                ))}
-              </div>
-              <label className="library-reduced-toggle">
-                <input
-                  type="checkbox"
-                  checked={reduced}
-                  onChange={(event) => writeViewState(device, event.currentTarget.checked)}
-                />
-                <span aria-hidden="true"><Check size={12} /></span>
-                <Accessibility aria-hidden="true" size={15} strokeWidth={1.8} />
-                {t("common.reducedMotion")}
-              </label>
+              <SegmentedControl
+                value={device}
+                onValueChange={(next) => writeViewState(next as DeviceWidth, reduced)}
+                label={t("workspace.deviceLabel")}
+                className="library-device-switcher interior-device-switcher"
+                options={deviceOptions.map(({ value, icon: Icon }) => ({
+                  value,
+                  ariaLabel: t(`workspace.devices.${value}`),
+                  label: <Icon aria-hidden="true" size={15} strokeWidth={1.8} />
+                }))}
+              />
+              <SegmentedControl
+                value={reduced ? "reduced" : "full"}
+                onValueChange={(next) => writeViewState(device, next === "reduced")}
+                label={t("common.reducedMotion")}
+                className="library-reduced-toggle interior-motion-mode"
+                options={[
+                  { value: "full", label: locale === "zh" ? "标准" : "Full" },
+                  { value: "reduced", label: locale === "zh" ? "减弱" : "Reduced" }
+                ]}
+              />
             </div>
           ) : null}
 
@@ -325,13 +321,19 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                   onReset={resetValues}
                 />
                 {inspectorRecipe.advanced ? (
-                  <details className="apple-inspector-disclosure" ref={advancedControlsRef}>
-                    <summary>
+                  <Disclosure
+                    className="apple-inspector-disclosure"
+                    summaryClassName="apple-inspector-disclosure-summary"
+                    bodyClassName="apple-inspector-disclosure-body"
+                    open={advancedOpen}
+                    onOpenChange={setAdvancedOpen}
+                    summary={(
+                      <>
                       <span>{labels.moreControls}</span>
                       <small>{inspectorRecipe.advanced.params.length}</small>
-                      <ChevronDown aria-hidden="true" size={16} strokeWidth={1.8} />
-                    </summary>
-                    <div className="apple-inspector-disclosure-body">
+                      </>
+                    )}
+                  >
                       <ParameterControls
                         locale={locale}
                         recipe={inspectorRecipe.advanced}
@@ -339,8 +341,7 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                         onChange={updateValue}
                         onReset={resetValues}
                       />
-                    </div>
-                  </details>
+                  </Disclosure>
                 ) : null}
               </aside>
             ) : null}
@@ -348,19 +349,16 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
         </section>
 
         {!isGuide ? (
-          <details
+          <Disclosure
             className="apple-disclosure apple-output-disclosure"
             open={outputOpen}
-            onToggle={(event) => setOutputOpen(event.currentTarget.open)}
+            onOpenChange={setOutputOpen}
+            summaryClassName="apple-disclosure-summary"
+            bodyClassName="apple-disclosure-body apple-output-body"
+            summary={<strong>{labels.output}</strong>}
           >
-            <summary className="apple-disclosure-summary">
-              <strong>{labels.output}</strong>
-              <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-            </summary>
-            <div className="apple-disclosure-body apple-output-body">
               <ExportPanel locale={locale} recipe={recipe} values={values} />
-            </div>
-          </details>
+          </Disclosure>
         ) : null}
 
         <section className="apple-reference-library" aria-labelledby="reference-library-title">
@@ -369,12 +367,14 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           </header>
 
           <section className="library-content-section apple-reference-section" id="understand" aria-labelledby="understand-summary-title">
-            <details className="apple-disclosure" ref={vocabularyDisclosureRef}>
-              <summary className="apple-disclosure-summary">
-                <strong id="understand-summary-title">{labels.understand}</strong>
-                <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-              </summary>
-              <div className="apple-disclosure-body">
+            <Disclosure
+              className="apple-disclosure"
+              open={vocabularyOpen}
+              onOpenChange={setVocabularyOpen}
+              summaryClassName="apple-disclosure-summary"
+              bodyClassName="apple-disclosure-body"
+              summary={<strong id="understand-summary-title">{labels.understand}</strong>}
+            >
                 <section className="apple-reference-topic" aria-labelledby="vocabulary-title">
                   <header className="apple-reference-topic-heading">
                     <DisclosureHeading id="vocabulary-title">{labels.vocabularyTitle}</DisclosureHeading>
@@ -418,17 +418,16 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                     <ChevronRight aria-hidden="true" size={15} />
                   </Link>
                 </section>
-              </div>
-            </details>
+            </Disclosure>
           </section>
 
           <section className="library-content-section apple-reference-section" id="implementation" aria-labelledby="implementation-summary-title">
-            <details className="apple-disclosure">
-              <summary className="apple-disclosure-summary">
-                <strong id="implementation-summary-title">{labels.implementation}</strong>
-                <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-              </summary>
-              <div className="apple-disclosure-body apple-implementation-body">
+            <Disclosure
+              className="apple-disclosure"
+              summaryClassName="apple-disclosure-summary"
+              bodyClassName="apple-disclosure-body apple-implementation-body"
+              summary={<strong id="implementation-summary-title">{labels.implementation}</strong>}
+            >
                 {guidance ? (
                   <section className="apple-reference-topic" aria-labelledby="decision-title">
                     <header className="apple-reference-topic-heading">
@@ -495,25 +494,23 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                     </div>
                   </section>
                 ) : null}
-              </div>
-            </details>
+            </Disclosure>
           </section>
 
           <section className="library-content-section apple-reference-section" id="review" aria-labelledby="review-summary-title">
-            <details className="apple-disclosure">
-              <summary className="apple-disclosure-summary">
-                <strong id="review-summary-title">{labels.review}</strong>
-                <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-              </summary>
-              <div className="apple-disclosure-body">
+            <Disclosure
+              className="apple-disclosure"
+              summaryClassName="apple-disclosure-summary"
+              bodyClassName="apple-disclosure-body"
+              summary={<strong id="review-summary-title">{labels.review}</strong>}
+            >
                 <DisclosureHeading className="sr-only" id="review-title">{t("workspace.reviewTitle")}</DisclosureHeading>
                 <ul className="library-check-list">
                   {recipe.reviewNotes.map((item) => (
                     <li key={text(item, locale)}><Check aria-hidden="true" size={15} />{text(item, locale)}</li>
                   ))}
                 </ul>
-              </div>
-            </details>
+            </Disclosure>
           </section>
         </section>
 

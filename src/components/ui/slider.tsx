@@ -1,27 +1,42 @@
-import * as React from "react";
-import * as SliderPrimitive from "@radix-ui/react-slider";
+import { SliderDetents } from "../interior/slider-detents";
 import { cn } from "../../lib/utils";
 
-type SliderProps = React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+type SliderProps = {
+  value: number[];
+  min?: number;
+  max?: number;
+  step?: number;
+  onValueChange?: (value: number[]) => void;
   thumbAriaLabel?: string;
   thumbAriaValueText?: string;
+  className?: string;
+  disabled?: boolean;
 };
 
-const Slider = React.forwardRef<
-  React.ElementRef<typeof SliderPrimitive.Root>,
-  SliderProps
->(({ className, thumbAriaLabel, thumbAriaValueText, ...props }, ref) => (
-  <SliderPrimitive.Root ref={ref} className={cn("ml-slider", className)} {...props}>
-    <SliderPrimitive.Track className="ml-slider-track">
-      <SliderPrimitive.Range className="ml-slider-range" />
-    </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb
-      className="ml-slider-thumb"
-      aria-label={thumbAriaLabel}
-      aria-valuetext={thumbAriaValueText}
+export function Slider({
+  value,
+  min = 0,
+  max = 100,
+  step = 1,
+  onValueChange,
+  thumbAriaLabel,
+  thumbAriaValueText,
+  className,
+  disabled
+}: SliderProps) {
+  return (
+    <SliderDetents
+      value={value[0] ?? min}
+      min={min}
+      max={max}
+      step={step}
+      onValueChange={(next) => onValueChange?.([next])}
+      label={thumbAriaLabel}
+      format={() => thumbAriaValueText ?? String(value[0] ?? min)}
+      showValue={false}
+      disabled={disabled}
+      haptic
+      className={cn("ml-slider interior-slider", className)}
     />
-  </SliderPrimitive.Root>
-));
-Slider.displayName = SliderPrimitive.Root.displayName;
-
-export { Slider };
+  );
+}

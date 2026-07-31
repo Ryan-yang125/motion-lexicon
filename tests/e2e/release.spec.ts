@@ -75,7 +75,7 @@ test("legacy output tab URLs open the consolidated code view", async ({ page }) 
     await page.goto(`/zh/springs/spring/?tab=${legacyTab}`);
 
     const disclosure = page.locator(".apple-output-disclosure");
-    await expect(disclosure).toHaveAttribute("open", "");
+    await expect(disclosure).toHaveAttribute("data-open", "true");
     await expect(disclosure.getByRole("tab")).toHaveCount(2);
     await expect(disclosure.getByRole("tab", { name: "代码" })).toHaveAttribute("aria-selected", "true");
     await expect(page.getByTestId("code-output-bundle")).toBeVisible();
@@ -575,7 +575,7 @@ test("all canonical catalog entries expose a working surface contract", async ({
       const promptTab = disclosure.getByRole("tab", { name: "提示词" });
       const codeTab = disclosure.getByRole("tab", { name: "代码" });
 
-      await expect(disclosure).toHaveAttribute("open", "");
+      await expect(disclosure).toHaveAttribute("data-open", "true");
       await expect(disclosure.getByRole("tab")).toHaveCount(2);
       await expect(promptTab).toHaveAttribute("aria-selected", "true");
       await expect(page.getByTestId("prompt-output")).toBeVisible();

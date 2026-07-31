@@ -5,7 +5,7 @@ import { text } from "../data/site";
 import { clampToStep, getParamDisplayValue } from "../lib/motion-engine";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
-import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { SegmentedControl } from "./interior/segmented-control";
 
 type ParameterControlsProps = {
   locale: Locale;
@@ -71,9 +71,7 @@ export function ParameterControls({
                   />
                   <span>{param.unit}</span>
                 </label>
-              ) : (
-                <span className="control-value">{visibleValue}</span>
-              )}
+              ) : null}
             </div>
             <p className="control-description">{text(param.description, locale)}</p>
             {param.kind === "range" ? (
@@ -88,34 +86,32 @@ export function ParameterControls({
               />
             ) : null}
             {param.kind === "segmented" ? (
-              <ToggleGroup
-                type="single"
+              <SegmentedControl
                 value={String(value)}
+                label={label}
+                className="ml-toggle-group interior-parameter-segment"
+                options={param.options.map((option) => ({
+                  value: option.value,
+                  label: text(option.label, locale)
+                }))}
                 onValueChange={(next) => {
                   if (next) {
                     onChange(param.id, next);
                   }
                 }}
-                aria-label={label}
-              >
-                {param.options.map((option) => (
-                  <ToggleGroupItem key={option.value} value={option.value} aria-label={text(option.label, locale)}>
-                    {text(option.label, locale)}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
+              />
             ) : null}
             {param.kind === "toggle" ? (
-              <label className="control-switch" htmlFor={controlId}>
-                <input
-                  id={controlId}
-                  type="checkbox"
-                  checked={Boolean(value)}
-                  onChange={(event) => onChange(param.id, event.currentTarget.checked)}
-                />
-                <span aria-hidden="true"><i /></span>
-                <strong>{visibleValue}</strong>
-              </label>
+              <SegmentedControl
+                value={value ? "on" : "off"}
+                label={label}
+                className="control-switch interior-toggle-switch"
+                options={[
+                  { value: "off", label: locale === "zh" ? "关闭" : "Off" },
+                  { value: "on", label: locale === "zh" ? "开启" : "On" }
+                ]}
+                onValueChange={(next) => onChange(param.id, next === "on")}
+              />
             ) : null}
           </div>
         );

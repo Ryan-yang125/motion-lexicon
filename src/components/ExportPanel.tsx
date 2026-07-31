@@ -11,7 +11,7 @@ import {
   getRecipeTeachingNotice
 } from "../lib/motion-engine";
 import { CopyButton } from "./CopyButton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs } from "./interior/tabs";
 
 type ExportPanelProps = {
   locale: Locale;
@@ -64,6 +64,31 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
     ].filter(Boolean).join("\n\n"),
     [css, html, js]
   );
+  const tabItems = useMemo(
+    () => [
+      {
+        value: "prompt",
+        ariaLabel: labels.prompt,
+        label: (
+          <span className="interior-tab-label">
+            <MessageSquareText aria-hidden="true" size={14} strokeWidth={1.8} />
+            {labels.prompt}
+          </span>
+        )
+      },
+      {
+        value: "code",
+        ariaLabel: labels.code,
+        label: (
+          <span className="interior-tab-label">
+            <Code2 aria-hidden="true" size={14} strokeWidth={1.8} />
+            {labels.code}
+          </span>
+        )
+      }
+    ],
+    [labels.code, labels.prompt]
+  );
 
   useEffect(() => {
     const timeout = window.setTimeout(() => setTab(readExportTab()), 0);
@@ -88,46 +113,41 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
   return (
     <section className="library-export" id="exports" aria-label={t("workspace.outputTitle")}>
       <div className="library-code-panel apple-code-output">
-        <Tabs value={tab} onValueChange={changeTab}>
-          <div className="library-code-toolbar">
-            <TabsList aria-label={t("workspace.outputTabsLabel")}>
-              <TabsTrigger value="prompt">
-                <MessageSquareText aria-hidden="true" size={14} strokeWidth={1.8} />
-                {labels.prompt}
-              </TabsTrigger>
-              <TabsTrigger value="code">
-                <Code2 aria-hidden="true" size={14} strokeWidth={1.8} />
-                {labels.code}
-              </TabsTrigger>
-            </TabsList>
-            {teachingNotice ? (
-              <span className="library-code-status" role="note">{teachingNotice}</span>
-            ) : null}
-          </div>
-
-          <TabsContent value="prompt" className="library-prompt-content">
-            <p data-testid="prompt-output">{prompt}</p>
-          </TabsContent>
-
-          <TabsContent value="code" className="library-code-bundle">
-            <div className="library-code-filebar library-code-bundle-toolbar">
-              <CopyButton
-                label={labels.copyAllCode}
-                getText={() => codeBundle}
-                variant="ghost"
-                size="sm"
-              />
+        <Tabs
+          items={tabItems}
+          value={tab}
+          onValueChange={changeTab}
+          label={t("workspace.outputTabsLabel")}
+          className="interior-output-tabs"
+          panelClassName="interior-output-panel"
+          renderPanel={(activeTab) => activeTab === "prompt" ? (
+            <div className="library-prompt-content">
+              {teachingNotice ? (
+                <span className="library-code-status" role="note">{teachingNotice}</span>
+              ) : null}
+              <p data-testid="prompt-output">{prompt}</p>
             </div>
-            <div className="library-code-files" data-testid="code-output-bundle">
-              {codeFiles.map((file) => (
-                <section className="library-code-file" key={file.id}>
-                  <header>{file.filename}</header>
-                  <pre data-testid={`${file.id}-output`}><code>{file.content}</code></pre>
-                </section>
-              ))}
+          ) : (
+            <div className="library-code-bundle">
+              <div className="library-code-filebar library-code-bundle-toolbar">
+                <CopyButton
+                  label={labels.copyAllCode}
+                  getText={() => codeBundle}
+                  variant="ghost"
+                  size="sm"
+                />
+              </div>
+              <div className="library-code-files" data-testid="code-output-bundle">
+                {codeFiles.map((file) => (
+                  <section className="library-code-file" key={file.id}>
+                    <header>{file.filename}</header>
+                    <pre data-testid={`${file.id}-output`}><code>{file.content}</code></pre>
+                  </section>
+                ))}
+              </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          )}
+        />
       </div>
     </section>
   );

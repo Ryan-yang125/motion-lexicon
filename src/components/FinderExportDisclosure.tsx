@@ -1,8 +1,8 @@
-import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale, MotionRecipe, ParamValues } from "../data/types";
 import { ExportPanel } from "./ExportPanel";
+import { Disclosure } from "./interior/disclosure";
 
 type FinderExportDisclosureProps = {
   locale: Locale;
@@ -34,21 +34,19 @@ export function FinderExportDisclosure({
   }, [recipe.id]);
 
   return (
-    <details
+    <Disclosure
       className={`finder-export-disclosure apple-export-disclosure ${
         isOpen ? "is-open" : "is-closed"
       }`}
+      summaryClassName="finder-export-summary"
+      bodyClassName="finder-export-body"
       open={isOpen}
-      onToggle={(event) => setIsOpen(event.currentTarget.open)}
+      onOpenChange={setIsOpen}
+      controls="exports"
+      label={`${toggleLabel}: ${t("workspace.outputTitle")}`}
+      summary={<strong>{t("workspace.outputTitle")}</strong>}
     >
-      <summary
-        aria-controls="exports"
-        aria-label={`${toggleLabel}: ${t("workspace.outputTitle")}`}
-      >
-        <strong>{t("workspace.outputTitle")}</strong>
-        <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
-      </summary>
       <ExportPanel locale={locale} recipe={recipe} values={values} />
-    </details>
+    </Disclosure>
   );
 }

@@ -126,6 +126,8 @@ Motion Lexicon 以静态网站运行，完整公共产品永久免费。浏览�
 - 源代码：[MIT](./LICENSE)
 - 项目原创内容与数据：[CC BY 4.0](./CONTENT-LICENSE)
 - 生成的代码片段：[0BSD](./CONTENT-LICENSE)
+- 交互组件：[Interior](https://github.com/ddoemonn/interior)，按 MIT
+  许可证改造，署名与许可正文见 [NOTICE](./NOTICE)
 
 ## 当前版本
 
@@ -158,7 +160,7 @@ Motion Lexicon 以静态网站运行，完整公共产品永久免费。浏览�
 
 ### 构建与静态交付
 
-Motion Lexicon 使用 React、TypeScript、Vite、TanStack Router 和 i18next。生产构建依次执行：
+Motion Lexicon 使用 React、TypeScript、Vite、Motion、TanStack Router 和 i18next。生产构建依次执行：
 
 ```text
 tsc -b
