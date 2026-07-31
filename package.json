@@ -66,7 +66,7 @@
     "motion:check": "tsx scripts/check-motion.ts",
     "assets:brand": "tsx scripts/generate-brand-assets.ts",
     "artifacts:generate": "tsx scripts/generate-public-artifacts.ts",
-    "artifacts:check": "npm run artifacts:generate && git diff --exit-code -- public/data/v1 public/llms.txt public/llms-full.txt public/pricing.txt",
+    "artifacts:check": "tsx scripts/check-public-artifacts.ts",
     "a11y:check": "tsx scripts/check-a11y.ts",
     "bundle:check": "tsx scripts/check-bundle.ts",
     "crawl:dist": "tsx scripts/crawl-dist.ts",
