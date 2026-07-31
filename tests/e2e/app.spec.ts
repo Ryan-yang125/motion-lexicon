@@ -4,13 +4,22 @@ test("desktop landing page renders without horizontal overflow", async ({ page }
   await page.goto("/zh/");
   await expect(page).toHaveTitle(/Motion Lexicon/);
   await expect(page.getByRole("heading", { name: /说出你要的感觉/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /开始描述动效/ })).toBeVisible();
+  await expect(page.getByRole("searchbox", { name: "描述你想要的动效" })).toBeVisible();
   await expect(page.locator(".library-card")).toHaveCount(3);
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     return document.documentElement.scrollWidth > window.innerWidth;
   });
   expect(hasHorizontalOverflow).toBe(false);
+});
+
+test("landing Interior search submits directly to Finder", async ({ page }) => {
+  await page.goto("/zh/");
+  const search = page.getByRole("searchbox", { name: "描述你想要的动效" });
+  await search.fill("卡片切入后慢慢停下来");
+  await search.press("Enter");
+  await expect(page).toHaveURL(/\/zh\/finder\/\?q=/);
+  await expect(page).toHaveURL(/%E5%8D%A1%E7%89%87/);
 });
 
 test("english landing page renders english copy", async ({ page }) => {
@@ -54,6 +63,7 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
   await expect(output.getByRole("tab")).toHaveCount(2);
   const promptTab = output.getByRole("tab", { name: "提示词", exact: true });
   const codeTab = output.getByRole("tab", { name: "代码", exact: true });
+  await expect(output.getByRole("button", { name: "复制提示词", exact: true })).toBeVisible();
   await expect(promptTab).toHaveAttribute(
     "aria-selected",
     "true"
@@ -72,6 +82,8 @@ test("recipe output opens on Prompt, exposes only Prompt and Code, and stays in 
   await promptTab.press("ArrowRight");
   await expect(codeTab).toHaveAttribute("aria-selected", "true");
   await expect(page).toHaveURL(/tab=code/);
+  await expect(output.getByRole("button", { name: "复制全部代码", exact: true })).toBeVisible();
+  await expect(output.locator(".library-code-bundle-toolbar")).toHaveCount(0);
   await expect(page.getByTestId("css-output")).toContainText("260ms");
   await expect(page.getByTestId("html-output")).toContainText('data-motion="slide-in"');
 
@@ -166,7 +178,7 @@ test("catalog category filters keep 44px touch targets", async ({ page }) => {
   expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
 
   await trigger.click();
-  const options = page.getByRole("listbox", { name: "全部条目" }).getByRole("option");
+  const options = page.getByRole("listbox", { name: "分类" }).getByRole("option");
   expect(await options.count()).toBeGreaterThan(1);
   await options.nth(1).click();
   await expect(page).toHaveURL(/category=/);
@@ -304,7 +316,7 @@ test("Apple product tokens control type, hierarchy, radii, and icon sizes", asyn
   await expect(cardIcon).toHaveCSS("height", "20px");
 
   await page.goto("/zh/entrances/slide-in/");
-  await expect(page.locator(".apple-recipe-primary-action .ml-button")).toHaveCSS(
+  await expect(page.locator(".interior-tabs-action .ml-button")).toHaveCSS(
     "border-radius",
     "999px"
   );

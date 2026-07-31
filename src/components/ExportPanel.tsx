@@ -1,4 +1,3 @@
-import { Code2, MessageSquareText } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -41,12 +40,14 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
     ? {
         prompt: "提示词",
         code: "代码",
-        copyAllCode: "复制全部代码"
+        copyAllCode: "复制全部代码",
+        copyFailed: "复制失败"
       }
     : {
         prompt: "Prompt",
         code: "Code",
-        copyAllCode: "Copy all code"
+        copyAllCode: "Copy all code",
+        copyFailed: "Copy failed"
       };
   const codeFiles = useMemo(
     () => [
@@ -69,22 +70,12 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
       {
         value: "prompt",
         ariaLabel: labels.prompt,
-        label: (
-          <span className="interior-tab-label">
-            <MessageSquareText aria-hidden="true" size={14} strokeWidth={1.8} />
-            {labels.prompt}
-          </span>
-        )
+        label: <span className="interior-tab-label">{labels.prompt}</span>
       },
       {
         value: "code",
         ariaLabel: labels.code,
-        label: (
-          <span className="interior-tab-label">
-            <Code2 aria-hidden="true" size={14} strokeWidth={1.8} />
-            {labels.code}
-          </span>
-        )
+        label: <span className="interior-tab-label">{labels.code}</span>
       }
     ],
     [labels.code, labels.prompt]
@@ -120,6 +111,15 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
           label={t("workspace.outputTabsLabel")}
           className="interior-output-tabs"
           panelClassName="interior-output-panel"
+          toolbar={(
+            <CopyButton
+              label={tab === "prompt" ? t("common.copyPrompt") : labels.copyAllCode}
+              getText={() => tab === "prompt" ? prompt : codeBundle}
+              errorLabel={labels.copyFailed}
+              variant="accent"
+              size="sm"
+            />
+          )}
           renderPanel={(activeTab) => activeTab === "prompt" ? (
             <div className="library-prompt-content">
               {teachingNotice ? (
@@ -129,14 +129,6 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
             </div>
           ) : (
             <div className="library-code-bundle">
-              <div className="library-code-filebar library-code-bundle-toolbar">
-                <CopyButton
-                  label={labels.copyAllCode}
-                  getText={() => codeBundle}
-                  variant="ghost"
-                  size="sm"
-                />
-              </div>
               <div className="library-code-files" data-testid="code-output-bundle">
                 {codeFiles.map((file) => (
                   <section className="library-code-file" key={file.id}>

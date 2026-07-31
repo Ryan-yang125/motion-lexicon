@@ -195,7 +195,16 @@ a,
   width: 36px;
 }
 
-.apple-hero-finder > div,
+.apple-hero-finder > .interior-hero-search {
+  min-height: 44px;
+  display: block;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .apple-search-pill .finder-search-field {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
@@ -207,14 +216,18 @@ a,
   box-shadow: var(--interior-shadow);
 }
 
-.apple-hero-finder > div:focus-within,
+.apple-hero-finder > .interior-hero-search:focus-within {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
 .apple-search-pill .finder-search-field:focus-within {
   border-color: var(--interior-focus);
   outline: 0;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--interior-focus) 26%, transparent), var(--interior-shadow);
 }
 
-.apple-hero-finder > div > .ml-button,
 .apple-search-pill .finder-search-field > .ml-button {
   min-width: max-content;
   min-height: 44px;
@@ -294,6 +307,15 @@ a,
   border-radius: 6px;
 }
 
+.library-device-switcher.interior-device-switcher button:hover {
+  background: transparent;
+}
+
+.interior-device-switcher,
+.interior-motion-mode {
+  align-self: center;
+}
+
 .control-switch.interior-toggle-switch,
 .ml-toggle-group.interior-parameter-segment {
   width: 100%;
@@ -306,9 +328,15 @@ a,
   min-height: 44px;
 }
 
+.ml-toggle-group.interior-parameter-segment .interior-segment-option.is-selected {
+  color: var(--apple-action-fg);
+  background: var(--apple-action-bg);
+}
+
 .ml-slider.interior-slider {
-  height: auto;
-  display: block;
+  height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .ml-slider.interior-slider [role="slider"] {
@@ -353,7 +381,8 @@ a,
 }
 
 .interior-theme-select {
-  display: inline-block;
+  width: 100%;
+  display: block;
   border: 0;
   padding: 0;
   background: transparent;
@@ -370,8 +399,8 @@ a,
 }
 
 .interior-theme-select > div {
-  inset-inline: auto 0;
-  min-width: 180px;
+  inset-inline: auto;
+  min-width: 0;
 }
 
 /* Catalog filtering and cards */
@@ -557,21 +586,66 @@ a,
 }
 
 .interior-output-tabs {
-  border-color: var(--interior-line);
-  border-radius: 12px;
-  background: var(--interior-panel);
-  box-shadow: var(--interior-shadow);
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.interior-output-tabs > [role="tablist"] {
-  min-height: 48px;
-  border-color: var(--interior-line);
+.interior-output-tabs > .interior-tabs-toolbar {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.interior-output-tabs > .interior-tabs-toolbar > [role="tablist"] {
+  width: fit-content;
+  min-height: 44px;
+  flex: 0 0 auto;
+  gap: 3px;
+  border: 0;
+  border-radius: 8px;
+  padding: 3px;
   background: var(--interior-well);
 }
 
-.interior-output-tabs [role="tab"] {
+.interior-output-tabs .interior-tabs-action {
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.interior-output-tabs .interior-tabs-action .ml-button {
   min-height: 44px;
+  border: 0;
+  border-radius: var(--ui-radius-cta);
+  padding-inline: 16px;
+  color: var(--apple-action-fg);
+  background: var(--apple-action-bg);
+  white-space: nowrap;
+}
+
+.interior-output-tabs .interior-tabs-action .ml-button:hover {
+  background: var(--apple-action-hover);
+}
+
+.interior-output-tabs [role="tab"] {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 6px;
+  padding-inline: 14px;
   font-size: 13px;
+}
+
+.interior-output-tabs [role="tab"][aria-selected="true"] {
+  border: 0;
+  border-radius: 6px;
+  background: var(--interior-panel);
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.12);
 }
 
 .interior-tab-label {
@@ -582,6 +656,24 @@ a,
 
 .interior-output-panel {
   min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--interior-line);
+  border-radius: 12px;
+  background: var(--interior-panel);
+}
+
+@media (max-width: 520px) {
+  .interior-output-tabs > .interior-tabs-toolbar {
+    gap: 8px;
+  }
+
+  .interior-output-tabs [role="tab"] {
+    padding-inline: 10px;
+  }
+
+  .interior-output-tabs .interior-tabs-action .ml-button {
+    padding-inline: 12px;
+  }
 }
 
 .apple-code-output .library-code-status {
@@ -655,7 +747,6 @@ a,
     width: 100%;
   }
 
-  .apple-hero-finder > div,
   .apple-search-pill .finder-search-field {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -680,7 +771,6 @@ a,
     height: 16px;
   }
 
-  .apple-hero-finder > div > .ml-button,
   .apple-search-pill .finder-search-field > .ml-button {
     width: 100%;
   }

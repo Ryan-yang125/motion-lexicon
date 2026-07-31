@@ -38,8 +38,10 @@ export function ThemeLanguageControls({ locale }: ControlsProps) {
         }))}
         value={mounted ? theme : "system"}
         onChange={(value) => setTheme(value as ThemeMode)}
-        label={t(`common.${mounted ? theme : "system"}`)}
+        label={t("common.theme")}
+        placeholder={t("common.system")}
         disabled={!mounted}
+        inline
         className="theme-select interior-theme-select"
       />
     </div>

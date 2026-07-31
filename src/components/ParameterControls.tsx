@@ -15,6 +15,15 @@ type ParameterControlsProps = {
   onReset: () => void;
 };
 
+function segmentedColumnCount(labels: string[]) {
+  const count = labels.length;
+  const longest = Math.max(0, ...labels.map((label) => label.length));
+  if (longest > 14) return Math.min(2, count);
+  if (longest > 8) return Math.min(3, count);
+  if (count > 4) return Math.min(4, Math.ceil(count / 2));
+  return count;
+}
+
 export function ParameterControls({
   locale,
   recipe,
@@ -49,6 +58,9 @@ export function ParameterControls({
         const label = text(param.label, locale);
         const visibleValue = displayValue(param, value);
         const controlId = `motion-control-${recipe.id}-${param.id}`;
+        const segmentedLabels = param.kind === "segmented"
+          ? param.options.map((option) => text(option.label, locale))
+          : [];
         return (
           <div className="control" key={param.id}>
             <div className="control-head">
@@ -89,6 +101,7 @@ export function ParameterControls({
               <SegmentedControl
                 value={String(value)}
                 label={label}
+                columns={segmentedColumnCount(segmentedLabels)}
                 className="ml-toggle-group interior-parameter-segment"
                 options={param.options.map((option) => ({
                   value: option.value,

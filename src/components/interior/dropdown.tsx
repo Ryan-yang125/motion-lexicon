@@ -270,6 +270,7 @@ export type DropdownProps = {
   disabled?: boolean;
   emptyLabel?: string;
   className?: string;
+  inline?: boolean;
 };
 
 export function Dropdown({
@@ -282,6 +283,7 @@ export function Dropdown({
   disabled = false,
   emptyLabel = "Nothing to choose",
   className = "",
+  inline = false,
 }: DropdownProps) {
   const reduced = useReducedMotion();
   const {
@@ -298,7 +300,11 @@ export function Dropdown({
   const cell = reduced ? NONE : CELL;
 
   return (
-    <div ref={rootRef} className={`relative inline-block text-left ${className}`}>
+    <div
+      ref={rootRef}
+      data-open={open ? "" : undefined}
+      className={`${inline ? "block" : "relative inline-block"} text-left ${className}`}
+    >
       <button
         {...triggerProps}
         className={`flex h-9 select-none items-center gap-2 whitespace-nowrap rounded-[9px] border border-stone-200 bg-white px-3 text-[13px] font-medium text-stone-700 outline-none transition-[box-shadow,border-color] duration-150 disabled:opacity-50 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-200 ${
@@ -310,7 +316,7 @@ export function Dropdown({
         <span className="sr-only">
           {label}: {selectedItem ? selectedItem.label : placeholder}
         </span>
-        <span aria-hidden>{label}</span>
+        <span aria-hidden>{selectedItem?.label ?? placeholder}</span>
         <motion.svg
           aria-hidden
           viewBox="0 0 12 12"
@@ -349,7 +355,7 @@ export function Dropdown({
                 : { ...OPEN, opacity: { duration: 0.12, ease: EASE } }
             }
             style={{ transformOrigin: "top left" }}
-            className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-[224px] whitespace-nowrap rounded-[11px] border border-stone-200 bg-white p-[5px] shadow-[0_1px_2px_rgba(28,25,23,0.06),0_16px_36px_-18px_rgba(28,25,23,0.5)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
+            className={`${inline ? "relative mt-1 w-full" : "absolute left-0 top-[calc(100%+6px)]"} z-50 min-w-[224px] whitespace-nowrap rounded-[11px] border border-stone-200 bg-white p-[5px] shadow-[0_1px_2px_rgba(28,25,23,0.06),0_16px_36px_-18px_rgba(28,25,23,0.5)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:shadow-[0_2px_12px_rgba(0,0,0,0.6)]`}
           >
             <ul
               {...listProps}

@@ -5,11 +5,15 @@ import { buttonVariants, type ButtonProps } from "./ui/button";
 type CopyButtonProps = Pick<ButtonProps, "className" | "variant" | "size" | "disabled"> & {
   getText: () => string;
   label: string;
+  copiedLabel?: string;
+  errorLabel?: string;
 };
 
 export function CopyButton({
   getText,
   label,
+  copiedLabel,
+  errorLabel,
   className,
   variant,
   size,
@@ -21,8 +25,8 @@ export function CopyButton({
     <InteriorCopyButton
       value={getText}
       label={label}
-      copiedLabel={t("common.copied")}
-      errorLabel={t("common.copyFailed")}
+      copiedLabel={copiedLabel ?? t("common.copied")}
+      errorLabel={errorLabel ?? t("common.copyFailed")}
       timeout={2200}
       disabled={disabled}
       className={buttonVariants({ variant, size, className })}

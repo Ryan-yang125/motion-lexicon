@@ -208,33 +208,13 @@ summary {
   margin-top: 2.2rem;
 }
 
-.apple-hero-finder > label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.apple-hero-finder > div {
-  min-height: 64px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.8rem;
-  border: 1px solid var(--apple-control-line);
-  border-radius: var(--ui-radius-card);
-  padding: 0.45rem 0.45rem 0.45rem 1rem;
-  background: var(--apple-surface);
-  box-shadow: none;
-  transition: border-color 160ms ease, background-color 160ms ease;
-}
-
-.apple-hero-finder > div:focus-within {
-  border-color: var(--apple-blue);
-  outline: 2px solid var(--apple-blue);
-  outline-offset: 2px;
+.apple-hero-finder > .interior-hero-search {
+  width: 100%;
+  min-height: 44px;
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
   box-shadow: none;
 }
 
@@ -254,26 +234,6 @@ summary {
 
 .apple-hero-finder input::placeholder {
   color: var(--apple-secondary);
-}
-
-.apple-hero-finder button {
-  min-height: 50px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  border: 0;
-  border-radius: var(--ui-radius-cta);
-  padding: 0 1.05rem;
-  color: var(--apple-action-fg);
-  background: var(--apple-action-bg);
-  font-size: 0.88rem;
-  font-weight: 650;
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--apple-ink) 18%, transparent);
-}
-
-.apple-hero-finder button:hover {
-  background: var(--apple-action-hover);
 }
 
 .apple-hero-examples {
@@ -632,17 +592,6 @@ summary {
     line-height: 1.62;
   }
 
-  .apple-hero-finder > div {
-    grid-template-columns: auto 1fr;
-    gap: 0.6rem;
-    padding: 0.45rem 0.55rem 0.55rem 0.9rem;
-  }
-
-  .apple-hero-finder button {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
-
   .apple-hero-examples {
     display: grid;
   }
@@ -724,7 +673,7 @@ summary {
 }
 
 @media (prefers-contrast: more) {
-  .apple-hero-finder > div,
+  .apple-hero-finder .interior-hero-search > div,
   .apple-hero-preview.library-hero-preview,
   .apple-motion-card.library-card {
     border: 1px solid currentColor;
@@ -1773,13 +1722,13 @@ summary {
 }
 
 .apple-recipe-hero.library-entry-header {
-  min-height: 280px;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: 2rem;
   border: 0;
-  padding: 3.2rem 0 3.5rem;
+  padding: 1.5rem 0 2.5rem;
 }
 
 .apple-recipe-identity {
@@ -1872,18 +1821,20 @@ summary {
 
 .apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar {
   min-height: 52px;
+  align-items: center;
   border: 1px solid var(--apple-line);
   border-bottom: 0;
   border-radius: var(--ui-radius-card) var(--ui-radius-card) 0 0;
-  padding: 0 0.55rem;
+  padding: 4px 0.5rem;
   background: color-mix(in srgb, var(--apple-surface-raised) 82%, transparent);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
 
-.apple-workbench-stage .library-device-switcher {
+.apple-workbench-stage .library-device-switcher,
+.apple-workbench-stage .library-reduced-toggle {
   border-radius: var(--ui-radius-nav);
-  padding: 0.15rem;
+  padding: 3px;
   background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
 }
 
@@ -1899,9 +1850,11 @@ summary {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.apple-workbench-stage .library-reduced-toggle {
+.apple-workbench-stage .library-reduced-toggle button {
+  min-width: 58px;
+  height: 44px;
+  padding-inline: 12px;
   border-radius: var(--ui-radius-nav);
-  padding: 0 0.65rem;
 }
 
 .apple-workbench.library-workbench {
@@ -2247,6 +2200,8 @@ summary {
 
 .apple-related-motion .library-related-links {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  border: 0;
 }
 
 .apple-related-motion .library-related-links a {
@@ -2509,7 +2464,7 @@ summary {
     min-height: auto;
     grid-template-columns: 1fr;
     align-items: start;
-    padding: 3rem 0 2.8rem;
+    padding: 1.5rem 0 2rem;
   }
 
   .apple-recipe-hero h1,
@@ -2527,7 +2482,7 @@ summary {
   }
 
   .apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar {
-    min-height: 56px;
+    min-height: 52px;
     border-radius: var(--ui-radius-card) var(--ui-radius-card) 0 0;
   }
 
@@ -2822,8 +2777,7 @@ summary {
 .finder-primary-copy.apple-primary-action,
 .finder-active-preview-copy > a,
 .library-code-filebar .ml-button,
-.finder-search-field > button,
-.apple-hero-finder button[type="submit"] {
+.finder-search-field > button {
   border-radius: var(--ui-radius-cta);
 }
 

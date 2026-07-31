@@ -1,4 +1,4 @@
-import { SliderDetents } from "../interior/slider-detents";
+import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "../../lib/utils";
 
 type SliderProps = {
@@ -25,18 +25,23 @@ export function Slider({
   disabled
 }: SliderProps) {
   return (
-    <SliderDetents
-      value={value[0] ?? min}
+    <SliderPrimitive.Root
+      value={value}
       min={min}
       max={max}
       step={step}
-      onValueChange={(next) => onValueChange?.([next])}
-      label={thumbAriaLabel}
-      format={() => thumbAriaValueText ?? String(value[0] ?? min)}
-      showValue={false}
+      onValueChange={onValueChange}
       disabled={disabled}
-      haptic
       className={cn("ml-slider interior-slider", className)}
-    />
+    >
+      <SliderPrimitive.Track className="ml-slider-track">
+        <SliderPrimitive.Range className="ml-slider-range" />
+      </SliderPrimitive.Track>
+      <SliderPrimitive.Thumb
+        className="ml-slider-thumb"
+        aria-label={thumbAriaLabel}
+        aria-valuetext={thumbAriaValueText}
+      />
+    </SliderPrimitive.Root>
   );
 }

@@ -171,6 +171,7 @@ export type TabsProps = {
   onValueChange?: (value: string) => void;
   activation?: TabsActivation;
   renderPanel?: (value: string) => ReactNode;
+  toolbar?: ReactNode;
   label?: string;
   panelClassName?: string;
   className?: string;
@@ -183,6 +184,7 @@ export function Tabs({
   onValueChange,
   activation = "automatic",
   renderPanel,
+  toolbar,
   label = "Tabs",
   panelClassName = "",
   className = "",
@@ -194,39 +196,42 @@ export function Tabs({
     <div
       className={`w-full overflow-hidden rounded-[12px] border border-stone-200 bg-white shadow-[0_1px_2px_rgba(28,25,23,0.06),0_4px_10px_-8px_rgba(28,25,23,0.45)] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:shadow-[0_1px_6px_rgba(0,0,0,0.45)] ${className}`}
     >
-      <div
-        {...tabs.tabListProps}
-        aria-label={label}
-        className="relative flex w-full gap-1 border-b border-stone-200 bg-stone-50 px-1 pt-1 dark:border-white/[0.16] dark:bg-[#1D1D1A]"
-      >
-        {items.map((item, index) => {
-          const selected = item.value === tabs.value;
-          return (
-            <button
-              key={item.value}
-              {...tabs.getTabProps(item, index)}
-              aria-label={item.ariaLabel}
-              className={`relative flex h-8 shrink-0 items-center justify-center rounded-t-[8px] px-3.5 text-[12.5px] outline-none transition-colors duration-150 after:pointer-events-none after:absolute after:inset-0 after:rounded-t-[8px] after:content-[''] focus-visible:after:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:after:shadow-[inset_0_0_0_1px_#93B0FF] ${
-                item.disabled
-                  ? "cursor-default text-stone-400 dark:text-stone-500"
-                  : selected
-                    ? "border border-b-0 border-stone-200 bg-white text-stone-800 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-100"
-                    : "text-stone-500 hover:bg-stone-200/50 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-white/[0.05] dark:hover:text-stone-200"
-              }`}
-            >
-              <span className="relative grid place-items-center leading-[1.4]">
-                <span aria-hidden className="invisible col-start-1 row-start-1 font-medium">
-                  {item.label}
+      <div className="interior-tabs-toolbar">
+        <div
+          {...tabs.tabListProps}
+          aria-label={label}
+          className="relative flex w-full gap-1 border-b border-stone-200 bg-stone-50 px-1 pt-1 dark:border-white/[0.16] dark:bg-[#1D1D1A]"
+        >
+          {items.map((item, index) => {
+            const selected = item.value === tabs.value;
+            return (
+              <button
+                key={item.value}
+                {...tabs.getTabProps(item, index)}
+                aria-label={item.ariaLabel}
+                className={`relative flex h-8 shrink-0 items-center justify-center rounded-t-[8px] px-3.5 text-[12.5px] outline-none transition-colors duration-150 after:pointer-events-none after:absolute after:inset-0 after:rounded-t-[8px] after:content-[''] focus-visible:after:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:after:shadow-[inset_0_0_0_1px_#93B0FF] ${
+                  item.disabled
+                    ? "cursor-default text-stone-400 dark:text-stone-500"
+                    : selected
+                      ? "border border-b-0 border-stone-200 bg-white text-stone-800 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-100"
+                      : "text-stone-500 hover:bg-stone-200/50 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-white/[0.05] dark:hover:text-stone-200"
+                }`}
+              >
+                <span className="relative grid place-items-center leading-[1.4]">
+                  <span aria-hidden className="invisible col-start-1 row-start-1 font-medium">
+                    {item.label}
+                  </span>
+                  <span
+                    className={`col-start-1 row-start-1 ${selected ? "font-medium" : ""}`}
+                  >
+                    {item.label}
+                  </span>
                 </span>
-                <span
-                  className={`col-start-1 row-start-1 ${selected ? "font-medium" : ""}`}
-                >
-                  {item.label}
-                </span>
-              </span>
-            </button>
-          );
-        })}
+              </button>
+            );
+          })}
+        </div>
+        {toolbar ? <div className="interior-tabs-action">{toolbar}</div> : null}
       </div>
 
       {renderPanel ? items.map((item) => {

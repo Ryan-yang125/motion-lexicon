@@ -110,7 +110,7 @@ test("catalog announces localized result changes for category, surface, and sear
 
   const categoryTrigger = page.locator(".library-category-filter-options").getByRole("button");
   await categoryTrigger.click();
-  const categoryOptions = page.getByRole("listbox", { name: "全部条目" }).getByRole("option");
+  const categoryOptions = page.getByRole("listbox", { name: "分类" }).getByRole("option");
   expect(await categoryOptions.count()).toBeGreaterThan(1);
   const categoryName = (await categoryOptions.nth(1).locator(".truncate").innerText()).trim();
   await categoryOptions.nth(1).click();
