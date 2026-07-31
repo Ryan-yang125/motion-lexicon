@@ -633,6 +633,7 @@ a,
 }
 
 .interior-output-tabs [role="tab"] {
+  min-width: 44px;
   min-height: 44px;
   border: 0;
   border-radius: 6px;
