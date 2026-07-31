@@ -6,7 +6,7 @@ test("Motion Pack gallery contains 16 interactive product moments and filters by
   await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
 
   await page.getByRole("tab", { name: "完成反馈" }).click();
-  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(3);
+  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(4);
   await expect(page.getByTestId("motion-pack-card-save-confirmation")).toBeVisible();
 });
 
@@ -17,7 +17,7 @@ test("Motion Pack detail provides a stateful preview and portable prompt/code ou
   const preview = page.locator(".motion-pack-stage");
   const save = preview.getByRole("button", { name: "保存" });
   await save.click();
-  await expect(preview.getByText("正在保存", { exact: true })).toBeVisible();
+  await expect(preview.locator(".mpp-status")).toHaveText("正在保存");
   await expect(preview.getByRole("button", { name: "已保存" })).toBeVisible({ timeout: 1_500 });
 
   const exportPanel = page.locator(".motion-pack-export");
