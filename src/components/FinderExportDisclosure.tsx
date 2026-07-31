@@ -45,10 +45,7 @@ export function FinderExportDisclosure({
         aria-controls="exports"
         aria-label={`${toggleLabel}: ${t("workspace.outputTitle")}`}
       >
-        <span>
-          <small>{t("workspace.outputLabel")}</small>
-          <strong>{t("workspace.outputTitle")}</strong>
-        </span>
+        <strong>{t("workspace.outputTitle")}</strong>
         <ChevronDown aria-hidden="true" size={18} strokeWidth={1.7} />
       </summary>
       <ExportPanel locale={locale} recipe={recipe} values={values} />

@@ -16,31 +16,33 @@ const copy = {
   zh: {
     eyebrow: "91 个动效术语",
     title: "动画词汇表",
-    intro: "Motion Lexicon 独立编写的完整双语动效词汇，提供英文技术定义、准确中文翻译、近义词辨析和对应的可操作组件。",
+    intro: "中英双语动效术语，包含定义、辨析和对应工作区。",
+    seoDescription: "Motion Lexicon 提供 91 个中英双语动效术语，包含英文定义、中文翻译、近义词辨析和对应工作区。",
     searchLabel: "搜索动画词汇",
     searchPlaceholder: "搜索 Pop in、共享元素、velocity…",
     count: (visible: number) => `显示 ${visible} / ${glossaryTerms.length} 个术语`,
-    sourceDefinition: "Motion Lexicon 英文定义",
+    sourceDefinition: "英文定义",
     translation: "中文翻译",
-    distinction: "怎么区分",
-    canonical: "正式组件",
+    distinction: "辨析",
+    canonical: "核心术语",
     alias: "相关术语",
-    open: "打开对应工作区",
+    open: "查看工作区",
     empty: "没有匹配词条，换一个名称、定义或用途继续搜索。"
   },
   en: {
     eyebrow: "91 motion terms",
     title: "Animation vocabulary",
-    intro: "Motion Lexicon's complete bilingual vocabulary, with original technical definitions, precise Chinese translations, close-term distinctions, and links to working components.",
+    intro: "Bilingual motion terms with definitions, distinctions, and corresponding workspaces.",
+    seoDescription: "Explore 91 bilingual Motion Lexicon terms with English definitions, Chinese translations, close-term distinctions, and corresponding workspaces.",
     searchLabel: "Search animation vocabulary",
     searchPlaceholder: "Search Pop in, shared element, velocity…",
     count: (visible: number) => `Showing ${visible} of ${glossaryTerms.length} terms`,
-    sourceDefinition: "Motion Lexicon definition",
+    sourceDefinition: "English definition",
     translation: "Chinese translation",
-    distinction: "How it differs",
-    canonical: "Canonical component",
+    distinction: "Distinction",
+    canonical: "Canonical term",
     alias: "Related term",
-    open: "Open canonical workspace",
+    open: "Open workspace",
     empty: "No term matches this query. Try a name, definition, or use case."
   }
 } as const;
@@ -88,7 +90,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
       <Seo
         locale={locale}
         title={locale === "zh" ? "动画词汇表｜Motion Lexicon" : "Animation vocabulary | Motion Lexicon"}
-        description={labels.intro}
+        description={labels.seoDescription}
         path={routePath}
         structuredData={[
           breadcrumbStructuredData(locale, [
@@ -99,7 +101,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
             "@context": "https://schema.org",
             "@type": "DefinedTermSet",
             name: labels.title,
-            description: labels.intro,
+            description: labels.seoDescription,
             url: termSetUrl,
             inLanguage: locale === "zh" ? "zh-CN" : "en",
             isAccessibleForFree: true,

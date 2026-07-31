@@ -51,7 +51,7 @@ export const motionIntentGroups: readonly MotionIntentGroup[] = [
         variantId: "pop-in",
         reason: localized(
           "弹入带一次轻微过冲和回落，适合紧凑、活泼的强调。",
-          "Pop in adds one compact overshoot and settle, fitting a playful accent."
+          "Pop in adds a slight overshoot before settling, creating a playful accent."
         ),
         signals: {
           zh: ["弹入", "弹一下", "回弹", "过冲", "活泼", "俏皮", "轻快", "弹出来"],
@@ -62,7 +62,7 @@ export const motionIntentGroups: readonly MotionIntentGroup[] = [
         variantId: "spring",
         reason: localized(
           "弹簧通过质量、刚度与阻尼表现重量、惯性和收敛过程。",
-          "Spring uses mass, stiffness, and damping to express weight, inertia, and settlement."
+          "Spring uses mass, stiffness, and damping to express weight, inertia, and how the motion settles."
         ),
         signals: {
           zh: ["弹簧", "有重量", "重量", "沉", "惯性", "物理", "阻尼", "收得住", "弹性", "自然"],

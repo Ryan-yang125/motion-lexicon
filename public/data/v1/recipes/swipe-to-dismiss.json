@@ -17,7 +17,7 @@
     "en": "Map swipe distance to travel and opacity with resistance before the threshold."
   },
   "definition": {
-    "zh": "把元素拖出屏幕以关闭它，例如抽屉或提示消息。",
+    "zh": "定向拖动越过距离或速度阈值后关闭当前界面元素。",
     "en": "A directional drag removes a surface after distance or velocity crosses a dismissal threshold."
   },
   "aliases": [

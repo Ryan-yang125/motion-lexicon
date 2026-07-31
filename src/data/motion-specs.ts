@@ -129,6 +129,8 @@ const distance = (value = 24, max = 120) =>
   range("distance", "位移", "Distance", value, 0, max, 2, "px", "控制元素移动的空间距离。", "Controls how far the element travels.");
 const scale = (value = 94) =>
   range("scale", "起始缩放", "Start scale", value, 70, 105, 1, "%", "控制元素相对最终尺寸的起始比例。", "Controls the starting size relative to the final state.");
+const activeScale = (value: number, labelZh: string, labelEn: string) =>
+  range("scale", labelZh, labelEn, value, 70, 105, 1, "%", "控制激活状态的缩放比例。", "Controls scale in the active state.");
 
 const compactEaseOptions = [
   ["soft", "柔和", "Soft", "cubic-bezier(0.23, 1, 0.32, 1)"],
@@ -182,7 +184,7 @@ function parametersFor(canonicalId: string): MotionParam[] {
         ease("snap")
       ];
     case "reveal":
-      return [duration(260), distance(20), segmented("reveal", "揭示材质", "Reveal mode", "clip", [["clip", "裁切", "Clip"], ["mask", "遮罩", "Mask"], ["blur", "模糊", "Blur"]]), delay(), ease()];
+      return [duration(260), distance(20), segmented("reveal", "揭示方式", "Reveal mode", "clip", [["clip", "裁切", "Clip"], ["mask", "遮罩", "Mask"], ["blur", "模糊", "Blur"]]), delay(), ease()];
     case "stagger":
       return [duration(220), range("stagger", "间隔", "Stagger", 50, 20, 120, 10, "ms"), range("count", "项目数", "Item count", 4, 2, 8, 1, ""), distance(18), ease()];
     case "keyframes":
@@ -192,7 +194,7 @@ function parametersFor(canonicalId: string): MotionParam[] {
     case "translate":
       return [duration(280), segmented("transform", "变换", "Transform", "translate", [["translate", "位移", "Translate"], ["scale", "缩放", "Scale"], ["rotate", "旋转", "Rotate"], ["skew", "倾斜", "Skew"], ["perspective", "透视", "Perspective"]]), distance(36), range("angle", "角度", "Angle", 12, -45, 45, 1, "deg"), scale(92), segmented("origin", "原点", "Origin", "center", [["center", "中心", "Center"], ["top", "顶部", "Top"], ["bottom", "底部", "Bottom"], ["left", "左侧", "Left"], ["right", "右侧", "Right"]]), ease()];
     case "3d-tilt-flip":
-      return [duration(280), range("angle", "翻转角度", "Flip angle", 180, 45, 180, 5, "deg"), range("perspective", "透视距离", "Perspective", 800, 320, 1400, 40, "px"), ease()];
+      return [duration(280), range("angle", "翻转角度", "Flip angle", 180, 45, 180, 5, "deg"), range("perspective", "透视距离", "Perspective distance", 800, 320, 1400, 40, "px"), ease()];
     case "origin-aware-animation":
       return [duration(220), scale(88), segmented("origin", "动作来源", "Motion origin", "top-left", [["top-left", "左上", "Top left"], ["top-right", "右上", "Top right"], ["bottom-left", "左下", "Bottom left"], ["bottom-right", "右下", "Bottom right"], ["center", "中心", "Center"]]), ease()];
     case "crossfade":
@@ -223,13 +225,13 @@ function parametersFor(canonicalId: string): MotionParam[] {
     case "page-transition":
       return [duration(280), distance(32), direction("left"), ease()];
     case "hover-effect":
-      return [duration(150), distance(4, 16), scale(101), ease("snap")];
+      return [duration(150), distance(4, 16), activeScale(101, "悬停缩放", "Hover scale"), ease("snap")];
     case "press-tap-feedback":
-      return [duration(120), scale(96), ease("snap")];
+      return [duration(120), activeScale(96, "按压缩放", "Pressed scale"), ease("snap")];
     case "hold-to-confirm":
-      return [deliberateDuration(1200, 2400), scale(98), ease("linear")];
+      return [deliberateDuration(1200, 2400), activeScale(98, "长按缩放", "Hold scale"), ease("linear")];
     case "drag-to-reorder":
-      return [duration(180), distance(48), scale(103), ease("snap")];
+      return [duration(180), distance(48), activeScale(103, "拾取缩放", "Pickup scale"), ease("snap")];
     case "swipe-to-dismiss":
       return [duration(240), distance(96, 240), range("resistance", "阻尼", "Resistance", 65, 0, 90, 5, "%"), ease("snap")];
     case "shake-wiggle":

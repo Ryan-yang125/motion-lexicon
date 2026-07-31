@@ -41,14 +41,12 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
     ? {
         prompt: "提示词",
         code: "代码",
-        copyAllCode: "复制全部代码",
-        fullCode: "完整实现"
+        copyAllCode: "复制全部代码"
       }
     : {
         prompt: "Prompt",
         code: "Code",
-        copyAllCode: "Copy all code",
-        fullCode: "Complete implementation"
+        copyAllCode: "Copy all code"
       };
   const codeFiles = useMemo(
     () => [
@@ -88,15 +86,7 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
   }
 
   return (
-    <section className="library-export" id="exports" aria-labelledby="export-title">
-      <div className="library-doc-section-heading">
-        <div>
-          <span>{t("workspace.outputLabel")}</span>
-          <h2 id="export-title">{t("workspace.outputTitle")}</h2>
-        </div>
-        <p>{t("workspace.outputCopy")}</p>
-      </div>
-
+    <section className="library-export" id="exports" aria-label={t("workspace.outputTitle")}>
       <div className="library-code-panel apple-code-output">
         <Tabs value={tab} onValueChange={changeTab}>
           <div className="library-code-toolbar">
@@ -110,21 +100,17 @@ export function ExportPanel({ locale, recipe, values }: ExportPanelProps) {
                 {labels.code}
               </TabsTrigger>
             </TabsList>
-            <span className="library-code-status" role={teachingNotice ? "note" : undefined}>
-              {teachingNotice || t("workspace.liveOutput")}
-            </span>
+            {teachingNotice ? (
+              <span className="library-code-status" role="note">{teachingNotice}</span>
+            ) : null}
           </div>
 
           <TabsContent value="prompt" className="library-prompt-content">
-            <div className="library-code-filebar">
-              <span>agent-prompt.txt</span>
-            </div>
             <p data-testid="prompt-output">{prompt}</p>
           </TabsContent>
 
           <TabsContent value="code" className="library-code-bundle">
             <div className="library-code-filebar library-code-bundle-toolbar">
-              <span>{labels.fullCode}</span>
               <CopyButton
                 label={labels.copyAllCode}
                 getText={() => codeBundle}

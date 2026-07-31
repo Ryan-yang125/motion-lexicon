@@ -66,11 +66,11 @@
       "kind": "segmented",
       "defaultValue": "clip",
       "label": {
-        "zh": "揭示材质",
+        "zh": "揭示方式",
         "en": "Reveal mode"
       },
       "description": {
-        "zh": "选择揭示材质。",
+        "zh": "选择揭示方式。",
         "en": "Selects reveal mode."
       },
       "options": [

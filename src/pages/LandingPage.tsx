@@ -54,7 +54,6 @@ export function LandingPage({ locale }: { locale: Locale }) {
       <section className="apple-home-library" aria-labelledby="home-library-title">
         <div className="apple-home-library-heading">
           <div>
-            <span>{locale === "zh" ? "动效库" : "MOTION LIBRARY"}</span>
             <h2 id="home-library-title">
               {locale === "zh" ? "从相近的感觉开始探索。" : "Explore motions that feel close."}
             </h2>
@@ -62,8 +61,8 @@ export function LandingPage({ locale }: { locale: Locale }) {
           <div>
             <p>
               {locale === "zh"
-                ? "每个配方都有真实预览、可调参数、准确提示词与可复制实现。"
-                : "Every recipe includes a live preview, tunable parameters, precise prompts, and portable code."}
+                ? "预览、调参、复制实现。"
+                : "Preview, tune, and copy."}
             </p>
             <Link
               to="/$locale/catalog/"

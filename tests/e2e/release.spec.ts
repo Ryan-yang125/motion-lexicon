@@ -32,8 +32,12 @@ async function expectScrollCatalogContinuity(page: Page, scrollRecipe: string) {
     const resting = snapshot();
     card.dispatchEvent(new PointerEvent("pointerenter"));
     const entered = snapshot();
-    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-    const playing = snapshot();
+    let playing = snapshot();
+    for (let frame = 0; frame < 12; frame += 1) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      playing = snapshot();
+      if (resting.opacity !== playing.opacity || resting.transform !== playing.transform) break;
+    }
     card.dispatchEvent(new PointerEvent("pointerleave"));
     const left = snapshot();
     return {

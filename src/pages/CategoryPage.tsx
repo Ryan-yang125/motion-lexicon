@@ -61,17 +61,12 @@ export function CategoryPage({ locale, categoryId }: CategoryPageProps) {
             <span>{text(category.eyebrow, locale)}</span>
             <h1>{text(category.name, locale)}</h1>
             <p>{text(category.description, locale)}</p>
-            <div className="library-category-stats">
-              <strong>{categoryRecipes.length}</strong>
-              <span>{t("catalog.canonicalEntries")}</span>
-            </div>
           </header>
 
           {grouped.length > 0 ? grouped.map(({ surfaceType, entries }) => (
             <section className="library-category-group" key={surfaceType} aria-labelledby={`${surfaceType}-title`}>
               <div className="library-section-heading is-row">
                 <div>
-                  <span>{t(`catalog.surfaces.${surfaceType}.label`)}</span>
                   <h2 id={`${surfaceType}-title`}>{t(`catalog.surfaces.${surfaceType}.title`)}</h2>
                 </div>
                 <small>{entries.length}</small>
