@@ -9,7 +9,7 @@ import type {
 } from "../../../src/data/types.js";
 
 export const schemaVersion = 1 as const;
-export const version = "0.2.0";
+export const version = "1.0.0";
 
 export type CliLocale = "zh" | "en";
 export type DiscoveryFormat = "text" | "json" | "md";
@@ -26,6 +26,11 @@ export type CatalogOptions = {
   locale?: CliLocale;
   category?: string;
   surface?: MotionSurfaceType;
+};
+
+export type MotionPackOptions = {
+  locale?: CliLocale;
+  group?: string;
 };
 
 export type SearchOptions = CatalogOptions & {
@@ -60,6 +65,49 @@ export type CatalogDocument = {
   locale: CliLocale;
   count: number;
   items: CatalogItem[];
+};
+
+export type MotionPackItem = {
+  id: string;
+  groupId: string;
+  groupName: string;
+  name: string;
+  description: string;
+  scene: string;
+  timing: string;
+  path: string;
+  previewUrl: string;
+};
+
+export type MotionPacksDocument = {
+  schemaVersion: typeof schemaVersion;
+  locale: CliLocale;
+  count: number;
+  groups: Array<{
+    id: string;
+    name: string;
+    description: string;
+  }>;
+  items: MotionPackItem[];
+};
+
+export type MotionPackDocument = MotionPackItem & {
+  schemaVersion: typeof schemaVersion;
+  locale: CliLocale;
+  useCase: string;
+  prompt: string;
+  guidance: {
+    trigger: string;
+    outcome: string;
+    reducedMotion: string;
+  };
+  keywords: string[];
+  source: {
+    html: string;
+    css: string;
+    js: string;
+    bundle: string;
+  };
 };
 
 export type SearchItem = CatalogItem & {
@@ -187,7 +235,14 @@ export type ResolvedRecipe = {
   values: ParamValues;
 };
 
-export type SchemaName = "recipe" | "catalog" | "search" | "recommend" | "export";
+export type SchemaName =
+  | "recipe"
+  | "catalog"
+  | "search"
+  | "recommend"
+  | "export"
+  | "packs"
+  | "pack";
 
 export class MotionLexiconError extends Error {
   readonly code: string;

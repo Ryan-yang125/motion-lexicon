@@ -11,16 +11,16 @@
   <a href="./README.zh-CN.md">简体中文</a>
 </p>
 
-<p align="center"><strong>Describe how motion should feel. Leave with an exact, copy-ready recipe.</strong></p>
+<p align="center"><strong>Copy a complete product moment into your interface.</strong></p>
 
 <p align="center">
-  A free visual motion finder for product builders, designers, developers, and AI agents.<br />
-  <strong>Describe → Choose → Tune → Use</strong>
+  A free, open-source collection of real product interactions for builders, designers, developers, and AI agents.<br />
+  <strong>Preview → Trigger → Inspect → Copy</strong>
 </p>
 
 <p align="center">
-  <a href="https://motion-lexicon.pages.dev/en/finder/"><strong>Try Motion Finder</strong></a> ·
-  <a href="https://motion-lexicon.pages.dev/en/catalog/"><strong>Explore the Library</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/packs/"><strong>Explore Motion Packs</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/finder/"><strong>Use Motion Finder</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/"><strong>Visit the Website</strong></a>
 </p>
 
@@ -32,88 +32,89 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon home — describe the motion you want](docs/assets/readme-home.webp)
+![Motion Lexicon V1 — sixteen real product moments](docs/assets/readme-v1-home.webp)
 
-## From a vague feeling to a usable motion
+## Motion Packs for real product moments
 
-Start with the words already in your head:
+V1.0 is built around **16 Motion Packs**: complete, small interactions that
+already live inside recognisable product surfaces. Trigger each Pack in the
+browser, inspect its state changes, then copy the Prompt, HTML, CSS, and
+JavaScript into your own product.
 
-> “The card should pop in with weight, then settle cleanly.”
+Every Pack carries one clear interaction contract:
 
-Motion Finder turns that request into a focused workflow:
+- A real product context with a visible before-and-after state
+- Immediate press and completion feedback
+- Short, compositor-friendly timing built from `transform` and `opacity`
+- A portable implementation plus reduced-motion treatment
+- A stable, shareable detail URL
 
-1. **Describe** the feeling, purpose, or behavior in Chinese or English.
-2. **Choose** from three ranked static candidates while the current choice plays in one primary preview.
-3. **Tune** and replay the selected motion while watching the primary preview update in real time.
-4. **Use** the result as an agent-ready prompt or portable HTML, CSS, and JavaScript.
+![Motion Pack detail — preview a save confirmation and copy its implementation](docs/assets/readme-v1-pack.webp)
 
-The full state lives in the URL, so a motion decision can be shared with a
-teammate or reopened later.
+### The first 16 Packs
 
-![Motion Finder — one primary preview with three ranked candidate choices](docs/assets/readme-finder.webp)
+| Group | Motion Packs |
+| --- | --- |
+| Feedback | Save confirmation, Publish release, Copy share link |
+| Choice | Card selection, Workspace switch, Template choice |
+| Change | Layer insertion, Archive undo, Filter results, Inline validation |
+| Workflow | Command menu, Details disclosure, Notification triage, Progress steps, Member invite, Media scrub |
 
-## A visual workbench for every recipe
+Start with the [Motion Pack gallery](https://motion-lexicon.pages.dev/en/packs/),
+then open a detail such as [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/).
 
-Each recipe brings the motion, controls, implementation, and design guidance
-into one place.
+## One interaction, end to end
 
-- Large live preview with replay, device, and reduced-motion controls
-- Focused Inspector for the parameters that matter most
-- Prompt, HTML, CSS, and framework-independent JavaScript generated from one
-  motion specification
-- Purpose, usage frequency, interaction rules, review criteria, and
-  accessibility guidance
-- Stable, shareable URLs for every recipe and parameter state
+1. **Preview** a complete product moment in its own scene.
+2. **Trigger** it yourself and see the state changes in context.
+3. **Inspect** the timing, interaction guidance, and reduced-motion behavior.
+4. **Copy** the Prompt or portable HTML, CSS, and JavaScript.
 
-![Motion recipe workspace — preview, Inspector, and copy-ready output](docs/assets/readme-workspace.webp)
+The gallery and every Pack detail are static pages. They load fast, work without
+an account, and stay easy to share in a design review, issue, or agent task.
 
-## What you can explore
+## Finder and vocabulary stay with you
+
+Motion Packs are the primary product surface in V1. The original discovery layer
+continues to support the full decision path:
 
 | Surface | What it gives you |
 | --- | --- |
-| [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | Three explainable recommendations from a natural-language request |
-| [Motion Library](https://motion-lexicon.pages.dev/en/catalog/) | 44 curated, visual workspaces across 12 motion families |
-| [Vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/) | 91 bilingual motion terms with precise definitions and close-term distinctions |
-| [Recipe workspaces](https://motion-lexicon.pages.dev/en/entrances/slide-in/) | Live previews, parameters, prompts, portable code, and review guidance |
-| [Versioned data](https://motion-lexicon.pages.dev/data/v1/catalog.json) | Structured catalog, vocabulary, and schema for tools and agents |
+| [Motion Packs](https://motion-lexicon.pages.dev/en/packs/) | 16 complete, copy-ready product interactions |
+| [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | Explainable candidates from a natural-language motion request |
+| [Motion Library](https://motion-lexicon.pages.dev/en/catalog/) | 44 canonical motion workspaces across 12 families |
+| [Vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/) | 91 bilingual terms with definitions and close-term distinctions |
+| [Versioned data](https://motion-lexicon.pages.dev/data/v1/packs.json) | Machine-readable Packs, catalog, vocabulary, and schema |
 
-The 44 canonical workspaces include 31 copy-ready components, 9 focused
-playgrounds, and 4 practical guides. All 91 source terms resolve into this
-curated surface, keeping discovery broad and implementation focused.
-
-## Who it is for
-
-- **Product builders** who know the desired feeling and want the right motion language
-- **Designers** who need a visual reference for comparing close animation patterns
-- **Developers** who want concrete parameters and portable implementation code
-- **AI agents** that work better with precise prompts, structured data, and
-  explicit constraints
+Finder helps choose the motion language. A Pack turns that choice into a complete
+product interaction. The 44 canonical workspaces and all 91 source terms remain
+available for exact search, SEO, and deeper implementation reference.
 
 ## Use it from the browser, CLI, or an agent
 
-The website is the fastest visual path. The free CLI carries the same
-recommendation model into a terminal:
+The website is the fastest visual route. The free CLI exposes the same V1 Pack
+data locally:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend \
-  "卡片弹出来要有重量，最后收得住" \
-  --locale zh \
-  --format json
-```
+npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 packs \
+  --locale en --format json
 
-Continue from discovery to implementation:
-
-```bash
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 search \
-  "shared element" --locale en
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 show spring --locale en
-npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 export spring \
+npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 pack save-confirmation \
   --locale en --format bundle
 ```
 
-`recommend` returns up to three ranked variants with match reasons,
-distinctions, resolved presets, preview URLs, and a shareable Finder URL. The
-compatibility field remains named `compareUrl` and preserves candidate order.
+Finder and the recipe library remain available through the same CLI:
+
+```bash
+npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend \
+  "A card enters quickly, then settles into place" \
+  --locale en --format json
+
+npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 search \
+  "shared element" --locale en
+npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 export spring \
+  --locale en --format bundle
+```
 
 Install the free Motion Lexicon Agent Skill:
 
@@ -121,22 +122,20 @@ Install the free Motion Lexicon Agent Skill:
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 ```
 
-The Skill guides an agent from a vague request through ranked recommendations,
-primary-preview selection, parameter choices, accessibility checks, and
-implementation output.
-Agent integrations can also read:
+Agents can also read the public resources directly:
 
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
 - [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt)
+- [Motion Packs JSON](https://motion-lexicon.pages.dev/data/v1/packs.json)
 - [Catalog JSON](https://motion-lexicon.pages.dev/data/v1/catalog.json)
 - [Vocabulary JSON](https://motion-lexicon.pages.dev/data/v1/vocabulary.json)
 - [JSON Schema](https://motion-lexicon.pages.dev/data/v1/schema.json)
 
 ## Free, open, and portable
 
-Motion Lexicon runs as a static website and keeps the complete public product
-free of charge. The browser experience, CLI, Agent Skill, catalog data, and
-generated output travel easily between people and tools.
+Motion Lexicon is a static website with free browser access, a local CLI, an
+Agent Skill, and public data. Every exported implementation is framework
+independent, so it can travel into an existing product stack.
 
 - Source code: [MIT](./LICENSE)
 - Project-authored content and data: [CC BY 4.0](./CONTENT-LICENSE)
@@ -144,18 +143,11 @@ generated output travel easily between people and tools.
 - Interaction primitives: [Interior](https://github.com/ddoemonn/interior),
   adapted under MIT with attribution in [NOTICE](./NOTICE)
 
-## Project snapshot
+## V1.0 snapshot
 
-**v0.2.0 is live.** The current release includes the bilingual Finder, 44
-canonical workspaces, all 91 source terms, the CLI, the Agent Skill, versioned
-machine-readable data, localized SEO, and 120 prerendered canonical routes.
-
-- Finder candidate order, current selection, and non-default recipe parameters
-  stay shareable in the URL.
-- Preview, parameters, prompt, portable code, and reduced-motion output come
-  from one semantic motion specification.
-- Light and dark themes, keyboard and pointer interaction, reduced-motion
-  behavior, and responsive workspaces ship across the public experience.
+**V1.0.0 is live.** The public product includes 16 real product Motion Packs,
+the bilingual Finder, 44 canonical motion workspaces, 91 source terms, the CLI,
+Agent Skill, versioned machine-readable data, localized SEO, and static delivery.
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -169,17 +161,18 @@ Every public product route is available in English (`/en/`) and Chinese
 
 | Route shape | Purpose |
 | --- | --- |
-| `/:locale/` | Product home |
-| `/:locale/finder/` | Natural-language recommendation, candidate selection, and primary preview |
-| `/:locale/catalog/` | Full 44-workspace library |
+| `/:locale/` | Motion Pack gallery and product home |
+| `/:locale/packs/` | All 16 real product Motion Packs |
+| `/:locale/packs/:packId/` | A Pack preview, guidance, and portable export |
+| `/:locale/finder/` | Natural-language motion recommendation |
+| `/:locale/catalog/` | Full 44-workspace motion library |
 | `/:locale/vocabulary/` | Complete 91-term vocabulary |
-| `/:locale/:category/` | Motion-family discovery page |
 | `/:locale/:category/:recipe/` | Canonical recipe workspace |
-| `/data/v1/*.json` | Versioned catalog, vocabulary, and schema |
+| `/data/v1/*.json` | Versioned Pack, catalog, vocabulary, and schema data |
 
 ### Build and static delivery
 
-Motion Lexicon uses React, TypeScript, Vite, Motion, TanStack Router, and i18next. A
+Motion Lexicon uses React, TypeScript, Vite, TanStack Router, and i18next. A
 production build runs this sequence:
 
 ```text
@@ -190,15 +183,9 @@ tsc -b
 
 The prerender step enumerates canonical routes from `src/data/site.ts`, renders
 them through `src/entry-server.tsx`, injects localized metadata, and writes
-`dist/<route>/index.html`. It also generates `dist/sitemap.xml`,
-`dist/robots.txt`, and static redirect rules. The build also carries favicon
-assets, bilingual social images, the web manifest, `404.html`, and static
-headers into `dist/`.
-
-The finished `dist/` directory contains static HTML, CSS, JavaScript, images,
-and data. It can be served from Cloudflare Pages, Vercel static hosting,
-Netlify, or any CDN-backed file server. React server rendering runs during the
-build only; production requires no Node server.
+`dist/<route>/index.html`, `dist/sitemap.xml`, and `dist/robots.txt`. The
+finished `dist/` directory contains static HTML, CSS, JavaScript, images, and
+data for CDN-backed static hosting.
 
 ```bash
 npm install
@@ -236,6 +223,6 @@ and [DESIGN.md](./DESIGN.md). Contribution guidelines are in
 
 ---
 
-**[Describe a motion](https://motion-lexicon.pages.dev/en/finder/)** ·
-**[Browse all recipes](https://motion-lexicon.pages.dev/en/catalog/)** ·
+**[Explore Motion Packs](https://motion-lexicon.pages.dev/en/packs/)** ·
+**[Use Motion Finder](https://motion-lexicon.pages.dev/en/finder/)** ·
 **[阅读中文 README](./README.zh-CN.md)**

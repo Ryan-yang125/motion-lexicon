@@ -4,9 +4,9 @@
     {
       "id": 1,
       "prompt": "我想让一张卡片弹出来时有重量感，最后能稳稳收住。帮我选一个合适的动效，并给我可以直接交给编码 Agent 的 Prompt。",
-      "expected_output": "Should run the pinned v0.2.0 recommend command in zh with JSON output, preserve the three ranked candidates and their CLI-provided reasons, provide the localized compare URL, select or confirm one candidate, inspect it with show, and obtain the final prompt through export. The answer should include the selected variant and canonical IDs, parameter values, and reduced-motion treatment.",
+      "expected_output": "Should run the pinned v1.0.0 recommend command in zh with JSON output, preserve the three ranked candidates and their CLI-provided reasons, provide the localized compare URL, select or confirm one candidate, inspect it with show, and obtain the final prompt through export. The answer should include the selected variant and canonical IDs, parameter values, and reduced-motion treatment.",
       "assertions": [
-        "Runs npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend with --locale zh --format json",
+        "Runs npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend with --locale zh --format json",
         "Presents three candidates in the CLI-provided rank order",
         "Includes a CLI-provided reason for each candidate",
         "Returns the localized compareUrl from the recommendation document",
@@ -21,7 +21,7 @@
       "prompt": "The thumbnail should leave and the detail view should feel like the same object continuing in space. Compare the closest motion patterns and give me the best live reference.",
       "expected_output": "Should treat the request as fuzzy intent, run recommend in English, and report the returned Top 3 with reasons and distinctions. It should preserve aliases or presets in variantId while using canonicalId for inspection, return the compare URL, then use show for the chosen candidate and include the preview URL plus reduced-motion guidance.",
       "assertions": [
-        "Runs the pinned v0.2.0 recommend command with --locale en --format json",
+        "Runs the pinned v1.0.0 recommend command with --locale en --format json",
         "Reports exactly three ranked candidates when the CLI returns three",
         "Preserves variantId separately from canonicalId",
         "Includes CLI-provided distinctions when present",
@@ -36,7 +36,7 @@
       "prompt": "I already know the term is shared element. Resolve the exact Motion Lexicon entry, set any preset it requires, and export a portable bundle.",
       "expected_output": "Should preserve exact-search compatibility by using search for the explicit term, resolve the returned alias or canonical entry with show, preserve any CLI-provided preset query and values, and generate the bundle with export. The answer should name both the requested term and canonical ID and include the live preview plus reduced-motion treatment.",
       "assertions": [
-        "Runs npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 search for shared element with JSON output",
+        "Runs npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 search for shared element with JSON output",
         "Uses the CLI-provided canonical ID",
         "Runs show before export",
         "Preserves presetQuery and preset values when provided",

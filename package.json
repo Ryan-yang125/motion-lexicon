@@ -1,6 +1,6 @@
 {
   "name": "motion-lexicon",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "An open motion finder and recipe library for humans and agents, with an offline CLI and Node API.",
   "license": "MIT",
   "repository": {
@@ -53,9 +53,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview",
-    "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
+    "build": "npm run cli:build && tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
     "lint": "eslint .",
-    "typecheck": "tsc -b && npm run cli:typecheck",
+    "typecheck": "npm run cli:build && tsc -b && npm run cli:typecheck",
     "prepare": "npm run cli:build",
     "cli:build": "npm run build -w @motion-lexicon/cli",
     "cli:typecheck": "npm run typecheck -w @motion-lexicon/cli",
@@ -72,7 +72,8 @@
     "crawl:dist": "tsx scripts/crawl-dist.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:visual": "playwright test"
+    "test:visual": "playwright test",
+    "test:lab": "playwright test --config playwright.lab.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

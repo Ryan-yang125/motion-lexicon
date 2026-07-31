@@ -1,4 +1,5 @@
 import { categories } from "../src/data/categories";
+import { motionPacks } from "../src/data/motion-packs";
 import {
   aliasMetadata,
   canonicalIdByEntryId,
@@ -25,6 +26,8 @@ assert(!siteUrl.includes(".local"), "siteUrl must not use a local domain");
 assert(entries.length === 91, `Expected 91 glossary entries, found ${entries.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 canonical entries, found ${canonicalMotionCatalog.length}`);
 assert(aliasMetadata.length === 47, `Expected 47 aliases, found ${aliasMetadata.length}`);
+assert(motionPacks.length === 16, `Expected 16 Motion Packs, found ${motionPacks.length}`);
+assert(new Set(motionPacks.map((pack) => pack.id)).size === motionPacks.length, "Motion Packs contain duplicate IDs");
 
 const canonicalIds = new Set(canonicalMotionCatalog.map((item) => item.id));
 assert(canonicalIds.size === canonicalMotionCatalog.length, "Canonical catalog contains duplicate IDs");
@@ -82,11 +85,13 @@ const expectedPaths = locales.flatMap((locale) => [
   pathFor(locale, ["catalog"]),
   pathFor(locale, ["finder"]),
   pathFor(locale, ["vocabulary"]),
+  pathFor(locale, ["packs"]),
+  ...motionPacks.map((pack) => pathFor(locale, ["packs", pack.id])),
   ...categories.map((category) => pathFor(locale, [category.id])),
   ...canonicalMotionCatalog.map((item) => pathFor(locale, [item.categoryId, item.id]))
 ]);
 
-assert(expectedPaths.length === 120, `Expected 120 localized canonical paths, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 154, `Expected 154 localized canonical paths, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static paths, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap URLs, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static paths contain duplicates");
@@ -152,5 +157,5 @@ for (const locale of locales) {
 console.log(
   `SEO check passed: ${entries.length} glossary terms → ${canonicalMotionCatalog.length} canonical entries ` +
     `(${surfaceCounts.component} components, ${surfaceCounts.playground} playgrounds, ${surfaceCounts.guide} guides), ` +
-    `${sitemap.length} localized sitemap URLs and ${aliasMetadata.length} redirects per locale.`
+    `${motionPacks.length} Motion Packs, ${sitemap.length} localized sitemap URLs and ${aliasMetadata.length} redirects per locale.`
 );

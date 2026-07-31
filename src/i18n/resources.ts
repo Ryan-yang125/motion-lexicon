@@ -208,14 +208,14 @@ export const resources = {
         staticProduct: "静态构建 · 中英文 · 支持减弱动效"
       },
       seo: {
-        homeTitle: "Motion Lexicon | 从模糊描述找到准确动效",
-        homeDescription: "描述产品动效的感觉，在一个主预览中切换三个候选，重播当前动效，实时调节参数，并复制提示词、CSS、HTML 和行为所需的 JS。",
+        homeTitle: "Motion Lexicon | 可复制的真实产品瞬间",
+        homeDescription: "探索 16 个可交互的 Motion Pack：在真实产品场景中触发状态变化，查看结果，并复制提示词、HTML、CSS 和 JavaScript。",
         catalogTitle: "动效目录 | Motion Lexicon",
         catalogDescription: "按动效组件、参数工具和指南浏览 Motion Lexicon。",
         playgroundTitle: "参数工具 | Motion Lexicon",
         playgroundDescription: "比较和调整动效参数，并复制可用输出。",
         finderTitle: "动效选择器 | Motion Lexicon",
-        finderDescription: "描述你想要的动效感觉，在主预览中切换三个候选，重播当前动效，调节参数并复制提示词、CSS、HTML 和 JS。"
+        finderDescription: "描述你想要的动效感觉，比较候选、调节参数，并继续查看可复制的真实产品瞬间。"
       }
     }
   },
@@ -426,14 +426,14 @@ export const resources = {
         staticProduct: "Static build · bilingual · reduced-motion ready"
       },
       seo: {
-        homeTitle: "Motion Lexicon | Find the right motion from a fuzzy description",
-        homeDescription: "Describe the feel of a product motion, switch among three candidates in one primary preview, replay the current motion, tune parameters live, and copy the prompt, CSS, HTML, and any JavaScript required for behavior.",
+        homeTitle: "Motion Lexicon | Copy-ready product moments",
+        homeDescription: "Explore 16 interactive Motion Packs: trigger real product-state changes, inspect the result, and copy the prompt, HTML, CSS, and JavaScript.",
         catalogTitle: "Motion catalog | Motion Lexicon",
         catalogDescription: "Browse Motion Lexicon by components, playgrounds, and guides.",
         playgroundTitle: "Motion playgrounds | Motion Lexicon",
         playgroundDescription: "Compare and tune motion parameters, then copy usable output.",
         finderTitle: "Motion Finder | Motion Lexicon",
-        finderDescription: "Describe the motion you want, switch among three candidates in the primary preview, replay the current motion, tune parameters, and copy a prompt, CSS, HTML, and JavaScript."
+        finderDescription: "Describe the motion you want, compare candidates, tune parameters, and continue into copy-ready product moments."
       }
     }
   }

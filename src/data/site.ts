@@ -1,5 +1,6 @@
 import { categories } from "./categories";
 import { aliasMetadata, canonicalMotionCatalog } from "./motion-catalog";
+import { motionPacks } from "./motion-packs";
 import type { Locale } from "./types";
 
 export const siteUrl = "https://motion-lexicon.pages.dev";
@@ -49,6 +50,11 @@ export function sitemapPaths() {
     paths.add(pathFor(locale, ["catalog"]));
     paths.add(pathFor(locale, ["finder"]));
     paths.add(pathFor(locale, ["vocabulary"]));
+    paths.add(pathFor(locale, ["packs"]));
+
+    for (const pack of motionPacks) {
+      paths.add(pathFor(locale, ["packs", pack.id]));
+    }
 
     for (const category of categories) {
       paths.add(pathFor(locale, [category.id]));

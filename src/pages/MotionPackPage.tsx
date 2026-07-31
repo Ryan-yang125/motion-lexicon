@@ -1,0 +1,152 @@
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { MotionPackExport } from "../components/MotionPackExport";
+import { MotionPackPreview } from "../components/MotionPackPreview";
+import { Seo } from "../components/Seo";
+import { getMotionPack, getMotionPacksForGroup, motionPackGroups, motionPacks } from "../data/motion-packs";
+import { pathFor } from "../data/site";
+import type { Locale } from "../data/types";
+
+export function MotionPackPage({ locale, packId }: { locale: Locale; packId: string }) {
+  const pack = getMotionPack(packId);
+  const labels = locale === "zh"
+    ? {
+        back: "返回 Pack Gallery",
+        preview: "交互预览",
+        scene: "产品场景",
+        use: "适合使用",
+        rules: "动效规则",
+        reduced: "减弱动效",
+        related: "相关 Pack",
+        source: "可复制实现",
+        states: ["开始", "进行中", "完成", "再次触发"]
+      }
+    : {
+        back: "Back to Pack Gallery",
+        preview: "Interactive preview",
+        scene: "Product scene",
+        use: "Use for",
+        rules: "Motion rules",
+        reduced: "Reduced motion",
+        related: "Related packs",
+        source: "Copy-ready implementation",
+        states: ["Start", "In progress", "Complete", "Repeat"]
+      };
+
+  if (!pack) {
+    return <MotionPacksFallback locale={locale} />;
+  }
+
+  const group = motionPackGroups.find((entry) => entry.id === pack.groupId);
+  const index = motionPacks.findIndex((entry) => entry.id === pack.id) + 1;
+  const related = getMotionPacksForGroup(pack.groupId).filter((entry) => entry.id !== pack.id).slice(0, 3);
+
+  return (
+    <>
+      <Seo
+        locale={locale}
+        title={`${pack.name[locale]} | Motion Pack — Motion Lexicon`}
+        description={pack.shortDescription[locale]}
+        path={pathFor(locale, ["packs", pack.id])}
+      />
+      <div className="motion-pack-page">
+        <Link className="motion-pack-back-link" to="/$locale/packs/" params={{ locale }}>
+          <ArrowLeft aria-hidden="true" size={14} />
+          {labels.back}
+        </Link>
+
+        <header className="motion-pack-page-header">
+          <span className="motion-pack-eyebrow">
+            Motion Pack {String(index).padStart(2, "0")} · {group?.name[locale]}
+          </span>
+          <h1>{pack.name[locale]}</h1>
+          <p>{pack.shortDescription[locale]}</p>
+        </header>
+
+        <section className="motion-pack-workbench" aria-label={labels.preview}>
+          <div className="motion-pack-stage">
+            <MotionPackPreview pack={pack} locale={locale} />
+          </div>
+          <aside className="motion-pack-inspector">
+            <div className="motion-pack-inspector-header">
+              <strong>{labels.preview}</strong>
+              <span>{pack.timing}</span>
+            </div>
+            <dl className="motion-pack-info-list">
+              <div>
+                <dt>{labels.scene}</dt>
+                <dd>{pack.scene[locale]}</dd>
+              </div>
+              <div>
+                <dt>{labels.use}</dt>
+                <dd>{pack.useCase[locale]}</dd>
+              </div>
+              <div>
+                <dt>{labels.rules}</dt>
+                <dd>{pack.guidance.trigger[locale]}</dd>
+              </div>
+            </dl>
+            <div className="motion-pack-state-list" aria-label={locale === "zh" ? "完整状态" : "Complete states"}>
+              {labels.states.map((state) => <span key={state}>{state}</span>)}
+            </div>
+          </aside>
+        </section>
+
+        <div className="motion-pack-page-main">
+          <section aria-label={labels.source}>
+            <MotionPackExport locale={locale} prompt={pack.prompt[locale]} source={pack.source} />
+          </section>
+          <section className="motion-pack-guidance" aria-label={labels.rules}>
+            <div className="motion-pack-rule">
+              <span className="motion-pack-rule-label">{labels.rules}</span>
+              <p>{pack.guidance.outcome[locale]}</p>
+            </div>
+            <div className="motion-pack-rule">
+              <span className="motion-pack-rule-label">{labels.reduced}</span>
+              <p>{pack.guidance.reducedMotion[locale]}</p>
+            </div>
+            <div className="motion-pack-rule">
+              <span className="motion-pack-rule-label">{locale === "zh" ? "实现" : "Implementation"}</span>
+              <p>{locale === "zh" ? "HTML、CSS 与行为所需的 JavaScript 一起复制。" : "Copy HTML, CSS, and the JavaScript required for behavior together."}</p>
+            </div>
+          </section>
+
+          {related.length ? (
+            <section className="motion-pack-related" aria-labelledby="related-packs-title">
+              <div className="motion-pack-related-head">
+                <h2 id="related-packs-title">{labels.related}</h2>
+              </div>
+              <div className="motion-pack-related-grid">
+                {related.map((entry) => (
+                  <Link
+                    className="motion-pack-related-link"
+                    key={entry.id}
+                    to="/$locale/packs/$packId/"
+                    params={{ locale, packId: entry.id }}
+                  >
+                    <span>
+                      <small>{entry.timing}</small>
+                      {entry.name[locale]}
+                    </span>
+                    <ArrowRight aria-hidden="true" size={15} />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function MotionPacksFallback({ locale }: { locale: Locale }) {
+  return (
+    <div className="motion-pack-page">
+      <Link className="motion-pack-back-link" to="/$locale/packs/" params={{ locale }}>
+        <ArrowLeft aria-hidden="true" size={14} />
+        {locale === "zh" ? "返回 Pack Gallery" : "Back to Pack Gallery"}
+      </Link>
+    </div>
+  );
+}

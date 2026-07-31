@@ -3,9 +3,8 @@ import { expect, test } from "@playwright/test";
 test("desktop landing page renders without horizontal overflow", async ({ page }) => {
   await page.goto("/zh/");
   await expect(page).toHaveTitle(/Motion Lexicon/);
-  await expect(page.getByRole("heading", { name: /说出你要的感觉/ })).toBeVisible();
-  await expect(page.getByRole("searchbox", { name: "描述你想要的动效" })).toBeVisible();
-  await expect(page.locator(".library-card")).toHaveCount(3);
+  await expect(page.getByRole("heading", { name: "把一个产品瞬间，直接带进你的界面。" })).toBeVisible();
+  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     return document.documentElement.scrollWidth > window.innerWidth;
@@ -13,18 +12,15 @@ test("desktop landing page renders without horizontal overflow", async ({ page }
   expect(hasHorizontalOverflow).toBe(false);
 });
 
-test("landing Interior search submits directly to Finder", async ({ page }) => {
+test("landing Pack callout opens Finder", async ({ page }) => {
   await page.goto("/zh/");
-  const search = page.getByRole("searchbox", { name: "描述你想要的动效" });
-  await search.fill("卡片切入后慢慢停下来");
-  await search.press("Enter");
-  await expect(page).toHaveURL(/\/zh\/finder\/\?q=/);
-  await expect(page).toHaveURL(/%E5%8D%A1%E7%89%87/);
+  await page.getByRole("link", { name: "描述一个产品瞬间" }).click();
+  await expect(page).toHaveURL(/\/zh\/finder\//);
 });
 
 test("english landing page renders english copy", async ({ page }) => {
   await page.goto("/en/");
-  await expect(page.getByRole("heading", { name: /Describe the feel/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bring a better product moment into your interface." })).toBeVisible();
   await expect(page.getByText("一个能看")).toHaveCount(0);
 });
 

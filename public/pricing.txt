@@ -6,11 +6,11 @@
 - Billing: None
 - Account required: No
 - Website: https://motion-lexicon.pages.dev
-- CLI: npx -y github:Ryan-yang125/motion-lexicon#v0.2.0
+- CLI: npx -y github:Ryan-yang125/motion-lexicon#v1.0.0
 - Agent Skill: npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Code license: MIT
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
 - Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
-- Last updated: 2026-07-30
+- Last updated: 2026-08-01

@@ -91,6 +91,25 @@ const finderRoute = createRoute({
   path: "$locale/finder"
 }).lazy(() => import("./routes/finder.lazy").then((module) => module.Route));
 
+const packsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/packs"
+}).lazy(() => import("./routes/packs.lazy").then((module) => module.Route));
+
+const motionPackRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/packs/$packId"
+}).lazy(() => import("./routes/motion-pack.lazy").then((module) => module.Route));
+
+const isLocalLabEnabled = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true;
+
+const quietProductMotionLabRoute = isLocalLabEnabled
+  ? createRoute({
+      getParentRoute: () => rootRoute,
+      path: "$locale/lab/quiet-product-motion"
+    }).lazy(() => import("./routes/quiet-product-motion-lab.lazy").then((module) => module.Route))
+  : null;
+
 const recipeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "$locale/$categoryId/$recipeId"
@@ -101,16 +120,34 @@ const categoryRoute = createRoute({
   path: "$locale/$categoryId"
 }).lazy(() => import("./routes/category.lazy").then((module) => module.Route));
 
-const routeTree = rootRoute.addChildren([
-  rootIndexRoute,
-  localeRoute,
-  catalogRoute,
-  playgroundRoute,
-  vocabularyRoute,
-  finderRoute,
-  recipeRoute,
-  categoryRoute
-]);
+const routeTree = rootRoute.addChildren(
+  quietProductMotionLabRoute
+    ? [
+        rootIndexRoute,
+        localeRoute,
+        catalogRoute,
+        playgroundRoute,
+        vocabularyRoute,
+        finderRoute,
+        packsRoute,
+        motionPackRoute,
+        quietProductMotionLabRoute,
+        recipeRoute,
+        categoryRoute
+      ]
+    : [
+        rootIndexRoute,
+        localeRoute,
+        catalogRoute,
+        playgroundRoute,
+        vocabularyRoute,
+        finderRoute,
+        packsRoute,
+        motionPackRoute,
+        recipeRoute,
+        categoryRoute
+      ]
+);
 
 export function createAppRouter(history?: RouterHistory) {
   return createRouter({

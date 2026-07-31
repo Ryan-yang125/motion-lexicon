@@ -6,6 +6,8 @@
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Motion Finder: https://motion-lexicon.pages.dev/en/finder/
 - 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
+- Motion Packs: https://motion-lexicon.pages.dev/en/packs/
+- Motion Packs JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
@@ -15,9 +17,28 @@
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v0.2.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
+
+## Motion Packs
+
+- [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/): A submission lands across the action, status marker, and document state together.
+- [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/): Resolve a ready update into a release with a clear landing point.
+- [Copy share link](https://motion-lexicon.pages.dev/en/packs/share-link/): Copy success is confirmed through the action and a light, temporary cue.
+- [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/): After selecting a layout, its boundary, checkmark, and selection summary express the result together.
+- [Workspace switch](https://motion-lexicon.pages.dev/en/packs/workspace-switch/): When switching context, keep the active tab and content surface on one continuous focus path.
+- [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/): Choose direction from visual templates, then attach the next action steadily to that choice.
+- [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/): New content reserves its correct position, then reveals itself with very small travel.
+- [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/): After an item leaves, an undo affordance catches the user in the same context.
+- [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/): When a filter changes, update the result count and visible items together.
+- [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/): Offer direction close to the field while people stay in the current task.
+- [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/): Filter actions inside a compact surface with equal focus feedback for keyboard and pointer.
+- [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/): Open collapsed information in place while preserving a clear relationship with its trigger.
+- [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/): After handling a notification, let completion and the next pending item follow naturally.
+- [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/): Across a multi-step task, make completed, current, and next steps form a clear cadence.
+- [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
+- [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
 
 ## Canonical recipes
 
@@ -100,6 +121,184 @@
 - [Anticipation](https://motion-lexicon.pages.dev/en/principles/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/anticipation.json)
 - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json)
 - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json)
+
+# Full Motion Pack reference
+
+## Save confirmation (save-confirmation)
+
+- Chinese name: 保存确认
+- Group: feedback
+- Scene: A saved state inside a product-update editor.
+- Use case: Editors, settings, form submission, and draft saving.
+- Timing: 180ms · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: Give a slight press response immediately after Save is clicked.
+- Reduced motion: Keep text and color state changes while removing spin and travel.
+- Preview: https://motion-lexicon.pages.dev/en/packs/save-confirmation/
+
+## Publish release (publish-release)
+
+- Chinese name: 发布版本
+- Group: feedback
+- Scene: A version panel while publishing a V1.0 update.
+- Use case: Publishing articles, shipping releases, submitting approvals, and sending announcements.
+- Timing: 240ms + 60ms follow-through · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Make it clear that Publish has been received before the release lands.
+- Reduced motion: Keep state and record changes while removing entrance travel.
+- Preview: https://motion-lexicon.pages.dev/en/packs/publish-release/
+
+## Copy share link (share-link)
+
+- Chinese name: 复制分享链接
+- Group: feedback
+- Scene: A public preview link in project settings.
+- Use case: Share links, invitation links, embed snippets, and API tokens.
+- Timing: 160ms + 1.6s confirmation window · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: Show a check on the original action after copying.
+- Reduced motion: Keep text and color changes; let the cue appear and leave directly.
+- Preview: https://motion-lexicon.pages.dev/en/packs/share-link/
+
+## Card selection (card-selection)
+
+- Chinese name: 卡片选择
+- Group: choice
+- Scene: Choosing a content layout for a new project.
+- Use case: Choosing layouts, plans, covers, themes, or ways of working.
+- Timing: 200ms · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: Move focus to the chosen card after any option is clicked.
+- Reduced motion: Update the selection boundary and check directly without travel.
+- Preview: https://motion-lexicon.pages.dev/en/packs/card-selection/
+
+## Workspace switch (workspace-switch)
+
+- Chinese name: 工作区切换
+- Group: choice
+- Scene: Design, writing, and review views inside a project workspace.
+- Use case: Workspaces, project modules, document views, and nested detail pages.
+- Timing: 180ms tab · 160ms content · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: The tab itself carries both the switch origin and focus location.
+- Reduced motion: Update tab and content directly while retaining keyboard focus.
+- Preview: https://motion-lexicon.pages.dev/en/packs/workspace-switch/
+
+## Template choice (template-choice)
+
+- Chinese name: 模板选择
+- Group: choice
+- Scene: Choosing a starting template when creating a new page.
+- Use case: Creating projects, choosing covers, selecting email templates, and generating reports.
+- Timing: 200ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Update the visual choice first, then update the next action.
+- Reduced motion: Keep boundary, corner mark, and action-label updates.
+- Preview: https://motion-lexicon.pages.dev/en/packs/template-choice/
+
+## Layer insertion (layer-insertion)
+
+- Chinese name: 图层插入
+- Group: change
+- Scene: Adding a title or accent layer inside a design tool.
+- Use case: Adding list items, inserting comments, layer panels, and creating tasks.
+- Timing: 220ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Make the addition visible immediately inside the current list area.
+- Reduced motion: Show the new row directly while preserving item order.
+- Preview: https://motion-lexicon.pages.dev/en/packs/layer-insertion/
+
+## Archive undo (archive-undo)
+
+- Chinese name: 归档撤销
+- Group: change
+- Scene: Moving a review task to archive from a task list.
+- Use case: Archiving, deleting, removing members, completing tasks, and unsubscribing.
+- Timing: 200ms exit + 180ms restore · cubic-bezier(0.4, 0, 1, 1)
+- Trigger: Keep the departure origin inside the list the person is viewing.
+- Reduced motion: Hide or restore the card directly while keeping Undo available.
+- Preview: https://motion-lexicon.pages.dev/en/packs/archive-undo/
+
+## Filter results (filter-results)
+
+- Chinese name: 筛选结果
+- Group: change
+- Scene: Filtering design files by status in a resource library.
+- Use case: Search results, content lists, orders, tasks, and tag views.
+- Timing: 180ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Keep the filter itself continuously visible so people understand the active scope.
+- Reduced motion: Replace visible results directly while retaining count and active filter.
+- Preview: https://motion-lexicon.pages.dev/en/packs/filter-results/
+
+## Inline validation (inline-validation)
+
+- Chinese name: 行内校验
+- Group: workflow
+- Scene: Entering an email address while inviting a collaborator.
+- Use case: Form fields, account settings, payment information, and invite flows.
+- Timing: 140ms · ease-out
+- Trigger: Update state after the person completes an input that can be evaluated.
+- Reduced motion: Keep the state changes in color, icon, and text.
+- Preview: https://motion-lexicon.pages.dev/en/packs/inline-validation/
+
+## Command menu (command-menu)
+
+- Chinese name: 命令菜单
+- Group: choice
+- Scene: Jumping quickly to a common action from a document workspace.
+- Use case: Quick actions, global search, file jumping, and creation entry points.
+- Timing: 160ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Open from the original action and move keyboard focus into search immediately.
+- Reduced motion: Open and close the panel directly while retaining focus management and keyboard controls.
+- Preview: https://motion-lexicon.pages.dev/en/packs/command-menu/
+
+## Details disclosure (details-disclosure)
+
+- Chinese name: 详情展开
+- Group: change
+- Scene: An expanded explanation in a pre-publish checklist.
+- Use case: Settings explanations, FAQs, checklists, table details, and advanced parameters.
+- Timing: 220ms · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: The title row remains one complete clickable trigger surface.
+- Reduced motion: Open or close content directly while retaining aria-expanded state.
+- Preview: https://motion-lexicon.pages.dev/en/packs/details-disclosure/
+
+## Notification triage (notification-triage)
+
+- Chinese name: 通知处理
+- Group: feedback
+- Scene: Clearing two pending updates from a project inbox.
+- Use case: Notification centers, comment inboxes, approval queues, and support tickets.
+- Timing: 180ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Keep the handling action next to the current notification to reduce eye travel.
+- Reduced motion: Remove the handled item directly and update the count.
+- Preview: https://motion-lexicon.pages.dev/en/packs/notification-triage/
+
+## Progress steps (progress-steps)
+
+- Chinese name: 进度步骤
+- Group: workflow
+- Scene: Completing content, sharing, and publishing while setting up a public page.
+- Use case: Onboarding, checkout, publish wizards, imports, and application forms.
+- Timing: 240ms staged · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: The primary action advances one explicit next step.
+- Reduced motion: Update step state and progress text directly.
+- Preview: https://motion-lexicon.pages.dev/en/packs/progress-steps/
+
+## Member invite (member-invite)
+
+- Chinese name: 成员邀请
+- Group: workflow
+- Scene: Inviting a new design collaborator from project settings.
+- Use case: Team invitations, shared documents, project permissions, and approval assignment.
+- Timing: 220ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: The send action should make the invitee and role understandable.
+- Reduced motion: Insert the member row directly and retain pending copy.
+- Preview: https://motion-lexicon.pages.dev/en/packs/member-invite/
+
+## Media scrub (media-scrub)
+
+- Chinese name: 媒体拖动
+- Group: workflow
+- Scene: Precisely previewing a shot inside a video editor.
+- Use case: Video players, audio editing, before-and-after frames, and timeline editing.
+- Timing: Continuous input · linear
+- Trigger: Use the same timeline to communicate current position throughout dragging.
+- Reduced motion: Keep drag and content in sync while omitting transitions inside the frame.
+- Preview: https://motion-lexicon.pages.dev/en/packs/media-scrub/
 
 # Full recipe reference
 

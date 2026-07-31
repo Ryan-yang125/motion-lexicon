@@ -1,6 +1,6 @@
 {
   "name": "@motion-lexicon/cli",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Offline recommendation CLI and Node API for Motion Lexicon recipes.",
   "type": "module",
   "bin": {

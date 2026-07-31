@@ -112,10 +112,12 @@ test("resource popover grows with its inline theme menu", async ({ page }, testI
   expect(geometry.contentScrollHeight).toBeLessThanOrEqual(geometry.contentClientHeight + 1);
 });
 
-test("landing uses one direct Interior search shell without horizontal overflow", async ({ page }) => {
+test("landing presents the Motion Pack gallery without horizontal overflow", async ({ page }) => {
   await page.goto("/zh/");
-  await expect(page.locator(".apple-hero-finder > .interior-hero-search")).toHaveCount(1);
-  await expect(page.locator(".apple-hero-finder > div > .ml-button")).toHaveCount(0);
+  await expect(page.locator(".motion-pack-hero")).toHaveCount(1);
+  await expect(page.locator(".motion-pack-hero-stage .motion-pack-preview")).toHaveCount(1);
+  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
+  await expect(page.locator(".motion-pack-finder-callout")).toHaveCount(1);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth
   );

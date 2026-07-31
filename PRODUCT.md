@@ -2,111 +2,152 @@
 
 ## Product Promise
 
-Motion Lexicon turns vague interface intent into visible, explainable, tunable, copy-ready motion recipes.
+Motion Lexicon gives a product builder a complete, polished interaction they can
+preview, understand, and copy into an interface.
 
-The primary journey is **Describe → Choose → Tune → Use**. The product helps a user move from a feeling to a precise recipe they can share with another person or hand to an agent. Every primary surface should answer four questions quickly:
+V1 is centered on **Motion Packs**: real product moments such as saving,
+publishing, choosing, inviting, filtering, and undoing. Each Pack combines a
+recognisable scene, a clear interaction contract, short motion, accessible
+reduced-motion behavior, and portable Prompt/HTML/CSS/JavaScript output.
 
-- What can I describe in my own words?
-- What does this motion look like?
-- Which close motion fits this situation?
-- How do I reproduce it with prompt text or portable HTML/CSS/JavaScript?
+The primary journey is **Preview → Trigger → Inspect → Copy**:
+
+- What product moment does this Pack solve?
+- What changes when the user triggers it?
+- What timing and reduced-motion behavior make it feel right?
+- How can I carry it into my own interface today?
+
+Motion Finder and the vocabulary continue to support the decision journey:
+**Describe → Choose → Tune → Use**. Finder gives users accurate motion
+language; Motion Packs turn that language into a complete product interaction.
 
 ## Primary Users
 
-- Product builders who can describe interface intent, yet do not have precise animation vocabulary.
-- Designers who want a shared visual reference for motion patterns.
-- Engineers and agents that need concrete parameters, code, and reduced-motion guidance.
+- Product builders who want refined interactions without starting from a blank canvas.
+- Designers who need a shared, interactive reference during product decisions.
+- Engineers who need portable HTML, CSS, JavaScript, and behavior guidance.
+- AI agents that benefit from exact prompts, structured data, and explicit motion constraints.
 
-## Product Structure
+## V1 Product Structure
 
-The site is a static, SEO-friendly application with two primary destinations and supporting acquisition surfaces:
+The site is a static, SEO-friendly application with Motion Packs as its primary
+surface and the existing dictionary as its discovery foundation.
 
-- **Find motion:** the landing experience carries the Finder intake directly. A bilingual description produces three ranked variants, plays the current choice in one primary preview, keeps all three variants available as static choices, replays the current candidate on demand, and continues into tuning and export.
-- **Library:** one browsing destination for 31 copy-ready components, 9 focused playgrounds, and 4 guides. Search, surface, and category controls reveal the catalog progressively.
-- **Recipe workspace:** a selected motion opens as a dominant preview stage with nearby controls, a primary Prompt action, portable output, and deeper reference material.
-- **Vocabulary and category pages:** stable, indexable acquisition pages that preserve all 91 terms, close-term distinctions, and every motion family, then lead into canonical workspaces.
-- **Alias routes:** preserve legacy vocabulary URLs and resolve each related term to a canonical unit or meaningful preset.
-- **Open-source resources:** CLI, Agent Skill, versioned JSON, schemas, and repository links remain accessible from the utility layer and project footer.
+- **Motion Pack gallery:** `/:locale/` and `/:locale/packs/` present 16 real
+  product moments, grouped by feedback, choice, change, and workflow.
+- **Motion Pack detail:** `/:locale/packs/:packId/` gives each Pack a dominant
+  live preview, concise interaction guidance, and a Prompt/Code export surface.
+- **Motion Finder:** `/:locale/finder/` receives a natural-language description,
+  returns ranked candidates, and leads into precise vocabulary and recipe work.
+- **Motion Library:** `/:locale/catalog/` preserves 44 canonical workspaces
+  across components, focused playgrounds, and guides.
+- **Vocabulary and category pages:** preserve all 91 terms, definitions,
+  distinctions, and indexable acquisition routes.
+- **Open-source resources:** CLI, Agent Skill, versioned JSON, schemas, and the
+  repository remain available from the resources layer and public artifacts.
 
-Recipe URLs are canonical content URLs. Query parameters carry only tunable state such as duration, delay, distance, and easing.
+Every public page is static. No account or runtime server is required.
+
+## Motion Pack Content Contract
+
+Every Pack owns one complete, portable interaction contract:
+
+- A product context with a visible idle, active, and completed state.
+- A clear trigger and outcome expressed in the live preview.
+- Motion scoped to `transform` and `opacity` wherever possible, with short,
+  deliberate timing and a defined settle curve.
+- Prompt, HTML, CSS, and JavaScript derived from the same Pack data.
+- A reduced-motion treatment that preserves result, hierarchy, and control.
+- Bilingual names, summaries, scenes, use cases, guidance, and SEO metadata.
+- A stable URL, public JSON representation, and CLI API.
+
+The V1 set contains 16 Packs:
+
+| Group | Packs |
+| --- | --- |
+| Feedback | Save confirmation, Publish release, Share link |
+| Choice | Card selection, Workspace switch, Template choice |
+| Change | Layer insertion, Archive undo, Filter results, Inline validation |
+| Workflow | Command menu, Details disclosure, Notification triage, Progress steps, Member invite, Media scrub |
 
 ## Version Strategy
 
-The v0.1 launch ships 44 canonical units backed by all 91 vocabulary terms. Architecture, routing, SEO, i18n, themes, controls, exports, content, assets, and test gates are part of the production surface.
+### v0.1 — Vocabulary and canonical workspaces
 
-The v0.2 release adds Motion Finder as the decision layer above that catalog:
+44 canonical units and 91 source terms established the shared vocabulary,
+routing, SEO, i18n, portable exports, CLI, Skill, and quality gates.
 
-1. Accept a vague feeling, interface goal, or behavior in Chinese or English.
-2. Return up to three ranked variants with a concise reason and close-term distinction.
-3. Play the selected variant in one primary scene, keep all three ranked variants available as static choices, and replay the current candidate on demand.
-4. Preserve variants and aliases as meaningful presets while resolving implementation through canonical recipes.
-5. Continue into the existing parameter, Prompt, HTML, CSS, JavaScript, and reduced-motion workflow.
+### v0.2 — Motion Finder
 
-The recommendation engine, web Finder, CLI `recommend` command, and Agent Skill share one versioned intent model. The entire path runs locally in the static frontend or CLI and requires no account or runtime server.
+Finder added a local recommendation model for vague motion requests. It ranks up
+to three candidates, keeps the selected candidate in one primary preview, and
+shares current state through the URL and CLI.
 
-The current product experience unifies the landing intake and Finder language, establishes Find motion and Library as the primary navigation, and applies focused workspaces plus progressive disclosure across Finder, catalog, and recipe pages. This redesign preserves the v0.2 data model, URLs, exports, CLI, Skill, and SEO surface.
+### V1.0 — Motion Packs
+
+V1 changes the product’s center of gravity from individual motion primitives to
+complete product moments.
+
+1. Ship 16 high-quality Packs with real product scenes and visible state changes.
+2. Make every Pack directly usable through Prompt, HTML, CSS, and JavaScript.
+3. Keep Finder, the 44 canonical workspaces, and all 91 terms as a durable
+   choice, search, SEO, and reference layer.
+4. Expose Packs through the website, CLI, Agent Skill, `packs.json`, and
+   `llms.txt` for people and agents.
+5. Let real user questions and product feedback guide future Pack additions.
 
 ## Content Principles
 
-- Show the motion before explaining it.
-- Keep labels concrete and short.
-- Present the common path first and place advanced parameters, code, review guidance, and reference material one level deeper.
-- Keep one primary action visually dominant in each state: submit a description, select a candidate, tune the motion, or copy the result.
-- Pair every visual behavior with purpose, frequency, trigger, enter/exit, interruptibility, gesture rules, review notes, and reduced-motion guidance.
-- Keep preview, controls, Prompt, HTML, CSS, and JavaScript driven by one motion specification.
-- Maintain an original, implementation-oriented English definition for every vocabulary term and display concise product summaries as a separate layer.
-- Keep React source out of user-facing exports; users receive portable Prompt, HTML, CSS, and framework-independent JavaScript where behavior requires it.
-- Treat Chinese and English as first-class content. Both locales need complete route coverage and metadata.
-- Keep every category content-bearing. Empty category routes are a launch blocker.
-
-## Content Ownership
-
-- Motion Lexicon independently maintains the 91 English technical definitions, Chinese translations, close-term distinctions, and 44-workspace curation.
-- Motion Lexicon maintains its summaries, examples, parameters, previews, design contracts, review criteria, Prompt/HTML/CSS/JavaScript output, SEO, and product UI.
-- Project source code uses MIT; project-authored content and data use CC BY 4.0; generated code fragments use 0BSD. The root license files define the exact boundaries.
+- Show the product moment before explaining it.
+- Keep labels concrete and compact.
+- Present the common path first; place implementation details one level deeper.
+- Keep one action visually dominant in each state.
+- Give every visual behavior purpose, trigger, outcome, and reduced-motion guidance.
+- Keep preview, Prompt, HTML, CSS, and JavaScript driven by one source of truth.
+- Treat Chinese and English as first-class product content.
+- Preserve every existing canonical recipe, term, alias, and acquisition route.
 
 ## Interaction Principles
 
-- Keep the main journey continuous: Describe → Choose → Tune → Use.
-- Use one primary preview for the selected candidate and show all three ranked candidates as static choices. Replay only the current candidate.
-- Pair the preview stage and Inspector on desktop. Stack the Inspector after the stage on narrower layouts, and condense the three mobile candidate choices into compact scan-friendly rows.
-- Controls must update preview, generated CSS, generated HTML, generated prompt, and URL state together.
-- Gesture components must perform the named behavior in the preview and copied output, with pointer capture, multi-touch protection, damping, velocity-aware settlement, cancellation, and keyboard parity where applicable.
-- The current recipe should stay shareable through its URL.
-- Finder URLs should preserve the original query, ordered candidate list, selected variant, and non-default parameter values.
-- Switching Finder candidates should reuse the same primary scene dimensions, and the replay control should restart only the current candidate.
-- Copy actions need explicit success and failure states.
-- Buttons, links, inputs, and disclosures need immediate press, focus, and completion feedback.
-- Touch targets should meet 44px on mobile and remain comfortable on desktop.
-- Motion controls should respect `prefers-reduced-motion` while preserving meaning. Translucent chrome should also adapt to `prefers-reduced-transparency`, with stronger boundaries available under increased contrast preferences.
+- Live Pack previews must perform the named product interaction, with a visible
+  before-and-after state and repeatable actions.
+- Input should receive immediate press and focus feedback.
+- Completion should land quickly, clearly, and without decorative delay.
+- Pack previews use compositor-friendly properties and avoid continuous loops
+  unless a loop carries product meaning.
+- Copy actions have explicit success and failure states.
+- Touch targets remain comfortable at mobile widths.
+- `prefers-reduced-motion` removes large travel, looping, and scale while
+  preserving status, outcome, and action availability.
 
 ## Visual Principles
 
-The production design adapts Apple-inspired foundations to Motion Lexicon's own web product language:
+The production design uses a quiet, product-led Apple-inspired visual language:
 
-- **Purpose:** each screen makes the next useful action obvious and gives the motion preview the strongest visual weight.
-- **Agency:** users can revise the original request, switch among three static candidate choices, replay the current candidate, change parameters, reset values, open deeper references, and copy the output they need.
-- **Simplicity:** Find motion and Library form the primary navigation. Shared workspaces reveal output, advanced controls, vocabulary, decisions, review guidance, accessibility, and related material progressively.
-- **Craft:** platform system fonts, size-specific tracking, deliberate leading, stable spacing, responsive focus states, and carefully scoped transitions create a calm, confident interface.
-- Chroma-zero light and dark neutrals establish depth, while a single blue state color carries focus, selection, readiness, and primary actions.
-- Whitespace, scale, and surface elevation provide hierarchy. Borders appear at structural boundaries, and larger preview surfaces use more generous radii.
-- Translucent material is reserved for floating navigation, utility popovers, toolbars, and Inspectors. Solid preview surfaces preserve legibility and stable visual judgment.
-- Mono typography is reserved for code, IDs, filenames, and precise values.
-- Real animation scenes carry the product character. Supporting chrome remains quiet and predictable.
+- System typography, compact type sizes, and precise hierarchy keep attention on
+  the product moment.
+- Chroma-zero neutrals establish depth; restrained blue carries focus, selection,
+  and readiness.
+- Cards use 16px radii, navigation controls use 8px radii, and primary actions
+  use pill shapes.
+- Preview scenes carry the visual character; surrounding chrome stays calm.
+- Structural lines, spacing, and shadows clarify hierarchy without decoration.
 
 ## Quality Bar
 
-Before a change is considered done:
+Before a V1 change is considered done:
 
-- Static pages build with route-level SEO metadata.
-- Finder pages prerender in both locales and publish stable canonical URLs.
-- Web and CLI recommendation tests return the same ordered variants, reasons, presets, and selected state for the same intent.
-- Recipe pages contain a real H1 and stable canonical path.
-- Desktop and mobile have no horizontal overflow.
-- Functional text passes accessible contrast in light and dark themes.
-- Landing and Finder make the natural-language intake the clear first action.
-- Finder presents one primary preview, three static candidate choices, and a replay action for the current candidate.
-- Desktop places the active preview beside the Inspector; narrow layouts preserve the stage-first reading order.
-- Recipe pages show preview, common controls, and the primary Prompt action before deeper output and reference material.
-- Reduced-motion mode removes position, scale, looping, and parallax movement while retaining short opacity or color feedback that preserves meaning.
-- `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`, `npm run vocabulary:check`, `npm run seo:check`, `npm run motion:check`, `npm run a11y:check`, `npm run build`, `npm run bundle:check`, `npm run crawl:dist`, and `npm run test:visual` pass.
+- All 16 Pack routes render with a stable H1, localized metadata, canonical URL,
+  and a live product interaction.
+- Pack previews, Prompt, HTML, CSS, JavaScript, and reduced-motion guidance stay
+  in sync from the same data source.
+- Finder, catalog, vocabulary, all 44 workspaces, and all 91 terms remain
+  available and indexable.
+- Desktop and mobile layouts stay free of horizontal page overflow.
+- Functional text remains accessible in light and dark themes.
+- Public data, CLI, Agent Skill, README, and `llms.txt` describe the same V1
+  Pack surface.
+- `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`,
+  `npm run vocabulary:check`, `npm run seo:check`, `npm run motion:check`,
+  `npm run a11y:check`, `npm run build`, `npm run bundle:check`,
+  `npm run crawl:dist`, and `npm run test:visual` pass.

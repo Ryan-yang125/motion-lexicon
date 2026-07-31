@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { categories } from "../src/data/categories";
 import { glossaryTerms } from "../src/data/glossary";
+import { motionPackGroups, motionPacks } from "../src/data/motion-packs";
 import { getMotionGuidance } from "../src/data/motion-guidance";
 import { getMotionSpec } from "../src/data/motion-specs";
 import { canonicalMotionCatalog, catalogRecipes } from "../src/data/recipes";
@@ -13,7 +14,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const publicDir = path.join(rootDir, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const cliCommand = "npx -y github:Ryan-yang125/motion-lexicon#v0.2.0";
+const cliCommand = "npx -y github:Ryan-yang125/motion-lexicon#v1.0.0";
 const cliRecommendCommand = `${cliCommand} recommend "describe the motion you want" --locale en --format json`;
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 
@@ -40,6 +41,15 @@ function localizedVocabularyUrls(termId: string) {
     (["zh", "en"] as const).map((locale) => [
       locale,
       `${absoluteUrl(pathFor(locale, ["vocabulary"]))}#term-${termId}`
+    ])
+  ) as Record<Locale, string>;
+}
+
+function localizedMotionPackUrls(packId: string) {
+  return Object.fromEntries(
+    (["zh", "en"] as const).map((locale) => [
+      locale,
+      absoluteUrl(pathFor(locale, ["packs", packId]))
     ])
   ) as Record<Locale, string>;
 }
@@ -101,8 +111,8 @@ function catalogArtifact() {
     project: {
       name: "Motion Lexicon",
       description: {
-        zh: "从模糊描述推荐候选，并提供可视、可调、可复制配方的界面动效词典。",
-        en: "An interface motion finder that turns fuzzy descriptions into comparable, tunable, and copy-ready recipes."
+        zh: "把真实产品瞬间做成可预览、可复制、可直接接入界面的 Motion Pack，并保留完整动效词典与选择器。",
+        en: "A collection of previewable, copy-ready Motion Packs for real product moments, with a full motion vocabulary and Finder."
       },
       siteUrl,
       repositoryUrl,
@@ -115,6 +125,12 @@ function catalogArtifact() {
         zh: absoluteUrl(pathFor("zh", ["finder"])),
         en: absoluteUrl(pathFor("en", ["finder"]))
       },
+      packs: {
+        zh: absoluteUrl(pathFor("zh", ["packs"])),
+        en: absoluteUrl(pathFor("en", ["packs"]))
+      },
+      packsData: `${siteUrl}/data/v1/packs.json`,
+      packTemplate: `${siteUrl}/data/v1/packs.json#{id}`,
       catalog: `${siteUrl}/data/v1/catalog.json`,
       vocabulary: `${siteUrl}/data/v1/vocabulary.json`,
       recipeTemplate: `${siteUrl}/data/v1/recipes/{id}.json`,
@@ -126,6 +142,7 @@ function catalogArtifact() {
     counts: {
       categories: categories.length,
       recipes: catalogRecipes.length,
+      packs: motionPacks.length,
       vocabularyTerms: glossaryTerms.length,
       aliases: glossaryTerms.filter((term) => term.alias).length
     },
@@ -152,6 +169,41 @@ function catalogArtifact() {
       aliases: recipe.aliases,
       urls: localizedRecipeUrls(recipe.categoryId, recipe.id),
       dataUrl: `${siteUrl}/data/v1/recipes/${recipe.id}.json`
+    }))
+  };
+}
+
+function motionPacksArtifact() {
+  return {
+    kind: "packs",
+    schemaVersion,
+    schemaUrl: `${siteUrl}/data/v1/schema.json`,
+    count: motionPacks.length,
+    urls: Object.fromEntries(
+      (["zh", "en"] as const).map((locale) => [
+        locale,
+        absoluteUrl(pathFor(locale, ["packs"]))
+      ])
+    ),
+    groups: motionPackGroups.map((group) => ({
+      id: group.id,
+      name: group.name,
+      description: group.description
+    })),
+    packs: motionPacks.map((pack) => ({
+      id: pack.id,
+      kind: pack.kind,
+      groupId: pack.groupId,
+      name: pack.name,
+      summary: pack.shortDescription,
+      scene: pack.scene,
+      useCase: pack.useCase,
+      prompt: pack.prompt,
+      guidance: pack.guidance,
+      keywords: pack.keywords,
+      timing: pack.timing,
+      urls: localizedMotionPackUrls(pack.id),
+      source: pack.source
     }))
   };
 }
@@ -221,9 +273,10 @@ function schemaArtifact() {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: `${siteUrl}/data/v1/schema.json`,
     title: "Motion Lexicon public data",
-    description: "Schema for the versioned catalog, vocabulary, and individual recipe artifacts.",
+    description: "Schema for the versioned catalog, Motion Packs, vocabulary, and individual recipe artifacts.",
     oneOf: [
       { $ref: "#/$defs/catalogDocument" },
+      { $ref: "#/$defs/motionPacksDocument" },
       { $ref: "#/$defs/vocabularyDocument" },
       { $ref: "#/$defs/recipeDocument" }
     ],
@@ -316,6 +369,84 @@ function schemaArtifact() {
           kind: { const: "catalog" },
           categories: { type: "array", minItems: 1 },
           recipes: { type: "array", items: { $ref: "#/$defs/catalogItem" } }
+        }
+      },
+      motionPack: {
+        type: "object",
+        additionalProperties: false,
+        required: [
+          "id",
+          "kind",
+          "groupId",
+          "name",
+          "summary",
+          "scene",
+          "useCase",
+          "prompt",
+          "guidance",
+          "keywords",
+          "timing",
+          "urls",
+          "source"
+        ],
+        properties: {
+          id: { type: "string" },
+          kind: { type: "string" },
+          groupId: { type: "string" },
+          name: { $ref: "#/$defs/localizedText" },
+          summary: { $ref: "#/$defs/localizedText" },
+          scene: { $ref: "#/$defs/localizedText" },
+          useCase: { $ref: "#/$defs/localizedText" },
+          prompt: { $ref: "#/$defs/localizedText" },
+          guidance: {
+            type: "object",
+            additionalProperties: false,
+            required: ["trigger", "outcome", "reducedMotion"],
+            properties: {
+              trigger: { $ref: "#/$defs/localizedText" },
+              outcome: { $ref: "#/$defs/localizedText" },
+              reducedMotion: { $ref: "#/$defs/localizedText" }
+            }
+          },
+          keywords: { type: "array", items: { type: "string" }, minItems: 1 },
+          timing: { type: "string" },
+          urls: { $ref: "#/$defs/localizedUrls" },
+          source: {
+            type: "object",
+            additionalProperties: false,
+            required: ["html", "css", "js"],
+            properties: {
+              html: { type: "string" },
+              css: { type: "string" },
+              js: { type: "string" }
+            }
+          }
+        }
+      },
+      motionPacksDocument: {
+        type: "object",
+        additionalProperties: false,
+        required: [...baseDocumentRequired, "count", "urls", "groups", "packs"],
+        properties: {
+          ...baseDocumentProperties,
+          kind: { const: "packs" },
+          count: { type: "integer", minimum: 1 },
+          urls: { $ref: "#/$defs/localizedUrls" },
+          groups: {
+            type: "array",
+            minItems: 1,
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["id", "name", "description"],
+              properties: {
+                id: { type: "string" },
+                name: { $ref: "#/$defs/localizedText" },
+                description: { $ref: "#/$defs/localizedText" }
+              }
+            }
+          },
+          packs: { type: "array", minItems: 1, items: { $ref: "#/$defs/motionPack" } }
         }
       },
       vocabularyTerm: {
@@ -425,6 +556,8 @@ function llmsArtifact() {
     `- Chinese website: ${siteUrl}/zh/`,
     `- Motion Finder: ${siteUrl}/en/finder/`,
     `- 中文动效选择器: ${siteUrl}/zh/finder/`,
+    `- Motion Packs: ${siteUrl}/en/packs/`,
+    `- Motion Packs JSON: ${siteUrl}/data/v1/packs.json`,
     `- Source: ${repositoryUrl}`,
     `- Pricing: ${siteUrl}/pricing.txt (free; no account required)`,
     `- Catalog JSON: ${siteUrl}/data/v1/catalog.json`,
@@ -437,6 +570,13 @@ function llmsArtifact() {
     `- CLI: \`${cliCommand}\``,
     `- Fuzzy recommendation: \`${cliRecommendCommand}\``,
     `- Agent Skill: \`${skillCommand}\``,
+    "",
+    "## Motion Packs",
+    "",
+    ...motionPacks.map(
+      (pack) =>
+        `- [${pack.name.en}](${absoluteUrl(pathFor("en", ["packs", pack.id]))}): ${pack.shortDescription.en}`
+    ),
     "",
     "## Canonical recipes",
     ""
@@ -472,12 +612,28 @@ function pricingArtifact() {
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
 - Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
-- Last updated: 2026-07-30
+- Last updated: 2026-08-01
 `;
 }
 
 function llmsFullArtifact() {
-  const lines = [llmsArtifact().trim(), "", "# Full recipe reference", ""];
+  const lines = [llmsArtifact().trim(), "", "# Full Motion Pack reference", ""];
+
+  for (const pack of motionPacks) {
+    lines.push(`## ${pack.name.en} (${pack.id})`);
+    lines.push("");
+    lines.push(`- Chinese name: ${pack.name.zh}`);
+    lines.push(`- Group: ${pack.groupId}`);
+    lines.push(`- Scene: ${pack.scene.en}`);
+    lines.push(`- Use case: ${pack.useCase.en}`);
+    lines.push(`- Timing: ${pack.timing}`);
+    lines.push(`- Trigger: ${pack.guidance.trigger.en}`);
+    lines.push(`- Reduced motion: ${pack.guidance.reducedMotion.en}`);
+    lines.push(`- Preview: ${absoluteUrl(pathFor("en", ["packs", pack.id]))}`);
+    lines.push("");
+  }
+
+  lines.push("# Full recipe reference", "");
 
   for (const recipe of catalogRecipes) {
     const guidance = getMotionGuidance(recipe.id);
@@ -523,6 +679,7 @@ export function buildPublicArtifacts(): Artifact[] {
     { relativePath: "llms-full.txt", content: llmsFullArtifact() },
     jsonArtifact("data/v1/schema.json", schemaArtifact()),
     jsonArtifact("data/v1/catalog.json", catalogArtifact()),
+    jsonArtifact("data/v1/packs.json", motionPacksArtifact()),
     jsonArtifact("data/v1/vocabulary.json", vocabularyArtifact()),
     ...catalogRecipes.map((recipe) =>
       jsonArtifact(`data/v1/recipes/${recipe.id}.json`, recipeArtifact(recipe.id))

@@ -4,9 +4,11 @@ export {
   getSchema,
   listCanonicalIds,
   listCategories,
+  packs,
   recommend,
   resolveRecipe,
   search,
+  showPack,
   show
 } from "./core.js";
 export { runCli, getHelp, type CliIo } from "./cli.js";
@@ -21,6 +23,10 @@ export {
   type CliLocale,
   type DiscoveryFormat,
   type ExportFormat,
+  type MotionPackDocument,
+  type MotionPackItem,
+  type MotionPackOptions,
+  type MotionPacksDocument,
   type RecipeDocument,
   type RecipeExportDocument,
   type RecipeOptions,

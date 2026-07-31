@@ -2,10 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://motion-lexicon.pages.dev/data/v1/schema.json",
   "title": "Motion Lexicon public data",
-  "description": "Schema for the versioned catalog, vocabulary, and individual recipe artifacts.",
+  "description": "Schema for the versioned catalog, Motion Packs, vocabulary, and individual recipe artifacts.",
   "oneOf": [
     {
       "$ref": "#/$defs/catalogDocument"
+    },
+    {
+      "$ref": "#/$defs/motionPacksDocument"
     },
     {
       "$ref": "#/$defs/vocabularyDocument"
@@ -275,6 +278,167 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/catalogItem"
+          }
+        }
+      }
+    },
+    "motionPack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "groupId",
+        "name",
+        "summary",
+        "scene",
+        "useCase",
+        "prompt",
+        "guidance",
+        "keywords",
+        "timing",
+        "urls",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "summary": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "scene": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "useCase": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "prompt": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "guidance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "trigger",
+            "outcome",
+            "reducedMotion"
+          ],
+          "properties": {
+            "trigger": {
+              "$ref": "#/$defs/localizedText"
+            },
+            "outcome": {
+              "$ref": "#/$defs/localizedText"
+            },
+            "reducedMotion": {
+              "$ref": "#/$defs/localizedText"
+            }
+          }
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "timing": {
+          "type": "string"
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "html",
+            "css",
+            "js"
+          ],
+          "properties": {
+            "html": {
+              "type": "string"
+            },
+            "css": {
+              "type": "string"
+            },
+            "js": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "motionPacksDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "schemaVersion",
+        "schemaUrl",
+        "count",
+        "urls",
+        "groups",
+        "packs"
+      ],
+      "properties": {
+        "kind": {
+          "const": "packs"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "schemaUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "description"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "$ref": "#/$defs/localizedText"
+              },
+              "description": {
+                "$ref": "#/$defs/localizedText"
+              }
+            }
+          }
+        },
+        "packs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/motionPack"
           }
         }
       }

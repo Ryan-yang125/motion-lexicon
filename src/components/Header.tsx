@@ -32,10 +32,11 @@ export function Header({ locale }: HeaderProps) {
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const isHome = pathSegments.length === 1;
   const isCatalog = /\/catalog\/?$/.test(location.pathname);
+  const isPacksRoute = /\/packs(?:\/|$)/.test(location.pathname);
   const isFinderRoute = /\/finder\/?$/.test(location.pathname);
-  const isFinder = isHome || isFinderRoute;
+  const isFinder = isFinderRoute;
   const isVocabulary = /\/vocabulary\/?$/.test(location.pathname);
-  const isLibrary = !isFinder;
+  const isLibrary = isHome || isPacksRoute;
   const finderLabel = locale === "zh" ? "找动效" : "Find motion";
   const libraryLabel = locale === "zh" ? "动效库" : "Library";
   const resourcesLabel = locale === "zh" ? "资源与设置" : "Resources and settings";
@@ -68,11 +69,10 @@ export function Header({ locale }: HeaderProps) {
             {finderLabel}
           </Link>
           <Link
-            to="/$locale/catalog/"
+            to="/$locale/packs/"
             params={{ locale }}
-            search={{ surface: "components" }}
             className={`library-primary-link is-library${isLibrary ? " is-active" : ""}`}
-            aria-current={isCatalog ? "page" : undefined}
+            aria-current={isPacksRoute ? "page" : undefined}
           >
             {libraryLabel}
           </Link>
@@ -125,6 +125,15 @@ export function Header({ locale }: HeaderProps) {
                     </Link>
                   );
                 })}
+                <Link
+                  to="/$locale/catalog/"
+                  params={{ locale }}
+                  search={{ surface: "components" }}
+                  className={isCatalog ? "is-active" : undefined}
+                >
+                  <BookOpen aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <span>{locale === "zh" ? "词典与工具" : "Vocabulary tools"}</span>
+                </Link>
                 <Link
                   to="/$locale/vocabulary/"
                   params={{ locale }}

@@ -104,24 +104,25 @@ test("persisted theme hydrates without a first-render mismatch", async ({ page }
   expect(hydrationErrors).toEqual([]);
 });
 
-test("landing defers editor, guidance, and runtime chunks", async ({ page }, testInfo) => {
+test("landing defers recipe and Pack-detail chunks until the reader opens a Pack", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Initial chunk loading is verified once on desktop.");
 
   await page.goto("/zh/");
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "把一个产品瞬间，直接带进你的界面。" })).toBeVisible();
   const resources = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
 
-  expect(resources.some((url) => /editor-vendor|CatalogSidebar|recipe\.lazy|structured-data/.test(url))).toBe(false);
+  expect(resources.some((url) => /editor-vendor|CatalogSidebar|recipe\.lazy|motion-pack\.lazy|structured-data/.test(url))).toBe(false);
 
-  await page.locator(".library-hero-preview").click();
-  await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();
+  await page.getByTestId("motion-pack-card-save-confirmation").getByRole("link", { name: "查看 Pack", exact: true }).click();
+  await expect(page).toHaveURL(/\/zh\/packs\/save-confirmation\//);
+  await expect(page.getByRole("heading", { level: 1, name: "保存确认" })).toBeVisible();
   const afterNavigation = await page.evaluate(() => ({
     resources: performance.getEntriesByType("resource").map((entry) => entry.name),
     documentNavigations: performance.getEntriesByType("navigation").length
   }));
-  expect(afterNavigation.resources.some((url) => /CatalogSidebar|recipe\.lazy/.test(url))).toBe(true);
+  expect(afterNavigation.resources.some((url) => /motion-pack\.lazy/.test(url))).toBe(true);
   expect(afterNavigation.documentNavigations).toBe(1);
 });
 

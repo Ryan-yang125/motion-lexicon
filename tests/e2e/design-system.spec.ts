@@ -1,10 +1,16 @@
 import { expect, test, webkit, type Page } from "@playwright/test";
 
+const finderRoute = `/zh/finder/?q=${encodeURIComponent("卡片弹出来要有重量，最后收得住")}&compare=spring,pop-in,scale-in&selected=spring`;
+
 const productRoutes = [
   "/zh/",
+  "/zh/packs/",
+  "/zh/packs/save-confirmation/",
   "/zh/catalog/?surface=components",
-  `/zh/finder/?q=${encodeURIComponent("卡片弹出来要有重量，最后收得住")}&compare=spring,pop-in,scale-in&selected=spring`,
+  finderRoute,
   "/zh/sequencing/stagger/",
+  "/en/packs/",
+  "/en/packs/save-confirmation/",
   "/en/catalog/?surface=components"
 ];
 
@@ -147,11 +153,22 @@ test("key Chinese and English layouts have no horizontal scrolling at product br
     route: string;
     selectors: string[];
     codeTab?: string;
+    packCodeTab?: string;
     parameterTable?: boolean;
   }> = [
     {
       route: "/en/",
-      selectors: [".apple-hero-examples", ".apple-hero-examples button", ".apple-hero-preview"]
+      selectors: [".motion-pack-hero", ".motion-pack-hero-stage", ".motion-pack-gallery", ".motion-pack-grid"]
+    },
+    {
+      route: "/zh/packs/save-confirmation/",
+      packCodeTab: "代码",
+      selectors: [".motion-pack-workbench", ".motion-pack-stage", ".motion-pack-export", ".motion-pack-code pre"]
+    },
+    {
+      route: "/en/packs/save-confirmation/",
+      packCodeTab: "Code",
+      selectors: [".motion-pack-workbench", ".motion-pack-stage", ".motion-pack-export", ".motion-pack-code pre"]
     },
     {
       route: "/zh/catalog/?surface=components",
@@ -170,7 +187,7 @@ test("key Chinese and English layouts have no horizontal scrolling at product br
       ]
     },
     {
-      route: productRoutes[2],
+      route: finderRoute,
       codeTab: "代码",
       selectors: [
         ".finder-workspace-shell",
@@ -224,6 +241,12 @@ test("key Chinese and English layouts have no horizontal scrolling at product br
       if (item.codeTab) {
         await page.locator(".apple-code-output").getByRole("tab", { name: item.codeTab, exact: true }).click();
         await expect(page.locator(".library-code-files")).toBeVisible();
+      }
+
+      if (item.packCodeTab) {
+        const output = page.locator(".motion-pack-export");
+        await output.getByRole("tab", { name: item.packCodeTab, exact: true }).click();
+        await expect(output.locator(".motion-pack-code")).toBeVisible();
       }
 
       if (item.parameterTable && width <= 390) {
@@ -294,11 +317,11 @@ test("vocabulary search stays compact across stacked and horizontal toolbars", a
   }
 });
 
-test("dark Finder, Catalog, and recipe states render without overflow", async ({ page }, testInfo) => {
+test("dark Motion Pack, Finder, Catalog, and recipe states render without overflow", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Dark route coverage runs once in desktop Chromium.");
   await page.addInitScript(() => localStorage.setItem("motion-lexicon-theme:v1", "dark"));
 
-  for (const route of [productRoutes[1], productRoutes[2], productRoutes[3]]) {
+  for (const route of ["/zh/packs/", "/zh/packs/save-confirmation/", "/zh/catalog/?surface=components", finderRoute, "/zh/sequencing/stagger/"]) {
     await page.goto(route);
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -333,13 +356,21 @@ test("Interior product surfaces keep compact geometry and restrained elevation",
     {
       route: "/zh/",
       surfaces: [
-        { selector: ".apple-hero-finder .interior-hero-search > div", radius: "10px" },
-        { selector: ".apple-hero-preview.library-hero-preview", radius: "16px" },
-        { selector: ".apple-scene-card", radius: "16px" }
+        { selector: ".motion-pack-hero-stage", radius: "16px" },
+        { selector: ".motion-pack-card", radius: "16px" },
+        { selector: ".motion-pack-finder-callout", radius: "16px" }
       ]
     },
     {
-      route: productRoutes[2],
+      route: "/zh/packs/save-confirmation/",
+      surfaces: [
+        { selector: ".motion-pack-stage", radius: "16px" },
+        { selector: ".motion-pack-inspector", radius: "16px" },
+        { selector: ".motion-pack-export", radius: "16px" }
+      ]
+    },
+    {
+      route: finderRoute,
       surfaces: [
         { selector: ".apple-search-pill .finder-search-field", radius: "16px" },
         { selector: ".apple-inspector.finder-inspector", radius: "16px" },
@@ -379,7 +410,7 @@ test("Interior product surfaces keep compact geometry and restrained elevation",
 
   await page.emulateMedia({ contrast: "more" });
   await page.goto("/zh/");
-  await expect(page.locator(".apple-motion-card.library-card").first()).not.toHaveCSS("box-shadow", "none");
+  await expect(page.locator(".motion-pack-card").first()).not.toHaveCSS("box-shadow", "none");
 });
 
 test("fine-pointer parameter primitives preserve the 44 pixel target baseline", async ({ page }, testInfo) => {
@@ -396,7 +427,7 @@ test("fine-pointer parameter primitives preserve the 44 pixel target baseline", 
 test("coarse-pointer product controls preserve 44 pixel targets", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Target sizing uses the coarse-pointer project.");
 
-  await page.goto(productRoutes[2]);
+  await page.goto(finderRoute);
   for (const selector of [
     ".finder-active-preview-header .ml-button",
     ".finder-active-preview-copy > a",
@@ -428,7 +459,7 @@ test("coarse-pointer layouts hide the keyboard-only slash hint", async ({ page }
   await expect(page.locator(".finder-search > small")).toBeHidden();
 });
 
-test("WebKit renders the critical catalog and recipe paths cleanly", async ({ baseURL }, testInfo) => {
+test("WebKit renders the critical Pack, catalog, and recipe paths cleanly", async ({ baseURL }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "The dedicated WebKit audit runs once.");
   const browser = await webkit.launch();
   const context = await browser.newContext({ viewport: { width: 1024, height: 900 } });
@@ -437,7 +468,7 @@ test("WebKit renders the critical catalog and recipe paths cleanly", async ({ ba
   page.on("pageerror", (error) => errors.push(error.message));
 
   try {
-    for (const route of ["/en/catalog/?surface=components", "/zh/sequencing/stagger/"]) {
+    for (const route of ["/en/packs/", "/en/packs/save-confirmation/", "/en/catalog/?surface=components", "/zh/sequencing/stagger/"]) {
       await page.goto(`${baseURL ?? "http://127.0.0.1:4173"}${route}`);
       await page.locator("#main-content").waitFor({ state: "visible" });
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

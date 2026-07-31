@@ -1,5 +1,7 @@
 import type {
   CatalogDocument,
+  MotionPackDocument,
+  MotionPacksDocument,
   RecommendDocument,
   RecipeDocument,
   SearchDocument
@@ -31,6 +33,56 @@ export function formatCatalogMarkdown(document: CatalogDocument) {
     "| ID | Name | Category | Surface | Aliases |",
     "| --- | --- | --- | --- | --- |",
     ...rows
+  ].join("\n");
+}
+
+export function formatMotionPacksText(document: MotionPacksDocument) {
+  return document.items
+    .map((item) => `${item.id}\t${item.name}\t${item.groupName}\t${item.description}`)
+    .join("\n");
+}
+
+export function formatMotionPacksMarkdown(document: MotionPacksDocument) {
+  const rows = document.items.map(
+    (item) => `| ${escapeCell(item.id)} | ${escapeCell(item.name)} | ${escapeCell(item.groupName)} | ${escapeCell(item.description)} |`
+  );
+  return [
+    "| ID | Motion Pack | Group | Description |",
+    "| --- | --- | --- | --- |",
+    ...rows
+  ].join("\n");
+}
+
+export function formatMotionPackText(document: MotionPackDocument) {
+  return [
+    `${document.name} (${document.id})`,
+    document.description,
+    `group: ${document.groupName}`,
+    `path: ${document.path}`,
+    `timing: ${document.timing}`,
+    `trigger: ${document.guidance.trigger}`,
+    `reduced motion: ${document.guidance.reducedMotion}`
+  ].join("\n");
+}
+
+export function formatMotionPackMarkdown(document: MotionPackDocument) {
+  return [
+    `# ${document.name}`,
+    "",
+    document.description,
+    "",
+    `- ID: \`${document.id}\``,
+    `- Group: ${document.groupName}`,
+    `- Scene: ${document.scene}`,
+    `- Use case: ${document.useCase}`,
+    `- Timing: ${document.timing}`,
+    `- Path: \`${document.path}\``,
+    "",
+    "## Motion guidance",
+    "",
+    `- Trigger: ${document.guidance.trigger}`,
+    `- Outcome: ${document.guidance.outcome}`,
+    `- Reduced motion: ${document.guidance.reducedMotion}`
   ].join("\n");
 }
 
