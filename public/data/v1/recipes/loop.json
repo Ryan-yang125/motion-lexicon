@@ -177,5 +177,40 @@
     "marquee",
     "orbit",
     "idle-animation"
+  ],
+  "productMoments": [
+    {
+      "id": "save-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "保存确认",
+        "en": "Save confirmation"
+      },
+      "summary": {
+        "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+        "en": "A submission lands across the action, status marker, and document state together."
+      },
+      "scene": {
+        "zh": "产品更新编辑器中的一条已保存状态。",
+        "en": "A saved state inside a product-update editor."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "保存中的图标短暂循环，并在结果抵达后停止。",
+        "en": "The saving icon loops briefly and stops once the result arrives."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+      }
+    }
   ]
 }

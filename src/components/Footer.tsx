@@ -27,7 +27,10 @@ export function Footer() {
             {locale === "zh" ? "找动效" : "Find motion"}
           </Link>
           <Link to="/$locale/packs/" params={{ locale }}>
-            {locale === "zh" ? "动效库" : "Library"}
+            {locale === "zh" ? "产品瞬间" : "Product moments"}
+          </Link>
+          <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
+            {locale === "zh" ? "动效基础" : "Motion primitives"}
           </Link>
           <Link to="/$locale/vocabulary/" params={{ locale }}>
             {locale === "zh" ? "动画词汇" : "Vocabulary"}
@@ -51,6 +54,10 @@ export function Footer() {
           </a>
           <a href="/data/v1/catalog.json">
             Catalog JSON
+            <ArrowUpRight aria-hidden="true" size={14} />
+          </a>
+          <a href="/data/v1/packs.json">
+            Packs JSON
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
         </nav>

@@ -63,12 +63,12 @@ export const resources = {
         searchPlaceholder: "搜索 fade、slide、stagger、press"
       },
       landing: {
-        heroStatus: "Motion Finder v0.2 · 免费开源",
-        heroTitle: "说出你要的感觉，\n找到准确动效。",
-        heroCopy: "描述界面、动作和质感，获得三个可预览候选。",
+        heroStatus: "Motion Lexicon V1.1 · 免费开源",
+        heroTitle: "产品瞬间与动效基础，\n都能直接带走。",
+        heroCopy: "从完整交互或底层动作开始，预览、调节并复制产品动效。",
         openFinder: "开始描述动效",
         finderExample: "例如：卡片切入后慢慢停下来",
-        browseComponents: "浏览动效组件",
+        browseComponents: "浏览动效基础",
         openPlaygrounds: "打开参数工具",
         searchLibrary: "搜索 fade、spring、drag 或 reduced motion",
         outputLabel: "可复制输出",
@@ -85,8 +85,8 @@ export const resources = {
           copy: { title: "直接复制交付", copy: "选择 CSS、HTML、行为所需的 JS 或提示词，带走已经确认的结果。" }
         },
         directoryLabel: "完整目录",
-        directoryTitle: "按用途发现合适的动效",
-        directoryCopy: "核心组件、参数工具和设计指南分别组织，术语仍能通过搜索找到。",
+        directoryTitle: "从两条目录开始",
+        directoryCopy: "产品瞬间与动效基础并列组织，Finder 会跨两条目录给出方向。",
         directoryCount: "{{count}} 个结果",
         openFullCatalog: "打开完整目录",
         searchLabel: "搜索动效库",
@@ -116,8 +116,8 @@ export const resources = {
         copyCopy: "复制提示词和代码。"
       },
       catalog: {
-        title: "动效库",
-        libraryLabel: "动效目录",
+        title: "动效基础",
+        libraryLabel: "动效基础目录",
         indexTitle: "目录导航",
         recipesTitle: "可用条目",
         surfaceLabel: "内容类型",
@@ -133,10 +133,10 @@ export const resources = {
         clearSearch: "清除搜索",
         clearFilters: "清除筛选",
         viewCategory: "查看分类",
-        backToLibrary: "返回动效库",
+        backToLibrary: "返回动效基础",
         noResultsCopy: "调整或清除筛选条件后继续浏览。",
         notFoundTitle: "找不到这个分类",
-        notFoundCopy: "返回动效库，选择一个现有分类。"
+        notFoundCopy: "返回动效基础，选择一个现有分类。"
       },
       finder: {
         title: "描述感觉，找到准确动效。",
@@ -150,7 +150,7 @@ export const resources = {
           continuity: "让同一个元素在两个页面之间连贯移动",
           sequence: "让一组列表项依次出现，节奏清楚一点"
         },
-        resultTitle: "候选动效",
+        resultTitle: "相关动效基础",
         resultCount: "已找到 {{count}} 个候选",
         confidence: {
           high: "高度匹配",
@@ -208,14 +208,14 @@ export const resources = {
         staticProduct: "静态构建 · 中英文 · 支持减弱动效"
       },
       seo: {
-        homeTitle: "Motion Lexicon | 可复制的真实产品瞬间",
-        homeDescription: "探索 16 个可交互的 Motion Pack：在真实产品场景中触发状态变化，查看结果，并复制提示词、HTML、CSS 和 JavaScript。",
-        catalogTitle: "动效目录 | Motion Lexicon",
-        catalogDescription: "按动效组件、参数工具和指南浏览 Motion Lexicon。",
+        homeTitle: "Motion Lexicon | 产品瞬间与动效基础",
+        homeDescription: "探索 16 个产品瞬间与 44 个动效基础，在真实界面中预览、调节并复制产品动效。",
+        catalogTitle: "动效基础 | Motion Lexicon",
+        catalogDescription: "浏览 44 个动效基础的组件、参数工具和设计指南，并追溯它们参与的产品瞬间。",
         playgroundTitle: "参数工具 | Motion Lexicon",
         playgroundDescription: "比较和调整动效参数，并复制可用输出。",
         finderTitle: "动效选择器 | Motion Lexicon",
-        finderDescription: "描述你想要的动效感觉，比较候选、调节参数，并继续查看可复制的真实产品瞬间。"
+        finderDescription: "描述你想要的界面、动作或感觉，同时查看相关动效基础与适合的产品瞬间。"
       }
     }
   },
@@ -281,12 +281,12 @@ export const resources = {
         searchPlaceholder: "Search fade, slide, stagger, press"
       },
       landing: {
-        heroStatus: "Motion Finder v0.2 · free and open source",
-        heroTitle: "Describe the feel.\nFind the right motion.",
-        heroCopy: "Describe the interface, action, and feel to get three previewable candidates.",
+        heroStatus: "Motion Lexicon V1.1 · free and open source",
+        heroTitle: "Product moments and motion primitives,\nready to take with you.",
+        heroCopy: "Start with a complete interaction or a foundational behavior, then preview, tune, and copy product motion.",
         openFinder: "Describe your motion",
         finderExample: "For example: let the card enter, then slow to a stop",
-        browseComponents: "Browse components",
+        browseComponents: "Browse motion primitives",
         openPlaygrounds: "Open playgrounds",
         searchLibrary: "Search fade, spring, drag, or reduced motion",
         outputLabel: "Copyable output",
@@ -303,8 +303,8 @@ export const resources = {
           copy: { title: "Copy the handoff", copy: "Choose CSS, HTML, any JavaScript required for behavior, or prompt text." }
         },
         directoryLabel: "Full directory",
-        directoryTitle: "Find motion by purpose",
-        directoryCopy: "Core components, focused playgrounds, and practical guides have their own clear place. Search still reaches every term.",
+        directoryTitle: "Start with two directories",
+        directoryCopy: "Product moments and motion primitives have equal place in the product. Finder crosses both directories.",
         directoryCount: "{{count}} results",
         openFullCatalog: "Open full catalog",
         searchLabel: "Search the motion library",
@@ -334,8 +334,8 @@ export const resources = {
         copyCopy: "Copy prompt text and code."
       },
       catalog: {
-        title: "Motion library",
-        libraryLabel: "Motion directory",
+        title: "Motion primitives",
+        libraryLabel: "Motion primitives directory",
         indexTitle: "Library navigation",
         recipesTitle: "Available entries",
         surfaceLabel: "Content type",
@@ -351,10 +351,10 @@ export const resources = {
         clearSearch: "Clear search",
         clearFilters: "Clear filters",
         viewCategory: "View category",
-        backToLibrary: "Back to library",
+        backToLibrary: "Back to motion primitives",
         noResultsCopy: "Adjust or clear the filters to continue browsing.",
         notFoundTitle: "Category not found",
-        notFoundCopy: "Return to the motion library and choose an available category."
+        notFoundCopy: "Return to motion primitives and choose an available category."
       },
       finder: {
         title: "Describe the feel. Find the right motion.",
@@ -368,7 +368,7 @@ export const resources = {
           continuity: "Move the same element smoothly between two screens",
           sequence: "Bring in a list item by item with a clear rhythm"
         },
-        resultTitle: "Motion candidates",
+        resultTitle: "Related motion primitives",
         resultCount: "{{count}} candidates found",
         confidence: {
           high: "High match",
@@ -426,14 +426,14 @@ export const resources = {
         staticProduct: "Static build · bilingual · reduced-motion ready"
       },
       seo: {
-        homeTitle: "Motion Lexicon | Copy-ready product moments",
-        homeDescription: "Explore 16 interactive Motion Packs: trigger real product-state changes, inspect the result, and copy the prompt, HTML, CSS, and JavaScript.",
-        catalogTitle: "Motion catalog | Motion Lexicon",
-        catalogDescription: "Browse Motion Lexicon by components, playgrounds, and guides.",
+        homeTitle: "Motion Lexicon | Product moments and motion primitives",
+        homeDescription: "Explore 16 product moments and 44 motion primitives. Preview, tune, and copy product motion in real interface contexts.",
+        catalogTitle: "Motion primitives | Motion Lexicon",
+        catalogDescription: "Browse 44 motion primitives across components, playgrounds, and guides, then open their declared Product Moment relationships.",
         playgroundTitle: "Motion playgrounds | Motion Lexicon",
         playgroundDescription: "Compare and tune motion parameters, then copy usable output.",
         finderTitle: "Motion Finder | Motion Lexicon",
-        finderDescription: "Describe the motion you want, compare candidates, tune parameters, and continue into copy-ready product moments."
+        finderDescription: "Describe an interface, action, or feeling to view related motion primitives and matching product moments together."
       }
     }
   }

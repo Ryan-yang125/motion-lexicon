@@ -1,7 +1,8 @@
+import { canonicalMotionCatalog } from "./motion-catalog";
 import type { LocalizedText } from "./types";
 
 /**
- * Motion Lexicon V1 is organised around recognisable product moments.
+ * Motion Lexicon V1.1 organises one collection around recognisable product moments.
  * A pack owns the complete portable implementation a visitor can preview,
  * copy, and adapt inside their own interface.
  */
@@ -37,6 +38,35 @@ export type MotionPackSource = {
   js: string;
 };
 
+/**
+ * The contribution a canonical motion primitive makes inside a product moment.
+ * Packs can carry several roles, which keeps the relationship deliberately
+ * many-to-many while preserving equal standing for both collections.
+ */
+export type MotionFoundationRole =
+  | "input-feedback"
+  | "state-change"
+  | "entrance"
+  | "exit-recovery"
+  | "spatial-continuity"
+  | "sequence"
+  | "disclosure"
+  | "continuous-input"
+  | "timing"
+  | "motion-preference";
+
+export type MotionPackFoundation = {
+  foundationId: string;
+  role: MotionFoundationRole;
+  roleLabel: LocalizedText;
+  note: LocalizedText;
+};
+
+export type MotionPackFoundationLink = {
+  pack: MotionPack;
+  foundation: MotionPackFoundation;
+};
+
 export type MotionPack = {
   id: MotionPackKind;
   kind: MotionPackKind;
@@ -53,10 +83,38 @@ export type MotionPack = {
   };
   keywords: string[];
   timing: string;
+  foundations: readonly MotionPackFoundation[];
   source: MotionPackSource;
 };
 
+type MotionPackCore = Omit<MotionPack, "foundations">;
+
 const text = (zh: string, en: string): LocalizedText => ({ zh, en });
+
+const foundationRoleLabels: Readonly<Record<MotionFoundationRole, LocalizedText>> = {
+  "input-feedback": text("输入反馈", "Input feedback"),
+  "state-change": text("状态变化", "State change"),
+  entrance: text("进入", "Entrance"),
+  "exit-recovery": text("离开与恢复", "Exit and recovery"),
+  "spatial-continuity": text("空间连续性", "Spatial continuity"),
+  sequence: text("顺序编排", "Sequencing"),
+  disclosure: text("展开与收起", "Disclosure"),
+  "continuous-input": text("连续输入", "Continuous input"),
+  timing: text("节奏与时长", "Timing"),
+  "motion-preference": text("减弱动效", "Reduced motion")
+};
+
+const foundation = (
+  foundationId: string,
+  role: MotionFoundationRole,
+  zh: string,
+  en: string
+): MotionPackFoundation => ({
+  foundationId,
+  role,
+  roleLabel: foundationRoleLabels[role],
+  note: text(zh, en)
+});
 
 const source = (html: string, css: string, js: string): MotionPackSource => ({
   html: html.trim(),
@@ -98,7 +156,7 @@ export const motionPackGroups: readonly MotionPackGroup[] = [
   }
 ];
 
-export const motionPacks: MotionPack[] = [
+const motionPackCores: MotionPackCore[] = [
   {
     id: "save-confirmation",
     kind: "save-confirmation",
@@ -154,7 +212,7 @@ export const motionPacks: MotionPack[] = [
     groupId: "feedback",
     name: text("发布版本", "Publish release"),
     shortDescription: text("把一项准备完成的更新，收束成一次有明确落点的发布。", "Resolve a ready update into a release with a clear landing point."),
-    scene: text("发布 V1.0 更新时的版本面板。", "A version panel while publishing a V1.0 update."),
+    scene: text("发布产品更新时的版本面板。", "A version panel while publishing a product update."),
     useCase: text("发布文章、上线版本、提交审批和发送公告。", "Publishing articles, shipping releases, submitting approvals, and sending announcements."),
     prompt: text(
       "实现一个版本发布动作：用户点击“发布版本”后，按钮短暂显示进行中，发布卡片变为已上线状态，并在时间线里留下“刚刚发布”的记录。动作集中在 240ms 内完成。",
@@ -170,7 +228,7 @@ export const motionPacks: MotionPack[] = [
     source: source(
       String.raw`<section class="ml-publish-release" data-motion-pack="publish-release" aria-label="Publish release">
   <div class="ml-release-card" data-state="ready">
-    <div class="ml-release-head"><span class="ml-release-version">v1.0</span><span class="ml-release-state" data-release-state>Ready</span></div>
+    <div class="ml-release-head"><span class="ml-release-version">v1.1</span><span class="ml-release-state" data-release-state>Ready</span></div>
     <strong>Quiet Product Motion</strong><p>16 product moments are ready to ship.</p>
     <button type="button" data-publish-action><span data-publish-label>Publish release</span><span aria-hidden="true">→</span></button>
     <ol class="ml-release-history" data-release-history><li><i></i><span>Notes approved</span></li></ol>
@@ -447,7 +505,7 @@ export const motionPacks: MotionPack[] = [
   {
     id: "inline-validation",
     kind: "inline-validation",
-    groupId: "workflow",
+    groupId: "feedback",
     name: text("行内校验", "Inline validation"),
     shortDescription: text("输入时提供贴近字段的方向，让用户持续停留在当前任务上。", "Offer direction close to the field while people stay in the current task."),
     scene: text("邀请协作者时填写电子邮箱。", "Entering an email address while inviting a collaborator."),
@@ -552,7 +610,7 @@ export const motionPacks: MotionPack[] = [
   {
     id: "notification-triage",
     kind: "notification-triage",
-    groupId: "feedback",
+    groupId: "workflow",
     name: text("通知处理", "Notification triage"),
     shortDescription: text("处理一条提醒后，让已完成感和下一条待处理内容自然接续。", "After handling a notification, let completion and the next pending item follow naturally."),
     scene: text("项目收件箱里清理两条待处理的更新。", "Clearing two pending updates from a project inbox."),
@@ -685,6 +743,407 @@ export const motionPacks: MotionPack[] = [
   }
 ];
 
+/**
+ * Each link describes a primitive already present in the 44-item canonical
+ * catalog. The localized note explains the primitive's concrete contribution
+ * within this specific product moment.
+ */
+const foundationsByMotionPackId: Readonly<
+  Record<MotionPackKind, readonly MotionPackFoundation[]>
+> = {
+  "save-confirmation": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "保存按钮先确认这次点击已被接收。",
+      "The save action acknowledges the click before the result arrives."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "保存中与已保存的文案在原位置更新。",
+      "Saving and Saved update in the same label position."
+    ),
+    foundation(
+      "perceived-performance",
+      "state-change",
+      "同步状态标记让短暂等待始终可读。",
+      "The synchronous state marker keeps the brief wait legible."
+    ),
+    foundation(
+      "duration",
+      "timing",
+      "按下、保存中和已保存使用短时长，保持反馈紧凑可感知。",
+      "Press, saving, and saved use short durations that keep feedback compact and perceptible."
+    ),
+    foundation(
+      "loop",
+      "timing",
+      "保存中的图标短暂循环，并在结果抵达后停止。",
+      "The saving icon loops briefly and stops once the result arrives."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "低动态偏好保留状态文字与颜色结果。",
+      "Reduced motion retains the state copy and color result."
+    )
+  ],
+  "publish-release": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "发布按钮先给出动作已接收的反馈。",
+      "The Publish action first acknowledges that the request was received."
+    ),
+    foundation(
+      "stagger",
+      "sequence",
+      "发布状态落定后，时间线记录随后补上。",
+      "The timeline record follows after the release state lands."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "版本标签与按钮文案同步切到已上线。",
+      "The version label and action copy switch to Live together."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时保留发布结果和时间线记录。",
+      "Reduced motion retains the release result and timeline record."
+    )
+  ],
+  "share-link": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "复制动作在原按钮上立刻得到确认。",
+      "The copy action is confirmed directly on its original control."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "链接图标和按钮文案切换为已复制。",
+      "The link icon and button copy switch to Copied."
+    ),
+    foundation(
+      "fade-in-fade-out",
+      "entrance",
+      "短提示出现后自然离开，不打断后续操作。",
+      "A short cue appears and leaves without interrupting the next action."
+    )
+  ],
+  "card-selection": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "每个候选卡片先响应点击，再更新选择。",
+      "Each candidate card responds to the click before selection updates."
+    ),
+    foundation(
+      "scale-in",
+      "state-change",
+      "选中勾选以短促缩放抵达，强调当前决定。",
+      "The selected check scales in briefly to emphasize the current decision."
+    ),
+    foundation(
+      "easing",
+      "timing",
+      "边界和勾选用同一条曲线收束选择状态。",
+      "Boundary and check settle the selected state with one easing curve."
+    )
+  ],
+  "workspace-switch": [
+    foundation(
+      "morph",
+      "spatial-continuity",
+      "活动底板沿同一标签轨道移动，保留焦点来源。",
+      "The active pill moves along one tab track to preserve focus origin."
+    ),
+    foundation(
+      "fade-in-fade-out",
+      "state-change",
+      "内容表面用极短透明度变化完成视图替换。",
+      "The content surface uses a brief opacity change to swap views."
+    ),
+    foundation(
+      "page-transition",
+      "spatial-continuity",
+      "标签切换维持原工作区上下文中的连续感。",
+      "The tab switch maintains continuity within the existing workspace context."
+    )
+  ],
+  "template-choice": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "模板卡片用轻微按压确认选择输入。",
+      "Template cards use a light press response to acknowledge selection input."
+    ),
+    foundation(
+      "scale-in",
+      "state-change",
+      "角标以小幅缩放出现，明确当前模板。",
+      "The corner mark scales in slightly to identify the active template."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "主按钮在原位置带出当前模板名称。",
+      "The primary action adopts the active template name in place."
+    ),
+    foundation(
+      "hover-effect",
+      "input-feedback",
+      "候选模板在悬停时明确可交互性，点击后保持当前选择。",
+      "Candidate templates signal interactivity on hover and retain the current choice after selection."
+    )
+  ],
+  "layer-insertion": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "添加图层按钮先确认这次新增动作。",
+      "The Add layer action first acknowledges the insertion request."
+    ),
+    foundation(
+      "slide-in",
+      "entrance",
+      "新行从极小的下方位移进入最终位置。",
+      "The new row enters its final position with very small upward travel."
+    ),
+    foundation(
+      "scale-in",
+      "entrance",
+      "轻微缩放让新增内容有清晰落点。",
+      "A slight scale gives the inserted content a clear landing."
+    )
+  ],
+  "archive-undo": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "归档按钮立即确认移除动作。",
+      "The Archive action immediately acknowledges the removal request."
+    ),
+    foundation(
+      "fade-in-fade-out",
+      "exit-recovery",
+      "任务离开列表时淡出，撤销后回到同一位置。",
+      "The task fades out of the list and returns to the same place on Undo."
+    ),
+    foundation(
+      "scale-in",
+      "exit-recovery",
+      "缩放压低离开动作的视觉重量。",
+      "Scale reduces the visual weight of the departure."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效版本保留撤销入口与恢复结果。",
+      "The reduced-motion version retains Undo and the restored result."
+    )
+  ],
+  "filter-results": [
+    foundation(
+      "fade-in-fade-out",
+      "state-change",
+      "符合条件的卡片以短透明度变化进入结果网格。",
+      "Matching cards enter the result grid through a short opacity change."
+    ),
+    foundation(
+      "translate",
+      "entrance",
+      "新结果从很小的上移距离抵达，保留稳定布局。",
+      "New results settle from a very small upward distance while layout stays stable."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "结果数量在原位置随筛选范围更新。",
+      "The result count updates in place with the active filter scope."
+    )
+  ],
+  "inline-validation": [
+    foundation(
+      "text-morph",
+      "state-change",
+      "字段旁的辅助文字随输入结果直接更新。",
+      "The nearby helper copy updates directly with the input result."
+    ),
+    foundation(
+      "easing",
+      "timing",
+      "边界、图标和文字以同一短节奏抵达有效或错误状态。",
+      "Boundary, icon, and copy reach valid or invalid state on one short cadence."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "低动态版本保留颜色、图标与说明变化。",
+      "The low-motion treatment keeps color, icon, and explanatory changes."
+    )
+  ],
+  "command-menu": [
+    foundation(
+      "slide-in",
+      "entrance",
+      "命令面板从触发器下方以很短的位移进入。",
+      "The command panel enters below its trigger with very short travel."
+    ),
+    foundation(
+      "scale-in",
+      "entrance",
+      "轻微缩放帮助紧凑面板落在触发器上下文中。",
+      "A slight scale helps the compact panel land in the trigger context."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "键盘筛选后，当前高亮项持续表达下一次执行结果。",
+      "After keyboard filtering, the active row keeps the next execution clear."
+    )
+  ],
+  "details-disclosure": [
+    foundation(
+      "accordion-collapse",
+      "disclosure",
+      "内容高度、箭头和展开状态由同一个触发器协调。",
+      "Content height, arrow, and expanded state are coordinated by one trigger."
+    ),
+    foundation(
+      "origin-aware-animation",
+      "spatial-continuity",
+      "内容从标题行所在的位置打开，保持来源可读。",
+      "Content opens from the title row so its origin remains legible."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时仍保留展开状态与可访问语义。",
+      "Reduced motion retains expanded state and accessible semantics."
+    )
+  ],
+  "notification-triage": [
+    foundation(
+      "fade-in-fade-out",
+      "exit-recovery",
+      "已处理通知降低层级后离开队列。",
+      "A handled notification leaves the queue after its hierarchy recedes."
+    ),
+    foundation(
+      "translate",
+      "spatial-continuity",
+      "下一条通知轻微补位，维持队列的空间关系。",
+      "The next notification fills the space with slight travel to preserve queue context."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "剩余待处理数量与队列在原位置同步更新。",
+      "The remaining count updates in place with the queue."
+    )
+  ],
+  "progress-steps": [
+    foundation(
+      "stagger",
+      "sequence",
+      "完成标记、连接线和下一步按明确顺序推进。",
+      "Completion mark, connector, and next step advance in a clear order."
+    ),
+    foundation(
+      "line-drawing",
+      "sequence",
+      "连接线延展，把步骤之间的进展关系画出来。",
+      "The extending connector draws the progress relationship between steps."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "右侧任务说明随当前步骤在原位置更新。",
+      "The task copy updates in place with the current step."
+    ),
+    foundation(
+      "purposeful-animation",
+      "sequence",
+      "每一步动作只交代完成、关系和下一步。",
+      "Each movement communicates completion, relationship, and the next step."
+    )
+  ],
+  "member-invite": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "发送邀请先确认动作已开始。",
+      "The Invite action first confirms that sending has begun."
+    ),
+    foundation(
+      "slide-in",
+      "entrance",
+      "待加入成员行从列表下方轻量进入。",
+      "The pending member row enters lightly from below the list."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "按钮文案和成员状态共同表达待接受结果。",
+      "Action copy and member status jointly express the pending result."
+    )
+  ],
+  "media-scrub": [
+    foundation(
+      "translate",
+      "continuous-input",
+      "播放头的位置由拖动值连续驱动。",
+      "The playhead position is driven continuously by the drag value."
+    ),
+    foundation(
+      "easing",
+      "timing",
+      "拖动采用线性响应，让时间与手势保持一一对应。",
+      "Scrubbing responds linearly so time stays one-to-one with the gesture."
+    ),
+    foundation(
+      "frame-rate",
+      "continuous-input",
+      "连续预览需要保持稳定帧率，避免播放头与画面脱节。",
+      "Continuous preview needs stable frame rate so the playhead stays aligned with the frame."
+    ),
+    foundation(
+      "compositing",
+      "continuous-input",
+      "位置变化优先交给合成友好的属性处理。",
+      "Position changes favor compositor-friendly properties."
+    )
+  ]
+};
+
+const canonicalFoundationIds = new Set(
+  canonicalMotionCatalog.map((foundation) => foundation.id)
+);
+
+for (const pack of motionPackCores) {
+  const foundations = foundationsByMotionPackId[pack.id];
+  if (!foundations?.length) {
+    throw new Error(`Missing motion foundations for pack: ${pack.id}`);
+  }
+  for (const link of foundations) {
+    if (!canonicalFoundationIds.has(link.foundationId)) {
+      throw new Error(
+        `Unknown canonical motion foundation "${link.foundationId}" for pack: ${pack.id}`
+      );
+    }
+  }
+}
+
+export const motionPacks: MotionPack[] = motionPackCores.map((pack) => ({
+  ...pack,
+  foundations: foundationsByMotionPackId[pack.id]
+}));
+
 const motionPackById = new Map<MotionPackKind, MotionPack>(
   motionPacks.map((pack) => [pack.id, pack])
 );
@@ -693,12 +1152,52 @@ const motionPackGroupById = new Map<MotionPackGroupId, MotionPackGroup>(
   motionPackGroups.map((group) => [group.id, group])
 );
 
+const motionPackFoundationLinksById = new Map<
+  string,
+  readonly MotionPackFoundationLink[]
+>();
+
+for (const pack of motionPacks) {
+  for (const foundation of pack.foundations) {
+    const links = motionPackFoundationLinksById.get(foundation.foundationId) ?? [];
+    motionPackFoundationLinksById.set(
+      foundation.foundationId,
+      Object.freeze([...links, { pack, foundation }])
+    );
+  }
+}
+
 export function isMotionPackKind(value: string): value is MotionPackKind {
   return motionPackById.has(value as MotionPackKind);
 }
 
 export function getMotionPack(id?: string | null): MotionPack | undefined {
   return id ? motionPackById.get(id as MotionPackKind) : undefined;
+}
+
+/** Returns the canonical motion primitives that compose one product moment. */
+export function getMotionPackFoundations(
+  packOrId?: MotionPack | string | null
+): readonly MotionPackFoundation[] {
+  const pack =
+    typeof packOrId === "string" ? getMotionPack(packOrId) : packOrId;
+  return pack?.foundations ?? [];
+}
+
+/** Returns every product-moment link that uses one canonical motion primitive. */
+export function getMotionPackFoundationLinks(
+  foundationId?: string | null
+): readonly MotionPackFoundationLink[] {
+  return foundationId
+    ? motionPackFoundationLinksById.get(foundationId) ?? []
+    : [];
+}
+
+/** Returns product moments that use one canonical motion primitive. */
+export function getMotionPacksForFoundation(
+  foundationId?: string | null
+): readonly MotionPack[] {
+  return getMotionPackFoundationLinks(foundationId).map(({ pack }) => pack);
 }
 
 export function getMotionPackGroup(groupId?: string | null): MotionPackGroup | undefined {

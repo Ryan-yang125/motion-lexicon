@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { type KeyboardEvent, useMemo, useState } from "react";
 import { motionPackGroups, motionPacks } from "../data/motion-packs";
 import type { Locale } from "../data/types";
 import { MotionPackPreview } from "./MotionPackPreview";
@@ -14,23 +14,46 @@ export function MotionPackGallery({ locale, id = "packs" }: MotionPackGalleryPro
   const [groupId, setGroupId] = useState("all");
   const labels = locale === "zh"
     ? {
-        eyebrow: "Motion Pack Gallery",
-        title: "16 个真实产品瞬间",
+        eyebrow: "产品瞬间",
+        title: "16 个完整产品瞬间",
         copy: "完成、选择、内容变化和工作流反馈，都有完整状态与可复制实现。",
         all: "全部",
-        open: "查看 Pack"
+        open: "查看产品瞬间"
       }
     : {
-        eyebrow: "Motion Pack Gallery",
-        title: "16 real product moments",
+        eyebrow: "Product moments",
+        title: "16 complete product moments",
         copy: "Completion, selection, content change, and workflow feedback—each with a complete state and copy-ready implementation.",
         all: "All",
-        open: "Open pack"
+        open: "Open product moment"
       };
   const packs = useMemo(
     () => groupId === "all" ? motionPacks : motionPacks.filter((pack) => pack.groupId === groupId),
     [groupId]
   );
+  const panelId = `${id}-panel`;
+  const activeTabId = `${id}-tab-${groupId}`;
+  const filterIds = ["all", ...motionPackGroups.map((group) => group.id)];
+
+  function handleFilterKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const currentIndex = filterIds.indexOf(groupId);
+    const nextIndex = event.key === "ArrowRight" || event.key === "ArrowDown"
+      ? (currentIndex + 1) % filterIds.length
+      : event.key === "ArrowLeft" || event.key === "ArrowUp"
+        ? (currentIndex - 1 + filterIds.length) % filterIds.length
+        : event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? filterIds.length - 1
+            : null;
+
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextId = filterIds[nextIndex];
+    setGroupId(nextId);
+    requestAnimationFrame(() => document.getElementById(`${id}-tab-${nextId}`)?.focus());
+  }
 
   return (
     <section className="motion-pack-gallery" id={id} aria-labelledby={`${id}-title`}>
@@ -42,11 +65,19 @@ export function MotionPackGallery({ locale, id = "packs" }: MotionPackGalleryPro
         <p>{labels.copy}</p>
       </div>
 
-      <div className="motion-pack-filters" role="tablist" aria-label={locale === "zh" ? "按场景筛选 Pack" : "Filter packs by scenario"}>
+      <div
+        className="motion-pack-filters"
+        role="tablist"
+        aria-label={locale === "zh" ? "按场景筛选 Pack" : "Filter packs by scenario"}
+        onKeyDown={handleFilterKeyDown}
+      >
         <button
           type="button"
           role="tab"
+          id={`${id}-tab-all`}
           aria-selected={groupId === "all"}
+          aria-controls={panelId}
+          tabIndex={groupId === "all" ? 0 : -1}
           className={groupId === "all" ? "is-active" : undefined}
           onClick={() => setGroupId("all")}
         >
@@ -56,7 +87,10 @@ export function MotionPackGallery({ locale, id = "packs" }: MotionPackGalleryPro
           <button
             type="button"
             role="tab"
+            id={`${id}-tab-${group.id}`}
             aria-selected={groupId === group.id}
+            aria-controls={panelId}
+            tabIndex={groupId === group.id ? 0 : -1}
             className={groupId === group.id ? "is-active" : undefined}
             key={group.id}
             onClick={() => setGroupId(group.id)}
@@ -66,7 +100,7 @@ export function MotionPackGallery({ locale, id = "packs" }: MotionPackGalleryPro
         ))}
       </div>
 
-      <div className="motion-pack-grid" role="tabpanel">
+      <div className="motion-pack-grid" id={panelId} role="tabpanel" aria-labelledby={activeTabId}>
         {packs.map((pack) => {
           const group = motionPackGroups.find((item) => item.id === pack.groupId);
           return (

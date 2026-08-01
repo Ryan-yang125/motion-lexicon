@@ -185,5 +185,172 @@
     "fade-in-fade-out",
     "slide-in",
     "reveal"
+  ],
+  "productMoments": [
+    {
+      "id": "card-selection",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "卡片选择",
+        "en": "Card selection"
+      },
+      "summary": {
+        "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+        "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+      },
+      "scene": {
+        "zh": "新建项目时选择一个内容布局。",
+        "en": "Choosing a content layout for a new project."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "选中勾选以短促缩放抵达，强调当前决定。",
+        "en": "The selected check scales in briefly to emphasize the current decision."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+      }
+    },
+    {
+      "id": "template-choice",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "模板选择",
+        "en": "Template choice"
+      },
+      "summary": {
+        "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+        "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+      },
+      "scene": {
+        "zh": "创建新页面时选择一个起始模板。",
+        "en": "Choosing a starting template when creating a new page."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "角标以小幅缩放出现，明确当前模板。",
+        "en": "The corner mark scales in slightly to identify the active template."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+      }
+    },
+    {
+      "id": "layer-insertion",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "图层插入",
+        "en": "Layer insertion"
+      },
+      "summary": {
+        "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+        "en": "New content reserves its correct position, then reveals itself with very small travel."
+      },
+      "scene": {
+        "zh": "设计工具中新增一个标题或强调图层。",
+        "en": "Adding a title or accent layer inside a design tool."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "轻微缩放让新增内容有清晰落点。",
+        "en": "A slight scale gives the inserted content a clear landing."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+      }
+    },
+    {
+      "id": "archive-undo",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "归档撤销",
+        "en": "Archive undo"
+      },
+      "summary": {
+        "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+        "en": "After an item leaves, an undo affordance catches the user in the same context."
+      },
+      "scene": {
+        "zh": "任务列表中把一条评审移到归档。",
+        "en": "Moving a review task to archive from a task list."
+      },
+      "role": "exit-recovery",
+      "roleLabel": {
+        "zh": "离开与恢复",
+        "en": "Exit and recovery"
+      },
+      "note": {
+        "zh": "缩放压低离开动作的视觉重量。",
+        "en": "Scale reduces the visual weight of the departure."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+      }
+    },
+    {
+      "id": "command-menu",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "命令菜单",
+        "en": "Command menu"
+      },
+      "summary": {
+        "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+        "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+      },
+      "scene": {
+        "zh": "文档工作区中快速跳转到一个常用动作。",
+        "en": "Jumping quickly to a common action from a document workspace."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "轻微缩放帮助紧凑面板落在触发器上下文中。",
+        "en": "A slight scale helps the compact panel land in the trigger context."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+      }
+    }
   ]
 }

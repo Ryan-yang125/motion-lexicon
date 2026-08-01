@@ -36,7 +36,7 @@ type Copy = {
 
 const copy: Record<Locale, Copy> = {
   zh: {
-    eyebrow: "V1 审美方向实验",
+    eyebrow: "产品瞬间实验",
     title: "Quiet Product Motion",
     description: "四个真实产品瞬间：短、清晰、可重复触发，并且在动作完成后留下一条明确的状态变化。",
     reset: "重置全部",
@@ -54,7 +54,7 @@ const copy: Record<Locale, Copy> = {
     preview: "交互预览"
   },
   en: {
-    eyebrow: "V1 visual direction study",
+    eyebrow: "Product motion study",
     title: "Quiet Product Motion",
     description: "Four real product moments: short, clear, repeatable, and each leaves behind a meaningful state change.",
     reset: "Reset all",

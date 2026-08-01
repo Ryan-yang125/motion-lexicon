@@ -668,7 +668,7 @@ function previewFor(kind: string, labels: Labels, compact: boolean) {
 }
 
 /**
- * A self-contained, CSS-first interactive renderer for the V1 Motion Pack gallery.
+ * A self-contained, CSS-first interactive renderer for the V1.1 product moments collection.
  * It deliberately owns the miniature product UI so each pack can have a real state
  * transition without inheriting the generic motion-demo shell from the vocabulary.
  */

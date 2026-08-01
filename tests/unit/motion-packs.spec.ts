@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { motionPackGroups, motionPacks } from "../../src/data/motion-packs";
+import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
+import {
+  getMotionPackFoundationLinks,
+  getMotionPackFoundations,
+  getMotionPacksForFoundation,
+  motionPackGroups,
+  motionPacks
+} from "../../src/data/motion-packs";
 
 describe("Motion Pack V1 data", () => {
   it("ships sixteen uniquely identified, grouped real product moments", () => {
@@ -25,5 +32,47 @@ describe("Motion Pack V1 data", () => {
       expect(pack.source.js.trim(), pack.id).not.toHaveLength(0);
       expect(() => new Function(pack.source.js), pack.id).not.toThrow();
     }
+  });
+
+  it("connects every pack to valid canonical foundations with localized roles and notes", () => {
+    const canonicalIds = new Set(canonicalMotionCatalog.map((motion) => motion.id));
+
+    for (const pack of motionPacks) {
+      const foundations = getMotionPackFoundations(pack);
+      expect(foundations.length, pack.id).toBeGreaterThanOrEqual(3);
+      expect(new Set(foundations.map((foundation) => foundation.foundationId)).size, pack.id).toBe(
+        foundations.length
+      );
+
+      for (const foundation of foundations) {
+        expect(canonicalIds.has(foundation.foundationId), `${pack.id}:${foundation.foundationId}`).toBe(true);
+        expect(foundation.roleLabel.zh, `${pack.id}:${foundation.foundationId}`).not.toHaveLength(0);
+        expect(foundation.roleLabel.en, `${pack.id}:${foundation.foundationId}`).not.toHaveLength(0);
+        expect(foundation.note.zh, `${pack.id}:${foundation.foundationId}`).not.toHaveLength(0);
+        expect(foundation.note.en, `${pack.id}:${foundation.foundationId}`).not.toHaveLength(0);
+      }
+    }
+  });
+
+  it("supports Pack-to-foundation and foundation-to-Pack lookup from the same relationship data", () => {
+    const saveFoundations = getMotionPackFoundations("save-confirmation");
+    expect(saveFoundations.map((foundation) => foundation.foundationId)).toContain("press-tap-feedback");
+
+    const pressLinks = getMotionPackFoundationLinks("press-tap-feedback");
+    expect(pressLinks.some(({ pack }) => pack.id === "save-confirmation")).toBe(true);
+    expect(
+      getMotionPacksForFoundation("press-tap-feedback").map((pack) => pack.id)
+    ).toContain("save-confirmation");
+
+    expect(getMotionPackFoundations("missing-pack")).toEqual([]);
+    expect(getMotionPackFoundationLinks("missing-foundation")).toEqual([]);
+    expect(getMotionPacksForFoundation("missing-foundation")).toEqual([]);
+  });
+
+  it("keeps instant validation in feedback and notification triage in workflow", () => {
+    expect(motionPacks.find((pack) => pack.id === "inline-validation")?.groupId).toBe("feedback");
+    expect(motionPacks.find((pack) => pack.id === "notification-triage")?.groupId).toBe("workflow");
+    expect(motionPacks.filter((pack) => pack.groupId === "feedback")).toHaveLength(4);
+    expect(motionPacks.filter((pack) => pack.groupId === "workflow")).toHaveLength(4);
   });
 });

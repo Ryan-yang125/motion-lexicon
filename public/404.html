@@ -78,17 +78,17 @@
     <main>
       <div class="brand"><img src="/brand/motion-lexicon-mark.svg" alt="" /><span>Motion Lexicon</span></div>
       <h1>404</h1>
-      <p id="message">页面未找到。返回动效库继续浏览。</p>
-      <a id="library-link" href="/zh/catalog/">打开动效库</a>
+      <p id="message">页面未找到。回到 Motion Lexicon 继续浏览。</p>
+      <a id="library-link" href="/zh/">返回首页</a>
     </main>
     <script>
       if (window.location.pathname === "/en" || window.location.pathname.startsWith("/en/")) {
         document.documentElement.lang = "en";
         document.title = "Page not found | Motion Lexicon";
-        document.getElementById("message").textContent = "This page doesn’t exist. Return to the motion library.";
+        document.getElementById("message").textContent = "This page doesn’t exist. Return to Motion Lexicon.";
         const link = document.getElementById("library-link");
-        link.href = "/en/catalog/";
-        link.textContent = "Open library";
+        link.href = "/en/";
+        link.textContent = "Back home";
       }
     </script>
   </body>

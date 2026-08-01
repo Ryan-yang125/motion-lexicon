@@ -6,6 +6,7 @@ import {
   catalog,
   exportRecipe,
   getSchema,
+  list,
   packs,
   recommend,
   resolveRecipe,
@@ -18,8 +19,8 @@ import {
 } from "motion-lexicon";
 
 describe("Motion Lexicon CLI API", () => {
-  it("reports the v1.0.0 release version", () => {
-    expect(version).toBe("1.0.0");
+  it("reports the v1.1.0 CLI release version", () => {
+    expect(version).toBe("1.1.0");
   });
 
   it("lists real product Motion Packs with a portable implementation", () => {
@@ -30,12 +31,23 @@ describe("Motion Lexicon CLI API", () => {
       name: "保存确认",
       previewUrl: "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/"
     });
-    expect(showPack("archive-undo", { locale: "en" })).toMatchObject({
+    const archiveUndo = showPack("archive-undo", { locale: "en" });
+    expect(archiveUndo).toMatchObject({
       id: "archive-undo",
       name: "Archive undo",
       guidance: { reducedMotion: expect.any(String) },
       source: { html: expect.any(String), css: expect.any(String), js: expect.any(String) }
     });
+    expect(archiveUndo.foundations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          role: expect.any(String),
+          note: expect.any(String),
+          previewUrl: expect.stringContaining("/en/")
+        })
+      ])
+    );
   });
 
   it("returns the 44 canonical recipes with schema version 1", () => {
@@ -47,6 +59,19 @@ describe("Motion Lexicon CLI API", () => {
       name: "淡入 / 淡出",
       previewUrl: "https://motion-lexicon.pages.dev/zh/entrances/fade-in-fade-out/"
     });
+  });
+
+  it("provides list as a stable Motion Primitives entry alongside catalog", () => {
+    const listed = list({ locale: "en" });
+    const cataloged = catalog({ locale: "en" });
+
+    expect(listed).toEqual(cataloged);
+    expect(listed).toMatchObject({ count: 44 });
+    expect(listed.items.find((item) => item.id === "press-tap-feedback")?.productMoments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "save-confirmation", role: "input-feedback" })
+      ])
+    );
   });
 
   it("searches canonical names and aliases in Chinese and English", () => {
@@ -177,6 +202,22 @@ describe("runCli", () => {
     ).toBe(0);
     expect(bundle.stdout()).toContain("/* Prompt */");
     expect(bundle.stdout()).toContain("<!-- HTML -->");
+  });
+
+  it("lists Motion Primitives through the list command", async () => {
+    const output = capture();
+    expect(await runCli(["list", "--locale", "zh", "--format", "json"], output.io)).toBe(0);
+
+    const result = JSON.parse(output.stdout());
+    expect(result).toMatchObject({ count: 44 });
+    expect(result.items).toHaveLength(44);
+    const pressFeedback = result.items.find(
+      (item: { id: string }) => item.id === "press-tap-feedback"
+    );
+    expect(pressFeedback.productMoments).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: "save-confirmation" })])
+    );
+    expect(output.stderr()).toBe("");
   });
 
   it("prints machine-readable recommendations", async () => {

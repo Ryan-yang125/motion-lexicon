@@ -71,5 +71,172 @@
     "purposeful-animation",
     "anticipation",
     "perceived-performance"
+  ],
+  "productMoments": [
+    {
+      "id": "save-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "保存确认",
+        "en": "Save confirmation"
+      },
+      "summary": {
+        "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+        "en": "A submission lands across the action, status marker, and document state together."
+      },
+      "scene": {
+        "zh": "产品更新编辑器中的一条已保存状态。",
+        "en": "A saved state inside a product-update editor."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "低动态偏好保留状态文字与颜色结果。",
+        "en": "Reduced motion retains the state copy and color result."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+      }
+    },
+    {
+      "id": "publish-release",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "发布版本",
+        "en": "Publish release"
+      },
+      "summary": {
+        "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+        "en": "Resolve a ready update into a release with a clear landing point."
+      },
+      "scene": {
+        "zh": "发布产品更新时的版本面板。",
+        "en": "A version panel while publishing a product update."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时保留发布结果和时间线记录。",
+        "en": "Reduced motion retains the release result and timeline record."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+      }
+    },
+    {
+      "id": "archive-undo",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "归档撤销",
+        "en": "Archive undo"
+      },
+      "summary": {
+        "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+        "en": "After an item leaves, an undo affordance catches the user in the same context."
+      },
+      "scene": {
+        "zh": "任务列表中把一条评审移到归档。",
+        "en": "Moving a review task to archive from a task list."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效版本保留撤销入口与恢复结果。",
+        "en": "The reduced-motion version retains Undo and the restored result."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+      }
+    },
+    {
+      "id": "inline-validation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "行内校验",
+        "en": "Inline validation"
+      },
+      "summary": {
+        "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+        "en": "Offer direction close to the field while people stay in the current task."
+      },
+      "scene": {
+        "zh": "邀请协作者时填写电子邮箱。",
+        "en": "Entering an email address while inviting a collaborator."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "低动态版本保留颜色、图标与说明变化。",
+        "en": "The low-motion treatment keeps color, icon, and explanatory changes."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+      }
+    },
+    {
+      "id": "details-disclosure",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "详情展开",
+        "en": "Details disclosure"
+      },
+      "summary": {
+        "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+        "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+      },
+      "scene": {
+        "zh": "发布前检查清单中的一项展开说明。",
+        "en": "An expanded explanation in a pre-publish checklist."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时仍保留展开状态与可访问语义。",
+        "en": "Reduced motion retains expanded state and accessible semantics."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+      }
+    }
   ]
 }

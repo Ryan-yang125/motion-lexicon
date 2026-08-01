@@ -14,7 +14,8 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const publicDir = path.join(rootDir, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const cliCommand = "npx -y github:Ryan-yang125/motion-lexicon#v1.0.0";
+const releaseVersion = "1.1.0";
+const cliCommand = `npx -y github:Ryan-yang125/motion-lexicon#v${releaseVersion}`;
 const cliRecommendCommand = `${cliCommand} recommend "describe the motion you want" --locale en --format json`;
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 
@@ -64,6 +65,52 @@ function localizedRecipeFocusUrls(categoryId: string, canonicalId: string, termI
   ) as Record<Locale, string>;
 }
 
+const motionPackGroupById = new Map(
+  motionPackGroups.map((group) => [group.id, group])
+);
+const catalogRecipeById = new Map(
+  catalogRecipes.map((recipe) => [recipe.id, recipe])
+);
+
+function foundationArtifact(
+  foundation: (typeof motionPacks)[number]["foundations"][number]
+) {
+  const recipe = catalogRecipeById.get(foundation.foundationId);
+  if (!recipe) {
+    throw new Error(`Missing canonical motion primitive: ${foundation.foundationId}`);
+  }
+  return {
+    id: foundation.foundationId,
+    categoryId: recipe.categoryId,
+    name: recipe.name,
+    role: foundation.role,
+    roleLabel: foundation.roleLabel,
+    note: foundation.note,
+    urls: localizedRecipeUrls(recipe.categoryId, recipe.id)
+  };
+}
+
+function productMomentsForFoundation(foundationId: string) {
+  return motionPacks.flatMap((pack) => {
+    const group = motionPackGroupById.get(pack.groupId);
+    if (!group) throw new Error(`Missing Motion Pack group: ${pack.groupId}`);
+    return pack.foundations
+      .filter((foundation) => foundation.foundationId === foundationId)
+      .map((foundation) => ({
+        id: pack.id,
+        groupId: pack.groupId,
+        groupName: group.name,
+        name: pack.name,
+        summary: pack.shortDescription,
+        scene: pack.scene,
+        role: foundation.role,
+        roleLabel: foundation.roleLabel,
+        note: foundation.note,
+        urls: localizedMotionPackUrls(pack.id)
+      }));
+  });
+}
+
 function recipeArtifact(recipeId: string) {
   const recipe = catalogRecipes.find((entry) => entry.id === recipeId);
   if (!recipe) throw new Error(`Missing canonical recipe: ${recipeId}`);
@@ -99,7 +146,8 @@ function recipeArtifact(recipeId: string) {
     },
     reducedMotion: guidance.reducedMotionStrategy,
     reviewNotes: guidance.reviewNotes,
-    relatedRecipes: recipe.relatedEntries
+    relatedRecipes: recipe.relatedEntries,
+    productMoments: productMomentsForFoundation(recipe.id)
   };
 }
 
@@ -111,9 +159,10 @@ function catalogArtifact() {
     project: {
       name: "Motion Lexicon",
       description: {
-        zh: "把真实产品瞬间做成可预览、可复制、可直接接入界面的 Motion Pack，并保留完整动效词典与选择器。",
-        en: "A collection of previewable, copy-ready Motion Packs for real product moments, with a full motion vocabulary and Finder."
+        zh: "产品瞬间与动效基础，都是可预览、可复制、可直接接入界面的产品动效。",
+        en: "Product Moments and Motion Primitives for previewing, copying, and integrating interface motion."
       },
+      releaseVersion,
       siteUrl,
       repositoryUrl,
       locales: ["zh", "en"],
@@ -129,9 +178,17 @@ function catalogArtifact() {
         zh: absoluteUrl(pathFor("zh", ["packs"])),
         en: absoluteUrl(pathFor("en", ["packs"]))
       },
+      productMoments: {
+        zh: absoluteUrl(pathFor("zh", ["packs"])),
+        en: absoluteUrl(pathFor("en", ["packs"]))
+      },
       packsData: `${siteUrl}/data/v1/packs.json`,
       packTemplate: `${siteUrl}/data/v1/packs.json#{id}`,
       catalog: `${siteUrl}/data/v1/catalog.json`,
+      motionPrimitives: {
+        zh: absoluteUrl(pathFor("zh", ["catalog"])),
+        en: absoluteUrl(pathFor("en", ["catalog"]))
+      },
       vocabulary: `${siteUrl}/data/v1/vocabulary.json`,
       recipeTemplate: `${siteUrl}/data/v1/recipes/{id}.json`,
       schema: `${siteUrl}/data/v1/schema.json`,
@@ -143,6 +200,8 @@ function catalogArtifact() {
       categories: categories.length,
       recipes: catalogRecipes.length,
       packs: motionPacks.length,
+      motionPrimitives: catalogRecipes.length,
+      productMoments: motionPacks.length,
       vocabularyTerms: glossaryTerms.length,
       aliases: glossaryTerms.filter((term) => term.alias).length
     },
@@ -167,6 +226,7 @@ function catalogArtifact() {
       name: recipe.name,
       summary: recipe.shortDescription,
       aliases: recipe.aliases,
+      productMoments: productMomentsForFoundation(recipe.id),
       urls: localizedRecipeUrls(recipe.categoryId, recipe.id),
       dataUrl: `${siteUrl}/data/v1/recipes/${recipe.id}.json`
     }))
@@ -202,6 +262,7 @@ function motionPacksArtifact() {
       guidance: pack.guidance,
       keywords: pack.keywords,
       timing: pack.timing,
+      foundations: pack.foundations.map(foundationArtifact),
       urls: localizedMotionPackUrls(pack.id),
       source: pack.source
     }))
@@ -273,7 +334,7 @@ function schemaArtifact() {
     $schema: "https://json-schema.org/draft/2020-12/schema",
     $id: `${siteUrl}/data/v1/schema.json`,
     title: "Motion Lexicon public data",
-    description: "Schema for the versioned catalog, Motion Packs, vocabulary, and individual recipe artifacts.",
+    description: "Schema for the versioned Product Moments, Motion Primitives, vocabulary, and individual recipe artifacts.",
     oneOf: [
       { $ref: "#/$defs/catalogDocument" },
       { $ref: "#/$defs/motionPacksDocument" },
@@ -347,7 +408,18 @@ function schemaArtifact() {
       catalogItem: {
         type: "object",
         additionalProperties: false,
-        required: ["id", "categoryId", "family", "surfaceType", "name", "summary", "aliases", "urls", "dataUrl"],
+        required: [
+          "id",
+          "categoryId",
+          "family",
+          "surfaceType",
+          "name",
+          "summary",
+          "aliases",
+          "productMoments",
+          "urls",
+          "dataUrl"
+        ],
         properties: {
           id: { type: "string" },
           categoryId: { type: "string" },
@@ -356,6 +428,10 @@ function schemaArtifact() {
           name: { $ref: "#/$defs/localizedText" },
           summary: { $ref: "#/$defs/localizedText" },
           aliases: { type: "array", items: { type: "string" }, uniqueItems: true },
+          productMoments: {
+            type: "array",
+            items: { $ref: "#/$defs/productMomentReference" }
+          },
           urls: { $ref: "#/$defs/localizedUrls" },
           dataUrl: { type: "string", format: "uri" }
         }
@@ -386,6 +462,7 @@ function schemaArtifact() {
           "guidance",
           "keywords",
           "timing",
+          "foundations",
           "urls",
           "source"
         ],
@@ -410,6 +487,11 @@ function schemaArtifact() {
           },
           keywords: { type: "array", items: { type: "string" }, minItems: 1 },
           timing: { type: "string" },
+          foundations: {
+            type: "array",
+            minItems: 1,
+            items: { $ref: "#/$defs/motionFoundation" }
+          },
           urls: { $ref: "#/$defs/localizedUrls" },
           source: {
             type: "object",
@@ -447,6 +529,48 @@ function schemaArtifact() {
             }
           },
           packs: { type: "array", minItems: 1, items: { $ref: "#/$defs/motionPack" } }
+        }
+      },
+      motionFoundation: {
+        type: "object",
+        additionalProperties: false,
+        required: ["id", "categoryId", "name", "role", "roleLabel", "note", "urls"],
+        properties: {
+          id: { type: "string" },
+          categoryId: { type: "string" },
+          name: { $ref: "#/$defs/localizedText" },
+          role: { type: "string" },
+          roleLabel: { $ref: "#/$defs/localizedText" },
+          note: { $ref: "#/$defs/localizedText" },
+          urls: { $ref: "#/$defs/localizedUrls" }
+        }
+      },
+      productMomentReference: {
+        type: "object",
+        additionalProperties: false,
+        required: [
+          "id",
+          "groupId",
+          "groupName",
+          "name",
+          "summary",
+          "scene",
+          "role",
+          "roleLabel",
+          "note",
+          "urls"
+        ],
+        properties: {
+          id: { type: "string" },
+          groupId: { type: "string" },
+          groupName: { $ref: "#/$defs/localizedText" },
+          name: { $ref: "#/$defs/localizedText" },
+          summary: { $ref: "#/$defs/localizedText" },
+          scene: { $ref: "#/$defs/localizedText" },
+          role: { type: "string" },
+          roleLabel: { $ref: "#/$defs/localizedText" },
+          note: { $ref: "#/$defs/localizedText" },
+          urls: { $ref: "#/$defs/localizedUrls" }
         }
       },
       vocabularyTerm: {
@@ -508,7 +632,8 @@ function schemaArtifact() {
           "guidance",
           "reducedMotion",
           "reviewNotes",
-          "relatedRecipes"
+          "relatedRecipes",
+          "productMoments"
         ],
         properties: {
           ...baseDocumentProperties,
@@ -529,7 +654,11 @@ function schemaArtifact() {
           guidance: { $ref: "#/$defs/guidance" },
           reducedMotion: { $ref: "#/$defs/localizedText" },
           reviewNotes: { type: "array", items: { $ref: "#/$defs/localizedText" } },
-          relatedRecipes: { type: "array", items: { type: "string" }, uniqueItems: true }
+          relatedRecipes: { type: "array", items: { type: "string" }, uniqueItems: true },
+          productMoments: {
+            type: "array",
+            items: { $ref: "#/$defs/productMomentReference" }
+          }
         }
       }
     }
@@ -550,17 +679,18 @@ function llmsArtifact() {
   const lines = [
     "# Motion Lexicon",
     "",
-    "> A free, open-source, bilingual motion finder and recipe reference for choosing, comparing, tuning, reviewing, and implementing interface motion.",
+    "> A free, open-source, bilingual library of Product Moments and Motion Primitives for choosing, comparing, tuning, reviewing, and implementing interface motion.",
     "",
     `- Website: ${siteUrl}/en/`,
     `- Chinese website: ${siteUrl}/zh/`,
     `- Motion Finder: ${siteUrl}/en/finder/`,
     `- 中文动效选择器: ${siteUrl}/zh/finder/`,
-    `- Motion Packs: ${siteUrl}/en/packs/`,
-    `- Motion Packs JSON: ${siteUrl}/data/v1/packs.json`,
+    `- Product Moments: ${siteUrl}/en/packs/`,
+    `- Product Moments JSON: ${siteUrl}/data/v1/packs.json`,
+    `- Motion Primitives: ${siteUrl}/en/catalog/`,
+    `- Motion Primitives JSON: ${siteUrl}/data/v1/catalog.json`,
     `- Source: ${repositoryUrl}`,
     `- Pricing: ${siteUrl}/pricing.txt (free; no account required)`,
-    `- Catalog JSON: ${siteUrl}/data/v1/catalog.json`,
     `- Vocabulary JSON: ${siteUrl}/data/v1/vocabulary.json`,
     `- JSON Schema: ${siteUrl}/data/v1/schema.json`,
     `- Full machine-readable text: ${siteUrl}/llms-full.txt`,
@@ -568,17 +698,19 @@ function llmsArtifact() {
     "## Free tools",
     "",
     `- CLI: \`${cliCommand}\``,
+    `- Motion Primitives: \`${cliCommand} list --locale en --format json\``,
+    `- Product Moments: \`${cliCommand} packs --locale en --format json\``,
     `- Fuzzy recommendation: \`${cliRecommendCommand}\``,
     `- Agent Skill: \`${skillCommand}\``,
     "",
-    "## Motion Packs",
+    "## Product Moments",
     "",
     ...motionPacks.map(
       (pack) =>
         `- [${pack.name.en}](${absoluteUrl(pathFor("en", ["packs", pack.id]))}): ${pack.shortDescription.en}`
     ),
     "",
-    "## Canonical recipes",
+    "## Motion Primitives",
     ""
   ];
 
@@ -605,6 +737,9 @@ function pricingArtifact() {
 - Billing: None
 - Account required: No
 - Website: ${siteUrl}
+- Release: ${releaseVersion}
+- Product Moments: ${siteUrl}/en/packs/
+- Motion Primitives: ${siteUrl}/en/catalog/
 - CLI: ${cliCommand}
 - Agent Skill: ${skillCommand}
 - Source: ${repositoryUrl}
@@ -617,7 +752,7 @@ function pricingArtifact() {
 }
 
 function llmsFullArtifact() {
-  const lines = [llmsArtifact().trim(), "", "# Full Motion Pack reference", ""];
+  const lines = [llmsArtifact().trim(), "", "# Full Product Moment reference", ""];
 
   for (const pack of motionPacks) {
     lines.push(`## ${pack.name.en} (${pack.id})`);
@@ -630,10 +765,18 @@ function llmsFullArtifact() {
     lines.push(`- Trigger: ${pack.guidance.trigger.en}`);
     lines.push(`- Reduced motion: ${pack.guidance.reducedMotion.en}`);
     lines.push(`- Preview: ${absoluteUrl(pathFor("en", ["packs", pack.id]))}`);
+    lines.push("- Motion primitives:");
+    for (const foundation of pack.foundations) {
+      const recipe = catalogRecipeById.get(foundation.foundationId);
+      if (!recipe) throw new Error(`Missing canonical motion primitive: ${foundation.foundationId}`);
+      lines.push(
+        `  - [${recipe.name.en}](${absoluteUrl(pathFor("en", [recipe.categoryId, recipe.id]))}) — ${foundation.roleLabel.en}: ${foundation.note.en}`
+      );
+    }
     lines.push("");
   }
 
-  lines.push("# Full recipe reference", "");
+  lines.push("# Full Motion Primitive reference", "");
 
   for (const recipe of catalogRecipes) {
     const guidance = getMotionGuidance(recipe.id);
@@ -649,6 +792,15 @@ function llmsFullArtifact() {
     lines.push(`- Reduced motion: ${guidance.reducedMotionStrategy.en}`);
     lines.push(`- Preview: ${absoluteUrl(pathFor("en", [recipe.categoryId, recipe.id]))}`);
     lines.push(`- Data: ${siteUrl}/data/v1/recipes/${recipe.id}.json`);
+    const productMoments = productMomentsForFoundation(recipe.id);
+    if (productMoments.length > 0) {
+      lines.push("- Product moments:");
+      for (const moment of productMoments) {
+        lines.push(
+          `  - [${moment.name.en}](${moment.urls.en}) — ${moment.roleLabel.en}: ${moment.note.en}`
+        );
+      }
+    }
     if (recipe.aliases.length > 0) lines.push(`- Aliases: ${recipe.aliases.join(", ")}`);
     if (recipe.params.length > 0) {
       lines.push("- Parameters:");

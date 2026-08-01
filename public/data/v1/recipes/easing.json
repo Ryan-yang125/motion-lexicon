@@ -199,5 +199,106 @@
   "relatedRecipes": [
     "ripple",
     "spring"
+  ],
+  "productMoments": [
+    {
+      "id": "card-selection",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "卡片选择",
+        "en": "Card selection"
+      },
+      "summary": {
+        "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+        "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+      },
+      "scene": {
+        "zh": "新建项目时选择一个内容布局。",
+        "en": "Choosing a content layout for a new project."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "边界和勾选用同一条曲线收束选择状态。",
+        "en": "Boundary and check settle the selected state with one easing curve."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+      }
+    },
+    {
+      "id": "inline-validation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "行内校验",
+        "en": "Inline validation"
+      },
+      "summary": {
+        "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+        "en": "Offer direction close to the field while people stay in the current task."
+      },
+      "scene": {
+        "zh": "邀请协作者时填写电子邮箱。",
+        "en": "Entering an email address while inviting a collaborator."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "边界、图标和文字以同一短节奏抵达有效或错误状态。",
+        "en": "Boundary, icon, and copy reach valid or invalid state on one short cadence."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+      }
+    },
+    {
+      "id": "media-scrub",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "媒体拖动",
+        "en": "Media scrub"
+      },
+      "summary": {
+        "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+        "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+      },
+      "scene": {
+        "zh": "在视频编辑器里精确预览一个镜头片段。",
+        "en": "Precisely previewing a shot inside a video editor."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "拖动采用线性响应，让时间与手势保持一一对应。",
+        "en": "Scrubbing responds linearly so time stays one-to-one with the gesture."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+      }
+    }
   ]
 }

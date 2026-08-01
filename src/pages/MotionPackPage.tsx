@@ -3,7 +3,14 @@ import { Link } from "@tanstack/react-router";
 import { MotionPackExport } from "../components/MotionPackExport";
 import { MotionPackPreview } from "../components/MotionPackPreview";
 import { Seo } from "../components/Seo";
-import { getMotionPack, getMotionPacksForGroup, motionPackGroups, motionPacks } from "../data/motion-packs";
+import {
+  getMotionPack,
+  getMotionPackFoundations,
+  getMotionPacksForGroup,
+  motionPackGroups,
+  motionPacks
+} from "../data/motion-packs";
+import { getCatalogRecipe } from "../data/recipes";
 import { pathFor } from "../data/site";
 import type { Locale } from "../data/types";
 
@@ -11,24 +18,26 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
   const pack = getMotionPack(packId);
   const labels = locale === "zh"
     ? {
-        back: "返回 Pack Gallery",
+        back: "返回产品瞬间",
         preview: "交互预览",
         scene: "产品场景",
         use: "适合使用",
         rules: "动效规则",
         reduced: "减弱动效",
-        related: "相关 Pack",
+        foundations: "关联动效基础",
+        related: "同类产品瞬间",
         source: "可复制实现",
         states: ["开始", "进行中", "完成", "再次触发"]
       }
     : {
-        back: "Back to Pack Gallery",
+        back: "Back to product moments",
         preview: "Interactive preview",
         scene: "Product scene",
         use: "Use for",
         rules: "Motion rules",
         reduced: "Reduced motion",
-        related: "Related packs",
+        foundations: "Related motion primitives",
+        related: "Related product moments",
         source: "Copy-ready implementation",
         states: ["Start", "In progress", "Complete", "Repeat"]
       };
@@ -40,6 +49,10 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
   const group = motionPackGroups.find((entry) => entry.id === pack.groupId);
   const index = motionPacks.findIndex((entry) => entry.id === pack.id) + 1;
   const related = getMotionPacksForGroup(pack.groupId).filter((entry) => entry.id !== pack.id).slice(0, 3);
+  const foundations = getMotionPackFoundations(pack).flatMap((foundation) => {
+    const recipe = getCatalogRecipe(foundation.foundationId);
+    return recipe ? [{ foundation, recipe }] : [];
+  });
 
   return (
     <>
@@ -96,6 +109,31 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
           <section aria-label={labels.source}>
             <MotionPackExport locale={locale} prompt={pack.prompt[locale]} source={pack.source} />
           </section>
+          {foundations.length ? (
+            <section className="motion-pack-foundations" aria-labelledby="pack-foundations-title">
+              <div className="motion-pack-related-head">
+                <h2 id="pack-foundations-title">{labels.foundations}</h2>
+              </div>
+              <div className="motion-pack-foundation-grid">
+                {foundations.map(({ foundation, recipe }) => (
+                  <Link
+                    className="motion-pack-foundation-link"
+                    data-testid={`pack-foundation-${foundation.foundationId}`}
+                    key={foundation.foundationId}
+                    to="/$locale/$categoryId/$recipeId/"
+                    params={{ locale, categoryId: recipe.categoryId, recipeId: recipe.id }}
+                  >
+                    <span className="motion-pack-foundation-copy">
+                      <small>{foundation.roleLabel[locale]}</small>
+                      <strong>{recipe.name[locale]}</strong>
+                      <em>{foundation.note[locale]}</em>
+                    </span>
+                    <ArrowRight aria-hidden="true" size={15} />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
           <section className="motion-pack-guidance" aria-label={labels.rules}>
             <div className="motion-pack-rule">
               <span className="motion-pack-rule-label">{labels.rules}</span>
@@ -144,8 +182,8 @@ function MotionPacksFallback({ locale }: { locale: Locale }) {
   return (
     <div className="motion-pack-page">
       <Link className="motion-pack-back-link" to="/$locale/packs/" params={{ locale }}>
-        <ArrowLeft aria-hidden="true" size={14} />
-        {locale === "zh" ? "返回 Pack Gallery" : "Back to Pack Gallery"}
+          <ArrowLeft aria-hidden="true" size={14} />
+        {locale === "zh" ? "返回产品瞬间" : "Back to product moments"}
       </Link>
     </div>
   );

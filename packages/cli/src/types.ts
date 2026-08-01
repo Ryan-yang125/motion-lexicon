@@ -9,7 +9,7 @@ import type {
 } from "../../../src/data/types.js";
 
 export const schemaVersion = 1 as const;
-export const version = "1.0.0";
+export const version = "1.1.0";
 
 export type CliLocale = "zh" | "en";
 export type DiscoveryFormat = "text" | "json" | "md";
@@ -56,6 +56,7 @@ export type CatalogItem = {
   name: string;
   description: string;
   aliases: string[];
+  productMoments: ProductMomentReference[];
   path: string;
   previewUrl: string;
 };
@@ -75,6 +76,34 @@ export type MotionPackItem = {
   description: string;
   scene: string;
   timing: string;
+  foundations: MotionFoundationReference[];
+  path: string;
+  previewUrl: string;
+};
+
+/** A product moment that uses an atomic motion primitive. */
+export type ProductMomentReference = {
+  id: string;
+  groupId: string;
+  groupName: string;
+  name: string;
+  description: string;
+  scene: string;
+  role: string;
+  roleLabel: string;
+  note: string;
+  path: string;
+  previewUrl: string;
+};
+
+/** An atomic motion primitive that composes a product moment. */
+export type MotionFoundationReference = {
+  id: string;
+  categoryId: string;
+  name: string;
+  role: string;
+  roleLabel: string;
+  note: string;
   path: string;
   previewUrl: string;
 };
@@ -205,6 +234,7 @@ export type RecipeDocument = {
   reducedMotion: string;
   reviewNotes: string[];
   relatedEntries: string[];
+  productMoments: ProductMomentReference[];
 };
 
 export type RecipeExportDocument = {

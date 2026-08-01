@@ -170,5 +170,40 @@
     "press-tap-feedback",
     "hold-to-confirm",
     "drag-to-reorder"
+  ],
+  "productMoments": [
+    {
+      "id": "template-choice",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "模板选择",
+        "en": "Template choice"
+      },
+      "summary": {
+        "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+        "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+      },
+      "scene": {
+        "zh": "创建新页面时选择一个起始模板。",
+        "en": "Choosing a starting template when creating a new page."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "候选模板在悬停时明确可交互性，点击后保持当前选择。",
+        "en": "Candidate templates signal interactivity on hover and retain the current choice after selection."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+      }
+    }
   ]
 }

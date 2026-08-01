@@ -158,7 +158,12 @@ test("key Chinese and English layouts have no horizontal scrolling at product br
   }> = [
     {
       route: "/en/",
-      selectors: [".motion-pack-hero", ".motion-pack-hero-stage", ".motion-pack-gallery", ".motion-pack-grid"]
+      selectors: [
+        ".dual-library-home",
+        "[data-testid=\"directory-card-packs\"]",
+        "[data-testid=\"directory-card-primitives\"]",
+        ".dual-library-search"
+      ]
     },
     {
       route: "/zh/packs/save-confirmation/",
@@ -356,9 +361,8 @@ test("Interior product surfaces keep compact geometry and restrained elevation",
     {
       route: "/zh/",
       surfaces: [
-        { selector: ".motion-pack-hero-stage", radius: "16px" },
-        { selector: ".motion-pack-card", radius: "16px" },
-        { selector: ".motion-pack-finder-callout", radius: "16px" }
+        { selector: ".dual-library-pack-card", radius: "16px" },
+        { selector: ".dual-library-primitive-card", radius: "16px" }
       ]
     },
     {
@@ -410,7 +414,7 @@ test("Interior product surfaces keep compact geometry and restrained elevation",
 
   await page.emulateMedia({ contrast: "more" });
   await page.goto("/zh/");
-  await expect(page.locator(".motion-pack-card").first()).not.toHaveCSS("box-shadow", "none");
+  await expect(page.locator(".dual-library-directory-card").first()).not.toHaveCSS("box-shadow", "none");
 });
 
 test("fine-pointer parameter primitives preserve the 44 pixel target baseline", async ({ page }, testInfo) => {

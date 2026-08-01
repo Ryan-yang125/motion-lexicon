@@ -112,12 +112,13 @@ test("resource popover grows with its inline theme menu", async ({ page }, testI
   expect(geometry.contentScrollHeight).toBeLessThanOrEqual(geometry.contentClientHeight + 1);
 });
 
-test("landing presents the Motion Pack gallery without horizontal overflow", async ({ page }) => {
+test("landing presents both motion directories without horizontal overflow", async ({ page }) => {
   await page.goto("/zh/");
-  await expect(page.locator(".motion-pack-hero")).toHaveCount(1);
-  await expect(page.locator(".motion-pack-hero-stage .motion-pack-preview")).toHaveCount(1);
-  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
-  await expect(page.locator(".motion-pack-finder-callout")).toHaveCount(1);
+  await expect(page.locator(".dual-library-home")).toHaveCount(1);
+  await expect(page.getByTestId("directory-card-packs")).toHaveCount(1);
+  await expect(page.getByTestId("directory-card-primitives")).toHaveCount(1);
+  await expect(page.locator(".dual-library-directory-stage .motion-pack-preview")).toHaveCount(1);
+  await expect(page.locator(".dual-library-primitive-stage .library-motion-thumb")).toHaveCount(1);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth
   );

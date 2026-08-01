@@ -11,15 +11,16 @@
   <a href="./README.zh-CN.md"><strong>简体中文</strong></a>
 </p>
 
-<p align="center"><strong>把一段完整的产品交互，直接带进你的界面。</strong></p>
+<p align="center"><strong>把产品瞬间或动效基础，直接带进你的界面。</strong></p>
 
 <p align="center">
-  面向产品创作者、设计师、开发者和 AI Agent 的免费开源真实产品交互合集。<br />
-  <strong>预览 → 触发 → 理解 → 复制</strong>
+  面向产品创作者、设计师、开发者和 AI Agent 的免费开源产品动效系统。<br />
+  <strong>产品瞬间 · 动效基础 · Finder</strong>
 </p>
 
 <p align="center">
-  <a href="https://motion-lexicon.pages.dev/zh/packs/"><strong>浏览 Motion Packs</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/packs/"><strong>浏览产品瞬间</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/catalog/"><strong>浏览动效基础</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/finder/"><strong>使用 Motion Finder</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/"><strong>访问网站</strong></a>
 </p>
@@ -32,11 +33,21 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon V1——16 个真实产品瞬间](docs/assets/readme-v1-home.webp)
+![Motion Lexicon V1.1——产品瞬间与动效基础](docs/assets/readme-v1-home.webp)
+
+## 两个目录，一套产品动效系统
+
+V1.1 将两个同等重要的目录放进同一套产品动效系统：**产品瞬间 · Motion Packs** 提供完整交互，**动效基础 · Motion Primitives** 提供 44 个聚焦的底层动效工作台。你可以从当前要解决的问题出发，再在两者之间切换，获得完整实现或更精确的调整。
+
+| 目录 | 适合从这里开始 | 可以复制什么 |
+| --- | --- | --- |
+| [产品瞬间 · Motion Packs](https://motion-lexicon.pages.dev/zh/packs/) | 保存、发布、邀请、筛选等一个明确的产品状态 | 完整场景、交互契约、Prompt、HTML、CSS 和 JavaScript |
+| [动效基础 · Motion Primitives](https://motion-lexicon.pages.dev/zh/catalog/) | 入场、缓动、编排、转场或一个具体参数 | 精确工作台、术语、参数和可移植实现 |
+| [Motion Finder](https://motion-lexicon.pages.dev/zh/finder/) | 能描述感觉或目标，还没有准确术语 | 同一条检索路径中的产品瞬间与动效基础 |
 
 ## 为真实产品瞬间准备的 Motion Pack
 
-V1.0 围绕 **16 个 Motion Pack** 构建：每一个都是能在产品里直接识别的完整小交互。你可以在浏览器里亲手触发、查看状态变化，再复制 Prompt、HTML、CSS 和 JavaScript，接入自己的产品。
+首批 16 个 Motion Pack 是能在产品里直接识别的完整小交互。你可以在浏览器里亲手触发、查看状态变化，再复制 Prompt、HTML、CSS 和 JavaScript，接入自己的产品。
 
 每个 Pack 都有一份清晰的交互契约：
 
@@ -52,10 +63,10 @@ V1.0 围绕 **16 个 Motion Pack** 构建：每一个都是能在产品里直接
 
 | 分组 | Motion Pack |
 | --- | --- |
-| 完成反馈 | 保存确认、发布版本、复制分享链接 |
-| 选择决策 | 卡片选择、工作区切换、模板选择 |
-| 内容变化 | 图层插入、归档撤销、筛选结果、行内校验 |
-| 工作流表面 | 命令菜单、展开详情、通知处理、步骤进度、成员邀请、媒体拖动 |
+| 完成反馈 | 保存确认、发布版本、分享链接、行内校验 |
+| 选择决策 | 卡片选择、工作区切换、模板选择、命令菜单 |
+| 内容变化 | 图层插入、归档撤销、筛选结果、展开详情 |
+| 工作流表面 | 通知处理、步骤进度、成员邀请、媒体拖动 |
 
 从 [Motion Pack 画廊](https://motion-lexicon.pages.dev/zh/packs/) 开始，再打开像 [保存确认](https://motion-lexicon.pages.dev/zh/packs/save-confirmation/) 这样的完整详情页。
 
@@ -68,42 +79,45 @@ V1.0 围绕 **16 个 Motion Pack** 构建：每一个都是能在产品里直接
 
 画廊和所有 Pack 详情页都是静态页面，加载快速、无需账号，也方便放进设计评审、Issue 或 Agent 任务里分享。
 
-## Finder 与词典继续服务完整决策
+## 通过 Finder 与关联动效连成一体
 
-Motion Pack 是 V1 的主产品界面。原有的动效选择和词典能力继续覆盖完整路径：
+Motion Finder 横跨两个目录。Pack 详情页会呈现构成产品瞬间的相关动效基础；已建立 Pack 关联的动效基础工作台会呈现对应产品瞬间。两条内容线各自解决清晰的问题，同时共同组成一套可浏览、可拆解、可复制的产品动效系统。
 
 | 产品界面 | 可以获得什么 |
 | --- | --- |
 | [Motion Packs](https://motion-lexicon.pages.dev/zh/packs/) | 16 段完整、可复制的产品交互 |
 | [Motion Finder](https://motion-lexicon.pages.dev/zh/finder/) | 根据自然语言需求给出可解释的动效候选 |
-| [动效库](https://motion-lexicon.pages.dev/zh/catalog/) | 12 个动效类别中的 44 张标准工作台 |
+| [动效基础 · Motion Primitives](https://motion-lexicon.pages.dev/zh/catalog/) | 12 个动效类别中的 44 张标准工作台 |
 | [动效词汇](https://motion-lexicon.pages.dev/zh/vocabulary/) | 91 个中英双语术语、定义和近义词区别 |
 | [版本化数据](https://motion-lexicon.pages.dev/data/v1/packs.json) | 供工具和 Agent 使用的 Pack、目录、词汇和 Schema |
 
-Finder 帮你选择动效语言，Pack 把这份选择做成完整产品交互。44 张标准工作台和 91 个源术语继续承担精准检索、SEO 与深入实现参考。
+Finder 帮你找到合适的动效语言、产品瞬间，或两者的组合。44 张标准工作台和 91 个源术语继续承担精准检索、SEO 与深入实现参考。
 
 ## 在浏览器、CLI 或 Agent 中使用
 
-网站提供最快的可视化路径。免费 CLI 也能在本地读取 V1 Pack 数据：
+网站提供最快的可视化路径。免费 CLI 通过并列的 `packs` 与 `list` 命令读取同一套 V1.1 数据：
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 packs \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs \
   --locale zh --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 pack save-confirmation \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 pack save-confirmation \
   --locale zh --format bundle
+
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list \
+  --locale zh --format json
 ```
 
-Finder 和词典工作台继续通过同一套 CLI 使用：
+动效基础的检索与导出继续通过同一套 CLI 使用：
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend \
   "一张卡片切入进来，然后慢慢停下来" \
   --locale zh --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 search \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 search \
   "共享元素" --locale zh
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 export spring \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 export spring \
   --locale zh --format bundle
 ```
 
@@ -131,9 +145,9 @@ Motion Lexicon 以静态网站运行，提供免费浏览器体验、本地 CLI�
 - 生成的代码片段：[0BSD](./CONTENT-LICENSE)
 - 交互组件：[Interior](https://github.com/ddoemonn/interior)，按 MIT 许可证改造，署名与许可正文见 [NOTICE](./NOTICE)
 
-## V1.0 快照
+## V1.1 快照
 
-**V1.0.0 已上线。** 公共产品包含 16 个真实产品 Motion Pack、双语 Finder、44 张标准动效工作台、91 个源术语、CLI、Agent Skill、版本化机器可读数据、本地化 SEO 和静态交付。
+**V1.1.0 已上线。** 公共产品包含两个同等重要的目录：16 个真实产品 Motion Pack 与 44 张标准动效基础工作台。Finder、双语词汇、CLI、Agent Skill、版本化机器可读数据、本地化 SEO 和静态交付将它们连成完整系统。
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -146,11 +160,11 @@ Motion Lexicon 以静态网站运行，提供免费浏览器体验、本地 CLI�
 
 | 路由形式 | 用途 |
 | --- | --- |
-| `/:locale/` | Motion Pack 画廊和产品首页 |
+| `/:locale/` | 产品首页，平等进入两个目录 |
 | `/:locale/packs/` | 全部 16 个真实产品 Motion Pack |
 | `/:locale/packs/:packId/` | 单个 Pack 的预览、指导和可移植实现 |
 | `/:locale/finder/` | 自然语言动效推荐 |
-| `/:locale/catalog/` | 包含 44 张工作台的完整动效库 |
+| `/:locale/catalog/` | 包含 44 张工作台的完整动效基础目录 |
 | `/:locale/vocabulary/` | 包含 91 个术语的完整词汇表 |
 | `/:locale/:category/:recipe/` | 标准动效方案工作台 |
 | `/data/v1/*.json` | 版本化 Pack、目录、词汇和 Schema 数据 |
@@ -199,6 +213,7 @@ npm run test:visual
 
 ---
 
-**[浏览 Motion Packs](https://motion-lexicon.pages.dev/zh/packs/)** ·
+**[浏览产品瞬间](https://motion-lexicon.pages.dev/zh/packs/)** ·
+**[浏览动效基础](https://motion-lexicon.pages.dev/zh/catalog/)** ·
 **[使用 Motion Finder](https://motion-lexicon.pages.dev/zh/finder/)** ·
 **[Read the English README](./README.md)**

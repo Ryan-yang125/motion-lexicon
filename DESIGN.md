@@ -2,10 +2,15 @@
 
 ## Experience Model
 
-Motion Lexicon V1 is a static, SEO-friendly collection of real product motion.
-Its primary surface is a gallery of 16 **Motion Packs**: complete interactions
-with a context, trigger, state transition, completion state, and portable
-implementation.
+Motion Lexicon V1.1 is a static, SEO-friendly product motion system with two
+equal collections:
+
+- **Product Moments · Motion Packs:** 16 complete interactions with a context,
+  trigger, state transition, completion state, and portable implementation.
+- **Motion Primitives:** 44 focused motion workspaces for exact behavior,
+  terminology, parameters, and implementation.
+
+Finder connects the two collections for visitors who begin from a description.
 
 ```txt
 Preview → Trigger → Inspect → Copy
@@ -16,10 +21,16 @@ Preview → Trigger → Inspect → Copy
 - **Inspect:** read the timing, trigger, outcome, and reduced-motion treatment.
 - **Copy:** take the Prompt or portable HTML, CSS, and JavaScript.
 
-Finder stays available for motion-language discovery:
+Motion Primitives use a parallel focused workflow:
 
 ```txt
-Describe → Choose → Tune → Use
+Identify → Preview → Tune → Copy
+```
+
+Finder provides cross-collection discovery:
+
+```txt
+Describe → Discover → Decide → Use
 ```
 
 The intended result is calm confidence. Product state carries the visual
@@ -27,37 +38,41 @@ interest; the surrounding interface gives that state space and clarity.
 
 ## Information Architecture
 
-The header exposes two primary destinations:
+The header exposes three primary destinations with equal visual weight:
 
 - **Find motion:** `/:locale/finder/` receives a natural-language request and
-  leads to ranked vocabulary candidates and recipe workspaces.
-- **Motion Packs:** `/:locale/` and `/:locale/packs/` are the V1 home and
-  gallery for real product moments.
+  returns relevant Motion Primitives together with matching Product Moments.
+- **Product Moments:** `/:locale/packs/` is the gallery for 16 real product
+  interactions.
+- **Motion Primitives:** `/:locale/catalog/` is the catalog for 44 focused
+  motion workspaces.
 
+The home route `/:locale/` introduces both collections with equal entry points.
 Supporting routes carry implementation depth and acquisition value:
 
 - `/:locale/packs/:packId/`: a live Pack preview, guidance, and export.
-- `/:locale/catalog/`: the 44 canonical motion workspaces.
+- `/:locale/catalog/`: the 44 canonical Motion Primitive workspaces.
 - `/:locale/vocabulary/`: the complete bilingual 91-term vocabulary.
 - `/:locale/:categoryId/`: indexable motion-family collections.
 - `/:locale/:categoryId/:recipeId/`: canonical recipe workspaces.
 - Legacy aliases and playground URLs: redirects to canonical destinations or
   meaningful presets.
 
-GitHub remains visible in the desktop header. CLI, Agent Skill, versioned data,
-vocabulary, theme, and locale remain available in the resources layer and
-footer.
+Pack details link to their related Motion Primitives; primitive workspaces
+surface the Pack relationships declared for that behavior. GitHub remains
+visible in the desktop header. CLI, Agent Skill, versioned data, vocabulary,
+theme, and locale remain available in the resources layer and footer.
 
-## Pack Gallery
+## Product Moments · Pack Gallery
 
-- The V1 home carries the Pack gallery directly, with a concise product promise,
-  a featured live scene, and clear routes to all Packs.
+- The Pack gallery has a concise product promise, a featured live scene, and
+  clear routes to all Packs.
 - Four filters organise the set by product intent: Feedback, Choice, Change, and
   Workflow.
 - Gallery cards present a stable product frame. Hover and focus animate the
   existing scene in place, avoiding a poster-to-preview swap.
-- Cards link to dedicated detail routes instead of treating the gallery as a
-  passive illustration surface.
+- Cards link to dedicated detail routes and keep the gallery as an active
+  browsing surface.
 - Mobile cards remain vertically readable and avoid horizontal page overflow.
 
 ## Pack Detail
@@ -72,16 +87,26 @@ footer.
   default; the tab row owns the corresponding copy action.
 - Related Packs form a lightweight continuation path without competing with the
   active scene.
+- Related Motion Primitives explain the behavior used inside the active Pack.
 
-## Finder And Dictionary Surfaces
+## Motion Primitives · Catalog
+
+- The catalog presents all 44 canonical workspaces with accurate live previews,
+  focused categories, and routes into each primitive.
+- Recipe workspaces pair a main preview with compact controls, then expose
+  Prompt and Code through the same output pattern used by Pack details.
+- Each declared primitive relationship links to its Product Moment, so visitors
+  can see that behavior inside a complete product context.
+- Vocabulary and category pages continue to be indexable acquisition surfaces.
+
+## Finder
 
 - Finder uses one primary preview for the selected candidate. Its other
   candidates remain static choices, and replay only affects the active motion.
-- Recipe workspaces pair a main preview with compact controls. Prompt and Code
-  share the same two-mode output pattern used by Pack details.
-- The Library preserves accurate per-card previews, 44 canonical units, and the
-  91-term vocabulary mapping.
-- Vocabulary and category pages continue to be indexable acquisition surfaces.
+- Results visibly distinguish Product Moments from Motion Primitives while
+  giving both collections equal relevance in a search result.
+- The 91-term vocabulary supplies precise language and close-term distinctions
+  for both collections.
 
 ## Technical Stack
 
@@ -95,27 +120,31 @@ footer.
 - Vitest for logic tests and Playwright for browser acceptance checks.
 
 `src/motion-packs.css` and `src/components/motion-pack-preview.css` provide the
-Pack gallery, detail, and live-scene styling. `src/data/motion-packs.ts` is the
-single source for Pack metadata, guidance, prompts, and portable output.
+Pack gallery, detail, and live-scene styling. `src/data/motion-packs.ts` holds
+Pack metadata, guidance, prompts, portable output, and its relationships to
+Motion Primitives. Existing motion-engine data remains the source for canonical
+primitive workspaces and vocabulary.
 
 ## Layout System
 
 ### Product shell
 
-- The 64px header uses a translucent material, a centered Find motion / Motion
-  Packs control, and a source-anchored resources popover.
+- The 64px header uses a translucent material, a centered Find motion / Product
+  Moments / Motion Primitives control, and a source-anchored resources popover.
 - Desktop content is capped at 1240px with comfortable outer breathing room.
 - Mobile uses a compact outer gutter and keeps the active product workflow ahead
   of reference material.
 - Footer content remains compact and groups product navigation separately from
   open-source resources.
 
-### Gallery
+### Collection galleries
 
-- The featured Pack scene occupies the main visual focus in the first viewport.
-- Group filters use a compact segmented control.
-- Desktop cards form a responsive grid; narrow layouts use one stable vertical
-  flow rather than a horizontally scrolling page.
+- The home route presents both collections as equal routes into the product.
+- Product Moments use a featured Pack scene and group filters in a compact
+  segmented control.
+- Motion Primitives use the canonical catalog and category filters.
+- Desktop cards form responsive grids; narrow layouts use stable vertical flows
+  with no horizontal page scrolling.
 
 ### Detail workspace
 
@@ -151,6 +180,7 @@ Pack data lives in `src/data/motion-packs.ts`. Each Pack contains:
 - search keywords and timing;
 - portable HTML, CSS, and JavaScript;
 - a reduced-motion treatment.
+- `foundations`: a related Motion Primitive ID, localized role, and note.
 
 Canonical Pack paths are stable content URLs:
 
@@ -164,9 +194,10 @@ The public artifact generator publishes the complete Pack data at:
 /data/v1/packs.json
 ```
 
-The CLI exposes the same data through `packs` and `pack <id>` commands. Existing
-catalog, recipe, vocabulary, and Finder documents remain versioned under
-`/data/v1/`.
+The CLI exposes Product Moments through `packs` and `pack <id>` commands and
+Motion Primitives through `list`, `search`, `show`, and `export`. Both
+collections, their relationships, vocabulary, and Finder documents remain
+versioned under `/data/v1/`.
 
 ## Interaction And Motion
 
@@ -198,22 +229,26 @@ catalog, recipe, vocabulary, and Finder documents remain versioned under
 ## SEO
 
 The build pipeline renders static HTML for every localized canonical route.
-Motion Pack gallery and detail routes receive self canonicals, reciprocal
-hreflang values, Open Graph metadata, and static JSON-LD alongside Finder,
-catalog, category, vocabulary, and recipe routes.
+Motion Pack gallery and detail routes, Motion Primitive catalog and workspace
+routes, and Finder routes receive self canonicals, reciprocal hreflang values,
+Open Graph metadata, and static JSON-LD.
 
-`packs.json`, the Pack CLI commands, `llms.txt`, and `llms-full.txt` publish the
-same V1 surface to tools and agents. Finder query variations remain canonicalized
-to their localized Finder route.
+`packs.json`, `catalog.json`, the CLI, Agent Skill, `llms.txt`, and
+`llms-full.txt` publish the same V1.1 two-collection model to tools and agents.
+Finder query variations remain canonicalized to their localized Finder route.
 
 ## Launch Acceptance
 
 Launch is complete when:
 
+- Product Moments and Motion Primitives have equal first-level navigation and
+  home-route entry points;
 - all 16 Pack gallery and detail routes build in Chinese and English;
 - each Pack preview exposes its intended real product interaction;
 - Prompt, HTML, CSS, JavaScript, and reduced-motion guidance stay aligned;
-- README, CLI, Skill, public JSON, `llms.txt`, and website all describe V1;
+- every declared Pack-to-Primitive relationship appears on both detail pages;
+- Finder returns relevant Motion Primitives and matching Product Moments;
+- README, CLI, Skill, public JSON, `llms.txt`, and website all describe V1.1;
 - 44 canonical workspaces and 91 source terms remain searchable and indexable;
 - desktop and mobile surfaces have no horizontal overflow;
 - `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`,

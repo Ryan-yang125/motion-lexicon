@@ -45,12 +45,17 @@ const help = `Motion Lexicon ${version}
 Usage:
   motion-lexicon packs [options]
   motion-lexicon pack <id> [options]
+  motion-lexicon list [options]
   motion-lexicon catalog [options]
   motion-lexicon search <query> [options]
   motion-lexicon recommend <description> [options]
   motion-lexicon show <id-or-alias> [options]
   motion-lexicon export <id-or-alias> [options]
   motion-lexicon schema [recipe|catalog|search|recommend|export|packs|pack]
+
+Libraries:
+  packs                              16 Product Moments with complete implementations
+  list, catalog                      44 Motion Primitives with portable recipes
 
 Common options:
   --locale <zh|en>                Output language (default: en)
@@ -72,6 +77,8 @@ Export formats:
 Examples:
   motion-lexicon packs --locale zh
   motion-lexicon pack save-confirmation --locale zh --format bundle
+  motion-lexicon list --locale zh --format json
+  motion-lexicon catalog --category entrances
   motion-lexicon search "弹簧"
   motion-lexicon recommend "卡片弹出来要有重量、最后收得住" --locale zh
   motion-lexicon show pop-in --locale zh --format json
@@ -191,9 +198,11 @@ function write(io: CliIo, output: string) {
   io.stdout(output ? `${output.replace(/\n$/, "")}\n` : "");
 }
 
-async function runCatalog(parsed: Parsed, io: CliIo) {
+async function runCatalog(parsed: Parsed, io: CliIo, command = "catalog") {
   rejectOptions(parsed, ["--locale", "--format", "--category", "--surface"]);
-  if (parsed.positionals.length) throw new MotionLexiconError("catalog does not take positional values.");
+  if (parsed.positionals.length) {
+    throw new MotionLexiconError(`${command} does not take positional values.`);
+  }
   const format = discoveryFormat(parsed);
   const document = catalog({
     locale: locale(parsed),
@@ -336,6 +345,7 @@ export async function runCli(argv: string[], io: CliIo): Promise<number> {
     }
     if (command === "packs") await runPacks(parsed, io);
     else if (command === "pack") await runPack(parsed, io);
+    else if (command === "list") await runCatalog(parsed, io, "list");
     else if (command === "catalog") await runCatalog(parsed, io);
     else if (command === "search") await runSearch(parsed, io);
     else if (command === "recommend") await runRecommend(parsed, io);

@@ -187,5 +187,73 @@
     "keyframes",
     "duration",
     "reveal"
+  ],
+  "productMoments": [
+    {
+      "id": "publish-release",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "发布版本",
+        "en": "Publish release"
+      },
+      "summary": {
+        "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+        "en": "Resolve a ready update into a release with a clear landing point."
+      },
+      "scene": {
+        "zh": "发布产品更新时的版本面板。",
+        "en": "A version panel while publishing a product update."
+      },
+      "role": "sequence",
+      "roleLabel": {
+        "zh": "顺序编排",
+        "en": "Sequencing"
+      },
+      "note": {
+        "zh": "发布状态落定后，时间线记录随后补上。",
+        "en": "The timeline record follows after the release state lands."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+      }
+    },
+    {
+      "id": "progress-steps",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "进度步骤",
+        "en": "Progress steps"
+      },
+      "summary": {
+        "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+        "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+      },
+      "scene": {
+        "zh": "设置公开页面时依次完成内容、分享和发布。",
+        "en": "Completing content, sharing, and publishing while setting up a public page."
+      },
+      "role": "sequence",
+      "roleLabel": {
+        "zh": "顺序编排",
+        "en": "Sequencing"
+      },
+      "note": {
+        "zh": "完成标记、连接线和下一步按明确顺序推进。",
+        "en": "Completion mark, connector, and next step advance in a clear order."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+      }
+    }
   ]
 }

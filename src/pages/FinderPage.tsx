@@ -84,6 +84,9 @@ export function FinderPage({ locale }: { locale: Locale }) {
     selected: MotionFinderCandidate;
     values: ParamValues;
   } | null>(null);
+  const resultLabels = locale === "zh"
+    ? { eyebrow: "动效基础", title: "相关动效基础" }
+    : { eyebrow: "Motion primitives", title: "Related motion primitives" };
 
   const cancelPendingParameterCommit = useCallback(() => {
     if (parameterFrameRef.current) window.cancelAnimationFrame(parameterFrameRef.current);
@@ -337,7 +340,8 @@ export function FinderPage({ locale }: { locale: Locale }) {
         >
           <div className="library-doc-section-heading finder-results-heading finder-workspace-heading">
             <div>
-              <h2 id="finder-results-title">{t("finder.resultTitle")}</h2>
+              <span className="motion-pack-kicker">{resultLabels.eyebrow}</span>
+              <h2 id="finder-results-title">{resultLabels.title}</h2>
             </div>
             <div className="finder-match-summary">
               <p>{result.reason}</p>
@@ -410,7 +414,10 @@ export function FinderPage({ locale }: { locale: Locale }) {
             </div>
           ) : null}
 
-          <FinderPackBridge locale={locale} finderGroupId={result.groupId} />
+          <FinderPackBridge
+            locale={locale}
+            foundationIds={candidates.map((candidate) => candidate.recipe.id)}
+          />
         </section>
       ) : null}
 

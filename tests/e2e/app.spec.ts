@@ -1,10 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-test("desktop landing page renders without horizontal overflow", async ({ page }) => {
+test("desktop landing page renders without horizontal overflow", async ({ page }, testInfo) => {
   await page.goto("/zh/");
   await expect(page).toHaveTitle(/Motion Lexicon/);
-  await expect(page.getByRole("heading", { name: "把一个产品瞬间，直接带进你的界面。" })).toBeVisible();
-  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
+  await expect(page.getByRole("heading", { name: /把产品动效/ })).toBeVisible();
+  await expect(page.getByTestId("directory-card-packs")).toBeVisible();
+  await expect(page.getByTestId("directory-card-primitives")).toBeVisible();
+  if (!testInfo.project.name.includes("mobile")) {
+    await expect(page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "产品瞬间" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "主导航" }).getByRole("link", { name: "动效基础" })).toBeVisible();
+  }
 
   const hasHorizontalOverflow = await page.evaluate(() => {
     return document.documentElement.scrollWidth > window.innerWidth;
@@ -12,15 +17,15 @@ test("desktop landing page renders without horizontal overflow", async ({ page }
   expect(hasHorizontalOverflow).toBe(false);
 });
 
-test("landing Pack callout opens Finder", async ({ page }) => {
+test("landing Finder opens the shared search route", async ({ page }) => {
   await page.goto("/zh/");
-  await page.getByRole("link", { name: "描述一个产品瞬间" }).click();
+  await page.getByRole("button", { name: "找动效" }).click();
   await expect(page).toHaveURL(/\/zh\/finder\//);
 });
 
 test("english landing page renders english copy", async ({ page }) => {
   await page.goto("/en/");
-  await expect(page.getByRole("heading", { name: "Bring a better product moment into your interface." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Bring product motion/ })).toBeVisible();
   await expect(page.getByText("一个能看")).toHaveCount(0);
 });
 

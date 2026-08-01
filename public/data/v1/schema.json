@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://motion-lexicon.pages.dev/data/v1/schema.json",
   "title": "Motion Lexicon public data",
-  "description": "Schema for the versioned catalog, Motion Packs, vocabulary, and individual recipe artifacts.",
+  "description": "Schema for the versioned Product Moments, Motion Primitives, vocabulary, and individual recipe artifacts.",
   "oneOf": [
     {
       "$ref": "#/$defs/catalogDocument"
@@ -204,6 +204,7 @@
         "name",
         "summary",
         "aliases",
+        "productMoments",
         "urls",
         "dataUrl"
       ],
@@ -236,6 +237,12 @@
             "type": "string"
           },
           "uniqueItems": true
+        },
+        "productMoments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/productMomentReference"
+          }
         },
         "urls": {
           "$ref": "#/$defs/localizedUrls"
@@ -297,6 +304,7 @@
         "guidance",
         "keywords",
         "timing",
+        "foundations",
         "urls",
         "source"
       ],
@@ -354,6 +362,13 @@
         },
         "timing": {
           "type": "string"
+        },
+        "foundations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/motionFoundation"
+          }
         },
         "urls": {
           "$ref": "#/$defs/localizedUrls"
@@ -440,6 +455,90 @@
           "items": {
             "$ref": "#/$defs/motionPack"
           }
+        }
+      }
+    },
+    "motionFoundation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "categoryId",
+        "name",
+        "role",
+        "roleLabel",
+        "note",
+        "urls"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "role": {
+          "type": "string"
+        },
+        "roleLabel": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "note": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
+        }
+      }
+    },
+    "productMomentReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "groupId",
+        "groupName",
+        "name",
+        "summary",
+        "scene",
+        "role",
+        "roleLabel",
+        "note",
+        "urls"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "groupName": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "name": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "summary": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "scene": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "role": {
+          "type": "string"
+        },
+        "roleLabel": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "note": {
+          "$ref": "#/$defs/localizedText"
+        },
+        "urls": {
+          "$ref": "#/$defs/localizedUrls"
         }
       }
     },
@@ -577,7 +676,8 @@
         "guidance",
         "reducedMotion",
         "reviewNotes",
-        "relatedRecipes"
+        "relatedRecipes",
+        "productMoments"
       ],
       "properties": {
         "kind": {
@@ -659,6 +759,12 @@
             "type": "string"
           },
           "uniqueItems": true
+        },
+        "productMoments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/productMomentReference"
+          }
         }
       }
     }

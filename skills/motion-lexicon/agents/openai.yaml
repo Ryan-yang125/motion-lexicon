@@ -1,4 +1,4 @@
 interface:
   display_name: "Motion Lexicon"
-  short_description: "Find and export polished product Motion Packs"
-  default_prompt: "Use $motion-lexicon to find the best Motion Pack for this product interaction, inspect its live path and reduced-motion treatment, then return a portable implementation bundle."
+  short_description: "Find product moments and motion primitives"
+  default_prompt: "Use $motion-lexicon to choose the best Product Moment or Motion Primitive for this request, inspect its live path and reduced-motion treatment, then return a portable implementation bundle."

@@ -73,5 +73,40 @@
   "relatedRecipes": [
     "compositing",
     "typewriter"
+  ],
+  "productMoments": [
+    {
+      "id": "media-scrub",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "媒体拖动",
+        "en": "Media scrub"
+      },
+      "summary": {
+        "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+        "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+      },
+      "scene": {
+        "zh": "在视频编辑器里精确预览一个镜头片段。",
+        "en": "Precisely previewing a shot inside a video editor."
+      },
+      "role": "continuous-input",
+      "roleLabel": {
+        "zh": "连续输入",
+        "en": "Continuous input"
+      },
+      "note": {
+        "zh": "连续预览需要保持稳定帧率，避免播放头与画面脱节。",
+        "en": "Continuous preview needs stable frame rate so the playhead stays aligned with the frame."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+      }
+    }
   ]
 }

@@ -1,27 +1,30 @@
 # Motion Lexicon
 
-> A free, open-source, bilingual motion finder and recipe reference for choosing, comparing, tuning, reviewing, and implementing interface motion.
+> A free, open-source, bilingual library of Product Moments and Motion Primitives for choosing, comparing, tuning, reviewing, and implementing interface motion.
 
 - Website: https://motion-lexicon.pages.dev/en/
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Motion Finder: https://motion-lexicon.pages.dev/en/finder/
 - 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
-- Motion Packs: https://motion-lexicon.pages.dev/en/packs/
-- Motion Packs JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
+- Product Moments: https://motion-lexicon.pages.dev/en/packs/
+- Product Moments JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
+- Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
+- Motion Primitives JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
-- Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
 - Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
 - JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json
 - Full machine-readable text: https://motion-lexicon.pages.dev/llms-full.txt
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0`
+- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list --locale en --format json`
+- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs --locale en --format json`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 
-## Motion Packs
+## Product Moments
 
 - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/): A submission lands across the action, status marker, and document state together.
 - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/): Resolve a ready update into a release with a clear landing point.
@@ -40,7 +43,7 @@
 - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
 - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
 
-## Canonical recipes
+## Motion Primitives
 
 ### Entrances & exits
 
@@ -122,7 +125,7 @@
 - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json)
 - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax. [JSON](https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json)
 
-# Full Motion Pack reference
+# Full Product Moment reference
 
 ## Save confirmation (save-confirmation)
 
@@ -134,17 +137,29 @@
 - Trigger: Give a slight press response immediately after Save is clicked.
 - Reduced motion: Keep text and color state changes while removing spin and travel.
 - Preview: https://motion-lexicon.pages.dev/en/packs/save-confirmation/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The save action acknowledges the click before the result arrives.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Saving and Saved update in the same label position.
+  - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/) — State change: The synchronous state marker keeps the brief wait legible.
+  - [Duration](https://motion-lexicon.pages.dev/en/sequencing/duration/) — Timing: Press, saving, and saved use short durations that keep feedback compact and perceptible.
+  - [Loop](https://motion-lexicon.pages.dev/en/loops/loop/) — Timing: The saving icon loops briefly and stops once the result arrives.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains the state copy and color result.
 
 ## Publish release (publish-release)
 
 - Chinese name: 发布版本
 - Group: feedback
-- Scene: A version panel while publishing a V1.0 update.
+- Scene: A version panel while publishing a product update.
 - Use case: Publishing articles, shipping releases, submitting approvals, and sending announcements.
 - Timing: 240ms + 60ms follow-through · cubic-bezier(0.16, 1, 0.3, 1)
 - Trigger: Make it clear that Publish has been received before the release lands.
 - Reduced motion: Keep state and record changes while removing entrance travel.
 - Preview: https://motion-lexicon.pages.dev/en/packs/publish-release/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The Publish action first acknowledges that the request was received.
+  - [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/) — Sequencing: The timeline record follows after the release state lands.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The version label and action copy switch to Live together.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains the release result and timeline record.
 
 ## Copy share link (share-link)
 
@@ -156,6 +171,10 @@
 - Trigger: Show a check on the original action after copying.
 - Reduced motion: Keep text and color changes; let the cue appear and leave directly.
 - Preview: https://motion-lexicon.pages.dev/en/packs/share-link/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The copy action is confirmed directly on its original control.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The link icon and button copy switch to Copied.
+  - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/) — Entrance: A short cue appears and leaves without interrupting the next action.
 
 ## Card selection (card-selection)
 
@@ -167,6 +186,10 @@
 - Trigger: Move focus to the chosen card after any option is clicked.
 - Reduced motion: Update the selection boundary and check directly without travel.
 - Preview: https://motion-lexicon.pages.dev/en/packs/card-selection/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: Each candidate card responds to the click before selection updates.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — State change: The selected check scales in briefly to emphasize the current decision.
+  - [Easing](https://motion-lexicon.pages.dev/en/easing/easing/) — Timing: Boundary and check settle the selected state with one easing curve.
 
 ## Workspace switch (workspace-switch)
 
@@ -178,6 +201,10 @@
 - Trigger: The tab itself carries both the switch origin and focus location.
 - Reduced motion: Update tab and content directly while retaining keyboard focus.
 - Preview: https://motion-lexicon.pages.dev/en/packs/workspace-switch/
+- Motion primitives:
+  - [Morph](https://motion-lexicon.pages.dev/en/state-transitions/morph/) — Spatial continuity: The active pill moves along one tab track to preserve focus origin.
+  - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/) — State change: The content surface uses a brief opacity change to swap views.
+  - [Page transition](https://motion-lexicon.pages.dev/en/scroll/page-transition/) — Spatial continuity: The tab switch maintains continuity within the existing workspace context.
 
 ## Template choice (template-choice)
 
@@ -189,6 +216,11 @@
 - Trigger: Update the visual choice first, then update the next action.
 - Reduced motion: Keep boundary, corner mark, and action-label updates.
 - Preview: https://motion-lexicon.pages.dev/en/packs/template-choice/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: Template cards use a light press response to acknowledge selection input.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — State change: The corner mark scales in slightly to identify the active template.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The primary action adopts the active template name in place.
+  - [Hover effect](https://motion-lexicon.pages.dev/en/feedback/hover-effect/) — Input feedback: Candidate templates signal interactivity on hover and retain the current choice after selection.
 
 ## Layer insertion (layer-insertion)
 
@@ -200,6 +232,10 @@
 - Trigger: Make the addition visible immediately inside the current list area.
 - Reduced motion: Show the new row directly while preserving item order.
 - Preview: https://motion-lexicon.pages.dev/en/packs/layer-insertion/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The Add layer action first acknowledges the insertion request.
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The new row enters its final position with very small upward travel.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — Entrance: A slight scale gives the inserted content a clear landing.
 
 ## Archive undo (archive-undo)
 
@@ -211,6 +247,11 @@
 - Trigger: Keep the departure origin inside the list the person is viewing.
 - Reduced motion: Hide or restore the card directly while keeping Undo available.
 - Preview: https://motion-lexicon.pages.dev/en/packs/archive-undo/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The Archive action immediately acknowledges the removal request.
+  - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/) — Exit and recovery: The task fades out of the list and returns to the same place on Undo.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — Exit and recovery: Scale reduces the visual weight of the departure.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: The reduced-motion version retains Undo and the restored result.
 
 ## Filter results (filter-results)
 
@@ -222,17 +263,25 @@
 - Trigger: Keep the filter itself continuously visible so people understand the active scope.
 - Reduced motion: Replace visible results directly while retaining count and active filter.
 - Preview: https://motion-lexicon.pages.dev/en/packs/filter-results/
+- Motion primitives:
+  - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/) — State change: Matching cards enter the result grid through a short opacity change.
+  - [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/) — Entrance: New results settle from a very small upward distance while layout stays stable.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The result count updates in place with the active filter scope.
 
 ## Inline validation (inline-validation)
 
 - Chinese name: 行内校验
-- Group: workflow
+- Group: feedback
 - Scene: Entering an email address while inviting a collaborator.
 - Use case: Form fields, account settings, payment information, and invite flows.
 - Timing: 140ms · ease-out
 - Trigger: Update state after the person completes an input that can be evaluated.
 - Reduced motion: Keep the state changes in color, icon, and text.
 - Preview: https://motion-lexicon.pages.dev/en/packs/inline-validation/
+- Motion primitives:
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The nearby helper copy updates directly with the input result.
+  - [Easing](https://motion-lexicon.pages.dev/en/easing/easing/) — Timing: Boundary, icon, and copy reach valid or invalid state on one short cadence.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: The low-motion treatment keeps color, icon, and explanatory changes.
 
 ## Command menu (command-menu)
 
@@ -244,6 +293,10 @@
 - Trigger: Open from the original action and move keyboard focus into search immediately.
 - Reduced motion: Open and close the panel directly while retaining focus management and keyboard controls.
 - Preview: https://motion-lexicon.pages.dev/en/packs/command-menu/
+- Motion primitives:
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The command panel enters below its trigger with very short travel.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — Entrance: A slight scale helps the compact panel land in the trigger context.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: After keyboard filtering, the active row keeps the next execution clear.
 
 ## Details disclosure (details-disclosure)
 
@@ -255,17 +308,25 @@
 - Trigger: The title row remains one complete clickable trigger surface.
 - Reduced motion: Open or close content directly while retaining aria-expanded state.
 - Preview: https://motion-lexicon.pages.dev/en/packs/details-disclosure/
+- Motion primitives:
+  - [Accordion / Collapse](https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/) — Disclosure: Content height, arrow, and expanded state are coordinated by one trigger.
+  - [Origin-aware animation](https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/) — Spatial continuity: Content opens from the title row so its origin remains legible.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains expanded state and accessible semantics.
 
 ## Notification triage (notification-triage)
 
 - Chinese name: 通知处理
-- Group: feedback
+- Group: workflow
 - Scene: Clearing two pending updates from a project inbox.
 - Use case: Notification centers, comment inboxes, approval queues, and support tickets.
 - Timing: 180ms · cubic-bezier(0.16, 1, 0.3, 1)
 - Trigger: Keep the handling action next to the current notification to reduce eye travel.
 - Reduced motion: Remove the handled item directly and update the count.
 - Preview: https://motion-lexicon.pages.dev/en/packs/notification-triage/
+- Motion primitives:
+  - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/) — Exit and recovery: A handled notification leaves the queue after its hierarchy recedes.
+  - [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/) — Spatial continuity: The next notification fills the space with slight travel to preserve queue context.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The remaining count updates in place with the queue.
 
 ## Progress steps (progress-steps)
 
@@ -277,6 +338,11 @@
 - Trigger: The primary action advances one explicit next step.
 - Reduced motion: Update step state and progress text directly.
 - Preview: https://motion-lexicon.pages.dev/en/packs/progress-steps/
+- Motion primitives:
+  - [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/) — Sequencing: Completion mark, connector, and next step advance in a clear order.
+  - [Line drawing](https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/) — Sequencing: The extending connector draws the progress relationship between steps.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The task copy updates in place with the current step.
+  - [Purposeful animation](https://motion-lexicon.pages.dev/en/principles/purposeful-animation/) — Sequencing: Each movement communicates completion, relationship, and the next step.
 
 ## Member invite (member-invite)
 
@@ -288,6 +354,10 @@
 - Trigger: The send action should make the invitee and role understandable.
 - Reduced motion: Insert the member row directly and retain pending copy.
 - Preview: https://motion-lexicon.pages.dev/en/packs/member-invite/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The Invite action first confirms that sending has begun.
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The pending member row enters lightly from below the list.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Action copy and member status jointly express the pending result.
 
 ## Media scrub (media-scrub)
 
@@ -299,8 +369,13 @@
 - Trigger: Use the same timeline to communicate current position throughout dragging.
 - Reduced motion: Keep drag and content in sync while omitting transitions inside the frame.
 - Preview: https://motion-lexicon.pages.dev/en/packs/media-scrub/
+- Motion primitives:
+  - [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/) — Continuous input: The playhead position is driven continuously by the drag value.
+  - [Easing](https://motion-lexicon.pages.dev/en/easing/easing/) — Timing: Scrubbing responds linearly so time stays one-to-one with the gesture.
+  - [Frame rate (FPS)](https://motion-lexicon.pages.dev/en/performance/frame-rate/) — Continuous input: Continuous preview needs stable frame rate so the playhead stays aligned with the frame.
+  - [Compositing](https://motion-lexicon.pages.dev/en/performance/compositing/) — Continuous input: Position changes favor compositor-friendly properties.
 
-# Full recipe reference
+# Full Motion Primitive reference
 
 ## Fade in / Fade out (fade-in-fade-out)
 
@@ -313,6 +388,12 @@
 - Reduced motion: Keep a brief 80–120ms fade and pair important information with a static contrast change.
 - Preview: https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/fade-in-fade-out.json
+- Product moments:
+  - [Copy share link](https://motion-lexicon.pages.dev/en/packs/share-link/) — Entrance: A short cue appears and leaves without interrupting the next action.
+  - [Workspace switch](https://motion-lexicon.pages.dev/en/packs/workspace-switch/) — State change: The content surface uses a brief opacity change to swap views.
+  - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Exit and recovery: The task fades out of the list and returns to the same place on Undo.
+  - [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/) — State change: Matching cards enter the result grid through a short opacity change.
+  - [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/) — Exit and recovery: A handled notification leaves the queue after its hierarchy recedes.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Start opacity (opacity): default 0%; range 0-80%; step 5%
@@ -330,6 +411,10 @@
 - Reduced motion: Remove large travel and keep a short fade with a clear layer boundary.
 - Preview: https://motion-lexicon.pages.dev/en/entrances/slide-in/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/slide-in.json
+- Product moments:
+  - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Entrance: The new row enters its final position with very small upward travel.
+  - [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/) — Entrance: The command panel enters below its trigger with very short travel.
+  - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — Entrance: The pending member row enters lightly from below the list.
 - Aliases: enter-exit
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
@@ -349,6 +434,12 @@
 - Reduced motion: Hold the final size and communicate appearance through an 80–120ms opacity change.
 - Preview: https://motion-lexicon.pages.dev/en/entrances/scale-in/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/scale-in.json
+- Product moments:
+  - [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/) — State change: The selected check scales in briefly to emphasize the current decision.
+  - [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/) — State change: The corner mark scales in slightly to identify the active template.
+  - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Entrance: A slight scale gives the inserted content a clear landing.
+  - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Exit and recovery: Scale reduces the visual weight of the departure.
+  - [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/) — Entrance: A slight scale helps the compact panel land in the trigger context.
 - Aliases: pop-in
 - Parameters:
   - Duration (duration): default 200ms; range 80-1200ms; step 20ms
@@ -386,6 +477,9 @@
 - Reduced motion: Remove inter-item delay and show the group immediately or with one short shared fade.
 - Preview: https://motion-lexicon.pages.dev/en/sequencing/stagger/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/stagger.json
+- Product moments:
+  - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/) — Sequencing: The timeline record follows after the release state lands.
+  - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — Sequencing: Completion mark, connector, and next step advance in a clear order.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Stagger (stagger): default 50ms; range 20-120ms; step 10ms
@@ -423,6 +517,8 @@
 - Reduced motion: Make nonessential transitions effectively immediate and remove delay.
 - Preview: https://motion-lexicon.pages.dev/en/sequencing/duration/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/duration.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Timing: Press, saving, and saved use short durations that keep feedback compact and perceptible.
 - Aliases: delay
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
@@ -440,6 +536,10 @@
 - Reduced motion: Remove large translation, rotation, and perspective, keeping a state-color change or short fade.
 - Preview: https://motion-lexicon.pages.dev/en/transforms/translate/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/translate.json
+- Product moments:
+  - [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/) — Entrance: New results settle from a very small upward distance while layout stays stable.
+  - [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/) — Spatial continuity: The next notification fills the space with slight travel to preserve queue context.
+  - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Continuous input: The playhead position is driven continuously by the drag value.
 - Aliases: scale, rotate, skew, perspective, transform-origin
 - Parameters:
   - Duration (duration): default 280ms; range 80-1200ms; step 20ms
@@ -478,6 +578,8 @@
 - Reduced motion: Preserve the static trigger-overlay relationship and replace scaling travel with a short fade.
 - Preview: https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json
+- Product moments:
+  - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Spatial continuity: Content opens from the title row so its origin remains legible.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Start scale (scale): default 88%; range 70-105%; step 1%
@@ -511,6 +613,8 @@
 - Reduced motion: Use a static state replacement or short crossfade while preserving object position and size.
 - Preview: https://motion-lexicon.pages.dev/en/state-transitions/morph/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/morph.json
+- Product moments:
+  - [Workspace switch](https://motion-lexicon.pages.dev/en/packs/workspace-switch/) — Spatial continuity: The active pill moves along one tab track to preserve focus origin.
 - Aliases: continuity-transition, shared-element-transition, layout-animation
 - Parameters:
   - Duration (duration): default 260ms; range 80-1200ms; step 20ms
@@ -530,6 +634,8 @@
 - Reduced motion: Switch content visibility and layout height immediately while preserving icon and aria-expanded state.
 - Preview: https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json
+- Product moments:
+  - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Disclosure: Content height, arrow, and expanded state are coordinated by one trigger.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Content height (height): default 140px; range 60-320px; step 10px
@@ -613,6 +719,8 @@
 - Reduced motion: Use immediate routing with a short content fade while preserving loading and focus feedback.
 - Preview: https://motion-lexicon.pages.dev/en/scroll/page-transition/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/page-transition.json
+- Product moments:
+  - [Workspace switch](https://motion-lexicon.pages.dev/en/packs/workspace-switch/) — Spatial continuity: The tab switch maintains continuity within the existing workspace context.
 - Aliases: view-transition
 - Parameters:
   - Duration (duration): default 280ms; range 80-1200ms; step 20ms
@@ -631,6 +739,8 @@
 - Reduced motion: Keep static hover and focus color, border, or shadow changes while removing travel and scale.
 - Preview: https://motion-lexicon.pages.dev/en/feedback/hover-effect/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/hover-effect.json
+- Product moments:
+  - [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/) — Input feedback: Candidate templates signal interactivity on hover and retain the current choice after selection.
 - Parameters:
   - Duration (duration): default 150ms; range 80-1200ms; step 20ms
   - Distance (distance): default 4px; range 0-16px; step 2px
@@ -648,6 +758,15 @@
 - Reduced motion: Remove scaling and keep an immediate color, border, or luminance response.
 - Preview: https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/press-tap-feedback.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Input feedback: The save action acknowledges the click before the result arrives.
+  - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/) — Input feedback: The Publish action first acknowledges that the request was received.
+  - [Copy share link](https://motion-lexicon.pages.dev/en/packs/share-link/) — Input feedback: The copy action is confirmed directly on its original control.
+  - [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/) — Input feedback: Each candidate card responds to the click before selection updates.
+  - [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/) — Input feedback: Template cards use a light press response to acknowledge selection input.
+  - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Input feedback: The Add layer action first acknowledges the insertion request.
+  - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Input feedback: The Archive action immediately acknowledges the removal request.
+  - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — Input feedback: The Invite action first confirms that sending has begun.
 - Parameters:
   - Duration (duration): default 120ms; range 80-1200ms; step 20ms
   - Pressed scale (scale): default 96%; range 70-105%; step 1%
@@ -748,6 +867,10 @@
 - Reduced motion: Keep very short state transitions and remove pronounced acceleration, deceleration, and long travel.
 - Preview: https://motion-lexicon.pages.dev/en/easing/easing/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/easing.json
+- Product moments:
+  - [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/) — Timing: Boundary and check settle the selected state with one easing curve.
+  - [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/) — Timing: Boundary, icon, and copy reach valid or invalid state on one short cadence.
+  - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Timing: Scrubbing responds linearly so time stays one-to-one with the gesture.
 - Aliases: ease-out, ease-in, ease-in-out, linear, cubic-bezier, asymmetric-easing
 - Parameters:
   - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
@@ -784,6 +907,8 @@
 - Reduced motion: Stop automatic looping and show a representative static frame with explicit status text.
 - Preview: https://motion-lexicon.pages.dev/en/loops/loop/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/loop.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Timing: The saving icon loops briefly and stops once the result arrives.
 - Aliases: alternate
 - Parameters:
   - Cycle duration (duration): default 1200ms; range 800-4000ms; step 100ms
@@ -887,6 +1012,8 @@
 - Reduced motion: Show the complete path immediately or with one very short fade.
 - Preview: https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/line-drawing.json
+- Product moments:
+  - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — Sequencing: The extending connector draws the progress relationship between steps.
 - Parameters:
   - Demo duration (duration): default 1000ms; range 500-3000ms; step 20ms
   - Delay (delay): default 0ms; range 0-600ms; step 20ms
@@ -903,6 +1030,17 @@
 - Reduced motion: Replace the full text immediately and use static highlighting or one short fade to signal change.
 - Preview: https://motion-lexicon.pages.dev/en/polish-effects/text-morph/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/text-morph.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — State change: Saving and Saved update in the same label position.
+  - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/) — State change: The version label and action copy switch to Live together.
+  - [Copy share link](https://motion-lexicon.pages.dev/en/packs/share-link/) — State change: The link icon and button copy switch to Copied.
+  - [Template choice](https://motion-lexicon.pages.dev/en/packs/template-choice/) — State change: The primary action adopts the active template name in place.
+  - [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/) — State change: The result count updates in place with the active filter scope.
+  - [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/) — State change: The nearby helper copy updates directly with the input result.
+  - [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/) — State change: After keyboard filtering, the active row keeps the next execution clear.
+  - [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/) — State change: The remaining count updates in place with the queue.
+  - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — State change: The task copy updates in place with the current step.
+  - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — State change: Action copy and member status jointly express the pending result.
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
   - Transition blur (blur): default 8px; range 0-20px; step 1px
@@ -968,6 +1106,8 @@
 - Reduced motion: Measure default and reduced-motion modes separately, confirming the low-motion path also avoids long tasks.
 - Preview: https://motion-lexicon.pages.dev/en/performance/frame-rate/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/frame-rate.json
+- Product moments:
+  - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Continuous input: Continuous preview needs stable frame rate so the playhead stays aligned with the frame.
 - Aliases: jank, dropped-frame
 
 ## Compositing (compositing)
@@ -981,6 +1121,8 @@
 - Reduced motion: Reduced-motion mode still favors transform and opacity while limiting persistent layer allocation.
 - Preview: https://motion-lexicon.pages.dev/en/performance/compositing/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json
+- Product moments:
+  - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Continuous input: Position changes favor compositor-friendly properties.
 - Aliases: will-change, layout-thrashing, hardware-acceleration
 - Parameters:
   - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
@@ -999,6 +1141,8 @@
 - Reduced motion: Provide an equivalent low-motion expression for each purpose while preserving function and state information.
 - Preview: https://motion-lexicon.pages.dev/en/principles/purposeful-animation/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json
+- Product moments:
+  - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — Sequencing: Each movement communicates completion, relationship, and the next step.
 - Aliases: frequency-of-use, spatial-consistency
 
 ## Anticipation (anticipation)
@@ -1031,6 +1175,8 @@
 - Reduced motion: Disable looping shimmer and large transitions while preserving immediate state, static skeletons, and progress text.
 - Preview: https://motion-lexicon.pages.dev/en/principles/perceived-performance/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — State change: The synchronous state marker keeps the brief wait legible.
 
 ## Reduced motion (reduced-motion)
 
@@ -1043,6 +1189,12 @@
 - Reduced motion: Define per-pattern treatment: zero travel, fixed scale, stopped loops, frozen parallax, and static progress feedback.
 - Preview: https://motion-lexicon.pages.dev/en/principles/reduced-motion/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/reduced-motion.json
+- Product moments:
+  - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Reduced motion: Reduced motion retains the state copy and color result.
+  - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/) — Reduced motion: Reduced motion retains the release result and timeline record.
+  - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Reduced motion: The reduced-motion version retains Undo and the restored result.
+  - [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/) — Reduced motion: The low-motion treatment keeps color, icon, and explanatory changes.
+  - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Reduced motion: Reduced motion retains expanded state and accessible semantics.
 
 # Complete vocabulary
 

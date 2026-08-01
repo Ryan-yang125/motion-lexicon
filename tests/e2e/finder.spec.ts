@@ -18,6 +18,9 @@ test("Finder restores one active runtime and switches through three static candi
   await expect(page).toHaveTitle(/动效选择器/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.locator(".finder-candidate-choice")).toHaveCount(3);
+  await expect(page.locator(".finder-results-heading").getByRole("heading", { name: "相关动效基础" })).toBeVisible();
+  await expect(page.locator(".finder-pack-bridge").getByRole("heading", { name: "适合的产品瞬间" })).toBeVisible();
+  await expect(page.locator(".finder-pack-bridge").getByRole("link").first()).toHaveAttribute("href", /\/zh\/packs\//);
   await expect(page.locator(".finder-candidate-stage")).toHaveCount(1);
   await expect(page.locator(".motion-demo")).toHaveCount(1);
   await expect(page.locator(".finder-active-preview")).toHaveAttribute("data-variant-id", "pop-in");

@@ -4,15 +4,15 @@ import { readFile } from "node:fs/promises";
 const finderCases = [
   {
     locale: "zh",
-    query: "让卡片带着重量感进入，最后稳稳收住",
-    title: "候选动效",
+    query: "卡片先切入进来，然后慢慢停下来",
+    title: "相关动效基础",
     output: "复制实现",
     recipeSummaries: ["复制实现", "动效词义", "实现规则", "发布检查"]
   },
   {
     locale: "en",
     query: "Make the card enter with a sense of weight, then settle cleanly",
-    title: "Motion candidates",
+    title: "Related motion primitives",
     output: "Copy implementation",
     recipeSummaries: ["Copy implementation", "Motion vocabulary", "Implementation rules", "Ship checklist"]
   }
@@ -39,11 +39,11 @@ test("finder and recipe workspaces keep bilingual UI copy concise", async ({ pag
 
 test("catalog and vocabulary use precise bilingual labels", async ({ page }) => {
   await page.goto("/zh/catalog/?surface=components");
-  await expect(page.locator(".library-catalog-hero-unified h1")).toHaveText("动效库");
+  await expect(page.locator(".library-catalog-hero-unified h1")).toHaveText("动效基础");
   await expect(page.locator(".library-catalog-hero-unified > span, .library-catalog-hero-unified > p")).toHaveCount(0);
 
   await page.goto("/en/catalog/?surface=components");
-  await expect(page.locator(".library-catalog-hero-unified h1")).toHaveText("Motion library");
+  await expect(page.locator(".library-catalog-hero-unified h1")).toHaveText("Motion primitives");
 
   await page.goto("/zh/vocabulary/");
   await expect(page.locator(".vocabulary-definition").first()).toContainText("英文定义");
@@ -61,15 +61,15 @@ test("the static 404 page localizes Chinese and English routes", async ({ browse
       path: "/zh/missing/",
       language: "zh-CN",
       title: "页面未找到 | Motion Lexicon",
-      message: "页面未找到。返回动效库继续浏览。",
-      link: "/zh/catalog/"
+      message: "页面未找到。回到 Motion Lexicon 继续浏览。",
+      link: "/zh/"
     },
     {
       path: "/en/missing/",
       language: "en",
       title: "Page not found | Motion Lexicon",
-      message: "This page doesn’t exist. Return to the motion library.",
-      link: "/en/catalog/"
+      message: "This page doesn’t exist. Return to Motion Lexicon.",
+      link: "/en/"
     }
   ] as const;
 

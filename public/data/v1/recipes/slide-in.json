@@ -227,5 +227,106 @@
     "fade-in-fade-out",
     "scale-in",
     "reveal"
+  ],
+  "productMoments": [
+    {
+      "id": "layer-insertion",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "图层插入",
+        "en": "Layer insertion"
+      },
+      "summary": {
+        "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+        "en": "New content reserves its correct position, then reveals itself with very small travel."
+      },
+      "scene": {
+        "zh": "设计工具中新增一个标题或强调图层。",
+        "en": "Adding a title or accent layer inside a design tool."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "新行从极小的下方位移进入最终位置。",
+        "en": "The new row enters its final position with very small upward travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+      }
+    },
+    {
+      "id": "command-menu",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "命令菜单",
+        "en": "Command menu"
+      },
+      "summary": {
+        "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+        "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+      },
+      "scene": {
+        "zh": "文档工作区中快速跳转到一个常用动作。",
+        "en": "Jumping quickly to a common action from a document workspace."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "命令面板从触发器下方以很短的位移进入。",
+        "en": "The command panel enters below its trigger with very short travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+      }
+    },
+    {
+      "id": "member-invite",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "成员邀请",
+        "en": "Member invite"
+      },
+      "summary": {
+        "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+        "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+      },
+      "scene": {
+        "zh": "在项目设置中邀请新的设计协作者。",
+        "en": "Inviting a new design collaborator from project settings."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "待加入成员行从列表下方轻量进入。",
+        "en": "The pending member row enters lightly from below the list."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+      }
+    }
   ]
 }

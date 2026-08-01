@@ -170,5 +170,6 @@
     "scroll-driven-animation",
     "parallax",
     "page-transition"
-  ]
+  ],
+  "productMoments": []
 }

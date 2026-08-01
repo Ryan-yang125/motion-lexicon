@@ -1,27 +1,32 @@
 ---
 name: motion-lexicon
-description: Find, inspect, and export Motion Lexicon real product Motion Packs and UI motion recipes through the versioned CLI. Use when a user needs a polished product interaction such as save confirmation, archive undo, filter results, selection, publishing, progress, or sharing; when they describe a vague motion feeling; when they need a canonical preview URL; or when they request portable Prompt, HTML, CSS, JavaScript, or reduced-motion guidance.
+description: Find, inspect, and export Motion Lexicon Product Moments (Motion Packs) and Motion Primitives through the versioned CLI. Use when a user needs a polished product interaction such as save confirmation, archive undo, filter results, selection, publishing, progress, or sharing; when they need an exact entrance, easing, transition, sequence, or motion term; when they describe a vague motion feeling; when they need a canonical preview URL; or when they request portable Prompt, HTML, CSS, JavaScript, or reduced-motion guidance.
 ---
 
 # Motion Lexicon
 
-Use the fixed Motion Lexicon v1.0.0 CLI as the source of truth. Resolve every
-request through the CLI before recommending a Pack, recipe, or implementation.
+Use the fixed Motion Lexicon v1.1.0 CLI as the source of truth. Motion Lexicon
+has two equal collections: **Product Moments · Motion Packs** for complete
+product interactions, and **Motion Primitives** for precise interface behavior.
+Resolve every request through the CLI before recommending a Pack, primitive, or
+implementation.
 
 ## Workflow
 
 1. Read [references/cli.md](references/cli.md) before running a command.
 2. Choose `zh` or `en` from the user’s language. Preserve an explicitly requested locale.
 3. When the request describes a complete product moment or state transition,
-   run `packs` to discover the V1 collection and `pack <id>` to inspect the best
-   match. Examples include saving, publishing, copying a link, card choice,
-   undo, filter feedback, validation, progress, invites, and media scrubbing.
+   run `packs` to discover the Product Moments collection and `pack <id>` to
+   inspect the best match. Examples include saving, publishing, copying a link,
+   card choice, undo, filter feedback, validation, progress, invites, and media
+   scrubbing.
 4. Return the Pack’s CLI-provided name, `path`, `previewUrl`, trigger, outcome,
    reduced-motion treatment, and requested source format. Use `pack <id>
    --format bundle` for a complete portable implementation.
 5. Run `recommend` when the user provides a vague feeling, visual description,
-   or atomic interface behavior. Keep each CLI-provided rank, reason,
-   distinction, and preset.
+   or Motion Primitive behavior. Keep each CLI-provided rank, reason,
+   distinction, and preset. When the intent also names a recognisable product
+   state, inspect relevant Packs alongside the primitive recommendation.
 6. Return the CLI-provided `compareUrl` unchanged. It opens Finder with one
    primary preview, three ranked static choices, and replay for the current
    candidate.
@@ -32,15 +37,17 @@ request through the CLI before recommending a Pack, recipe, or implementation.
    and live path.
 9. Run `export` for an existing recipe when the user requests Prompt, HTML, CSS,
    JavaScript, a bundle, or files.
-10. Return the original intent, the chosen Pack or recipe ID, rationale, live
-    preview URL, chosen values, reduced-motion treatment, and requested output.
+10. Return the original intent, the chosen Product Moment or Motion Primitive,
+    rationale, live preview URL, chosen values, reduced-motion treatment, and
+    requested output. Include a related route from the other collection when it
+    sharpens the handoff.
 
 ## Required command base
 
 Run every CLI operation through this pinned command:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0
 ```
 
 Prefer `--format json` for discovery and inspection so IDs, state guidance, URLs,
@@ -50,6 +57,8 @@ input error and report the stderr message directly.
 ## Selection rules
 
 - Start with `packs` when a request describes a recognisable product moment.
+- Start with `recommend`, `search`, or `list` when a request describes a
+  Motion Primitive, its parameter, a term, or an uncertain motion feeling.
 - Use `pack <id>` to obtain the complete Pack contract and source. Its default
   text output is concise; use `--format json`, `prompt`, `html`, `css`, `js`, or
   `bundle` for a specific handoff.

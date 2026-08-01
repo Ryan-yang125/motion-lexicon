@@ -5,12 +5,16 @@ import {
 } from "../../../src/data/motion-catalog.js";
 import {
   catalogRecipes,
+  getCatalogRecipe,
   getCanonicalRecipe
 } from "../../../src/data/recipes.js";
 import {
+  getMotionPackFoundationLinks,
+  getMotionPackFoundations,
   motionPackGroups,
   motionPacks,
-  type MotionPack
+  type MotionPack,
+  type MotionPackFoundation
 } from "../../../src/data/motion-packs.js";
 import { siteUrl } from "../../../src/data/site.js";
 import type {
@@ -40,10 +44,12 @@ import {
   type CatalogItem,
   type CatalogOptions,
   type CliLocale,
+  type MotionFoundationReference,
   type MotionPackDocument,
   type MotionPackItem,
   type MotionPackOptions,
   type MotionPacksDocument,
+  type ProductMomentReference,
   type RecipeDocument,
   type RecipeExportDocument,
   type RecipeOptions,
@@ -104,6 +110,7 @@ function catalogItem(recipe: MotionRecipe, locale: CliLocale): CatalogItem {
     name: localize(recipe.name, locale),
     description: localize(recipe.shortDescription, locale),
     aliases: [...recipe.aliases],
+    productMoments: productMomentReferences(recipe.canonicalId, locale),
     path,
     previewUrl: absolutePreviewUrl(path)
   };
@@ -111,6 +118,53 @@ function catalogItem(recipe: MotionRecipe, locale: CliLocale): CatalogItem {
 
 function motionPackPath(pack: MotionPack, locale: CliLocale) {
   return `/${locale}/packs/${pack.id}/`;
+}
+
+function motionFoundationReference(
+  foundation: MotionPackFoundation,
+  locale: CliLocale
+): MotionFoundationReference {
+  const recipe = getCatalogRecipe(foundation.foundationId);
+  if (!recipe) {
+    throw new MotionLexiconError(
+      `Missing canonical motion primitive: ${foundation.foundationId}.`
+    );
+  }
+  const path = recipePath(recipe, locale);
+  return {
+    id: foundation.foundationId,
+    categoryId: recipe.categoryId,
+    name: localize(recipe.name, locale),
+    role: foundation.role,
+    roleLabel: localize(foundation.roleLabel, locale),
+    note: localize(foundation.note, locale),
+    path,
+    previewUrl: absolutePreviewUrl(path)
+  };
+}
+
+function productMomentReferences(
+  foundationId: string,
+  locale: CliLocale
+): ProductMomentReference[] {
+  return getMotionPackFoundationLinks(foundationId).map(({ pack, foundation }) => {
+    const group = motionPackGroups.find((entry) => entry.id === pack.groupId);
+    if (!group) throw new MotionLexiconError(`Missing Motion Pack group: ${pack.groupId}.`);
+    const path = motionPackPath(pack, locale);
+    return {
+      id: pack.id,
+      groupId: pack.groupId,
+      groupName: localize(group.name, locale),
+      name: localize(pack.name, locale),
+      description: localize(pack.shortDescription, locale),
+      scene: localize(pack.scene, locale),
+      role: foundation.role,
+      roleLabel: localize(foundation.roleLabel, locale),
+      note: localize(foundation.note, locale),
+      path,
+      previewUrl: absolutePreviewUrl(path)
+    };
+  });
 }
 
 function motionPackItem(pack: MotionPack, locale: CliLocale): MotionPackItem {
@@ -125,6 +179,9 @@ function motionPackItem(pack: MotionPack, locale: CliLocale): MotionPackItem {
     description: localize(pack.shortDescription, locale),
     scene: localize(pack.scene, locale),
     timing: pack.timing,
+    foundations: getMotionPackFoundations(pack).map((foundation) =>
+      motionFoundationReference(foundation, locale)
+    ),
     path,
     previewUrl: absolutePreviewUrl(path)
   };
@@ -285,6 +342,11 @@ export function catalog(options: CatalogOptions = {}): CatalogDocument {
     .filter((recipe) => !options.surface || recipe.surfaceType === options.surface)
     .map((recipe) => catalogItem(recipe, locale));
   return { schemaVersion, locale, count: items.length, items };
+}
+
+/** Lists the 44 Motion Primitives. `catalog` remains available as a stable alias. */
+export function list(options: CatalogOptions = {}): CatalogDocument {
+  return catalog(options);
 }
 
 export function packs(options: MotionPackOptions = {}): MotionPacksDocument {
@@ -495,7 +557,8 @@ export function show(id: string, options: RecipeOptions = {}): RecipeDocument {
     query,
     reducedMotion: localize(recipe.reducedMotion, locale),
     reviewNotes: recipe.reviewNotes.map((item) => localize(item, locale)),
-    relatedEntries: [...recipe.relatedEntries]
+    relatedEntries: [...recipe.relatedEntries],
+    productMoments: productMomentReferences(recipe.canonicalId, locale)
   };
 }
 
@@ -528,10 +591,74 @@ export function exportRecipe(
   };
 }
 
+const productMomentReferenceSchema = {
+  type: "object",
+  required: [
+    "id",
+    "groupId",
+    "groupName",
+    "name",
+    "description",
+    "scene",
+    "role",
+    "roleLabel",
+    "note",
+    "path",
+    "previewUrl"
+  ],
+  properties: {
+    id: { type: "string" },
+    groupId: { type: "string" },
+    groupName: { type: "string" },
+    name: { type: "string" },
+    description: { type: "string" },
+    scene: { type: "string" },
+    role: { type: "string" },
+    roleLabel: { type: "string" },
+    note: { type: "string" },
+    path: { type: "string", pattern: "^/" },
+    previewUrl: { type: "string", format: "uri" }
+  }
+};
+
+const motionFoundationReferenceSchema = {
+  type: "object",
+  required: [
+    "id",
+    "categoryId",
+    "name",
+    "role",
+    "roleLabel",
+    "note",
+    "path",
+    "previewUrl"
+  ],
+  properties: {
+    id: { type: "string" },
+    categoryId: { type: "string" },
+    name: { type: "string" },
+    role: { type: "string" },
+    roleLabel: { type: "string" },
+    note: { type: "string" },
+    path: { type: "string", pattern: "^/" },
+    previewUrl: { type: "string", format: "uri" }
+  }
+};
+
 const definitions: Record<SchemaName, Record<string, unknown>> = {
   recipe: {
     type: "object",
-    required: ["schemaVersion", "id", "canonicalId", "locale", "path", "previewUrl", "params", "values"],
+    required: [
+      "schemaVersion",
+      "id",
+      "canonicalId",
+      "locale",
+      "path",
+      "previewUrl",
+      "params",
+      "values",
+      "productMoments"
+    ],
     properties: {
       schemaVersion: { const: schemaVersion },
       id: { type: "string" },
@@ -541,7 +668,8 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
       path: { type: "string", pattern: "^/" },
       previewUrl: { type: "string", format: "uri" },
       params: { type: "array" },
-      values: { type: "object" }
+      values: { type: "object" },
+      productMoments: { type: "array", items: productMomentReferenceSchema }
     }
   },
   catalog: {
@@ -555,11 +683,12 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
         type: "array",
         items: {
           type: "object",
-          required: ["id", "path", "previewUrl"],
+          required: ["id", "path", "previewUrl", "productMoments"],
           properties: {
             id: { type: "string" },
             path: { type: "string", pattern: "^/" },
-            previewUrl: { type: "string", format: "uri" }
+            previewUrl: { type: "string", format: "uri" },
+            productMoments: { type: "array", items: productMomentReferenceSchema }
           }
         }
       }
@@ -577,11 +706,12 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
         type: "array",
         items: {
           type: "object",
-          required: ["id", "groupId", "name", "path", "previewUrl"],
+          required: ["id", "groupId", "name", "foundations", "path", "previewUrl"],
           properties: {
             id: { type: "string" },
             groupId: { type: "string" },
             name: { type: "string" },
+            foundations: { type: "array", items: motionFoundationReferenceSchema },
             path: { type: "string", pattern: "^/" },
             previewUrl: { type: "string", format: "uri" }
           }
@@ -600,6 +730,7 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
       "previewUrl",
       "prompt",
       "guidance",
+      "foundations",
       "source"
     ],
     properties: {
@@ -611,6 +742,7 @@ const definitions: Record<SchemaName, Record<string, unknown>> = {
       previewUrl: { type: "string", format: "uri" },
       prompt: { type: "string" },
       guidance: { type: "object" },
+      foundations: { type: "array", items: motionFoundationReferenceSchema },
       source: {
         type: "object",
         required: ["html", "css", "js", "bundle"],

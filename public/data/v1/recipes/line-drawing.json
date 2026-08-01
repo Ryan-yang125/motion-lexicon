@@ -153,5 +153,40 @@
     "blur",
     "before-after-slider",
     "text-morph"
+  ],
+  "productMoments": [
+    {
+      "id": "progress-steps",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "进度步骤",
+        "en": "Progress steps"
+      },
+      "summary": {
+        "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+        "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+      },
+      "scene": {
+        "zh": "设置公开页面时依次完成内容、分享和发布。",
+        "en": "Completing content, sharing, and publishing while setting up a public page."
+      },
+      "role": "sequence",
+      "roleLabel": {
+        "zh": "顺序编排",
+        "en": "Sequencing"
+      },
+      "note": {
+        "zh": "连接线延展，把步骤之间的进展关系画出来。",
+        "en": "The extending connector draws the progress relationship between steps."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+      }
+    }
   ]
 }
