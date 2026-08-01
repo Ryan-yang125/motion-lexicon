@@ -9,9 +9,9 @@ import { pathFor, sitemapPaths } from "../../src/data/site";
 import { locales } from "../../src/data/types";
 import { recommendMotions } from "../../src/lib/motion-finder";
 
-describe("V1.1 dual-directory information architecture", () => {
+describe("V1.2 dual-directory information architecture", () => {
   it("keeps Product Moments and Motion Foundations as independently canonical directories", () => {
-    expect(motionPacks).toHaveLength(16);
+    expect(motionPacks).toHaveLength(28);
     expect(canonicalMotionCatalog).toHaveLength(44);
 
     const paths = sitemapPaths();

@@ -18,12 +18,12 @@ export function LandingPage({ locale }: { locale: Locale }) {
   const featuredPrimitive = getRecipe("entrances", "slide-in");
   const labels = locale === "zh"
     ? {
-        status: "Motion Lexicon V1.1 · 免费开源",
+        status: "Motion Lexicon V1.2 · 免费开源",
         title: "把产品动效，\n带进真实界面。",
         copy: "产品瞬间与动效基础，都是可预览、可调节、可复制的产品动效。",
         placeholder: "描述一个界面、动作或感觉",
         submit: "找动效",
-        packsKicker: "产品瞬间 · 16",
+        packsKicker: "产品瞬间 · 28",
         packsTitle: "完整交互，直接带走。",
         packsCopy: "从触发到结果，一次看完完整状态和可复制实现。",
         packsAction: "浏览产品瞬间",
@@ -35,12 +35,12 @@ export function LandingPage({ locale }: { locale: Locale }) {
         finderCopy: "用自己的描述，在两条目录中找到合适的起点。"
       }
     : {
-        status: "Motion Lexicon V1.1 · Free and open source",
+        status: "Motion Lexicon V1.2 · Free and open source",
         title: "Bring product motion\ninto a real interface.",
         copy: "Product moments and motion primitives are both previewable, tunable, and ready to copy.",
         placeholder: "Describe an interface, action, or feeling",
         submit: "Find motion",
-        packsKicker: "Product moments · 16",
+        packsKicker: "Product moments · 28",
         packsTitle: "A complete interaction, ready to take.",
         packsCopy: "See the full state change from trigger to outcome, then copy the implementation.",
         packsAction: "Browse product moments",
@@ -72,7 +72,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Motion Lexicon V1.1",
+            name: "Motion Lexicon V1.2",
             description: labels.copy,
             url: `${siteUrl}${pathFor(locale)}`,
             inLanguage: locale === "zh" ? "zh-CN" : "en",

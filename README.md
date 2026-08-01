@@ -33,11 +33,11 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon V1.1 — product moments and motion primitives](docs/assets/readme-v1-home.webp)
+![Motion Lexicon V1.2 — product moments and motion primitives](docs/assets/readme-v1-home.webp)
 
 ## Two collections, one motion system
 
-V1.1 brings together two equal collections for product motion. **Motion Packs**
+V1.2 brings together two equal collections for product motion. **Motion Packs**
 are complete product moments; **Motion Primitives** are the 44 focused building
 blocks behind interface behavior. Start from the level that matches the work in
 front of you, then move between them when you need a fuller implementation or a
@@ -51,7 +51,7 @@ more precise adjustment.
 
 ## Motion Packs for real product moments
 
-The first 16 Packs are complete, small interactions that already live inside
+All 28 Packs are complete, small interactions that already live inside
 recognisable product surfaces. Trigger each Pack in the browser, inspect its
 state changes, then copy the Prompt, HTML, CSS, and JavaScript into your own
 product.
@@ -66,14 +66,14 @@ Every Pack carries one clear interaction contract:
 
 ![Motion Pack detail — preview a save confirmation and copy its implementation](docs/assets/readme-v1-pack.webp)
 
-### The first 16 Packs
+### 28 Packs across four product groups
 
 | Group | Motion Packs |
 | --- | --- |
-| Feedback | Save confirmation, Publish release, Share link, Inline validation |
-| Choice | Card selection, Workspace switch, Template choice, Command menu |
-| Change | Layer insertion, Archive undo, Filter results, Details disclosure |
-| Workflow | Notification triage, Progress steps, Member invite, Media scrub |
+| Feedback | Save confirmation, Publish release, Share link, Inline validation, Upload complete, Sync recovery, Delete confirmation |
+| Choice | Card selection, Workspace switch, Template choice, Command menu, Assignee picker, Permission change, Search suggestions |
+| Change | Layer insertion, Archive undo, Filter results, Details disclosure, Kanban move, Cart update, Comment reply |
+| Workflow | Notification triage, Progress steps, Member invite, Media scrub, Approval request, Checkout payment, Scheduled publish |
 
 Start with the [Motion Pack gallery](https://motion-lexicon.pages.dev/en/packs/),
 then open a detail such as [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/).
@@ -97,7 +97,7 @@ motion system while preserving the different jobs each collection serves.
 
 | Surface | What it gives you |
 | --- | --- |
-| [Motion Packs](https://motion-lexicon.pages.dev/en/packs/) | 16 complete, copy-ready product interactions |
+| [Motion Packs](https://motion-lexicon.pages.dev/en/packs/) | 28 complete, copy-ready product interactions |
 | [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | Explainable candidates from a natural-language motion request |
 | [Motion Primitives](https://motion-lexicon.pages.dev/en/catalog/) | 44 canonical motion workspaces across 12 families |
 | [Vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/) | 91 bilingual terms with definitions and close-term distinctions |
@@ -109,30 +109,30 @@ SEO, and deeper implementation reference.
 
 ## Use it from the browser, CLI, or an agent
 
-The website is the fastest visual route. The free CLI exposes the same V1.1
+The website is the fastest visual route. The free CLI exposes the same V1.2
 collections through parallel `packs` and `list` commands:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 packs \
   --locale en --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 pack save-confirmation \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 pack save-confirmation \
   --locale en --format bundle
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 list \
   --locale en --format json
 ```
 
 Primitive discovery and export remain available through the same CLI:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend \
   "A card enters quickly, then settles into place" \
   --locale en --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 search \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 search \
   "shared element" --locale en
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 export spring \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 export spring \
   --locale en --format bundle
 ```
 
@@ -163,9 +163,9 @@ independent, so it can travel into an existing product stack.
 - Interaction primitives: [Interior](https://github.com/ddoemonn/interior),
   adapted under MIT with attribution in [NOTICE](./NOTICE)
 
-## V1.1 snapshot
+## V1.2 snapshot
 
-**V1.1.0 is live.** The public product includes two equal collections: 16 real
+**V1.2.0 is live.** The public product includes two equal collections: 28 real
 product Motion Packs and 44 canonical Motion Primitives. Finder, the bilingual
 vocabulary, CLI, Agent Skill, versioned machine-readable data, localized SEO,
 and static delivery connect the full system.
@@ -183,7 +183,7 @@ Every public product route is available in English (`/en/`) and Chinese
 | Route shape | Purpose |
 | --- | --- |
 | `/:locale/` | Product home with equal routes into both collections |
-| `/:locale/packs/` | All 16 real product Motion Packs |
+| `/:locale/packs/` | All 28 real product Motion Packs |
 | `/:locale/packs/:packId/` | A Pack preview, guidance, and portable export |
 | `/:locale/finder/` | Natural-language motion recommendation |
 | `/:locale/catalog/` | Full 44-workspace Motion Primitives collection |

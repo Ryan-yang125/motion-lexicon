@@ -5,7 +5,7 @@ description: Find, inspect, and export Motion Lexicon Product Moments (Motion Pa
 
 # Motion Lexicon
 
-Use the fixed Motion Lexicon v1.1.0 CLI as the source of truth. Motion Lexicon
+Use the fixed Motion Lexicon v1.2.0 CLI as the source of truth. Motion Lexicon
 has two equal collections: **Product Moments · Motion Packs** for complete
 product interactions, and **Motion Primitives** for precise interface behavior.
 Resolve every request through the CLI before recommending a Pack, primitive, or
@@ -19,7 +19,8 @@ implementation.
    run `packs` to discover the Product Moments collection and `pack <id>` to
    inspect the best match. Examples include saving, publishing, copying a link,
    card choice, undo, filter feedback, validation, progress, invites, and media
-   scrubbing.
+   scrubbing, uploads, sync recovery, deletion, assignments, permissions,
+   search, kanban, carts, comments, approvals, checkout, and scheduled publishing.
 4. Return the Pack’s CLI-provided name, `path`, `previewUrl`, trigger, outcome,
    reduced-motion treatment, and requested source format. Use `pack <id>
    --format bundle` for a complete portable implementation.
@@ -47,7 +48,7 @@ implementation.
 Run every CLI operation through this pinned command:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0
 ```
 
 Prefer `--format json` for discovery and inspection so IDs, state guidance, URLs,

@@ -9,7 +9,7 @@ import type {
 } from "../../../src/data/types.js";
 
 export const schemaVersion = 1 as const;
-export const version = "1.1.0";
+export const version = "1.2.0";
 
 export type CliLocale = "zh" | "en";
 export type DiscoveryFormat = "text" | "json" | "md";

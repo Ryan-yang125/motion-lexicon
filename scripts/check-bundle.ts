@@ -20,12 +20,12 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// V1 carries sixteen real product moments in the initial gallery. The Interior
-// interaction system keeps Motion in its own vendor chunk; the total budget also
-// covers the Pack preview renderer and the accessible Radix slider used by
-// recipe controls while retaining a hard ceiling for future growth.
+// V1.2 carries twenty-eight real product moments. The Interior interaction
+// system keeps Motion in its own vendor chunk; the total budget covers the
+// additional self-contained Pack previews and the accessible Radix slider used
+// by recipe controls while retaining a hard ceiling for future growth.
 const maxMotionVendorGzipBytes = 48 * 1024;
-const maxTotalJsGzipBytes = 336 * 1024;
+const maxTotalJsGzipBytes = 352 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 

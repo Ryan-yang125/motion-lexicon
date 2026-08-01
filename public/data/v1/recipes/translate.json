@@ -403,6 +403,39 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
         "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
       }
+    },
+    {
+      "id": "kanban-move",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "看板移动",
+        "en": "Kanban move"
+      },
+      "summary": {
+        "zh": "任务跨列移动时，让拾取、目标列和完成计数共同说明它的新位置。",
+        "en": "When a task crosses columns, let pickup, target column, and completion count explain its new location together."
+      },
+      "scene": {
+        "zh": "把一项设计任务从“待处理”移到“进行中”。",
+        "en": "Moving a design task from To do to In progress."
+      },
+      "role": "spatial-continuity",
+      "roleLabel": {
+        "zh": "空间连续性",
+        "en": "Spatial continuity"
+      },
+      "note": {
+        "zh": "任务落入相邻列时使用小位移保留空间关系。",
+        "en": "The task uses small travel when it lands in the adjacent column to retain spatial context."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/kanban-move/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/kanban-move/"
+      }
     }
   ]
 }

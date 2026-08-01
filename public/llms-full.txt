@@ -18,10 +18,10 @@
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0`
-- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list --locale en --format json`
-- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs --locale en --format json`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0`
+- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 list --locale en --format json`
+- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 packs --locale en --format json`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 
 ## Product Moments
@@ -42,6 +42,18 @@
 - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/): Across a multi-step task, make completed, current, and next steps form a clear cadence.
 - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
 - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
+- [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/): When a file lands, use progress, availability, and a new asset row to explain the result.
+- [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/): When connectivity returns, connect local edits, syncing progress, and completion through one clear state line.
+- [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/): A high-risk action stays controllable through a clear target, hold progress, and completion feedback.
+- [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/): When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context.
+- [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/): When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity.
+- [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/): While a query is entered, let suggestions, result count, and chosen item follow the current terms closely.
+- [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/): When a task crosses columns, let pickup, target column, and completion count explain its new location together.
+- [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/): After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state.
+- [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/): After a reply is submitted, let the input area resolve into a discussion record with identity and time.
+- [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/): When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow.
+- [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/): After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout.
+- [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/): After scheduling a future release, keep publish time, queue record, and editable state consistent.
 
 ## Motion Primitives
 
@@ -375,6 +387,203 @@
   - [Frame rate (FPS)](https://motion-lexicon.pages.dev/en/performance/frame-rate/) — Continuous input: Continuous preview needs stable frame rate so the playhead stays aligned with the frame.
   - [Compositing](https://motion-lexicon.pages.dev/en/performance/compositing/) — Continuous input: Position changes favor compositor-friendly properties.
 
+## Upload complete (upload-complete)
+
+- Chinese name: 文件上传完成
+- Group: feedback
+- Scene: Uploading a product cover in an asset library.
+- Use case: Media uploads, attachments, file imports, and batch processing.
+- Timing: 220ms + 320ms completion · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: When upload starts, make it clear that the file is being processed.
+- Reduced motion: Keep progress value, state copy, and the asset record while omitting entrance travel.
+- Preview: https://motion-lexicon.pages.dev/en/packs/upload-complete/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The upload action immediately acknowledges input when file processing starts.
+  - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/) — State change: The progress track and processing state keep the brief wait legible.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Upload state changes from ready to available in the same location.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — Entrance: The new asset row lands in the list with slight scale and upward travel.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains progress, availability, and the new asset record.
+
+## Sync recovery (sync-recovery)
+
+- Chinese name: 同步恢复
+- Group: feedback
+- Scene: Reconnecting an offline-edited project to its workspace.
+- Use case: Offline drafts, cloud sync, collaboration tools, and autosave.
+- Timing: 180ms + 420ms sync window · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: When connection returns, keep visible evidence of the local edits first.
+- Reduced motion: Keep state copy and icon outcome while omitting rotation.
+- Preview: https://motion-lexicon.pages.dev/en/packs/sync-recovery/
+- Motion primitives:
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Local edits, Syncing, and All synced update in place.
+  - [Loop](https://motion-lexicon.pages.dev/en/loops/loop/) — Timing: The sync icon rotates only during the brief recovery window.
+  - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/) — State change: The continuously visible local-edit count reduces uncertainty during sync.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion keeps sync copy and the completion icon while omitting rotation.
+
+## Delete confirmation (delete-confirmation)
+
+- Chinese name: 删除确认
+- Group: feedback
+- Scene: Permanently removing a test project from a workspace.
+- Use case: Deleting projects, revoking access, clearing data, and irreversible settings.
+- Timing: 600ms hold · linear
+- Trigger: First let the user confirm the target and irreversible consequence.
+- Reduced motion: Keep hold duration, result copy, and Undo while omitting fill animation.
+- Preview: https://motion-lexicon.pages.dev/en/packs/delete-confirmation/
+- Motion primitives:
+  - [Hold to confirm](https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/) — Input feedback: Hold progress turns a high-risk action into deliberate, cancellable confirmation.
+  - [Duration](https://motion-lexicon.pages.dev/en/sequencing/duration/) — Timing: A fixed 600ms hold duration communicates the confirmation threshold.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Before-and-after deletion copy updates in the same explanatory area.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains hold duration, deletion result, and Undo.
+
+## Assignee picker (assignee-picker)
+
+- Chinese name: 负责人选择
+- Group: choice
+- Scene: Choosing an owner for a pending design task.
+- Use case: Task assignment, reviewer choice, support tickets, and scheduling.
+- Timing: 180ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: The current assignee should stay visible and explain the purpose of the selection entry.
+- Reduced motion: Update assignee copy and avatar directly while retaining disclosure semantics.
+- Preview: https://motion-lexicon.pages.dev/en/packs/assignee-picker/
+- Motion primitives:
+  - [Accordion / Collapse](https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/) — Disclosure: The assignee trigger coordinates expansion and collapse of the candidate list.
+  - [Origin-aware animation](https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/) — Spatial continuity: The candidate list opens below the current assignee to preserve selection origin.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The assignee name is replaced by the new member in the original trigger.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — State change: A slight avatar scale emphasizes the completed assignment.
+
+## Permission change (permission-change)
+
+- Chinese name: 权限变更
+- Group: choice
+- Scene: Setting access permissions for a public preview page.
+- Use case: Shared documents, project links, team spaces, and approval material.
+- Timing: 160ms · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: Each permission option should state who can access the content.
+- Reduced motion: Keep selected icon, explanation, and save result while omitting scale.
+- Preview: https://motion-lexicon.pages.dev/en/packs/permission-change/
+- Motion primitives:
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — State change: The selected icon uses slight scale to confirm the current access rule.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The top permission summary updates in place with the selected option.
+  - [Easing](https://motion-lexicon.pages.dev/en/easing/easing/) — Timing: Boundary and selected icon share a short settling curve.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains selection, explanatory copy, and saved result.
+
+## Search suggestions (search-suggestions)
+
+- Chinese name: 搜索建议
+- Group: choice
+- Scene: Finding a design guideline in an asset library.
+- Use case: Global search, command menus, customer lookup, and knowledge-base retrieval.
+- Timing: 140ms · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: When the query changes, derive count and candidates from the same query.
+- Reduced motion: Update the suggestion list directly while retaining focus and result copy.
+- Preview: https://motion-lexicon.pages.dev/en/packs/search-suggestions/
+- Motion primitives:
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: Suggestion rows settle below the field with very small downward travel.
+  - [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/) — Sequencing: Visible suggestions enter at short intervals to preserve reading order.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The result count updates from the current query in real time.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: With reduced motion, suggestions update directly while focus and result copy remain.
+
+## Kanban move (kanban-move)
+
+- Chinese name: 看板移动
+- Group: change
+- Scene: Moving a design task from To do to In progress.
+- Use case: Project boards, ticket state, hiring pipelines, and content scheduling.
+- Timing: 180ms settle · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Once dragging begins, clearly identify the task being picked up.
+- Reduced motion: Keep the moved result and count changes while omitting drag opacity and scale.
+- Preview: https://motion-lexicon.pages.dev/en/packs/kanban-move/
+- Motion primitives:
+  - [Drag to reorder](https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/) — Input feedback: The dragged card and destination column clearly express pickup and drop.
+  - [Translate](https://motion-lexicon.pages.dev/en/transforms/translate/) — Spatial continuity: The task uses small travel when it lands in the adjacent column to retain spatial context.
+  - [Scale in](https://motion-lexicon.pages.dev/en/entrances/scale-in/) — State change: A slight scale at the destination emphasizes that the task reached its new state.
+  - [Compositing](https://motion-lexicon.pages.dev/en/performance/compositing/) — Continuous input: Drag and landing favor transform and opacity to reduce layout cost.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains column, count, and task-position changes.
+
+## Cart update (cart-update)
+
+- Chinese name: 购物车更新
+- Group: change
+- Scene: Adjusting the quantity of a team template before checkout.
+- Use case: Carts, subscription seats, order edits, and accessory quantity.
+- Timing: 140ms · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: Quantity actions must confirm immediately inside the item row.
+- Reduced motion: Keep number changes and disabled state while omitting digit scale.
+- Preview: https://motion-lexicon.pages.dev/en/packs/cart-update/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: Increment and decrement controls give immediate press feedback for every quantity action.
+  - [Number ticker](https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/) — State change: Quantity, seat count, and subtotal update together with stable figures.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Subtotal switches to the new amount in the same reading position.
+  - [Easing](https://motion-lexicon.pages.dev/en/easing/easing/) — Timing: A short curve lets number changes arrive and settle quickly.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains quantity, amount, and the minimum-quantity constraint.
+
+## Comment reply (comment-reply)
+
+- Chinese name: 评论回复
+- Group: change
+- Scene: Replying to a comment about button cadence in a design review.
+- Use case: Comment threads, code review, support replies, and team discussion.
+- Timing: 180ms + 220ms send · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Before submission, let the send action clearly express the current action.
+- Reduced motion: Insert the reply directly and update status copy while retaining reading order.
+- Preview: https://motion-lexicon.pages.dev/en/packs/comment-reply/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The Reply action confirms the submission when sending begins.
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The new reply enters the reading order from the thread bottom with very small travel.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The action copy switches in place between Reply and Sending.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion inserts the reply directly while retaining identity and time.
+
+## Approval request (approval-request)
+
+- Chinese name: 请求审批
+- Group: workflow
+- Scene: Submitting release notes to two approvers.
+- Use case: Design review, content publishing, purchase requests, and access requests.
+- Timing: 200ms + 70ms stagger · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: The request action should make approval scope and participant count clear.
+- Reduced motion: Update all approval states and summary copy directly.
+- Preview: https://motion-lexicon.pages.dev/en/packs/approval-request/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The approval-request action first confirms that submission has started.
+  - [Stagger](https://motion-lexicon.pages.dev/en/sequencing/stagger/) — Sequencing: Approver rows enter Awaiting response at short intervals.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The top summary and each approver's state update in place.
+  - [Purposeful animation](https://motion-lexicon.pages.dev/en/principles/purposeful-animation/) — Sequencing: The sequence communicates only submission, approval scope, and waiting result.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: With reduced motion, approval rows and summary state update together.
+
+## Checkout payment (checkout-payment)
+
+- Chinese name: 支付结账
+- Group: workflow
+- Scene: Buying a motion-review template for a team.
+- Use case: One-time purchases, subscription upgrades, invoice payments, and order confirmation.
+- Timing: 180ms + 480ms payment window · cubic-bezier(0.23, 1, 0.32, 1)
+- Trigger: When payment starts, retain price and order contents so the user keeps context.
+- Reduced motion: Keep processing and success copy while omitting icon rotation.
+- Preview: https://motion-lexicon.pages.dev/en/packs/checkout-payment/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The payment action acknowledges the click when the request starts.
+  - [Perceived performance](https://motion-lexicon.pages.dev/en/principles/perceived-performance/) — State change: The order summary stays visible while processing state reduces uncertainty during payment.
+  - [Loop](https://motion-lexicon.pages.dev/en/loops/loop/) — Timing: The processing icon rotates only briefly during the payment window.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: Payment action and result copy switch to the receipt state.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion retains processing and payment-success copy.
+
+## Scheduled publish (scheduled-publish)
+
+- Chinese name: 定时发布
+- Group: workflow
+- Scene: Scheduling a product update for Monday morning.
+- Use case: Content publishing, email sends, social scheduling, and report generation.
+- Timing: 200ms + 180ms record · cubic-bezier(0.16, 1, 0.3, 1)
+- Trigger: Before scheduling, let users see an explicit date, time, and timezone.
+- Reduced motion: Insert the queue record directly while retaining publish time and edit entry.
+- Preview: https://motion-lexicon.pages.dev/en/packs/scheduled-publish/
+- Motion primitives:
+  - [Press / Tap feedback](https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/) — Input feedback: The schedule action first confirms the scheduling request.
+  - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The top state updates to Scheduled using the selected date and time.
+  - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The new queue record enters from very small upward travel.
+  - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion inserts the queue record directly while retaining the edit entry.
+
 # Full Motion Primitive reference
 
 ## Fade in / Fade out (fade-in-fade-out)
@@ -415,6 +624,9 @@
   - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Entrance: The new row enters its final position with very small upward travel.
   - [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/) — Entrance: The command panel enters below its trigger with very short travel.
   - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — Entrance: The pending member row enters lightly from below the list.
+  - [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/) — Entrance: Suggestion rows settle below the field with very small downward travel.
+  - [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/) — Entrance: The new reply enters the reading order from the thread bottom with very small travel.
+  - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/) — Entrance: The new queue record enters from very small upward travel.
 - Aliases: enter-exit
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
@@ -440,6 +652,10 @@
   - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Entrance: A slight scale gives the inserted content a clear landing.
   - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Exit and recovery: Scale reduces the visual weight of the departure.
   - [Command menu](https://motion-lexicon.pages.dev/en/packs/command-menu/) — Entrance: A slight scale helps the compact panel land in the trigger context.
+  - [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/) — Entrance: The new asset row lands in the list with slight scale and upward travel.
+  - [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/) — State change: A slight avatar scale emphasizes the completed assignment.
+  - [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/) — State change: The selected icon uses slight scale to confirm the current access rule.
+  - [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/) — State change: A slight scale at the destination emphasizes that the task reached its new state.
 - Aliases: pop-in
 - Parameters:
   - Duration (duration): default 200ms; range 80-1200ms; step 20ms
@@ -480,6 +696,8 @@
 - Product moments:
   - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/) — Sequencing: The timeline record follows after the release state lands.
   - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — Sequencing: Completion mark, connector, and next step advance in a clear order.
+  - [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/) — Sequencing: Visible suggestions enter at short intervals to preserve reading order.
+  - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/) — Sequencing: Approver rows enter Awaiting response at short intervals.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Stagger (stagger): default 50ms; range 20-120ms; step 10ms
@@ -519,6 +737,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/duration.json
 - Product moments:
   - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Timing: Press, saving, and saved use short durations that keep feedback compact and perceptible.
+  - [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/) — Timing: A fixed 600ms hold duration communicates the confirmation threshold.
 - Aliases: delay
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
@@ -540,6 +759,7 @@
   - [Filter results](https://motion-lexicon.pages.dev/en/packs/filter-results/) — Entrance: New results settle from a very small upward distance while layout stays stable.
   - [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/) — Spatial continuity: The next notification fills the space with slight travel to preserve queue context.
   - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Continuous input: The playhead position is driven continuously by the drag value.
+  - [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/) — Spatial continuity: The task uses small travel when it lands in the adjacent column to retain spatial context.
 - Aliases: scale, rotate, skew, perspective, transform-origin
 - Parameters:
   - Duration (duration): default 280ms; range 80-1200ms; step 20ms
@@ -580,6 +800,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/origin-aware-animation.json
 - Product moments:
   - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Spatial continuity: Content opens from the title row so its origin remains legible.
+  - [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/) — Spatial continuity: The candidate list opens below the current assignee to preserve selection origin.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Start scale (scale): default 88%; range 70-105%; step 1%
@@ -636,6 +857,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/accordion-collapse.json
 - Product moments:
   - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Disclosure: Content height, arrow, and expanded state are coordinated by one trigger.
+  - [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/) — Disclosure: The assignee trigger coordinates expansion and collapse of the candidate list.
 - Parameters:
   - Duration (duration): default 220ms; range 80-1200ms; step 20ms
   - Content height (height): default 140px; range 60-320px; step 10px
@@ -767,6 +989,12 @@
   - [Layer insertion](https://motion-lexicon.pages.dev/en/packs/layer-insertion/) — Input feedback: The Add layer action first acknowledges the insertion request.
   - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Input feedback: The Archive action immediately acknowledges the removal request.
   - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — Input feedback: The Invite action first confirms that sending has begun.
+  - [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/) — Input feedback: The upload action immediately acknowledges input when file processing starts.
+  - [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/) — Input feedback: Increment and decrement controls give immediate press feedback for every quantity action.
+  - [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/) — Input feedback: The Reply action confirms the submission when sending begins.
+  - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/) — Input feedback: The approval-request action first confirms that submission has started.
+  - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/) — Input feedback: The payment action acknowledges the click when the request starts.
+  - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/) — Input feedback: The schedule action first confirms the scheduling request.
 - Parameters:
   - Duration (duration): default 120ms; range 80-1200ms; step 20ms
   - Pressed scale (scale): default 96%; range 70-105%; step 1%
@@ -783,6 +1011,8 @@
 - Reduced motion: Use static progress or countdown text without filling motion, and allow a standard two-step confirmation.
 - Preview: https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/hold-to-confirm.json
+- Product moments:
+  - [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/) — Input feedback: Hold progress turns a high-risk action into deliberate, cancellable confirmation.
 - Parameters:
   - Confirmation duration (duration): default 1200ms; range 600-2400ms; step 50ms
   - Hold scale (scale): default 98%; range 70-105%; step 1%
@@ -799,6 +1029,8 @@
 - Reduced motion: Remove follow-pointer animation and use pickup state, target highlighting, and an immediate reorder result.
 - Preview: https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/drag-to-reorder.json
+- Product moments:
+  - [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/) — Input feedback: The dragged card and destination column clearly express pickup and drop.
 - Aliases: drag
 - Parameters:
   - Duration (duration): default 180ms; range 80-1200ms; step 20ms
@@ -871,6 +1103,8 @@
   - [Card selection](https://motion-lexicon.pages.dev/en/packs/card-selection/) — Timing: Boundary and check settle the selected state with one easing curve.
   - [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/) — Timing: Boundary, icon, and copy reach valid or invalid state on one short cadence.
   - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Timing: Scrubbing responds linearly so time stays one-to-one with the gesture.
+  - [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/) — Timing: Boundary and selected icon share a short settling curve.
+  - [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/) — Timing: A short curve lets number changes arrive and settle quickly.
 - Aliases: ease-out, ease-in, ease-in-out, linear, cubic-bezier, asymmetric-easing
 - Parameters:
   - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
@@ -909,6 +1143,8 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/loop.json
 - Product moments:
   - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — Timing: The saving icon loops briefly and stops once the result arrives.
+  - [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/) — Timing: The sync icon rotates only during the brief recovery window.
+  - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/) — Timing: The processing icon rotates only briefly during the payment window.
 - Aliases: alternate
 - Parameters:
   - Cycle duration (duration): default 1200ms; range 800-4000ms; step 100ms
@@ -1041,6 +1277,17 @@
   - [Notification triage](https://motion-lexicon.pages.dev/en/packs/notification-triage/) — State change: The remaining count updates in place with the queue.
   - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — State change: The task copy updates in place with the current step.
   - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/) — State change: Action copy and member status jointly express the pending result.
+  - [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/) — State change: Upload state changes from ready to available in the same location.
+  - [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/) — State change: Local edits, Syncing, and All synced update in place.
+  - [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/) — State change: Before-and-after deletion copy updates in the same explanatory area.
+  - [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/) — State change: The assignee name is replaced by the new member in the original trigger.
+  - [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/) — State change: The top permission summary updates in place with the selected option.
+  - [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/) — State change: The result count updates from the current query in real time.
+  - [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/) — State change: Subtotal switches to the new amount in the same reading position.
+  - [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/) — State change: The action copy switches in place between Reply and Sending.
+  - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/) — State change: The top summary and each approver's state update in place.
+  - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/) — State change: Payment action and result copy switch to the receipt state.
+  - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/) — State change: The top state updates to Scheduled using the selected date and time.
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
   - Transition blur (blur): default 8px; range 0-20px; step 1px
@@ -1073,6 +1320,8 @@
 - Reduced motion: Replace the value immediately and indicate direction through static color or an arrow.
 - Preview: https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/number-ticker.json
+- Product moments:
+  - [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/) — State change: Quantity, seat count, and subtotal update together with stable figures.
 - Aliases: tabular-numbers
 - Parameters:
   - Duration (duration): default 240ms; range 80-1200ms; step 20ms
@@ -1123,6 +1372,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/compositing.json
 - Product moments:
   - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/) — Continuous input: Position changes favor compositor-friendly properties.
+  - [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/) — Continuous input: Drag and landing favor transform and opacity to reduce layout cost.
 - Aliases: will-change, layout-thrashing, hardware-acceleration
 - Parameters:
   - Demo duration (duration): default 520ms; range 300-1200ms; step 20ms
@@ -1143,6 +1393,7 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/purposeful-animation.json
 - Product moments:
   - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/) — Sequencing: Each movement communicates completion, relationship, and the next step.
+  - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/) — Sequencing: The sequence communicates only submission, approval scope, and waiting result.
 - Aliases: frequency-of-use, spatial-consistency
 
 ## Anticipation (anticipation)
@@ -1177,6 +1428,9 @@
 - Data: https://motion-lexicon.pages.dev/data/v1/recipes/perceived-performance.json
 - Product moments:
   - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/) — State change: The synchronous state marker keeps the brief wait legible.
+  - [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/) — State change: The progress track and processing state keep the brief wait legible.
+  - [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/) — State change: The continuously visible local-edit count reduces uncertainty during sync.
+  - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/) — State change: The order summary stays visible while processing state reduces uncertainty during payment.
 
 ## Reduced motion (reduced-motion)
 
@@ -1195,6 +1449,17 @@
   - [Archive undo](https://motion-lexicon.pages.dev/en/packs/archive-undo/) — Reduced motion: The reduced-motion version retains Undo and the restored result.
   - [Inline validation](https://motion-lexicon.pages.dev/en/packs/inline-validation/) — Reduced motion: The low-motion treatment keeps color, icon, and explanatory changes.
   - [Details disclosure](https://motion-lexicon.pages.dev/en/packs/details-disclosure/) — Reduced motion: Reduced motion retains expanded state and accessible semantics.
+  - [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/) — Reduced motion: Reduced motion retains progress, availability, and the new asset record.
+  - [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/) — Reduced motion: Reduced motion keeps sync copy and the completion icon while omitting rotation.
+  - [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/) — Reduced motion: Reduced motion retains hold duration, deletion result, and Undo.
+  - [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/) — Reduced motion: Reduced motion retains selection, explanatory copy, and saved result.
+  - [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/) — Reduced motion: With reduced motion, suggestions update directly while focus and result copy remain.
+  - [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/) — Reduced motion: Reduced motion retains column, count, and task-position changes.
+  - [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/) — Reduced motion: Reduced motion retains quantity, amount, and the minimum-quantity constraint.
+  - [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/) — Reduced motion: Reduced motion inserts the reply directly while retaining identity and time.
+  - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/) — Reduced motion: With reduced motion, approval rows and summary state update together.
+  - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/) — Reduced motion: Reduced motion retains processing and payment-success copy.
+  - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/) — Reduced motion: Reduced motion inserts the queue record directly while retaining the edit entry.
 
 # Complete vocabulary
 

@@ -1,6 +1,6 @@
 {
   "name": "motion-lexicon",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "An open motion finder and recipe library for humans and agents, with an offline CLI and Node API.",
   "license": "MIT",
   "repository": {

@@ -327,6 +327,105 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
         "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
       }
+    },
+    {
+      "id": "search-suggestions",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "搜索建议",
+        "en": "Search suggestions"
+      },
+      "summary": {
+        "zh": "输入查询时，让建议、结果数量和已选条目紧贴当前词语变化。",
+        "en": "While a query is entered, let suggestions, result count, and chosen item follow the current terms closely."
+      },
+      "scene": {
+        "zh": "在素材库中查找一份设计规范。",
+        "en": "Finding a design guideline in an asset library."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "建议行以很小的向下位移抵达输入框下方。",
+        "en": "Suggestion rows settle below the field with very small downward travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/search-suggestions/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/search-suggestions/"
+      }
+    },
+    {
+      "id": "comment-reply",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "评论回复",
+        "en": "Comment reply"
+      },
+      "summary": {
+        "zh": "提交回复后，让输入区收束为一条带身份和时间的讨论记录。",
+        "en": "After a reply is submitted, let the input area resolve into a discussion record with identity and time."
+      },
+      "scene": {
+        "zh": "在设计评审中回复一条关于按钮节奏的评论。",
+        "en": "Replying to a comment about button cadence in a design review."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "新回复从线程底部以极小位移进入阅读顺序。",
+        "en": "The new reply enters the reading order from the thread bottom with very small travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/comment-reply/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/comment-reply/"
+      }
+    },
+    {
+      "id": "scheduled-publish",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "定时发布",
+        "en": "Scheduled publish"
+      },
+      "summary": {
+        "zh": "为未来发布设置时间后，让发布时间、队列记录和可编辑状态彼此一致。",
+        "en": "After scheduling a future release, keep publish time, queue record, and editable state consistent."
+      },
+      "scene": {
+        "zh": "为一篇产品更新安排下周一上午发布。",
+        "en": "Scheduling a product update for Monday morning."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "新的队列记录从极小下方位移进入。",
+        "en": "The new queue record enters from very small upward travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/scheduled-publish/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/scheduled-publish/"
+      }
     }
   ]
 }

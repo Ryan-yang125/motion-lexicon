@@ -58,9 +58,9 @@ describe("public machine-readable artifacts", () => {
     expect(catalog.counts).toEqual({
       categories: 12,
       recipes: 44,
-      packs: 16,
+      packs: 28,
       motionPrimitives: 44,
-      productMoments: 16,
+      productMoments: 28,
       vocabularyTerms: 91,
       aliases: 47
     });
@@ -107,7 +107,7 @@ describe("public machine-readable artifacts", () => {
     }
   });
 
-  it("publishes all 16 copy-ready Motion Packs", async () => {
+  it("publishes all 28 copy-ready Motion Packs", async () => {
     const packs = await parseArtifact("data/v1/packs.json") as unknown as {
       kind: string;
       count: number;
@@ -123,9 +123,25 @@ describe("public machine-readable artifacts", () => {
       }>;
     };
 
-    expect(packs).toMatchObject({ kind: "packs", count: 16 });
-    expect(packs.packs).toHaveLength(16);
-    expect(new Set(packs.packs.map((pack) => pack.id)).size).toBe(16);
+    expect(packs).toMatchObject({ kind: "packs", count: 28 });
+    expect(packs.packs).toHaveLength(28);
+    expect(new Set(packs.packs.map((pack) => pack.id)).size).toBe(28);
+    expect(packs.packs.map((pack) => pack.id)).toEqual(
+      expect.arrayContaining([
+        "upload-complete",
+        "sync-recovery",
+        "delete-confirmation",
+        "assignee-picker",
+        "permission-change",
+        "search-suggestions",
+        "kanban-move",
+        "cart-update",
+        "comment-reply",
+        "approval-request",
+        "checkout-payment",
+        "scheduled-publish"
+      ])
+    );
     for (const pack of packs.packs) {
       expect(pack.source.html, pack.id).toContain("data-motion-pack");
       expect(pack.source.css, pack.id).toContain("prefers-reduced-motion");
@@ -146,7 +162,7 @@ describe("public machine-readable artifacts", () => {
 
   it("advertises the free CLI and Agent Skill in both LLM indexes", async () => {
     const expectedCommands = [
-      "npx -y github:Ryan-yang125/motion-lexicon#v1.1.0",
+      "npx -y github:Ryan-yang125/motion-lexicon#v1.2.0",
       "recommend \"describe the motion you want\" --locale en --format json",
       "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
     ];

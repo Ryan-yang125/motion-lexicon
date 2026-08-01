@@ -105,6 +105,105 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
         "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
       }
+    },
+    {
+      "id": "upload-complete",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "文件上传完成",
+        "en": "Upload complete"
+      },
+      "summary": {
+        "zh": "文件抵达后，用进度、可用状态和新资产行交代结果。",
+        "en": "When a file lands, use progress, availability, and a new asset row to explain the result."
+      },
+      "scene": {
+        "zh": "在素材库里上传一张产品封面。",
+        "en": "Uploading a product cover in an asset library."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "进度轨道和处理中状态让短暂等待始终可读。",
+        "en": "The progress track and processing state keep the brief wait legible."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/upload-complete/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/upload-complete/"
+      }
+    },
+    {
+      "id": "sync-recovery",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "同步恢复",
+        "en": "Sync recovery"
+      },
+      "summary": {
+        "zh": "网络恢复后，把本地改动、同步过程和完成结果连成一条清楚的状态线。",
+        "en": "When connectivity returns, connect local edits, syncing progress, and completion through one clear state line."
+      },
+      "scene": {
+        "zh": "离线编辑的项目重新连接到工作区。",
+        "en": "Reconnecting an offline-edited project to its workspace."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "持续可见的本地改动数量减轻同步中的不确定感。",
+        "en": "The continuously visible local-edit count reduces uncertainty during sync."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/sync-recovery/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/sync-recovery/"
+      }
+    },
+    {
+      "id": "checkout-payment",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "支付结账",
+        "en": "Checkout payment"
+      },
+      "summary": {
+        "zh": "付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。",
+        "en": "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."
+      },
+      "scene": {
+        "zh": "为团队购买一份动效评审模板。",
+        "en": "Buying a motion-review template for a team."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "订单摘要持续可见，处理中状态降低付款等待的不确定感。",
+        "en": "The order summary stays visible while processing state reduces uncertainty during payment."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/checkout-payment/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/checkout-payment/"
+      }
     }
   ]
 }

@@ -187,6 +187,39 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
         "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
       }
+    },
+    {
+      "id": "assignee-picker",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "负责人选择",
+        "en": "Assignee picker"
+      },
+      "summary": {
+        "zh": "从候选成员中选择负责人时，让触发器、当前人选和候选列表保持同一上下文。",
+        "en": "When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context."
+      },
+      "scene": {
+        "zh": "为一条待完成的设计任务选择负责人。",
+        "en": "Choosing an owner for a pending design task."
+      },
+      "role": "disclosure",
+      "roleLabel": {
+        "zh": "展开与收起",
+        "en": "Disclosure"
+      },
+      "note": {
+        "zh": "负责人触发器协调候选列表的展开与收起。",
+        "en": "The assignee trigger coordinates expansion and collapse of the candidate list."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/assignee-picker/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/assignee-picker/"
+      }
     }
   ]
 }

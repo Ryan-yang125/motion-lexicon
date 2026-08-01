@@ -501,6 +501,369 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
         "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
       }
+    },
+    {
+      "id": "upload-complete",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "文件上传完成",
+        "en": "Upload complete"
+      },
+      "summary": {
+        "zh": "文件抵达后，用进度、可用状态和新资产行交代结果。",
+        "en": "When a file lands, use progress, availability, and a new asset row to explain the result."
+      },
+      "scene": {
+        "zh": "在素材库里上传一张产品封面。",
+        "en": "Uploading a product cover in an asset library."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "上传状态在同一位置从准备切换为可用。",
+        "en": "Upload state changes from ready to available in the same location."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/upload-complete/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/upload-complete/"
+      }
+    },
+    {
+      "id": "sync-recovery",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "同步恢复",
+        "en": "Sync recovery"
+      },
+      "summary": {
+        "zh": "网络恢复后，把本地改动、同步过程和完成结果连成一条清楚的状态线。",
+        "en": "When connectivity returns, connect local edits, syncing progress, and completion through one clear state line."
+      },
+      "scene": {
+        "zh": "离线编辑的项目重新连接到工作区。",
+        "en": "Reconnecting an offline-edited project to its workspace."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "本地改动、同步中和全部已同步在原位置更新。",
+        "en": "Local edits, Syncing, and All synced update in place."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/sync-recovery/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/sync-recovery/"
+      }
+    },
+    {
+      "id": "delete-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "删除确认",
+        "en": "Delete confirmation"
+      },
+      "summary": {
+        "zh": "高风险操作通过明确对象、按住进度和完成反馈保持可控。",
+        "en": "A high-risk action stays controllable through a clear target, hold progress, and completion feedback."
+      },
+      "scene": {
+        "zh": "从工作区永久移除一个测试项目。",
+        "en": "Permanently removing a test project from a workspace."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "删除前后状态文字在同一说明区更新。",
+        "en": "Before-and-after deletion copy updates in the same explanatory area."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/delete-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/delete-confirmation/"
+      }
+    },
+    {
+      "id": "assignee-picker",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "负责人选择",
+        "en": "Assignee picker"
+      },
+      "summary": {
+        "zh": "从候选成员中选择负责人时，让触发器、当前人选和候选列表保持同一上下文。",
+        "en": "When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context."
+      },
+      "scene": {
+        "zh": "为一条待完成的设计任务选择负责人。",
+        "en": "Choosing an owner for a pending design task."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "负责人姓名在原触发器中替换为新成员。",
+        "en": "The assignee name is replaced by the new member in the original trigger."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/assignee-picker/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/assignee-picker/"
+      }
+    },
+    {
+      "id": "permission-change",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "权限变更",
+        "en": "Permission change"
+      },
+      "summary": {
+        "zh": "切换访问范围时，用当前规则、选项说明和保存结果减少误解。",
+        "en": "When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity."
+      },
+      "scene": {
+        "zh": "为一个公开预览页面设置访问权限。",
+        "en": "Setting access permissions for a public preview page."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "顶部权限摘要随选项在原位置更新。",
+        "en": "The top permission summary updates in place with the selected option."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/permission-change/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/permission-change/"
+      }
+    },
+    {
+      "id": "search-suggestions",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "搜索建议",
+        "en": "Search suggestions"
+      },
+      "summary": {
+        "zh": "输入查询时，让建议、结果数量和已选条目紧贴当前词语变化。",
+        "en": "While a query is entered, let suggestions, result count, and chosen item follow the current terms closely."
+      },
+      "scene": {
+        "zh": "在素材库中查找一份设计规范。",
+        "en": "Finding a design guideline in an asset library."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "结果数量由当前查询实时更新。",
+        "en": "The result count updates from the current query in real time."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/search-suggestions/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/search-suggestions/"
+      }
+    },
+    {
+      "id": "cart-update",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "购物车更新",
+        "en": "Cart update"
+      },
+      "summary": {
+        "zh": "调整数量后，把商品行、件数和小计同步为一个即时的购买状态。",
+        "en": "After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state."
+      },
+      "scene": {
+        "zh": "在结账前调整一件团队模板的数量。",
+        "en": "Adjusting the quantity of a team template before checkout."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "小计在同一阅读位置切换到新的金额。",
+        "en": "Subtotal switches to the new amount in the same reading position."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/cart-update/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/cart-update/"
+      }
+    },
+    {
+      "id": "comment-reply",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "评论回复",
+        "en": "Comment reply"
+      },
+      "summary": {
+        "zh": "提交回复后，让输入区收束为一条带身份和时间的讨论记录。",
+        "en": "After a reply is submitted, let the input area resolve into a discussion record with identity and time."
+      },
+      "scene": {
+        "zh": "在设计评审中回复一条关于按钮节奏的评论。",
+        "en": "Replying to a comment about button cadence in a design review."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "按钮文案在回复与发送中之间原位切换。",
+        "en": "The action copy switches in place between Reply and Sending."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/comment-reply/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/comment-reply/"
+      }
+    },
+    {
+      "id": "approval-request",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "请求审批",
+        "en": "Approval request"
+      },
+      "summary": {
+        "zh": "发起审批时，让提交动作、审批人队列和当前等待状态形成连续工作流。",
+        "en": "When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow."
+      },
+      "scene": {
+        "zh": "把一份发布说明提交给两位审批人。",
+        "en": "Submitting release notes to two approvers."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "顶部汇总与每位审批人的状态在原位置更新。",
+        "en": "The top summary and each approver's state update in place."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/approval-request/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/approval-request/"
+      }
+    },
+    {
+      "id": "checkout-payment",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "支付结账",
+        "en": "Checkout payment"
+      },
+      "summary": {
+        "zh": "付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。",
+        "en": "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."
+      },
+      "scene": {
+        "zh": "为团队购买一份动效评审模板。",
+        "en": "Buying a motion-review template for a team."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "支付按钮和结果文字切换到收据状态。",
+        "en": "Payment action and result copy switch to the receipt state."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/checkout-payment/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/checkout-payment/"
+      }
+    },
+    {
+      "id": "scheduled-publish",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "定时发布",
+        "en": "Scheduled publish"
+      },
+      "summary": {
+        "zh": "为未来发布设置时间后，让发布时间、队列记录和可编辑状态彼此一致。",
+        "en": "After scheduling a future release, keep publish time, queue record, and editable state consistent."
+      },
+      "scene": {
+        "zh": "为一篇产品更新安排下周一上午发布。",
+        "en": "Scheduling a product update for Monday morning."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "页面顶部状态使用所选日期和时间更新为已安排。",
+        "en": "The top state updates to Scheduled using the selected date and time."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/scheduled-publish/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/scheduled-publish/"
+      }
     }
   ]
 }

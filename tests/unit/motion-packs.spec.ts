@@ -8,10 +8,10 @@ import {
   motionPacks
 } from "../../src/data/motion-packs";
 
-describe("Motion Pack V1 data", () => {
-  it("ships sixteen uniquely identified, grouped real product moments", () => {
-    expect(motionPacks).toHaveLength(16);
-    expect(new Set(motionPacks.map((pack) => pack.id)).size).toBe(16);
+describe("Motion Pack V1.2 data", () => {
+  it("ships twenty-eight uniquely identified, grouped real product moments", () => {
+    expect(motionPacks).toHaveLength(28);
+    expect(new Set(motionPacks.map((pack) => pack.id)).size).toBe(28);
     expect(motionPackGroups).toHaveLength(4);
 
     for (const pack of motionPacks) {
@@ -69,10 +69,24 @@ describe("Motion Pack V1 data", () => {
     expect(getMotionPacksForFoundation("missing-foundation")).toEqual([]);
   });
 
-  it("keeps instant validation in feedback and notification triage in workflow", () => {
+  it("keeps the complete seven-Pack groups balanced", () => {
     expect(motionPacks.find((pack) => pack.id === "inline-validation")?.groupId).toBe("feedback");
+    expect(motionPacks.find((pack) => pack.id === "upload-complete")?.groupId).toBe("feedback");
+    expect(motionPacks.find((pack) => pack.id === "sync-recovery")?.groupId).toBe("feedback");
+    expect(motionPacks.find((pack) => pack.id === "delete-confirmation")?.groupId).toBe("feedback");
+    expect(motionPacks.find((pack) => pack.id === "assignee-picker")?.groupId).toBe("choice");
+    expect(motionPacks.find((pack) => pack.id === "permission-change")?.groupId).toBe("choice");
+    expect(motionPacks.find((pack) => pack.id === "search-suggestions")?.groupId).toBe("choice");
+    expect(motionPacks.find((pack) => pack.id === "kanban-move")?.groupId).toBe("change");
+    expect(motionPacks.find((pack) => pack.id === "cart-update")?.groupId).toBe("change");
+    expect(motionPacks.find((pack) => pack.id === "comment-reply")?.groupId).toBe("change");
     expect(motionPacks.find((pack) => pack.id === "notification-triage")?.groupId).toBe("workflow");
-    expect(motionPacks.filter((pack) => pack.groupId === "feedback")).toHaveLength(4);
-    expect(motionPacks.filter((pack) => pack.groupId === "workflow")).toHaveLength(4);
+    expect(motionPacks.find((pack) => pack.id === "approval-request")?.groupId).toBe("workflow");
+    expect(motionPacks.find((pack) => pack.id === "checkout-payment")?.groupId).toBe("workflow");
+    expect(motionPacks.find((pack) => pack.id === "scheduled-publish")?.groupId).toBe("workflow");
+
+    for (const group of motionPackGroups) {
+      expect(motionPacks.filter((pack) => pack.groupId === group.id), group.id).toHaveLength(7);
+    }
   });
 });

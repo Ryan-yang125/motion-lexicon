@@ -34,14 +34,14 @@ and Motion Primitives, then gives users a clear route into the right collection.
 - Engineers who need portable HTML, CSS, JavaScript, and behavior guidance.
 - AI agents that benefit from exact prompts, structured data, and explicit motion constraints.
 
-## V1.1 Product Structure
+## V1.2 Product Structure
 
 The site is a static, SEO-friendly application with two equal content
 collections. Each has a dedicated home, detail workflow, and direct navigation;
 Finder connects them for visitors who begin from a description.
 
-- **Product Moments · Motion Pack gallery:** `/:locale/packs/` presents 16 real
-  product moments, grouped by feedback, choice, change, and workflow.
+- **Product Moments · Motion Pack gallery:** `/:locale/packs/` presents 28 real
+  product moments, with seven Packs in each of feedback, choice, change, and workflow.
 - **Motion Pack detail:** `/:locale/packs/:packId/` gives each Pack a dominant
   live preview, concise interaction guidance, a Prompt/Code export surface, and
   related Motion Primitives.
@@ -74,14 +74,14 @@ Every Pack owns one complete, portable interaction contract:
 - A stable URL, public JSON representation, and CLI API.
 - Related Motion Primitives that explain the motion choices inside the scene.
 
-The V1 set contains 16 Packs:
+V1.2 contains 28 Packs:
 
 | Group | Packs |
 | --- | --- |
-| Feedback | Save confirmation, Publish release, Share link, Inline validation |
-| Choice | Card selection, Workspace switch, Template choice, Command menu |
-| Change | Layer insertion, Archive undo, Filter results, Details disclosure |
-| Workflow | Notification triage, Progress steps, Member invite, Media scrub |
+| Feedback | Save confirmation, Publish release, Share link, Inline validation, Upload complete, Sync recovery, Delete confirmation |
+| Choice | Card selection, Workspace switch, Template choice, Command menu, Assignee picker, Permission change, Search suggestions |
+| Change | Layer insertion, Archive undo, Filter results, Details disclosure, Kanban move, Cart update, Comment reply |
+| Workflow | Notification triage, Progress steps, Member invite, Media scrub, Approval request, Checkout payment, Scheduled publish |
 
 ## Motion Primitive Content Contract
 
@@ -131,6 +131,18 @@ collections.
 4. Align the website, CLI (`packs` and `list`), Agent Skill, public data, README, and `llms.txt`
    around the two-collection product model.
 
+### V1.2 — Expanded product moments
+
+V1.2 expands Product Moments from 16 to 28 complete interactions while keeping
+the four product groups balanced at seven Packs each.
+
+1. Cover common product states across upload, sync, deletion, assignees,
+   permissions, search, kanban, cart, comments, approvals, checkout, and scheduled publishing.
+2. Keep each additional Pack connected to the Motion Primitives that explain its
+   timing and behavior.
+3. Keep website navigation, Finder, CLI, Agent Skill, public data, README, SEO,
+   and static routes aligned with the complete 28-Pack collection.
+
 ## Content Principles
 
 - Show the product moment before explaining it.
@@ -170,9 +182,9 @@ The production design uses a quiet, product-led Apple-inspired visual language:
 
 ## Quality Bar
 
-Before a V1.1 change is considered done:
+Before a V1.2 change is considered done:
 
-- All 16 Pack routes render with a stable H1, localized metadata, canonical URL,
+- All 28 Pack routes render with a stable H1, localized metadata, canonical URL,
   and a live product interaction.
 - Pack previews, Prompt, HTML, CSS, JavaScript, and reduced-motion guidance stay
   in sync from the same data source.
@@ -182,7 +194,7 @@ Before a V1.1 change is considered done:
   available and indexable.
 - Desktop and mobile layouts stay free of horizontal page overflow.
 - Functional text remains accessible in light and dark themes.
-- Public data, CLI, Agent Skill, README, and `llms.txt` describe the same V1.1
+- Public data, CLI, Agent Skill, README, and `llms.txt` describe the same V1.2
   two-collection product model.
 - `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`,
   `npm run vocabulary:check`, `npm run seo:check`, `npm run motion:check`,

@@ -26,7 +26,7 @@ assert(!siteUrl.includes(".local"), "siteUrl must not use a local domain");
 assert(entries.length === 91, `Expected 91 glossary entries, found ${entries.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 canonical entries, found ${canonicalMotionCatalog.length}`);
 assert(aliasMetadata.length === 47, `Expected 47 aliases, found ${aliasMetadata.length}`);
-assert(motionPacks.length === 16, `Expected 16 Motion Packs, found ${motionPacks.length}`);
+assert(motionPacks.length === 28, `Expected 28 Motion Packs, found ${motionPacks.length}`);
 assert(new Set(motionPacks.map((pack) => pack.id)).size === motionPacks.length, "Motion Packs contain duplicate IDs");
 
 const canonicalIds = new Set(canonicalMotionCatalog.map((item) => item.id));
@@ -91,7 +91,7 @@ const expectedPaths = locales.flatMap((locale) => [
   ...canonicalMotionCatalog.map((item) => pathFor(locale, [item.categoryId, item.id]))
 ]);
 
-assert(expectedPaths.length === 154, `Expected 154 localized canonical paths, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 178, `Expected 178 localized canonical paths, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static paths, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap URLs, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static paths contain duplicates");
