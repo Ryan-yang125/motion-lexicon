@@ -1,99 +1,74 @@
 /* global console, process */
 
+import Ajv2020 from "ajv/dist/2020.js";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const skillDirectory = path.resolve(scriptDirectory, "..");
+const schemaPath = path.join(skillDirectory, "assets", "motion-blueprint.schema.json");
 const defaultBlueprintPath = path.join(skillDirectory, "assets", "example-motion-blueprint.json");
 const providedPath = process.argv[2];
 const blueprintPath = providedPath ? path.resolve(process.cwd(), providedPath) : defaultBlueprintPath;
 const issues = [];
 
 const addIssue = (message) => issues.push(message);
-const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
-const needFields = (value, fields, label) => {
-  if (!isObject(value)) {
-    addIssue(`${label} needs an object value.`);
-    return;
-  }
-
-  for (const field of fields) {
-    if (!(field in value)) addIssue(`${label}.${field} is required.`);
+const readJson = (filePath, label) => {
+  try {
+    return { ok: true, value: JSON.parse(fs.readFileSync(filePath, "utf8")) };
+  } catch (error) {
+    addIssue(`${label} JSON is unavailable or invalid: ${error.message}`);
+    return { ok: false };
   }
 };
 
-let blueprint;
-try {
-  blueprint = JSON.parse(fs.readFileSync(blueprintPath, "utf8"));
-} catch (error) {
-  addIssue(`Blueprint JSON is unavailable or invalid: ${error.message}`);
-}
+const decodeJsonPointerSegment = (segment) => segment.replace(/~1/g, "/").replace(/~0/g, "~");
 
-if (blueprint) {
-  needFields(
-    blueprint,
-    ["version", "locale", "intent", "scope", "stateGraph", "actors", "beats", "accessibility", "delivery", "provenance"],
-    "blueprint"
-  );
+const formatInstancePath = (instancePath) => {
+  if (!instancePath) return "blueprint";
 
-  if (blueprint.version !== "2.0") addIssue("blueprint.version must equal 2.0.");
-  if (!["zh", "en"].includes(blueprint.locale)) addIssue("blueprint.locale must equal zh or en.");
+  return instancePath
+    .split("/")
+    .slice(1)
+    .map(decodeJsonPointerSegment)
+    .reduce(
+      (label, segment) => (Number.isInteger(Number(segment)) && String(Number(segment)) === segment
+        ? `${label}[${segment}]`
+        : `${label}.${segment}`),
+      "blueprint"
+    );
+};
 
-  needFields(blueprint.intent, ["productGoal", "userIntent", "feeling"], "blueprint.intent");
-  needFields(blueprint.scope, ["surface", "framework", "input"], "blueprint.scope");
-  needFields(blueprint.stateGraph, ["initial", "states", "transitions"], "blueprint.stateGraph");
-  needFields(blueprint.accessibility, ["reducedMotion", "focus", "aria", "keyboard"], "blueprint.accessibility");
-  needFields(blueprint.delivery, ["formats", "integration"], "blueprint.delivery");
-  needFields(blueprint.provenance, ["status", "foundations", "moments", "confidence"], "blueprint.provenance");
+const formatSchemaError = (error) => {
+  const instancePath = formatInstancePath(error.instancePath);
 
-  if (!Array.isArray(blueprint.actors) || blueprint.actors.length < 1 || blueprint.actors.length > 3) {
-    addIssue("blueprint.actors needs one to three actors.");
-  } else {
-    if (blueprint.actors.filter((actor) => actor?.role === "primary").length !== 1) {
-      addIssue("blueprint.actors needs exactly one primary actor.");
-    }
-    for (const [index, actor] of blueprint.actors.entries()) {
-      needFields(actor, ["id", "role", "kind", "element"], `blueprint.actors[${index}]`);
-      if (!["primary", "supporting"].includes(actor?.role)) {
-        addIssue(`blueprint.actors[${index}].role needs primary or supporting.`);
-      }
-      if (!["trigger", "hero", "status", "record", "environment"].includes(actor?.kind)) {
-        addIssue(`blueprint.actors[${index}].kind needs a documented semantic kind.`);
-      }
-    }
+  if (error.keyword === "required") {
+    return `${instancePath}.${error.params.missingProperty} is required.`;
   }
 
-  if (!Array.isArray(blueprint.beats) || blueprint.beats.length < 1 || blueprint.beats.length > 5) {
-    addIssue("blueprint.beats needs one to five focused beats.");
-  } else {
-    for (const [index, beat] of blueprint.beats.entries()) {
-      needFields(
-        beat,
-        ["id", "at", "actor", "purpose", "primitive", "from", "to", "durationMs", "easing", "properties"],
-        `blueprint.beats[${index}]`
-      );
-      if (!["arrive", "leave", "feedback", "linear", "spring"].includes(beat?.easing)) {
-        addIssue(`blueprint.beats[${index}].easing needs a documented easing token.`);
+  if (error.keyword === "additionalProperties") {
+    return `${instancePath}.${error.params.additionalProperty} is not allowed.`;
+  }
+
+  return `${instancePath} ${error.message ?? "is invalid"}.`;
+};
+
+const schemaResult = readJson(schemaPath, "Motion Blueprint schema");
+const blueprintResult = readJson(blueprintPath, "Blueprint");
+
+if (schemaResult.ok && blueprintResult.ok) {
+  try {
+    const validator = new Ajv2020({ allErrors: true }).compile(schemaResult.value);
+
+    if (!validator(blueprintResult.value)) {
+      for (const error of validator.errors ?? []) {
+        addIssue(formatSchemaError(error));
       }
     }
-  }
-
-  const stateIds = new Set(blueprint.stateGraph?.states?.map((state) => state?.id));
-  if (blueprint.stateGraph?.initial && !stateIds.has(blueprint.stateGraph.initial)) {
-    addIssue("blueprint.stateGraph.initial must reference a declared state.");
-  }
-
-  for (const [index, transition] of (blueprint.stateGraph?.transitions ?? []).entries()) {
-    if (!stateIds.has(transition?.from) || !stateIds.has(transition?.to)) {
-      addIssue(`blueprint.stateGraph.transitions[${index}] must connect declared states.`);
-    }
-  }
-
-  if (!["draft", "candidate", "published"].includes(blueprint.provenance?.status)) {
-    addIssue("blueprint.provenance.status needs draft, candidate, or published.");
+  } catch (error) {
+    addIssue(`Motion Blueprint schema could not be compiled: ${error.message}`);
   }
 }
 

@@ -1,4 +1,14 @@
 /* Motion Director — warm three-layer materials, concise event-driven feedback. */
+:root {
+  --director-lab-status-ink: #714800;
+  --director-lab-status-surface: #fbf5e7;
+}
+
+:root.dark {
+  --director-lab-status-ink: #f1c875;
+  --director-lab-status-surface: #3b3424;
+}
+
 .motion-director-page,
 .motion-blueprint-lab {
   width: min(100%, 1160px);
@@ -318,7 +328,7 @@
 .director-scene[data-state="awaiting"] .director-scene-feedback svg { color: currentColor; transform: translateY(0) scale(1); opacity: 1; }
 
 .director-scene-button {
-  min-height: 36px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -469,7 +479,7 @@
 .director-blueprint-copy > p { margin-top: 12px; }
 
 .director-text-link {
-  min-height: 36px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -629,7 +639,19 @@
 .blueprint-lab-primary { overflow: hidden; }
 .blueprint-lab-primary-top { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--interior-line); padding: 0 16px; }
 .blueprint-lab-id { color: var(--interior-secondary); font-family: var(--mono); font-size: 12px; }
-.blueprint-lab-status { min-height: 26px; display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 0 9px; color: #9b6c17; background: color-mix(in srgb, #e6b95d 15%, var(--interior-panel)); font-size: 12px; font-weight: 500; white-space: nowrap; }
+.blueprint-lab-status {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 0 9px;
+  color: var(--director-lab-status-ink);
+  background: var(--director-lab-status-surface);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
 .blueprint-lab-primary > h2 { margin: 21px 20px 0; color: var(--interior-ink); font-size: 14px; font-weight: 500; letter-spacing: -0.03em; }
 .blueprint-lab-primary > p { max-width: 52ch; margin: 8px 20px 22px; color: var(--interior-secondary); font-size: 13px; line-height: 1.6; }
 

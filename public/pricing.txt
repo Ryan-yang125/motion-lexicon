@@ -6,7 +6,7 @@
 - Billing: None
 - Account required: No
 - Website: https://motion-lexicon.pages.dev
-- Release: 2.0.0
+- Release: 2.0.1
 - Product Moments: https://motion-lexicon.pages.dev/en/packs/
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
 - Motion Director: https://motion-lexicon.pages.dev/en/director/

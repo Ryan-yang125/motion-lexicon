@@ -8,7 +8,7 @@
       "zh": "产品瞬间与动效基础，都是可预览、可复制、可直接接入界面的产品动效。",
       "en": "Product Moments and Motion Primitives for previewing, copying, and integrating interface motion."
     },
-    "releaseVersion": "2.0.0",
+    "releaseVersion": "2.0.1",
     "siteUrl": "https://motion-lexicon.pages.dev",
     "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
     "locales": [

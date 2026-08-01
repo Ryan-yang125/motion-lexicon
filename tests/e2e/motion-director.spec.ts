@@ -14,6 +14,7 @@ test("Motion Director is a canonical bilingual creation entry with an overflow-s
   await page.getByRole("button", { name: "发送请求" }).click();
   await expect(page.getByText("已发送", { exact: true })).toBeVisible({ timeout: 1_500 });
   await expect(page.locator(".director-scene")).toHaveAttribute("data-state", "awaiting");
+  await expect(page.locator(".director-scene-record-status")).toHaveText("等待回复");
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
@@ -24,6 +25,10 @@ test("Motion Director is a canonical bilingual creation entry with an overflow-s
     "href",
     "https://motion-lexicon.pages.dev/en/director/"
   );
+  await page.getByRole("button", { name: "Send request" }).click();
+  await expect(page.getByText("Sent", { exact: true })).toBeVisible({ timeout: 1_500 });
+  await expect(page.locator(".director-scene")).toHaveAttribute("data-state", "awaiting");
+  await expect(page.locator(".director-scene-record-status")).toHaveText("Awaiting");
 });
 
 test("candidate library is reachable, prerendered, and noindex", async ({ page }) => {

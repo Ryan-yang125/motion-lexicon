@@ -142,7 +142,7 @@ Motion Lexicon 是静态网站，提供免费浏览器体验、免费 Agent Skil
 
 ## V2.0 快照
 
-**V2.0.0 将 Motion Director 带入产品。** 产品瞬间、动效基础、双语词汇、公共
+**V2.0.1 将 Motion Director 带入产品。** 产品瞬间、动效基础、双语词汇、公共
 Motion Grammar 和 Agent Skill 共同组成内容与创作系统。浏览器承担可视化参考，
 Motion Director 将同一套决策带入真实产品工作。
 

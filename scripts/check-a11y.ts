@@ -4,13 +4,15 @@ type Rgb = { r: number; g: number; b: number };
 
 const WCAG_AA_NORMAL_TEXT = 4.5;
 const WCAG_AA_LARGE_TEXT_OR_UI = 3;
+const motionDirectorCss = readFileSync("src/pages/motion-director.css", "utf8");
 const css = [
   "src/styles.css",
   "src/library.css",
   "src/vocabulary.css",
   "src/apple-redesign.css",
-  "src/interior-theme.css"
-].map((file) => readFileSync(file, "utf8")).join("\n");
+  "src/interior-theme.css",
+  "src/pages/motion-director.css"
+].map((file) => file === "src/pages/motion-director.css" ? motionDirectorCss : readFileSync(file, "utf8")).join("\n");
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -44,6 +46,12 @@ function resolveCustomProperty(properties: Map<string, string>, token: string, s
   if (!reference) return value;
   seen.add(token);
   return resolveCustomProperty(properties, reference[1], seen);
+}
+
+function readRule(source: string, selector: string) {
+  const rule = source.match(new RegExp(`${escapeRegExp(selector)}\\s*\\{([\\s\\S]*?)\\}`));
+  assert(rule, `Missing ${selector} rule`);
+  return rule[1];
 }
 
 function parseCssColor(value: string, label: string): Rgb {
@@ -108,6 +116,15 @@ assert(css.includes("focus-visible"), "Visible focus styles are missing");
 assert(css.includes("min-height: 2.75rem"), "44px interactive target baseline is missing");
 assert(css.includes("@media (prefers-reduced-motion: reduce)"), "Reduced-motion media query is missing");
 
+for (const selector of [".director-scene-button", ".director-text-link"]) {
+  const rule = readRule(motionDirectorCss, selector);
+  assert(/min-height\s*:\s*44px\s*;/.test(rule), `${selector} must keep a 44px target height`);
+}
+
+const labStatusRule = readRule(motionDirectorCss, ".blueprint-lab-status");
+assert(/color\s*:\s*var\(--director-lab-status-ink\)\s*;/.test(labStatusRule), "Blueprint lab status must use its theme-aware foreground token");
+assert(/background\s*:\s*var\(--director-lab-status-surface\)\s*;/.test(labStatusRule), "Blueprint lab status must use its theme-aware surface token");
+
 const lightProperties = readCustomProperties(":root");
 const darkProperties = new Map(lightProperties);
 for (const [token, value] of readCustomProperties(":root.dark")) {
@@ -124,7 +141,8 @@ const contrastChecks: Array<[string, string, string, number]> = [
   ["primary action text", "--apple-action-fg", "--apple-action-bg", WCAG_AA_NORMAL_TEXT],
   ["primary action hover text", "--apple-action-fg", "--apple-action-hover", WCAG_AA_NORMAL_TEXT],
   ["code text", "--code-text", "--code", WCAG_AA_NORMAL_TEXT],
-  ["focus indicator", "--accent", "--bg", WCAG_AA_LARGE_TEXT_OR_UI]
+  ["focus indicator", "--accent", "--bg", WCAG_AA_LARGE_TEXT_OR_UI],
+  ["Motion Blueprint lab status", "--director-lab-status-ink", "--director-lab-status-surface", WCAG_AA_NORMAL_TEXT]
 ];
 
 const results: string[] = [];
