@@ -34,7 +34,7 @@ test("landing page exposes GitHub, Motion Director, Skill, and versioned public 
   expect(motionGrammarResponse.ok()).toBe(true);
   await expect(motionGrammarResponse.json()).resolves.toMatchObject({
     kind: "motion-grammar",
-    version: "2.0.0",
+    version: "2.0.1",
     grammar: { collections: { primitives: { count: 44 }, moments: { count: 28 } } },
     modes: expect.arrayContaining([
       expect.objectContaining({ id: "recommend" }),

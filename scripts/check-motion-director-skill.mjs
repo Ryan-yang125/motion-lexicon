@@ -19,6 +19,7 @@ const requiredFiles = [
   "skills/motion-lexicon/assets/motion-blueprint.schema.json",
   "skills/motion-lexicon/assets/example-motion-blueprint.json",
   "skills/motion-lexicon/assets/candidate-template.md",
+  "skills/motion-lexicon/THIRD_PARTY_NOTICES.md",
   "skills/motion-lexicon/scripts/validate-motion-blueprint.mjs",
   "skills/motion-lexicon/evals/evals.json",
   "skills/motion-lexicon/evals/trigger-evals.json",
@@ -146,6 +147,9 @@ const validateBlueprint = (blueprint, pathLabel) => {
 
 const validateSkillDocument = () => {
   const skillText = readText(path.join(skillDirectory, "SKILL.md"));
+  const validatorText = readText(path.join(skillDirectory, "scripts", "validate-motion-blueprint.mjs"));
+  const thirdPartyNotices = readText(path.join(skillDirectory, "THIRD_PARTY_NOTICES.md"));
+  const packageManifest = JSON.parse(readText(path.join(repositoryRoot, "package.json")));
   const requiredHeadings = ["## Recommend", "## Compose", "## Implement", "## Review", "## Contribute"];
   for (const heading of requiredHeadings) {
     if (!skillText.includes(heading)) {
@@ -157,6 +161,20 @@ const validateSkillDocument = () => {
   for (const pattern of legacyReferences) {
     if (pattern.test(skillText)) {
       fail(`SKILL.md includes a retired public-command dependency: ${pattern}.`);
+    }
+  }
+
+  if (/^\s*import\s+.+?\s+from\s+["'](?:ajv|ajv\/)/m.test(validatorText)) {
+    fail("Motion Blueprint validator must bundle its schema runtime for standalone Skill installs.");
+  }
+
+  if (packageManifest.dependencies?.ajv || !packageManifest.devDependencies?.ajv) {
+    fail("Ajv must remain a development dependency because the installed Skill carries its own validator runtime.");
+  }
+
+  for (const signal of ["Ajv", "fast-deep-equal", "fast-uri", "json-schema-traverse", "MIT License", "BSD 3-Clause License"]) {
+    if (!thirdPartyNotices.includes(signal)) {
+      fail(`Motion Blueprint third-party notices need the ${signal} attribution.`);
     }
   }
 

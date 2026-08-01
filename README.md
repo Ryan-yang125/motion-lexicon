@@ -155,7 +155,7 @@ runtime.
 
 ## V2.0 snapshot
 
-**V2.0.0 brings Motion Director into the product.** Product Moments, Motion
+**V2.0.1 brings Motion Director into the product.** Product Moments, Motion
 Primitives, the bilingual vocabulary, the public Motion Grammar, and the Agent
 Skill now form one content-and-creation system. The browser remains the visual
 reference; Motion Director carries the same decisions into active product work.

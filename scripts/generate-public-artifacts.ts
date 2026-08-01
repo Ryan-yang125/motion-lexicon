@@ -28,7 +28,7 @@ const motionBlueprintSchemaPath = path.join(
 );
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const releaseVersion = "2.0.0";
+const releaseVersion = "2.0.1";
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 const motionBlueprintSchemaDataPath = "/data/v2/motion-blueprint.schema.json";
 

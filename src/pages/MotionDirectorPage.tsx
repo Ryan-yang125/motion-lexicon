@@ -55,7 +55,6 @@ type DirectorCopy = {
   trigger: string;
   context: string;
   statusDraft: string;
-  statusLive: string;
 };
 
 const copy: Record<Locale, DirectorCopy> = {
@@ -94,8 +93,7 @@ const copy: Record<Locale, DirectorCopy> = {
     reducedMotion: "减弱动效",
     trigger: "触发",
     context: "向两位审批人发送请求",
-    statusDraft: "草稿",
-    statusLive: "已上线"
+    statusDraft: "草稿"
   },
   en: {
     eyebrow: "Motion Director · Agent Skill",
@@ -132,8 +130,7 @@ const copy: Record<Locale, DirectorCopy> = {
     reducedMotion: "Reduced motion",
     trigger: "Trigger",
     context: "Send a request to two approvers",
-    statusDraft: "Draft",
-    statusLive: "Live"
+    statusDraft: "Draft"
   }
 };
 
@@ -142,10 +139,14 @@ const skillUrl = `${repositoryUrl}/tree/main/skills/motion-lexicon`;
 
 type BlueprintSceneProps = {
   labels: DirectorCopy;
+  locale: Locale;
 };
 
-function BlueprintScene({ labels }: BlueprintSceneProps) {
+function BlueprintScene({ labels, locale }: BlueprintSceneProps) {
   const [state, setState] = useState<"ready" | "sending" | "awaiting">("ready");
+  const awaitingLabel = motionBlueprintExample.stateGraph.find(
+    (blueprintState) => blueprintState.id === "awaiting"
+  )?.label[locale] ?? labels.statusDraft;
 
   useEffect(() => {
     if (state !== "sending") return;
@@ -177,7 +178,7 @@ function BlueprintScene({ labels }: BlueprintSceneProps) {
             </span>
             <span className="director-scene-record-status" aria-live="polite">
               <i aria-hidden="true" />
-              {state === "awaiting" ? labels.statusLive : labels.statusDraft}
+              {state === "awaiting" ? awaitingLabel : labels.statusDraft}
             </span>
           </div>
           <div className="director-scene-summary" aria-hidden="true">
@@ -264,7 +265,7 @@ export function MotionDirectorPage({ locale }: { locale: Locale }) {
               <h2>{labels.sceneTitle}</h2>
               <p>{labels.sceneDescription}</p>
             </div>
-            <BlueprintScene labels={labels} />
+            <BlueprintScene labels={labels} locale={locale} />
           </div>
         </section>
 
