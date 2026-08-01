@@ -6,14 +6,16 @@
 - Billing: None
 - Account required: No
 - Website: https://motion-lexicon.pages.dev
-- Release: 1.2.0
+- Release: 2.0.0
 - Product Moments: https://motion-lexicon.pages.dev/en/packs/
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
-- CLI: npx -y github:Ryan-yang125/motion-lexicon#v1.2.0
+- Motion Director: https://motion-lexicon.pages.dev/en/director/
+- Motion Grammar: https://motion-lexicon.pages.dev/data/v2/motion-grammar.json
+- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json
 - Agent Skill: npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Code license: MIT
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
-- Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
+- Usage: The public static website and Motion Director Skill are available without an account.
 - Last updated: 2026-08-01

@@ -63,7 +63,7 @@ export const resources = {
         searchPlaceholder: "搜索 fade、slide、stagger、press"
       },
       landing: {
-        heroStatus: "Motion Lexicon V1.2 · 免费开源",
+        heroStatus: "Motion Lexicon V2.0 · 免费开源",
         heroTitle: "产品瞬间与动效基础，\n都能直接带走。",
         heroCopy: "从完整交互或底层动作开始，预览、调节并复制产品动效。",
         openFinder: "开始描述动效",
@@ -281,7 +281,7 @@ export const resources = {
         searchPlaceholder: "Search fade, slide, stagger, press"
       },
       landing: {
-        heroStatus: "Motion Lexicon V1.2 · free and open source",
+        heroStatus: "Motion Lexicon V2.0 · free and open source",
         heroTitle: "Product moments and motion primitives,\nready to take with you.",
         heroCopy: "Start with a complete interaction or a foundational behavior, then preview, tune, and copy product motion.",
         openFinder: "Describe your motion",

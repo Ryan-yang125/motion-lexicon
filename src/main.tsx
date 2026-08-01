@@ -11,6 +11,7 @@ import "./vocabulary.css";
 import "./apple-redesign.css";
 import "./interior-theme.css";
 import "./motion-packs.css";
+import "./pages/motion-director.css";
 import "./components/motion-pack-preview.css";
 
 const helmetModule = helmetAsync as typeof helmetAsync & Record<string, typeof helmetAsync | undefined>;

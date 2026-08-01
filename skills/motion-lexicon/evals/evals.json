@@ -1,48 +1,482 @@
 {
   "skill_name": "motion-lexicon",
+  "version": "2.0",
   "evals": [
     {
-      "id": 1,
-      "prompt": "我希望这张卡片先切入进来，然后慢慢停下来。帮我选一个合适的动效，并给我可以直接交给编码 Agent 的 Prompt。",
-      "expected_output": "Should run the pinned v1.2.0 recommend command in zh with JSON output, preserve the three ranked candidates and their CLI-provided reasons, provide the localized compare URL, select or confirm one candidate, inspect it with show, and obtain the final prompt through export. The answer should include the selected variant and canonical IDs, parameter values, and reduced-motion treatment.",
+      "id": "zh-recommend-card-arrival",
+      "mode": "recommend",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "我有一张任务卡要在用户点开项目后出现。希望它有一点切入感，最后停得很干净。给我三种选择并挑一个。",
+      "expected_output": "A concise ranked motion recommendation for a card arrival with one selected option and accessible timing guidance.",
       "assertions": [
-        "Runs npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend with --locale zh --format json",
-        "Presents three candidates in the CLI-provided rank order",
-        "Includes a CLI-provided reason for each candidate",
-        "Returns the localized compareUrl from the recommendation document",
-        "Uses show on the selected variantId before implementation",
-        "Uses export with --format prompt for the requested Prompt",
-        "Includes resolved parameter values and reduced-motion guidance"
+        "Returns at most three candidates with product-facing distinctions",
+        "Selects one candidate with trigger, timing, and easing",
+        "Uses an arrival treatment within the documented range",
+        "Includes a reduced-motion treatment"
       ],
       "files": []
     },
     {
-      "id": 2,
-      "prompt": "The thumbnail should leave and the detail view should feel like the same object continuing in space. Compare the closest motion patterns and give me the best live reference.",
-      "expected_output": "Should treat the request as fuzzy intent, run recommend in English, and report the returned Top 3 with reasons and distinctions. It should preserve aliases or presets in variantId while using canonicalId for inspection, return the compare URL, then use show for the chosen candidate and include the preview URL plus reduced-motion guidance.",
+      "id": "zh-compose-card-to-detail",
+      "mode": "compose",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "用户在项目列表点一张卡后进入详情页。我想让他一直知道自己点的是哪张卡，详情页还要有最近活动。帮我做一个完整动效方案。",
+      "expected_output": "A Motion Blueprint for card selection to detail, preserving identity and staging supporting activity after the primary actor settles.",
       "assertions": [
-        "Runs the pinned v1.2.0 recommend command with --locale en --format json",
-        "Reports exactly three ranked candidates when the CLI returns three",
-        "Preserves variantId separately from canonicalId",
-        "Includes CLI-provided distinctions when present",
-        "Returns compareUrl unchanged",
-        "Runs show for the chosen variantId",
-        "Includes the chosen previewUrl and reduced-motion guidance"
+        "Includes a state graph with selection and detail states",
+        "Names one primary card actor, focused supporting actors, and semantic actor kinds",
+        "Uses shared-element continuity or a deliberate equivalent",
+        "Defines focus and reduced-motion behavior"
       ],
       "files": []
     },
     {
-      "id": 3,
-      "prompt": "I already know the term is shared element. Resolve the exact Motion Lexicon entry, set any preset it requires, and export a portable bundle.",
-      "expected_output": "Should preserve exact-search compatibility by using search for the explicit term, resolve the returned alias or canonical entry with show, preserve any CLI-provided preset query and values, and generate the bundle with export. The answer should name both the requested term and canonical ID and include the live preview plus reduced-motion treatment.",
+      "id": "zh-compose-async-save-failure",
+      "mode": "compose",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "编辑器保存时有网络请求，偶尔失败。用户连续点保存也很常见。请把成功、失败、重试和快速重复点击都设计进去。",
+      "expected_output": "A stateful async save Blueprint covering pending, success, failure, retry, and repeated input.",
       "assertions": [
-        "Runs npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 search for shared element with JSON output",
-        "Uses the CLI-provided canonical ID",
-        "Runs show before export",
-        "Preserves presetQuery and preset values when provided",
-        "Runs export with --format bundle",
-        "Names the requested term and canonical recipe ID",
-        "Includes the localized preview URL and reduced-motion guidance"
+        "Contains pending, success, failure, and recovery states",
+        "Defines an interruption policy for repeated save input",
+        "Keeps status near the initiating control or changed record",
+        "Includes aria-live and focus guidance"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-compose-archive-undo",
+      "mode": "compose",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "用户把一条任务归档后，会出现撤销。列表经常很长，不能让周围内容乱跳。给我一个归档撤销的产品瞬间。",
+      "expected_output": "A reversible archive Moment that preserves list geometry and makes undo immediately reachable.",
+      "assertions": [
+        "Uses a clear archive to undo state sequence",
+        "Plans reserved layout or a stable proxy for the row",
+        "Keeps the undo action in the local context",
+        "Defines reduced-motion and keyboard behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-compose-high-frequency-filter",
+      "mode": "compose",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "我们的筛选器用户会快速连续点，结果列表每次都更新。我希望动效有节奏但始终跟得上最新选择。",
+      "expected_output": "A filter-results design that treats the latest selection as authoritative and avoids queued visual backlog.",
+      "assertions": [
+        "Uses a replace or settle policy for rapid input",
+        "Keeps the filter control as a stable anchor",
+        "Uses compact group sequencing only when it supports result order",
+        "Defines a final state for reduced motion"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-recommend-reduced-motion",
+      "mode": "recommend",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "同一个卡片切入，我需要兼顾喜欢动效的人和开启减少动态效果的人。应该怎么选？",
+      "expected_output": "A recommendation that differentiates standard and reduced-motion behavior while preserving state meaning.",
+      "assertions": [
+        "Recommends a standard arrival primitive",
+        "Explains the reduced-motion final-state treatment",
+        "Preserves status and focus semantics",
+        "Keeps the comparison concise"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-review-layout-jank",
+      "mode": "review",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "帮我 review 这段交互：保存后按钮文案从“保存”变成“已保存”，宽度跟着变，右边的操作每次都抖一下。动画用 transition: all 0.5s。",
+      "expected_output": "A prioritized review that identifies layout shift and broad property transitions, then proposes stable replacement behavior.",
+      "assertions": [
+        "Flags layout stability as critical or important",
+        "Explains a reserved-width or stable-wrapper fix",
+        "Replaces broad transition behavior with focused properties",
+        "Suggests a shorter feedback timing range"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-review-preview-flash",
+      "mode": "review",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "动效库卡片平时显示一张预览图，鼠标 hover 后换成真实 DOM 动画，第一帧会闪白。请 review 根因和修复顺序。",
+      "expected_output": "A review centered on first-frame continuity, stable DOM, and compositor-friendly hover behavior.",
+      "assertions": [
+        "Identifies preview swap or first-frame mismatch as a likely cause",
+        "Proposes a stable live DOM structure before hover",
+        "Uses opacity and transform for hover motion",
+        "Includes a verification plan for rapid hover changes"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-implement-status-css",
+      "mode": "implement",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "给我写一个纯 HTML、CSS、JS 的复制链接反馈。点击后按钮保持宽度，显示“已复制”，1.5 秒后回到初始状态，减少动态效果时直接切状态。",
+      "expected_output": "Portable semantic HTML, CSS, and JavaScript for a stable copy confirmation interaction.",
+      "assertions": [
+        "Delivers HTML, CSS, and JS sections",
+        "Uses a state attribute or equivalent state source",
+        "Reserves button or status geometry",
+        "Includes a prefers-reduced-motion branch"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-implement-react-command-menu",
+      "mode": "implement",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "我们是 React，点击 Command 按钮后弹出命令菜单，Esc 关闭，焦点进入菜单，打开和关闭的节奏要像一个真实产品。请写出核心实现。",
+      "expected_output": "A React-focused implementation plan and core code for an accessible, event-driven command menu.",
+      "assertions": [
+        "Models open and closed state explicitly",
+        "Includes Escape and focus handling",
+        "Uses arrival and leaving motion with documented timing",
+        "Includes a reduced-motion branch"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-contribute-primitive-candidate",
+      "mode": "contribute",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "我想把“选中对象进入详情时保留身份”做成一个新基础动效。帮我整理成候选，需要哪些证据？",
+      "expected_output": "A primitive-candidate record plan with three independent scenes and a Motion Blueprint requirement.",
+      "assertions": [
+        "Classifies the proposal as a primitive candidate",
+        "Requests three independent product scenes",
+        "Requires comparison with shared-element or related foundations",
+        "Keeps status at candidate for maintainer review"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-contribute-preset-promotion",
+      "mode": "contribute",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "我们已经有保存成功动效，现在发现桌面端和移动端节奏不同。我想提一个预设版本，怎样判断它能进入词典？",
+      "expected_output": "A preset contribution path that distinguishes controlled parameter variation from a new primitive.",
+      "assertions": [
+        "Classifies the proposal as a preset when behavior remains invariant",
+        "Requests parent pattern and changed timing values",
+        "Includes device context and reduced-motion plan",
+        "Keeps publication subject to maintainer review"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-recommend-exact-shared-element",
+      "mode": "recommend",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "shared element 和 morph 我总是分不清。一个商品缩略图进入详情页该用哪个？",
+      "expected_output": "A focused distinction between shared-element continuity and morph, with a recommendation for a product thumbnail to detail.",
+      "assertions": [
+        "Explains the identity-continuity distinction",
+        "Selects shared element for a persistent thumbnail identity",
+        "Includes concise timing guidance",
+        "Mentions reduced-motion behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-compose-stagger-list",
+      "mode": "compose",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "新建项目后有 6 条任务自动出现，我想让它们有顺序感，但用户很快就会继续操作。请设计这段列表进入。",
+      "expected_output": "A compact stagger composition with bounded timing and an interruption-ready final state.",
+      "assertions": [
+        "Uses a bounded stagger interval",
+        "Keeps the entire group within a short perceptible window",
+        "Defines interaction behavior during the sequence",
+        "Provides a direct reduced-motion result"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-review-direct-manipulation",
+      "mode": "review",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "Kanban 卡片拖到另一列后，我们让它先飞到上方再落下，用户会觉得自己拖的卡片丢了。请 review。",
+      "expected_output": "A review that restores direct-manipulation continuity and a coherent drop settle.",
+      "assertions": [
+        "Identifies lost primary-actor continuity",
+        "Recommends tracking the dragged card or a visual proxy",
+        "Uses a short settle after the drop",
+        "Covers keyboard drag and reduced motion"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-negative-copy-edit",
+      "mode": "negative-trigger",
+      "locale": "zh",
+      "shouldUseSkill": false,
+      "prompt": "把这个按钮文案从“开始体验”改成“免费开始”。",
+      "expected_output": "A concise copy-edit response without a motion-design workflow.",
+      "assertions": [
+        "Keeps shouldUseSkill false",
+        "Avoids a Motion Blueprint",
+        "Returns only the requested copy revision"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-recommend-toast-arrival",
+      "mode": "recommend",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "A share confirmation should appear near the trigger. I want it to feel quick and grounded, with a clear resting state. Give me three options and pick one.",
+      "expected_output": "A ranked recommendation for local confirmation feedback with one selected approach.",
+      "assertions": [
+        "Returns at most three candidates with product distinctions",
+        "Selects one option with timing and easing",
+        "Keeps the primary actor close to the trigger",
+        "Includes reduced-motion behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-compose-thumbnail-to-player",
+      "mode": "compose",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "When someone opens a video from a media grid, the thumbnail should carry their attention into the player while the metadata arrives afterward. Compose the full interaction.",
+      "expected_output": "A Motion Blueprint for a media thumbnail to player flow with a clear primary actor and delayed supporting metadata.",
+      "assertions": [
+        "Includes a state graph plus actors with primary/supporting roles and semantic kinds",
+        "Uses continuity for the selected media object",
+        "Stages metadata after the primary actor settles",
+        "Defines focus and reduced-motion behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-compose-async-upload-failure",
+      "mode": "compose",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Design an upload interaction where progress is real, a network failure can happen, retry is available, and people often click away while it is running.",
+      "expected_output": "A truthful progress composition with failure, retry, and navigation continuity.",
+      "assertions": [
+        "Separates measured progress from decorative timing",
+        "Includes failure and retry states",
+        "Defines behavior when navigation occurs during work",
+        "Preserves status in reduced motion"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-compose-delete-undo",
+      "mode": "compose",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "A person deletes a comment from a busy discussion. They should get an undo affordance without the thread jumping around. Build the product moment.",
+      "expected_output": "A delete-to-undo Blueprint that keeps the discussion geometry stable and preserves agency.",
+      "assertions": [
+        "Maps delete, undo, and terminal states",
+        "Preserves local layout stability",
+        "Places undo in the affected context",
+        "Covers keyboard and reduced motion"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-compose-high-frequency-search",
+      "mode": "compose",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Search suggestions update on every keystroke. The list should feel responsive even when results arrive out of order. Compose the behavior.",
+      "expected_output": "A state plan that prioritizes current input, handles stale results, and keeps suggestions usable.",
+      "assertions": [
+        "Defines a current-query source of truth",
+        "Handles out-of-order responses coherently",
+        "Keeps list motion compact and interruptible",
+        "Includes keyboard focus behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-recommend-reduced-motion-dialog",
+      "mode": "recommend",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "How should a command dialog open for people who prefer reduced motion while still making focus and hierarchy clear?",
+      "expected_output": "A dialog recommendation that pairs standard arrival with a reduced-motion focus-safe alternative.",
+      "assertions": [
+        "Chooses an event-driven dialog entrance",
+        "Explains a reduced-motion final-state or compact crossfade path",
+        "Moves focus into the dialog",
+        "Mentions Escape or close behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-review-heavy-properties",
+      "mode": "review",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Review this: a card transition animates top, left, width, box-shadow, and filter for 700ms. On a low-end laptop it stutters and the click target drifts.",
+      "expected_output": "A performance and interaction review with a compositor-friendly redesign path.",
+      "assertions": [
+        "Flags layout and paint-heavy animated properties",
+        "Recommends transform and opacity or a stable proxy",
+        "Addresses click target stability",
+        "Proposes a shorter event-appropriate timing"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-review-state-overload",
+      "mode": "review",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Our checkout success view animates confetti, a card bounce, an icon spin, a price count-up, and three staggered links at once. It feels busy. Review it.",
+      "expected_output": "A review that reduces competing actors and gives the primary confirmation a clear hierarchy.",
+      "assertions": [
+        "Identifies competing visual actors",
+        "Recommends one primary confirmation actor",
+        "Sequences or removes supporting changes with a product purpose",
+        "Preserves accessible completion status"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-implement-html-css-js-progress",
+      "mode": "implement",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Write a portable HTML, CSS, and JavaScript upload row with real progress, a retry state, and a reduced-motion path. Keep the row height stable.",
+      "expected_output": "A complete portable implementation with semantic status, state-driven visuals, and stable geometry.",
+      "assertions": [
+        "Delivers HTML, CSS, and JS sections",
+        "Uses state-driven progress and retry behavior",
+        "Reserves row geometry across statuses",
+        "Includes reduced-motion and aria-live handling"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-implement-react-selection",
+      "mode": "implement",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "In React, implement a selectable project card that opens a side inspector. Preserve the selected card identity, support Escape, and keep motion interruption-safe.",
+      "expected_output": "A React implementation outline and core code for selection, inspector transition, focus, and interruption.",
+      "assertions": [
+        "Models selection and inspector state explicitly",
+        "Preserves primary card continuity or a visual proxy",
+        "Includes Escape and focus behavior",
+        "Includes an interruption and reduced-motion policy"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-contribute-primitive-candidate",
+      "mode": "contribute",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "I want to propose a reusable “status becomes action” primitive where a completed operation reveals the next step in the same control. What evidence does a candidate need?",
+      "expected_output": "A primitive candidate plan with three scenes, state evidence, and closest-library comparison.",
+      "assertions": [
+        "Classifies the proposal as a primitive candidate",
+        "Requests three independent product scenes",
+        "Requires a complete Blueprint and portable implementation",
+        "Keeps the proposal at candidate status"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-contribute-moment-promotion",
+      "mode": "contribute",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "We have an internal payment confirmation flow used in production. I want to promote it into a Product Moment. Help me prepare the candidate record.",
+      "expected_output": "A Moment candidate record plan with state graph, evidence, accessibility, and maintainer review status.",
+      "assertions": [
+        "Classifies the proposal as a Moment candidate",
+        "Requests success, failure, and recovery behavior",
+        "Requires reduced-motion and keyboard evidence",
+        "Keeps public publication for maintainer approval"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-recommend-exact-morph",
+      "mode": "recommend",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "A compact filter chip expands into an inline filter editor in the same toolbar. Should I use a morph, reveal, or shared element?",
+      "expected_output": "A precise comparison that selects the behavior matching a component changing role in place.",
+      "assertions": [
+        "Compares morph, reveal, and shared-element in product terms",
+        "Selects a component-in-place transition when appropriate",
+        "Includes timing and transform-origin guidance",
+        "Includes reduced-motion behavior"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-compose-stagger-sequence",
+      "mode": "compose",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "After a new workspace is created, six setup tasks arrive. People may click the first task immediately. Compose a sequence that communicates order and remains interactive.",
+      "expected_output": "A bounded stagger plan where a user action can interrupt or settle the group coherently.",
+      "assertions": [
+        "Uses a short stagger interval",
+        "Keeps the first task actionable during the sequence",
+        "Defines repeat or click interruption behavior",
+        "Includes an immediate reduced-motion result"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-review-async-race",
+      "mode": "review",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "A person toggles a task complete, quickly toggles it back, then the first request resolves late and plays the success animation again. Review the interaction race.",
+      "expected_output": "A review that connects visual state to current product state and handles stale async completions.",
+      "assertions": [
+        "Identifies stale async completion as a cause",
+        "Uses a current intent or request version policy",
+        "Cancels or settles obsolete animation",
+        "Preserves clear accessible status"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-negative-data-table",
+      "mode": "negative-trigger",
+      "locale": "en",
+      "shouldUseSkill": false,
+      "prompt": "Can you add a sortable revenue column to this CSV and calculate the monthly total?",
+      "expected_output": "A data-processing response without a motion-design workflow.",
+      "assertions": [
+        "Keeps shouldUseSkill false",
+        "Avoids a Motion Blueprint",
+        "Focuses on the requested data task"
       ],
       "files": []
     }

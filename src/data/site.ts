@@ -39,7 +39,13 @@ export function switchLocalePath(pathname: string, nextLocale: Locale) {
 }
 
 export function getStaticPaths() {
-  return sitemapPaths();
+  const paths = new Set(sitemapPaths());
+
+  for (const locale of ["zh", "en"] as const) {
+    paths.add(pathFor(locale, ["lab", "motion-blueprints"]));
+  }
+
+  return Array.from(paths);
 }
 
 export function sitemapPaths() {
@@ -51,6 +57,7 @@ export function sitemapPaths() {
     paths.add(pathFor(locale, ["finder"]));
     paths.add(pathFor(locale, ["vocabulary"]));
     paths.add(pathFor(locale, ["packs"]));
+    paths.add(pathFor(locale, ["director"]));
 
     for (const pack of motionPacks) {
       paths.add(pathFor(locale, ["packs", pack.id]));
@@ -93,6 +100,9 @@ export function staticRedirects(): StaticRedirect[] {
     const primaryPlaygroundPath = pathFor(locale, ["easing", "easing"]);
     add(pathFor(locale, ["playground"]), primaryPlaygroundPath);
     add(pathFor(locale, ["playground"]).replace(/\/$/, ""), primaryPlaygroundPath);
+
+    const blueprintLabPath = pathFor(locale, ["lab", "motion-blueprints"]);
+    add(blueprintLabPath.replace(/\/$/, ""), blueprintLabPath);
 
     for (const alias of aliasMetadata) {
       const source = pathFor(locale, alias.sourcePath.split("/").filter(Boolean));

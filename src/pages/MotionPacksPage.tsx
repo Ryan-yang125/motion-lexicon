@@ -11,7 +11,7 @@ import { publisherStructuredData } from "../lib/structured-data";
 export function MotionPacksPage({ locale }: { locale: Locale }) {
   const labels = locale === "zh"
     ? {
-        status: "Motion Lexicon V1.2 · 28 个产品瞬间",
+        status: "Motion Lexicon V2.0 · 28 个产品瞬间",
         title: "一段完整交互，直接带进你的界面。",
         copy: "每个 Motion Pack 都是一段完整交互：亲手触发，查看状态，再复制 HTML、CSS 和 JavaScript。",
         browse: "浏览 28 个产品瞬间",
@@ -23,7 +23,7 @@ export function MotionPacksPage({ locale }: { locale: Locale }) {
         finderAction: "打开 Finder"
       }
     : {
-        status: "Motion Lexicon V1.2 · 28 product moments",
+        status: "Motion Lexicon V2.0 · 28 product moments",
         title: "Bring a complete interaction into your interface.",
         copy: "Each Motion Pack is a complete interaction to trigger, inspect, and copy as HTML, CSS, and JavaScript.",
         browse: "Explore 28 product moments",

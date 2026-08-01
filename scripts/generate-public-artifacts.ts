@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,18 +7,30 @@ import { glossaryTerms } from "../src/data/glossary";
 import { motionPackGroups, motionPacks } from "../src/data/motion-packs";
 import { getMotionGuidance } from "../src/data/motion-guidance";
 import { getMotionSpec } from "../src/data/motion-specs";
+import {
+  motionBlueprintExample,
+  motionDirectorModes,
+  motionGrammar,
+  motionGrammarDataPath
+} from "../src/data/motion-grammar";
 import { canonicalMotionCatalog, catalogRecipes } from "../src/data/recipes";
 import { pathFor, siteUrl } from "../src/data/site";
 import type { Locale, MotionParam } from "../src/data/types";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = path.join(rootDir, "public");
+const motionBlueprintSchemaPath = path.join(
+  rootDir,
+  "skills",
+  "motion-lexicon",
+  "assets",
+  "motion-blueprint.schema.json"
+);
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const releaseVersion = "1.2.0";
-const cliCommand = `npx -y github:Ryan-yang125/motion-lexicon#v${releaseVersion}`;
-const cliRecommendCommand = `${cliCommand} recommend "describe the motion you want" --locale en --format json`;
+const releaseVersion = "2.0.0";
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
+const motionBlueprintSchemaDataPath = "/data/v2/motion-blueprint.schema.json";
 
 type Artifact = {
   relativePath: string;
@@ -166,8 +179,9 @@ function catalogArtifact() {
       siteUrl,
       repositoryUrl,
       locales: ["zh", "en"],
-      cliCommand,
-      skillCommand
+      skillCommand,
+      motionGrammarData: `${siteUrl}${motionGrammarDataPath}`,
+      motionBlueprintSchemaData: `${siteUrl}${motionBlueprintSchemaDataPath}`
     },
     endpoints: {
       finder: {
@@ -177,6 +191,10 @@ function catalogArtifact() {
       packs: {
         zh: absoluteUrl(pathFor("zh", ["packs"])),
         en: absoluteUrl(pathFor("en", ["packs"]))
+      },
+      director: {
+        zh: absoluteUrl(pathFor("zh", ["director"])),
+        en: absoluteUrl(pathFor("en", ["director"]))
       },
       productMoments: {
         zh: absoluteUrl(pathFor("zh", ["packs"])),
@@ -192,6 +210,8 @@ function catalogArtifact() {
       vocabulary: `${siteUrl}/data/v1/vocabulary.json`,
       recipeTemplate: `${siteUrl}/data/v1/recipes/{id}.json`,
       schema: `${siteUrl}/data/v1/schema.json`,
+      motionGrammar: `${siteUrl}${motionGrammarDataPath}`,
+      motionBlueprintSchema: `${siteUrl}${motionBlueprintSchemaDataPath}`,
       pricing: `${siteUrl}/pricing.txt`,
       llms: `${siteUrl}/llms.txt`,
       llmsFull: `${siteUrl}/llms-full.txt`
@@ -300,6 +320,32 @@ function vocabularyArtifact() {
       };
     })
   };
+}
+
+function motionGrammarArtifact() {
+  return {
+    kind: "motion-grammar",
+    version: motionGrammar.version,
+    project: {
+      name: "Motion Lexicon",
+      releaseVersion,
+      siteUrl,
+      repositoryUrl,
+      skillCommand
+    },
+    urls: {
+      zh: absoluteUrl(pathFor("zh", ["director"])),
+      en: absoluteUrl(pathFor("en", ["director"]))
+    },
+    blueprintSchema: `${siteUrl}${motionBlueprintSchemaDataPath}`,
+    grammar: motionGrammar,
+    modes: motionDirectorModes,
+    examples: [motionBlueprintExample.contract]
+  };
+}
+
+function motionBlueprintSchemaArtifact() {
+  return JSON.parse(readFileSync(motionBlueprintSchemaPath, "utf8")) as unknown;
 }
 
 const localizedTextSchema = {
@@ -685,6 +731,10 @@ function llmsArtifact() {
     `- Chinese website: ${siteUrl}/zh/`,
     `- Motion Finder: ${siteUrl}/en/finder/`,
     `- 中文动效选择器: ${siteUrl}/zh/finder/`,
+    `- Motion Director: ${siteUrl}/en/director/`,
+    `- Motion Director 中文: ${siteUrl}/zh/director/`,
+    `- Motion Grammar JSON: ${siteUrl}${motionGrammarDataPath}`,
+    `- Motion Blueprint schema: ${siteUrl}${motionBlueprintSchemaDataPath}`,
     `- Product Moments: ${siteUrl}/en/packs/`,
     `- Product Moments JSON: ${siteUrl}/data/v1/packs.json`,
     `- Motion Primitives: ${siteUrl}/en/catalog/`,
@@ -695,13 +745,11 @@ function llmsArtifact() {
     `- JSON Schema: ${siteUrl}/data/v1/schema.json`,
     `- Full machine-readable text: ${siteUrl}/llms-full.txt`,
     "",
-    "## Free tools",
+    "## Motion Director",
     "",
-    `- CLI: \`${cliCommand}\``,
-    `- Motion Primitives: \`${cliCommand} list --locale en --format json\``,
-    `- Product Moments: \`${cliCommand} packs --locale en --format json\``,
-    `- Fuzzy recommendation: \`${cliRecommendCommand}\``,
     `- Agent Skill: \`${skillCommand}\``,
+    "- Modes: Recommend, Compose, Implement, Review, Contribute",
+    "- Delivery: semantic HTML, CSS, and small interaction JavaScript",
     "",
     "## Product Moments",
     "",
@@ -740,13 +788,15 @@ function pricingArtifact() {
 - Release: ${releaseVersion}
 - Product Moments: ${siteUrl}/en/packs/
 - Motion Primitives: ${siteUrl}/en/catalog/
-- CLI: ${cliCommand}
+- Motion Director: ${siteUrl}/en/director/
+- Motion Grammar: ${siteUrl}${motionGrammarDataPath}
+- Motion Blueprint schema: ${siteUrl}${motionBlueprintSchemaDataPath}
 - Agent Skill: ${skillCommand}
 - Source: ${repositoryUrl}
 - Code license: MIT
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
-- Usage: The public static website is available without an account. The CLI and Agent Skill run locally.
+- Usage: The public static website and Motion Director Skill are available without an account.
 - Last updated: 2026-08-01
 `;
 }
@@ -833,6 +883,8 @@ export function buildPublicArtifacts(): Artifact[] {
     jsonArtifact("data/v1/catalog.json", catalogArtifact()),
     jsonArtifact("data/v1/packs.json", motionPacksArtifact()),
     jsonArtifact("data/v1/vocabulary.json", vocabularyArtifact()),
+    jsonArtifact(motionGrammarDataPath.replace(/^\//, ""), motionGrammarArtifact()),
+    jsonArtifact(motionBlueprintSchemaDataPath.replace(/^\//, ""), motionBlueprintSchemaArtifact()),
     ...catalogRecipes.map((recipe) =>
       jsonArtifact(`data/v1/recipes/${recipe.id}.json`, recipeArtifact(recipe.id))
     )

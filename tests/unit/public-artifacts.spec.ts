@@ -45,6 +45,7 @@ describe("public machine-readable artifacts", () => {
       endpoints: {
         productMoments: { zh: string; en: string };
         motionPrimitives: { zh: string; en: string };
+        motionBlueprintSchema: string;
       };
     };
     const vocabulary = await parseArtifact("data/v1/vocabulary.json") as unknown as {
@@ -71,6 +72,9 @@ describe("public machine-readable artifacts", () => {
     );
     expect(catalog.endpoints.productMoments.en).toBe("https://motion-lexicon.pages.dev/en/packs/");
     expect(catalog.endpoints.motionPrimitives.en).toBe("https://motion-lexicon.pages.dev/en/catalog/");
+    expect(catalog.endpoints.motionBlueprintSchema).toBe(
+      "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json"
+    );
     expect(vocabulary).toMatchObject({ count: 91, canonicalCount: 44, aliasCount: 47 });
     expect(vocabulary.terms).toHaveLength(91);
     expect(new Set(vocabulary.terms.map((term) => term.id)).size).toBe(91);
@@ -160,32 +164,104 @@ describe("public machine-readable artifacts", () => {
     }
   });
 
-  it("advertises the free CLI and Agent Skill in both LLM indexes", async () => {
-    const expectedCommands = [
-      "npx -y github:Ryan-yang125/motion-lexicon#v1.2.0",
-      "recommend \"describe the motion you want\" --locale en --format json",
+  it("publishes the shared Motion Grammar for the website and Motion Director", async () => {
+    const grammar = await parseArtifact("data/v2/motion-grammar.json") as unknown as {
+      kind: string;
+      version: string;
+      project: { releaseVersion: string; skillCommand: string };
+      urls: { zh: string; en: string };
+      grammar: {
+        collections: { primitives: { count: number }; moments: { count: number } };
+        invariants: Array<{ zh: string; en: string }>;
+      };
+      modes: Array<{ id: string; title: { zh: string; en: string } }>;
+      examples: Array<{
+        version: string;
+        provenance: { status: string; moments: string[] };
+      }>;
+    };
+
+    expect(grammar.kind).toBe("motion-grammar");
+    expect(grammar.version).toBe("2.0.0");
+    expect(grammar.project.releaseVersion).toBe("2.0.0");
+    expect(grammar.project.skillCommand).toBe(
       "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
+    );
+    expect(grammar.urls.en).toBe("https://motion-lexicon.pages.dev/en/director/");
+    expect(grammar.urls.zh).toBe("https://motion-lexicon.pages.dev/zh/director/");
+    expect(grammar.grammar.collections).toMatchObject({
+      primitives: { count: 44 },
+      moments: { count: 28 }
+    });
+    expect(grammar.grammar.invariants).toHaveLength(6);
+    expect(grammar.modes.map((mode) => mode.id)).toEqual([
+      "recommend",
+      "compose",
+      "implement",
+      "review",
+      "contribute"
+    ]);
+    expect(grammar.examples).toEqual([
+      expect.objectContaining({
+        version: "2.0",
+        provenance: expect.objectContaining({ status: "published", moments: ["approval-request"] })
+      })
+    ]);
+  });
+
+  it("publishes the Motion Blueprint schema that the Skill uses", async () => {
+    const publicSchema = await parseArtifact("data/v2/motion-blueprint.schema.json");
+    const skillSchema = JSON.parse(
+      await readFile(path.resolve(process.cwd(), "skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8")
+    ) as Record<string, unknown>;
+
+    expect(publicSchema).toEqual(skillSchema);
+    expect(publicSchema).toMatchObject({
+      $id: "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json",
+      title: "Motion Lexicon Motion Blueprint"
+    });
+  });
+
+  it("advertises Motion Director and the Agent Skill in both LLM indexes", async () => {
+    const expectedReferences = [
+      "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon",
+      "https://motion-lexicon.pages.dev/en/director/",
+      "https://motion-lexicon.pages.dev/data/v2/motion-grammar.json"
     ];
 
     for (const filename of ["llms.txt", "llms-full.txt"]) {
       const content = await readArtifact(filename);
-      for (const command of expectedCommands) expect(content, filename).toContain(command);
+      for (const reference of expectedReferences) expect(content, filename).toContain(reference);
       expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/finder/");
       expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/packs/");
       expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/catalog/");
+      expect(/\bcli\b/i.test(content), filename).toBe(false);
     }
   });
 
   it("publishes a machine-readable free pricing statement", async () => {
     const pricing = await readArtifact("pricing.txt");
     const catalog = await parseArtifact("data/v1/catalog.json") as unknown as {
-      endpoints: { pricing: string };
+      endpoints: {
+        pricing: string;
+        motionGrammar: string;
+        motionBlueprintSchema: string;
+        director: { en: string; zh: string };
+      };
     };
 
     expect(pricing).toContain("- Price: $0");
     expect(pricing).toContain("- Account required: No");
     expect(pricing).toContain("- Billing: None");
     expect(catalog.endpoints.pricing).toBe("https://motion-lexicon.pages.dev/pricing.txt");
+    expect(catalog.endpoints.motionGrammar).toBe(
+      "https://motion-lexicon.pages.dev/data/v2/motion-grammar.json"
+    );
+    expect(catalog.endpoints.motionBlueprintSchema).toBe(
+      "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json"
+    );
+    expect(catalog.endpoints.director.en).toBe("https://motion-lexicon.pages.dev/en/director/");
+    expect(catalog.endpoints.director.zh).toBe("https://motion-lexicon.pages.dev/zh/director/");
 
     for (const filename of ["llms.txt", "llms-full.txt"]) {
       expect(await readArtifact(filename), filename).toContain(

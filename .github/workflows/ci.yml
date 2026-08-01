@@ -28,6 +28,8 @@ jobs:
       - run: npm run test
       - run: npm run i18n:check
       - run: npm run vocabulary:check
+      - run: npm run motion-grammar:check
+      - run: npm run skill:check
       - run: npm run artifacts:check
       - run: npm run seo:check
       - run: npm run motion:check

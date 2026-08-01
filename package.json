@@ -1,7 +1,7 @@
 {
   "name": "motion-lexicon",
-  "version": "1.2.0",
-  "description": "An open motion finder and recipe library for humans and agents, with an offline CLI and Node API.",
+  "version": "2.0.0",
+  "description": "An open product-motion system with Motion Packs, Motion Primitives, and the Motion Director Agent Skill.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,52 +16,26 @@
     "animation",
     "css-animation",
     "motion",
-    "cli",
+    "motion-director",
     "agent-skill",
     "reduced-motion",
     "ui"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
-  "bin": {
-    "motion-lexicon": "packages/cli/dist/motion-lexicon.mjs"
-  },
-  "exports": {
-    ".": {
-      "types": "./packages/cli/dist/types/packages/cli/src/index.d.ts",
-      "import": "./packages/cli/dist/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "packages/cli/dist",
-    "skills/motion-lexicon",
-    "README.md",
-    "README.zh-CN.md",
-    "LICENSE",
-    "CONTENT-LICENSE",
-    "NOTICE"
-  ],
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview",
-    "build": "npm run cli:build && tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
+    "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
     "lint": "eslint .",
-    "typecheck": "npm run cli:build && tsc -b && npm run cli:typecheck",
-    "prepare": "npm run cli:build",
-    "cli:build": "npm run build -w @motion-lexicon/cli",
-    "cli:typecheck": "npm run typecheck -w @motion-lexicon/cli",
-    "cli:test": "vitest run tests/cli",
+    "typecheck": "tsc -b",
     "i18n:check": "tsx scripts/check-i18n.ts",
     "vocabulary:check": "tsx scripts/check-vocabulary.ts",
+    "motion-grammar:check": "tsx scripts/check-motion-grammar.ts",
+    "skill:check": "node scripts/check-motion-director-skill.mjs",
     "seo:check": "tsx scripts/check-seo.ts",
     "motion:check": "tsx scripts/check-motion.ts",
     "assets:brand": "tsx scripts/generate-brand-assets.ts",

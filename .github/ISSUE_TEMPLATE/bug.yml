@@ -16,8 +16,8 @@ body:
   - type: input
     id: route
     attributes:
-      label: Route or command
-      placeholder: /en/entrances/slide-in/ or npx motion-lexicon show slide-in
+      label: Route, Skill, or project context
+      placeholder: /en/entrances/slide-in/ or Motion Director Skill in your project
   - type: textarea
     id: reproduce
     attributes:

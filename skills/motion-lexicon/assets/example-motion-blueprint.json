@@ -1,0 +1,76 @@
+{
+  "version": "2.0",
+  "locale": "en",
+  "intent": {
+    "productGoal": "Confirm that a project update was saved and guide the user back to editing.",
+    "userIntent": "Save a changed project title.",
+    "feeling": "Quick, grounded confirmation."
+  },
+  "scope": {
+    "surface": "Project details panel",
+    "framework": "HTML, CSS, and JavaScript",
+    "input": ["pointer", "keyboard"]
+  },
+  "stateGraph": {
+    "initial": "idle",
+    "states": [
+      { "id": "idle", "label": "Ready to save", "role": "initial" },
+      { "id": "pending", "label": "Saving", "role": "pending" },
+      { "id": "success", "label": "Saved", "role": "success" },
+      { "id": "failure", "label": "Save failed", "role": "failure" }
+    ],
+    "transitions": [
+      { "event": "submit", "from": "idle", "to": "pending", "interrupt": "replace" },
+      { "event": "resolved", "from": "pending", "to": "success", "interrupt": "settle" },
+      { "event": "rejected", "from": "pending", "to": "failure", "interrupt": "settle" },
+      { "event": "retry", "from": "failure", "to": "pending", "interrupt": "replace" }
+    ]
+  },
+  "actors": [
+    { "id": "save-button", "role": "primary", "kind": "trigger", "element": "Save button" },
+    { "id": "save-status", "role": "supporting", "kind": "status", "element": "Live status message" }
+  ],
+  "beats": [
+    {
+      "id": "pending-feedback",
+      "at": 0,
+      "actor": "save-button",
+      "purpose": "confirm",
+      "primitive": "status-transition",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": ["color", "opacity"]
+    },
+    {
+      "id": "success-arrival",
+      "at": "after:resolved",
+      "actor": "save-status",
+      "purpose": "confirm",
+      "primitive": "pop-in",
+      "from": "hidden",
+      "to": "visible",
+      "durationMs": 220,
+      "easing": "arrive",
+      "properties": ["transform", "opacity"]
+    }
+  ],
+  "accessibility": {
+    "reducedMotion": "Apply the final success status immediately while preserving the message.",
+    "focus": "Keep focus on the save button after success and move it to retry after failure.",
+    "aria": "Expose saving, saved, and failure states through a polite live region.",
+    "keyboard": "Enter submits the form and Escape leaves the current unsaved field state intact."
+  },
+  "delivery": {
+    "formats": ["html", "css", "js"],
+    "integration": "Drive data-state from the save request result and reserve status width beside the control."
+  },
+  "provenance": {
+    "status": "draft",
+    "foundations": ["status-transition", "pop-in"],
+    "moments": ["save-confirmation"],
+    "confidence": "high",
+    "evidence": "A local save operation needs immediate acknowledgement, a clear outcome, and a retry path."
+  }
+}

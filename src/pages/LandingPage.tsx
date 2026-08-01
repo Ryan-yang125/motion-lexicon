@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, Sparkles } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { MotionPackPreview } from "../components/MotionPackPreview";
 import { MotionThumbnail } from "../components/MotionThumbnail";
@@ -18,7 +18,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
   const featuredPrimitive = getRecipe("entrances", "slide-in");
   const labels = locale === "zh"
     ? {
-        status: "Motion Lexicon V1.2 · 免费开源",
+        status: "Motion Lexicon V2.0 · 免费开源",
         title: "把产品动效，\n带进真实界面。",
         copy: "产品瞬间与动效基础，都是可预览、可调节、可复制的产品动效。",
         placeholder: "描述一个界面、动作或感觉",
@@ -32,10 +32,14 @@ export function LandingPage({ locale }: { locale: Locale }) {
         primitivesCopy: "查看底层动作、参数和用法，再按需要探索完整产品瞬间。",
         primitivesAction: "浏览动效基础",
         finderKicker: "Motion Finder",
-        finderCopy: "用自己的描述，在两条目录中找到合适的起点。"
+        finderCopy: "用自己的描述，在两条目录中找到合适的起点。",
+        directorKicker: "Motion Director · Agent Skill",
+        directorTitle: "从你的产品场景开始。",
+        directorCopy: "让 Agent Skill 根据状态、节奏和实现边界，写出一份可交付的 Motion Blueprint。",
+        directorAction: "进入 Motion Director"
       }
     : {
-        status: "Motion Lexicon V1.2 · Free and open source",
+        status: "Motion Lexicon V2.0 · Free and open source",
         title: "Bring product motion\ninto a real interface.",
         copy: "Product moments and motion primitives are both previewable, tunable, and ready to copy.",
         placeholder: "Describe an interface, action, or feeling",
@@ -49,7 +53,11 @@ export function LandingPage({ locale }: { locale: Locale }) {
         primitivesCopy: "Inspect the underlying behavior, parameters, and use, then explore complete product moments when useful.",
         primitivesAction: "Browse motion primitives",
         finderKicker: "Motion Finder",
-        finderCopy: "Start with your own words and explore both directories."
+        finderCopy: "Start with your own words and explore both directories.",
+        directorKicker: "Motion Director · Agent Skill",
+        directorTitle: "Start from your product scene.",
+        directorCopy: "Let the Agent Skill turn state, rhythm, and implementation boundaries into a deliverable Motion Blueprint.",
+        directorAction: "Open Motion Director"
       };
 
   function submitFinder(event: FormEvent<HTMLFormElement>) {
@@ -72,7 +80,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Motion Lexicon V1.2",
+            name: "Motion Lexicon V2.0",
             description: labels.copy,
             url: `${siteUrl}${pathFor(locale)}`,
             inLanguage: locale === "zh" ? "zh-CN" : "en",
@@ -152,6 +160,19 @@ export function LandingPage({ locale }: { locale: Locale }) {
               <ArrowRight aria-hidden="true" size={15} />
             </Link>
           </article>
+        </section>
+
+        <section className="dual-library-director-callout" aria-labelledby="director-callout-title">
+          <span className="dual-library-director-icon" aria-hidden="true"><Sparkles size={20} strokeWidth={1.8} /></span>
+          <div>
+            <span className="motion-pack-kicker">{labels.directorKicker}</span>
+            <h2 id="director-callout-title">{labels.directorTitle}</h2>
+            <p>{labels.directorCopy}</p>
+          </div>
+          <Link className="dual-library-director-action" to="/$locale/director/" params={{ locale }}>
+            {labels.directorAction}
+            <ArrowRight aria-hidden="true" size={15} />
+          </Link>
         </section>
       </div>
     </>

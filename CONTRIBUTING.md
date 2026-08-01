@@ -1,13 +1,14 @@
 # Contributing to Motion Lexicon
 
-Motion Lexicon welcomes focused contributions to definitions, accessibility, motion behavior, portable output, documentation, and tooling.
+Motion Lexicon welcomes focused contributions to Motion Grammar, Product Moments, Motion Primitives, accessibility, portable output, documentation, and tooling.
 
 ## Choose a contribution path
 
 - Report a reproducible defect with the bug form.
 - Propose a vocabulary correction with technical evidence and a concrete replacement.
-- Request a recipe or related term with its user task, interaction trigger, and reduced-motion expectation.
+- Request a Product Moment, Motion Primitive, or related term with its user task, interaction trigger, and reduced-motion expectation.
 - Improve accessibility, performance, examples, tests, or bilingual copy through a pull request.
+- Prepare a Motion Director candidate with its product context, state graph, and evidence for review.
 - Discuss a new canonical workspace in an issue before implementation.
 
 ## Preserve the public contract
@@ -15,6 +16,9 @@ Motion Lexicon welcomes focused contributions to definitions, accessibility, mot
 - Keep the 44 canonical IDs and their localized routes stable. They form the public discovery surface.
 - Keep all 91 vocabulary IDs discoverable. Related terms map to an existing canonical workspace unless an accepted proposal expands the surface.
 - Add a bilingual distinction whenever a related term shares a workspace with another term.
+- Build new motion decisions from the shared Motion Grammar: intent, state graph, actors, beats, accessibility, delivery, and provenance.
+- Give a new Primitive evidence from at least three independent product scenes.
+- Keep one primary actor responsible for each state transition and reserve space for changing labels, actions, and status.
 - Drive preview, parameters, Prompt, HTML, CSS, JavaScript, and reduced-motion behavior from the same motion specification.
 - Omit default parameter values from shareable URLs.
 - Keep interaction targets at least 44px and provide keyboard behavior for interactive motion.
@@ -34,6 +38,8 @@ npm run typecheck
 npm run test
 npm run i18n:check
 npm run vocabulary:check
+npm run motion-grammar:check
+npm run skill:check
 npm run seo:check
 npm run motion:check
 npm run a11y:check
@@ -49,6 +55,7 @@ UI and routing contributions should also inspect `/zh/`, `/zh/catalog/?surface=c
 
 - Explain the user-visible outcome and affected routes.
 - Link the issue or proposal when the change alters the catalog surface.
+- Include a Motion Blueprint or equivalent state-and-beat description for a new Pack, Primitive, or candidate.
 - Include screenshots or a short recording for visible motion changes.
 - Confirm reduced-motion and keyboard behavior.
 - List the checks you ran.

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "zh-trigger-product-state",
+    "should_trigger": true,
+    "query": "我在做一个项目管理工具，用户点“发布”后按钮和右侧的版本记录都要有反馈。帮我把整个产品瞬间设计出来。"
+  },
+  {
+    "id": "zh-trigger-vague-feeling",
+    "should_trigger": true,
+    "query": "卡片出现时我想要有一点从外面进来的感觉，最后收得很干净。这个该选什么动效？"
+  },
+  {
+    "id": "zh-trigger-existing-jank",
+    "should_trigger": true,
+    "query": "这段 React 动画总是卡顿，用户连续点击时状态还会倒退。请帮我 review 动效逻辑和 CSS。"
+  },
+  {
+    "id": "zh-trigger-portable-code",
+    "should_trigger": true,
+    "query": "给我一个 HTML CSS JS 的上传完成反馈，要有失败重试和减少动态效果的处理。"
+  },
+  {
+    "id": "zh-trigger-candidate",
+    "should_trigger": true,
+    "query": "我想把“删除后撤销”这个交互贡献到 Motion Lexicon，候选需要怎么写？"
+  },
+  {
+    "id": "zh-trigger-primitive-choice",
+    "should_trigger": true,
+    "query": "商品缩略图进详情页时 shared element、morph、crossfade 怎么选？"
+  },
+  {
+    "id": "zh-no-trigger-image-crop",
+    "should_trigger": false,
+    "query": "帮我把这张产品截图裁成小红书封面尺寸，再把文字锐化一点。"
+  },
+  {
+    "id": "zh-no-trigger-video-script",
+    "should_trigger": false,
+    "query": "我想录一条介绍开源项目的视频，帮我写 45 秒口播稿和标题。"
+  },
+  {
+    "id": "zh-no-trigger-copy",
+    "should_trigger": false,
+    "query": "帮我把首页标题改得更有吸引力，目标是让用户知道这是免费的开源项目。"
+  },
+  {
+    "id": "zh-no-trigger-database",
+    "should_trigger": false,
+    "query": "请给这个 SQLite 表增加一个 created_at 索引，并解释迁移步骤。"
+  },
+  {
+    "id": "en-trigger-product-moment",
+    "should_trigger": true,
+    "query": "I am designing a checkout confirmation where payment can fail, retry, and succeed. Compose the interaction and its accessible motion states."
+  },
+  {
+    "id": "en-no-trigger-document-summary",
+    "should_trigger": false,
+    "query": "Summarize this customer interview transcript into the five strongest product insights and include direct evidence for each one."
+  },
+  {
+    "id": "en-trigger-code-review",
+    "should_trigger": true,
+    "query": "Review this animation: it changes top, left, width, blur, and shadow for 600ms, then flashes when the user hovers quickly."
+  },
+  {
+    "id": "en-trigger-framework-code",
+    "should_trigger": true,
+    "query": "Build the core React interaction for a selectable project card that opens a side panel and handles Escape, focus, and reduced motion."
+  },
+  {
+    "id": "en-trigger-contribution",
+    "should_trigger": true,
+    "query": "I have a reusable status-to-next-action pattern from three products. Help me prepare it as a Motion Lexicon primitive candidate."
+  },
+  {
+    "id": "en-no-trigger-travel-plan",
+    "should_trigger": false,
+    "query": "Plan a four-day Kyoto itinerary for two people who care about architecture, coffee, and easy public transit."
+  },
+  {
+    "id": "en-no-trigger-spreadsheet",
+    "should_trigger": false,
+    "query": "Please clean this CSV, calculate retention by month, and create a summary table for the finance team."
+  },
+  {
+    "id": "en-no-trigger-legal-copy",
+    "should_trigger": false,
+    "query": "Can you rewrite our privacy policy paragraph in plainer English while preserving the legal meaning?"
+  },
+  {
+    "id": "en-no-trigger-server-debug",
+    "should_trigger": false,
+    "query": "Our Node server returns 502 after a deploy. Help me inspect the logs and identify the broken environment variable."
+  },
+  {
+    "id": "en-no-trigger-static-layout",
+    "should_trigger": false,
+    "query": "Make the pricing table fit on a 390px viewport with two columns and consistent spacing."
+  }
+]

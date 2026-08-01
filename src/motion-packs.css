@@ -519,6 +519,76 @@
   .finder-pack-bridge-list > a { min-height: 72px; }
 }
 
+/* Motion Director — the creative entry sits beside the two content directories. */
+.dual-library-director-callout {
+  min-height: 148px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid var(--interior-line);
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--interior-ink);
+  background:
+    radial-gradient(circle at 94% 6%, color-mix(in srgb, var(--interior-focus) 10%, transparent), transparent 28%),
+    var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+}
+
+.dual-library-director-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--interior-focus);
+  background: color-mix(in srgb, var(--interior-focus) 11%, var(--interior-panel));
+}
+
+.dual-library-director-callout h2 {
+  margin: 8px 0 0;
+  color: var(--interior-ink);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.16;
+}
+
+.dual-library-director-callout p {
+  max-width: 57ch;
+  margin: 8px 0 0;
+  color: var(--interior-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.dual-library-director-action {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--interior-ink);
+  border-radius: 999px;
+  padding: 0 16px;
+  color: var(--interior-bezel);
+  background: var(--interior-ink);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: transform 150ms var(--interior-ease), opacity 150ms ease;
+}
+
+.dual-library-director-action:hover { transform: translateY(-1px); opacity: 0.88; }
+.dual-library-director-action:active { transform: scale(0.98); }
+
+@media (max-width: 640px) {
+  .dual-library-director-callout { grid-template-columns: auto minmax(0, 1fr); align-items: start; padding: 16px; }
+  .dual-library-director-action { grid-column: 1 / -1; width: 100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-packs-page *, .motion-pack-page * { scroll-behavior: auto !important; }
   .motion-pack-card, .motion-pack-hero-actions > a, .motion-pack-card-link, .motion-pack-back-link, .motion-pack-related-link { transform: none !important; transition-duration: 1ms !important; }
@@ -591,7 +661,7 @@
   .motion-pack-page-header h1 { font-size: 24px; }
 }
 
-/* V1.2 home — two equally weighted directories with a shared Finder intake. */
+/* V2.0 home — two equally weighted directories with a shared Finder intake. */
 .dual-library-home {
   width: min(100%, 1160px);
   margin: 0 auto;

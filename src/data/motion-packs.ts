@@ -2,7 +2,7 @@ import { canonicalMotionCatalog } from "./motion-catalog";
 import type { LocalizedText } from "./types";
 
 /**
- * Motion Lexicon V1.2 organises one collection around recognisable product moments.
+ * Motion Lexicon V2.0 keeps one collection around recognisable product moments.
  * A pack owns the complete portable implementation a visitor can preview,
  * copy, and adapt inside their own interface.
  */
