@@ -2,13 +2,19 @@
 
 ## Product Promise
 
-Motion Lexicon gives a product builder a complete, polished interaction they can
-preview, understand, and copy into an interface.
+Motion Lexicon gives product builders two complementary, equal collections they
+can preview, understand, and copy into an interface: complete product moments
+and precise motion primitives.
 
-V1 is centered on **Motion Packs**: real product moments such as saving,
+**Product Moments · Motion Packs** cover real interactions such as saving,
 publishing, choosing, inviting, filtering, and undoing. Each Pack combines a
 recognisable scene, a clear interaction contract, short motion, accessible
 reduced-motion behavior, and portable Prompt/HTML/CSS/JavaScript output.
+
+**Motion Primitives** cover the 44 canonical elements that shape product
+behavior: entrances, exits, easing, sequencing, shared elements, feedback, and
+more. Each primitive provides accurate terminology, a live workspace, tunable
+parameters, and portable output.
 
 The primary journey is **Preview → Trigger → Inspect → Copy**:
 
@@ -18,8 +24,8 @@ The primary journey is **Preview → Trigger → Inspect → Copy**:
 - How can I carry it into my own interface today?
 
 Motion Finder and the vocabulary continue to support the decision journey:
-**Describe → Choose → Tune → Use**. Finder gives users accurate motion
-language; Motion Packs turn that language into a complete product interaction.
+**Describe → Discover → Decide → Use**. Finder searches across Product Moments
+and Motion Primitives, then gives users a clear route into the right collection.
 
 ## Primary Users
 
@@ -28,19 +34,25 @@ language; Motion Packs turn that language into a complete product interaction.
 - Engineers who need portable HTML, CSS, JavaScript, and behavior guidance.
 - AI agents that benefit from exact prompts, structured data, and explicit motion constraints.
 
-## V1 Product Structure
+## V1.1 Product Structure
 
-The site is a static, SEO-friendly application with Motion Packs as its primary
-surface and the existing dictionary as its discovery foundation.
+The site is a static, SEO-friendly application with two equal content
+collections. Each has a dedicated home, detail workflow, and direct navigation;
+Finder connects them for visitors who begin from a description.
 
-- **Motion Pack gallery:** `/:locale/` and `/:locale/packs/` present 16 real
+- **Product Moments · Motion Pack gallery:** `/:locale/packs/` presents 16 real
   product moments, grouped by feedback, choice, change, and workflow.
 - **Motion Pack detail:** `/:locale/packs/:packId/` gives each Pack a dominant
-  live preview, concise interaction guidance, and a Prompt/Code export surface.
+  live preview, concise interaction guidance, a Prompt/Code export surface, and
+  related Motion Primitives.
+- **Motion Primitives · catalog:** `/:locale/catalog/` preserves 44 canonical
+  workspaces across components, focused playgrounds, and guides.
+- **Motion Primitive detail:** `/:locale/:category/:recipe/` gives each
+  primitive a live workspace, parameters, portable output, and related Product
+  Moments whenever the relationship is present in a Pack.
 - **Motion Finder:** `/:locale/finder/` receives a natural-language description,
-  returns ranked candidates, and leads into precise vocabulary and recipe work.
-- **Motion Library:** `/:locale/catalog/` preserves 44 canonical workspaces
-  across components, focused playgrounds, and guides.
+  returns relevant Motion Primitives and their matching Product Moments, and
+  preserves its precise vocabulary and recipe workflow.
 - **Vocabulary and category pages:** preserve all 91 terms, definitions,
   distinctions, and indexable acquisition routes.
 - **Open-source resources:** CLI, Agent Skill, versioned JSON, schemas, and the
@@ -60,15 +72,28 @@ Every Pack owns one complete, portable interaction contract:
 - A reduced-motion treatment that preserves result, hierarchy, and control.
 - Bilingual names, summaries, scenes, use cases, guidance, and SEO metadata.
 - A stable URL, public JSON representation, and CLI API.
+- Related Motion Primitives that explain the motion choices inside the scene.
 
 The V1 set contains 16 Packs:
 
 | Group | Packs |
 | --- | --- |
-| Feedback | Save confirmation, Publish release, Share link |
-| Choice | Card selection, Workspace switch, Template choice |
-| Change | Layer insertion, Archive undo, Filter results, Inline validation |
-| Workflow | Command menu, Details disclosure, Notification triage, Progress steps, Member invite, Media scrub |
+| Feedback | Save confirmation, Publish release, Share link, Inline validation |
+| Choice | Card selection, Workspace switch, Template choice, Command menu |
+| Change | Layer insertion, Archive undo, Filter results, Details disclosure |
+| Workflow | Notification triage, Progress steps, Member invite, Media scrub |
+
+## Motion Primitive Content Contract
+
+Every Motion Primitive owns a focused, portable behavior contract:
+
+- A stable canonical ID, localized name, definition, and close-term distinction.
+- A live preview with the behavior it describes, plus an accessible
+  reduced-motion treatment.
+- Tunable parameters with shareable URL state.
+- Prompt, HTML, CSS, and JavaScript aligned with the same motion specification.
+- Related Product Moments whenever a Pack uses the primitive in a complete
+  product context.
 
 ## Version Strategy
 
@@ -85,16 +110,26 @@ shares current state through the URL and CLI.
 
 ### V1.0 — Motion Packs
 
-V1 changes the product’s center of gravity from individual motion primitives to
-complete product moments.
+V1 introduced 16 high-quality Packs with real product scenes and visible state
+changes.
 
-1. Ship 16 high-quality Packs with real product scenes and visible state changes.
-2. Make every Pack directly usable through Prompt, HTML, CSS, and JavaScript.
-3. Keep Finder, the 44 canonical workspaces, and all 91 terms as a durable
-   choice, search, SEO, and reference layer.
-4. Expose Packs through the website, CLI, Agent Skill, `packs.json`, and
+1. Make every Pack directly usable through Prompt, HTML, CSS, and JavaScript.
+2. Expose Packs through the website, CLI, Agent Skill, `packs.json`, and
    `llms.txt` for people and agents.
-5. Let real user questions and product feedback guide future Pack additions.
+3. Let real user questions and product feedback guide future Pack additions.
+
+### V1.1 — Equal collections, connected discovery
+
+V1.1 establishes Product Moments and Motion Primitives as equal public
+collections.
+
+1. Give Product Moments and Motion Primitives equal first-level navigation and
+   clear, dedicated catalog routes.
+2. Link each Pack to the Motion Primitives that shape its behavior, and expose
+   every declared relationship from both directions.
+3. Let Finder return useful results from both collections.
+4. Align the website, CLI (`packs` and `list`), Agent Skill, public data, README, and `llms.txt`
+   around the two-collection product model.
 
 ## Content Principles
 
@@ -135,18 +170,20 @@ The production design uses a quiet, product-led Apple-inspired visual language:
 
 ## Quality Bar
 
-Before a V1 change is considered done:
+Before a V1.1 change is considered done:
 
 - All 16 Pack routes render with a stable H1, localized metadata, canonical URL,
   and a live product interaction.
 - Pack previews, Prompt, HTML, CSS, JavaScript, and reduced-motion guidance stay
   in sync from the same data source.
+- Product Moments and Motion Primitives each have equal first-level routes;
+  declared Pack-to-Primitive relationships stay reciprocal.
 - Finder, catalog, vocabulary, all 44 workspaces, and all 91 terms remain
   available and indexable.
 - Desktop and mobile layouts stay free of horizontal page overflow.
 - Functional text remains accessible in light and dark themes.
-- Public data, CLI, Agent Skill, README, and `llms.txt` describe the same V1
-  Pack surface.
+- Public data, CLI, Agent Skill, README, and `llms.txt` describe the same V1.1
+  two-collection product model.
 - `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`,
   `npm run vocabulary:check`, `npm run seo:check`, `npm run motion:check`,
   `npm run a11y:check`, `npm run build`, `npm run bundle:check`,

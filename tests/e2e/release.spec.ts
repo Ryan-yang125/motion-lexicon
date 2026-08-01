@@ -104,18 +104,20 @@ test("persisted theme hydrates without a first-render mismatch", async ({ page }
   expect(hydrationErrors).toEqual([]);
 });
 
-test("landing defers recipe and Pack-detail chunks until the reader opens a Pack", async ({ page }, testInfo) => {
+test("landing defers recipe and Pack-detail chunks until the reader opens a product moment", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Initial chunk loading is verified once on desktop.");
 
   await page.goto("/zh/");
-  await expect(page.getByRole("heading", { level: 1, name: "把一个产品瞬间，直接带进你的界面。" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /把产品动效/ })).toBeVisible();
   const resources = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
 
   expect(resources.some((url) => /editor-vendor|CatalogSidebar|recipe\.lazy|motion-pack\.lazy|structured-data/.test(url))).toBe(false);
 
-  await page.getByTestId("motion-pack-card-save-confirmation").getByRole("link", { name: "查看 Pack", exact: true }).click();
+  await page.getByTestId("directory-card-packs").getByRole("link", { name: "浏览产品瞬间" }).click();
+  await expect(page).toHaveURL(/\/zh\/packs\//);
+  await page.getByTestId("motion-pack-card-save-confirmation").getByRole("link", { name: "查看产品瞬间", exact: true }).click();
   await expect(page).toHaveURL(/\/zh\/packs\/save-confirmation\//);
   await expect(page.getByRole("heading", { level: 1, name: "保存确认" })).toBeVisible();
   const afterNavigation = await page.evaluate(() => ({

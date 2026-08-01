@@ -1,27 +1,30 @@
 # Motion Lexicon
 
-> A free, open-source, bilingual motion finder and recipe reference for choosing, comparing, tuning, reviewing, and implementing interface motion.
+> A free, open-source, bilingual library of Product Moments and Motion Primitives for choosing, comparing, tuning, reviewing, and implementing interface motion.
 
 - Website: https://motion-lexicon.pages.dev/en/
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Motion Finder: https://motion-lexicon.pages.dev/en/finder/
 - 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
-- Motion Packs: https://motion-lexicon.pages.dev/en/packs/
-- Motion Packs JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
+- Product Moments: https://motion-lexicon.pages.dev/en/packs/
+- Product Moments JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
+- Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
+- Motion Primitives JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
-- Catalog JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
 - Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
 - JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json
 - Full machine-readable text: https://motion-lexicon.pages.dev/llms-full.txt
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0`
+- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list --locale en --format json`
+- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs --locale en --format json`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 
-## Motion Packs
+## Product Moments
 
 - [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/): A submission lands across the action, status marker, and document state together.
 - [Publish release](https://motion-lexicon.pages.dev/en/packs/publish-release/): Resolve a ready update into a release with a clear landing point.
@@ -40,7 +43,7 @@
 - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
 - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
 
-## Canonical recipes
+## Motion Primitives
 
 ### Entrances & exits
 

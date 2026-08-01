@@ -71,5 +71,40 @@
     "purposeful-animation",
     "anticipation",
     "reduced-motion"
+  ],
+  "productMoments": [
+    {
+      "id": "save-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "保存确认",
+        "en": "Save confirmation"
+      },
+      "summary": {
+        "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+        "en": "A submission lands across the action, status marker, and document state together."
+      },
+      "scene": {
+        "zh": "产品更新编辑器中的一条已保存状态。",
+        "en": "A saved state inside a product-update editor."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "同步状态标记让短暂等待始终可读。",
+        "en": "The synchronous state marker keeps the brief wait legible."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+      }
+    }
   ]
 }

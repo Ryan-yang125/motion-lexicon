@@ -1,33 +1,54 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { motionPacks } from "../data/motion-packs";
+import { getMotionPackFoundationLinks, type MotionPackFoundationLink } from "../data/motion-packs";
 import type { Locale } from "../data/types";
 
-const packIdsByFinderGroup: Record<string, readonly string[]> = {
-  "entrance-feel": ["card-selection", "save-confirmation", "publish-release"],
-  "state-continuity": ["workspace-switch", "template-choice", "details-disclosure"],
-  "sequence-timing": ["layer-insertion", "progress-steps", "notification-triage"]
+type RankedPack = {
+  pack: MotionPackFoundationLink["pack"];
+  links: MotionPackFoundationLink[];
 };
 
-export function FinderPackBridge({ locale, finderGroupId }: { locale: Locale; finderGroupId: string }) {
-  const ids = packIdsByFinderGroup[finderGroupId] ?? ["save-confirmation", "workspace-switch", "layer-insertion"];
-  const packs = ids
-    .map((id) => motionPacks.find((pack) => pack.id === id))
-    .filter((pack): pack is (typeof motionPacks)[number] => Boolean(pack));
+function rankPacks(foundationIds: readonly string[]): RankedPack[] {
+  const packLinks = new Map<string, RankedPack>();
+
+  for (const foundationId of foundationIds) {
+    for (const link of getMotionPackFoundationLinks(foundationId)) {
+      const current = packLinks.get(link.pack.id);
+      if (current) {
+        current.links.push(link);
+      } else {
+        packLinks.set(link.pack.id, { pack: link.pack, links: [link] });
+      }
+    }
+  }
+
+  return Array.from(packLinks.values())
+    .sort((left, right) => right.links.length - left.links.length || left.pack.id.localeCompare(right.pack.id))
+    .slice(0, 3);
+}
+
+export function FinderPackBridge({
+  locale,
+  foundationIds
+}: {
+  locale: Locale;
+  foundationIds: readonly string[];
+}) {
+  const packs = rankPacks(foundationIds);
   const labels = locale === "zh"
     ? {
-        eyebrow: "Motion Packs",
-        title: "Finder 帮你选，Pack 帮你落地。",
-        copy: "把这个方向放进完整的产品交互里继续看。",
-        open: "查看 Pack",
-        all: "浏览全部 16 个 Pack"
+        eyebrow: "产品瞬间",
+        title: "适合的产品瞬间",
+        copy: "把当前动效方向放进完整交互里继续看。",
+        open: "查看产品瞬间",
+        all: "浏览全部产品瞬间"
       }
     : {
-        eyebrow: "Motion Packs",
-        title: "Finder helps you choose. Packs help you ship.",
-        copy: "Take this direction into a complete product interaction.",
-        open: "Open pack",
-        all: "Explore all 16 packs"
+        eyebrow: "Product moments",
+        title: "Suitable product moments",
+        copy: "Take the current motion direction into a complete interaction.",
+        open: "Open product moment",
+        all: "Browse all product moments"
       };
 
   if (!packs.length) return null;
@@ -42,13 +63,14 @@ export function FinderPackBridge({ locale, finderGroupId }: { locale: Locale; fi
         <p>{labels.copy}</p>
       </div>
       <div className="finder-pack-bridge-list">
-        {packs.map((pack) => (
+        {packs.map(({ pack, links }) => (
           <Link
             key={pack.id}
             to="/$locale/packs/$packId/"
             params={{ locale, packId: pack.id }}
           >
             <span>
+              <small>{links.map(({ foundation }) => foundation.roleLabel[locale]).join(" · ")}</small>
               <strong>{pack.name[locale]}</strong>
               <small>{pack.shortDescription[locale]}</small>
             </span>

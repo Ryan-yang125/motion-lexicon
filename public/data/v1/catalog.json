@@ -5,16 +5,17 @@
   "project": {
     "name": "Motion Lexicon",
     "description": {
-      "zh": "把真实产品瞬间做成可预览、可复制、可直接接入界面的 Motion Pack，并保留完整动效词典与选择器。",
-      "en": "A collection of previewable, copy-ready Motion Packs for real product moments, with a full motion vocabulary and Finder."
+      "zh": "产品瞬间与动效基础，都是可预览、可复制、可直接接入界面的产品动效。",
+      "en": "Product Moments and Motion Primitives for previewing, copying, and integrating interface motion."
     },
+    "releaseVersion": "1.1.0",
     "siteUrl": "https://motion-lexicon.pages.dev",
     "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
     "locales": [
       "zh",
       "en"
     ],
-    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v1.0.0",
+    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v1.1.0",
     "skillCommand": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
   },
   "endpoints": {
@@ -26,9 +27,17 @@
       "zh": "https://motion-lexicon.pages.dev/zh/packs/",
       "en": "https://motion-lexicon.pages.dev/en/packs/"
     },
+    "productMoments": {
+      "zh": "https://motion-lexicon.pages.dev/zh/packs/",
+      "en": "https://motion-lexicon.pages.dev/en/packs/"
+    },
     "packsData": "https://motion-lexicon.pages.dev/data/v1/packs.json",
     "packTemplate": "https://motion-lexicon.pages.dev/data/v1/packs.json#{id}",
     "catalog": "https://motion-lexicon.pages.dev/data/v1/catalog.json",
+    "motionPrimitives": {
+      "zh": "https://motion-lexicon.pages.dev/zh/catalog/",
+      "en": "https://motion-lexicon.pages.dev/en/catalog/"
+    },
     "vocabulary": "https://motion-lexicon.pages.dev/data/v1/vocabulary.json",
     "recipeTemplate": "https://motion-lexicon.pages.dev/data/v1/recipes/{id}.json",
     "schema": "https://motion-lexicon.pages.dev/data/v1/schema.json",
@@ -40,6 +49,8 @@
     "categories": 12,
     "recipes": 44,
     "packs": 16,
+    "motionPrimitives": 44,
+    "productMoments": 16,
     "vocabularyTerms": 91,
     "aliases": 47
   },
@@ -264,6 +275,173 @@
         "en": "Introduce or remove an element with opacity for low-distraction state changes."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "share-link",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "复制分享链接",
+            "en": "Copy share link"
+          },
+          "summary": {
+            "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+            "en": "Copy success is confirmed through the action and a light, temporary cue."
+          },
+          "scene": {
+            "zh": "项目设置中的公开预览链接。",
+            "en": "A public preview link in project settings."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "短提示出现后自然离开，不打断后续操作。",
+            "en": "A short cue appears and leaves without interrupting the next action."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+          }
+        },
+        {
+          "id": "workspace-switch",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "工作区切换",
+            "en": "Workspace switch"
+          },
+          "summary": {
+            "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+            "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+          },
+          "scene": {
+            "zh": "项目工作区里的设计、撰写和评审视图。",
+            "en": "Design, writing, and review views inside a project workspace."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "内容表面用极短透明度变化完成视图替换。",
+            "en": "The content surface uses a brief opacity change to swap views."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+          }
+        },
+        {
+          "id": "archive-undo",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "归档撤销",
+            "en": "Archive undo"
+          },
+          "summary": {
+            "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+            "en": "After an item leaves, an undo affordance catches the user in the same context."
+          },
+          "scene": {
+            "zh": "任务列表中把一条评审移到归档。",
+            "en": "Moving a review task to archive from a task list."
+          },
+          "role": "exit-recovery",
+          "roleLabel": {
+            "zh": "离开与恢复",
+            "en": "Exit and recovery"
+          },
+          "note": {
+            "zh": "任务离开列表时淡出，撤销后回到同一位置。",
+            "en": "The task fades out of the list and returns to the same place on Undo."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+          }
+        },
+        {
+          "id": "filter-results",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "筛选结果",
+            "en": "Filter results"
+          },
+          "summary": {
+            "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+            "en": "When a filter changes, update the result count and visible items together."
+          },
+          "scene": {
+            "zh": "资源库中按状态过滤设计文件。",
+            "en": "Filtering design files by status in a resource library."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "符合条件的卡片以短透明度变化进入结果网格。",
+            "en": "Matching cards enter the result grid through a short opacity change."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+          }
+        },
+        {
+          "id": "notification-triage",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "通知处理",
+            "en": "Notification triage"
+          },
+          "summary": {
+            "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+            "en": "After handling a notification, let completion and the next pending item follow naturally."
+          },
+          "scene": {
+            "zh": "项目收件箱里清理两条待处理的更新。",
+            "en": "Clearing two pending updates from a project inbox."
+          },
+          "role": "exit-recovery",
+          "roleLabel": {
+            "zh": "离开与恢复",
+            "en": "Exit and recovery"
+          },
+          "note": {
+            "zh": "已处理通知降低层级后离开队列。",
+            "en": "A handled notification leaves the queue after its hierarchy recedes."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/entrances/fade-in-fade-out/",
         "en": "https://motion-lexicon.pages.dev/en/entrances/fade-in-fade-out/"
@@ -285,6 +463,107 @@
       },
       "aliases": [
         "enter-exit"
+      ],
+      "productMoments": [
+        {
+          "id": "layer-insertion",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "图层插入",
+            "en": "Layer insertion"
+          },
+          "summary": {
+            "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+            "en": "New content reserves its correct position, then reveals itself with very small travel."
+          },
+          "scene": {
+            "zh": "设计工具中新增一个标题或强调图层。",
+            "en": "Adding a title or accent layer inside a design tool."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "新行从极小的下方位移进入最终位置。",
+            "en": "The new row enters its final position with very small upward travel."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+          }
+        },
+        {
+          "id": "command-menu",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "命令菜单",
+            "en": "Command menu"
+          },
+          "summary": {
+            "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+            "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+          },
+          "scene": {
+            "zh": "文档工作区中快速跳转到一个常用动作。",
+            "en": "Jumping quickly to a common action from a document workspace."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "命令面板从触发器下方以很短的位移进入。",
+            "en": "The command panel enters below its trigger with very short travel."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+          }
+        },
+        {
+          "id": "member-invite",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "成员邀请",
+            "en": "Member invite"
+          },
+          "summary": {
+            "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+            "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+          },
+          "scene": {
+            "zh": "在项目设置中邀请新的设计协作者。",
+            "en": "Inviting a new design collaborator from project settings."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "待加入成员行从列表下方轻量进入。",
+            "en": "The pending member row enters lightly from below the list."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+          }
+        }
       ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/entrances/slide-in/",
@@ -308,6 +587,173 @@
       "aliases": [
         "pop-in"
       ],
+      "productMoments": [
+        {
+          "id": "card-selection",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "卡片选择",
+            "en": "Card selection"
+          },
+          "summary": {
+            "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+            "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+          },
+          "scene": {
+            "zh": "新建项目时选择一个内容布局。",
+            "en": "Choosing a content layout for a new project."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "选中勾选以短促缩放抵达，强调当前决定。",
+            "en": "The selected check scales in briefly to emphasize the current decision."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+          }
+        },
+        {
+          "id": "template-choice",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "模板选择",
+            "en": "Template choice"
+          },
+          "summary": {
+            "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+            "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+          },
+          "scene": {
+            "zh": "创建新页面时选择一个起始模板。",
+            "en": "Choosing a starting template when creating a new page."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "角标以小幅缩放出现，明确当前模板。",
+            "en": "The corner mark scales in slightly to identify the active template."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+          }
+        },
+        {
+          "id": "layer-insertion",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "图层插入",
+            "en": "Layer insertion"
+          },
+          "summary": {
+            "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+            "en": "New content reserves its correct position, then reveals itself with very small travel."
+          },
+          "scene": {
+            "zh": "设计工具中新增一个标题或强调图层。",
+            "en": "Adding a title or accent layer inside a design tool."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "轻微缩放让新增内容有清晰落点。",
+            "en": "A slight scale gives the inserted content a clear landing."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+          }
+        },
+        {
+          "id": "archive-undo",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "归档撤销",
+            "en": "Archive undo"
+          },
+          "summary": {
+            "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+            "en": "After an item leaves, an undo affordance catches the user in the same context."
+          },
+          "scene": {
+            "zh": "任务列表中把一条评审移到归档。",
+            "en": "Moving a review task to archive from a task list."
+          },
+          "role": "exit-recovery",
+          "roleLabel": {
+            "zh": "离开与恢复",
+            "en": "Exit and recovery"
+          },
+          "note": {
+            "zh": "缩放压低离开动作的视觉重量。",
+            "en": "Scale reduces the visual weight of the departure."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+          }
+        },
+        {
+          "id": "command-menu",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "命令菜单",
+            "en": "Command menu"
+          },
+          "summary": {
+            "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+            "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+          },
+          "scene": {
+            "zh": "文档工作区中快速跳转到一个常用动作。",
+            "en": "Jumping quickly to a common action from a document workspace."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "轻微缩放帮助紧凑面板落在触发器上下文中。",
+            "en": "A slight scale helps the compact panel land in the trigger context."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/entrances/scale-in/",
         "en": "https://motion-lexicon.pages.dev/en/entrances/scale-in/"
@@ -328,6 +774,7 @@
         "en": "Reveal content with clipping and slight travel for headings, media, and sections."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/entrances/reveal/",
         "en": "https://motion-lexicon.pages.dev/en/entrances/reveal/"
@@ -348,6 +795,74 @@
         "en": "Introduce list items at short intervals to communicate order and rhythm."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "publish-release",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "发布版本",
+            "en": "Publish release"
+          },
+          "summary": {
+            "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+            "en": "Resolve a ready update into a release with a clear landing point."
+          },
+          "scene": {
+            "zh": "发布产品更新时的版本面板。",
+            "en": "A version panel while publishing a product update."
+          },
+          "role": "sequence",
+          "roleLabel": {
+            "zh": "顺序编排",
+            "en": "Sequencing"
+          },
+          "note": {
+            "zh": "发布状态落定后，时间线记录随后补上。",
+            "en": "The timeline record follows after the release state lands."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+          }
+        },
+        {
+          "id": "progress-steps",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "进度步骤",
+            "en": "Progress steps"
+          },
+          "summary": {
+            "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+            "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+          },
+          "scene": {
+            "zh": "设置公开页面时依次完成内容、分享和发布。",
+            "en": "Completing content, sharing, and publishing while setting up a public page."
+          },
+          "role": "sequence",
+          "roleLabel": {
+            "zh": "顺序编排",
+            "en": "Sequencing"
+          },
+          "note": {
+            "zh": "完成标记、连接线和下一步按明确顺序推进。",
+            "en": "Completion mark, connector, and next step advance in a clear order."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/sequencing/stagger/",
         "en": "https://motion-lexicon.pages.dev/en/sequencing/stagger/"
@@ -373,6 +888,7 @@
         "fill-mode",
         "stepped-animation"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/sequencing/keyframes/",
         "en": "https://motion-lexicon.pages.dev/en/sequencing/keyframes/"
@@ -394,6 +910,41 @@
       },
       "aliases": [
         "delay"
+      ],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "timing",
+          "roleLabel": {
+            "zh": "节奏与时长",
+            "en": "Timing"
+          },
+          "note": {
+            "zh": "按下、保存中和已保存使用短时长，保持反馈紧凑可感知。",
+            "en": "Press, saving, and saved use short durations that keep feedback compact and perceptible."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        }
       ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/sequencing/duration/",
@@ -421,6 +972,107 @@
         "perspective",
         "transform-origin"
       ],
+      "productMoments": [
+        {
+          "id": "filter-results",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "筛选结果",
+            "en": "Filter results"
+          },
+          "summary": {
+            "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+            "en": "When a filter changes, update the result count and visible items together."
+          },
+          "scene": {
+            "zh": "资源库中按状态过滤设计文件。",
+            "en": "Filtering design files by status in a resource library."
+          },
+          "role": "entrance",
+          "roleLabel": {
+            "zh": "进入",
+            "en": "Entrance"
+          },
+          "note": {
+            "zh": "新结果从很小的上移距离抵达，保留稳定布局。",
+            "en": "New results settle from a very small upward distance while layout stays stable."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+          }
+        },
+        {
+          "id": "notification-triage",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "通知处理",
+            "en": "Notification triage"
+          },
+          "summary": {
+            "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+            "en": "After handling a notification, let completion and the next pending item follow naturally."
+          },
+          "scene": {
+            "zh": "项目收件箱里清理两条待处理的更新。",
+            "en": "Clearing two pending updates from a project inbox."
+          },
+          "role": "spatial-continuity",
+          "roleLabel": {
+            "zh": "空间连续性",
+            "en": "Spatial continuity"
+          },
+          "note": {
+            "zh": "下一条通知轻微补位，维持队列的空间关系。",
+            "en": "The next notification fills the space with slight travel to preserve queue context."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+          }
+        },
+        {
+          "id": "media-scrub",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "媒体拖动",
+            "en": "Media scrub"
+          },
+          "summary": {
+            "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+            "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+          },
+          "scene": {
+            "zh": "在视频编辑器里精确预览一个镜头片段。",
+            "en": "Precisely previewing a shot inside a video editor."
+          },
+          "role": "continuous-input",
+          "roleLabel": {
+            "zh": "连续输入",
+            "en": "Continuous input"
+          },
+          "note": {
+            "zh": "播放头的位置由拖动值连续驱动。",
+            "en": "The playhead position is driven continuously by the drag value."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/transforms/translate/",
         "en": "https://motion-lexicon.pages.dev/en/transforms/translate/"
@@ -441,6 +1093,7 @@
         "en": "Use controlled perspective and rotation for card flips or hover depth."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/transforms/3d-tilt-flip/",
         "en": "https://motion-lexicon.pages.dev/en/transforms/3d-tilt-flip/"
@@ -461,6 +1114,41 @@
         "en": "Expand or scale from the trigger point to preserve spatial continuity."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "details-disclosure",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "详情展开",
+            "en": "Details disclosure"
+          },
+          "summary": {
+            "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+            "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+          },
+          "scene": {
+            "zh": "发布前检查清单中的一项展开说明。",
+            "en": "An expanded explanation in a pre-publish checklist."
+          },
+          "role": "spatial-continuity",
+          "roleLabel": {
+            "zh": "空间连续性",
+            "en": "Spatial continuity"
+          },
+          "note": {
+            "zh": "内容从标题行所在的位置打开，保持来源可读。",
+            "en": "Content opens from the title row so its origin remains legible."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/transforms/origin-aware-animation/",
         "en": "https://motion-lexicon.pages.dev/en/transforms/origin-aware-animation/"
@@ -481,6 +1169,7 @@
         "en": "Crossfade overlapping, similarly sized states to reduce visual jumps."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/crossfade/",
         "en": "https://motion-lexicon.pages.dev/en/state-transitions/crossfade/"
@@ -505,6 +1194,41 @@
         "shared-element-transition",
         "layout-animation"
       ],
+      "productMoments": [
+        {
+          "id": "workspace-switch",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "工作区切换",
+            "en": "Workspace switch"
+          },
+          "summary": {
+            "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+            "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+          },
+          "scene": {
+            "zh": "项目工作区里的设计、撰写和评审视图。",
+            "en": "Design, writing, and review views inside a project workspace."
+          },
+          "role": "spatial-continuity",
+          "roleLabel": {
+            "zh": "空间连续性",
+            "en": "Spatial continuity"
+          },
+          "note": {
+            "zh": "活动底板沿同一标签轨道移动，保留焦点来源。",
+            "en": "The active pill moves along one tab track to preserve focus origin."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/morph/",
         "en": "https://motion-lexicon.pages.dev/en/state-transitions/morph/"
@@ -525,6 +1249,41 @@
         "en": "Coordinate height, opacity, and icon state for clear disclosure transitions."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "details-disclosure",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "详情展开",
+            "en": "Details disclosure"
+          },
+          "summary": {
+            "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+            "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+          },
+          "scene": {
+            "zh": "发布前检查清单中的一项展开说明。",
+            "en": "An expanded explanation in a pre-publish checklist."
+          },
+          "role": "disclosure",
+          "roleLabel": {
+            "zh": "展开与收起",
+            "en": "Disclosure"
+          },
+          "note": {
+            "zh": "内容高度、箭头和展开状态由同一个触发器协调。",
+            "en": "Content height, arrow, and expanded state are coordinated by one trigger."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/accordion-collapse/",
         "en": "https://motion-lexicon.pages.dev/en/state-transitions/accordion-collapse/"
@@ -545,6 +1304,7 @@
         "en": "Match enter and exit directions to navigation order and preserve context."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/state-transitions/direction-aware-transition/",
         "en": "https://motion-lexicon.pages.dev/en/state-transitions/direction-aware-transition/"
@@ -565,6 +1325,7 @@
         "en": "Reveal content once as it enters the viewport with a reduced-motion fallback."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-reveal/",
         "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-reveal/"
@@ -585,6 +1346,7 @@
         "en": "Bind animation progress to a scroll range and tune its start, end, and travel."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/scroll/scroll-driven-animation/",
         "en": "https://motion-lexicon.pages.dev/en/scroll/scroll-driven-animation/"
@@ -605,6 +1367,7 @@
         "en": "Move foreground and background at restrained relative speeds to create depth."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/scroll/parallax/",
         "en": "https://motion-lexicon.pages.dev/en/scroll/parallax/"
@@ -627,6 +1390,41 @@
       "aliases": [
         "view-transition"
       ],
+      "productMoments": [
+        {
+          "id": "workspace-switch",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "工作区切换",
+            "en": "Workspace switch"
+          },
+          "summary": {
+            "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+            "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+          },
+          "scene": {
+            "zh": "项目工作区里的设计、撰写和评审视图。",
+            "en": "Design, writing, and review views inside a project workspace."
+          },
+          "role": "spatial-continuity",
+          "roleLabel": {
+            "zh": "空间连续性",
+            "en": "Spatial continuity"
+          },
+          "note": {
+            "zh": "标签切换维持原工作区上下文中的连续感。",
+            "en": "The tab switch maintains continuity within the existing workspace context."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/scroll/page-transition/",
         "en": "https://motion-lexicon.pages.dev/en/scroll/page-transition/"
@@ -647,6 +1445,41 @@
         "en": "Reinforce interactivity on pointer hover while keeping layout stable."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "template-choice",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "模板选择",
+            "en": "Template choice"
+          },
+          "summary": {
+            "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+            "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+          },
+          "scene": {
+            "zh": "创建新页面时选择一个起始模板。",
+            "en": "Choosing a starting template when creating a new page."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "候选模板在悬停时明确可交互性，点击后保持当前选择。",
+            "en": "Candidate templates signal interactivity on hover and retain the current choice after selection."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/hover-effect/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/hover-effect/"
@@ -667,6 +1500,272 @@
         "en": "Confirm input immediately with a brief scale and contrast response."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "保存按钮先确认这次点击已被接收。",
+            "en": "The save action acknowledges the click before the result arrives."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        },
+        {
+          "id": "publish-release",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "发布版本",
+            "en": "Publish release"
+          },
+          "summary": {
+            "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+            "en": "Resolve a ready update into a release with a clear landing point."
+          },
+          "scene": {
+            "zh": "发布产品更新时的版本面板。",
+            "en": "A version panel while publishing a product update."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "发布按钮先给出动作已接收的反馈。",
+            "en": "The Publish action first acknowledges that the request was received."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+          }
+        },
+        {
+          "id": "share-link",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "复制分享链接",
+            "en": "Copy share link"
+          },
+          "summary": {
+            "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+            "en": "Copy success is confirmed through the action and a light, temporary cue."
+          },
+          "scene": {
+            "zh": "项目设置中的公开预览链接。",
+            "en": "A public preview link in project settings."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "复制动作在原按钮上立刻得到确认。",
+            "en": "The copy action is confirmed directly on its original control."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+          }
+        },
+        {
+          "id": "card-selection",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "卡片选择",
+            "en": "Card selection"
+          },
+          "summary": {
+            "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+            "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+          },
+          "scene": {
+            "zh": "新建项目时选择一个内容布局。",
+            "en": "Choosing a content layout for a new project."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "每个候选卡片先响应点击，再更新选择。",
+            "en": "Each candidate card responds to the click before selection updates."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+          }
+        },
+        {
+          "id": "template-choice",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "模板选择",
+            "en": "Template choice"
+          },
+          "summary": {
+            "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+            "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+          },
+          "scene": {
+            "zh": "创建新页面时选择一个起始模板。",
+            "en": "Choosing a starting template when creating a new page."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "模板卡片用轻微按压确认选择输入。",
+            "en": "Template cards use a light press response to acknowledge selection input."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+          }
+        },
+        {
+          "id": "layer-insertion",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "图层插入",
+            "en": "Layer insertion"
+          },
+          "summary": {
+            "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+            "en": "New content reserves its correct position, then reveals itself with very small travel."
+          },
+          "scene": {
+            "zh": "设计工具中新增一个标题或强调图层。",
+            "en": "Adding a title or accent layer inside a design tool."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "添加图层按钮先确认这次新增动作。",
+            "en": "The Add layer action first acknowledges the insertion request."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+          }
+        },
+        {
+          "id": "archive-undo",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "归档撤销",
+            "en": "Archive undo"
+          },
+          "summary": {
+            "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+            "en": "After an item leaves, an undo affordance catches the user in the same context."
+          },
+          "scene": {
+            "zh": "任务列表中把一条评审移到归档。",
+            "en": "Moving a review task to archive from a task list."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "归档按钮立即确认移除动作。",
+            "en": "The Archive action immediately acknowledges the removal request."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+          }
+        },
+        {
+          "id": "member-invite",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "成员邀请",
+            "en": "Member invite"
+          },
+          "summary": {
+            "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+            "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+          },
+          "scene": {
+            "zh": "在项目设置中邀请新的设计协作者。",
+            "en": "Inviting a new design collaborator from project settings."
+          },
+          "role": "input-feedback",
+          "roleLabel": {
+            "zh": "输入反馈",
+            "en": "Input feedback"
+          },
+          "note": {
+            "zh": "发送邀请先确认动作已开始。",
+            "en": "The Invite action first confirms that sending has begun."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/press-tap-feedback/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/press-tap-feedback/"
@@ -687,6 +1786,7 @@
         "en": "Show cancellable progress during hold-to-confirm interactions to reduce mistakes."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/hold-to-confirm/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/hold-to-confirm/"
@@ -709,6 +1809,7 @@
       "aliases": [
         "drag"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/drag-to-reorder/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/drag-to-reorder/"
@@ -731,6 +1832,7 @@
       "aliases": [
         "rubber-banding"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/swipe-to-dismiss/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/swipe-to-dismiss/"
@@ -751,6 +1853,7 @@
         "en": "Use one brief horizontal shake for errors or inputs that need attention."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/shake-wiggle/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/shake-wiggle/"
@@ -771,6 +1874,7 @@
         "en": "Expand a restrained ripple from the input coordinate for precise touch feedback."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/feedback/ripple/",
         "en": "https://motion-lexicon.pages.dev/en/feedback/ripple/"
@@ -797,6 +1901,107 @@
         "linear",
         "cubic-bezier",
         "asymmetric-easing"
+      ],
+      "productMoments": [
+        {
+          "id": "card-selection",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "卡片选择",
+            "en": "Card selection"
+          },
+          "summary": {
+            "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+            "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+          },
+          "scene": {
+            "zh": "新建项目时选择一个内容布局。",
+            "en": "Choosing a content layout for a new project."
+          },
+          "role": "timing",
+          "roleLabel": {
+            "zh": "节奏与时长",
+            "en": "Timing"
+          },
+          "note": {
+            "zh": "边界和勾选用同一条曲线收束选择状态。",
+            "en": "Boundary and check settle the selected state with one easing curve."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+          }
+        },
+        {
+          "id": "inline-validation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "行内校验",
+            "en": "Inline validation"
+          },
+          "summary": {
+            "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+            "en": "Offer direction close to the field while people stay in the current task."
+          },
+          "scene": {
+            "zh": "邀请协作者时填写电子邮箱。",
+            "en": "Entering an email address while inviting a collaborator."
+          },
+          "role": "timing",
+          "roleLabel": {
+            "zh": "节奏与时长",
+            "en": "Timing"
+          },
+          "note": {
+            "zh": "边界、图标和文字以同一短节奏抵达有效或错误状态。",
+            "en": "Boundary, icon, and copy reach valid or invalid state on one short cadence."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+          }
+        },
+        {
+          "id": "media-scrub",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "媒体拖动",
+            "en": "Media scrub"
+          },
+          "summary": {
+            "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+            "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+          },
+          "scene": {
+            "zh": "在视频编辑器里精确预览一个镜头片段。",
+            "en": "Precisely previewing a shot inside a video editor."
+          },
+          "role": "timing",
+          "roleLabel": {
+            "zh": "节奏与时长",
+            "en": "Timing"
+          },
+          "note": {
+            "zh": "拖动采用线性响应，让时间与手势保持一一对应。",
+            "en": "Scrubbing responds linearly so time stays one-to-one with the gesture."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+          }
+        }
       ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/easing/easing/",
@@ -827,6 +2032,7 @@
         "velocity",
         "interruptible-animation"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/springs/spring/",
         "en": "https://motion-lexicon.pages.dev/en/springs/spring/"
@@ -849,6 +2055,41 @@
       "aliases": [
         "alternate"
       ],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "timing",
+          "roleLabel": {
+            "zh": "节奏与时长",
+            "en": "Timing"
+          },
+          "note": {
+            "zh": "保存中的图标短暂循环，并在结果抵达后停止。",
+            "en": "The saving icon loops briefly and stops once the result arrives."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/loops/loop/",
         "en": "https://motion-lexicon.pages.dev/en/loops/loop/"
@@ -869,6 +2110,7 @@
         "en": "Continuously scroll overflowing content and pause it on hover or focus."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/loops/marquee/",
         "en": "https://motion-lexicon.pages.dev/en/loops/marquee/"
@@ -889,6 +2131,7 @@
         "en": "Move a decorative node slowly around a center for low-frequency status displays."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/loops/orbit/",
         "en": "https://motion-lexicon.pages.dev/en/loops/orbit/"
@@ -912,6 +2155,7 @@
         "pulse",
         "float"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/loops/idle-animation/",
         "en": "https://motion-lexicon.pages.dev/en/loops/idle-animation/"
@@ -935,6 +2179,7 @@
         "clip-path",
         "mask"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/blur/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/blur/"
@@ -955,6 +2200,7 @@
         "en": "Compare before and after states of the same visual with a draggable divider."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/before-after-slider/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/before-after-slider/"
@@ -975,6 +2221,41 @@
         "en": "Draw icons, paths, or explanatory connectors with stroke offset animation."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "progress-steps",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "进度步骤",
+            "en": "Progress steps"
+          },
+          "summary": {
+            "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+            "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+          },
+          "scene": {
+            "zh": "设置公开页面时依次完成内容、分享和发布。",
+            "en": "Completing content, sharing, and publishing while setting up a public page."
+          },
+          "role": "sequence",
+          "roleLabel": {
+            "zh": "顺序编排",
+            "en": "Sequencing"
+          },
+          "note": {
+            "zh": "连接线延展，把步骤之间的进展关系画出来。",
+            "en": "The extending connector draws the progress relationship between steps."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/line-drawing/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/line-drawing/"
@@ -995,6 +2276,338 @@
         "en": "Transition between similarly sized short labels while preserving reading position."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "保存中与已保存的文案在原位置更新。",
+            "en": "Saving and Saved update in the same label position."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        },
+        {
+          "id": "publish-release",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "发布版本",
+            "en": "Publish release"
+          },
+          "summary": {
+            "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+            "en": "Resolve a ready update into a release with a clear landing point."
+          },
+          "scene": {
+            "zh": "发布产品更新时的版本面板。",
+            "en": "A version panel while publishing a product update."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "版本标签与按钮文案同步切到已上线。",
+            "en": "The version label and action copy switch to Live together."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+          }
+        },
+        {
+          "id": "share-link",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "复制分享链接",
+            "en": "Copy share link"
+          },
+          "summary": {
+            "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+            "en": "Copy success is confirmed through the action and a light, temporary cue."
+          },
+          "scene": {
+            "zh": "项目设置中的公开预览链接。",
+            "en": "A public preview link in project settings."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "链接图标和按钮文案切换为已复制。",
+            "en": "The link icon and button copy switch to Copied."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+          }
+        },
+        {
+          "id": "template-choice",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "模板选择",
+            "en": "Template choice"
+          },
+          "summary": {
+            "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+            "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+          },
+          "scene": {
+            "zh": "创建新页面时选择一个起始模板。",
+            "en": "Choosing a starting template when creating a new page."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "主按钮在原位置带出当前模板名称。",
+            "en": "The primary action adopts the active template name in place."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+          }
+        },
+        {
+          "id": "filter-results",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "筛选结果",
+            "en": "Filter results"
+          },
+          "summary": {
+            "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+            "en": "When a filter changes, update the result count and visible items together."
+          },
+          "scene": {
+            "zh": "资源库中按状态过滤设计文件。",
+            "en": "Filtering design files by status in a resource library."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "结果数量在原位置随筛选范围更新。",
+            "en": "The result count updates in place with the active filter scope."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+          }
+        },
+        {
+          "id": "inline-validation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "行内校验",
+            "en": "Inline validation"
+          },
+          "summary": {
+            "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+            "en": "Offer direction close to the field while people stay in the current task."
+          },
+          "scene": {
+            "zh": "邀请协作者时填写电子邮箱。",
+            "en": "Entering an email address while inviting a collaborator."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "字段旁的辅助文字随输入结果直接更新。",
+            "en": "The nearby helper copy updates directly with the input result."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+          }
+        },
+        {
+          "id": "command-menu",
+          "groupId": "choice",
+          "groupName": {
+            "zh": "选择决策",
+            "en": "Choice"
+          },
+          "name": {
+            "zh": "命令菜单",
+            "en": "Command menu"
+          },
+          "summary": {
+            "zh": "在一个紧凑表面里筛选动作，并为键盘和指针提供相同的焦点反馈。",
+            "en": "Filter actions inside a compact surface with equal focus feedback for keyboard and pointer."
+          },
+          "scene": {
+            "zh": "文档工作区中快速跳转到一个常用动作。",
+            "en": "Jumping quickly to a common action from a document workspace."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "键盘筛选后，当前高亮项持续表达下一次执行结果。",
+            "en": "After keyboard filtering, the active row keeps the next execution clear."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
+          }
+        },
+        {
+          "id": "notification-triage",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "通知处理",
+            "en": "Notification triage"
+          },
+          "summary": {
+            "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+            "en": "After handling a notification, let completion and the next pending item follow naturally."
+          },
+          "scene": {
+            "zh": "项目收件箱里清理两条待处理的更新。",
+            "en": "Clearing two pending updates from a project inbox."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "剩余待处理数量与队列在原位置同步更新。",
+            "en": "The remaining count updates in place with the queue."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+          }
+        },
+        {
+          "id": "progress-steps",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "进度步骤",
+            "en": "Progress steps"
+          },
+          "summary": {
+            "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+            "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+          },
+          "scene": {
+            "zh": "设置公开页面时依次完成内容、分享和发布。",
+            "en": "Completing content, sharing, and publishing while setting up a public page."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "右侧任务说明随当前步骤在原位置更新。",
+            "en": "The task copy updates in place with the current step."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+          }
+        },
+        {
+          "id": "member-invite",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "成员邀请",
+            "en": "Member invite"
+          },
+          "summary": {
+            "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+            "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+          },
+          "scene": {
+            "zh": "在项目设置中邀请新的设计协作者。",
+            "en": "Inviting a new design collaborator from project settings."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "按钮文案和成员状态共同表达待接受结果。",
+            "en": "Action copy and member status jointly express the pending result."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/text-morph/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/text-morph/"
@@ -1015,6 +2628,7 @@
         "en": "Communicate loading progress with a low-contrast shimmer across placeholders."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/skeleton-shimmer/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/skeleton-shimmer/"
@@ -1037,6 +2651,7 @@
       "aliases": [
         "tabular-numbers"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/number-ticker/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/number-ticker/"
@@ -1057,6 +2672,7 @@
         "en": "Reveal short text character by character while preserving complete accessible text."
       },
       "aliases": [],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/polish-effects/typewriter/",
         "en": "https://motion-lexicon.pages.dev/en/polish-effects/typewriter/"
@@ -1079,6 +2695,41 @@
       "aliases": [
         "jank",
         "dropped-frame"
+      ],
+      "productMoments": [
+        {
+          "id": "media-scrub",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "媒体拖动",
+            "en": "Media scrub"
+          },
+          "summary": {
+            "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+            "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+          },
+          "scene": {
+            "zh": "在视频编辑器里精确预览一个镜头片段。",
+            "en": "Precisely previewing a shot inside a video editor."
+          },
+          "role": "continuous-input",
+          "roleLabel": {
+            "zh": "连续输入",
+            "en": "Continuous input"
+          },
+          "note": {
+            "zh": "连续预览需要保持稳定帧率，避免播放头与画面脱节。",
+            "en": "Continuous preview needs stable frame rate so the playhead stays aligned with the frame."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+          }
+        }
       ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/performance/frame-rate/",
@@ -1104,6 +2755,41 @@
         "layout-thrashing",
         "hardware-acceleration"
       ],
+      "productMoments": [
+        {
+          "id": "media-scrub",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "媒体拖动",
+            "en": "Media scrub"
+          },
+          "summary": {
+            "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+            "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+          },
+          "scene": {
+            "zh": "在视频编辑器里精确预览一个镜头片段。",
+            "en": "Precisely previewing a shot inside a video editor."
+          },
+          "role": "continuous-input",
+          "roleLabel": {
+            "zh": "连续输入",
+            "en": "Continuous input"
+          },
+          "note": {
+            "zh": "位置变化优先交给合成友好的属性处理。",
+            "en": "Position changes favor compositor-friendly properties."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/performance/compositing/",
         "en": "https://motion-lexicon.pages.dev/en/performance/compositing/"
@@ -1126,6 +2812,41 @@
       "aliases": [
         "frequency-of-use",
         "spatial-consistency"
+      ],
+      "productMoments": [
+        {
+          "id": "progress-steps",
+          "groupId": "workflow",
+          "groupName": {
+            "zh": "工作流表面",
+            "en": "Workflow"
+          },
+          "name": {
+            "zh": "进度步骤",
+            "en": "Progress steps"
+          },
+          "summary": {
+            "zh": "在连续任务中，让已完成、当前步骤和下一步形成清晰节奏。",
+            "en": "Across a multi-step task, make completed, current, and next steps form a clear cadence."
+          },
+          "scene": {
+            "zh": "设置公开页面时依次完成内容、分享和发布。",
+            "en": "Completing content, sharing, and publishing while setting up a public page."
+          },
+          "role": "sequence",
+          "roleLabel": {
+            "zh": "顺序编排",
+            "en": "Sequencing"
+          },
+          "note": {
+            "zh": "每一步动作只交代完成、关系和下一步。",
+            "en": "Each movement communicates completion, relationship, and the next step."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
+          }
+        }
       ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/principles/purposeful-animation/",
@@ -1150,6 +2871,7 @@
         "follow-through",
         "squash-and-stretch"
       ],
+      "productMoments": [],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/principles/anticipation/",
         "en": "https://motion-lexicon.pages.dev/en/principles/anticipation/"
@@ -1170,6 +2892,41 @@
         "en": "Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "state-change",
+          "roleLabel": {
+            "zh": "状态变化",
+            "en": "State change"
+          },
+          "note": {
+            "zh": "同步状态标记让短暂等待始终可读。",
+            "en": "The synchronous state marker keeps the brief wait legible."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/principles/perceived-performance/",
         "en": "https://motion-lexicon.pages.dev/en/principles/perceived-performance/"
@@ -1190,6 +2947,173 @@
         "en": "Provide equivalent low-motion treatments for travel, scaling, loops, and parallax."
       },
       "aliases": [],
+      "productMoments": [
+        {
+          "id": "save-confirmation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "保存确认",
+            "en": "Save confirmation"
+          },
+          "summary": {
+            "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+            "en": "A submission lands across the action, status marker, and document state together."
+          },
+          "scene": {
+            "zh": "产品更新编辑器中的一条已保存状态。",
+            "en": "A saved state inside a product-update editor."
+          },
+          "role": "motion-preference",
+          "roleLabel": {
+            "zh": "减弱动效",
+            "en": "Reduced motion"
+          },
+          "note": {
+            "zh": "低动态偏好保留状态文字与颜色结果。",
+            "en": "Reduced motion retains the state copy and color result."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+          }
+        },
+        {
+          "id": "publish-release",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "发布版本",
+            "en": "Publish release"
+          },
+          "summary": {
+            "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+            "en": "Resolve a ready update into a release with a clear landing point."
+          },
+          "scene": {
+            "zh": "发布产品更新时的版本面板。",
+            "en": "A version panel while publishing a product update."
+          },
+          "role": "motion-preference",
+          "roleLabel": {
+            "zh": "减弱动效",
+            "en": "Reduced motion"
+          },
+          "note": {
+            "zh": "减弱动效时保留发布结果和时间线记录。",
+            "en": "Reduced motion retains the release result and timeline record."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+          }
+        },
+        {
+          "id": "archive-undo",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "归档撤销",
+            "en": "Archive undo"
+          },
+          "summary": {
+            "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+            "en": "After an item leaves, an undo affordance catches the user in the same context."
+          },
+          "scene": {
+            "zh": "任务列表中把一条评审移到归档。",
+            "en": "Moving a review task to archive from a task list."
+          },
+          "role": "motion-preference",
+          "roleLabel": {
+            "zh": "减弱动效",
+            "en": "Reduced motion"
+          },
+          "note": {
+            "zh": "减弱动效版本保留撤销入口与恢复结果。",
+            "en": "The reduced-motion version retains Undo and the restored result."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+          }
+        },
+        {
+          "id": "inline-validation",
+          "groupId": "feedback",
+          "groupName": {
+            "zh": "完成反馈",
+            "en": "Feedback"
+          },
+          "name": {
+            "zh": "行内校验",
+            "en": "Inline validation"
+          },
+          "summary": {
+            "zh": "输入时提供贴近字段的方向，让用户持续停留在当前任务上。",
+            "en": "Offer direction close to the field while people stay in the current task."
+          },
+          "scene": {
+            "zh": "邀请协作者时填写电子邮箱。",
+            "en": "Entering an email address while inviting a collaborator."
+          },
+          "role": "motion-preference",
+          "roleLabel": {
+            "zh": "减弱动效",
+            "en": "Reduced motion"
+          },
+          "note": {
+            "zh": "低动态版本保留颜色、图标与说明变化。",
+            "en": "The low-motion treatment keeps color, icon, and explanatory changes."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/inline-validation/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/inline-validation/"
+          }
+        },
+        {
+          "id": "details-disclosure",
+          "groupId": "change",
+          "groupName": {
+            "zh": "内容变化",
+            "en": "Change"
+          },
+          "name": {
+            "zh": "详情展开",
+            "en": "Details disclosure"
+          },
+          "summary": {
+            "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+            "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+          },
+          "scene": {
+            "zh": "发布前检查清单中的一项展开说明。",
+            "en": "An expanded explanation in a pre-publish checklist."
+          },
+          "role": "motion-preference",
+          "roleLabel": {
+            "zh": "减弱动效",
+            "en": "Reduced motion"
+          },
+          "note": {
+            "zh": "减弱动效时仍保留展开状态与可访问语义。",
+            "en": "Reduced motion retains expanded state and accessible semantics."
+          },
+          "urls": {
+            "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+            "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+          }
+        }
+      ],
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/principles/reduced-motion/",
         "en": "https://motion-lexicon.pages.dev/en/principles/reduced-motion/"

@@ -276,7 +276,7 @@ assert(redirectLines.length === staticRedirects().length + 1, "Built redirects c
 
 const notFoundHtml = readFileSync(path.join("dist", "404.html"), "utf8");
 assert(notFoundHtml.includes('name="robots" content="noindex,follow"'), "404 page must be excluded from indexing");
-assert(notFoundHtml.includes(`href="${pathFor(defaultLocale, ["catalog"])}"`), "404 page must link to the canonical catalog");
+assert(notFoundHtml.includes(`href="${pathFor(defaultLocale)}"`), "404 page must link to the canonical home");
 
 assert(!listFiles("dist").some((file) => file.endsWith(".map")), "Production output contains source maps");
 

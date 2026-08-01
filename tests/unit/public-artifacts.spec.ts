@@ -32,8 +32,20 @@ describe("public machine-readable artifacts", () => {
   it("publishes the complete canonical catalog and vocabulary", async () => {
     const catalog = await parseArtifact("data/v1/catalog.json") as unknown as {
       schemaVersion: number;
-      counts: { categories: number; recipes: number; packs: number; vocabularyTerms: number; aliases: number };
-      recipes: Array<{ id: string; dataUrl: string }>;
+      counts: {
+        categories: number;
+        recipes: number;
+        packs: number;
+        motionPrimitives: number;
+        productMoments: number;
+        vocabularyTerms: number;
+        aliases: number;
+      };
+      recipes: Array<{ id: string; dataUrl: string; productMoments: Array<{ id: string }> }>;
+      endpoints: {
+        productMoments: { zh: string; en: string };
+        motionPrimitives: { zh: string; en: string };
+      };
     };
     const vocabulary = await parseArtifact("data/v1/vocabulary.json") as unknown as {
       count: number;
@@ -47,11 +59,18 @@ describe("public machine-readable artifacts", () => {
       categories: 12,
       recipes: 44,
       packs: 16,
+      motionPrimitives: 44,
+      productMoments: 16,
       vocabularyTerms: 91,
       aliases: 47
     });
     expect(catalog.recipes).toHaveLength(44);
     expect(new Set(catalog.recipes.map((recipe) => recipe.id)).size).toBe(44);
+    expect(catalog.recipes.find((recipe) => recipe.id === "press-tap-feedback")?.productMoments).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: "save-confirmation" })])
+    );
+    expect(catalog.endpoints.productMoments.en).toBe("https://motion-lexicon.pages.dev/en/packs/");
+    expect(catalog.endpoints.motionPrimitives.en).toBe("https://motion-lexicon.pages.dev/en/catalog/");
     expect(vocabulary).toMatchObject({ count: 91, canonicalCount: 44, aliasCount: 47 });
     expect(vocabulary.terms).toHaveLength(91);
     expect(new Set(vocabulary.terms.map((term) => term.id)).size).toBe(91);
@@ -71,12 +90,15 @@ describe("public machine-readable artifacts", () => {
     expect(schema.$defs).toHaveProperty("motionPacksDocument");
     expect(schema.$defs).toHaveProperty("catalogDocument");
     expect(schema.$defs).toHaveProperty("vocabularyDocument");
+    expect(schema.$defs).toHaveProperty("motionFoundation");
+    expect(schema.$defs).toHaveProperty("productMomentReference");
 
     for (const filename of recipeFiles) {
       const recipe = await parseArtifact(`data/v1/recipes/${filename}`);
       expect(recipe.kind, filename).toBe("recipe");
       expect(recipe.parameters, filename).toBeInstanceOf(Array);
       expect(recipe.guidance, filename).toBeTypeOf("object");
+      expect(recipe.productMoments, filename).toBeInstanceOf(Array);
       expect(recipe, filename).not.toHaveProperty("outputs");
       expect(recipe, filename).not.toHaveProperty("prompt");
       expect(recipe, filename).not.toHaveProperty("html");
@@ -89,7 +111,16 @@ describe("public machine-readable artifacts", () => {
     const packs = await parseArtifact("data/v1/packs.json") as unknown as {
       kind: string;
       count: number;
-      packs: Array<{ id: string; source: { html: string; css: string; js: string } }>;
+      packs: Array<{
+        id: string;
+        foundations: Array<{
+          id: string;
+          role: string;
+          roleLabel: { zh: string; en: string };
+          note: { zh: string; en: string };
+        }>;
+        source: { html: string; css: string; js: string };
+      }>;
     };
 
     expect(packs).toMatchObject({ kind: "packs", count: 16 });
@@ -99,12 +130,23 @@ describe("public machine-readable artifacts", () => {
       expect(pack.source.html, pack.id).toContain("data-motion-pack");
       expect(pack.source.css, pack.id).toContain("prefers-reduced-motion");
       expect(pack.source.js, pack.id).toContain("querySelector");
+      expect(pack.foundations.length, pack.id).toBeGreaterThanOrEqual(3);
+      expect(new Set(pack.foundations.map((foundation) => foundation.id)).size, pack.id).toBe(
+        pack.foundations.length
+      );
+      for (const foundation of pack.foundations) {
+        expect(foundation.role).not.toHaveLength(0);
+        expect(foundation.roleLabel.zh).not.toHaveLength(0);
+        expect(foundation.roleLabel.en).not.toHaveLength(0);
+        expect(foundation.note.zh).not.toHaveLength(0);
+        expect(foundation.note.en).not.toHaveLength(0);
+      }
     }
   });
 
   it("advertises the free CLI and Agent Skill in both LLM indexes", async () => {
     const expectedCommands = [
-      "npx -y github:Ryan-yang125/motion-lexicon#v1.0.0",
+      "npx -y github:Ryan-yang125/motion-lexicon#v1.1.0",
       "recommend \"describe the motion you want\" --locale en --format json",
       "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
     ];
@@ -114,6 +156,7 @@ describe("public machine-readable artifacts", () => {
       for (const command of expectedCommands) expect(content, filename).toContain(command);
       expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/finder/");
       expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/packs/");
+      expect(content, filename).toContain("https://motion-lexicon.pages.dev/en/catalog/");
     }
   });
 

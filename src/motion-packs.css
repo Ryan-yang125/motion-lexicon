@@ -322,7 +322,8 @@
 .motion-pack-inspector,
 .motion-pack-export,
 .motion-pack-guidance,
-.motion-pack-related {
+.motion-pack-related,
+.motion-pack-foundations {
   border: 1px solid var(--interior-line);
   border-radius: 16px;
   background: var(--interior-panel);
@@ -388,6 +389,29 @@
 .motion-pack-related-link { min-height: 84px; justify-content: space-between; border-radius: 12px; padding: 12px; color: var(--interior-ink); box-shadow: none; }
 .motion-pack-related-link > span { display: grid; gap: 4px; }
 .motion-pack-related-link small { color: var(--interior-tertiary); font-family: var(--mono); font-size: 10px; }
+
+.motion-pack-foundations { padding: 20px; }
+.motion-pack-foundation-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.motion-pack-foundation-link {
+  min-width: 0;
+  min-height: 112px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--interior-line);
+  border-radius: 12px;
+  padding: 13px;
+  color: var(--interior-ink);
+  background: var(--interior-well);
+  transition: transform 150ms var(--interior-ease), border-color 150ms ease, background-color 150ms ease;
+}
+.motion-pack-foundation-link:hover { border-color: var(--interior-ink); background: var(--interior-panel); transform: translateY(-1px); }
+.motion-pack-foundation-link:focus-visible { outline: 2px solid var(--interior-focus); outline-offset: 2px; }
+.motion-pack-foundation-copy { min-width: 0; display: grid; gap: 5px; }
+.motion-pack-foundation-copy small { color: var(--interior-focus); font-family: var(--mono); font-size: 12px; }
+.motion-pack-foundation-copy strong { color: var(--interior-ink); font-size: 14px; font-weight: 500; }
+.motion-pack-foundation-copy em { color: var(--interior-secondary); font-size: 12px; font-style: normal; line-height: 1.48; }
 
 /* Finder continuation — compact enough to keep the selected atomic direction in focus. */
 .finder-pack-bridge {
@@ -483,7 +507,7 @@
   .motion-pack-card { grid-template-rows: 220px auto; }
   .motion-pack-finder-callout { grid-template-columns: 1fr; gap: 16px; }
   .motion-pack-finder-callout a { width: max-content; }
-  .motion-pack-guidance, .motion-pack-related-grid { grid-template-columns: 1fr; }
+  .motion-pack-guidance, .motion-pack-related-grid, .motion-pack-foundation-grid { grid-template-columns: 1fr; }
   .motion-pack-rule { min-height: 0; border-right: 0; border-bottom: 1px solid var(--interior-line); }
   .motion-pack-rule:last-child { border-bottom: 0; }
   .motion-pack-related-link { min-height: 58px; }
@@ -565,4 +589,251 @@
 @media (max-width: 640px) {
   .motion-pack-hero h1,
   .motion-pack-page-header h1 { font-size: 24px; }
+}
+
+/* V1.1 home — two equally weighted directories with a shared Finder intake. */
+.dual-library-home {
+  width: min(100%, 1160px);
+  margin: 0 auto;
+  padding: clamp(42px, 7vw, 88px) 0 96px;
+  color: var(--interior-ink);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.15px;
+}
+
+.dual-library-home * { letter-spacing: -0.15px; }
+
+.dual-library-intro {
+  display: grid;
+  justify-items: start;
+  max-width: 690px;
+}
+
+.dual-library-intro h1 {
+  max-width: 13ch;
+  margin: 12px 0;
+  color: var(--interior-ink);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.1;
+  white-space: pre-line;
+}
+
+.dual-library-intro > p:not(.dual-library-finder-note) {
+  max-width: 49ch;
+  margin: 0;
+  color: var(--interior-secondary);
+  font-size: 14px;
+  line-height: 1.62;
+}
+
+.dual-library-search {
+  width: min(100%, 548px);
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  margin-top: 22px;
+  border: 1px solid var(--interior-line);
+  border-radius: 999px;
+  padding: 4px 5px 4px 15px;
+  color: var(--interior-tertiary);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+  transition: border-color 150ms ease, box-shadow 150ms var(--interior-ease);
+}
+
+.dual-library-search:focus-within {
+  border-color: color-mix(in srgb, var(--interior-focus) 68%, var(--interior-line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--interior-focus) 12%, transparent);
+}
+
+.dual-library-search input {
+  min-width: 0;
+  height: 38px;
+  border: 0;
+  outline: 0;
+  color: var(--interior-ink);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+
+.dual-library-search input::placeholder { color: var(--interior-tertiary); }
+.dual-library-search .ml-button { min-height: 38px; border-radius: 999px; padding-inline: 14px; font-size: 12px; }
+
+.dual-library-finder-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0 0;
+  color: var(--interior-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dual-library-finder-note span {
+  color: var(--interior-focus);
+  font-family: var(--mono);
+}
+
+.dual-library-directories {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: clamp(34px, 5vw, 58px);
+}
+
+.dual-library-directory-card {
+  min-width: 0;
+  min-height: 426px;
+  display: grid;
+  grid-template-rows: auto minmax(190px, 1fr) auto;
+  gap: 18px;
+  overflow: hidden;
+  border: 1px solid var(--interior-line);
+  border-radius: 16px;
+  padding: 20px;
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+  transition: transform 180ms var(--interior-ease), box-shadow 180ms var(--interior-ease), border-color 150ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dual-library-directory-card:hover {
+    border-color: color-mix(in srgb, var(--interior-ink) 22%, var(--interior-line));
+    box-shadow: var(--interior-shadow-raised);
+    transform: translateY(-2px);
+  }
+}
+
+.dual-library-directory-card:focus-visible { outline: 2px solid var(--interior-focus); outline-offset: 3px; }
+
+.dual-library-directory-copy h2 {
+  max-width: 18ch;
+  margin: 8px 0 0;
+  color: var(--interior-ink);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.16;
+}
+
+.dual-library-directory-copy p {
+  max-width: 39ch;
+  margin: 9px 0 0;
+  color: var(--interior-secondary);
+  font-size: 13px;
+  line-height: 1.56;
+}
+
+.dual-library-directory-stage {
+  min-height: 190px;
+  overflow: hidden;
+  border: 1px solid var(--interior-line);
+  border-radius: 12px;
+  background: var(--interior-well);
+}
+
+.dual-library-directory-stage .motion-pack-preview { min-height: 190px; }
+
+.dual-library-primitive-card.library-hero-preview {
+  width: auto;
+  border-radius: 16px;
+  background: var(--interior-panel);
+}
+
+.dual-library-primitive-stage { position: relative; }
+.dual-library-primitive-stage .library-motion-thumb { width: 100%; min-height: 190px; height: 100%; border: 0; background-color: var(--interior-well); }
+.dual-library-primitive-stage .motion-thumbnail-runtime { position: absolute; inset: 0; }
+
+.dual-library-directory-action {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--interior-focus);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (max-width: 760px) {
+  .dual-library-directories { grid-template-columns: 1fr; }
+  .dual-library-directory-card { min-height: 390px; }
+}
+
+@media (max-width: 640px) {
+  .dual-library-home { padding-top: 34px; padding-bottom: 64px; }
+  .dual-library-intro h1, .dual-library-directory-copy h2 { font-size: 24px; }
+  .dual-library-search { grid-template-columns: auto minmax(0, 1fr); }
+  .dual-library-search .ml-button { grid-column: 1 / -1; width: 100%; }
+  .dual-library-directory-card { min-height: 362px; padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dual-library-directory-card { transform: none !important; transition-duration: 1ms !important; }
+}
+
+/* Reverse relation on atomic recipe pages. */
+.recipe-pack-connections {
+  width: min(100%, 1160px);
+  margin: 20px auto 0;
+  border-top: 1px solid var(--interior-line);
+  padding-top: 24px;
+}
+
+.recipe-pack-connections-head h2 {
+  margin: 8px 0 0;
+  color: var(--interior-ink);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.16;
+}
+
+.recipe-pack-connections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.recipe-pack-connection {
+  min-width: 0;
+  min-height: 118px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--interior-line);
+  border-radius: 12px;
+  padding: 13px;
+  color: var(--interior-ink);
+  background: var(--interior-panel);
+  box-shadow: var(--interior-shadow);
+  transition: transform 150ms var(--interior-ease), border-color 150ms ease, box-shadow 150ms var(--interior-ease);
+}
+
+.recipe-pack-connection:hover {
+  border-color: color-mix(in srgb, var(--interior-ink) 22%, var(--interior-line));
+  box-shadow: var(--interior-shadow-raised);
+  transform: translateY(-1px);
+}
+
+.recipe-pack-connection:focus-visible { outline: 2px solid var(--interior-focus); outline-offset: 2px; }
+.recipe-pack-connection > span { min-width: 0; display: grid; gap: 5px; }
+.recipe-pack-connection small { color: var(--interior-focus); font-family: var(--mono); font-size: 12px; }
+.recipe-pack-connection strong { color: var(--interior-ink); font-size: 14px; font-weight: 500; }
+.recipe-pack-connection em { color: var(--interior-secondary); font-size: 12px; font-style: normal; line-height: 1.48; }
+
+@media (max-width: 760px) {
+  .recipe-pack-connections-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .recipe-pack-connections { margin-top: 16px; padding-top: 20px; }
+  .recipe-pack-connections-grid { grid-template-columns: 1fr; }
+  .recipe-pack-connections-head h2 { font-size: 24px; }
+  .recipe-pack-connection { min-height: 96px; }
 }

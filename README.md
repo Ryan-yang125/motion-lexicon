@@ -11,15 +11,16 @@
   <a href="./README.zh-CN.md">简体中文</a>
 </p>
 
-<p align="center"><strong>Copy a complete product moment into your interface.</strong></p>
+<p align="center"><strong>Copy a product moment or motion primitive into your interface.</strong></p>
 
 <p align="center">
-  A free, open-source collection of real product interactions for builders, designers, developers, and AI agents.<br />
-  <strong>Preview → Trigger → Inspect → Copy</strong>
+  A free, open-source motion system for builders, designers, developers, and AI agents.<br />
+  <strong>Product moments · Motion primitives · Finder</strong>
 </p>
 
 <p align="center">
-  <a href="https://motion-lexicon.pages.dev/en/packs/"><strong>Explore Motion Packs</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/packs/"><strong>Explore Product Moments</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/catalog/"><strong>Explore Motion Primitives</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/finder/"><strong>Use Motion Finder</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/"><strong>Visit the Website</strong></a>
 </p>
@@ -32,14 +33,28 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon V1 — sixteen real product moments](docs/assets/readme-v1-home.webp)
+![Motion Lexicon V1.1 — product moments and motion primitives](docs/assets/readme-v1-home.webp)
+
+## Two collections, one motion system
+
+V1.1 brings together two equal collections for product motion. **Motion Packs**
+are complete product moments; **Motion Primitives** are the 44 focused building
+blocks behind interface behavior. Start from the level that matches the work in
+front of you, then move between them when you need a fuller implementation or a
+more precise adjustment.
+
+| Collection | Best starting point | What you can copy |
+| --- | --- | --- |
+| [Product Moments · Motion Packs](https://motion-lexicon.pages.dev/en/packs/) | A save, publish, invite, filter, or similar product state | A complete scene, interaction contract, Prompt, HTML, CSS, and JavaScript |
+| [Motion Primitives](https://motion-lexicon.pages.dev/en/catalog/) | An entrance, easing curve, sequence, transition, or parameter | A precise live workspace, terminology, parameters, and portable implementation |
+| [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | A feeling or intent without an exact term | Relevant product moments and motion primitives in one search path |
 
 ## Motion Packs for real product moments
 
-V1.0 is built around **16 Motion Packs**: complete, small interactions that
-already live inside recognisable product surfaces. Trigger each Pack in the
-browser, inspect its state changes, then copy the Prompt, HTML, CSS, and
-JavaScript into your own product.
+The first 16 Packs are complete, small interactions that already live inside
+recognisable product surfaces. Trigger each Pack in the browser, inspect its
+state changes, then copy the Prompt, HTML, CSS, and JavaScript into your own
+product.
 
 Every Pack carries one clear interaction contract:
 
@@ -55,10 +70,10 @@ Every Pack carries one clear interaction contract:
 
 | Group | Motion Packs |
 | --- | --- |
-| Feedback | Save confirmation, Publish release, Copy share link |
-| Choice | Card selection, Workspace switch, Template choice |
-| Change | Layer insertion, Archive undo, Filter results, Inline validation |
-| Workflow | Command menu, Details disclosure, Notification triage, Progress steps, Member invite, Media scrub |
+| Feedback | Save confirmation, Publish release, Share link, Inline validation |
+| Choice | Card selection, Workspace switch, Template choice, Command menu |
+| Change | Layer insertion, Archive undo, Filter results, Details disclosure |
+| Workflow | Notification triage, Progress steps, Member invite, Media scrub |
 
 Start with the [Motion Pack gallery](https://motion-lexicon.pages.dev/en/packs/),
 then open a detail such as [Save confirmation](https://motion-lexicon.pages.dev/en/packs/save-confirmation/).
@@ -73,46 +88,51 @@ then open a detail such as [Save confirmation](https://motion-lexicon.pages.dev/
 The gallery and every Pack detail are static pages. They load fast, work without
 an account, and stay easy to share in a design review, issue, or agent task.
 
-## Finder and vocabulary stay with you
+## Connected through Finder and related motion
 
-Motion Packs are the primary product surface in V1. The original discovery layer
-continues to support the full decision path:
+Motion Finder spans both collections. Pack detail pages surface the motion
+primitives that shape each product moment; primitive workspaces surface product
+moments for their declared Pack relationships. This creates one continuous
+motion system while preserving the different jobs each collection serves.
 
 | Surface | What it gives you |
 | --- | --- |
 | [Motion Packs](https://motion-lexicon.pages.dev/en/packs/) | 16 complete, copy-ready product interactions |
 | [Motion Finder](https://motion-lexicon.pages.dev/en/finder/) | Explainable candidates from a natural-language motion request |
-| [Motion Library](https://motion-lexicon.pages.dev/en/catalog/) | 44 canonical motion workspaces across 12 families |
+| [Motion Primitives](https://motion-lexicon.pages.dev/en/catalog/) | 44 canonical motion workspaces across 12 families |
 | [Vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/) | 91 bilingual terms with definitions and close-term distinctions |
 | [Versioned data](https://motion-lexicon.pages.dev/data/v1/packs.json) | Machine-readable Packs, catalog, vocabulary, and schema |
 
-Finder helps choose the motion language. A Pack turns that choice into a complete
-product interaction. The 44 canonical workspaces and all 91 source terms remain
-available for exact search, SEO, and deeper implementation reference.
+Finder helps you find the right motion language, product moment, or both. The 44
+canonical workspaces and all 91 source terms remain available for exact search,
+SEO, and deeper implementation reference.
 
 ## Use it from the browser, CLI, or an agent
 
-The website is the fastest visual route. The free CLI exposes the same V1 Pack
-data locally:
+The website is the fastest visual route. The free CLI exposes the same V1.1
+collections through parallel `packs` and `list` commands:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 packs \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs \
   --locale en --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 pack save-confirmation \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 pack save-confirmation \
   --locale en --format bundle
+
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list \
+  --locale en --format json
 ```
 
-Finder and the recipe library remain available through the same CLI:
+Primitive discovery and export remain available through the same CLI:
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 recommend \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend \
   "A card enters quickly, then settles into place" \
   --locale en --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 search \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 search \
   "shared element" --locale en
-npx -y github:Ryan-yang125/motion-lexicon#v1.0.0 export spring \
+npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 export spring \
   --locale en --format bundle
 ```
 
@@ -143,11 +163,12 @@ independent, so it can travel into an existing product stack.
 - Interaction primitives: [Interior](https://github.com/ddoemonn/interior),
   adapted under MIT with attribution in [NOTICE](./NOTICE)
 
-## V1.0 snapshot
+## V1.1 snapshot
 
-**V1.0.0 is live.** The public product includes 16 real product Motion Packs,
-the bilingual Finder, 44 canonical motion workspaces, 91 source terms, the CLI,
-Agent Skill, versioned machine-readable data, localized SEO, and static delivery.
+**V1.1.0 is live.** The public product includes two equal collections: 16 real
+product Motion Packs and 44 canonical Motion Primitives. Finder, the bilingual
+vocabulary, CLI, Agent Skill, versioned machine-readable data, localized SEO,
+and static delivery connect the full system.
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -161,11 +182,11 @@ Every public product route is available in English (`/en/`) and Chinese
 
 | Route shape | Purpose |
 | --- | --- |
-| `/:locale/` | Motion Pack gallery and product home |
+| `/:locale/` | Product home with equal routes into both collections |
 | `/:locale/packs/` | All 16 real product Motion Packs |
 | `/:locale/packs/:packId/` | A Pack preview, guidance, and portable export |
 | `/:locale/finder/` | Natural-language motion recommendation |
-| `/:locale/catalog/` | Full 44-workspace motion library |
+| `/:locale/catalog/` | Full 44-workspace Motion Primitives collection |
 | `/:locale/vocabulary/` | Complete 91-term vocabulary |
 | `/:locale/:category/:recipe/` | Canonical recipe workspace |
 | `/data/v1/*.json` | Versioned Pack, catalog, vocabulary, and schema data |
@@ -223,6 +244,7 @@ and [DESIGN.md](./DESIGN.md). Contribution guidelines are in
 
 ---
 
-**[Explore Motion Packs](https://motion-lexicon.pages.dev/en/packs/)** ·
+**[Explore Product Moments](https://motion-lexicon.pages.dev/en/packs/)** ·
+**[Explore Motion Primitives](https://motion-lexicon.pages.dev/en/catalog/)** ·
 **[Use Motion Finder](https://motion-lexicon.pages.dev/en/finder/)** ·
 **[阅读中文 README](./README.zh-CN.md)**

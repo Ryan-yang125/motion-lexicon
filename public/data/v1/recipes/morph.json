@@ -221,5 +221,40 @@
     "crossfade",
     "accordion-collapse",
     "direction-aware-transition"
+  ],
+  "productMoments": [
+    {
+      "id": "workspace-switch",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "工作区切换",
+        "en": "Workspace switch"
+      },
+      "summary": {
+        "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+        "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+      },
+      "scene": {
+        "zh": "项目工作区里的设计、撰写和评审视图。",
+        "en": "Design, writing, and review views inside a project workspace."
+      },
+      "role": "spatial-continuity",
+      "roleLabel": {
+        "zh": "空间连续性",
+        "en": "Spatial continuity"
+      },
+      "note": {
+        "zh": "活动底板沿同一标签轨道移动，保留焦点来源。",
+        "en": "The active pill moves along one tab track to preserve focus origin."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+      }
+    }
   ]
 }

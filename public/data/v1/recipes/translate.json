@@ -303,5 +303,106 @@
     "3d-tilt-flip",
     "origin-aware-animation",
     "duration"
+  ],
+  "productMoments": [
+    {
+      "id": "filter-results",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "筛选结果",
+        "en": "Filter results"
+      },
+      "summary": {
+        "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+        "en": "When a filter changes, update the result count and visible items together."
+      },
+      "scene": {
+        "zh": "资源库中按状态过滤设计文件。",
+        "en": "Filtering design files by status in a resource library."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "新结果从很小的上移距离抵达，保留稳定布局。",
+        "en": "New results settle from a very small upward distance while layout stays stable."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+      }
+    },
+    {
+      "id": "notification-triage",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "通知处理",
+        "en": "Notification triage"
+      },
+      "summary": {
+        "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+        "en": "After handling a notification, let completion and the next pending item follow naturally."
+      },
+      "scene": {
+        "zh": "项目收件箱里清理两条待处理的更新。",
+        "en": "Clearing two pending updates from a project inbox."
+      },
+      "role": "spatial-continuity",
+      "roleLabel": {
+        "zh": "空间连续性",
+        "en": "Spatial continuity"
+      },
+      "note": {
+        "zh": "下一条通知轻微补位，维持队列的空间关系。",
+        "en": "The next notification fills the space with slight travel to preserve queue context."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+      }
+    },
+    {
+      "id": "media-scrub",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "媒体拖动",
+        "en": "Media scrub"
+      },
+      "summary": {
+        "zh": "拖动时间线时，让画面帧、时间标记和进度轨道保持同步。",
+        "en": "While scrubbing a timeline, keep frame, time marker, and progress track in sync."
+      },
+      "scene": {
+        "zh": "在视频编辑器里精确预览一个镜头片段。",
+        "en": "Precisely previewing a shot inside a video editor."
+      },
+      "role": "continuous-input",
+      "roleLabel": {
+        "zh": "连续输入",
+        "en": "Continuous input"
+      },
+      "note": {
+        "zh": "播放头的位置由拖动值连续驱动。",
+        "en": "The playhead position is driven continuously by the drag value."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/media-scrub/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/media-scrub/"
+      }
+    }
   ]
 }

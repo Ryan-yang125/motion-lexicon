@@ -170,5 +170,172 @@
     "slide-in",
     "scale-in",
     "reveal"
+  ],
+  "productMoments": [
+    {
+      "id": "share-link",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "复制分享链接",
+        "en": "Copy share link"
+      },
+      "summary": {
+        "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+        "en": "Copy success is confirmed through the action and a light, temporary cue."
+      },
+      "scene": {
+        "zh": "项目设置中的公开预览链接。",
+        "en": "A public preview link in project settings."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "短提示出现后自然离开，不打断后续操作。",
+        "en": "A short cue appears and leaves without interrupting the next action."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+      }
+    },
+    {
+      "id": "workspace-switch",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "工作区切换",
+        "en": "Workspace switch"
+      },
+      "summary": {
+        "zh": "切换上下文时，让活动标签与内容表面保持一条连续的焦点路径。",
+        "en": "When switching context, keep the active tab and content surface on one continuous focus path."
+      },
+      "scene": {
+        "zh": "项目工作区里的设计、撰写和评审视图。",
+        "en": "Design, writing, and review views inside a project workspace."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "内容表面用极短透明度变化完成视图替换。",
+        "en": "The content surface uses a brief opacity change to swap views."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/workspace-switch/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/workspace-switch/"
+      }
+    },
+    {
+      "id": "archive-undo",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "归档撤销",
+        "en": "Archive undo"
+      },
+      "summary": {
+        "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+        "en": "After an item leaves, an undo affordance catches the user in the same context."
+      },
+      "scene": {
+        "zh": "任务列表中把一条评审移到归档。",
+        "en": "Moving a review task to archive from a task list."
+      },
+      "role": "exit-recovery",
+      "roleLabel": {
+        "zh": "离开与恢复",
+        "en": "Exit and recovery"
+      },
+      "note": {
+        "zh": "任务离开列表时淡出，撤销后回到同一位置。",
+        "en": "The task fades out of the list and returns to the same place on Undo."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+      }
+    },
+    {
+      "id": "filter-results",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "筛选结果",
+        "en": "Filter results"
+      },
+      "summary": {
+        "zh": "筛选条件变化时，让结果数量和可见项目一起更新。",
+        "en": "When a filter changes, update the result count and visible items together."
+      },
+      "scene": {
+        "zh": "资源库中按状态过滤设计文件。",
+        "en": "Filtering design files by status in a resource library."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "符合条件的卡片以短透明度变化进入结果网格。",
+        "en": "Matching cards enter the result grid through a short opacity change."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/filter-results/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/filter-results/"
+      }
+    },
+    {
+      "id": "notification-triage",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "通知处理",
+        "en": "Notification triage"
+      },
+      "summary": {
+        "zh": "处理一条提醒后，让已完成感和下一条待处理内容自然接续。",
+        "en": "After handling a notification, let completion and the next pending item follow naturally."
+      },
+      "scene": {
+        "zh": "项目收件箱里清理两条待处理的更新。",
+        "en": "Clearing two pending updates from a project inbox."
+      },
+      "role": "exit-recovery",
+      "roleLabel": {
+        "zh": "离开与恢复",
+        "en": "Exit and recovery"
+      },
+      "note": {
+        "zh": "已处理通知降低层级后离开队列。",
+        "en": "A handled notification leaves the queue after its hierarchy recedes."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/notification-triage/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/notification-triage/"
+      }
+    }
   ]
 }

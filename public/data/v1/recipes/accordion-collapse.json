@@ -153,5 +153,40 @@
     "crossfade",
     "morph",
     "direction-aware-transition"
+  ],
+  "productMoments": [
+    {
+      "id": "details-disclosure",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "详情展开",
+        "en": "Details disclosure"
+      },
+      "summary": {
+        "zh": "让被收起的信息在原有位置打开，内容与触发器保持清晰关联。",
+        "en": "Open collapsed information in place while preserving a clear relationship with its trigger."
+      },
+      "scene": {
+        "zh": "发布前检查清单中的一项展开说明。",
+        "en": "An expanded explanation in a pre-publish checklist."
+      },
+      "role": "disclosure",
+      "roleLabel": {
+        "zh": "展开与收起",
+        "en": "Disclosure"
+      },
+      "note": {
+        "zh": "内容高度、箭头和展开状态由同一个触发器协调。",
+        "en": "Content height, arrow, and expanded state are coordinated by one trigger."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
+      }
+    }
   ]
 }

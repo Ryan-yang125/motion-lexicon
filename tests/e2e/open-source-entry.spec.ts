@@ -23,6 +23,10 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
     "href",
     "/data/v1/catalog.json"
   );
+  await expect(resources.getByRole("link", { name: "Packs JSON", exact: true })).toHaveAttribute(
+    "href",
+    "/data/v1/packs.json"
+  );
 
   const catalogResponse = await request.get("/data/v1/catalog.json");
   expect(catalogResponse.ok()).toBe(true);
@@ -30,6 +34,14 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
     kind: "catalog",
     schemaVersion: 1,
     counts: { recipes: 44, vocabularyTerms: 91 }
+  });
+
+  const packsResponse = await request.get("/data/v1/packs.json");
+  expect(packsResponse.ok()).toBe(true);
+  await expect(packsResponse.json()).resolves.toMatchObject({
+    kind: "packs",
+    schemaVersion: 1,
+    count: 16
   });
 
   const llmsResponse = await request.get("/llms.txt");

@@ -153,5 +153,271 @@
     "hover-effect",
     "hold-to-confirm",
     "drag-to-reorder"
+  ],
+  "productMoments": [
+    {
+      "id": "save-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "保存确认",
+        "en": "Save confirmation"
+      },
+      "summary": {
+        "zh": "一次提交后，按钮、状态标记和文档状态一起抵达结果。",
+        "en": "A submission lands across the action, status marker, and document state together."
+      },
+      "scene": {
+        "zh": "产品更新编辑器中的一条已保存状态。",
+        "en": "A saved state inside a product-update editor."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "保存按钮先确认这次点击已被接收。",
+        "en": "The save action acknowledges the click before the result arrives."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
+      }
+    },
+    {
+      "id": "publish-release",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "发布版本",
+        "en": "Publish release"
+      },
+      "summary": {
+        "zh": "把一项准备完成的更新，收束成一次有明确落点的发布。",
+        "en": "Resolve a ready update into a release with a clear landing point."
+      },
+      "scene": {
+        "zh": "发布产品更新时的版本面板。",
+        "en": "A version panel while publishing a product update."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "发布按钮先给出动作已接收的反馈。",
+        "en": "The Publish action first acknowledges that the request was received."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/publish-release/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/publish-release/"
+      }
+    },
+    {
+      "id": "share-link",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "复制分享链接",
+        "en": "Copy share link"
+      },
+      "summary": {
+        "zh": "复制成功通过按钮与短提示共同确认，提示轻量离开。",
+        "en": "Copy success is confirmed through the action and a light, temporary cue."
+      },
+      "scene": {
+        "zh": "项目设置中的公开预览链接。",
+        "en": "A public preview link in project settings."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "复制动作在原按钮上立刻得到确认。",
+        "en": "The copy action is confirmed directly on its original control."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/share-link/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/share-link/"
+      }
+    },
+    {
+      "id": "card-selection",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "卡片选择",
+        "en": "Card selection"
+      },
+      "summary": {
+        "zh": "用户选中一个布局后，边界、勾选和选择摘要同步表达结果。",
+        "en": "After selecting a layout, its boundary, checkmark, and selection summary express the result together."
+      },
+      "scene": {
+        "zh": "新建项目时选择一个内容布局。",
+        "en": "Choosing a content layout for a new project."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "每个候选卡片先响应点击，再更新选择。",
+        "en": "Each candidate card responds to the click before selection updates."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/card-selection/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/card-selection/"
+      }
+    },
+    {
+      "id": "template-choice",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "模板选择",
+        "en": "Template choice"
+      },
+      "summary": {
+        "zh": "在一组可视模板中确定方向，并把下一步操作稳定地接在选择之后。",
+        "en": "Choose direction from visual templates, then attach the next action steadily to that choice."
+      },
+      "scene": {
+        "zh": "创建新页面时选择一个起始模板。",
+        "en": "Choosing a starting template when creating a new page."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "模板卡片用轻微按压确认选择输入。",
+        "en": "Template cards use a light press response to acknowledge selection input."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/template-choice/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/template-choice/"
+      }
+    },
+    {
+      "id": "layer-insertion",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "图层插入",
+        "en": "Layer insertion"
+      },
+      "summary": {
+        "zh": "新内容先占住正确位置，再用极小的位移显露出来。",
+        "en": "New content reserves its correct position, then reveals itself with very small travel."
+      },
+      "scene": {
+        "zh": "设计工具中新增一个标题或强调图层。",
+        "en": "Adding a title or accent layer inside a design tool."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "添加图层按钮先确认这次新增动作。",
+        "en": "The Add layer action first acknowledges the insertion request."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/layer-insertion/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/layer-insertion/"
+      }
+    },
+    {
+      "id": "archive-undo",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "归档撤销",
+        "en": "Archive undo"
+      },
+      "summary": {
+        "zh": "项目离开后，撤销入口从同一上下文接住用户。",
+        "en": "After an item leaves, an undo affordance catches the user in the same context."
+      },
+      "scene": {
+        "zh": "任务列表中把一条评审移到归档。",
+        "en": "Moving a review task to archive from a task list."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "归档按钮立即确认移除动作。",
+        "en": "The Archive action immediately acknowledges the removal request."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/archive-undo/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/archive-undo/"
+      }
+    },
+    {
+      "id": "member-invite",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "成员邀请",
+        "en": "Member invite"
+      },
+      "summary": {
+        "zh": "发送邀请后，让输入表单自然转化为一个可追踪的待加入成员。",
+        "en": "After an invite is sent, turn the form naturally into a trackable pending member."
+      },
+      "scene": {
+        "zh": "在项目设置中邀请新的设计协作者。",
+        "en": "Inviting a new design collaborator from project settings."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "发送邀请先确认动作已开始。",
+        "en": "The Invite action first confirms that sending has begun."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
+      }
+    }
   ]
 }
