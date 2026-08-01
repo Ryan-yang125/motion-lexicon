@@ -351,6 +351,138 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/command-menu/",
         "en": "https://motion-lexicon.pages.dev/en/packs/command-menu/"
       }
+    },
+    {
+      "id": "upload-complete",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "文件上传完成",
+        "en": "Upload complete"
+      },
+      "summary": {
+        "zh": "文件抵达后，用进度、可用状态和新资产行交代结果。",
+        "en": "When a file lands, use progress, availability, and a new asset row to explain the result."
+      },
+      "scene": {
+        "zh": "在素材库里上传一张产品封面。",
+        "en": "Uploading a product cover in an asset library."
+      },
+      "role": "entrance",
+      "roleLabel": {
+        "zh": "进入",
+        "en": "Entrance"
+      },
+      "note": {
+        "zh": "新资产行通过轻微缩放和上移抵达列表。",
+        "en": "The new asset row lands in the list with slight scale and upward travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/upload-complete/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/upload-complete/"
+      }
+    },
+    {
+      "id": "assignee-picker",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "负责人选择",
+        "en": "Assignee picker"
+      },
+      "summary": {
+        "zh": "从候选成员中选择负责人时，让触发器、当前人选和候选列表保持同一上下文。",
+        "en": "When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context."
+      },
+      "scene": {
+        "zh": "为一条待完成的设计任务选择负责人。",
+        "en": "Choosing an owner for a pending design task."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "当前头像的小幅缩放强调刚完成的分配。",
+        "en": "A slight avatar scale emphasizes the completed assignment."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/assignee-picker/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/assignee-picker/"
+      }
+    },
+    {
+      "id": "permission-change",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "权限变更",
+        "en": "Permission change"
+      },
+      "summary": {
+        "zh": "切换访问范围时，用当前规则、选项说明和保存结果减少误解。",
+        "en": "When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity."
+      },
+      "scene": {
+        "zh": "为一个公开预览页面设置访问权限。",
+        "en": "Setting access permissions for a public preview page."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "选中图标用轻微缩放确认当前访问规则。",
+        "en": "The selected icon uses slight scale to confirm the current access rule."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/permission-change/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/permission-change/"
+      }
+    },
+    {
+      "id": "kanban-move",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "看板移动",
+        "en": "Kanban move"
+      },
+      "summary": {
+        "zh": "任务跨列移动时，让拾取、目标列和完成计数共同说明它的新位置。",
+        "en": "When a task crosses columns, let pickup, target column, and completion count explain its new location together."
+      },
+      "scene": {
+        "zh": "把一项设计任务从“待处理”移到“进行中”。",
+        "en": "Moving a design task from To do to In progress."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "落点卡片的小幅缩放强调任务已进入新状态。",
+        "en": "A slight scale at the destination emphasizes that the task reached its new state."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/kanban-move/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/kanban-move/"
+      }
     }
   ]
 }

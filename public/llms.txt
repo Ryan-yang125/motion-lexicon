@@ -18,10 +18,10 @@
 
 ## Free tools
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0`
-- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list --locale en --format json`
-- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs --locale en --format json`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend "describe the motion you want" --locale en --format json`
+- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0`
+- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 list --locale en --format json`
+- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 packs --locale en --format json`
+- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 
 ## Product Moments
@@ -42,6 +42,18 @@
 - [Progress steps](https://motion-lexicon.pages.dev/en/packs/progress-steps/): Across a multi-step task, make completed, current, and next steps form a clear cadence.
 - [Member invite](https://motion-lexicon.pages.dev/en/packs/member-invite/): After an invite is sent, turn the form naturally into a trackable pending member.
 - [Media scrub](https://motion-lexicon.pages.dev/en/packs/media-scrub/): While scrubbing a timeline, keep frame, time marker, and progress track in sync.
+- [Upload complete](https://motion-lexicon.pages.dev/en/packs/upload-complete/): When a file lands, use progress, availability, and a new asset row to explain the result.
+- [Sync recovery](https://motion-lexicon.pages.dev/en/packs/sync-recovery/): When connectivity returns, connect local edits, syncing progress, and completion through one clear state line.
+- [Delete confirmation](https://motion-lexicon.pages.dev/en/packs/delete-confirmation/): A high-risk action stays controllable through a clear target, hold progress, and completion feedback.
+- [Assignee picker](https://motion-lexicon.pages.dev/en/packs/assignee-picker/): When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context.
+- [Permission change](https://motion-lexicon.pages.dev/en/packs/permission-change/): When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity.
+- [Search suggestions](https://motion-lexicon.pages.dev/en/packs/search-suggestions/): While a query is entered, let suggestions, result count, and chosen item follow the current terms closely.
+- [Kanban move](https://motion-lexicon.pages.dev/en/packs/kanban-move/): When a task crosses columns, let pickup, target column, and completion count explain its new location together.
+- [Cart update](https://motion-lexicon.pages.dev/en/packs/cart-update/): After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state.
+- [Comment reply](https://motion-lexicon.pages.dev/en/packs/comment-reply/): After a reply is submitted, let the input area resolve into a discussion record with identity and time.
+- [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/): When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow.
+- [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/): After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout.
+- [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/): After scheduling a future release, keep publish time, queue record, and editable state consistent.
 
 ## Motion Primitives
 

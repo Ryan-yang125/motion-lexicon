@@ -1,17 +1,18 @@
 import { expect, test } from "@playwright/test";
 
-test("Motion Pack gallery contains 16 interactive product moments and filters by group", async ({ page }) => {
+test("Motion Pack gallery contains 28 interactive product moments and filters by group", async ({ page }) => {
   await page.goto("/zh/packs/");
-  await expect(page.getByRole("heading", { name: "16 个完整产品瞬间" })).toBeVisible();
-  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(16);
+  await expect(page.getByRole("heading", { name: "28 个完整产品瞬间" })).toBeVisible();
+  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(28);
   const gallery = page.locator("#packs");
   const filters = gallery.getByRole("tablist", { name: "按场景筛选 Pack" });
   await expect(filters.getByRole("tab", { name: "全部" })).toHaveAttribute("aria-controls", "packs-panel");
   await expect(page.locator("#packs-panel")).toHaveAttribute("aria-labelledby", "packs-tab-all");
 
   await filters.getByRole("tab", { name: "完成反馈" }).click();
-  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(4);
+  await expect(page.getByTestId(/motion-pack-card-/)).toHaveCount(7);
   await expect(page.getByTestId("motion-pack-card-save-confirmation")).toBeVisible();
+  await expect(page.getByTestId("motion-pack-card-upload-complete")).toBeVisible();
   await expect(page.locator("#packs-panel")).toHaveAttribute("aria-labelledby", "packs-tab-feedback");
 
   await filters.getByRole("tab", { name: "完成反馈" }).focus();

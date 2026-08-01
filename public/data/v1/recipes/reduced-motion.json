@@ -237,6 +237,369 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/details-disclosure/",
         "en": "https://motion-lexicon.pages.dev/en/packs/details-disclosure/"
       }
+    },
+    {
+      "id": "upload-complete",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "文件上传完成",
+        "en": "Upload complete"
+      },
+      "summary": {
+        "zh": "文件抵达后，用进度、可用状态和新资产行交代结果。",
+        "en": "When a file lands, use progress, availability, and a new asset row to explain the result."
+      },
+      "scene": {
+        "zh": "在素材库里上传一张产品封面。",
+        "en": "Uploading a product cover in an asset library."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时保留进度、可用状态和新资产记录。",
+        "en": "Reduced motion retains progress, availability, and the new asset record."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/upload-complete/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/upload-complete/"
+      }
+    },
+    {
+      "id": "sync-recovery",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "同步恢复",
+        "en": "Sync recovery"
+      },
+      "summary": {
+        "zh": "网络恢复后，把本地改动、同步过程和完成结果连成一条清楚的状态线。",
+        "en": "When connectivity returns, connect local edits, syncing progress, and completion through one clear state line."
+      },
+      "scene": {
+        "zh": "离线编辑的项目重新连接到工作区。",
+        "en": "Reconnecting an offline-edited project to its workspace."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留同步文字和完成图标，省略旋转。",
+        "en": "Reduced motion keeps sync copy and the completion icon while omitting rotation."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/sync-recovery/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/sync-recovery/"
+      }
+    },
+    {
+      "id": "delete-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "删除确认",
+        "en": "Delete confirmation"
+      },
+      "summary": {
+        "zh": "高风险操作通过明确对象、按住进度和完成反馈保持可控。",
+        "en": "A high-risk action stays controllable through a clear target, hold progress, and completion feedback."
+      },
+      "scene": {
+        "zh": "从工作区永久移除一个测试项目。",
+        "en": "Permanently removing a test project from a workspace."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留按住时长、删除结果和撤销入口。",
+        "en": "Reduced motion retains hold duration, deletion result, and Undo."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/delete-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/delete-confirmation/"
+      }
+    },
+    {
+      "id": "permission-change",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "权限变更",
+        "en": "Permission change"
+      },
+      "summary": {
+        "zh": "切换访问范围时，用当前规则、选项说明和保存结果减少误解。",
+        "en": "When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity."
+      },
+      "scene": {
+        "zh": "为一个公开预览页面设置访问权限。",
+        "en": "Setting access permissions for a public preview page."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留选中状态、说明和保存结果。",
+        "en": "Reduced motion retains selection, explanatory copy, and saved result."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/permission-change/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/permission-change/"
+      }
+    },
+    {
+      "id": "search-suggestions",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "搜索建议",
+        "en": "Search suggestions"
+      },
+      "summary": {
+        "zh": "输入查询时，让建议、结果数量和已选条目紧贴当前词语变化。",
+        "en": "While a query is entered, let suggestions, result count, and chosen item follow the current terms closely."
+      },
+      "scene": {
+        "zh": "在素材库中查找一份设计规范。",
+        "en": "Finding a design guideline in an asset library."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时建议直接更新，保留焦点和结果文字。",
+        "en": "With reduced motion, suggestions update directly while focus and result copy remain."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/search-suggestions/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/search-suggestions/"
+      }
+    },
+    {
+      "id": "kanban-move",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "看板移动",
+        "en": "Kanban move"
+      },
+      "summary": {
+        "zh": "任务跨列移动时，让拾取、目标列和完成计数共同说明它的新位置。",
+        "en": "When a task crosses columns, let pickup, target column, and completion count explain its new location together."
+      },
+      "scene": {
+        "zh": "把一项设计任务从“待处理”移到“进行中”。",
+        "en": "Moving a design task from To do to In progress."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留列、计数和任务位置变化。",
+        "en": "Reduced motion retains column, count, and task-position changes."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/kanban-move/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/kanban-move/"
+      }
+    },
+    {
+      "id": "cart-update",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "购物车更新",
+        "en": "Cart update"
+      },
+      "summary": {
+        "zh": "调整数量后，把商品行、件数和小计同步为一个即时的购买状态。",
+        "en": "After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state."
+      },
+      "scene": {
+        "zh": "在结账前调整一件团队模板的数量。",
+        "en": "Adjusting the quantity of a team template before checkout."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留数量、金额和最小数量限制。",
+        "en": "Reduced motion retains quantity, amount, and the minimum-quantity constraint."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/cart-update/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/cart-update/"
+      }
+    },
+    {
+      "id": "comment-reply",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "评论回复",
+        "en": "Comment reply"
+      },
+      "summary": {
+        "zh": "提交回复后，让输入区收束为一条带身份和时间的讨论记录。",
+        "en": "After a reply is submitted, let the input area resolve into a discussion record with identity and time."
+      },
+      "scene": {
+        "zh": "在设计评审中回复一条关于按钮节奏的评论。",
+        "en": "Replying to a comment about button cadence in a design review."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时直接插入回复，保留身份和时间。",
+        "en": "Reduced motion inserts the reply directly while retaining identity and time."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/comment-reply/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/comment-reply/"
+      }
+    },
+    {
+      "id": "approval-request",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "请求审批",
+        "en": "Approval request"
+      },
+      "summary": {
+        "zh": "发起审批时，让提交动作、审批人队列和当前等待状态形成连续工作流。",
+        "en": "When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow."
+      },
+      "scene": {
+        "zh": "把一份发布说明提交给两位审批人。",
+        "en": "Submitting release notes to two approvers."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时同时更新审批行与汇总状态。",
+        "en": "With reduced motion, approval rows and summary state update together."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/approval-request/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/approval-request/"
+      }
+    },
+    {
+      "id": "checkout-payment",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "支付结账",
+        "en": "Checkout payment"
+      },
+      "summary": {
+        "zh": "付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。",
+        "en": "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."
+      },
+      "scene": {
+        "zh": "为团队购买一份动效评审模板。",
+        "en": "Buying a motion-review template for a team."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效保留处理中和付款成功的文字结果。",
+        "en": "Reduced motion retains processing and payment-success copy."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/checkout-payment/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/checkout-payment/"
+      }
+    },
+    {
+      "id": "scheduled-publish",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "定时发布",
+        "en": "Scheduled publish"
+      },
+      "summary": {
+        "zh": "为未来发布设置时间后，让发布时间、队列记录和可编辑状态彼此一致。",
+        "en": "After scheduling a future release, keep publish time, queue record, and editable state consistent."
+      },
+      "scene": {
+        "zh": "为一篇产品更新安排下周一上午发布。",
+        "en": "Scheduling a product update for Monday morning."
+      },
+      "role": "motion-preference",
+      "roleLabel": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "note": {
+        "zh": "减弱动效时直接插入队列记录，保留编辑入口。",
+        "en": "Reduced motion inserts the queue record directly while retaining the edit entry."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/scheduled-publish/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/scheduled-publish/"
+      }
     }
   ]
 }

@@ -156,5 +156,39 @@
     "before-after-slider",
     "line-drawing"
   ],
-  "productMoments": []
+  "productMoments": [
+    {
+      "id": "cart-update",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "购物车更新",
+        "en": "Cart update"
+      },
+      "summary": {
+        "zh": "调整数量后，把商品行、件数和小计同步为一个即时的购买状态。",
+        "en": "After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state."
+      },
+      "scene": {
+        "zh": "在结账前调整一件团队模板的数量。",
+        "en": "Adjusting the quantity of a team template before checkout."
+      },
+      "role": "state-change",
+      "roleLabel": {
+        "zh": "状态变化",
+        "en": "State change"
+      },
+      "note": {
+        "zh": "数量、席位数和小计使用稳定数字共同更新。",
+        "en": "Quantity, seat count, and subtotal update together with stable figures."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/cart-update/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/cart-update/"
+      }
+    }
+  ]
 }

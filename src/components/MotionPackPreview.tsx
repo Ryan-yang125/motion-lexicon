@@ -1,27 +1,39 @@
 import {
+  AlertTriangle,
   Archive,
   ArrowUpRight,
+  CalendarClock,
   Check,
   CheckCircle2,
   ChevronDown,
   ChevronRight,
+  CloudOff,
   Command,
   Copy,
+  CreditCard,
   FileText,
   Filter,
   Folder,
+  GripVertical,
   Layers3,
   Link,
   Mail,
+  MessageCircle,
   Pause,
   Play,
   Plus,
+  RefreshCw,
   Search,
   Send,
   Share2,
+  ShieldCheck,
+  ShoppingBag,
   Sparkles,
+  Trash2,
   Undo2,
-  UserPlus
+  Upload,
+  UserPlus,
+  UserRoundCheck
 } from "lucide-react";
 import { type CSSProperties, type ReactNode, useEffect, useId, useRef, useState } from "react";
 
@@ -41,7 +53,19 @@ export type MotionPackPreviewKind =
   | "notification-triage"
   | "progress-steps"
   | "member-invite"
-  | "media-scrub";
+  | "media-scrub"
+  | "upload-complete"
+  | "sync-recovery"
+  | "delete-confirmation"
+  | "assignee-picker"
+  | "permission-change"
+  | "search-suggestions"
+  | "kanban-move"
+  | "cart-update"
+  | "comment-reply"
+  | "approval-request"
+  | "checkout-payment"
+  | "scheduled-publish";
 
 export type MotionPackPreviewPack = {
   id: string;
@@ -88,6 +112,37 @@ type Labels = {
   reset: string;
   command: string;
   details: string;
+  upload: string;
+  uploading: string;
+  uploaded: string;
+  retry: string;
+  syncing: string;
+  synced: string;
+  recover: string;
+  delete: string;
+  deleted: string;
+  cancel: string;
+  restore: string;
+  assign: string;
+  assignee: string;
+  permissions: string;
+  viewer: string;
+  commenter: string;
+  editor: string;
+  suggestions: string;
+  move: string;
+  moved: string;
+  cart: string;
+  update: string;
+  reply: string;
+  replied: string;
+  approve: string;
+  approved: string;
+  payment: string;
+  pay: string;
+  paid: string;
+  schedule: string;
+  scheduled: string;
 };
 
 const zh: Labels = {
@@ -118,7 +173,38 @@ const zh: Labels = {
   pause: "暂停",
   reset: "重播",
   command: "命令",
-  details: "查看详情"
+  details: "查看详情",
+  upload: "上传",
+  uploading: "上传中",
+  uploaded: "已上传",
+  retry: "重试",
+  syncing: "正在同步",
+  synced: "已同步",
+  recover: "恢复同步",
+  delete: "删除",
+  deleted: "已删除",
+  cancel: "取消",
+  restore: "恢复",
+  assign: "分配",
+  assignee: "负责人",
+  permissions: "权限",
+  viewer: "查看者",
+  commenter: "评论者",
+  editor: "编辑者",
+  suggestions: "建议",
+  move: "移动",
+  moved: "已移动",
+  cart: "购物袋",
+  update: "更新",
+  reply: "回复",
+  replied: "已回复",
+  approve: "批准",
+  approved: "已批准",
+  payment: "付款",
+  pay: "付款",
+  paid: "已付款",
+  schedule: "定时发布",
+  scheduled: "已定时"
 };
 
 const en: Labels = {
@@ -149,7 +235,38 @@ const en: Labels = {
   pause: "Pause",
   reset: "Replay",
   command: "Command",
-  details: "View details"
+  details: "View details",
+  upload: "Upload",
+  uploading: "Uploading",
+  uploaded: "Uploaded",
+  retry: "Retry",
+  syncing: "Syncing",
+  synced: "Synced",
+  recover: "Recover sync",
+  delete: "Delete",
+  deleted: "Deleted",
+  cancel: "Cancel",
+  restore: "Restore",
+  assign: "Assign",
+  assignee: "Assignee",
+  permissions: "Permissions",
+  viewer: "Viewer",
+  commenter: "Commenter",
+  editor: "Editor",
+  suggestions: "Suggestions",
+  move: "Move",
+  moved: "Moved",
+  cart: "Cart",
+  update: "Update",
+  reply: "Reply",
+  replied: "Replied",
+  approve: "Approve",
+  approved: "Approved",
+  payment: "Payment",
+  pay: "Pay",
+  paid: "Paid",
+  schedule: "Schedule",
+  scheduled: "Scheduled"
 };
 
 function localizedValue(value: unknown, locale: PreviewLocale) {
@@ -230,7 +347,7 @@ function TinyButton({
   children: ReactNode;
   label: string;
   onClick: () => void;
-  tone?: "soft" | "dark" | "blue" | "ghost";
+  tone?: "soft" | "dark" | "blue" | "ghost" | "danger";
   disabled?: boolean;
 }) {
   return (
@@ -645,7 +762,288 @@ function MediaScrub({ labels }: { labels: Labels }) {
   );
 }
 
-function previewFor(kind: string, labels: Labels, compact: boolean) {
+function localizedPackText(locale: PreviewLocale, zhText: string, enText: string) {
+  return locale === "zh" ? zhText : enText;
+}
+
+function UploadComplete({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [state, setState] = useState<"ready" | "uploading" | "complete">("ready");
+  const timerRef = useRef<number | null>(null);
+  const title = localizedPackText(locale, "文件上传完成", "Upload complete");
+
+  useEffect(() => () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+  }, []);
+
+  const upload = () => {
+    if (state === "uploading") return;
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    setState("uploading");
+    timerRef.current = window.setTimeout(() => {
+      setState("complete");
+      timerRef.current = null;
+    }, 620);
+  };
+
+  const status = state === "complete" ? labels.uploaded : state === "uploading" ? labels.uploading : labels.upload;
+
+  return (
+    <div className="mpp-upload" data-state={state} aria-label={title}>
+      <div className="mpp-upload__file">
+        <span className="mpp-upload__file-icon"><FileText aria-hidden="true" size={15} /></span>
+        <span><strong>{localizedPackText(locale, "发布清单.pdf", "Launch checklist.pdf")}</strong><small>2.4 MB</small></span>
+        <span className="mpp-upload__status" aria-live="polite">{state === "complete" ? <Check aria-hidden="true" size={13} /> : null}{status}</span>
+      </div>
+      <div className="mpp-upload__track" aria-hidden="true"><i /></div>
+      <TinyButton label={`${title}: ${status}`} onClick={upload} tone={state === "complete" ? "blue" : "dark"} disabled={state === "uploading"}>
+        {state === "complete" ? <Check aria-hidden="true" size={14} /> : <Upload aria-hidden="true" size={14} />}
+        <span>{status}</span>
+      </TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{state === "complete" ? `${title}: ${labels.uploaded}` : ""}</span>
+    </div>
+  );
+}
+
+function SyncRecovery({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [state, setState] = useState<"offline" | "syncing" | "synced">("offline");
+  const timerRef = useRef<number | null>(null);
+  const title = localizedPackText(locale, "同步恢复", "Sync recovery");
+
+  useEffect(() => () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+  }, []);
+
+  const recover = () => {
+    if (state === "syncing") return;
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    setState("syncing");
+    timerRef.current = window.setTimeout(() => {
+      setState("synced");
+      timerRef.current = null;
+    }, 720);
+  };
+
+  const detail = state === "offline"
+    ? localizedPackText(locale, "3 项更改等待同步", "3 changes waiting to sync")
+    : state === "syncing"
+      ? localizedPackText(locale, "正在恢复连接", "Restoring connection")
+      : localizedPackText(locale, "全部更改已同步", "All changes are in sync");
+
+  return (
+    <div className="mpp-sync" data-state={state} aria-label={title}>
+      <div className="mpp-sync__icon">{state === "synced" ? <CheckCircle2 aria-hidden="true" size={17} /> : state === "syncing" ? <RefreshCw aria-hidden="true" size={17} /> : <CloudOff aria-hidden="true" size={17} />}</div>
+      <div className="mpp-sync__copy"><strong>{state === "synced" ? labels.synced : title}</strong><small>{detail}</small></div>
+      <TinyButton label={state === "synced" ? labels.retry : labels.recover} onClick={recover} tone={state === "synced" ? "blue" : "dark"} disabled={state === "syncing"}>
+        <RefreshCw aria-hidden="true" size={14} /><span>{state === "syncing" ? labels.syncing : state === "synced" ? labels.retry : labels.recover}</span>
+      </TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{state === "synced" ? `${title}: ${labels.synced}` : ""}</span>
+    </div>
+  );
+}
+
+function DeleteConfirmation({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [state, setState] = useState<"idle" | "confirming" | "deleted">("idle");
+  const title = localizedPackText(locale, "删除确认", "Delete confirmation");
+
+  return (
+    <div className={`mpp-delete mpp-delete--${state}`} aria-label={title}>
+      {state === "idle" ? (
+        <div className="mpp-delete__item">
+          <span className="mpp-delete__file"><FileText aria-hidden="true" size={15} /></span>
+          <span><strong>{localizedPackText(locale, "旧版草稿", "Previous draft")}</strong><small>{localizedPackText(locale, "归档于昨天", "Archived yesterday")}</small></span>
+          <TinyButton label={labels.delete} onClick={() => setState("confirming")} tone="ghost"><Trash2 aria-hidden="true" size={14} /></TinyButton>
+        </div>
+      ) : null}
+      {state === "confirming" ? (
+        <div className="mpp-delete__confirm" role="alert">
+          <span><AlertTriangle aria-hidden="true" size={16} /></span>
+          <div><strong>{localizedPackText(locale, "删除此草稿？", "Delete this draft?")}</strong><small>{localizedPackText(locale, "此操作可以恢复。", "You can restore it next.")}</small></div>
+          <div className="mpp-delete__actions"><TinyButton label={labels.cancel} onClick={() => setState("idle")} tone="soft"><span>{labels.cancel}</span></TinyButton><TinyButton label={labels.delete} onClick={() => setState("deleted")} tone="danger"><span>{labels.delete}</span></TinyButton></div>
+        </div>
+      ) : null}
+      {state === "deleted" ? (
+        <div className="mpp-delete__result" role="status" aria-live="polite"><span><Check aria-hidden="true" size={14} />{labels.deleted}</span><TinyButton label={labels.restore} onClick={() => setState("idle")} tone="soft"><Undo2 aria-hidden="true" size={13} /><span>{labels.restore}</span></TinyButton></div>
+      ) : null}
+    </div>
+  );
+}
+
+function AssigneePicker({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const choices = [
+    { name: "Mina", initials: "M", tone: "blue" },
+    { name: "Ryan", initials: "R", tone: "ink" },
+    { name: "Ari", initials: "A", tone: "sand" }
+  ];
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(0);
+  const listId = useId();
+  const title = localizedPackText(locale, "负责人选择", "Assignee picker");
+
+  return (
+    <div className={`mpp-assignee${open ? " is-open" : ""}`} aria-label={title}>
+      <div className="mpp-row"><div><strong>{localizedPackText(locale, "设计审阅", "Design review")}</strong><small>{localizedPackText(locale, "选择一位负责人", "Choose an owner")}</small></div><UserRoundCheck aria-hidden="true" size={16} /></div>
+      <button className="mpp-assignee__trigger" type="button" aria-expanded={open} aria-controls={listId} onClick={() => setOpen((current) => !current)}>
+        <span className={`mpp-assignee__avatar is-${choices[selected].tone}`}>{choices[selected].initials}</span><span>{choices[selected].name}</span><ChevronDown aria-hidden="true" size={14} />
+      </button>
+      <div className="mpp-assignee__menu" id={listId} role="listbox" aria-label={title}>
+        {choices.map((choice, index) => <button type="button" role="option" aria-selected={selected === index} key={choice.name} onClick={() => { setSelected(index); setOpen(false); }}><span className={`mpp-assignee__avatar is-${choice.tone}`}>{choice.initials}</span><span>{choice.name}</span>{selected === index ? <Check aria-hidden="true" size={13} /> : null}</button>)}
+      </div>
+      <span className="mpp-screen-reader-status" aria-live="polite">{`${labels.assignee}: ${choices[selected].name}`}</span>
+    </div>
+  );
+}
+
+function PermissionChange({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const roles = [labels.viewer, labels.commenter, labels.editor];
+  const descriptions = locale === "zh" ? ["可查看项目", "可评论与查看", "可编辑与发布"] : ["Can view the project", "Can comment and view", "Can edit and publish"];
+  const [role, setRole] = useState(0);
+  const title = localizedPackText(locale, "权限变更", "Permission change");
+
+  return (
+    <div className="mpp-permission" aria-label={title}>
+      <div className="mpp-row"><div><strong>{labels.permissions}</strong><small>{localizedPackText(locale, "团队访问", "Team access")}</small></div><ShieldCheck aria-hidden="true" size={17} /></div>
+      <div className="mpp-permission__roles" role="radiogroup" aria-label={title}>
+        {roles.map((item, index) => <button type="button" role="radio" aria-checked={role === index} className={role === index ? "is-selected" : ""} key={item} onClick={() => setRole(index)}>{item}</button>)}
+      </div>
+      <div className="mpp-permission__summary" aria-live="polite"><CheckCircle2 aria-hidden="true" size={14} /><span><strong>{roles[role]}</strong><small>{descriptions[role]}</small></span></div>
+    </div>
+  );
+}
+
+function SearchSuggestions({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const suggestions = locale === "zh" ? ["保存确认", "产品瞬间", "动效基础"] : ["Save confirmation", "Product moments", "Motion primitives"];
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState("");
+  const title = localizedPackText(locale, "搜索建议", "Search suggestions");
+  const visible = suggestions.filter((item) => item.toLocaleLowerCase().includes(query.toLocaleLowerCase())).slice(0, 3);
+
+  return (
+    <div className="mpp-search" aria-label={title}>
+      <label className="mpp-search__field"><Search aria-hidden="true" size={15} /><input value={query} onChange={(event) => { setQuery(event.target.value); setSelected(""); }} placeholder={localizedPackText(locale, "搜索动效", "Search motion")} aria-label={title} /><kbd>⌘K</kbd></label>
+      <div className="mpp-search__label">{labels.suggestions}</div>
+      <div className="mpp-search__suggestions" role="listbox" aria-label={title}>
+        {visible.map((item, index) => <button type="button" role="option" aria-selected={selected === item} key={item} onClick={() => { setQuery(item); setSelected(item); }}><span className={`mpp-search__dot is-${index}`} /><span>{item}</span><ChevronRight aria-hidden="true" size={13} /></button>)}
+        {visible.length === 0 ? <span className="mpp-search__empty">{localizedPackText(locale, "没有匹配结果", "No matching results")}</span> : null}
+      </div>
+      <span className="mpp-screen-reader-status" aria-live="polite">{selected ? `${title}: ${selected}` : ""}</span>
+    </div>
+  );
+}
+
+function KanbanMove({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const columns = locale === "zh" ? ["待处理", "进行中", "已完成"] : ["Backlog", "In progress", "Done"];
+  const [column, setColumn] = useState(1);
+  const title = localizedPackText(locale, "看板移动", "Kanban move");
+  const move = () => setColumn((current) => (current + 1) % columns.length);
+
+  return (
+    <div className="mpp-kanban" data-column={column} aria-label={title}>
+      <div className="mpp-kanban__columns">
+        {columns.map((name, index) => <div className="mpp-kanban__column" key={name}><span>{name}</span>{column === index ? <div className="mpp-kanban__card"><GripVertical aria-hidden="true" size={13} /><strong>{localizedPackText(locale, "检查动效", "Review motion")}</strong></div> : <i aria-hidden="true" />}</div>)}
+      </div>
+      <TinyButton label={labels.move} onClick={move} tone="dark"><span>{labels.move}</span><ChevronRight aria-hidden="true" size={14} /></TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{`${title}: ${labels.moved} ${columns[column]}`}</span>
+    </div>
+  );
+}
+
+function CartUpdate({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [quantity, setQuantity] = useState(1);
+  const { active: updated, trigger } = useTransientFlag();
+  const title = localizedPackText(locale, "购物车更新", "Cart update");
+  const minusLabel = localizedPackText(locale, "减少数量", "Decrease quantity");
+  const plusLabel = localizedPackText(locale, "增加数量", "Increase quantity");
+
+  return (
+    <div className={`mpp-cart${updated ? " is-updated" : ""}`} aria-label={title}>
+      <div className="mpp-cart__product"><span className="mpp-cart__cover" aria-hidden="true"><i /><i /><i /></span><span><strong>{localizedPackText(locale, "动效指南", "Motion guide")}</strong><small>$24.00</small></span><span className="mpp-cart__quantity"><button type="button" aria-label={minusLabel} onClick={() => setQuantity((current) => Math.max(1, current - 1))}>−</button><output aria-label={localizedPackText(locale, "数量", "Quantity")}>{quantity}</output><button type="button" aria-label={plusLabel} onClick={() => setQuantity((current) => Math.min(3, current + 1))}>+</button></span></div>
+      <div className="mpp-cart__footer"><span><ShoppingBag aria-hidden="true" size={14} />{labels.cart}</span><strong>${(quantity * 24).toFixed(2)}</strong><TinyButton label={labels.update} onClick={trigger} tone="dark"><span>{updated ? <Check aria-hidden="true" size={14} /> : labels.update}</span></TinyButton></div>
+      <span className="mpp-screen-reader-status" aria-live="polite">{updated ? `${title}: ${labels.update}` : ""}</span>
+    </div>
+  );
+}
+
+function CommentReply({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [open, setOpen] = useState(false);
+  const [reply, setReply] = useState("");
+  const [sent, setSent] = useState(false);
+  const title = localizedPackText(locale, "评论回复", "Comment reply");
+
+  const sendReply = () => {
+    if (!reply.trim()) return;
+    setSent(true);
+    setOpen(false);
+  };
+
+  return (
+    <div className={`mpp-comment${open ? " is-open" : ""}${sent ? " is-sent" : ""}`} aria-label={title}>
+      <div className="mpp-comment__message"><span className="mpp-comment__avatar">M</span><span><strong>Mina</strong><small>{localizedPackText(locale, "这个切换很自然。", "This transition feels natural.")}</small></span><MessageCircle aria-hidden="true" size={15} /></div>
+      {open ? <div className="mpp-comment__composer"><textarea value={reply} onChange={(event) => { setReply(event.target.value); setSent(false); }} placeholder={localizedPackText(locale, "写下回复", "Write a reply")} aria-label={title} rows={2} /><div><TinyButton label={labels.cancel} onClick={() => setOpen(false)} tone="ghost"><span>{labels.cancel}</span></TinyButton><TinyButton label={labels.reply} onClick={sendReply} tone="dark" disabled={!reply.trim()}><Send aria-hidden="true" size={13} /><span>{labels.reply}</span></TinyButton></div></div> : <TinyButton label={labels.reply} onClick={() => { setOpen(true); setSent(false); }} tone="soft"><MessageCircle aria-hidden="true" size={13} /><span>{labels.reply}</span></TinyButton>}
+      <span className="mpp-screen-reader-status" aria-live="polite">{sent ? `${title}: ${labels.replied}` : ""}</span>
+    </div>
+  );
+}
+
+function ApprovalRequest({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [approved, setApproved] = useState(false);
+  const title = localizedPackText(locale, "请求审批", "Approval request");
+
+  return (
+    <div className={`mpp-approval${approved ? " is-approved" : ""}`} aria-label={title}>
+      <span className="mpp-approval__icon">{approved ? <CheckCircle2 aria-hidden="true" size={17} /> : <FileText aria-hidden="true" size={17} />}</span>
+      <div className="mpp-approval__copy"><strong>{approved ? labels.approved : localizedPackText(locale, "等待审批", "Awaiting approval")}</strong><small>{approved ? localizedPackText(locale, "已通知请求人", "Requester notified") : localizedPackText(locale, "发布说明 · 4 项更改", "Release notes · 4 changes")}</small></div>
+      <TinyButton label={approved ? labels.approved : labels.approve} onClick={() => setApproved(true)} tone={approved ? "blue" : "dark"} disabled={approved}>{approved ? <Check aria-hidden="true" size={14} /> : <span>{labels.approve}</span>}</TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{approved ? `${title}: ${labels.approved}` : ""}</span>
+    </div>
+  );
+}
+
+function CheckoutPayment({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const [state, setState] = useState<"ready" | "paying" | "paid">("ready");
+  const timerRef = useRef<number | null>(null);
+  const title = localizedPackText(locale, "支付结账", "Checkout payment");
+
+  useEffect(() => () => {
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+  }, []);
+
+  const pay = () => {
+    if (state === "paying") return;
+    if (timerRef.current !== null) window.clearTimeout(timerRef.current);
+    setState("paying");
+    timerRef.current = window.setTimeout(() => {
+      setState("paid");
+      timerRef.current = null;
+    }, 640);
+  };
+
+  return (
+    <div className="mpp-checkout" data-state={state} aria-label={title}>
+      <div className="mpp-checkout__card"><CreditCard aria-hidden="true" size={17} /><span>•••• 4242</span><i /></div>
+      <div className="mpp-checkout__total"><span>{localizedPackText(locale, "订单合计", "Order total")}</span><strong>$48.00</strong></div>
+      <TinyButton label={state === "paid" ? labels.paid : labels.pay} onClick={pay} tone={state === "paid" ? "blue" : "dark"} disabled={state === "paying"}>{state === "paid" ? <Check aria-hidden="true" size={14} /> : <CreditCard aria-hidden="true" size={14} />}<span>{state === "paying" ? localizedPackText(locale, "正在处理", "Processing") : state === "paid" ? labels.paid : `${labels.pay} $48`}</span></TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{state === "paid" ? `${title}: ${labels.paid}` : ""}</span>
+    </div>
+  );
+}
+
+function ScheduledPublish({ labels, locale }: { labels: Labels; locale: PreviewLocale }) {
+  const choices = locale === "zh" ? ["今天 17:00", "明天 09:00"] : ["Today 17:00", "Tomorrow 09:00"];
+  const [time, setTime] = useState(0);
+  const [scheduled, setScheduled] = useState(false);
+  const title = localizedPackText(locale, "定时发布", "Scheduled publish");
+
+  return (
+    <div className={`mpp-schedule${scheduled ? " is-scheduled" : ""}`} aria-label={title}>
+      <div className="mpp-row"><div><strong>{scheduled ? labels.scheduled : title}</strong><small>{scheduled ? choices[time] : localizedPackText(locale, "选择发布时间", "Choose a publish time")}</small></div><CalendarClock aria-hidden="true" size={17} /></div>
+      <div className="mpp-schedule__choices" role="radiogroup" aria-label={title}>{choices.map((choice, index) => <button type="button" role="radio" aria-checked={time === index} className={time === index ? "is-selected" : ""} key={choice} onClick={() => { setTime(index); setScheduled(false); }}>{choice}</button>)}</div>
+      <TinyButton label={labels.schedule} onClick={() => setScheduled(true)} tone={scheduled ? "blue" : "dark"}>{scheduled ? <Check aria-hidden="true" size={14} /> : <Send aria-hidden="true" size={14} />}<span>{scheduled ? labels.scheduled : labels.schedule}</span></TinyButton>
+      <span className="mpp-screen-reader-status" aria-live="polite">{scheduled ? `${title}: ${labels.scheduled} ${choices[time]}` : ""}</span>
+    </div>
+  );
+}
+
+function previewFor(kind: string, labels: Labels, compact: boolean, locale: PreviewLocale) {
   switch (kind) {
     case "publish-release": return <PublishRelease labels={labels} />;
     case "share-link": return <ShareLink labels={labels} />;
@@ -662,13 +1060,25 @@ function previewFor(kind: string, labels: Labels, compact: boolean) {
     case "progress-steps": return <ProgressSteps labels={labels} />;
     case "member-invite": return <MemberInvite labels={labels} />;
     case "media-scrub": return <MediaScrub labels={labels} />;
+    case "upload-complete": return <UploadComplete labels={labels} locale={locale} />;
+    case "sync-recovery": return <SyncRecovery labels={labels} locale={locale} />;
+    case "delete-confirmation": return <DeleteConfirmation labels={labels} locale={locale} />;
+    case "assignee-picker": return <AssigneePicker labels={labels} locale={locale} />;
+    case "permission-change": return <PermissionChange labels={labels} locale={locale} />;
+    case "search-suggestions": return <SearchSuggestions labels={labels} locale={locale} />;
+    case "kanban-move": return <KanbanMove labels={labels} locale={locale} />;
+    case "cart-update": return <CartUpdate labels={labels} locale={locale} />;
+    case "comment-reply": return <CommentReply labels={labels} locale={locale} />;
+    case "approval-request": return <ApprovalRequest labels={labels} locale={locale} />;
+    case "checkout-payment": return <CheckoutPayment labels={labels} locale={locale} />;
+    case "scheduled-publish": return <ScheduledPublish labels={labels} locale={locale} />;
     case "save-confirmation":
     default: return <SaveConfirmation labels={labels} compact={compact} />;
   }
 }
 
 /**
- * A self-contained, CSS-first interactive renderer for the V1.1 product moments collection.
+ * A self-contained, CSS-first interactive renderer for the V1.2 product moments collection.
  * It deliberately owns the miniature product UI so each pack can have a real state
  * transition without inheriting the generic motion-demo shell from the vocabulary.
  */
@@ -680,7 +1090,7 @@ export function MotionPackPreview({ pack, compact = false, locale = "zh", classN
   return (
     <PreviewFrame compact={compact} title={title} label={labels.live} kind={kind} className={className}>
       <div className="motion-pack-preview__scene" key={`${pack.id}:${kind}`}>
-        {previewFor(kind, labels, compact)}
+        {previewFor(kind, labels, compact, locale)}
       </div>
     </PreviewFrame>
   );

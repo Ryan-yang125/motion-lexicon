@@ -6,10 +6,10 @@
 - Billing: None
 - Account required: No
 - Website: https://motion-lexicon.pages.dev
-- Release: 1.1.0
+- Release: 1.2.0
 - Product Moments: https://motion-lexicon.pages.dev/en/packs/
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
-- CLI: npx -y github:Ryan-yang125/motion-lexicon#v1.1.0
+- CLI: npx -y github:Ryan-yang125/motion-lexicon#v1.2.0
 - Agent Skill: npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Code license: MIT

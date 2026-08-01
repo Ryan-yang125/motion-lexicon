@@ -19,13 +19,13 @@ import {
 } from "motion-lexicon";
 
 describe("Motion Lexicon CLI API", () => {
-  it("reports the v1.1.0 CLI release version", () => {
-    expect(version).toBe("1.1.0");
+  it("reports the v1.2.0 CLI release version", () => {
+    expect(version).toBe("1.2.0");
   });
 
   it("lists real product Motion Packs with a portable implementation", () => {
     const result = packs({ locale: "zh" });
-    expect(result).toMatchObject({ schemaVersion: 1, count: 16 });
+    expect(result).toMatchObject({ schemaVersion: 1, count: 28 });
     expect(result.items[0]).toMatchObject({
       id: "save-confirmation",
       name: "保存确认",
@@ -46,6 +46,22 @@ describe("Motion Lexicon CLI API", () => {
           note: expect.any(String),
           previewUrl: expect.stringContaining("/en/")
         })
+      ])
+    );
+    expect(result.items.map((item) => item.id)).toEqual(
+      expect.arrayContaining([
+        "upload-complete",
+        "sync-recovery",
+        "delete-confirmation",
+        "assignee-picker",
+        "permission-change",
+        "search-suggestions",
+        "kanban-move",
+        "cart-update",
+        "comment-reply",
+        "approval-request",
+        "checkout-payment",
+        "scheduled-publish"
       ])
     );
   });
@@ -194,7 +210,7 @@ describe("runCli", () => {
   it("prints Motion Pack listings and portable bundles", async () => {
     const listing = capture();
     expect(await runCli(["packs", "--locale", "en", "--format", "json"], listing.io)).toBe(0);
-    expect(JSON.parse(listing.stdout())).toMatchObject({ count: 16 });
+    expect(JSON.parse(listing.stdout())).toMatchObject({ count: 28 });
 
     const bundle = capture();
     expect(

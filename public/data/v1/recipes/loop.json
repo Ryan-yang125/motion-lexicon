@@ -211,6 +211,72 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
         "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
       }
+    },
+    {
+      "id": "sync-recovery",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "同步恢复",
+        "en": "Sync recovery"
+      },
+      "summary": {
+        "zh": "网络恢复后，把本地改动、同步过程和完成结果连成一条清楚的状态线。",
+        "en": "When connectivity returns, connect local edits, syncing progress, and completion through one clear state line."
+      },
+      "scene": {
+        "zh": "离线编辑的项目重新连接到工作区。",
+        "en": "Reconnecting an offline-edited project to its workspace."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "同步图标只在连接恢复的短窗口内旋转。",
+        "en": "The sync icon rotates only during the brief recovery window."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/sync-recovery/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/sync-recovery/"
+      }
+    },
+    {
+      "id": "checkout-payment",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "支付结账",
+        "en": "Checkout payment"
+      },
+      "summary": {
+        "zh": "付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。",
+        "en": "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."
+      },
+      "scene": {
+        "zh": "为团队购买一份动效评审模板。",
+        "en": "Buying a motion-review template for a team."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "处理中图标仅在支付窗口内短暂旋转。",
+        "en": "The processing icon rotates only briefly during the payment window."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/checkout-payment/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/checkout-payment/"
+      }
     }
   ]
 }

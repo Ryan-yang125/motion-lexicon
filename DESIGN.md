@@ -2,10 +2,10 @@
 
 ## Experience Model
 
-Motion Lexicon V1.1 is a static, SEO-friendly product motion system with two
+Motion Lexicon V1.2 is a static, SEO-friendly product motion system with two
 equal collections:
 
-- **Product Moments · Motion Packs:** 16 complete interactions with a context,
+- **Product Moments · Motion Packs:** 28 complete interactions with a context,
   trigger, state transition, completion state, and portable implementation.
 - **Motion Primitives:** 44 focused motion workspaces for exact behavior,
   terminology, parameters, and implementation.
@@ -42,7 +42,7 @@ The header exposes three primary destinations with equal visual weight:
 
 - **Find motion:** `/:locale/finder/` receives a natural-language request and
   returns relevant Motion Primitives together with matching Product Moments.
-- **Product Moments:** `/:locale/packs/` is the gallery for 16 real product
+- **Product Moments:** `/:locale/packs/` is the gallery for 28 real product
   interactions.
 - **Motion Primitives:** `/:locale/catalog/` is the catalog for 44 focused
   motion workspaces.
@@ -68,7 +68,7 @@ theme, and locale remain available in the resources layer and footer.
 - The Pack gallery has a concise product promise, a featured live scene, and
   clear routes to all Packs.
 - Four filters organise the set by product intent: Feedback, Choice, Change, and
-  Workflow.
+  Workflow. Each group contains seven Packs.
 - Gallery cards present a stable product frame. Hover and focus animate the
   existing scene in place, avoiding a poster-to-preview swap.
 - Cards link to dedicated detail routes and keep the gallery as an active
@@ -234,7 +234,7 @@ routes, and Finder routes receive self canonicals, reciprocal hreflang values,
 Open Graph metadata, and static JSON-LD.
 
 `packs.json`, `catalog.json`, the CLI, Agent Skill, `llms.txt`, and
-`llms-full.txt` publish the same V1.1 two-collection model to tools and agents.
+`llms-full.txt` publish the same V1.2 two-collection model to tools and agents.
 Finder query variations remain canonicalized to their localized Finder route.
 
 ## Launch Acceptance
@@ -243,12 +243,12 @@ Launch is complete when:
 
 - Product Moments and Motion Primitives have equal first-level navigation and
   home-route entry points;
-- all 16 Pack gallery and detail routes build in Chinese and English;
+- all 28 Pack gallery and detail routes build in Chinese and English;
 - each Pack preview exposes its intended real product interaction;
 - Prompt, HTML, CSS, JavaScript, and reduced-motion guidance stay aligned;
 - every declared Pack-to-Primitive relationship appears on both detail pages;
 - Finder returns relevant Motion Primitives and matching Product Moments;
-- README, CLI, Skill, public JSON, `llms.txt`, and website all describe V1.1;
+- README, CLI, Skill, public JSON, `llms.txt`, and website all describe V1.2;
 - 44 canonical workspaces and 91 source terms remain searchable and indexable;
 - desktop and mobile surfaces have no horizontal overflow;
 - `npm run lint`, `npm run typecheck`, `npm run test`, `npm run i18n:check`,

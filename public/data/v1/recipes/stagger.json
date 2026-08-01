@@ -254,6 +254,72 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/progress-steps/",
         "en": "https://motion-lexicon.pages.dev/en/packs/progress-steps/"
       }
+    },
+    {
+      "id": "search-suggestions",
+      "groupId": "choice",
+      "groupName": {
+        "zh": "选择决策",
+        "en": "Choice"
+      },
+      "name": {
+        "zh": "搜索建议",
+        "en": "Search suggestions"
+      },
+      "summary": {
+        "zh": "输入查询时，让建议、结果数量和已选条目紧贴当前词语变化。",
+        "en": "While a query is entered, let suggestions, result count, and chosen item follow the current terms closely."
+      },
+      "scene": {
+        "zh": "在素材库中查找一份设计规范。",
+        "en": "Finding a design guideline in an asset library."
+      },
+      "role": "sequence",
+      "roleLabel": {
+        "zh": "顺序编排",
+        "en": "Sequencing"
+      },
+      "note": {
+        "zh": "可见建议以短间隔进入，维持阅读顺序。",
+        "en": "Visible suggestions enter at short intervals to preserve reading order."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/search-suggestions/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/search-suggestions/"
+      }
+    },
+    {
+      "id": "approval-request",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "请求审批",
+        "en": "Approval request"
+      },
+      "summary": {
+        "zh": "发起审批时，让提交动作、审批人队列和当前等待状态形成连续工作流。",
+        "en": "When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow."
+      },
+      "scene": {
+        "zh": "把一份发布说明提交给两位审批人。",
+        "en": "Submitting release notes to two approvers."
+      },
+      "role": "sequence",
+      "roleLabel": {
+        "zh": "顺序编排",
+        "en": "Sequencing"
+      },
+      "note": {
+        "zh": "审批人行以短间隔进入等待回复状态。",
+        "en": "Approver rows enter Awaiting response at short intervals."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/approval-request/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/approval-request/"
+      }
     }
   ]
 }

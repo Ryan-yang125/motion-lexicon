@@ -41,7 +41,7 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
   await expect(packsResponse.json()).resolves.toMatchObject({
     kind: "packs",
     schemaVersion: 1,
-    count: 16
+    count: 28
   });
 
   const llmsResponse = await request.get("/llms.txt");

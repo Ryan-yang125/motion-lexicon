@@ -15,14 +15,14 @@ export function MotionPackGallery({ locale, id = "packs" }: MotionPackGalleryPro
   const labels = locale === "zh"
     ? {
         eyebrow: "产品瞬间",
-        title: "16 个完整产品瞬间",
+        title: "28 个完整产品瞬间",
         copy: "完成、选择、内容变化和工作流反馈，都有完整状态与可复制实现。",
         all: "全部",
         open: "查看产品瞬间"
       }
     : {
         eyebrow: "Product moments",
-        title: "16 complete product moments",
+        title: "28 complete product moments",
         copy: "Completion, selection, content change, and workflow feedback—each with a complete state and copy-ready implementation.",
         all: "All",
         open: "Open product moment"

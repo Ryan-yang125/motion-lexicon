@@ -2,7 +2,7 @@ import { canonicalMotionCatalog } from "./motion-catalog";
 import type { LocalizedText } from "./types";
 
 /**
- * Motion Lexicon V1.1 organises one collection around recognisable product moments.
+ * Motion Lexicon V1.2 organises one collection around recognisable product moments.
  * A pack owns the complete portable implementation a visitor can preview,
  * copy, and adapt inside their own interface.
  */
@@ -24,7 +24,19 @@ export type MotionPackKind =
   | "notification-triage"
   | "progress-steps"
   | "member-invite"
-  | "media-scrub";
+  | "media-scrub"
+  | "upload-complete"
+  | "sync-recovery"
+  | "delete-confirmation"
+  | "assignee-picker"
+  | "permission-change"
+  | "search-suggestions"
+  | "kanban-move"
+  | "cart-update"
+  | "comment-reply"
+  | "approval-request"
+  | "checkout-payment"
+  | "scheduled-publish";
 
 export type MotionPackGroup = {
   id: MotionPackGroupId;
@@ -740,6 +752,597 @@ const motionPackCores: MotionPackCore[] = [
   input.addEventListener('input', () => { const value = Number(input.value); root.style.setProperty('--progress', value + '%'); const seconds = Math.round(value * 26 / 100); title.textContent = 'Frame ' + String(seconds).padStart(2, '0'); time.textContent = '00:' + String(seconds).padStart(2, '0'); });
 })();`
     )
+  },
+  {
+    id: "upload-complete",
+    kind: "upload-complete",
+    groupId: "feedback",
+    name: text("文件上传完成", "Upload complete"),
+    shortDescription: text("文件抵达后，用进度、可用状态和新资产行交代结果。", "When a file lands, use progress, availability, and a new asset row to explain the result."),
+    scene: text("在素材库里上传一张产品封面。", "Uploading a product cover in an asset library."),
+    useCase: text("媒体上传、附件提交、导入文件和批量处理。", "Media uploads, attachments, file imports, and batch processing."),
+    prompt: text(
+      "实现一个文件上传完成反馈：点击上传后，进度条在短时间内到达完成，状态由“上传中”切换为“可用”，并插入一条带文件名和大小的资产记录。使用 transform、opacity 和短时长，并提供减弱动效版本。",
+      "Build upload-complete feedback: after Upload, let progress finish quickly, switch the state from Uploading to Available, and insert an asset record with filename and size. Use transform, opacity, short timing, and a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("上传动作开始时，先明确文件正在处理中。", "When upload starts, make it clear that the file is being processed."),
+      outcome: text("进度、可用状态和资产列表在一次连续流程中更新。", "Progress, availability, and the asset list update as one continuous flow."),
+      reducedMotion: text("保留进度数值、状态文字和资产记录，省略进入位移。", "Keep progress value, state copy, and the asset record while omitting entrance travel.")
+    },
+    keywords: ["上传", "文件", "素材", "完成", "进度", "upload", "file", "asset", "complete", "progress"],
+    timing: "220ms + 320ms completion · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-upload-complete" data-motion-pack="upload-complete" data-state="ready" style="--upload-progress: 0%" aria-label="Upload complete">
+  <div class="ml-upload-head"><div><span>Cover image</span><strong data-upload-state>Ready to upload</strong></div><button type="button" data-upload-action>Upload file</button></div>
+  <div class="ml-upload-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-upload-progress><i></i></div>
+  <ul class="ml-upload-assets" data-upload-assets><li><span class="ml-upload-icon">□</span><div><strong>brand-guide.pdf</strong><small>2.4 MB · Available</small></div></li></ul>
+</section>`,
+      String.raw`[data-motion-pack="upload-complete"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="upload-complete"] .ml-upload-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+[data-motion-pack="upload-complete"] .ml-upload-head span, [data-motion-pack="upload-complete"] small { display: block; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="upload-complete"] .ml-upload-head strong { display: block; margin-top: 3px; font-size: 15px; letter-spacing: -.15px; }
+[data-motion-pack="upload-complete"] button { min-height: 36px; border: 0; border-radius: 999px; padding: 0 13px; color: #fff; background: #292929; cursor: pointer; font: inherit; transition: transform 120ms ease, background 160ms ease; }
+[data-motion-pack="upload-complete"] button:active { transform: scale(.97); } [data-motion-pack="upload-complete"] button:disabled { cursor: wait; background: #5d5d5d; }
+[data-motion-pack="upload-complete"] .ml-upload-track { height: 7px; overflow: hidden; margin: 18px 0 12px; border-radius: 999px; background: #ebebe9; }
+[data-motion-pack="upload-complete"] .ml-upload-track i { display: block; width: var(--upload-progress); height: 100%; border-radius: inherit; background: #292929; transition: width 320ms cubic-bezier(.16,1,.3,1), background 160ms ease; }
+[data-motion-pack="upload-complete"][data-state="complete"] .ml-upload-track i { background: #2d8c5f; }
+[data-motion-pack="upload-complete"] .ml-upload-assets { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+[data-motion-pack="upload-complete"] .ml-upload-assets li { display: grid; grid-template-columns: 28px 1fr; align-items: center; gap: 9px; min-height: 44px; border-radius: 11px; padding: 6px 9px; background: #f5f5f3; }
+[data-motion-pack="upload-complete"] .ml-upload-assets li.is-new { animation: ml-upload-enter 220ms cubic-bezier(.16,1,.3,1) both; }
+[data-motion-pack="upload-complete"] .ml-upload-icon { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; color: #fff; background: #5d5d5d; font-size: 16px; }
+[data-motion-pack="upload-complete"][data-state="complete"] .ml-upload-icon { background: #2d8c5f; }
+@keyframes ml-upload-enter { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="upload-complete"]');
+  if (!root) return;
+  const action = root.querySelector('[data-upload-action]');
+  const state = root.querySelector('[data-upload-state]');
+  const track = root.querySelector('[data-upload-progress]');
+  const assets = root.querySelector('[data-upload-assets]');
+  action.addEventListener('click', () => {
+    if (root.dataset.state === 'uploading') return;
+    root.dataset.state = 'uploading'; action.disabled = true; action.textContent = 'Uploading'; state.textContent = 'Uploading cover.png';
+    root.style.setProperty('--upload-progress', '72%'); track.setAttribute('aria-valuenow', '72');
+    window.setTimeout(() => {
+      root.dataset.state = 'complete'; root.style.setProperty('--upload-progress', '100%'); track.setAttribute('aria-valuenow', '100');
+      state.textContent = 'Cover available'; action.disabled = false; action.textContent = 'Upload another';
+      assets.insertAdjacentHTML('beforeend', '<li class="is-new"><span class="ml-upload-icon">✓</span><div><strong>cover.png</strong><small>1.8 MB · Available</small></div></li>');
+    }, 420);
+  });
+})();`
+    )
+  },
+  {
+    id: "sync-recovery",
+    kind: "sync-recovery",
+    groupId: "feedback",
+    name: text("同步恢复", "Sync recovery"),
+    shortDescription: text("网络恢复后，把本地改动、同步过程和完成结果连成一条清楚的状态线。", "When connectivity returns, connect local edits, syncing progress, and completion through one clear state line."),
+    scene: text("离线编辑的项目重新连接到工作区。", "Reconnecting an offline-edited project to its workspace."),
+    useCase: text("离线草稿、云端同步、协作工具和自动保存。", "Offline drafts, cloud sync, collaboration tools, and autosave."),
+    prompt: text(
+      "实现一个同步恢复反馈：网络恢复后，状态从“3 个本地改动”切换为“正在同步”，短暂显示旋转同步图标，随后变为“全部已同步”。保留本地改动数量，并提供减弱动效版本。",
+      "Build sync-recovery feedback: when connectivity returns, move from 3 local edits to Syncing, briefly show a rotating sync icon, then land on All synced. Retain the local-change count and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("恢复连接时先保留本地改动的可见证据。", "When connection returns, keep visible evidence of the local edits first."),
+      outcome: text("同步状态在原位置推进到全部已同步。", "The sync state advances in place to All synced."),
+      reducedMotion: text("保留状态文字和图标结果，省略旋转。", "Keep state copy and icon outcome while omitting rotation.")
+    },
+    keywords: ["同步", "离线", "恢复", "连接", "本地改动", "sync", "offline", "recovery", "connection", "local changes"],
+    timing: "180ms + 420ms sync window · cubic-bezier(0.23, 1, 0.32, 1)",
+    source: source(
+      String.raw`<section class="ml-sync-recovery" data-motion-pack="sync-recovery" data-state="offline" aria-label="Sync recovery">
+  <div class="ml-sync-status"><span class="ml-sync-icon" data-sync-icon aria-hidden="true">↻</span><div><strong data-sync-title>3 local edits</strong><small data-sync-copy>Waiting for connection</small></div><button type="button" data-sync-action>Reconnect</button></div>
+  <div class="ml-sync-note" role="status" data-sync-note>Changes stay on this device.</div>
+</section>`,
+      String.raw`[data-motion-pack="sync-recovery"] { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="sync-recovery"] .ml-sync-status { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 10px; border: 1px solid #dededc; border-radius: 16px; padding: 13px; background: #fff; }
+[data-motion-pack="sync-recovery"] .ml-sync-icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; color: #8f651f; background: #fff5de; font-size: 20px; }
+[data-motion-pack="sync-recovery"] strong, [data-motion-pack="sync-recovery"] small { display: block; } [data-motion-pack="sync-recovery"] small { margin-top: 2px; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="sync-recovery"] button { min-height: 34px; border: 1px solid #d7d7d4; border-radius: 999px; padding: 0 12px; color: #292929; background: #fff; cursor: pointer; font: inherit; }
+[data-motion-pack="sync-recovery"] .ml-sync-note { margin: 8px 5px 0; color: #5d5d5d; font-size: 12px; }
+[data-motion-pack="sync-recovery"][data-state="syncing"] .ml-sync-icon { animation: ml-sync-spin 620ms linear infinite; color: #4262b5; background: #edf2ff; }
+[data-motion-pack="sync-recovery"][data-state="synced"] .ml-sync-icon { color: #fff; background: #2d8c5f; } [data-motion-pack="sync-recovery"][data-state="synced"] button { color: #2d8c5f; border-color: #cce5d6; }
+@keyframes ml-sync-spin { to { transform: rotate(1turn); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="sync-recovery"]');
+  if (!root) return;
+  const action = root.querySelector('[data-sync-action]');
+  const icon = root.querySelector('[data-sync-icon]');
+  const title = root.querySelector('[data-sync-title]');
+  const copy = root.querySelector('[data-sync-copy]');
+  const note = root.querySelector('[data-sync-note]');
+  action.addEventListener('click', () => {
+    if (root.dataset.state === 'syncing') return;
+    root.dataset.state = 'syncing'; action.disabled = true; action.textContent = 'Syncing'; title.textContent = 'Syncing 3 edits'; copy.textContent = 'Connection restored'; note.textContent = 'Keeping your changes visible while they sync.';
+    window.setTimeout(() => {
+      root.dataset.state = 'synced'; icon.textContent = '✓'; title.textContent = 'All synced'; copy.textContent = 'Workspace is current'; note.textContent = '3 local edits are now available to collaborators.'; action.disabled = false; action.textContent = 'Synced';
+    }, 520);
+  });
+})();`
+    )
+  },
+  {
+    id: "delete-confirmation",
+    kind: "delete-confirmation",
+    groupId: "feedback",
+    name: text("删除确认", "Delete confirmation"),
+    shortDescription: text("高风险操作通过明确对象、按住进度和完成反馈保持可控。", "A high-risk action stays controllable through a clear target, hold progress, and completion feedback."),
+    scene: text("从工作区永久移除一个测试项目。", "Permanently removing a test project from a workspace."),
+    useCase: text("删除项目、撤销访问、清空数据和不可逆设置。", "Deleting projects, revoking access, clearing data, and irreversible settings."),
+    prompt: text(
+      "实现一个删除确认：明确展示将被删除的对象，用户按住“按住删除”约 600ms 后才完成删除。按住时显示进度填充，完成后保留可访问的结果文字和撤销入口。提供减弱动效版本。",
+      "Build a delete confirmation: clearly show the target, require holding Hold to delete for about 600ms, show progress fill while held, then retain accessible completion copy and an Undo entry. Provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("先让用户确认对象与不可逆后果。", "First let the user confirm the target and irreversible consequence."),
+      outcome: text("按住进度说明确认正在发生，完成后给出明确结果。", "Hold progress shows that confirmation is underway, then provides a clear result."),
+      reducedMotion: text("保留按住时长、结果文字和撤销入口，省略填充动画。", "Keep hold duration, result copy, and Undo while omitting fill animation.")
+    },
+    keywords: ["删除", "确认", "按住", "危险操作", "撤销", "delete", "confirmation", "hold", "destructive", "undo"],
+    timing: "600ms hold · linear",
+    source: source(
+      String.raw`<section class="ml-delete-confirmation" data-motion-pack="delete-confirmation" data-state="ready" aria-label="Delete confirmation">
+  <div class="ml-delete-copy"><span>Permanent action</span><strong>Delete “Motion tests”?</strong><p data-delete-status>This removes the project and 12 drafts.</p></div>
+  <div class="ml-delete-actions"><button type="button" data-delete-action aria-describedby="delete-help"><i aria-hidden="true"></i><span data-delete-label>Hold to delete</span></button><button type="button" data-delete-undo hidden>Undo</button></div>
+  <small id="delete-help">Hold for 0.6 seconds to confirm.</small>
+</section>`,
+      String.raw`[data-motion-pack="delete-confirmation"] { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.4 Inter, system-ui, sans-serif; }
+[data-motion-pack="delete-confirmation"] .ml-delete-copy { border: 1px solid #ead7d5; border-radius: 16px; padding: 15px; background: #fffafa; }
+[data-motion-pack="delete-confirmation"] .ml-delete-copy > span { color: #b54747; font-size: 12px; } [data-motion-pack="delete-confirmation"] strong { display: block; margin-top: 5px; font-size: 16px; letter-spacing: -.15px; }
+[data-motion-pack="delete-confirmation"] p { margin: 5px 0 0; color: #5d5d5d; } [data-motion-pack="delete-confirmation"] .ml-delete-actions { display: flex; gap: 8px; margin-top: 11px; }
+[data-motion-pack="delete-confirmation"] [data-delete-action] { position: relative; isolation: isolate; overflow: hidden; min-height: 38px; border: 0; border-radius: 999px; padding: 0 15px; color: #fff; background: #b54747; cursor: pointer; font: inherit; }
+[data-motion-pack="delete-confirmation"] [data-delete-action] i { position: absolute; z-index: -1; inset: 0 auto 0 0; width: 0; background: rgb(0 0 0 / 20%); transition: width 600ms linear; }
+[data-motion-pack="delete-confirmation"][data-state="holding"] [data-delete-action] i { width: 100%; } [data-motion-pack="delete-confirmation"][data-state="deleted"] [data-delete-action] { background: #5d5d5d; cursor: default; }
+[data-motion-pack="delete-confirmation"] [data-delete-undo] { min-height: 38px; border: 1px solid #d7d7d4; border-radius: 999px; padding: 0 14px; color: #292929; background: #fff; cursor: pointer; font: inherit; }
+[data-motion-pack="delete-confirmation"] small { display: block; margin: 7px 3px 0; color: #9e9e9e; font-size: 12px; }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="delete-confirmation"]');
+  if (!root) return;
+  const action = root.querySelector('[data-delete-action]');
+  const label = root.querySelector('[data-delete-label]');
+  const status = root.querySelector('[data-delete-status]');
+  const undo = root.querySelector('[data-delete-undo]');
+  let timer;
+  const clearHold = () => { if (root.dataset.state === 'holding') root.dataset.state = 'ready'; window.clearTimeout(timer); };
+  const complete = () => { root.dataset.state = 'deleted'; action.disabled = true; label.textContent = 'Deleted'; status.textContent = 'Motion tests was deleted.'; undo.hidden = false; };
+  const beginHold = () => { if (root.dataset.state !== 'ready') return; root.dataset.state = 'holding'; timer = window.setTimeout(complete, 600); };
+  action.addEventListener('pointerdown', beginHold); action.addEventListener('pointerup', clearHold); action.addEventListener('pointerleave', clearHold); action.addEventListener('pointercancel', clearHold);
+  action.addEventListener('keydown', (event) => { if (event.key === ' ' || event.key === 'Enter') beginHold(); }); action.addEventListener('keyup', clearHold);
+  undo.addEventListener('click', () => { root.dataset.state = 'ready'; action.disabled = false; label.textContent = 'Hold to delete'; status.textContent = 'Deletion was undone.'; undo.hidden = true; });
+})();`
+    )
+  },
+  {
+    id: "assignee-picker",
+    kind: "assignee-picker",
+    groupId: "choice",
+    name: text("负责人选择", "Assignee picker"),
+    shortDescription: text("从候选成员中选择负责人时，让触发器、当前人选和候选列表保持同一上下文。", "When choosing an owner from candidates, keep the trigger, current person, and candidate list in one context."),
+    scene: text("为一条待完成的设计任务选择负责人。", "Choosing an owner for a pending design task."),
+    useCase: text("任务分配、审阅人选择、支持工单和日程安排。", "Task assignment, reviewer choice, support tickets, and scheduling."),
+    prompt: text(
+      "实现一个负责人选择器：点击当前负责人后在触发器下方展开候选成员，选择一人后替换头像、姓名和状态，并自动收起列表。让选择结果在原位置更新，并提供减弱动效版本。",
+      "Build an assignee picker: clicking the current assignee opens candidate members below the trigger; selecting one replaces avatar, name, and status, then closes the list. Update the result in place and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("当前负责人要始终可见，并能解释选择入口的作用。", "The current assignee should stay visible and explain the purpose of the selection entry."),
+      outcome: text("候选列表关闭后，任务顶部保留新负责人的身份与状态。", "After the candidate list closes, the task header retains the new owner identity and status."),
+      reducedMotion: text("直接更新负责人文字与头像，保留展开语义。", "Update assignee copy and avatar directly while retaining disclosure semantics.")
+    },
+    keywords: ["负责人", "分配", "成员", "任务", "选择", "assignee", "assign", "member", "task", "picker"],
+    timing: "180ms · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-assignee-picker" data-motion-pack="assignee-picker" data-open="false" aria-label="Assignee picker">
+  <div class="ml-assignee-task"><span>Design review</span><strong>Refine upload flow</strong></div>
+  <button type="button" class="ml-assignee-current" data-assignee-trigger aria-expanded="false"><span class="ml-assignee-avatar" data-assignee-avatar>R</span><span><small>Assignee</small><strong data-assignee-name>Rui Yang</strong></span><span aria-hidden="true">⌄</span></button>
+  <div class="ml-assignee-menu" data-assignee-menu hidden role="listbox" aria-label="Choose assignee">
+    <button type="button" role="option" data-assignee-option data-name="Mina Park" data-initial="M">Mina Park <small>Design</small></button>
+    <button type="button" role="option" data-assignee-option data-name="Noah Lee" data-initial="N">Noah Lee <small>Engineering</small></button>
+    <button type="button" role="option" data-assignee-option data-name="Rui Yang" data-initial="R">Rui Yang <small>Product</small></button>
+  </div>
+</section>`,
+      String.raw`[data-motion-pack="assignee-picker"] { position: relative; width: min(100%, 390px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="assignee-picker"] .ml-assignee-task { display: grid; gap: 4px; margin-bottom: 11px; } [data-motion-pack="assignee-picker"] .ml-assignee-task span, [data-motion-pack="assignee-picker"] small { color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="assignee-picker"] .ml-assignee-current { display: grid; width: 100%; grid-template-columns: 32px 1fr auto; align-items: center; gap: 9px; border: 1px solid #d9d9d6; border-radius: 12px; padding: 8px; color: #292929; background: #fff; cursor: pointer; text-align: left; font: inherit; }
+[data-motion-pack="assignee-picker"] .ml-assignee-current strong, [data-motion-pack="assignee-picker"] .ml-assignee-current small { display: block; } [data-motion-pack="assignee-picker"] .ml-assignee-current strong { margin-top: 2px; }
+[data-motion-pack="assignee-picker"] .ml-assignee-avatar { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; color: #fff; background: #5569c8; font-size: 12px; transition: transform 180ms cubic-bezier(.16,1,.3,1), background 180ms ease; }
+[data-motion-pack="assignee-picker"][data-open="true"] .ml-assignee-avatar { transform: scale(1.06); } [data-motion-pack="assignee-picker"] .ml-assignee-menu { display: grid; gap: 4px; margin-top: 6px; border: 1px solid #dededc; border-radius: 12px; padding: 5px; background: #fff; box-shadow: 0 12px 22px rgb(25 25 25 / 8%); }
+[data-motion-pack="assignee-picker"] .ml-assignee-menu:not([hidden]) { animation: ml-assignee-menu 180ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="assignee-picker"] .ml-assignee-menu button { display: flex; align-items: center; justify-content: space-between; min-height: 36px; border: 0; border-radius: 8px; padding: 0 9px; color: #292929; background: transparent; cursor: pointer; text-align: left; font: inherit; }
+[data-motion-pack="assignee-picker"] .ml-assignee-menu button:hover, [data-motion-pack="assignee-picker"] .ml-assignee-menu button:focus-visible { outline: 0; background: #f2f2f0; } @keyframes ml-assignee-menu { from { opacity: 0; transform: translateY(-4px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="assignee-picker"]');
+  if (!root) return;
+  const trigger = root.querySelector('[data-assignee-trigger]');
+  const menu = root.querySelector('[data-assignee-menu]');
+  const avatar = root.querySelector('[data-assignee-avatar]');
+  const name = root.querySelector('[data-assignee-name]');
+  trigger.addEventListener('click', () => { const open = root.dataset.open !== 'true'; root.dataset.open = String(open); trigger.setAttribute('aria-expanded', String(open)); menu.hidden = !open; });
+  root.querySelectorAll('[data-assignee-option]').forEach((option) => option.addEventListener('click', () => {
+    name.textContent = option.dataset.name; avatar.textContent = option.dataset.initial; root.dataset.open = 'false'; trigger.setAttribute('aria-expanded', 'false'); menu.hidden = true;
+  }));
+})();`
+    )
+  },
+  {
+    id: "permission-change",
+    kind: "permission-change",
+    groupId: "choice",
+    name: text("权限变更", "Permission change"),
+    shortDescription: text("切换访问范围时，用当前规则、选项说明和保存结果减少误解。", "When access scope changes, use the current rule, option explanation, and saved result to reduce ambiguity."),
+    scene: text("为一个公开预览页面设置访问权限。", "Setting access permissions for a public preview page."),
+    useCase: text("共享文档、项目链接、团队空间和审批材料。", "Shared documents, project links, team spaces, and approval material."),
+    prompt: text(
+      "实现一个权限变更选择：用户在“仅受邀成员”和“持有链接的任何人”之间选择，选择后更新说明文字，点击保存后显示已更新状态。保持选项文字完整可读，并提供减弱动效版本。",
+      "Build a permission-change choice: let users choose between Invited members only and Anyone with the link, update the explanation after selection, and show an Updated state after saving. Keep option copy fully readable and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("每个权限选项都要说明可访问的人群。", "Each permission option should state who can access the content."),
+      outcome: text("保存后用当前规则和更新时间确认新的范围。", "After saving, use the active rule and updated time to confirm the new scope."),
+      reducedMotion: text("保留选中图标、说明和保存结果，省略缩放。", "Keep selected icon, explanation, and save result while omitting scale.")
+    },
+    keywords: ["权限", "访问", "分享", "链接", "成员", "permission", "access", "share", "link", "members"],
+    timing: "160ms · cubic-bezier(0.23, 1, 0.32, 1)",
+    source: source(
+      String.raw`<section class="ml-permission-change" data-motion-pack="permission-change" data-choice="invite" aria-label="Permission change">
+  <div class="ml-permission-head"><div><span>Preview access</span><strong data-permission-title>Invited members only</strong></div><span data-permission-state>Saved</span></div>
+  <div class="ml-permission-options" role="radiogroup" aria-label="Access scope">
+    <button type="button" role="radio" aria-checked="true" data-permission-option data-value="invite"><i aria-hidden="true">✓</i><span><strong>Invited members only</strong><small>People you add can open this preview.</small></span></button>
+    <button type="button" role="radio" aria-checked="false" data-permission-option data-value="link"><i aria-hidden="true">✓</i><span><strong>Anyone with the link</strong><small>Anyone with this URL can view the preview.</small></span></button>
+  </div>
+  <button type="button" class="ml-permission-save" data-permission-save>Save access</button>
+</section>`,
+      String.raw`[data-motion-pack="permission-change"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="permission-change"] .ml-permission-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; } [data-motion-pack="permission-change"] .ml-permission-head span, [data-motion-pack="permission-change"] small { display: block; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="permission-change"] .ml-permission-head strong { display: block; margin-top: 3px; font-size: 15px; } [data-motion-pack="permission-change"] [data-permission-state] { color: #2d8c5f; }
+[data-motion-pack="permission-change"] .ml-permission-options { display: grid; gap: 6px; } [data-motion-pack="permission-change"] [data-permission-option] { display: grid; grid-template-columns: 21px minmax(0,1fr); align-items: center; gap: 9px; border: 1px solid #dededc; border-radius: 12px; padding: 10px; color: #292929; background: #fff; cursor: pointer; text-align: left; font: inherit; }
+[data-motion-pack="permission-change"] [data-permission-option] i { display: grid; width: 18px; height: 18px; place-items: center; border: 1px solid #c9c9c6; border-radius: 50%; color: transparent; font-size: 11px; font-style: normal; transition: color 160ms ease, background 160ms ease, transform 160ms cubic-bezier(.23,1,.32,1); }
+[data-motion-pack="permission-change"] [data-permission-option][aria-checked="true"] { border-color: #9eabdf; background: #f6f8ff; } [data-motion-pack="permission-change"] [data-permission-option][aria-checked="true"] i { color: #fff; background: #4262b5; transform: scale(1.06); }
+[data-motion-pack="permission-change"] [data-permission-option] strong { display: block; } [data-motion-pack="permission-change"] [data-permission-option] small { margin-top: 3px; color: #5d5d5d; }
+[data-motion-pack="permission-change"] .ml-permission-save { width: 100%; min-height: 38px; margin-top: 10px; border: 0; border-radius: 999px; color: #fff; background: #292929; cursor: pointer; font: inherit; }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="permission-change"]');
+  if (!root) return;
+  const title = root.querySelector('[data-permission-title]');
+  const state = root.querySelector('[data-permission-state]');
+  const save = root.querySelector('[data-permission-save]');
+  let current = 'invite';
+  root.querySelectorAll('[data-permission-option]').forEach((option) => option.addEventListener('click', () => {
+    current = option.dataset.value; root.querySelectorAll('[data-permission-option]').forEach((item) => item.setAttribute('aria-checked', String(item === option)));
+    title.textContent = current === 'link' ? 'Anyone with the link' : 'Invited members only'; state.textContent = 'Unsaved';
+  }));
+  save.addEventListener('click', () => { save.disabled = true; save.textContent = 'Saving'; window.setTimeout(() => { state.textContent = 'Updated now'; save.disabled = false; save.textContent = 'Save access'; }, 260); });
+})();`
+    )
+  },
+  {
+    id: "search-suggestions",
+    kind: "search-suggestions",
+    groupId: "choice",
+    name: text("搜索建议", "Search suggestions"),
+    shortDescription: text("输入查询时，让建议、结果数量和已选条目紧贴当前词语变化。", "While a query is entered, let suggestions, result count, and chosen item follow the current terms closely."),
+    scene: text("在素材库中查找一份设计规范。", "Finding a design guideline in an asset library."),
+    useCase: text("全局搜索、命令面板、客户查找和知识库检索。", "Global search, command menus, customer lookup, and knowledge-base retrieval."),
+    prompt: text(
+      "实现一个搜索建议表面：输入关键词后，展示匹配建议和结果数量；选择一项后，把它填回输入框并显示已打开状态。建议列表只做短透明度与小位移进入，并提供减弱动效版本。",
+      "Build a search-suggestions surface: after typing a query, show matching suggestions and a result count; choosing one fills it back into the field and shows an opened state. Suggestions use only brief opacity and small-travel entrance with a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("搜索词变化时，让结果数量和候选项来自同一个查询。", "When the query changes, derive count and candidates from the same query."),
+      outcome: text("选择一条建议后，在输入框附近确认打开的内容。", "After choosing a suggestion, confirm the opened content near the field."),
+      reducedMotion: text("建议列表直接更新，保留焦点与结果文字。", "Update the suggestion list directly while retaining focus and result copy.")
+    },
+    keywords: ["搜索", "建议", "结果", "输入", "命令", "search", "suggestions", "results", "query", "command"],
+    timing: "140ms · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-search-suggestions" data-motion-pack="search-suggestions" aria-label="Search suggestions">
+  <label>Search library <input type="search" value="motion" data-search-input aria-label="Search library"></label>
+  <div class="ml-search-meta"><span data-search-count>3 suggestions</span><span data-search-opened role="status"></span></div>
+  <ul data-search-list role="listbox"><li><button type="button" data-search-option>Motion foundations <small>Guide</small></button></li><li><button type="button" data-search-option>Motion system <small>Project</small></button></li><li><button type="button" data-search-option>Motion review <small>Checklist</small></button></li></ul>
+</section>`,
+      String.raw`[data-motion-pack="search-suggestions"] { width: min(100%, 420px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="search-suggestions"] label { display: grid; gap: 6px; color: #5d5d5d; font-size: 12px; } [data-motion-pack="search-suggestions"] input { min-height: 40px; border: 1px solid #d5d5d2; border-radius: 10px; padding: 0 11px; color: #292929; background: #fff; font: 500 14px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="search-suggestions"] input:focus { outline: 2px solid rgb(66 98 181 / 18%); outline-offset: 1px; } [data-motion-pack="search-suggestions"] .ml-search-meta { display: flex; justify-content: space-between; gap: 10px; margin: 7px 3px; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="search-suggestions"] [data-search-opened] { color: #2d8c5f; } [data-motion-pack="search-suggestions"] ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+[data-motion-pack="search-suggestions"] li { animation: ml-search-row 140ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="search-suggestions"] li:nth-child(2) { animation-delay: 20ms; } [data-motion-pack="search-suggestions"] li:nth-child(3) { animation-delay: 40ms; }
+[data-motion-pack="search-suggestions"] li[hidden] { display: none; } [data-motion-pack="search-suggestions"] li button { display: flex; width: 100%; align-items: center; justify-content: space-between; min-height: 36px; border: 0; border-radius: 8px; padding: 0 9px; color: #292929; background: #f5f5f3; cursor: pointer; text-align: left; font: inherit; }
+[data-motion-pack="search-suggestions"] li button:hover, [data-motion-pack="search-suggestions"] li button:focus-visible { outline: 0; background: #ececea; } [data-motion-pack="search-suggestions"] small { color: #9e9e9e; font-size: 12px; } @keyframes ml-search-row { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="search-suggestions"]');
+  if (!root) return;
+  const input = root.querySelector('[data-search-input]');
+  const count = root.querySelector('[data-search-count]');
+  const opened = root.querySelector('[data-search-opened]');
+  const rows = [...root.querySelectorAll('[data-search-list] li')];
+  const update = () => { const query = input.value.trim().toLowerCase(); const visible = rows.filter((row) => { const match = row.textContent.toLowerCase().includes(query); row.hidden = !match; return match; }); count.textContent = visible.length + (visible.length === 1 ? ' suggestion' : ' suggestions'); };
+  input.addEventListener('input', update); root.querySelectorAll('[data-search-option]').forEach((option) => option.addEventListener('click', () => { input.value = option.textContent.trim().replace(/(Guide|Project|Checklist)$/, '').trim(); opened.textContent = 'Opened'; update(); }));
+})();`
+    )
+  },
+  {
+    id: "kanban-move",
+    kind: "kanban-move",
+    groupId: "change",
+    name: text("看板移动", "Kanban move"),
+    shortDescription: text("任务跨列移动时，让拾取、目标列和完成计数共同说明它的新位置。", "When a task crosses columns, let pickup, target column, and completion count explain its new location together."),
+    scene: text("把一项设计任务从“待处理”移到“进行中”。", "Moving a design task from To do to In progress."),
+    useCase: text("项目看板、工单状态、招聘流程和内容排期。", "Project boards, ticket state, hiring pipelines, and content scheduling."),
+    prompt: text(
+      "实现一个看板移动：任务卡可以拖到相邻列，也可以通过按钮移动。拖动时强调拾取状态，落下后任务进入目标列并更新列计数。保持两列布局稳定，并提供减弱动效版本。",
+      "Build a Kanban move: a task can be dragged to the adjacent column or moved with a button. Emphasize pickup while dragging; after drop, place the task in the target column and update column counts. Keep both columns stable and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("拖动开始后，清楚表达当前被拾取的任务。", "Once dragging begins, clearly identify the task being picked up."),
+      outcome: text("落点列和列计数一起确认任务的新位置。", "The destination column and its count jointly confirm the task's new position."),
+      reducedMotion: text("保留移动结果和计数变化，省略拖动时的透明度与缩放。", "Keep the moved result and count changes while omitting drag opacity and scale.")
+    },
+    keywords: ["看板", "拖动", "移动", "任务", "列", "kanban", "drag", "move", "task", "board"],
+    timing: "180ms settle · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-kanban-move" data-motion-pack="kanban-move" aria-label="Kanban move">
+  <div class="ml-kanban-board"><section data-kanban-column="todo"><header><span>To do</span><b data-kanban-count="todo">1</b></header><div class="ml-kanban-list" data-kanban-list="todo"><article draggable="true" data-kanban-card><strong>Refine upload flow</strong><small>Design · Today</small></article></div></section><section data-kanban-column="progress"><header><span>In progress</span><b data-kanban-count="progress">0</b></header><div class="ml-kanban-list" data-kanban-list="progress"></div></section></div>
+  <button type="button" data-kanban-move>Move to In progress <span aria-hidden="true">→</span></button>
+</section>`,
+      String.raw`[data-motion-pack="kanban-move"] { width: min(100%, 460px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="kanban-move"] .ml-kanban-board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; } [data-motion-pack="kanban-move"] [data-kanban-column] { min-height: 126px; border: 1px solid #dededc; border-radius: 14px; padding: 9px; background: #f7f7f5; }
+[data-motion-pack="kanban-move"] header { display: flex; align-items: center; justify-content: space-between; color: #5d5d5d; font-size: 12px; } [data-motion-pack="kanban-move"] header b { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; color: #5d5d5d; background: #ececea; font-size: 11px; }
+[data-motion-pack="kanban-move"] .ml-kanban-list { display: grid; min-height: 82px; align-content: start; gap: 6px; margin-top: 8px; border-radius: 9px; transition: background 140ms ease; } [data-motion-pack="kanban-move"] .ml-kanban-list.is-over { background: #edf2ff; }
+[data-motion-pack="kanban-move"] article { display: grid; gap: 4px; border: 1px solid #dcdcd9; border-radius: 10px; padding: 10px; background: #fff; box-shadow: 0 3px 8px rgb(25 25 25 / 5%); cursor: grab; transition: opacity 120ms ease, transform 180ms cubic-bezier(.16,1,.3,1); }
+[data-motion-pack="kanban-move"] article.is-dragging { opacity: .45; transform: scale(.97); } [data-motion-pack="kanban-move"] article.is-moved { animation: ml-kanban-land 180ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="kanban-move"] small { color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="kanban-move"] [data-kanban-move] { display: flex; width: 100%; min-height: 38px; align-items: center; justify-content: space-between; margin-top: 10px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; } @keyframes ml-kanban-land { from { opacity: 0; transform: translateY(7px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="kanban-move"]');
+  if (!root) return;
+  const card = root.querySelector('[data-kanban-card]');
+  const lists = [...root.querySelectorAll('[data-kanban-list]')];
+  const action = root.querySelector('[data-kanban-move]');
+  let location = 'todo';
+  const update = (next) => {
+    location = next; const list = root.querySelector('[data-kanban-list="' + next + '"]'); list.append(card); card.classList.remove('is-moved'); void card.offsetWidth; card.classList.add('is-moved');
+    root.querySelector('[data-kanban-count="todo"]').textContent = next === 'todo' ? '1' : '0'; root.querySelector('[data-kanban-count="progress"]').textContent = next === 'progress' ? '1' : '0';
+    action.innerHTML = next === 'todo' ? 'Move to In progress <span aria-hidden="true">→</span>' : 'Move back to To do <span aria-hidden="true">←</span>';
+  };
+  card.addEventListener('dragstart', () => card.classList.add('is-dragging')); card.addEventListener('dragend', () => { card.classList.remove('is-dragging'); lists.forEach((list) => list.classList.remove('is-over')); });
+  lists.forEach((list) => { list.addEventListener('dragover', (event) => { event.preventDefault(); list.classList.add('is-over'); }); list.addEventListener('dragleave', () => list.classList.remove('is-over')); list.addEventListener('drop', (event) => { event.preventDefault(); list.classList.remove('is-over'); update(list.dataset.kanbanList); }); });
+  action.addEventListener('click', () => update(location === 'todo' ? 'progress' : 'todo'));
+})();`
+    )
+  },
+  {
+    id: "cart-update",
+    kind: "cart-update",
+    groupId: "change",
+    name: text("购物车更新", "Cart update"),
+    shortDescription: text("调整数量后，把商品行、件数和小计同步为一个即时的购买状态。", "After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state."),
+    scene: text("在结账前调整一件团队模板的数量。", "Adjusting the quantity of a team template before checkout."),
+    useCase: text("购物车、订阅席位、订单编辑和配件数量。", "Carts, subscription seats, order edits, and accessory quantity."),
+    prompt: text(
+      "实现一个购物车更新：点击加减按钮后，数量、小计和购物车件数同时更新。让数值在原位置短促变化，按钮保留按压反馈，避免页面整体跳动，并提供减弱动效版本。",
+      "Build a cart update: clicking plus or minus updates quantity, subtotal, and cart count together. Let numbers change briefly in place, retain press feedback on buttons, avoid whole-page movement, and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("数量操作必须在商品行内立即确认。", "Quantity actions must confirm immediately inside the item row."),
+      outcome: text("数量、件数和小计都来自同一个数量值。", "Quantity, item count, and subtotal all derive from one quantity value."),
+      reducedMotion: text("保留数值变化与禁用状态，省略数字缩放。", "Keep number changes and disabled state while omitting digit scale.")
+    },
+    keywords: ["购物车", "数量", "小计", "订单", "席位", "cart", "quantity", "subtotal", "order", "seats"],
+    timing: "140ms · cubic-bezier(0.23, 1, 0.32, 1)",
+    source: source(
+      String.raw`<section class="ml-cart-update" data-motion-pack="cart-update" aria-label="Cart update">
+  <div class="ml-cart-line"><div class="ml-cart-thumb" aria-hidden="true"></div><div><strong>Motion review template</strong><small>$18 per seat</small></div><div class="ml-cart-quantity"><button type="button" data-cart-minus aria-label="Decrease quantity">−</button><output data-cart-quantity>2</output><button type="button" data-cart-plus aria-label="Increase quantity">+</button></div></div>
+  <div class="ml-cart-total"><span><span data-cart-count>2</span> seats</span><strong data-cart-subtotal>$36</strong></div>
+</section>`,
+      String.raw`[data-motion-pack="cart-update"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="cart-update"] .ml-cart-line { display: grid; grid-template-columns: 42px minmax(0,1fr) auto; align-items: center; gap: 10px; border: 1px solid #dededc; border-radius: 16px; padding: 11px; background: #fff; }
+[data-motion-pack="cart-update"] .ml-cart-thumb { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg,#6b7fd2,#dce3ff); } [data-motion-pack="cart-update"] strong, [data-motion-pack="cart-update"] small { display: block; } [data-motion-pack="cart-update"] small { margin-top: 3px; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="cart-update"] .ml-cart-quantity { display: inline-grid; grid-template-columns: 30px 28px 30px; align-items: center; border: 1px solid #d8d8d5; border-radius: 999px; overflow: hidden; } [data-motion-pack="cart-update"] .ml-cart-quantity button { height: 30px; border: 0; color: #292929; background: #fff; cursor: pointer; font: inherit; }
+[data-motion-pack="cart-update"] .ml-cart-quantity button:active { background: #f0f0ee; transform: scale(.94); } [data-motion-pack="cart-update"] output { text-align: center; font-variant-numeric: tabular-nums; } [data-motion-pack="cart-update"] output.is-changing, [data-motion-pack="cart-update"] [data-cart-subtotal].is-changing { animation: ml-cart-number 140ms cubic-bezier(.23,1,.32,1) both; }
+[data-motion-pack="cart-update"] .ml-cart-total { display: flex; align-items: center; justify-content: space-between; margin: 10px 4px 0; color: #5d5d5d; } [data-motion-pack="cart-update"] .ml-cart-total strong { color: #292929; font-size: 16px; font-variant-numeric: tabular-nums; } @keyframes ml-cart-number { from { opacity: .45; transform: translateY(3px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="cart-update"]');
+  if (!root) return;
+  const quantity = root.querySelector('[data-cart-quantity]');
+  const count = root.querySelector('[data-cart-count]');
+  const subtotal = root.querySelector('[data-cart-subtotal]');
+  let value = 2;
+  const update = (next) => { value = Math.max(1, next); quantity.textContent = String(value); count.textContent = String(value); subtotal.textContent = '$' + String(value * 18); [quantity, subtotal].forEach((node) => { node.classList.remove('is-changing'); void node.offsetWidth; node.classList.add('is-changing'); }); };
+  root.querySelector('[data-cart-minus]').addEventListener('click', () => update(value - 1)); root.querySelector('[data-cart-plus]').addEventListener('click', () => update(value + 1));
+})();`
+    )
+  },
+  {
+    id: "comment-reply",
+    kind: "comment-reply",
+    groupId: "change",
+    name: text("评论回复", "Comment reply"),
+    shortDescription: text("提交回复后，让输入区收束为一条带身份和时间的讨论记录。", "After a reply is submitted, let the input area resolve into a discussion record with identity and time."),
+    scene: text("在设计评审中回复一条关于按钮节奏的评论。", "Replying to a comment about button cadence in a design review."),
+    useCase: text("评论线程、代码审阅、客服回复和团队讨论。", "Comment threads, code review, support replies, and team discussion."),
+    prompt: text(
+      "实现一个评论回复：用户输入后点击回复，按钮短暂进入发送状态，评论线程底部插入带头像、姓名和“刚刚”时间的回复。保留输入焦点与后续继续回复能力，并提供减弱动效版本。",
+      "Build a comment reply: after input and Reply, briefly enter a sending state, then insert a reply with avatar, name, and Just now at the bottom of the thread. Retain input focus and the ability to continue replying, with a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("回复提交前，让发送按钮清楚表达当前动作。", "Before submission, let the send action clearly express the current action."),
+      outcome: text("新回复进入同一线程，并带出可追踪的身份与时间。", "The new reply enters the same thread with traceable identity and time."),
+      reducedMotion: text("直接插入回复并更新状态文字，保留阅读顺序。", "Insert the reply directly and update status copy while retaining reading order.")
+    },
+    keywords: ["评论", "回复", "讨论", "线程", "发送", "comment", "reply", "discussion", "thread", "send"],
+    timing: "180ms + 220ms send · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-comment-reply" data-motion-pack="comment-reply" aria-label="Comment reply">
+  <ol data-reply-thread><li><span class="ml-reply-avatar">M</span><div><strong>Mina Park <small>2m</small></strong><p>Could the save state land a little sooner?</p></div></li></ol>
+  <div class="ml-reply-compose"><textarea data-reply-input rows="2" aria-label="Reply" placeholder="Write a reply">I’ll tighten the final settle.</textarea><button type="button" data-reply-action>Reply</button></div><p data-reply-status role="status"></p>
+</section>`,
+      String.raw`[data-motion-pack="comment-reply"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.4 Inter, system-ui, sans-serif; }
+[data-motion-pack="comment-reply"] ol { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; } [data-motion-pack="comment-reply"] li { display: grid; grid-template-columns: 29px minmax(0,1fr); gap: 8px; }
+[data-motion-pack="comment-reply"] li.is-new { animation: ml-reply-enter 180ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="comment-reply"] .ml-reply-avatar { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 50%; color: #fff; background: #7d8fd8; font-size: 11px; }
+[data-motion-pack="comment-reply"] strong { display: block; } [data-motion-pack="comment-reply"] small { margin-left: 4px; color: #9e9e9e; font-size: 11px; font-weight: 500; } [data-motion-pack="comment-reply"] p { margin: 3px 0 0; color: #5d5d5d; }
+[data-motion-pack="comment-reply"] .ml-reply-compose { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; margin-top: 12px; } [data-motion-pack="comment-reply"] textarea { resize: vertical; min-height: 50px; border: 1px solid #d7d7d4; border-radius: 10px; padding: 8px 9px; color: #292929; font: inherit; }
+[data-motion-pack="comment-reply"] textarea:focus { outline: 2px solid rgb(66 98 181 / 18%); outline-offset: 1px; } [data-motion-pack="comment-reply"] button { align-self: end; min-height: 36px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; } [data-motion-pack="comment-reply"] [data-reply-status] { min-height: 16px; margin: 5px 2px 0; color: #b54747; font-size: 12px; }
+@keyframes ml-reply-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="comment-reply"]');
+  if (!root) return;
+  const input = root.querySelector('[data-reply-input]');
+  const action = root.querySelector('[data-reply-action]');
+  const thread = root.querySelector('[data-reply-thread]');
+  const status = root.querySelector('[data-reply-status]');
+  action.addEventListener('click', () => {
+    const value = input.value.trim(); if (!value) { status.textContent = 'Write a reply before sending.'; input.focus(); return; }
+    action.disabled = true; action.textContent = 'Sending'; status.textContent = '';
+    window.setTimeout(() => { thread.insertAdjacentHTML('beforeend', '<li class="is-new"><span class="ml-reply-avatar">R</span><div><strong>Rui Yang <small>Just now</small></strong><p></p></div></li>'); thread.lastElementChild.querySelector('p').textContent = value; input.value = ''; action.disabled = false; action.textContent = 'Reply'; input.focus(); }, 280);
+  });
+})();`
+    )
+  },
+  {
+    id: "approval-request",
+    kind: "approval-request",
+    groupId: "workflow",
+    name: text("请求审批", "Approval request"),
+    shortDescription: text("发起审批时，让提交动作、审批人队列和当前等待状态形成连续工作流。", "When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow."),
+    scene: text("把一份发布说明提交给两位审批人。", "Submitting release notes to two approvers."),
+    useCase: text("设计评审、内容发布、采购申请和访问请求。", "Design review, content publishing, purchase requests, and access requests."),
+    prompt: text(
+      "实现一个请求审批：点击“请求审批”后，按钮进入短暂提交状态，审批人列表依次变为“等待回复”，顶部状态切换为“已发送给 2 位审批人”。动作只编排关键状态，并提供减弱动效版本。",
+      "Build an approval request: after Request approval, briefly show submission, let approver rows become Awaiting response in sequence, and change the top state to Sent to 2 approvers. Sequence only the key states and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("发起动作要明确审批范围和参与人数量。", "The request action should make approval scope and participant count clear."),
+      outcome: text("审批人行按小间隔进入等待状态，顶部汇总同步更新。", "Approver rows enter awaiting state at short intervals while the summary updates."),
+      reducedMotion: text("直接更新所有审批状态与汇总文字。", "Update all approval states and summary copy directly.")
+    },
+    keywords: ["审批", "请求", "评审", "等待", "状态", "approval", "request", "review", "awaiting", "workflow"],
+    timing: "200ms + 70ms stagger · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-approval-request" data-motion-pack="approval-request" data-state="draft" aria-label="Approval request">
+  <div class="ml-approval-head"><div><span>Release notes</span><strong data-approval-summary>Draft · 2 approvers</strong></div><span data-approval-state>Ready</span></div>
+  <ul data-approval-list><li><span class="ml-approval-avatar">M</span><div><strong>Mina Park</strong><small>Design</small></div><em>Not requested</em></li><li><span class="ml-approval-avatar">N</span><div><strong>Noah Lee</strong><small>Engineering</small></div><em>Not requested</em></li></ul>
+  <button type="button" data-approval-action>Request approval <span aria-hidden="true">→</span></button>
+</section>`,
+      String.raw`[data-motion-pack="approval-request"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="approval-request"] .ml-approval-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; } [data-motion-pack="approval-request"] .ml-approval-head span, [data-motion-pack="approval-request"] small { display: block; color: #9e9e9e; font-size: 12px; }
+[data-motion-pack="approval-request"] .ml-approval-head strong { display: block; margin-top: 3px; font-size: 15px; } [data-motion-pack="approval-request"] [data-approval-state] { color: #5d5d5d; }
+[data-motion-pack="approval-request"] ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; } [data-motion-pack="approval-request"] li { display: grid; grid-template-columns: 28px minmax(0,1fr) auto; align-items: center; gap: 8px; border-radius: 10px; padding: 7px 9px; background: #f5f5f3; }
+[data-motion-pack="approval-request"] li.is-requested { animation: ml-approval-row 200ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="approval-request"] .ml-approval-avatar { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; color: #fff; background: #6679cf; font-size: 11px; }
+[data-motion-pack="approval-request"] li strong { display: block; } [data-motion-pack="approval-request"] em { color: #7f651f; font-size: 12px; font-style: normal; } [data-motion-pack="approval-request"] li.is-requested em { color: #4262b5; }
+[data-motion-pack="approval-request"] button { display: flex; width: 100%; min-height: 38px; align-items: center; justify-content: space-between; margin-top: 10px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; } [data-motion-pack="approval-request"] button:disabled { background: #5d5d5d; cursor: wait; }
+@keyframes ml-approval-row { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="approval-request"]');
+  if (!root) return;
+  const action = root.querySelector('[data-approval-action]');
+  const summary = root.querySelector('[data-approval-summary]');
+  const state = root.querySelector('[data-approval-state]');
+  const rows = [...root.querySelectorAll('[data-approval-list] li')];
+  action.addEventListener('click', () => {
+    if (root.dataset.state !== 'draft') return;
+    root.dataset.state = 'requesting'; action.disabled = true; action.textContent = 'Sending request'; state.textContent = 'Sending';
+    rows.forEach((row, index) => window.setTimeout(() => { row.classList.add('is-requested'); row.querySelector('em').textContent = 'Awaiting response'; }, 170 + index * 70));
+    window.setTimeout(() => { root.dataset.state = 'requested'; summary.textContent = 'Sent · 2 approvers'; state.textContent = 'Awaiting'; action.disabled = false; action.textContent = 'Request sent'; }, 390);
+  });
+})();`
+    )
+  },
+  {
+    id: "checkout-payment",
+    kind: "checkout-payment",
+    groupId: "workflow",
+    name: text("支付结账", "Checkout payment"),
+    shortDescription: text("付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。", "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."),
+    scene: text("为团队购买一份动效评审模板。", "Buying a motion-review template for a team."),
+    useCase: text("单次购买、订阅升级、发票支付和订单确认。", "One-time purchases, subscription upgrades, invoice payments, and order confirmation."),
+    prompt: text(
+      "实现一个支付结账：点击“支付 36 美元”后，按钮显示处理中，订单摘要保持可见；完成后切换为付款成功并展示订单编号。等待过程只使用短循环图标和状态文字，并提供减弱动效版本。",
+      "Build checkout payment: after Pay $36, show processing while the order summary stays visible; on completion, switch to Payment successful and show an order number. Use only a brief looping icon and state copy while waiting, with a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("支付开始时保留金额和订单内容，避免用户失去上下文。", "When payment starts, retain price and order contents so the user keeps context."),
+      outcome: text("成功结果包含金额、订单号和后续可查看的收据。", "The success result includes amount, order number, and a receipt that can be viewed next."),
+      reducedMotion: text("保留处理中和成功文字，省略旋转图标。", "Keep processing and success copy while omitting icon rotation.")
+    },
+    keywords: ["支付", "结账", "订单", "收据", "处理中", "payment", "checkout", "order", "receipt", "processing"],
+    timing: "180ms + 480ms payment window · cubic-bezier(0.23, 1, 0.32, 1)",
+    source: source(
+      String.raw`<section class="ml-checkout-payment" data-motion-pack="checkout-payment" data-state="ready" aria-label="Checkout payment">
+  <div class="ml-payment-order"><div><span>Motion review template</span><small>2 team seats</small></div><strong>$36</strong></div>
+  <div class="ml-payment-result" role="status"><span class="ml-payment-icon" data-payment-icon aria-hidden="true">◌</span><span data-payment-copy>Ready to pay securely</span></div>
+  <button type="button" data-payment-action><span data-payment-label>Pay $36</span><span aria-hidden="true">→</span></button>
+</section>`,
+      String.raw`[data-motion-pack="checkout-payment"] { width: min(100%, 400px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="checkout-payment"] .ml-payment-order { display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 1px solid #dededc; border-radius: 16px 16px 10px 10px; padding: 15px; background: #fff; } [data-motion-pack="checkout-payment"] .ml-payment-order span, [data-motion-pack="checkout-payment"] small { display: block; }
+[data-motion-pack="checkout-payment"] small { margin-top: 3px; color: #9e9e9e; font-size: 12px; } [data-motion-pack="checkout-payment"] .ml-payment-order strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+[data-motion-pack="checkout-payment"] .ml-payment-result { display: flex; align-items: center; gap: 7px; padding: 10px 12px; border: 1px solid #dededc; border-top: 0; border-radius: 0 0 10px 10px; color: #5d5d5d; font-size: 12px; }
+[data-motion-pack="checkout-payment"] .ml-payment-icon { display: grid; width: 17px; height: 17px; place-items: center; border-radius: 50%; color: #4262b5; font-size: 17px; } [data-motion-pack="checkout-payment"][data-state="processing"] .ml-payment-icon { animation: ml-payment-spin 620ms linear infinite; }
+[data-motion-pack="checkout-payment"][data-state="success"] .ml-payment-icon { color: #2d8c5f; } [data-motion-pack="checkout-payment"][data-state="success"] .ml-payment-result { color: #2d8c5f; border-color: #cce5d6; background: #f5fbf7; }
+[data-motion-pack="checkout-payment"] button { display: flex; width: 100%; min-height: 40px; align-items: center; justify-content: space-between; margin-top: 10px; border: 0; border-radius: 999px; padding: 0 15px; color: #fff; background: #292929; cursor: pointer; font: inherit; } [data-motion-pack="checkout-payment"] button:disabled { background: #5d5d5d; cursor: wait; } @keyframes ml-payment-spin { to { transform: rotate(1turn); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="checkout-payment"]');
+  if (!root) return;
+  const action = root.querySelector('[data-payment-action]');
+  const label = root.querySelector('[data-payment-label]');
+  const icon = root.querySelector('[data-payment-icon]');
+  const copy = root.querySelector('[data-payment-copy]');
+  action.addEventListener('click', () => {
+    if (root.dataset.state !== 'ready') return;
+    root.dataset.state = 'processing'; action.disabled = true; label.textContent = 'Processing payment'; copy.textContent = 'Confirming your payment';
+    window.setTimeout(() => { root.dataset.state = 'success'; action.disabled = false; label.textContent = 'View receipt'; icon.textContent = '✓'; copy.textContent = 'Payment successful · Order #ML-2048'; }, 560);
+  });
+})();`
+    )
+  },
+  {
+    id: "scheduled-publish",
+    kind: "scheduled-publish",
+    groupId: "workflow",
+    name: text("定时发布", "Scheduled publish"),
+    shortDescription: text("为未来发布设置时间后，让发布时间、队列记录和可编辑状态彼此一致。", "After scheduling a future release, keep publish time, queue record, and editable state consistent."),
+    scene: text("为一篇产品更新安排下周一上午发布。", "Scheduling a product update for Monday morning."),
+    useCase: text("内容发布、邮件发送、社交媒体排期和报告生成。", "Content publishing, email sends, social scheduling, and report generation."),
+    prompt: text(
+      "实现一个定时发布：用户选择日期和时间后点击“安排发布”，按钮短暂确认，页面顶部切换为已安排状态，下面插入一条带发布时间的队列记录。让新增记录在小位移中进入，并提供减弱动效版本。",
+      "Build scheduled publish: after choosing date and time and clicking Schedule publish, briefly acknowledge the action, switch the top state to Scheduled, and insert a queue record with publish time below. Let the new record enter with small travel and provide a reduced-motion treatment."
+    ),
+    guidance: {
+      trigger: text("安排前要让用户看见明确的日期、时间和时区。", "Before scheduling, let users see an explicit date, time, and timezone."),
+      outcome: text("状态和队列记录使用同一个发布时间，方便后续编辑。", "Status and queue record use the same publish time for easy follow-up editing."),
+      reducedMotion: text("直接插入队列记录，保留发布时间和编辑入口。", "Insert the queue record directly while retaining publish time and edit entry.")
+    },
+    keywords: ["定时", "发布", "排期", "时间", "队列", "scheduled", "publish", "schedule", "time", "queue"],
+    timing: "200ms + 180ms record · cubic-bezier(0.16, 1, 0.3, 1)",
+    source: source(
+      String.raw`<section class="ml-scheduled-publish" data-motion-pack="scheduled-publish" data-state="draft" aria-label="Scheduled publish">
+  <div class="ml-schedule-head"><div><span>Product update</span><strong data-schedule-title>Choose a publish time</strong></div><span data-schedule-state>Draft</span></div>
+  <div class="ml-schedule-inputs"><label>Date <input type="date" value="2026-08-03" data-schedule-date></label><label>Time <input type="time" value="09:30" data-schedule-time></label></div>
+  <button type="button" data-schedule-action>Schedule publish <span aria-hidden="true">→</span></button>
+  <ol data-schedule-list aria-label="Publish queue"></ol>
+</section>`,
+      String.raw`[data-motion-pack="scheduled-publish"] { width: min(100%, 430px); margin: 0 auto; color: #292929; font: 500 13px/1.35 Inter, system-ui, sans-serif; }
+[data-motion-pack="scheduled-publish"] .ml-schedule-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 11px; } [data-motion-pack="scheduled-publish"] .ml-schedule-head span { display: block; color: #9e9e9e; font-size: 12px; } [data-motion-pack="scheduled-publish"] .ml-schedule-head strong { display: block; margin-top: 3px; font-size: 15px; }
+[data-motion-pack="scheduled-publish"] [data-schedule-state] { color: #5d5d5d; } [data-motion-pack="scheduled-publish"][data-state="scheduled"] [data-schedule-state] { color: #2d8c5f; }
+[data-motion-pack="scheduled-publish"] .ml-schedule-inputs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; } [data-motion-pack="scheduled-publish"] label { display: grid; gap: 5px; color: #5d5d5d; font-size: 12px; }
+[data-motion-pack="scheduled-publish"] input { box-sizing: border-box; min-width: 0; min-height: 37px; border: 1px solid #d7d7d4; border-radius: 9px; padding: 0 8px; color: #292929; background: #fff; font: inherit; }
+[data-motion-pack="scheduled-publish"] button { display: flex; width: 100%; min-height: 38px; align-items: center; justify-content: space-between; margin-top: 10px; border: 0; border-radius: 999px; padding: 0 14px; color: #fff; background: #292929; cursor: pointer; font: inherit; } [data-motion-pack="scheduled-publish"] button:disabled { background: #5d5d5d; cursor: wait; }
+[data-motion-pack="scheduled-publish"] ol { display: grid; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; } [data-motion-pack="scheduled-publish"] li { display: grid; grid-template-columns: 21px minmax(0,1fr) auto; align-items: center; gap: 8px; border-radius: 10px; padding: 8px; background: #f3f7f4; color: #2d8c5f; }
+[data-motion-pack="scheduled-publish"] li.is-new { animation: ml-schedule-enter 180ms cubic-bezier(.16,1,.3,1) both; } [data-motion-pack="scheduled-publish"] li i { display: grid; width: 21px; height: 21px; place-items: center; border-radius: 50%; color: #fff; background: #2d8c5f; font-size: 11px; font-style: normal; } [data-motion-pack="scheduled-publish"] li small { color: #5d5d5d; font-size: 12px; } @keyframes ml-schedule-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }`,
+      String.raw`(() => {
+  const root = document.querySelector('[data-motion-pack="scheduled-publish"]');
+  if (!root) return;
+  const date = root.querySelector('[data-schedule-date]');
+  const time = root.querySelector('[data-schedule-time]');
+  const action = root.querySelector('[data-schedule-action]');
+  const title = root.querySelector('[data-schedule-title]');
+  const state = root.querySelector('[data-schedule-state]');
+  const list = root.querySelector('[data-schedule-list]');
+  action.addEventListener('click', () => {
+    const when = date.value + ' · ' + time.value + ' UTC'; action.disabled = true; action.textContent = 'Scheduling'; state.textContent = 'Saving';
+    window.setTimeout(() => { root.dataset.state = 'scheduled'; title.textContent = 'Scheduled for ' + when; state.textContent = 'Scheduled'; action.disabled = false; action.textContent = 'Edit schedule'; list.innerHTML = '<li class="is-new"><i>✓</i><span>Product update</span><small>' + when + '</small></li>'; }, 320);
+  });
+})();`
+    )
   }
 ];
 
@@ -1117,6 +1720,348 @@ const foundationsByMotionPackId: Readonly<
       "continuous-input",
       "位置变化优先交给合成友好的属性处理。",
       "Position changes favor compositor-friendly properties."
+    )
+  ],
+  "upload-complete": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "上传按钮在文件处理开始时立即确认输入。",
+      "The upload action immediately acknowledges input when file processing starts."
+    ),
+    foundation(
+      "perceived-performance",
+      "state-change",
+      "进度轨道和处理中状态让短暂等待始终可读。",
+      "The progress track and processing state keep the brief wait legible."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "上传状态在同一位置从准备切换为可用。",
+      "Upload state changes from ready to available in the same location."
+    ),
+    foundation(
+      "scale-in",
+      "entrance",
+      "新资产行通过轻微缩放和上移抵达列表。",
+      "The new asset row lands in the list with slight scale and upward travel."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时保留进度、可用状态和新资产记录。",
+      "Reduced motion retains progress, availability, and the new asset record."
+    )
+  ],
+  "sync-recovery": [
+    foundation(
+      "text-morph",
+      "state-change",
+      "本地改动、同步中和全部已同步在原位置更新。",
+      "Local edits, Syncing, and All synced update in place."
+    ),
+    foundation(
+      "loop",
+      "timing",
+      "同步图标只在连接恢复的短窗口内旋转。",
+      "The sync icon rotates only during the brief recovery window."
+    ),
+    foundation(
+      "perceived-performance",
+      "state-change",
+      "持续可见的本地改动数量减轻同步中的不确定感。",
+      "The continuously visible local-edit count reduces uncertainty during sync."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留同步文字和完成图标，省略旋转。",
+      "Reduced motion keeps sync copy and the completion icon while omitting rotation."
+    )
+  ],
+  "delete-confirmation": [
+    foundation(
+      "hold-to-confirm",
+      "input-feedback",
+      "按住进度把高风险动作变成可取消的明确确认。",
+      "Hold progress turns a high-risk action into deliberate, cancellable confirmation."
+    ),
+    foundation(
+      "duration",
+      "timing",
+      "固定的 600ms 按住时长表达确认门槛。",
+      "A fixed 600ms hold duration communicates the confirmation threshold."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "删除前后状态文字在同一说明区更新。",
+      "Before-and-after deletion copy updates in the same explanatory area."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留按住时长、删除结果和撤销入口。",
+      "Reduced motion retains hold duration, deletion result, and Undo."
+    )
+  ],
+  "assignee-picker": [
+    foundation(
+      "accordion-collapse",
+      "disclosure",
+      "负责人触发器协调候选列表的展开与收起。",
+      "The assignee trigger coordinates expansion and collapse of the candidate list."
+    ),
+    foundation(
+      "origin-aware-animation",
+      "spatial-continuity",
+      "候选列表从当前负责人下方打开，保留选择来源。",
+      "The candidate list opens below the current assignee to preserve selection origin."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "负责人姓名在原触发器中替换为新成员。",
+      "The assignee name is replaced by the new member in the original trigger."
+    ),
+    foundation(
+      "scale-in",
+      "state-change",
+      "当前头像的小幅缩放强调刚完成的分配。",
+      "A slight avatar scale emphasizes the completed assignment."
+    )
+  ],
+  "permission-change": [
+    foundation(
+      "scale-in",
+      "state-change",
+      "选中图标用轻微缩放确认当前访问规则。",
+      "The selected icon uses slight scale to confirm the current access rule."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "顶部权限摘要随选项在原位置更新。",
+      "The top permission summary updates in place with the selected option."
+    ),
+    foundation(
+      "easing",
+      "timing",
+      "边界与选中图标共享短促的收束曲线。",
+      "Boundary and selected icon share a short settling curve."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留选中状态、说明和保存结果。",
+      "Reduced motion retains selection, explanatory copy, and saved result."
+    )
+  ],
+  "search-suggestions": [
+    foundation(
+      "slide-in",
+      "entrance",
+      "建议行以很小的向下位移抵达输入框下方。",
+      "Suggestion rows settle below the field with very small downward travel."
+    ),
+    foundation(
+      "stagger",
+      "sequence",
+      "可见建议以短间隔进入，维持阅读顺序。",
+      "Visible suggestions enter at short intervals to preserve reading order."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "结果数量由当前查询实时更新。",
+      "The result count updates from the current query in real time."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时建议直接更新，保留焦点和结果文字。",
+      "With reduced motion, suggestions update directly while focus and result copy remain."
+    )
+  ],
+  "kanban-move": [
+    foundation(
+      "drag-to-reorder",
+      "input-feedback",
+      "拖动中的卡片和目标列明确表达拾取与落点。",
+      "The dragged card and destination column clearly express pickup and drop."
+    ),
+    foundation(
+      "translate",
+      "spatial-continuity",
+      "任务落入相邻列时使用小位移保留空间关系。",
+      "The task uses small travel when it lands in the adjacent column to retain spatial context."
+    ),
+    foundation(
+      "scale-in",
+      "state-change",
+      "落点卡片的小幅缩放强调任务已进入新状态。",
+      "A slight scale at the destination emphasizes that the task reached its new state."
+    ),
+    foundation(
+      "compositing",
+      "continuous-input",
+      "拖动与落点优先使用 transform 和 opacity，减少布局成本。",
+      "Drag and landing favor transform and opacity to reduce layout cost."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留列、计数和任务位置变化。",
+      "Reduced motion retains column, count, and task-position changes."
+    )
+  ],
+  "cart-update": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "加减按钮在每次数量操作时给出立即按压反馈。",
+      "Increment and decrement controls give immediate press feedback for every quantity action."
+    ),
+    foundation(
+      "number-ticker",
+      "state-change",
+      "数量、席位数和小计使用稳定数字共同更新。",
+      "Quantity, seat count, and subtotal update together with stable figures."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "小计在同一阅读位置切换到新的金额。",
+      "Subtotal switches to the new amount in the same reading position."
+    ),
+    foundation(
+      "easing",
+      "timing",
+      "短促曲线让数字变化快速抵达并收束。",
+      "A short curve lets number changes arrive and settle quickly."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留数量、金额和最小数量限制。",
+      "Reduced motion retains quantity, amount, and the minimum-quantity constraint."
+    )
+  ],
+  "comment-reply": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "回复按钮在发送开始时确认这次提交。",
+      "The Reply action confirms the submission when sending begins."
+    ),
+    foundation(
+      "slide-in",
+      "entrance",
+      "新回复从线程底部以极小位移进入阅读顺序。",
+      "The new reply enters the reading order from the thread bottom with very small travel."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "按钮文案在回复与发送中之间原位切换。",
+      "The action copy switches in place between Reply and Sending."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时直接插入回复，保留身份和时间。",
+      "Reduced motion inserts the reply directly while retaining identity and time."
+    )
+  ],
+  "approval-request": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "请求审批按钮先确认提交已经开始。",
+      "The approval-request action first confirms that submission has started."
+    ),
+    foundation(
+      "stagger",
+      "sequence",
+      "审批人行以短间隔进入等待回复状态。",
+      "Approver rows enter Awaiting response at short intervals."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "顶部汇总与每位审批人的状态在原位置更新。",
+      "The top summary and each approver's state update in place."
+    ),
+    foundation(
+      "purposeful-animation",
+      "sequence",
+      "整段流程只交代提交、审批范围和等待结果。",
+      "The sequence communicates only submission, approval scope, and waiting result."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时同时更新审批行与汇总状态。",
+      "With reduced motion, approval rows and summary state update together."
+    )
+  ],
+  "checkout-payment": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "支付按钮在请求开始时确认点击已接收。",
+      "The payment action acknowledges the click when the request starts."
+    ),
+    foundation(
+      "perceived-performance",
+      "state-change",
+      "订单摘要持续可见，处理中状态降低付款等待的不确定感。",
+      "The order summary stays visible while processing state reduces uncertainty during payment."
+    ),
+    foundation(
+      "loop",
+      "timing",
+      "处理中图标仅在支付窗口内短暂旋转。",
+      "The processing icon rotates only briefly during the payment window."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "支付按钮和结果文字切换到收据状态。",
+      "Payment action and result copy switch to the receipt state."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效保留处理中和付款成功的文字结果。",
+      "Reduced motion retains processing and payment-success copy."
+    )
+  ],
+  "scheduled-publish": [
+    foundation(
+      "press-tap-feedback",
+      "input-feedback",
+      "安排发布按钮先确认提交日程的动作。",
+      "The schedule action first confirms the scheduling request."
+    ),
+    foundation(
+      "text-morph",
+      "state-change",
+      "页面顶部状态使用所选日期和时间更新为已安排。",
+      "The top state updates to Scheduled using the selected date and time."
+    ),
+    foundation(
+      "slide-in",
+      "entrance",
+      "新的队列记录从极小下方位移进入。",
+      "The new queue record enters from very small upward travel."
+    ),
+    foundation(
+      "reduced-motion",
+      "motion-preference",
+      "减弱动效时直接插入队列记录，保留编辑入口。",
+      "Reduced motion inserts the queue record directly while retaining the edit entry."
     )
   ]
 };

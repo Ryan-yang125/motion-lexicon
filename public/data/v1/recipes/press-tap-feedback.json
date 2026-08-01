@@ -418,6 +418,204 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/member-invite/",
         "en": "https://motion-lexicon.pages.dev/en/packs/member-invite/"
       }
+    },
+    {
+      "id": "upload-complete",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "文件上传完成",
+        "en": "Upload complete"
+      },
+      "summary": {
+        "zh": "文件抵达后，用进度、可用状态和新资产行交代结果。",
+        "en": "When a file lands, use progress, availability, and a new asset row to explain the result."
+      },
+      "scene": {
+        "zh": "在素材库里上传一张产品封面。",
+        "en": "Uploading a product cover in an asset library."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "上传按钮在文件处理开始时立即确认输入。",
+        "en": "The upload action immediately acknowledges input when file processing starts."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/upload-complete/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/upload-complete/"
+      }
+    },
+    {
+      "id": "cart-update",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "购物车更新",
+        "en": "Cart update"
+      },
+      "summary": {
+        "zh": "调整数量后，把商品行、件数和小计同步为一个即时的购买状态。",
+        "en": "After quantity changes, synchronize the item row, item count, and subtotal into one immediate purchase state."
+      },
+      "scene": {
+        "zh": "在结账前调整一件团队模板的数量。",
+        "en": "Adjusting the quantity of a team template before checkout."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "加减按钮在每次数量操作时给出立即按压反馈。",
+        "en": "Increment and decrement controls give immediate press feedback for every quantity action."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/cart-update/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/cart-update/"
+      }
+    },
+    {
+      "id": "comment-reply",
+      "groupId": "change",
+      "groupName": {
+        "zh": "内容变化",
+        "en": "Change"
+      },
+      "name": {
+        "zh": "评论回复",
+        "en": "Comment reply"
+      },
+      "summary": {
+        "zh": "提交回复后，让输入区收束为一条带身份和时间的讨论记录。",
+        "en": "After a reply is submitted, let the input area resolve into a discussion record with identity and time."
+      },
+      "scene": {
+        "zh": "在设计评审中回复一条关于按钮节奏的评论。",
+        "en": "Replying to a comment about button cadence in a design review."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "回复按钮在发送开始时确认这次提交。",
+        "en": "The Reply action confirms the submission when sending begins."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/comment-reply/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/comment-reply/"
+      }
+    },
+    {
+      "id": "approval-request",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "请求审批",
+        "en": "Approval request"
+      },
+      "summary": {
+        "zh": "发起审批时，让提交动作、审批人队列和当前等待状态形成连续工作流。",
+        "en": "When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow."
+      },
+      "scene": {
+        "zh": "把一份发布说明提交给两位审批人。",
+        "en": "Submitting release notes to two approvers."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "请求审批按钮先确认提交已经开始。",
+        "en": "The approval-request action first confirms that submission has started."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/approval-request/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/approval-request/"
+      }
+    },
+    {
+      "id": "checkout-payment",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "支付结账",
+        "en": "Checkout payment"
+      },
+      "summary": {
+        "zh": "付款提交后，用处理中状态和收据结果缩短支付流程的不确定感。",
+        "en": "After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout."
+      },
+      "scene": {
+        "zh": "为团队购买一份动效评审模板。",
+        "en": "Buying a motion-review template for a team."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "支付按钮在请求开始时确认点击已接收。",
+        "en": "The payment action acknowledges the click when the request starts."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/checkout-payment/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/checkout-payment/"
+      }
+    },
+    {
+      "id": "scheduled-publish",
+      "groupId": "workflow",
+      "groupName": {
+        "zh": "工作流表面",
+        "en": "Workflow"
+      },
+      "name": {
+        "zh": "定时发布",
+        "en": "Scheduled publish"
+      },
+      "summary": {
+        "zh": "为未来发布设置时间后，让发布时间、队列记录和可编辑状态彼此一致。",
+        "en": "After scheduling a future release, keep publish time, queue record, and editable state consistent."
+      },
+      "scene": {
+        "zh": "为一篇产品更新安排下周一上午发布。",
+        "en": "Scheduling a product update for Monday morning."
+      },
+      "role": "input-feedback",
+      "roleLabel": {
+        "zh": "输入反馈",
+        "en": "Input feedback"
+      },
+      "note": {
+        "zh": "安排发布按钮先确认提交日程的动作。",
+        "en": "The schedule action first confirms the scheduling request."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/scheduled-publish/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/scheduled-publish/"
+      }
     }
   ]
 }

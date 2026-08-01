@@ -54,7 +54,7 @@ Usage:
   motion-lexicon schema [recipe|catalog|search|recommend|export|packs|pack]
 
 Libraries:
-  packs                              16 Product Moments with complete implementations
+  packs                              28 Product Moments with complete implementations
   list, catalog                      44 Motion Primitives with portable recipes
 
 Common options:

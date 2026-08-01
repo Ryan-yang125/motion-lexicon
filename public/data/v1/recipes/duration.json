@@ -189,6 +189,39 @@
         "zh": "https://motion-lexicon.pages.dev/zh/packs/save-confirmation/",
         "en": "https://motion-lexicon.pages.dev/en/packs/save-confirmation/"
       }
+    },
+    {
+      "id": "delete-confirmation",
+      "groupId": "feedback",
+      "groupName": {
+        "zh": "完成反馈",
+        "en": "Feedback"
+      },
+      "name": {
+        "zh": "删除确认",
+        "en": "Delete confirmation"
+      },
+      "summary": {
+        "zh": "高风险操作通过明确对象、按住进度和完成反馈保持可控。",
+        "en": "A high-risk action stays controllable through a clear target, hold progress, and completion feedback."
+      },
+      "scene": {
+        "zh": "从工作区永久移除一个测试项目。",
+        "en": "Permanently removing a test project from a workspace."
+      },
+      "role": "timing",
+      "roleLabel": {
+        "zh": "节奏与时长",
+        "en": "Timing"
+      },
+      "note": {
+        "zh": "固定的 600ms 按住时长表达确认门槛。",
+        "en": "A fixed 600ms hold duration communicates the confirmation threshold."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/packs/delete-confirmation/",
+        "en": "https://motion-lexicon.pages.dev/en/packs/delete-confirmation/"
+      }
     }
   ]
 }

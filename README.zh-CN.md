@@ -33,11 +33,11 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon V1.1——产品瞬间与动效基础](docs/assets/readme-v1-home.webp)
+![Motion Lexicon V1.2——产品瞬间与动效基础](docs/assets/readme-v1-home.webp)
 
 ## 两个目录，一套产品动效系统
 
-V1.1 将两个同等重要的目录放进同一套产品动效系统：**产品瞬间 · Motion Packs** 提供完整交互，**动效基础 · Motion Primitives** 提供 44 个聚焦的底层动效工作台。你可以从当前要解决的问题出发，再在两者之间切换，获得完整实现或更精确的调整。
+V1.2 将两个同等重要的目录放进同一套产品动效系统：**产品瞬间 · Motion Packs** 提供完整交互，**动效基础 · Motion Primitives** 提供 44 个聚焦的底层动效工作台。你可以从当前要解决的问题出发，再在两者之间切换，获得完整实现或更精确的调整。
 
 | 目录 | 适合从这里开始 | 可以复制什么 |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ V1.1 将两个同等重要的目录放进同一套产品动效系统：**产品�
 
 ## 为真实产品瞬间准备的 Motion Pack
 
-首批 16 个 Motion Pack 是能在产品里直接识别的完整小交互。你可以在浏览器里亲手触发、查看状态变化，再复制 Prompt、HTML、CSS 和 JavaScript，接入自己的产品。
+28 个 Motion Pack 都是能在产品里直接识别的完整小交互。你可以在浏览器里亲手触发、查看状态变化，再复制 Prompt、HTML、CSS 和 JavaScript，接入自己的产品。
 
 每个 Pack 都有一份清晰的交互契约：
 
@@ -59,14 +59,14 @@ V1.1 将两个同等重要的目录放进同一套产品动效系统：**产品�
 
 ![Motion Pack 详情页——预览保存确认并复制实现](docs/assets/readme-v1-pack.webp)
 
-### 首批 16 个 Pack
+### 四个产品分组中的 28 个 Pack
 
 | 分组 | Motion Pack |
 | --- | --- |
-| 完成反馈 | 保存确认、发布版本、分享链接、行内校验 |
-| 选择决策 | 卡片选择、工作区切换、模板选择、命令菜单 |
-| 内容变化 | 图层插入、归档撤销、筛选结果、展开详情 |
-| 工作流表面 | 通知处理、步骤进度、成员邀请、媒体拖动 |
+| 完成反馈 | 保存确认、发布版本、分享链接、行内校验、文件上传完成、同步恢复、删除确认 |
+| 选择决策 | 卡片选择、工作区切换、模板选择、命令菜单、负责人选择、权限变更、搜索建议 |
+| 内容变化 | 图层插入、归档撤销、筛选结果、展开详情、看板移动、购物车更新、评论回复 |
+| 工作流表面 | 通知处理、步骤进度、成员邀请、媒体拖动、请求审批、支付结账、定时发布 |
 
 从 [Motion Pack 画廊](https://motion-lexicon.pages.dev/zh/packs/) 开始，再打开像 [保存确认](https://motion-lexicon.pages.dev/zh/packs/save-confirmation/) 这样的完整详情页。
 
@@ -85,7 +85,7 @@ Motion Finder 横跨两个目录。Pack 详情页会呈现构成产品瞬间的�
 
 | 产品界面 | 可以获得什么 |
 | --- | --- |
-| [Motion Packs](https://motion-lexicon.pages.dev/zh/packs/) | 16 段完整、可复制的产品交互 |
+| [Motion Packs](https://motion-lexicon.pages.dev/zh/packs/) | 28 段完整、可复制的产品交互 |
 | [Motion Finder](https://motion-lexicon.pages.dev/zh/finder/) | 根据自然语言需求给出可解释的动效候选 |
 | [动效基础 · Motion Primitives](https://motion-lexicon.pages.dev/zh/catalog/) | 12 个动效类别中的 44 张标准工作台 |
 | [动效词汇](https://motion-lexicon.pages.dev/zh/vocabulary/) | 91 个中英双语术语、定义和近义词区别 |
@@ -95,29 +95,29 @@ Finder 帮你找到合适的动效语言、产品瞬间，或两者的组合。4
 
 ## 在浏览器、CLI 或 Agent 中使用
 
-网站提供最快的可视化路径。免费 CLI 通过并列的 `packs` 与 `list` 命令读取同一套 V1.1 数据：
+网站提供最快的可视化路径。免费 CLI 通过并列的 `packs` 与 `list` 命令读取同一套 V1.2 数据：
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 packs \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 packs \
   --locale zh --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 pack save-confirmation \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 pack save-confirmation \
   --locale zh --format bundle
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 list \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 list \
   --locale zh --format json
 ```
 
 动效基础的检索与导出继续通过同一套 CLI 使用：
 
 ```bash
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 recommend \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend \
   "一张卡片切入进来，然后慢慢停下来" \
   --locale zh --format json
 
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 search \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 search \
   "共享元素" --locale zh
-npx -y github:Ryan-yang125/motion-lexicon#v1.1.0 export spring \
+npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 export spring \
   --locale zh --format bundle
 ```
 
@@ -145,9 +145,9 @@ Motion Lexicon 以静态网站运行，提供免费浏览器体验、本地 CLI�
 - 生成的代码片段：[0BSD](./CONTENT-LICENSE)
 - 交互组件：[Interior](https://github.com/ddoemonn/interior)，按 MIT 许可证改造，署名与许可正文见 [NOTICE](./NOTICE)
 
-## V1.1 快照
+## V1.2 快照
 
-**V1.1.0 已上线。** 公共产品包含两个同等重要的目录：16 个真实产品 Motion Pack 与 44 张标准动效基础工作台。Finder、双语词汇、CLI、Agent Skill、版本化机器可读数据、本地化 SEO 和静态交付将它们连成完整系统。
+**V1.2.0 已上线。** 公共产品包含两个同等重要的目录：28 个真实产品 Motion Pack 与 44 张标准动效基础工作台。Finder、双语词汇、CLI、Agent Skill、版本化机器可读数据、本地化 SEO 和静态交付将它们连成完整系统。
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -161,7 +161,7 @@ Motion Lexicon 以静态网站运行，提供免费浏览器体验、本地 CLI�
 | 路由形式 | 用途 |
 | --- | --- |
 | `/:locale/` | 产品首页，平等进入两个目录 |
-| `/:locale/packs/` | 全部 16 个真实产品 Motion Pack |
+| `/:locale/packs/` | 全部 28 个真实产品 Motion Pack |
 | `/:locale/packs/:packId/` | 单个 Pack 的预览、指导和可移植实现 |
 | `/:locale/finder/` | 自然语言动效推荐 |
 | `/:locale/catalog/` | 包含 44 张工作台的完整动效基础目录 |
