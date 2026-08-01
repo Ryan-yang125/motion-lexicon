@@ -35,7 +35,9 @@
     "i18n:check": "tsx scripts/check-i18n.ts",
     "vocabulary:check": "tsx scripts/check-vocabulary.ts",
     "motion-grammar:check": "tsx scripts/check-motion-grammar.ts",
-    "skill:check": "node scripts/check-motion-director-skill.mjs",
+    "skill:bundle": "node scripts/build-motion-blueprint-validator.mjs",
+    "skill:bundle:check": "node scripts/build-motion-blueprint-validator.mjs --check",
+    "skill:check": "npm run skill:bundle:check && node scripts/check-motion-director-skill.mjs",
     "seo:check": "tsx scripts/check-seo.ts",
     "motion:check": "tsx scripts/check-motion.ts",
     "assets:brand": "tsx scripts/generate-brand-assets.ts",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "ajv": "^8.20.0",
     "@playwright/test": "^1.49.1",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router": "^1.170.18",
@@ -93,7 +96,6 @@
     "postcss": "8.5.23"
   },
   "dependencies": {
-    "ajv": "^8.20.0",
     "@radix-ui/react-slider": "^1.4.7",
     "motion": "^12.43.0"
   }

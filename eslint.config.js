@@ -5,7 +5,17 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", "**/dist/**", "node_modules", "coverage", "playwright-report", ".wrangler"] },
+  {
+    ignores: [
+      "dist",
+      "**/dist/**",
+      "node_modules",
+      "coverage",
+      "playwright-report",
+      ".wrangler",
+      "skills/motion-lexicon/scripts/validate-motion-blueprint.mjs"
+    ]
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
