@@ -1,5 +1,5 @@
-name: Recipe or vocabulary proposal
-description: Propose a new motion recipe, related term, or definition improvement.
+name: Motion Grammar proposal
+description: Propose a Product Moment, Motion Primitive, related term, or definition improvement.
 title: "[Proposal]: "
 labels: [proposal]
 body:
@@ -11,28 +11,30 @@ body:
         - Improve an existing definition
         - Add a related term
         - Add a canonical workspace
-        - Improve a motion recipe
+        - Propose a Product Moment
+        - Improve a Motion Primitive
+        - Prepare a Motion Director candidate
     validations:
       required: true
   - type: textarea
     id: task
     attributes:
       label: User task
-      description: Explain the interface problem this motion helps someone solve.
+      description: Explain the product state and interface problem this motion helps someone solve.
     validations:
       required: true
   - type: textarea
     id: behavior
     attributes:
       label: Observable behavior
-      description: Describe trigger, states, direction, timing, interruption, and gesture behavior.
+      description: Describe trigger, state graph, primary actor, supporting actors, beats, direction, timing, interruption, and gesture behavior.
     validations:
       required: true
   - type: textarea
     id: mapping
     attributes:
       label: Canonical mapping
-      description: Name the existing canonical workspace that fits, or explain the need for a stable new unit.
+      description: Name related Packs or Primitives, or explain the need for a stable new canonical unit.
     validations:
       required: true
   - type: textarea

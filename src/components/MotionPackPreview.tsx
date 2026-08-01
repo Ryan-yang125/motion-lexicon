@@ -1078,7 +1078,7 @@ function previewFor(kind: string, labels: Labels, compact: boolean, locale: Prev
 }
 
 /**
- * A self-contained, CSS-first interactive renderer for the V1.2 product moments collection.
+ * A self-contained, CSS-first interactive renderer for the V2.0 product moments collection.
  * It deliberately owns the miniature product UI so each pack can have a real state
  * transition without inheriting the generic motion-demo shell from the vocabulary.
  */

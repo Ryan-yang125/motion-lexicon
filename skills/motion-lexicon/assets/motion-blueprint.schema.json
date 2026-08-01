@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json",
+  "title": "Motion Lexicon Motion Blueprint",
+  "description": "A portable contract for a product-motion decision, its state graph, accessible behavior, and delivery plan.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "locale",
+    "intent",
+    "scope",
+    "stateGraph",
+    "actors",
+    "beats",
+    "accessibility",
+    "delivery",
+    "provenance"
+  ],
+  "properties": {
+    "version": {
+      "const": "2.0"
+    },
+    "locale": {
+      "enum": ["zh", "en"]
+    },
+    "intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["productGoal", "userIntent", "feeling"],
+      "properties": {
+        "productGoal": { "type": "string", "minLength": 3 },
+        "userIntent": { "type": "string", "minLength": 3 },
+        "feeling": { "type": "string", "minLength": 2 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "framework", "input"],
+      "properties": {
+        "surface": { "type": "string", "minLength": 2 },
+        "framework": { "type": "string", "minLength": 2 },
+        "input": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["pointer", "keyboard", "touch", "programmatic"] },
+          "uniqueItems": true
+        }
+      }
+    },
+    "stateGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial", "states", "transitions"],
+      "properties": {
+        "initial": { "type": "string", "minLength": 1 },
+        "states": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "role"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+              "label": { "type": "string", "minLength": 1 },
+              "role": {
+                "enum": ["initial", "engaged", "pending", "success", "failure", "recovery", "terminal"]
+              }
+            }
+          }
+        },
+        "transitions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["event", "from", "to", "interrupt"],
+            "properties": {
+              "event": { "type": "string", "minLength": 1 },
+              "from": { "type": "string", "minLength": 1 },
+              "to": { "type": "string", "minLength": 1 },
+              "interrupt": { "enum": ["replace", "reverse", "settle", "queue"] }
+            }
+          }
+        }
+      }
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "contains": {
+        "type": "object",
+        "required": ["role"],
+        "properties": {
+          "role": { "const": "primary" }
+        }
+      },
+      "minContains": 1,
+      "maxContains": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "role", "kind", "element"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "role": { "enum": ["primary", "supporting"] },
+          "kind": { "enum": ["trigger", "hero", "status", "record", "environment"] },
+          "element": { "type": "string", "minLength": 2 }
+        }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "at", "actor", "purpose", "primitive", "from", "to", "durationMs", "easing", "properties"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "at": { "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "string", "minLength": 1 }] },
+          "actor": { "type": "string", "minLength": 1 },
+          "purpose": { "enum": ["orient", "confirm", "preserve-continuity", "reveal", "recover"] },
+          "primitive": { "type": "string", "minLength": 2 },
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "durationMs": { "type": "integer", "minimum": 0, "maximum": 2000 },
+          "easing": { "enum": ["arrive", "leave", "feedback", "linear", "spring"] },
+          "properties": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "enum": ["transform", "opacity", "color", "clip", "progress"] },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reducedMotion", "focus", "aria", "keyboard"],
+      "properties": {
+        "reducedMotion": { "type": "string", "minLength": 8 },
+        "focus": { "type": "string", "minLength": 3 },
+        "aria": { "type": "string", "minLength": 3 },
+        "keyboard": { "type": "string", "minLength": 3 }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formats", "integration"],
+      "properties": {
+        "formats": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["prompt", "html", "css", "js", "react", "vue", "svelte"] },
+          "uniqueItems": true
+        },
+        "integration": { "type": "string", "minLength": 8 }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "foundations", "moments", "confidence"],
+      "properties": {
+        "status": { "enum": ["draft", "candidate", "published"] },
+        "foundations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 2 },
+          "uniqueItems": true
+        },
+        "moments": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 2 },
+          "uniqueItems": true
+        },
+        "confidence": { "enum": ["high", "medium", "exploratory"] },
+        "evidence": { "type": "string", "minLength": 3 }
+      }
+    }
+  }
+}

@@ -101,6 +101,16 @@ const motionPackRoute = createRoute({
   path: "$locale/packs/$packId"
 }).lazy(() => import("./routes/motion-pack.lazy").then((module) => module.Route));
 
+const directorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/director"
+}).lazy(() => import("./routes/director.lazy").then((module) => module.Route));
+
+const motionBlueprintLabRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/lab/motion-blueprints"
+}).lazy(() => import("./routes/motion-blueprint-lab.lazy").then((module) => module.Route));
+
 const isLocalLabEnabled = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true;
 
 const quietProductMotionLabRoute = isLocalLabEnabled
@@ -131,6 +141,8 @@ const routeTree = rootRoute.addChildren(
         finderRoute,
         packsRoute,
         motionPackRoute,
+        directorRoute,
+        motionBlueprintLabRoute,
         quietProductMotionLabRoute,
         recipeRoute,
         categoryRoute
@@ -144,6 +156,8 @@ const routeTree = rootRoute.addChildren(
         finderRoute,
         packsRoute,
         motionPackRoute,
+        directorRoute,
+        motionBlueprintLabRoute,
         recipeRoute,
         categoryRoute
       ]

@@ -2,8 +2,10 @@ import { expect, test } from "@playwright/test";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 
-test("landing page exposes GitHub, CLI, Skill, and versioned public data", async ({ page, request }) => {
+test("landing page exposes GitHub, Motion Director, Skill, and versioned public data", async ({ page, request }) => {
   await page.goto("/zh/");
+
+  await expect(page.getByText("Motion Lexicon V2.0 · 免费开源", { exact: true })).toBeVisible();
 
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "GitHub" })).toHaveAttribute(
     "href",
@@ -11,13 +13,13 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
   );
   await page.locator(".library-utility-trigger").click();
   const resources = page.locator(".library-utility-popover");
-  await expect(resources.getByRole("link", { name: "CLI", exact: true })).toHaveAttribute(
-    "href",
-    `${repositoryUrl}#free-cli-and-agent-skill`
-  );
   await expect(resources.getByRole("link", { name: "Agent Skill", exact: true })).toHaveAttribute(
     "href",
     `${repositoryUrl}/tree/main/skills/motion-lexicon`
+  );
+  await expect(resources.getByRole("link", { name: "Motion Grammar JSON", exact: true })).toHaveAttribute(
+    "href",
+    "/data/v2/motion-grammar.json"
   );
   await expect(resources.getByRole("link", { name: "Catalog JSON", exact: true })).toHaveAttribute(
     "href",
@@ -27,6 +29,18 @@ test("landing page exposes GitHub, CLI, Skill, and versioned public data", async
     "href",
     "/data/v1/packs.json"
   );
+
+  const motionGrammarResponse = await request.get("/data/v2/motion-grammar.json");
+  expect(motionGrammarResponse.ok()).toBe(true);
+  await expect(motionGrammarResponse.json()).resolves.toMatchObject({
+    kind: "motion-grammar",
+    version: "2.0.0",
+    grammar: { collections: { primitives: { count: 44 }, moments: { count: 28 } } },
+    modes: expect.arrayContaining([
+      expect.objectContaining({ id: "recommend" }),
+      expect.objectContaining({ id: "contribute" })
+    ])
+  });
 
   const catalogResponse = await request.get("/data/v1/catalog.json");
   expect(catalogResponse.ok()).toBe(true);

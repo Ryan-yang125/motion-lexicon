@@ -5,8 +5,8 @@ import type { Locale } from "../data/types";
 import { BrandMark } from "./BrandMark";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
-const cliUrl = `${repositoryUrl}#free-cli-and-agent-skill`;
 const skillUrl = `${repositoryUrl}/tree/main/skills/motion-lexicon`;
+const motionGrammarUrl = "/data/v2/motion-grammar.json";
 
 export function Footer() {
   const { t, i18n } = useTranslation();
@@ -32,6 +32,9 @@ export function Footer() {
           <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
             {locale === "zh" ? "动效基础" : "Motion primitives"}
           </Link>
+          <Link to="/$locale/director/" params={{ locale }}>
+            Motion Director
+          </Link>
           <Link to="/$locale/vocabulary/" params={{ locale }}>
             {locale === "zh" ? "动画词汇" : "Vocabulary"}
           </Link>
@@ -44,12 +47,12 @@ export function Footer() {
             GitHub
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
-          <a href={cliUrl} target="_blank" rel="noreferrer">
-            CLI
-            <ArrowUpRight aria-hidden="true" size={14} />
-          </a>
           <a href={skillUrl} target="_blank" rel="noreferrer">
             Agent Skill
+            <ArrowUpRight aria-hidden="true" size={14} />
+          </a>
+          <a href={motionGrammarUrl}>
+            Motion Grammar JSON
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
           <a href="/data/v1/catalog.json">

@@ -1473,6 +1473,11 @@ summary {
     display: none;
   }
 
+  .library-header-compact .library-primary-nav .is-primitives,
+  .library-header-compact .library-primary-nav .is-director {
+    display: none;
+  }
+
   .library-header-compact .library-primary-nav .is-library {
     min-width: 44px;
     min-height: 44px;

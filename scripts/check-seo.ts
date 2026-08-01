@@ -80,27 +80,36 @@ for (const alias of aliasMetadata) {
 
 const staticPaths = getStaticPaths();
 const sitemap = sitemapPaths();
-const expectedPaths = locales.flatMap((locale) => [
+const expectedIndexablePaths = locales.flatMap((locale) => [
   pathFor(locale),
   pathFor(locale, ["catalog"]),
   pathFor(locale, ["finder"]),
   pathFor(locale, ["vocabulary"]),
   pathFor(locale, ["packs"]),
+  pathFor(locale, ["director"]),
   ...motionPacks.map((pack) => pathFor(locale, ["packs", pack.id])),
   ...categories.map((category) => pathFor(locale, [category.id])),
   ...canonicalMotionCatalog.map((item) => pathFor(locale, [item.categoryId, item.id]))
 ]);
+const expectedCandidatePaths = locales.map((locale) => pathFor(locale, ["lab", "motion-blueprints"]));
+const expectedStaticPaths = [...expectedIndexablePaths, ...expectedCandidatePaths];
 
-assert(expectedPaths.length === 178, `Expected 178 localized canonical paths, found ${expectedPaths.length}`);
-assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static paths, found ${staticPaths.length}`);
-assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap URLs, found ${sitemap.length}`);
+assert(expectedIndexablePaths.length === 180, `Expected 180 indexable localized paths, found ${expectedIndexablePaths.length}`);
+assert(expectedStaticPaths.length === 182, `Expected 182 localized static paths, found ${expectedStaticPaths.length}`);
+assert(staticPaths.length === expectedStaticPaths.length, `Expected ${expectedStaticPaths.length} static paths, found ${staticPaths.length}`);
+assert(sitemap.length === expectedIndexablePaths.length, `Expected ${expectedIndexablePaths.length} sitemap URLs, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static paths contain duplicates");
 assert(new Set(sitemap).size === sitemap.length, "Sitemap paths contain duplicates");
 
-for (const routePath of expectedPaths) {
+for (const routePath of expectedIndexablePaths) {
   assert(routePath.endsWith("/"), `Canonical path needs a trailing slash: ${routePath}`);
   assert(staticPaths.includes(routePath), `Static paths missing ${routePath}`);
   assert(sitemap.includes(routePath), `Sitemap missing ${routePath}`);
+}
+
+for (const routePath of expectedCandidatePaths) {
+  assert(staticPaths.includes(routePath), `Static paths missing candidate route ${routePath}`);
+  assert(!sitemap.includes(routePath), `Candidate route leaked into sitemap: ${routePath}`);
 }
 
 for (const locale of locales) {

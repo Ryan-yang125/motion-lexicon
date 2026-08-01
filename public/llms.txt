@@ -6,6 +6,10 @@
 - Chinese website: https://motion-lexicon.pages.dev/zh/
 - Motion Finder: https://motion-lexicon.pages.dev/en/finder/
 - 中文动效选择器: https://motion-lexicon.pages.dev/zh/finder/
+- Motion Director: https://motion-lexicon.pages.dev/en/director/
+- Motion Director 中文: https://motion-lexicon.pages.dev/zh/director/
+- Motion Grammar JSON: https://motion-lexicon.pages.dev/data/v2/motion-grammar.json
+- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json
 - Product Moments: https://motion-lexicon.pages.dev/en/packs/
 - Product Moments JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
@@ -16,13 +20,11 @@
 - JSON Schema: https://motion-lexicon.pages.dev/data/v1/schema.json
 - Full machine-readable text: https://motion-lexicon.pages.dev/llms-full.txt
 
-## Free tools
+## Motion Director
 
-- CLI: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0`
-- Motion Primitives: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 list --locale en --format json`
-- Product Moments: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 packs --locale en --format json`
-- Fuzzy recommendation: `npx -y github:Ryan-yang125/motion-lexicon#v1.2.0 recommend "describe the motion you want" --locale en --format json`
 - Agent Skill: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
+- Modes: Recommend, Compose, Implement, Review, Contribute
+- Delivery: semantic HTML, CSS, and small interaction JavaScript
 
 ## Product Moments
 

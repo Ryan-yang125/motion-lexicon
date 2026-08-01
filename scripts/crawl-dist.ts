@@ -4,6 +4,7 @@ import { glossaryTerms } from "../src/data/glossary";
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
 import {
   defaultLocale,
+  getStaticPaths,
   isLocale,
   pathFor,
   sitemapPaths,
@@ -94,7 +95,10 @@ assert(manifest.icons?.some((icon) => icon.src === "/icon-512.png" && icon.sizes
 
 const sitemapRoutePaths = sitemapPaths();
 const sitemapRouteSet = new Set(sitemapRoutePaths);
+const staticRoutePaths = getStaticPaths();
+const staticRouteSet = new Set(staticRoutePaths);
 assert(sitemapRouteSet.size === sitemapRoutePaths.length, "sitemapPaths contains duplicate URLs");
+assert(staticRouteSet.size === staticRoutePaths.length, "getStaticPaths contains duplicate URLs");
 for (const routePath of sitemapRoutePaths) {
   assert(routePath.endsWith("/"), `Canonical route must end in a slash: ${routePath}`);
   assert(existsSync(routeFile(routePath)), `Missing prerendered HTML for ${routePath}`);
@@ -235,8 +239,19 @@ for (const routePath of sitemapRoutePaths) {
 }
 
 for (const href of internalLinks) {
-  assert(sitemapRouteSet.has(href), `Internal link points to a redirect or non-indexable route: ${href}`);
+  assert(staticRouteSet.has(href), `Internal link has no canonical static target: ${href}`);
   assert(existsSync(routeFile(href)), `Internal link has no prerendered target: ${href}`);
+}
+
+const noindexStaticPaths = staticRoutePaths.filter((routePath) => !sitemapRouteSet.has(routePath));
+for (const routePath of noindexStaticPaths) {
+  const html = readFileSync(routeFile(routePath), "utf8");
+  assert(
+    html.includes('name="robots" content="noindex,follow"'),
+    `${routePath} is outside the sitemap and must carry noindex metadata`
+  );
+  assert(htmlTags(html, "h1").length === 1, `${routePath} must have exactly one H1`);
+  assert(htmlTags(html, "title").length === 1, `${routePath} must have exactly one title`);
 }
 
 for (const locale of locales) {
@@ -269,7 +284,7 @@ for (const redirect of staticRedirects()) {
     `Built redirects are missing ${redirect.source}`
   );
   const destinationPath = redirect.destination.split("?", 1)[0];
-  assert(sitemapRouteSet.has(destinationPath), `Redirect destination is not canonical: ${redirect.destination}`);
+  assert(staticRouteSet.has(destinationPath), `Redirect destination is not a prerendered canonical route: ${redirect.destination}`);
 }
 const redirectLines = redirects.trim().split("\n").filter(Boolean);
 assert(redirectLines.length === staticRedirects().length + 1, "Built redirects contain unsupported or stale rules");

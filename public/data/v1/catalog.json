@@ -8,15 +8,16 @@
       "zh": "产品瞬间与动效基础，都是可预览、可复制、可直接接入界面的产品动效。",
       "en": "Product Moments and Motion Primitives for previewing, copying, and integrating interface motion."
     },
-    "releaseVersion": "1.2.0",
+    "releaseVersion": "2.0.0",
     "siteUrl": "https://motion-lexicon.pages.dev",
     "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
     "locales": [
       "zh",
       "en"
     ],
-    "cliCommand": "npx -y github:Ryan-yang125/motion-lexicon#v1.2.0",
-    "skillCommand": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
+    "skillCommand": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon",
+    "motionGrammarData": "https://motion-lexicon.pages.dev/data/v2/motion-grammar.json",
+    "motionBlueprintSchemaData": "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json"
   },
   "endpoints": {
     "finder": {
@@ -26,6 +27,10 @@
     "packs": {
       "zh": "https://motion-lexicon.pages.dev/zh/packs/",
       "en": "https://motion-lexicon.pages.dev/en/packs/"
+    },
+    "director": {
+      "zh": "https://motion-lexicon.pages.dev/zh/director/",
+      "en": "https://motion-lexicon.pages.dev/en/director/"
     },
     "productMoments": {
       "zh": "https://motion-lexicon.pages.dev/zh/packs/",
@@ -41,6 +46,8 @@
     "vocabulary": "https://motion-lexicon.pages.dev/data/v1/vocabulary.json",
     "recipeTemplate": "https://motion-lexicon.pages.dev/data/v1/recipes/{id}.json",
     "schema": "https://motion-lexicon.pages.dev/data/v1/schema.json",
+    "motionGrammar": "https://motion-lexicon.pages.dev/data/v2/motion-grammar.json",
+    "motionBlueprintSchema": "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json",
     "pricing": "https://motion-lexicon.pages.dev/pricing.txt",
     "llms": "https://motion-lexicon.pages.dev/llms.txt",
     "llmsFull": "https://motion-lexicon.pages.dev/llms-full.txt"
