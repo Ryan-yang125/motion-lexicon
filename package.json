@@ -72,7 +72,7 @@
     "globals": "^17.7.0",
     "i18next": "^26.3.6",
     "iconoir": "^7.11.1",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^3.0.0",
