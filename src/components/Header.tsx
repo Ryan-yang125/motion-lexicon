@@ -1,5 +1,14 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { BookOpen, Braces, Github, Menu, Sparkles } from "lucide-react";
+import {
+  Braces,
+  Github,
+  Menu,
+  MotionBlueprintGlyph,
+  MotionDirectorGlyph,
+  MotionPrimitiveGlyph,
+  MotionVocabularyGlyph,
+  ProductMomentGlyph
+} from "./icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
@@ -118,11 +127,11 @@ export function Header({ locale }: HeaderProps) {
                   {finderLabel}
                 </Link>
                 <Link to="/$locale/director/" params={{ locale }} className={isDirectorRoute ? "is-active" : undefined}>
-                  <Sparkles aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <MotionDirectorGlyph aria-hidden="true" size={16} />
                   <span>{directorLabel}</span>
                 </Link>
                 <Link to="/$locale/packs/" params={{ locale }} className={isPacksRoute ? "is-active" : undefined}>
-                  <BookOpen aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <ProductMomentGlyph aria-hidden="true" size={16} />
                   <span>{packsLabel}</span>
                 </Link>
                 <Link
@@ -131,7 +140,7 @@ export function Header({ locale }: HeaderProps) {
                   search={{ surface: "components" }}
                   className={isPrimitivesRoute ? "is-active" : undefined}
                 >
-                  <BookOpen aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <MotionPrimitiveGlyph aria-hidden="true" size={16} />
                   <span>{primitivesLabel}</span>
                 </Link>
                 <Link
@@ -139,11 +148,11 @@ export function Header({ locale }: HeaderProps) {
                   params={{ locale }}
                   className={isVocabulary ? "is-active" : undefined}
                 >
-                  <BookOpen aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <MotionVocabularyGlyph aria-hidden="true" size={16} />
                   <span>{vocabularyLabel}</span>
                 </Link>
                 <a href={skillUrl} target="_blank" rel="noreferrer">
-                  <Braces aria-hidden="true" size={16} strokeWidth={1.7} />
+                  <MotionBlueprintGlyph aria-hidden="true" size={16} />
                   <span>Agent Skill</span>
                 </a>
                 <a href={motionGrammarUrl}>

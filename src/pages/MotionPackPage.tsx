@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "../components/icons";
 import { Link } from "@tanstack/react-router";
 import { MotionPackExport } from "../components/MotionPackExport";
 import { MotionPackPreview } from "../components/MotionPackPreview";
@@ -26,8 +26,7 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
         reduced: "减弱动效",
         foundations: "关联动效基础",
         related: "同类产品瞬间",
-        source: "可复制实现",
-        states: ["开始", "进行中", "完成", "再次触发"]
+        source: "可复制实现"
       }
     : {
         back: "Back to product moments",
@@ -38,8 +37,7 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
         reduced: "Reduced motion",
         foundations: "Related motion primitives",
         related: "Related product moments",
-        source: "Copy-ready implementation",
-        states: ["Start", "In progress", "Complete", "Repeat"]
+        source: "Copy-ready implementation"
       };
 
   if (!pack) {
@@ -100,7 +98,7 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
               </div>
             </dl>
             <div className="motion-pack-state-list" aria-label={locale === "zh" ? "完整状态" : "Complete states"}>
-              {labels.states.map((state) => <span key={state}>{state}</span>)}
+              {pack.stateLabels.map((state) => <span key={state[locale]}>{state[locale]}</span>)}
             </div>
           </aside>
         </section>

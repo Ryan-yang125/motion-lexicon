@@ -11,8 +11,8 @@
   --panel: #ffffff;
   --panel-solid: #ffffff;
   --panel-raised: #fafafa;
-  --accent: #2563eb;
-  --accent-strong: #1d4ed8;
+  --accent: var(--ml-focus, #3656df);
+  --accent-strong: #2948c4;
   --code: #09090b;
   --code-text: #fafafa;
   --shadow: rgba(0, 0, 0, 0.08);
@@ -31,8 +31,8 @@
   --panel: #09090b;
   --panel-solid: #09090b;
   --panel-raised: #18181b;
-  --accent: #3b82f6;
-  --accent-strong: #60a5fa;
+  --accent: var(--ml-focus, #93b0ff);
+  --accent-strong: #aec2ff;
   --code: #030305;
   --code-text: #fafafa;
   --shadow: rgba(0, 0, 0, 0.36);

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen } from "../components/icons";
 import { useTranslation } from "react-i18next";
 import { MotionThumbnail } from "../components/MotionThumbnail";
 import { Seo } from "../components/Seo";

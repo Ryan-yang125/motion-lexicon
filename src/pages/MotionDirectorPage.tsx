@@ -5,10 +5,12 @@ import {
   ClipboardCheck,
   Code2,
   Compass,
-  Layers3,
-  Sparkles,
-  WandSparkles
-} from "lucide-react";
+  MotionBlueprintGlyph,
+  MotionDirectorGlyph,
+  MotionPrimitiveGlyph,
+  MotionSequenceGlyph,
+  ProductMomentGlyph
+} from "../components/icons";
 import { useEffect, useState } from "react";
 import { Seo } from "../components/Seo";
 import {
@@ -170,7 +172,7 @@ function BlueprintScene({ labels, locale }: BlueprintSceneProps) {
         <div className="director-scene-body">
           <div className="director-scene-record">
             <span className="director-scene-record-icon" aria-hidden="true">
-              <Sparkles size={17} strokeWidth={1.8} />
+              <MotionDirectorGlyph size={17} />
             </span>
             <span className="director-scene-record-copy">
               <strong>Motion Director</strong>
@@ -212,10 +214,10 @@ function BlueprintScene({ labels, locale }: BlueprintSceneProps) {
 
 const workflowIcons = {
   recommend: Compass,
-  compose: Layers3,
+  compose: MotionSequenceGlyph,
   implement: Code2,
   review: ClipboardCheck,
-  contribute: WandSparkles
+  contribute: MotionBlueprintGlyph
 } as const;
 
 export function MotionDirectorPage({ locale }: { locale: Locale }) {
@@ -306,7 +308,7 @@ export function MotionDirectorPage({ locale }: { locale: Locale }) {
           <div className="director-blueprint-sheet">
             <div className="director-blueprint-sheet-top">
               <span>{motionBlueprintExample.id}</span>
-              <WandSparkles aria-hidden="true" size={16} strokeWidth={1.75} />
+              <MotionBlueprintGlyph aria-hidden="true" size={16} />
             </div>
             <dl className="director-blueprint-list">
               <div>
@@ -357,7 +359,7 @@ export function MotionDirectorPage({ locale }: { locale: Locale }) {
           </div>
           <div className="director-collection-grid">
             <Link className="director-collection-card" to="/$locale/packs/" params={{ locale }}>
-              <span className="director-collection-icon" aria-hidden="true"><Layers3 size={20} strokeWidth={1.75} /></span>
+              <span className="director-collection-icon" aria-hidden="true"><ProductMomentGlyph size={20} /></span>
               <span>
                 <strong>{labels.packs} · {motionGrammar.collections.moments.count}</strong>
                 <small>{labels.packsDescription}</small>
@@ -370,7 +372,7 @@ export function MotionDirectorPage({ locale }: { locale: Locale }) {
               params={{ locale }}
               search={{ surface: "components" }}
             >
-              <span className="director-collection-icon" aria-hidden="true"><Compass size={20} strokeWidth={1.75} /></span>
+              <span className="director-collection-icon" aria-hidden="true"><MotionPrimitiveGlyph size={20} /></span>
               <span>
                 <strong>{labels.primitives} · {motionGrammar.collections.primitives.count}</strong>
                 <small>{labels.primitivesDescription}</small>

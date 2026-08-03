@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, CircleDotDashed, Code2, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleDotDashed, Code2 } from "../components/icons";
 import { Seo } from "../components/Seo";
 import { motionBlueprintExample } from "../data/motion-grammar";
 import { pathFor } from "../data/site";
@@ -125,7 +125,6 @@ export function MotionBlueprintLabPage({ locale }: { locale: Locale }) {
           <aside className="blueprint-lab-review" aria-labelledby="blueprint-review-title">
             <div className="blueprint-lab-review-head">
               <span className="director-eyebrow">{labels.review}</span>
-              <Sparkles aria-hidden="true" size={17} strokeWidth={1.8} />
             </div>
             <h2 id="blueprint-review-title">{labels.ready}</h2>
             <ul>

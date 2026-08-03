@@ -140,11 +140,12 @@ Motion Lexicon 是静态网站，提供免费浏览器体验、免费 Agent Skil
 - 生成的代码片段：[0BSD](./CONTENT-LICENSE)
 - 源于 Interior 的交互组件：[MIT 署名](./NOTICE)
 
-## V2.0 快照
+## V2.1 快照
 
-**V2.0.1 将 Motion Director 带入产品。** 产品瞬间、动效基础、双语词汇、公共
-Motion Grammar 和 Agent Skill 共同组成内容与创作系统。浏览器承担可视化参考，
-Motion Director 将同一套决策带入真实产品工作。
+**V2.1 让视觉系统更贴近动效工作本身。** Iconoir 承担通用操作图标，项目自有的
+Motion Glyph 用于识别产品瞬间、动效基础、Motion Director 与创作流程。界面以墨色
+和中性色为主，蓝色保留给当前选中与键盘焦点。两个目录继续作为平级产品表面，共享
+同一套 Motion Grammar。
 
 <!-- markdownlint-disable MD013 MD033 -->
 

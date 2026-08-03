@@ -7,7 +7,7 @@ import {
   Monitor,
   Smartphone,
   Tablet
-} from "lucide-react";
+} from "./icons";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCategory } from "../data/categories";

@@ -1,4 +1,4 @@
-import { RotateCcw } from "lucide-react";
+import { RotateCcw } from "./icons";
 import { useTranslation } from "react-i18next";
 import type { Locale, MotionRecipe, ParamValue, ParamValues } from "../data/types";
 import { text } from "../data/site";

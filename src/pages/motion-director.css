@@ -734,3 +734,76 @@
   .director-scene-button { transition-duration: 1ms !important; }
   .director-scene[data-state="sending"] .director-scene-button-icon svg { animation: none; }
 }
+
+/* V2.1 product hierarchy: reserves blue for state and focus, while the
+   Director uses the same quiet product-material system as Motion Packs. */
+.director-eyebrow { gap: 0; }
+.director-eyebrow::before { display: none; }
+
+.director-hero-copy h1 {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+}
+
+.director-hero-stage,
+.director-mode-card,
+.director-collection-card,
+.blueprint-lab-primary,
+.blueprint-lab-card {
+  box-shadow: none;
+}
+
+.director-scene-window,
+.director-blueprint-sheet {
+  box-shadow: var(--ml-shadow-float);
+}
+
+.director-scene-record-icon,
+.director-mode-icon,
+.director-collection-icon {
+  color: var(--interior-ink);
+  background: transparent;
+  border-radius: 0;
+}
+
+.director-scene-record-status i { background: var(--ml-warning); }
+.director-scene[data-state="awaiting"] .director-scene-record-status i { background: var(--ml-success); }
+.director-scene[data-state="awaiting"] .director-scene-feedback { color: var(--ml-success); }
+
+.director-mode-card small,
+.director-text-link,
+.director-blueprint-sheet-top svg,
+.director-collection-card > svg,
+.blueprint-lab-review-head svg,
+.blueprint-lab-card small {
+  color: var(--interior-secondary);
+}
+
+.blueprint-lab-review li.is-pending svg { color: var(--ml-warning); }
+
+.director-candidate-card {
+  border: 0;
+  border-top: 1px solid var(--interior-line);
+  border-radius: 0;
+  padding: 26px 0 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.director-candidate-card > a,
+.director-hero-actions a,
+.blueprint-lab-back { box-shadow: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .director-mode-card:hover,
+  .director-collection-card:hover {
+    box-shadow: var(--ml-shadow-float);
+  }
+}
+
+@media (max-width: 560px) {
+  .director-hero-copy h1,
+  .blueprint-lab-intro h1 { font-size: 32px; }
+}

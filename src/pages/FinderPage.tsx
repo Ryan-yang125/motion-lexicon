@@ -1,4 +1,4 @@
-import { ArrowRight, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, SlidersHorizontal } from "../components/icons";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";

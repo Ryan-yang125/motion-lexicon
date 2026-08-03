@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, RotateCcw } from "lucide-react";
+import { ArrowUpRight, Check, RotateCcw } from "./icons";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, useReducedMotion } from "motion/react";

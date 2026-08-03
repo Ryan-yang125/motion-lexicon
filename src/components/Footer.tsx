@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "./icons";
 import { useTranslation } from "react-i18next";
 import type { Locale } from "../data/types";
 import { BrandMark } from "./BrandMark";

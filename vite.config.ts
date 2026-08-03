@@ -22,8 +22,7 @@ export default defineConfig({
             "/node_modules/@tanstack/",
             "/node_modules/i18next/",
             "/node_modules/react-i18next/",
-            "/node_modules/react-helmet-async/",
-            "/node_modules/lucide-react/"
+            "/node_modules/react-helmet-async/"
           ];
           return corePackages.some((packagePath) => id.includes(packagePath))
             ? "vendor"
