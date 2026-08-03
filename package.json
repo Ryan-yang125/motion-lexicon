@@ -92,8 +92,9 @@
     "lightningcss-linux-x64-gnu": "1.32.0"
   },
   "overrides": {
-    "brace-expansion": "5.0.8",
-    "postcss": "8.5.23"
+    "brace-expansion": "5.0.9",
+    "postcss": "8.5.23",
+    "undici": "7.29.0"
   },
   "dependencies": {
     "@radix-ui/react-slider": "^1.4.7",
