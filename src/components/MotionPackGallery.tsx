@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./icons";
 import { Link } from "@tanstack/react-router";
 import { type KeyboardEvent, useMemo, useState } from "react";
 import { motionPackGroups, motionPacks } from "../data/motion-packs";

@@ -28,13 +28,14 @@ import {
   Share2,
   ShieldCheck,
   ShoppingBag,
-  Sparkles,
   Trash2,
   Undo2,
   Upload,
   UserPlus,
-  UserRoundCheck
-} from "lucide-react";
+  UserRoundCheck,
+  MotionKeyframeGlyph,
+  MotionReleaseGlyph
+} from "./icons";
 import { type CSSProperties, type ReactNode, useEffect, useId, useRef, useState } from "react";
 
 export type MotionPackPreviewKind =
@@ -419,7 +420,7 @@ function PublishRelease({ labels }: { labels: Labels }) {
 
   return (
     <div className="mpp-window mpp-publish" data-published={published || undefined}>
-      <div className="mpp-row mpp-publish__headline"><span className="mpp-release-mark"><Sparkles aria-hidden="true" size={14} /></span><div><strong>Version 1.0</strong><small>Public release</small></div></div>
+      <div className="mpp-row mpp-publish__headline"><span className="mpp-release-mark"><MotionReleaseGlyph aria-hidden="true" size={14} /></span><div><strong>Version 1.0</strong><small>Public release</small></div></div>
       <div className="mpp-publish__timeline"><i /><i /><i className={published ? "is-complete" : ""} /></div>
       <div className="mpp-row mpp-publish__actions">
         <TinyButton label={published ? labels.published : labels.publish} onClick={publish} tone="dark">
@@ -682,7 +683,7 @@ function DetailsDisclosure({ labels }: { labels: Labels }) {
   return (
     <div className={`mpp-disclosure${open ? " is-open" : ""}`}>
       <button type="button" aria-expanded={open} aria-controls={detailsId} onClick={() => setOpen((current) => !current)}>
-        <span className="mpp-disclosure__mark"><Sparkles aria-hidden="true" size={14} /></span>
+        <span className="mpp-disclosure__mark"><MotionKeyframeGlyph aria-hidden="true" size={14} /></span>
         <span><strong>Motion quality review</strong><small>Timing, interruption, reduced motion</small></span>
         <ChevronDown aria-hidden="true" size={16} />
       </button>

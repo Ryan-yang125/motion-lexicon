@@ -1,5 +1,11 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Search, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  MotionDirectorGlyph,
+  MotionPrimitiveGlyph,
+  ProductMomentGlyph,
+  Search
+} from "../components/icons";
 import { FormEvent, useState } from "react";
 import { MotionPackPreview } from "../components/MotionPackPreview";
 import { MotionThumbnail } from "../components/MotionThumbnail";
@@ -33,6 +39,9 @@ export function LandingPage({ locale }: { locale: Locale }) {
         primitivesAction: "浏览动效基础",
         finderKicker: "Motion Finder",
         finderCopy: "用自己的描述，在两条目录中找到合适的起点。",
+        sceneIntent: "我有一个产品场景",
+        motionIntent: "我知道动效名称",
+        explore: "继续探索",
         directorKicker: "Motion Director · Agent Skill",
         directorTitle: "从你的产品场景开始。",
         directorCopy: "让 Agent Skill 根据状态、节奏和实现边界，写出一份可交付的 Motion Blueprint。",
@@ -54,6 +63,9 @@ export function LandingPage({ locale }: { locale: Locale }) {
         primitivesAction: "Browse motion primitives",
         finderKicker: "Motion Finder",
         finderCopy: "Start with your own words and explore both directories.",
+        sceneIntent: "I have a product scene",
+        motionIntent: "I know the motion name",
+        explore: "Keep exploring",
         directorKicker: "Motion Director · Agent Skill",
         directorTitle: "Start from your product scene.",
         directorCopy: "Let the Agent Skill turn state, rhythm, and implementation boundaries into a deliverable Motion Blueprint.",
@@ -113,9 +125,20 @@ export function LandingPage({ locale }: { locale: Locale }) {
             <span>{labels.finderKicker}</span>
             {labels.finderCopy}
           </p>
+          <div className="dual-library-intents" aria-label={locale === "zh" ? "选择起点" : "Choose a starting point"}>
+            <Link to="/$locale/packs/" params={{ locale }}>
+              <ProductMomentGlyph aria-hidden="true" size={16} />
+              {labels.sceneIntent}
+            </Link>
+            <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>
+              <MotionPrimitiveGlyph aria-hidden="true" size={16} />
+              {labels.motionIntent}
+            </Link>
+          </div>
         </section>
 
         <section className="dual-library-directories" aria-label={locale === "zh" ? "两个动效目录" : "Two motion directories"}>
+          <span className="dual-library-explore-label">{labels.explore}</span>
           <article
             className="dual-library-directory-card dual-library-pack-card"
             data-testid="directory-card-packs"
@@ -163,7 +186,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
         </section>
 
         <section className="dual-library-director-callout" aria-labelledby="director-callout-title">
-          <span className="dual-library-director-icon" aria-hidden="true"><Sparkles size={20} strokeWidth={1.8} /></span>
+          <span className="dual-library-director-icon" aria-hidden="true"><MotionDirectorGlyph size={20} /></span>
           <div>
             <span className="motion-pack-kicker">{labels.directorKicker}</span>
             <h2 id="director-callout-title">{labels.directorTitle}</h2>

@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "./icons";
 import { Link } from "@tanstack/react-router";
 import { getMotionPackFoundationLinks, type MotionPackFoundationLink } from "../data/motion-packs";
 import type { Locale } from "../data/types";

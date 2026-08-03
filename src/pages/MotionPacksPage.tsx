@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from "../components/icons";
 import { Link } from "@tanstack/react-router";
 import { MotionPackGallery } from "../components/MotionPackGallery";
 import { MotionPackPreview } from "../components/MotionPackPreview";

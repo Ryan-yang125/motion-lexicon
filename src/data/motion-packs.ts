@@ -95,11 +95,12 @@ export type MotionPack = {
   };
   keywords: string[];
   timing: string;
+  stateLabels: readonly LocalizedText[];
   foundations: readonly MotionPackFoundation[];
   source: MotionPackSource;
 };
 
-type MotionPackCore = Omit<MotionPack, "foundations">;
+type MotionPackCore = Omit<MotionPack, "foundations" | "stateLabels">;
 
 const text = (zh: string, en: string): LocalizedText => ({ zh, en });
 
@@ -127,6 +128,40 @@ const foundation = (
   roleLabel: foundationRoleLabels[role],
   note: text(zh, en)
 });
+
+const states = (zh: readonly string[], en: readonly string[]): readonly LocalizedText[] =>
+  zh.map((label, index) => text(label, en[index] ?? label));
+
+const stateLabelsByMotionPackId: Readonly<Record<MotionPackKind, readonly LocalizedText[]>> = {
+  "save-confirmation": states(["编辑中", "保存中", "已保存"], ["Editing", "Saving", "Saved"]),
+  "publish-release": states(["草稿", "发布中", "已发布"], ["Draft", "Publishing", "Published"]),
+  "share-link": states(["准备分享", "链接已复制", "已发送"], ["Ready", "Link copied", "Sent"]),
+  "card-selection": states(["未选中", "聚焦", "已选中"], ["Idle", "Focused", "Selected"]),
+  "workspace-switch": states(["当前工作区", "切换中", "已切换"], ["Current", "Switching", "Switched"]),
+  "template-choice": states(["浏览模板", "选择模板", "已应用"], ["Browsing", "Choosing", "Applied"]),
+  "layer-insertion": states(["当前图层", "插入中", "已加入"], ["Current layer", "Inserting", "Added"]),
+  "archive-undo": states(["可见", "已归档", "已恢复"], ["Visible", "Archived", "Restored"]),
+  "filter-results": states(["全部", "筛选中", "结果已更新"], ["All", "Filtering", "Results updated"]),
+  "inline-validation": states(["输入中", "校验中", "可继续"], ["Typing", "Validating", "Ready"]),
+  "command-menu": states(["唤起", "浏览命令", "已执行"], ["Open", "Browsing", "Run"]),
+  "details-disclosure": states(["收起", "展开", "已查看"], ["Closed", "Open", "Read"]),
+  "notification-triage": states(["未处理", "已归档", "下一项"], ["Unread", "Archived", "Next"]),
+  "progress-steps": states(["开始", "进行中", "完成"], ["Start", "In progress", "Complete"]),
+  "member-invite": states(["填写邀请", "已发送", "已加入"], ["Composing", "Sent", "Joined"]),
+  "media-scrub": states(["播放", "拖动位置", "继续播放"], ["Playing", "Scrubbing", "Playing"]),
+  "upload-complete": states(["待上传", "上传中", "已完成"], ["Ready", "Uploading", "Complete"]),
+  "sync-recovery": states(["离线", "同步中", "已恢复"], ["Offline", "Syncing", "Recovered"]),
+  "delete-confirmation": states(["待确认", "删除中", "已移除"], ["Confirm", "Deleting", "Removed"]),
+  "assignee-picker": states(["未分配", "选择成员", "已分配"], ["Unassigned", "Choosing", "Assigned"]),
+  "permission-change": states(["查看权限", "保存中", "已更新"], ["Reviewing", "Saving", "Updated"]),
+  "search-suggestions": states(["输入", "候选出现", "已打开"], ["Typing", "Suggestions", "Opened"]),
+  "kanban-move": states(["原列", "拖动", "已移动"], ["Source", "Dragging", "Moved"]),
+  "cart-update": states(["当前购物车", "数量更新", "金额已更新"], ["Cart", "Updating", "Total updated"]),
+  "comment-reply": states(["撰写", "发送中", "已回复"], ["Composing", "Sending", "Replied"]),
+  "approval-request": states(["草稿", "发送中", "等待审批"], ["Draft", "Sending", "Awaiting approval"]),
+  "checkout-payment": states(["订单确认", "付款中", "已完成"], ["Review", "Paying", "Complete"]),
+  "scheduled-publish": states(["草稿", "已安排", "已发布"], ["Draft", "Scheduled", "Published"])
+};
 
 const source = (html: string, css: string, js: string): MotionPackSource => ({
   html: html.trim(),
@@ -2086,6 +2121,7 @@ for (const pack of motionPackCores) {
 
 export const motionPacks: MotionPack[] = motionPackCores.map((pack) => ({
   ...pack,
+  stateLabels: stateLabelsByMotionPackId[pack.id],
   foundations: foundationsByMotionPackId[pack.id]
 }));
 

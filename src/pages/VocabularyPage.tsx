@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "../components/icons";
 import { useDeferredValue, useMemo, useState } from "react";
 import { Seo } from "../components/Seo";
 import { ExpandingSearch } from "../components/interior/expanding-search";

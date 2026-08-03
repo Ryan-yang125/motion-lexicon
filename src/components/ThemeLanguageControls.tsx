@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Languages } from "lucide-react";
+import { Languages } from "./icons";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "@tanstack/react-router";
 import type { Locale } from "../data/types";

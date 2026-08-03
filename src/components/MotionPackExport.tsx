@@ -1,4 +1,4 @@
-import { Braces, Sparkles } from "lucide-react";
+import { Braces, MotionPromptGlyph } from "./icons";
 import { useMemo, useState } from "react";
 import type { Locale } from "../data/types";
 import { CopyButton } from "./CopyButton";
@@ -52,7 +52,7 @@ export function MotionPackExport({ locale, prompt, source }: MotionPackExportPro
             className={tab === "prompt" ? "is-active" : undefined}
             onClick={() => setTab("prompt")}
           >
-            <Sparkles aria-hidden="true" size={14} />
+            <MotionPromptGlyph aria-hidden="true" size={14} />
             {labels.prompt}
           </button>
           <button

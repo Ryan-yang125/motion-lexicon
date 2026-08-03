@@ -8,7 +8,7 @@ import {
   Plus,
   RotateCcw,
   Undo2
-} from "lucide-react";
+} from "../components/icons";
 import { useEffect, useId, useState } from "react";
 import { Seo } from "../components/Seo";
 import { pathFor } from "../data/site";

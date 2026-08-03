@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "../components/icons";
 import { RecipeWorkspace } from "../components/RecipeWorkspace";
 import { Seo } from "../components/Seo";
 import { getCategory } from "../data/categories";

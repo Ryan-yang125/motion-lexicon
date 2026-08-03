@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, LayoutGrid, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, BookOpen, LayoutGrid, SlidersHorizontal } from "../components/icons";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CatalogSidebar } from "../components/CatalogSidebar";
