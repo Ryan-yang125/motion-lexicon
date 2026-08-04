@@ -335,26 +335,44 @@ test("implementation guidance uses one motion timeline and reflows cleanly", asy
   const desktop = await timeline.evaluate((element) => {
     const style = getComputedStyle(element);
     const rowElements = Array.from(element.querySelectorAll<HTMLElement>(":scope > div"));
+    const firstLabel = rowElements[0].querySelector<HTMLElement>("dt");
+    const firstDetail = rowElements[0].querySelector<HTMLElement>("dd");
+    if (!firstLabel || !firstDetail) throw new Error("Missing guidance row content");
+    const labelBox = firstLabel.getBoundingClientRect();
+    const detailBox = firstDetail.getBoundingClientRect();
     return {
       borderWidths: [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth],
       borderRadius: style.borderRadius,
-      rowColumns: getComputedStyle(rowElements[0]).gridTemplateColumns.split(" ").length,
+      labelTop: labelBox.top,
+      labelRight: labelBox.right,
+      detailTop: detailBox.top,
+      detailLeft: detailBox.left,
       rowWidths: rowElements.map((row) => row.getBoundingClientRect().width)
     };
   });
   expect(desktop.borderWidths).toEqual(["1px", "0px", "1px", "0px"]);
   expect(desktop.borderRadius).toBe("0px");
-  expect(desktop.rowColumns).toBe(2);
+  expect(Math.abs(desktop.detailTop - desktop.labelTop)).toBeLessThan(1);
+  expect(desktop.detailLeft).toBeGreaterThan(desktop.labelRight);
   expect(Math.max(...desktop.rowWidths) - Math.min(...desktop.rowWidths)).toBeLessThan(1);
 
   await page.setViewportSize({ width: 390, height: 900 });
   const mobile = await timeline.evaluate((element) => {
     const rowElements = Array.from(element.querySelectorAll<HTMLElement>(":scope > div"));
+    const firstLabel = rowElements[0].querySelector<HTMLElement>("dt");
+    const firstDetail = rowElements[0].querySelector<HTMLElement>("dd");
+    if (!firstLabel || !firstDetail) throw new Error("Missing guidance row content");
+    const labelBox = firstLabel.getBoundingClientRect();
+    const detailBox = firstDetail.getBoundingClientRect();
     return {
-      rowColumns: getComputedStyle(rowElements[0]).gridTemplateColumns.split(" ").length,
+      labelTop: labelBox.top,
+      labelLeft: labelBox.left,
+      detailTop: detailBox.top,
+      detailLeft: detailBox.left,
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
     };
   });
-  expect(mobile.rowColumns).toBe(1);
+  expect(mobile.detailTop).toBeGreaterThan(mobile.labelTop);
+  expect(Math.abs(mobile.detailLeft - mobile.labelLeft)).toBeLessThan(1);
   expect(mobile.overflow).toBeLessThanOrEqual(0);
 });

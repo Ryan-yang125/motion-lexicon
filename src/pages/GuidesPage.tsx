@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "../components/icons";
 import { Seo } from "../components/Seo";
 import { seoGuides } from "../data/seo-guides";
-import { pathFor } from "../data/site";
+import { pathFor, siteUrl } from "../data/site";
 import type { Locale } from "../data/types";
 import { breadcrumbStructuredData } from "../lib/structured-data";
 
@@ -11,14 +11,16 @@ export function GuidesPage({ locale }: { locale: Locale }) {
     ? {
         eyebrow: "场景指南",
         title: "从真实产品问题开始设计动效",
-        copy: "八篇场景指南，把产品状态、动效基础和可复制的 Product Moments 连成一条可执行的路径。",
-        open: "阅读指南"
+        copy: "八篇双语图文长文，把产品状态、动效基础和可复制的 Product Moments 连成一条可执行的路径。",
+        format: "1000+ 字 · 3 张图解 · 清单与代码",
+        open: "阅读完整指南"
       }
     : {
         eyebrow: "Scenario guides",
         title: "Design motion from real product questions",
-        copy: "Eight scenario guides connect product state, motion primitives, and copy-ready Product Moments into a practical path.",
-        open: "Read guide"
+        copy: "Eight illustrated, bilingual field guides connect product state, motion primitives, and copy-ready Product Moments into a practical path.",
+        format: "Long read · 3 diagrams · checklist and code",
+        open: "Read full guide"
       };
   const routePath = pathFor(locale, ["guides"]);
 
@@ -44,7 +46,7 @@ export function GuidesPage({ locale }: { locale: Locale }) {
               "@type": "ListItem",
               position: index + 1,
               name: guide.title[locale],
-              url: `${pathFor(locale, ["guides", guide.id])}`
+              url: `${siteUrl}${pathFor(locale, ["guides", guide.id])}`
             }))
           }
         ]}
@@ -61,6 +63,7 @@ export function GuidesPage({ locale }: { locale: Locale }) {
               <span>{guide.eyebrow[locale]}</span>
               <h2>{guide.title[locale]}</h2>
               <p>{guide.description[locale]}</p>
+              <small>{labels.format}</small>
               <Link to="/$locale/guides/$guideId/" params={{ locale, guideId: guide.id }}>
                 {labels.open}
                 <ArrowRight aria-hidden="true" size={15} />

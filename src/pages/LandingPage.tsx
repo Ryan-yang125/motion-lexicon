@@ -3,7 +3,7 @@ import {
   ArrowRight,
   MotionDirectorGlyph,
   MotionPrimitiveGlyph,
-  ProductMomentGlyph,
+  MotionStateGlyph,
   Search
 } from "../components/icons";
 import { FormEvent, useState } from "react";
@@ -130,8 +130,8 @@ export function LandingPage({ locale }: { locale: Locale }) {
             {labels.finderCopy}
           </p>
           <div className="dual-library-intents" aria-label={locale === "zh" ? "选择起点" : "Choose a starting point"}>
-            <Link to="/$locale/packs/" params={{ locale }}>
-              <ProductMomentGlyph aria-hidden="true" size={16} />
+            <Link to="/$locale/guides/" params={{ locale }}>
+              <MotionStateGlyph aria-hidden="true" size={16} />
               {labels.sceneIntent}
             </Link>
             <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: "components" }}>

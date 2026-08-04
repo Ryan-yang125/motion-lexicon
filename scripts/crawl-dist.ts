@@ -4,6 +4,7 @@ import { categories } from "../src/data/categories";
 import { glossaryTerms } from "../src/data/glossary";
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
 import { motionPacks } from "../src/data/motion-packs";
+import { seoGuideArticles } from "../src/data/seo-guide-articles";
 import { seoGuides } from "../src/data/seo-guides";
 import {
   defaultLocale,
@@ -36,6 +37,11 @@ function attributes(tag: string) {
 
 function htmlTags(html: string, name: string) {
   return Array.from(html.matchAll(new RegExp(`<${name}\\b[^>]*>`, "g")), (match) => match[0]);
+}
+
+function documentHeadTags(html: string, name: string) {
+  const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
+  return htmlTags(head, name);
 }
 
 function listFiles(directory: string): string[] {
@@ -242,12 +248,36 @@ for (const routePath of sitemapRoutePaths) {
     if (routeParts[0] === "guides") {
       const guide = seoGuides.find((candidate) => candidate.id === routeParts[1]);
       if (guide) {
+        const longArticle = seoGuideArticles.find((candidate) => candidate.guideId === guide.id);
         const article = parsedSchemas.find((schema) => schema["@type"] === "TechArticle");
         const howTo = parsedSchemas.find((schema) => schema["@type"] === "HowTo");
         assert(article, `${routePath} is missing scenario guide TechArticle schema`);
         assert(howTo, `${routePath} is missing scenario guide HowTo schema`);
+        assert(longArticle, `${routePath} is missing its long-form source article`);
+        const body = longArticle.sections
+          .flatMap((section) => section.paragraphs)
+          .map((paragraph) => paragraph[locale])
+          .join(" ")
+          .trim();
+        const expectedWordCount = locale === "zh" ? Array.from(body).length : body.split(/\s+/).filter(Boolean).length;
+        assert(article.wordCount === expectedWordCount, `${routePath} TechArticle wordCount is inconsistent`);
+        assert(
+          (html.match(/<figure class="seo-guide-diagram"/g) ?? []).length === 3,
+          `${routePath} must prerender three scenario diagrams`
+        );
+        assert(html.includes("<pre><code>"), `${routePath} must prerender a scenario implementation example`);
       }
     }
+  }
+
+  if (routeParts.length === 0) {
+    const activeHomeLink = html.match(/<a\b[^>]*class="[^"]*library-primary-link[^"]*is-home[^"]*is-active[^"]*"[^>]*>/);
+    assert(
+      activeHomeLink?.[0].includes('aria-current="page"'),
+      `${routePath} home navigation is missing its active state`
+    );
+    assert(html.includes("/guides/"), `${routePath} home page is missing its scenario guide entry`);
+    assert(!html.includes("seo-guide.lazy-"), `${routePath} eagerly loads the long-form scenario guide route`);
   }
 
   if (routeParts.length === 1 && routeParts[0] === "finder") {
@@ -261,7 +291,7 @@ for (const routePath of sitemapRoutePaths) {
 
   assert(/<div id="root">[\s\S]+<\/div>/.test(html), `${routePath} is missing prerendered application HTML`);
   assert(htmlTags(html, "h1").length === 1, `${routePath} must contain exactly one H1`);
-  assert(htmlTags(html, "title").length === 1, `${routePath} must contain exactly one title`);
+  assert(documentHeadTags(html, "title").length === 1, `${routePath} must contain exactly one document title`);
   assert(
     !/>\s*(?:common|nav|landing|catalog|workspace|footer|seo)\.[a-z0-9_.-]+\s*</i.test(html),
     `${routePath} contains an unresolved translation key`
@@ -297,7 +327,7 @@ for (const routePath of noindexStaticPaths) {
     `${routePath} is outside the sitemap and must carry noindex metadata`
   );
   assert(htmlTags(html, "h1").length === 1, `${routePath} must have exactly one H1`);
-  assert(htmlTags(html, "title").length === 1, `${routePath} must have exactly one title`);
+  assert(documentHeadTags(html, "title").length === 1, `${routePath} must have exactly one document title`);
 }
 
 for (const locale of locales) {

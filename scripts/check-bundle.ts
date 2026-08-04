@@ -22,10 +22,11 @@ const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
 // V2.1 carries twenty-eight real product moments, editorial hubs for all
 // twelve primitive categories, and eight lazy-loaded scenario guides. The
-// Interior interaction system keeps Motion in its own vendor chunk; this
-// remains a hard ceiling for the expanded static editorial surface.
+// Interior interaction system keeps Motion in its own vendor chunk; scenario
+// articles are isolated in their own lazy chunk and retain their own ceiling.
 const maxMotionVendorGzipBytes = 48 * 1024;
-const maxTotalJsGzipBytes = 390 * 1024;
+const maxScenarioGuideArticlesGzipBytes = 70 * 1024;
+const maxTotalJsGzipBytes = 450 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 
@@ -50,6 +51,13 @@ assert(motionVendorChunk, "Interior Motion vendor chunk is missing");
 assert(
   gzipSync(readFileSync(path.join(assetsDir, motionVendorChunk))).length <= maxMotionVendorGzipBytes,
   `Motion vendor chunk exceeds ${Math.round(maxMotionVendorGzipBytes / 1024)} KiB gzip`
+);
+
+const scenarioGuideArticlesChunk = jsFiles.find((file) => file.startsWith("seo-guide.lazy-"));
+assert(scenarioGuideArticlesChunk, "Scenario guide route chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, scenarioGuideArticlesChunk))).length <= maxScenarioGuideArticlesGzipBytes,
+  `Scenario guide article chunk exceeds ${Math.round(maxScenarioGuideArticlesGzipBytes / 1024)} KiB gzip`
 );
 
 const totalCssGzipBytes = cssFiles.reduce((total, file) => {
