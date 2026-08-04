@@ -759,8 +759,40 @@ summary {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+/* The five English labels need the same breathing room as the action cluster. */
+@media (max-width: 1280px) {
+  .library-header-compact .library-primary-nav {
+    display: none;
+  }
+}
+
 .library-header-compact .library-header-actions {
   gap: 0.35rem;
+}
+
+.library-header-compact .library-director-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--ui-radius-nav);
+  padding: 0 0.65rem;
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.library-header-compact .library-director-link:hover,
+.library-header-compact .library-director-link.is-active {
+  color: var(--apple-ink);
+  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
+}
+
+@media (max-width: 1280px) {
+  .library-header-compact .library-director-link {
+    display: none;
+  }
 }
 
 .library-header-compact .library-github-link,
@@ -1734,6 +1766,15 @@ summary {
   line-height: 1.7;
 }
 
+.seo-guide-page > header .seo-guide-standfirst {
+  max-width: 68ch;
+  border-left: 2px solid var(--apple-ink);
+  margin-top: 8px;
+  padding-left: 14px;
+  color: var(--apple-ink);
+  font-weight: 500;
+}
+
 .seo-guide-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1756,6 +1797,12 @@ summary {
   color: var(--apple-tertiary);
   font-family: var(--mono);
   font-size: 10px;
+}
+
+.seo-guide-grid article > small {
+  color: var(--apple-tertiary);
+  font-size: var(--type-xs);
+  line-height: 1.45;
 }
 
 .seo-guide-grid h2,
@@ -1870,6 +1917,223 @@ summary {
   font-weight: 600;
 }
 
+.seo-guide-article {
+  display: grid;
+  gap: 34px;
+  margin-top: 34px;
+}
+
+.seo-guide-article > section {
+  display: grid;
+  gap: 14px;
+  padding-top: 28px;
+  border-top: 1px solid var(--apple-line);
+}
+
+.seo-guide-article h2 {
+  font-size: var(--type-title);
+  letter-spacing: -0.025em;
+  line-height: 1.24;
+}
+
+.seo-guide-article p {
+  max-width: 68ch;
+  font-size: var(--type-md);
+  line-height: 1.82;
+}
+
+.seo-guide-article-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.seo-guide-checklist,
+.seo-guide-case-study {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-card);
+  padding: 18px;
+  background: var(--apple-surface);
+}
+
+.seo-guide-checklist > header,
+.seo-guide-case-study > header {
+  display: grid;
+  gap: 5px;
+}
+
+.seo-guide-checklist h2,
+.seo-guide-case-study h2 {
+  font-size: var(--type-md);
+  letter-spacing: var(--tracking-ui);
+}
+
+.seo-guide-checklist header p,
+.seo-guide-case-study header p {
+  font-size: var(--type-sm);
+  line-height: 1.65;
+}
+
+.seo-guide-checklist ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-guide-checklist li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 8px;
+  color: var(--apple-secondary);
+  font-size: var(--type-sm);
+  line-height: 1.6;
+}
+
+.seo-guide-checklist li > span {
+  display: grid;
+  gap: 3px;
+}
+
+.seo-guide-checklist li strong {
+  color: var(--apple-ink);
+  font-weight: 600;
+}
+
+.seo-guide-checklist li small {
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  line-height: 1.55;
+}
+
+.seo-guide-checklist li::before {
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--apple-ink);
+  border-radius: 50%;
+  content: "";
+}
+
+.seo-guide-case-study pre {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--ui-radius-nav);
+  margin: 0;
+  padding: 14px;
+  color: var(--apple-ink);
+  background: var(--apple-surface-soft);
+  font: 12px/1.65 var(--mono);
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.seo-guide-diagram {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-card);
+  margin: 4px 0 2px;
+  background: var(--apple-surface);
+}
+
+.seo-guide-diagram svg {
+  width: 100%;
+  height: auto;
+  padding: 16px;
+  background:
+    linear-gradient(var(--apple-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--apple-line) 1px, transparent 1px),
+    var(--apple-surface-soft);
+  background-size: 30px 30px;
+}
+
+.seo-guide-diagram-mobile {
+  display: none;
+}
+
+.seo-guide-diagram-arrow {
+  fill: var(--apple-secondary);
+}
+
+.seo-guide-diagram-connector {
+  fill: none;
+  stroke: var(--apple-secondary);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.seo-guide-diagram-connector-label {
+  fill: var(--apple-secondary);
+  font: 500 18px var(--sans);
+}
+
+.seo-guide-diagram-node rect {
+  fill: var(--apple-surface);
+  stroke: var(--apple-line-strong);
+  stroke-width: 2;
+}
+
+.seo-guide-diagram-node.is-ink rect {
+  fill: var(--apple-ink);
+  stroke: var(--apple-ink);
+}
+
+.seo-guide-diagram-node.is-accent rect {
+  fill: color-mix(in srgb, var(--ml-focus) 12%, var(--apple-surface));
+  stroke: var(--ml-focus);
+}
+
+.seo-guide-diagram-node.is-success rect {
+  fill: color-mix(in srgb, var(--ml-success) 13%, var(--apple-surface));
+  stroke: var(--ml-success);
+}
+
+.seo-guide-diagram-node.is-warning rect {
+  fill: color-mix(in srgb, var(--ml-warning) 13%, var(--apple-surface));
+  stroke: var(--ml-warning);
+}
+
+.seo-guide-diagram-node-label {
+  fill: var(--apple-ink);
+  font: 600 25px var(--sans);
+}
+
+.seo-guide-diagram-node-detail {
+  fill: var(--apple-secondary);
+  font: 400 18px var(--sans);
+}
+
+.seo-guide-diagram-node.is-ink :is(.seo-guide-diagram-node-label, .seo-guide-diagram-node-detail) {
+  fill: var(--apple-surface);
+}
+
+.seo-guide-diagram figcaption {
+  display: grid;
+  gap: 5px;
+  border-top: 1px solid var(--apple-line);
+  padding: 14px 16px 15px;
+}
+
+.seo-guide-diagram figcaption strong {
+  color: var(--apple-ink);
+  font-size: var(--type-sm);
+  font-weight: 600;
+}
+
+.seo-guide-diagram figcaption span {
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  line-height: 1.6;
+}
+
 .seo-guide-links > div,
 .seo-guide-related > div {
   display: grid;
@@ -1964,6 +2228,105 @@ summary {
   .seo-guide-related > div,
   .method-page > section > div:not(.method-actions) {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .seo-guide-diagram svg {
+    display: none;
+  }
+
+  .seo-guide-diagram-mobile {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    background:
+      linear-gradient(var(--apple-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--apple-line) 1px, transparent 1px),
+      var(--apple-surface-soft);
+    background-size: 24px 24px;
+  }
+
+  .seo-guide-diagram-mobile-nodes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .seo-guide-diagram-mobile-node {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+    border: 1px solid var(--apple-line-strong);
+    border-radius: var(--ui-radius-nav);
+    padding: 11px;
+    background: var(--apple-surface);
+  }
+
+  .seo-guide-diagram-mobile-node.is-ink {
+    border-color: var(--apple-ink);
+    color: var(--apple-surface);
+    background: var(--apple-ink);
+  }
+
+  .seo-guide-diagram-mobile-node.is-accent {
+    border-color: var(--ml-focus);
+    background: color-mix(in srgb, var(--ml-focus) 12%, var(--apple-surface));
+  }
+
+  .seo-guide-diagram-mobile-node.is-success {
+    border-color: var(--ml-success);
+    background: color-mix(in srgb, var(--ml-success) 13%, var(--apple-surface));
+  }
+
+  .seo-guide-diagram-mobile-node.is-warning {
+    border-color: var(--ml-warning);
+    background: color-mix(in srgb, var(--ml-warning) 13%, var(--apple-surface));
+  }
+
+  .seo-guide-diagram-mobile-node strong {
+    color: currentColor;
+    font-size: var(--type-sm);
+    font-weight: 650;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .seo-guide-diagram-mobile-node span {
+    color: var(--apple-secondary);
+    font-size: var(--type-xs);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .seo-guide-diagram-mobile-node.is-ink span {
+    color: color-mix(in srgb, var(--apple-surface) 76%, transparent);
+  }
+
+  .seo-guide-diagram-mobile-flow {
+    display: grid;
+    gap: 5px;
+  }
+
+  .seo-guide-diagram-mobile-flow span {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
+    border-top: 1px solid var(--apple-line);
+    padding-top: 8px;
+    color: var(--apple-secondary);
+    font-size: var(--type-xs);
+    line-height: 1.45;
+  }
+
+  .seo-guide-diagram-mobile-flow i {
+    color: var(--apple-ink);
+    font-style: normal;
+  }
+
+  .seo-guide-diagram-mobile-flow small {
+    color: var(--apple-tertiary);
+    font-size: inherit;
   }
 }
 

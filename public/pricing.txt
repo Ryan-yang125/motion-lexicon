@@ -20,4 +20,4 @@
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
 - Usage: The public static website and Motion Director Skill are available without an account.
-- Last updated: 2026-08-03
+- Last updated: 2026-08-04

@@ -2,6 +2,7 @@ import { categories } from "../src/data/categories";
 import { getCategorySeoHub } from "../src/data/category-seo";
 import { motionPacks } from "../src/data/motion-packs";
 import { release } from "../src/data/release";
+import { seoGuideArticles } from "../src/data/seo-guide-articles";
 import { seoGuides } from "../src/data/seo-guides";
 import {
   aliasMetadata,
@@ -32,7 +33,126 @@ assert(aliasMetadata.length === 47, `Expected 47 aliases, found ${aliasMetadata.
 assert(motionPacks.length === 28, `Expected 28 Motion Packs, found ${motionPacks.length}`);
 assert(release.version === "2.1.0", `Expected public release 2.1.0, found ${release.version}`);
 assert(seoGuides.length === 8, `Expected 8 scenario guides, found ${seoGuides.length}`);
+assert(seoGuideArticles.length === seoGuides.length, `Expected ${seoGuides.length} long-form scenario guides, found ${seoGuideArticles.length}`);
 assert(new Set(motionPacks.map((pack) => pack.id)).size === motionPacks.length, "Motion Packs contain duplicate IDs");
+assert(new Set(seoGuideArticles.map((article) => article.guideId)).size === seoGuideArticles.length, "Long-form scenario guides contain duplicate IDs");
+
+for (const guide of seoGuides) {
+  const article = seoGuideArticles.find((candidate) => candidate.guideId === guide.id);
+  assert(article, `${guide.id} is missing its long-form scenario article`);
+  assert(article.sections.length === 5, `${guide.id} must have five editorial sections`);
+  assert(article.diagrams.length === 3, `${guide.id} must have three editorial diagrams`);
+  assert(article.checklist.length === 5, `${guide.id} must have five checklist items`);
+  assert(article.caseStudy.code.trim().length > 80, `${guide.id} is missing a substantial implementation example`);
+
+  for (const locale of locales) {
+    const body = article.sections
+      .flatMap((section) => section.paragraphs)
+      .map((paragraph) => paragraph[locale])
+      .join(" ")
+      .trim();
+    const bodyLength = locale === "zh" ? Array.from(body).length : body.split(/\s+/).filter(Boolean).length;
+    const minimumLength = locale === "zh" ? 1000 : 700;
+    assert(bodyLength >= minimumLength, `${guide.id}.${locale} long-form body is too short (${bodyLength}/${minimumLength})`);
+  }
+
+  for (const diagram of article.diagrams) {
+    assert(diagram.nodes.length >= 2, `${guide.id}.${diagram.id} needs at least two diagram nodes`);
+    assert(diagram.title.zh.trim().length > 0 && diagram.title.en.trim().length > 0, `${guide.id}.${diagram.id} needs localized titles`);
+    assert(diagram.alt.zh.trim().length > 0 && diagram.alt.en.trim().length > 0, `${guide.id}.${diagram.id} needs localized alt text`);
+  }
+}
+
+const publishFeedbackArticle = seoGuideArticles.find((article) => article.guideId === "save-submit-publish-feedback");
+assert(publishFeedbackArticle, "Save and publish scenario article is missing");
+assert(
+  publishFeedbackArticle.caseStudy.code.includes(".publish-result { opacity: 0; visibility: hidden;") &&
+    publishFeedbackArticle.caseStudy.code.includes('[data-state="complete"] .publish-button { opacity: 0; visibility: hidden;') &&
+    publishFeedbackArticle.caseStudy.code.includes('[data-state="complete"] .publish-result { opacity: 1; visibility: visible;') &&
+    publishFeedbackArticle.caseStudy.code.includes('<section class="publish-action" data-state="ready">') &&
+    publishFeedbackArticle.caseStudy.code.includes('<script>') &&
+    publishFeedbackArticle.caseStudy.code.includes('if (action.dataset.state !== "ready") return;') &&
+    publishFeedbackArticle.caseStudy.code.includes("publishButton.disabled = true;") &&
+    publishFeedbackArticle.caseStudy.code.includes("data-publish-submissions") &&
+    publishFeedbackArticle.caseStudy.code.includes("await publishRequest();") &&
+    publishFeedbackArticle.caseStudy.code.includes("publishedLink.focus();"),
+  "Publish feedback example must execute independently and accept only one request while working"
+);
+
+const springArticle = seoGuideArticles.find((article) => article.guideId === "spring-or-ease-out");
+assert(springArticle, "Spring and ease-out scenario article is missing");
+assert(
+    springArticle.caseStudy.code.includes("releaseVelocity = 0") &&
+    springArticle.caseStudy.code.includes("let velocity = releaseVelocity;") &&
+    springArticle.caseStudy.code.includes('reducedMotionQuery.addEventListener("change", onReducedMotionChange);') &&
+    springArticle.caseStudy.code.includes('reducedMotionQuery.removeEventListener("change", onReducedMotionChange);'),
+  "Spring example must preserve release velocity and react immediately to reduced-motion changes"
+);
+
+const jankArticle = seoGuideArticles.find((article) => article.guideId === "css-motion-jank");
+assert(jankArticle, "CSS motion jank scenario article is missing");
+assert(
+  jankArticle.caseStudy.code.includes(".result-card { opacity: 1; transform: translateY(0); transition:") &&
+    jankArticle.caseStudy.code.includes('.result-card[data-motion="leave"]') &&
+    jankArticle.caseStudy.code.includes(".result-card { transition-duration: 1ms; }") &&
+    !jankArticle.caseStudy.code.includes('.result-card[data-motion="ready"] {\n  transition:') &&
+    jankArticle.caseStudy.code.includes('<section class="filter-demo">') &&
+    jankArticle.caseStudy.code.includes("<script>") &&
+    jankArticle.caseStudy.code.includes("window.cancelAnimationFrame(renderFrame);") &&
+    jankArticle.caseStudy.code.includes("window.clearTimeout(leaveTimer);") &&
+    !jankArticle.caseStudy.code.includes("cancelPendingCardTransitions") &&
+    !jankArticle.caseStudy.code.includes("query: string"),
+  "Filter-card example must run independently and cancel stale visual work"
+);
+
+const continuityArticle = seoGuideArticles.find((article) => article.guideId === "card-list-filter-continuity");
+assert(continuityArticle, "Filter continuity scenario article is missing");
+assert(
+  continuityArticle.caseStudy.code.includes(".result-empty { min-height: 160px; opacity: 0; visibility: hidden;") &&
+    continuityArticle.caseStudy.code.includes('.result-list[data-empty="true"] + .result-empty { opacity: 1; visibility: visible; }'),
+  "Hidden filter empty states must leave the focus order"
+);
+
+const reducedMotionArticle = seoGuideArticles.find((article) => article.guideId === "reduced-motion");
+assert(reducedMotionArticle, "Reduced-motion scenario article is missing");
+assert(
+  reducedMotionArticle.caseStudy.code.includes("@keyframes settle-in") &&
+    reducedMotionArticle.caseStudy.code.includes("to { opacity: 1; transform: scale(1); }") &&
+    reducedMotionArticle.caseStudy.code.includes("[data-save-state] { transition: transform 120ms ease, opacity 160ms ease; }"),
+  "Reduced-motion save feedback example must define its settle-in keyframes and keep its transition on the stable state selector"
+);
+
+const deletionArticle = seoGuideArticles.find((article) => article.guideId === "form-validation-delete-permission");
+assert(deletionArticle, "High-risk interaction scenario article is missing");
+assert(
+  deletionArticle.caseStudy.code.includes('<script>') &&
+    deletionArticle.caseStudy.code.includes('row.addEventListener("transitionend", onLeaveEnd);') &&
+    deletionArticle.caseStudy.code.includes('event.target !== row || event.propertyName !== "opacity"') &&
+    deletionArticle.caseStudy.code.includes('row.removeEventListener("transitionend", onLeaveEnd)') &&
+    deletionArticle.caseStudy.code.includes("window.setTimeout(finishRemoval, 220);") &&
+    deletionArticle.caseStudy.code.includes("row.remove();") &&
+    deletionArticle.caseStudy.code.includes("await restoreProject(projectId);") &&
+    deletionArticle.caseStudy.code.includes("undoButton.disabled = false;") &&
+    deletionArticle.caseStudy.code.includes('role="status" aria-live="polite"') &&
+    deletionArticle.caseStudy.code.includes("undoButton.focus();") &&
+    deletionArticle.caseStudy.code.includes("deleteButton.focus();") &&
+    deletionArticle.caseStudy.code.includes('window.matchMedia("(prefers-reduced-motion: reduce)")') &&
+    deletionArticle.caseStudy.code.includes("} catch {"),
+  "Deletion example must handle exit cleanup, focus recovery, reduced motion, and failure accessibly"
+);
+
+assert(
+  springArticle.caseStudy.code.includes('<section class="curve-demo">') &&
+    springArticle.caseStudy.code.includes("<style>") &&
+    springArticle.caseStudy.code.includes("<script>") &&
+    springArticle.caseStudy.code.includes("function springTo(element, from, target, releaseVelocity = 0)") &&
+    springArticle.caseStudy.code.includes(".save-status { opacity: 0; transform: translateY(6px);") &&
+    springArticle.caseStudy.code.includes('.save-status[data-state="saving"], .save-status[data-state="saved"]') &&
+    !springArticle.caseStudy.code.includes("HTMLElement") &&
+    !springArticle.caseStudy.code.includes("MediaQueryListEvent") &&
+    !springArticle.caseStudy.code.includes("export function"),
+  "Spring and ease-out example must be a self-contained browser runtime with visible save-state motion"
+);
 
 const canonicalIds = new Set(canonicalMotionCatalog.map((item) => item.id));
 assert(canonicalIds.size === canonicalMotionCatalog.length, "Canonical catalog contains duplicate IDs");

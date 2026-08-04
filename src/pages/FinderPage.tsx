@@ -29,6 +29,12 @@ import {
 
 const exampleKeys = ["weight", "continuity", "sequence"] as const;
 
+function finderStateKey(search: string) {
+  const params = new URLSearchParams(search.slice(search.indexOf("?") + 1));
+  params.delete("tab");
+  return params.toString();
+}
+
 function orderCandidates(
   result: MotionFinderResult,
   compareValue: string | null
@@ -79,6 +85,7 @@ export function FinderPage({ locale }: { locale: Locale }) {
   const [isHydrated, setIsHydrated] = useState(false);
   const valuesRef = useRef<ParamValues | null>(null);
   const syncedQueryRef = useRef<string | null>(null);
+  const localFinderStateKeysRef = useRef(new Map<string, true>());
   const parameterFrameRef = useRef(0);
   const pendingParameterUpdateRef = useRef<{
     query: string;
@@ -104,15 +111,19 @@ export function FinderPage({ locale }: { locale: Locale }) {
     [candidates, selectedId]
   );
   const finderStateSearch = useMemo(() => {
-    const params = new URLSearchParams(location.searchStr);
-    params.delete("tab");
-    return params.toString();
+    return finderStateKey(location.searchStr);
   }, [location.searchStr]);
 
   useEffect(() => cancelPendingParameterCommit, [cancelPendingParameterCommit]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
+      if (localFinderStateKeysRef.current.delete(finderStateSearch)) {
+        syncedQueryRef.current = new URLSearchParams(finderStateSearch).get("q")?.trim() ?? "";
+        setIsHydrated(true);
+        return;
+      }
+
       const params = new URLSearchParams(finderStateSearch);
       const query = params.get("q")?.trim() ?? "";
       const previousQuery = syncedQueryRef.current;
@@ -178,8 +189,18 @@ export function FinderPage({ locale }: { locale: Locale }) {
     selected: MotionFinderCandidate,
     nextValues: ParamValues
   ) {
+    const href = finderUrl(query, nextCandidates, selected, nextValues);
+    const nextFinderStateKey = finderStateKey(href);
+    if (nextFinderStateKey !== finderStateSearch) {
+      localFinderStateKeysRef.current.delete(nextFinderStateKey);
+      localFinderStateKeysRef.current.set(nextFinderStateKey, true);
+      if (localFinderStateKeysRef.current.size > 24) {
+        const oldestKey = localFinderStateKeysRef.current.keys().next().value;
+        if (oldestKey) localFinderStateKeysRef.current.delete(oldestKey);
+      }
+    }
     void navigate({
-      href: finderUrl(query, nextCandidates, selected, nextValues),
+      href,
       replace: true,
       resetScroll: false,
       hashScrollIntoView: false
