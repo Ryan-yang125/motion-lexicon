@@ -49,6 +49,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const storedTheme = getStoredTheme();
     setThemeState(storedTheme);
     applyTheme(storedTheme);
+    document.documentElement.dataset.clientReady = "true";
     setHasMounted(true);
   }, []);
 

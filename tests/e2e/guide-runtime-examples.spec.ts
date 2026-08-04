@@ -89,3 +89,58 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     expect(runtimeErrors).toEqual([]);
   });
 }
+
+test("spring drawer reverses from its current position without jumping to the previous target", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setContent(exampleFor("spring-or-ease-out"));
+
+  const drawer = page.locator("[data-drawer]");
+  const toggle = page.locator("[data-drawer-toggle]");
+  const drawerX = () =>
+    drawer.evaluate((element) => {
+      const match = (element as HTMLElement).style.transform.match(/translateX\(([-\d.]+)px\)/);
+      return Number(match?.[1]);
+    });
+
+  await toggle.click();
+  await expect.poll(async () => drawerX()).toBeGreaterThan(-236);
+  const [beforeReverse, afterReverse] = await drawer.evaluate((element) => {
+    const readX = () => Number((element as HTMLElement).style.transform.match(/translateX\(([-\d.]+)px\)/)?.[1]);
+    const before = readX();
+    (document.querySelector("[data-drawer-toggle]") as HTMLButtonElement).click();
+    return [before, readX()];
+  });
+
+  expect(Math.abs(afterReverse - beforeReverse)).toBeLessThan(12);
+  await expect.poll(async () => drawerX()).toBeLessThan(beforeReverse);
+});
+
+test("spring drawer lets a range drag take over and settle from the selected position", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setContent(exampleFor("spring-or-ease-out"));
+
+  const drawer = page.locator("[data-drawer]");
+  const range = page.locator("[data-drawer-range]");
+  const drawerX = () =>
+    drawer.evaluate((element) => Number((element as HTMLElement).style.transform.match(/translateX\(([-\d.]+)px\)/)?.[1]));
+
+  await page.locator("[data-drawer-toggle]").click();
+  await expect.poll(async () => drawerX()).toBeGreaterThan(-236);
+  const [beforeTakeover, afterPointerDown] = await range.evaluate((input) => {
+    const drawerElement = document.querySelector("[data-drawer]") as HTMLElement;
+    const readX = () => Number(drawerElement.style.transform.match(/translateX\(([-\d.]+)px\)/)?.[1]);
+    const before = readX();
+    input.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+    return [before, readX()];
+  });
+  expect(Math.abs(afterPointerDown - beforeTakeover)).toBeLessThan(12);
+
+  await range.evaluate((input) => {
+    (input as HTMLInputElement).value = "-160";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect.poll(async () => drawerX()).toBe(-160);
+
+  await range.evaluate((input) => input.dispatchEvent(new Event("change", { bubbles: true })));
+  await expect.poll(async () => drawerX()).toBeLessThan(-160);
+});

@@ -147,11 +147,12 @@ const drawerToggle = document.querySelector("[data-drawer-toggle]");
 const saveButton = document.querySelector("[data-save]");
 const saveStatus = document.querySelector("[data-save-status]");
 let drawerPosition = -240;
-let releaseVelocity = 0;
+let drawerVelocity = 0;
+let drawerTarget = -240;
 let lastInputTime = performance.now();
 let cancelDrawerSpring = () => {};
 
-function springTo(element, from, target, releaseVelocity = 0) {
+function springTo(element, from, target, releaseVelocity = 0, onUpdate = () => {}) {
   let position = from;
   let velocity = releaseVelocity;
   let previous = performance.now();
@@ -159,6 +160,15 @@ function springTo(element, from, target, releaseVelocity = 0) {
   let finished = false;
   const stiffness = 340;
   const damping = 34;
+  const update = (nextPosition, nextVelocity) => {
+    position = nextPosition;
+    velocity = nextVelocity;
+    element.style.transform = "translateX(" + position + "px)";
+    onUpdate(position, velocity);
+  };
+  const cleanup = () => {
+    reducedMotionQuery.removeEventListener("change", onReducedMotionChange);
+  };
   function onReducedMotionChange(event) {
     if (event.matches) finish();
   }
@@ -166,8 +176,15 @@ function springTo(element, from, target, releaseVelocity = 0) {
     if (finished) return;
     finished = true;
     window.cancelAnimationFrame(frame);
-    element.style.transform = "translateX(" + target + "px)";
-    reducedMotionQuery.removeEventListener("change", onReducedMotionChange);
+    update(target, 0);
+    cleanup();
+  };
+  const cancel = () => {
+    if (finished) return;
+    finished = true;
+    window.cancelAnimationFrame(frame);
+    onUpdate(position, velocity);
+    cleanup();
   };
 
   if (reducedMotionQuery.matches) {
@@ -182,7 +199,7 @@ function springTo(element, from, target, releaseVelocity = 0) {
     previous = now;
     velocity += (-stiffness * (position - target) - damping * velocity) * dt;
     position += velocity * dt;
-    element.style.transform = "translateX(" + position + "px)";
+    update(position, velocity);
     if (Math.abs(velocity) < 0.1 && Math.abs(position - target) < 0.1) {
       finish();
       return;
@@ -191,35 +208,44 @@ function springTo(element, from, target, releaseVelocity = 0) {
   };
 
   frame = window.requestAnimationFrame(tick);
-  return () => finish();
+  return cancel;
 }
 
-function setDrawerPosition(position) {
+function setDrawerPosition(position, velocity = 0) {
   drawerPosition = Math.max(-240, Math.min(0, position));
+  drawerVelocity = velocity;
   drawer.style.transform = "translateX(" + drawerPosition + "px)";
+  drawerRange.value = String(Math.round(drawerPosition));
 }
 
 function settleDrawer(target = drawerPosition > -120 ? 0 : -240) {
   cancelDrawerSpring();
-  drawerRange.value = String(target);
+  drawerTarget = target;
   drawerToggle.textContent = target === 0 ? "Close drawer" : "Open drawer";
-  cancelDrawerSpring = springTo(drawer, drawerPosition, target, releaseVelocity);
-  drawerPosition = target;
+  cancelDrawerSpring = springTo(drawer, drawerPosition, target, drawerVelocity, (position, velocity) => {
+    drawerPosition = position;
+    drawerVelocity = velocity;
+    drawerRange.value = String(Math.round(Math.max(-240, Math.min(0, position))));
+  });
 }
 
 drawerRange.addEventListener("input", () => {
   cancelDrawerSpring();
   const now = performance.now();
   const nextPosition = Number(drawerRange.value);
-  releaseVelocity = (nextPosition - drawerPosition) / Math.max((now - lastInputTime) / 1000, 0.016);
+  const nextVelocity = (nextPosition - drawerPosition) / Math.max((now - lastInputTime) / 1000, 0.016);
   lastInputTime = now;
-  setDrawerPosition(nextPosition);
+  drawerTarget = nextPosition > -120 ? 0 : -240;
+  drawerToggle.textContent = drawerTarget === 0 ? "Close drawer" : "Open drawer";
+  setDrawerPosition(nextPosition, nextVelocity);
 });
-drawerRange.addEventListener("change", settleDrawer);
+drawerRange.addEventListener("pointerdown", () => {
+  cancelDrawerSpring();
+  lastInputTime = performance.now();
+});
+drawerRange.addEventListener("change", () => settleDrawer());
 drawerToggle.addEventListener("click", () => {
-  const target = drawerPosition === 0 ? -240 : 0;
-  releaseVelocity = target === 0 ? 420 : -420;
-  settleDrawer(target);
+  settleDrawer(drawerTarget === 0 ? -240 : 0);
 });
 
 async function saveSettings() {
@@ -516,7 +542,7 @@ export const seoGuideArticlesC = [
     ],
     caseStudy: {
       title: text("案例：抽屉用 spring 接住拖拽，保存提示用 ease-out 交接", "Case: a drawer uses spring after drag while save feedback uses ease-out"),
-      context: text("抽屉在拖拽松手后要延续当前速度并收束到开合位置；保存提示只需要在原操作附近迅速清楚地抵达完成状态。", "After drag release, a drawer needs to retain current velocity and settle to open or closed; save feedback only needs a fast, clear completed state near the original action."),
+      context: text("抽屉在拖拽松手后延续当前速度并收束到开合位置；保存提示在原操作附近快速抵达完成状态。", "After drag release, a drawer retains velocity and settles open or closed; save feedback reaches a clear completed state near the original action."),
       code: springAndEaseRuntimeExample,
       explanation: text("`springTo` 接收松手瞬间的 releaseVelocity，并把它作为积分器初始速度，因此新的拖拽、反向操作或路由离开都能立即接管旧动画。系统减弱动效偏好通过 change 事件立即落在目标位置，并在完成与取消时清理监听；保存提示使用短时 ease-out，文案和状态仍由同一业务状态驱动，方便用户读到完成结果后继续操作。", "`springTo` receives releaseVelocity from the instant of release and uses it as the integrator’s initial velocity, so a new drag, reversal, or route exit can take over immediately. A reduced-motion preference change lands at the target through its change event, with listeners cleaned up on completion and cancellation; save feedback uses a short ease-out while copy and state remain driven by the same business state, letting people read completion and continue their work.")
     },

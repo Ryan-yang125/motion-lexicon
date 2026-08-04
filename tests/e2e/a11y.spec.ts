@@ -2,6 +2,10 @@ import { expect, test, type Page } from "@playwright/test";
 
 const WCAG_AA_NORMAL_TEXT = 4.5;
 
+async function waitForClientReady(page: Page) {
+  await expect(page.locator("html")).toHaveAttribute("data-client-ready", "true");
+}
+
 async function catalogTextContrastSamples(page: Page) {
   return page.evaluate(() => {
     type Rgba = { r: number; g: number; b: number; a: number };
@@ -96,6 +100,7 @@ test("catalog announces localized result changes for category, surface, and sear
   test.skip(testInfo.project.name.includes("mobile"), "Announcement semantics only need one browser audit.");
 
   await page.goto("/zh/catalog/?surface=components");
+  await waitForClientReady(page);
   const status = page.locator("#catalog-result-count");
   const search = page.getByRole("searchbox", { name: "搜索" });
   const cards = page.locator(".library-card");
@@ -170,6 +175,7 @@ test("catalog reflows and preserves keyboard feedback at a 200 percent zoom-equi
 
   await page.setViewportSize({ width: 640, height: 450 });
   await page.goto("/en/catalog/?surface=components");
+  await waitForClientReady(page);
 
   const search = page.getByRole("searchbox", { name: "Search" });
   await expect(search).toHaveAttribute("aria-describedby", /(?:^|\s)catalog-result-count(?:\s|$)/);
@@ -197,6 +203,7 @@ test("catalog segmented control moves focus and URL state with arrow keys", asyn
   test.skip(testInfo.project.name.includes("mobile"), "Keyboard roving focus only needs one browser audit.");
 
   await page.goto("/en/catalog/?surface=components");
+  await waitForClientReady(page);
   const options = page.locator(".library-surface-tabs").getByRole("radio");
 
   await options.first().focus();

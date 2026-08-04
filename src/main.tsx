@@ -44,9 +44,7 @@ async function bootstrap(container: HTMLElement) {
     router.ssr = { manifest: undefined };
     await router.load();
     hydrateRoot(container, app, {
-      onRecoverableError(error, errorInfo) {
-        console.error("[Motion Lexicon hydration]", error, errorInfo.componentStack);
-      }
+      onRecoverableError: console.error
     });
   } else {
     createRoot(container).render(app);

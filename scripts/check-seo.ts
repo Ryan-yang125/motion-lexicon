@@ -145,7 +145,12 @@ assert(
   springArticle.caseStudy.code.includes('<section class="curve-demo">') &&
     springArticle.caseStudy.code.includes("<style>") &&
     springArticle.caseStudy.code.includes("<script>") &&
-    springArticle.caseStudy.code.includes("function springTo(element, from, target, releaseVelocity = 0)") &&
+    springArticle.caseStudy.code.includes("function springTo(element, from, target, releaseVelocity = 0, onUpdate = () => {})") &&
+    springArticle.caseStudy.code.includes("return cancel;") &&
+    springArticle.caseStudy.code.includes("onUpdate(position, velocity);") &&
+    springArticle.caseStudy.code.includes('drawerRange.addEventListener("pointerdown", () => {') &&
+    springArticle.caseStudy.code.includes('drawerRange.addEventListener("change", () => settleDrawer());') &&
+    !springArticle.caseStudy.code.includes("return () => finish();") &&
     springArticle.caseStudy.code.includes(".save-status { opacity: 0; transform: translateY(6px);") &&
     springArticle.caseStudy.code.includes('.save-status[data-state="saving"], .save-status[data-state="saved"]') &&
     !springArticle.caseStudy.code.includes("HTMLElement") &&
