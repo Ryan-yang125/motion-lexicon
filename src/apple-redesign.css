@@ -1690,6 +1690,283 @@ summary {
   }
 }
 
+.seo-guides-page,
+.seo-guide-page,
+.method-page {
+  max-width: var(--library-content);
+  margin: 0 auto;
+  padding: 48px 0 72px;
+}
+
+.seo-guides-hero,
+.seo-guide-page > header,
+.method-page > header {
+  max-width: 760px;
+  display: grid;
+  gap: 10px;
+}
+
+.seo-guides-hero > span,
+.seo-guide-page > header > span,
+.method-page > header > span {
+  color: var(--apple-tertiary);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.seo-guides-hero h1,
+.seo-guide-page h1,
+.method-page h1 {
+  margin: 0;
+  color: var(--apple-ink);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.seo-guides-hero p,
+.seo-guide-page > header p,
+.method-page > header p {
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-md);
+  line-height: 1.7;
+}
+
+.seo-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.seo-guide-grid article {
+  min-height: 212px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-card);
+  padding: 18px;
+  background: var(--apple-surface);
+}
+
+.seo-guide-grid article > span {
+  color: var(--apple-tertiary);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.seo-guide-grid h2,
+.seo-guide-page h2,
+.method-page h2 {
+  margin: 0;
+  color: var(--apple-ink);
+  font-size: var(--type-md);
+  font-weight: 600;
+  letter-spacing: var(--tracking-ui);
+}
+
+.seo-guide-grid p,
+.seo-guide-page p,
+.method-page p {
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-sm);
+  line-height: 1.65;
+}
+
+.seo-guide-grid a,
+.seo-guide-related a,
+.method-actions > a,
+.method-actions > a:not([href]) {
+  width: fit-content;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  color: var(--apple-ink);
+  font-size: var(--type-xs);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.seo-guide-page > .motion-pack-back-link {
+  margin-bottom: 28px;
+}
+
+.seo-guide-page > header {
+  margin-bottom: 28px;
+}
+
+.seo-guide-decision {
+  display: grid;
+  gap: 7px;
+  border-left: 2px solid var(--apple-ink);
+  margin: 0 0 30px;
+  padding: 3px 0 3px 15px;
+}
+
+.seo-guide-decision > span {
+  color: var(--apple-tertiary);
+  font-size: var(--type-xs);
+}
+
+.seo-guide-decision h2 {
+  max-width: 62ch;
+  font-size: var(--type-md);
+  line-height: 1.6;
+}
+
+.seo-guide-steps,
+.seo-guide-links,
+.seo-guide-related,
+.method-page > section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--apple-line);
+}
+
+.seo-guide-steps > h2,
+.seo-guide-links > h2,
+.seo-guide-related > h2,
+.method-page > section > h2 {
+  margin-bottom: 14px;
+}
+
+.seo-guide-steps ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seo-guide-steps li {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 12px;
+  border-top: 1px solid var(--apple-line);
+  padding: 15px 0;
+}
+
+.seo-guide-steps li:last-child {
+  border-bottom: 1px solid var(--apple-line);
+}
+
+.seo-guide-steps li > span {
+  color: var(--apple-tertiary);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.seo-guide-steps h3,
+.method-page h3 {
+  margin: 0 0 5px;
+  color: var(--apple-ink);
+  font-size: var(--type-sm);
+  font-weight: 600;
+}
+
+.seo-guide-links > div,
+.seo-guide-related > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.seo-guide-links a,
+.seo-guide-related a {
+  min-width: 0;
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-nav);
+  padding: 12px;
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  font-size: var(--type-xs);
+  text-decoration: none;
+}
+
+.seo-guide-links a > span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.seo-guide-links strong {
+  overflow: hidden;
+  font-size: var(--type-sm);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seo-guide-links small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--apple-secondary);
+  font-size: 11px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.method-page > section > div:not(.method-actions) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.method-page > section article {
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-nav);
+  padding: 14px;
+  background: var(--apple-surface);
+}
+
+.method-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.method-actions > a {
+  min-height: 36px;
+  align-items: center;
+  border-radius: var(--ui-radius-cta);
+  padding: 0 14px;
+  color: var(--apple-action-fg);
+  background: var(--apple-action-bg);
+}
+
+.method-actions > a + a {
+  color: var(--apple-ink);
+  background: var(--apple-surface-soft);
+}
+
+@media (max-width: 760px) {
+  .seo-guides-page,
+  .seo-guide-page,
+  .method-page {
+    padding-top: 32px;
+  }
+
+  .seo-guide-grid,
+  .seo-guide-links > div,
+  .seo-guide-related > div,
+  .method-page > section > div:not(.method-actions) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (prefers-reduced-transparency: reduce) {
   .library-header.library-header-compact,
   .library-utility-popover,
@@ -3328,5 +3605,345 @@ summary {
 
   .finder-candidate-choice {
     transition: none;
+  }
+}
+
+/* Editorial content layers keep the catalog useful to readers and search
+   engines while staying inside the existing quiet product system. */
+.library-category-editorial {
+  display: grid;
+  gap: 20px;
+  margin: 0 0 28px;
+  padding: 20px 0 28px;
+  border-bottom: 1px solid var(--apple-line);
+}
+
+.library-category-hub-index {
+  max-width: var(--library-content);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 auto 16px;
+}
+
+.library-category-hub-index a {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--apple-line);
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--apple-secondary);
+  background: var(--apple-surface);
+  font-size: var(--type-xs);
+  text-decoration: none;
+}
+
+.library-category-hub-index a:hover {
+  color: var(--apple-ink);
+  border-color: var(--apple-line-strong);
+}
+
+.library-category-intro {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-sm);
+  line-height: 1.7;
+}
+
+.library-category-editorial h2,
+.finder-starter-guide h2 {
+  margin: 0;
+  color: var(--apple-ink);
+  font-size: var(--type-lg);
+  font-weight: 600;
+  letter-spacing: var(--apple-tracking);
+}
+
+.library-category-editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, .8fr);
+  gap: 16px;
+}
+
+.library-category-editorial-grid > section,
+.library-category-faq {
+  min-width: 0;
+}
+
+.library-category-editorial-grid > section > h2,
+.library-category-faq > h2 {
+  margin-bottom: 12px;
+  font-size: var(--type-md);
+}
+
+.library-category-framework,
+.library-category-pitfalls {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.library-category-framework {
+  counter-reset: category-step;
+}
+
+.library-category-framework li,
+.library-category-pitfalls li {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-nav);
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--apple-surface) 78%, transparent);
+}
+
+.library-category-framework li {
+  padding-left: 42px;
+}
+
+.library-category-framework li::before {
+  counter-increment: category-step;
+  content: counter(category-step, decimal-leading-zero);
+  position: absolute;
+  top: 13px;
+  left: 14px;
+  color: var(--apple-tertiary);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.library-category-framework strong {
+  display: block;
+  color: var(--apple-ink);
+  font-size: var(--type-sm);
+  font-weight: 600;
+}
+
+.library-category-framework p,
+.library-category-pitfalls li {
+  margin: 4px 0 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  line-height: 1.6;
+}
+
+.library-category-pitfalls li {
+  padding-left: 28px;
+}
+
+.library-category-pitfalls li::before {
+  content: "·";
+  position: absolute;
+  top: 7px;
+  left: 13px;
+  color: var(--apple-ink);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.library-category-packs {
+  display: grid;
+  gap: 10px;
+}
+
+.library-category-pack-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.library-category-pack-links > a {
+  min-width: 0;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-nav);
+  padding: 12px;
+  color: var(--apple-ink);
+  background: var(--apple-surface);
+  text-decoration: none;
+}
+
+.library-category-pack-links > a:hover {
+  border-color: color-mix(in srgb, var(--apple-ink) 30%, var(--apple-line));
+}
+
+.library-category-pack-links span {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.library-category-pack-links strong {
+  overflow: hidden;
+  font-size: var(--type-sm);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-category-pack-links small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.library-category-faq > div {
+  display: grid;
+  gap: 8px;
+}
+
+.library-category-faq details {
+  border-top: 1px solid var(--apple-line);
+  padding: 12px 0;
+}
+
+.library-category-faq details:last-child {
+  border-bottom: 1px solid var(--apple-line);
+}
+
+.library-category-faq summary {
+  cursor: pointer;
+  color: var(--apple-ink);
+  font-size: var(--type-sm);
+  font-weight: 500;
+}
+
+.library-category-faq p {
+  max-width: 72ch;
+  margin: 9px 0 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-sm);
+  line-height: 1.65;
+}
+
+.finder-starter-guide {
+  display: grid;
+  gap: 18px;
+  max-width: var(--library-content);
+  margin: 42px auto 0;
+  padding: 30px 0 0;
+  border-top: 1px solid var(--apple-line);
+}
+
+.finder-starter-guide > header {
+  display: grid;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+.finder-starter-guide > header p {
+  margin: 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-sm);
+  line-height: 1.65;
+}
+
+.finder-guide-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.finder-guide-steps article,
+.finder-starter-card {
+  min-width: 0;
+  border: 1px solid var(--apple-line);
+  border-radius: var(--ui-radius-card);
+  background: var(--apple-surface);
+}
+
+.finder-guide-steps article {
+  padding: 16px;
+}
+
+.finder-guide-steps span {
+  color: var(--apple-tertiary);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.finder-guide-steps h3,
+.finder-starter-card h3 {
+  margin: 8px 0 0;
+  color: var(--apple-ink);
+  font-size: var(--type-sm);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.finder-guide-steps p {
+  margin: 6px 0 0;
+  color: var(--apple-secondary);
+  font-size: var(--type-xs);
+  line-height: 1.6;
+}
+
+.finder-starter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.finder-starter-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.finder-starter-action {
+  width: fit-content;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--apple-ink);
+  font-size: var(--type-xs);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.finder-starter-card > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.finder-starter-card > div a {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 9px;
+  color: var(--apple-secondary);
+  background: var(--apple-surface-soft);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.finder-starter-card > div a:hover {
+  color: var(--apple-ink);
+}
+
+@media (max-width: 760px) {
+  .library-category-editorial-grid,
+  .finder-guide-steps,
+  .finder-starter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .library-category-pack-links {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -1,6 +1,9 @@
 import type { Category, Locale, MotionRecipe } from "../data/types";
+import type { MotionPack } from "../data/motion-packs";
+import { canonicalMotionCatalog } from "../data/motion-catalog";
 import { getGlossaryTermsForCanonical, type GlossaryTerm } from "../data/glossary";
 import { pathFor, siteUrl, text } from "../data/site";
+import { release } from "../data/release";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const contentLicenseUrl = "https://creativecommons.org/licenses/by/4.0/";
@@ -87,6 +90,8 @@ export function entryStructuredData(
     name: text(entry.name, locale),
     description: text(entry.seo.description, locale),
     url,
+    datePublished: release.publishedAt,
+    dateModified: release.updatedAt,
     isAccessibleForFree: true,
     license: contentLicenseUrl,
     author: publisherStructuredData,
@@ -110,5 +115,51 @@ export function entryStructuredData(
     ...(glossaryTerms.length > 1
       ? { mentions: glossaryTerms.filter((term) => term.alias).map(definedTerm) }
       : {})
+  };
+}
+
+export function faqPageStructuredData(
+  locale: Locale,
+  faqs: ReadonlyArray<{ question: Record<Locale, string>; answer: Record<Locale, string> }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: text(faq.question, locale),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: text(faq.answer, locale)
+      }
+    }))
+  };
+}
+
+export function motionPackStructuredData(locale: Locale, pack: MotionPack) {
+  const url = routeUrl(locale, ["packs", pack.id]);
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: text(pack.name, locale),
+    description: text(pack.shortDescription, locale),
+    url,
+    mainEntityOfPage: url,
+    articleSection: locale === "zh" ? "产品瞬间" : "Product moments",
+    datePublished: release.publishedAt,
+    dateModified: release.updatedAt,
+    isAccessibleForFree: true,
+    license: contentLicenseUrl,
+    author: publisherStructuredData,
+    publisher: publisherStructuredData,
+    keywords: [...pack.keywords, text(pack.name, locale), text(pack.useCase, locale)].join(", "),
+    about: pack.foundations.map((foundation) => ({
+      "@type": "Thing",
+      name: foundation.foundationId,
+      url: routeUrl(locale, [
+        canonicalMotionCatalog.find((recipe) => recipe.id === foundation.foundationId)?.categoryId ?? "catalog",
+        foundation.foundationId
+      ])
+    }))
   };
 }

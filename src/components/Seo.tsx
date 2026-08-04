@@ -1,6 +1,7 @@
 import * as helmetAsync from "react-helmet-async";
 import { htmlLang } from "../i18n/resources";
 import { defaultLocale, pathFor, siteUrl } from "../data/site";
+import { release } from "../data/release";
 import type { Locale } from "../data/types";
 
 type SeoProps = {
@@ -38,6 +39,7 @@ export function Seo({
     name: title,
     description,
     url: canonical,
+    dateModified: release.updatedAt,
     inLanguage: htmlLang(locale),
     isAccessibleForFree: true,
     license: "https://creativecommons.org/licenses/by/4.0/",

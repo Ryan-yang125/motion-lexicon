@@ -386,13 +386,13 @@ export function enrichMotionEntry(entry: MotionEntry): MotionRecipe {
     throw new Error(`Missing motion guidance: ${spec.canonicalId}`);
   }
   const outputDescription = spec.metadata.surfaceType === "guide"
-    ? {
+      ? {
         zh: `${summary.zh} 包含判断标准、常见风险、减少动态建议和可执行的评审清单。`,
-        en: `${summary.en} Includes review criteria, common risks, and reduced-motion guidance.`
+        en: `${summary.en} Review guidance and reduced-motion notes included.`
       }
-    : {
+      : {
         zh: `${summary.zh} 可调节相关参数，复制同源的提示词、HTML、CSS 与交互 JS，并包含减弱动效方案。`,
-        en: `${summary.en} Tune relevant parameters and copy synchronized prompt, HTML, CSS, and interaction JavaScript with reduced-motion guidance.`
+        en: `${summary.en} Preview, tune, and copy HTML, CSS, and JS.`
       };
   return {
     ...entry,

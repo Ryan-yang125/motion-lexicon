@@ -91,6 +91,21 @@ const finderRoute = createRoute({
   path: "$locale/finder"
 }).lazy(() => import("./routes/finder.lazy").then((module) => module.Route));
 
+const guidesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/guides"
+}).lazy(() => import("./routes/guides.lazy").then((module) => module.Route));
+
+const seoGuideRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/guides/$guideId"
+}).lazy(() => import("./routes/seo-guide.lazy").then((module) => module.Route));
+
+const methodRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/method"
+}).lazy(() => import("./routes/method.lazy").then((module) => module.Route));
+
 const packsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "$locale/packs"
@@ -139,6 +154,9 @@ const routeTree = rootRoute.addChildren(
         playgroundRoute,
         vocabularyRoute,
         finderRoute,
+        guidesRoute,
+        seoGuideRoute,
+        methodRoute,
         packsRoute,
         motionPackRoute,
         directorRoute,
@@ -154,6 +172,9 @@ const routeTree = rootRoute.addChildren(
         playgroundRoute,
         vocabularyRoute,
         finderRoute,
+        guidesRoute,
+        seoGuideRoute,
+        methodRoute,
         packsRoute,
         motionPackRoute,
         directorRoute,

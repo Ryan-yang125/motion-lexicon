@@ -14,6 +14,8 @@
 - Product Moments JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
 - Motion Primitives JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
+- Scenario guides: https://motion-lexicon.pages.dev/en/guides/
+- Method and sources: https://motion-lexicon.pages.dev/en/method/
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
@@ -56,6 +58,17 @@
 - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/): When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow.
 - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/): After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout.
 - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/): After scheduling a future release, keep publish time, queue record, and editable state consistent.
+
+## Scenario guides
+
+- [Save, submit, and publish feedback](https://motion-lexicon.pages.dev/en/guides/save-submit-publish-feedback/): Design save, submit, and publish feedback so every action has a clear start, progress, and result.
+- [Keep context through cards, lists, and filters](https://motion-lexicon.pages.dev/en/guides/card-list-filter-continuity/): Keep cards, lists, and filters legible as content changes, so people can follow what moved, stayed, or left.
+- [Diagnose CSS motion jank](https://motion-lexicon.pages.dev/en/guides/css-motion-jank/): Find CSS motion jank by checking frame work, layout cost, paint, and the actual duration of the interaction.
+- [Choose spring or ease-out by meaning](https://motion-lexicon.pages.dev/en/guides/spring-or-ease-out/): Choose spring or ease-out from the interaction’s meaning, interruption pattern, and need for a settled ending.
+- [Reduced motion without losing meaning](https://motion-lexicon.pages.dev/en/guides/reduced-motion/): Offer low-motion treatments for travel, scale, and loops while keeping hierarchy and action outcomes clear.
+- [Validation, deletion, and permission boundaries](https://motion-lexicon.pages.dev/en/guides/form-validation-delete-permission/): Give validation, deletion, and permission changes the right feedback so risk, next steps, and recovery stay clear.
+- [Turn a vague motion brief into a spec](https://motion-lexicon.pages.dev/en/guides/from-brief-to-spec/): Turn a vague motion brief into a buildable spec with trigger, object, states, timing, and reduced-motion rules.
+- [Choose a Pack or a motion primitive](https://motion-lexicon.pages.dev/en/guides/pack-or-primitive/): Choose a Pack or a motion primitive by scenario completeness and customization depth, balancing speed with design control.
 
 ## Motion Primitives
 
@@ -585,6 +598,72 @@
   - [Text morph](https://motion-lexicon.pages.dev/en/polish-effects/text-morph/) — State change: The top state updates to Scheduled using the selected date and time.
   - [Slide in](https://motion-lexicon.pages.dev/en/entrances/slide-in/) — Entrance: The new queue record enters from very small upward travel.
   - [Reduced motion](https://motion-lexicon.pages.dev/en/principles/reduced-motion/) — Reduced motion: Reduced motion inserts the queue record directly while retaining the edit entry.
+
+# Scenario guide reference
+
+## Save, submit, and publish feedback (save-submit-publish-feedback)
+
+- Chinese title: 保存、提交和发布：让结果立刻可见
+- Decision: Start with reversibility, whether waiting exceeds one second, and what visibly changes after success.
+- Preview: https://motion-lexicon.pages.dev/en/guides/save-submit-publish-feedback/
+- Motion primitives: press-tap-feedback, crossfade, duration
+- Product moments: save-confirmation, publish-release, upload-complete
+
+## Keep context through cards, lists, and filters (card-list-filter-continuity)
+
+- Chinese title: 卡片、列表与筛选：保住上下文
+- Decision: Decide whether people need to track one object, the order of a list, or the filtered result as a whole.
+- Preview: https://motion-lexicon.pages.dev/en/guides/card-list-filter-continuity/
+- Motion primitives: morph, stagger, crossfade
+- Product moments: card-selection, filter-results, kanban-move
+
+## Diagnose CSS motion jank (css-motion-jank)
+
+- Chinese title: CSS 动效卡顿：从帧到属性逐项排查
+- Decision: Reproduce the clearest case, then identify whether it happens on start, during travel, or when the UI settles.
+- Preview: https://motion-lexicon.pages.dev/en/guides/css-motion-jank/
+- Motion primitives: frame-rate, compositing, duration
+- Product moments: media-scrub, filter-results, upload-complete
+
+## Choose spring or ease-out by meaning (spring-or-ease-out)
+
+- Chinese title: Spring 还是 Ease-out：按动作的语义选
+- Decision: Ask whether the object can be dragged, interrupted, or reversed, then decide whether it needs physicality or a crisp endpoint.
+- Preview: https://motion-lexicon.pages.dev/en/guides/spring-or-ease-out/
+- Motion primitives: spring, easing, scale-in
+- Product moments: card-selection, save-confirmation, approval-request
+
+## Reduced motion without losing meaning (reduced-motion)
+
+- Chinese title: 减弱动效：保留结果，减少位移
+- Decision: List travel, scale, parallax, and loops on the page, then define the signal each one must retain.
+- Preview: https://motion-lexicon.pages.dev/en/guides/reduced-motion/
+- Motion primitives: reduced-motion, fade-in-fade-out, crossfade
+- Product moments: details-disclosure, notification-triage, progress-steps
+
+## Validation, deletion, and permission boundaries (form-validation-delete-permission)
+
+- Chinese title: 表单、删除与权限：把边界讲清楚
+- Decision: Separate reversible, confirm-required, and immediate actions, then decide whether feedback belongs to a field, object, or global layer.
+- Preview: https://motion-lexicon.pages.dev/en/guides/form-validation-delete-permission/
+- Motion primitives: shake-wiggle, hold-to-confirm, direction-aware-transition
+- Product moments: inline-validation, delete-confirmation, permission-change
+
+## Turn a vague motion brief into a spec (from-brief-to-spec)
+
+- Chinese title: 从模糊需求到动效规格
+- Decision: Clarify when people see the change, what result they need to understand, and whether the motion can be interrupted.
+- Preview: https://motion-lexicon.pages.dev/en/guides/from-brief-to-spec/
+- Motion primitives: purposeful-animation, duration, easing
+- Product moments: publish-release, workspace-switch, approval-request
+
+## Choose a Pack or a motion primitive (pack-or-primitive)
+
+- Chinese title: Pack 与基础动效：从哪里开始
+- Decision: Start with a Pack when the UI already has a clear state flow. Start with a primitive when you need to solve one local behaviour.
+- Preview: https://motion-lexicon.pages.dev/en/guides/pack-or-primitive/
+- Motion primitives: purposeful-animation, stagger, morph
+- Product moments: save-confirmation, card-selection, filter-results
 
 # Full Motion Primitive reference
 

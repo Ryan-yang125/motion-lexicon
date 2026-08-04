@@ -21,6 +21,7 @@
 <p align="center">
   <a href="https://motion-lexicon.pages.dev/zh/packs/"><strong>浏览产品瞬间</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/catalog/"><strong>浏览动效基础</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/guides/"><strong>阅读场景指南</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/director/"><strong>认识 Motion Director</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/"><strong>访问网站</strong></a>
 </p>
@@ -67,6 +68,13 @@ Director 是平级的产品表面，都基于同一份 Motion Grammar，因此�
 | 选择决策 | 卡片选择、工作区切换、模板选择、命令菜单、负责人选择、权限变更、搜索建议 |
 | 内容变化 | 图层插入、归档撤销、筛选结果、详情展开、看板移动、购物车更新、评论回复 |
 | 工作流 | 通知处理、进度步骤、成员邀请、媒体拖动、审批请求、支付结账、定时发布 |
+
+## 围绕产品决策的场景指南
+
+[场景指南](https://motion-lexicon.pages.dev/zh/guides/) 从真实产品问题开始：保存反馈、
+列表连续性、CSS 动效卡顿、Spring 与 Ease-out、减弱动效、高后果操作、动效需求转规格，
+以及 Pack 与动效基础的选择。每篇指南都连接相关的产品瞬间和动效基础，让一次判断可以
+继续走到预览与实现。
 
 ## Motion Director Agent Skill
 
@@ -125,6 +133,8 @@ Motion Director 可以准备包含上下文、状态模型和实现的候选内�
 - [产品瞬间 JSON](https://motion-lexicon.pages.dev/data/v1/packs.json)
 - [动效基础 JSON](https://motion-lexicon.pages.dev/data/v1/catalog.json)
 - [词汇 JSON](https://motion-lexicon.pages.dev/data/v1/vocabulary.json)
+- [场景指南](https://motion-lexicon.pages.dev/zh/guides/)
+- [方法与来源](https://motion-lexicon.pages.dev/zh/method/)
 - [JSON Schema](https://motion-lexicon.pages.dev/data/v1/schema.json)
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
 - [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt)
@@ -140,12 +150,13 @@ Motion Lexicon 是静态网站，提供免费浏览器体验、免费 Agent Skil
 - 生成的代码片段：[0BSD](./CONTENT-LICENSE)
 - 源于 Interior 的交互组件：[MIT 署名](./NOTICE)
 
-## V2.1 快照
+## V2.1.0 快照
 
-**V2.1 让视觉系统更贴近动效工作本身。** Iconoir 承担通用操作图标，项目自有的
+**V2.1.0 让视觉系统更贴近动效工作本身。** Iconoir 承担通用操作图标，项目自有的
 Motion Glyph 用于识别产品瞬间、动效基础、Motion Director 与创作流程。界面以墨色
 和中性色为主，蓝色保留给当前选中与键盘焦点。两个目录继续作为平级产品表面，共享
-同一套 Motion Grammar。
+同一套 Motion Grammar。十二个分类 Hub 和八篇场景指南让这套系统能从真实产品问题
+直接进入。
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -164,6 +175,9 @@ Motion Glyph 用于识别产品瞬间、动效基础、Motion Director 与创作
 | `/:locale/catalog/` | 全部 44 个动效基础 |
 | `/:locale/:category/:recipe/` | 一个标准动效基础工作台 |
 | `/:locale/finder/` | 跨两个目录的自然语言发现 |
+| `/:locale/guides/` | 连接 Pack 与动效基础的八篇场景指南 |
+| `/:locale/guides/:guideId/` | 带决策路径和实现关联的静态双语指南 |
+| `/:locale/method/` | 内容方法、许可与维护说明 |
 | `/:locale/director/` | Motion Director 与共同创作流程 |
 | `/:locale/vocabulary/` | 完整双语 91 术语词汇库 |
 | `/data/v2/motion-grammar.json` | Motion Director 与公开动效内容的共同数据源 |
@@ -222,5 +236,6 @@ npm run test:visual
 
 **[浏览产品瞬间](https://motion-lexicon.pages.dev/zh/packs/)** ·
 **[浏览动效基础](https://motion-lexicon.pages.dev/zh/catalog/)** ·
+**[阅读场景指南](https://motion-lexicon.pages.dev/zh/guides/)** ·
 **[认识 Motion Director](https://motion-lexicon.pages.dev/zh/director/)** ·
 **[Read English README](./README.md)**

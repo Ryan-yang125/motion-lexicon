@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { categories } from "../src/data/categories";
 import { glossaryTerms } from "../src/data/glossary";
 import { motionPackGroups, motionPacks } from "../src/data/motion-packs";
+import { seoGuides } from "../src/data/seo-guides";
 import { getMotionGuidance } from "../src/data/motion-guidance";
 import { getMotionSpec } from "../src/data/motion-specs";
 import {
@@ -15,6 +16,7 @@ import {
 } from "../src/data/motion-grammar";
 import { canonicalMotionCatalog, catalogRecipes } from "../src/data/recipes";
 import { pathFor, siteUrl } from "../src/data/site";
+import { release } from "../src/data/release";
 import type { Locale, MotionParam } from "../src/data/types";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -28,7 +30,7 @@ const motionBlueprintSchemaPath = path.join(
 );
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const schemaVersion = 1;
-const releaseVersion = "2.0.1";
+const releaseVersion = release.version;
 const skillCommand = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 const motionBlueprintSchemaDataPath = "/data/v2/motion-blueprint.schema.json";
 
@@ -739,6 +741,8 @@ function llmsArtifact() {
     `- Product Moments JSON: ${siteUrl}/data/v1/packs.json`,
     `- Motion Primitives: ${siteUrl}/en/catalog/`,
     `- Motion Primitives JSON: ${siteUrl}/data/v1/catalog.json`,
+    `- Scenario guides: ${siteUrl}/en/guides/`,
+    `- Method and sources: ${siteUrl}/en/method/`,
     `- Source: ${repositoryUrl}`,
     `- Pricing: ${siteUrl}/pricing.txt (free; no account required)`,
     `- Vocabulary JSON: ${siteUrl}/data/v1/vocabulary.json`,
@@ -756,6 +760,13 @@ function llmsArtifact() {
     ...motionPacks.map(
       (pack) =>
         `- [${pack.name.en}](${absoluteUrl(pathFor("en", ["packs", pack.id]))}): ${pack.shortDescription.en}`
+    ),
+    "",
+    "## Scenario guides",
+    "",
+    ...seoGuides.map(
+      (guide) =>
+        `- [${guide.title.en}](${absoluteUrl(pathFor("en", ["guides", guide.id]))}): ${guide.description.en}`
     ),
     "",
     "## Motion Primitives",
@@ -788,6 +799,8 @@ function pricingArtifact() {
 - Release: ${releaseVersion}
 - Product Moments: ${siteUrl}/en/packs/
 - Motion Primitives: ${siteUrl}/en/catalog/
+- Scenario guides: ${siteUrl}/en/guides/
+- Method and sources: ${siteUrl}/en/method/
 - Motion Director: ${siteUrl}/en/director/
 - Motion Grammar: ${siteUrl}${motionGrammarDataPath}
 - Motion Blueprint schema: ${siteUrl}${motionBlueprintSchemaDataPath}
@@ -797,7 +810,7 @@ function pricingArtifact() {
 - Vocabulary and editorial content license: CC BY 4.0
 - Generated code snippets license: 0BSD
 - Usage: The public static website and Motion Director Skill are available without an account.
-- Last updated: 2026-08-01
+- Last updated: ${release.updatedDate}
 `;
 }
 
@@ -823,6 +836,18 @@ function llmsFullArtifact() {
         `  - [${recipe.name.en}](${absoluteUrl(pathFor("en", [recipe.categoryId, recipe.id]))}) — ${foundation.roleLabel.en}: ${foundation.note.en}`
       );
     }
+    lines.push("");
+  }
+
+  lines.push("# Scenario guide reference", "");
+  for (const guide of seoGuides) {
+    lines.push(`## ${guide.title.en} (${guide.id})`);
+    lines.push("");
+    lines.push(`- Chinese title: ${guide.title.zh}`);
+    lines.push(`- Decision: ${guide.decision.en}`);
+    lines.push(`- Preview: ${absoluteUrl(pathFor("en", ["guides", guide.id]))}`);
+    lines.push(`- Motion primitives: ${guide.foundations.join(", ")}`);
+    lines.push(`- Product moments: ${guide.packs.join(", ")}`);
     lines.push("");
   }
 

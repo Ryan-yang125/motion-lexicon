@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import {
   Braces,
+  BookOpen,
   Github,
   Menu,
   MotionBlueprintGlyph,
@@ -37,7 +38,7 @@ export function Header({ locale }: HeaderProps) {
   const routeSegment = pathSegments[1];
   const isPrimitivesRoute = isCatalog
     || isVocabulary
-    || (pathSegments.length > 1 && !["finder", "packs", "director", "lab"].includes(routeSegment ?? ""));
+    || (pathSegments.length > 1 && !["finder", "guides", "method", "packs", "director", "lab"].includes(routeSegment ?? ""));
   const finderLabel = locale === "zh" ? "找动效" : "Find motion";
   const packsLabel = locale === "zh" ? "产品瞬间" : "Product moments";
   const primitivesLabel = locale === "zh" ? "动效基础" : "Motion primitives";
@@ -150,6 +151,14 @@ export function Header({ locale }: HeaderProps) {
                 >
                   <MotionVocabularyGlyph aria-hidden="true" size={16} />
                   <span>{vocabularyLabel}</span>
+                </Link>
+                <Link to="/$locale/guides/" params={{ locale }}>
+                  <BookOpen aria-hidden="true" size={16} />
+                  <span>{locale === "zh" ? "场景指南" : "Scenario guides"}</span>
+                </Link>
+                <Link to="/$locale/method/" params={{ locale }}>
+                  <BookOpen aria-hidden="true" size={16} />
+                  <span>{locale === "zh" ? "方法与来源" : "Method and sources"}</span>
                 </Link>
                 <a href={skillUrl} target="_blank" rel="noreferrer">
                   <MotionBlueprintGlyph aria-hidden="true" size={16} />

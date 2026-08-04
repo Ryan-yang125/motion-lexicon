@@ -42,6 +42,7 @@ export function RecipePage({ locale, categoryId, recipeId }: RecipePageProps) {
         title={text(recipe.seo.title, locale)}
         description={text(recipe.seo.description, locale)}
         path={pathFor(locale, [recipe.categoryId, recipe.id])}
+        image={`/og-primitives-${locale}.png`}
         structuredData={
           category
             ? [

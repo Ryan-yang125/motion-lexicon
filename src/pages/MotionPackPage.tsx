@@ -13,6 +13,15 @@ import {
 import { getCatalogRecipe } from "../data/recipes";
 import { pathFor } from "../data/site";
 import type { Locale } from "../data/types";
+import { motionPackStructuredData } from "../lib/structured-data";
+
+function concisePackDescription(pack: NonNullable<ReturnType<typeof getMotionPack>>, locale: Locale) {
+  const tail = locale === "zh" ? " 可复制 HTML、CSS 与 JavaScript。" : " Copy-ready HTML, CSS, and JavaScript.";
+  const copy = pack.shortDescription[locale].trim();
+  if (locale === "zh" || copy.length + tail.length <= 155) return `${copy}${tail}`;
+  const limit = 155 - tail.length - 1;
+  return `${copy.slice(0, limit).replace(/[\s,;:.]+$/, "")}…${tail}`;
+}
 
 export function MotionPackPage({ locale, packId }: { locale: Locale; packId: string }) {
   const pack = getMotionPack(packId);
@@ -51,14 +60,20 @@ export function MotionPackPage({ locale, packId }: { locale: Locale; packId: str
     const recipe = getCatalogRecipe(foundation.foundationId);
     return recipe ? [{ foundation, recipe }] : [];
   });
+  const seoTitle = locale === "zh"
+    ? `${pack.name.zh}产品动效：HTML、CSS、JS 示例 | Motion Lexicon`
+    : `${pack.name.en} product motion: HTML, CSS, JS | Motion Lexicon`;
+  const seoDescription = concisePackDescription(pack, locale);
 
   return (
     <>
       <Seo
         locale={locale}
-        title={`${pack.name[locale]} | Motion Pack — Motion Lexicon`}
-        description={pack.shortDescription[locale]}
+        title={seoTitle}
+        description={seoDescription}
         path={pathFor(locale, ["packs", pack.id])}
+        image={`/og-packs-${locale}.png`}
+        structuredData={[motionPackStructuredData(locale, pack)]}
       />
       <div className="motion-pack-page">
         <Link className="motion-pack-back-link" to="/$locale/packs/" params={{ locale }}>
