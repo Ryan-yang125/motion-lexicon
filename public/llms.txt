@@ -14,6 +14,8 @@
 - Product Moments JSON: https://motion-lexicon.pages.dev/data/v1/packs.json
 - Motion Primitives: https://motion-lexicon.pages.dev/en/catalog/
 - Motion Primitives JSON: https://motion-lexicon.pages.dev/data/v1/catalog.json
+- Scenario guides: https://motion-lexicon.pages.dev/en/guides/
+- Method and sources: https://motion-lexicon.pages.dev/en/method/
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Pricing: https://motion-lexicon.pages.dev/pricing.txt (free; no account required)
 - Vocabulary JSON: https://motion-lexicon.pages.dev/data/v1/vocabulary.json
@@ -56,6 +58,17 @@
 - [Approval request](https://motion-lexicon.pages.dev/en/packs/approval-request/): When approval is requested, connect submission, the approver queue, and the current waiting state into one workflow.
 - [Checkout payment](https://motion-lexicon.pages.dev/en/packs/checkout-payment/): After payment is submitted, use a processing state and receipt result to reduce uncertainty in checkout.
 - [Scheduled publish](https://motion-lexicon.pages.dev/en/packs/scheduled-publish/): After scheduling a future release, keep publish time, queue record, and editable state consistent.
+
+## Scenario guides
+
+- [Save, submit, and publish feedback](https://motion-lexicon.pages.dev/en/guides/save-submit-publish-feedback/): Design save, submit, and publish feedback so every action has a clear start, progress, and result.
+- [Keep context through cards, lists, and filters](https://motion-lexicon.pages.dev/en/guides/card-list-filter-continuity/): Keep cards, lists, and filters legible as content changes, so people can follow what moved, stayed, or left.
+- [Diagnose CSS motion jank](https://motion-lexicon.pages.dev/en/guides/css-motion-jank/): Find CSS motion jank by checking frame work, layout cost, paint, and the actual duration of the interaction.
+- [Choose spring or ease-out by meaning](https://motion-lexicon.pages.dev/en/guides/spring-or-ease-out/): Choose spring or ease-out from the interaction’s meaning, interruption pattern, and need for a settled ending.
+- [Reduced motion without losing meaning](https://motion-lexicon.pages.dev/en/guides/reduced-motion/): Offer low-motion treatments for travel, scale, and loops while keeping hierarchy and action outcomes clear.
+- [Validation, deletion, and permission boundaries](https://motion-lexicon.pages.dev/en/guides/form-validation-delete-permission/): Give validation, deletion, and permission changes the right feedback so risk, next steps, and recovery stay clear.
+- [Turn a vague motion brief into a spec](https://motion-lexicon.pages.dev/en/guides/from-brief-to-spec/): Turn a vague motion brief into a buildable spec with trigger, object, states, timing, and reduced-motion rules.
+- [Choose a Pack or a motion primitive](https://motion-lexicon.pages.dev/en/guides/pack-or-primitive/): Choose a Pack or a motion primitive by scenario completeness and customization depth, balancing speed with design control.
 
 ## Motion Primitives
 

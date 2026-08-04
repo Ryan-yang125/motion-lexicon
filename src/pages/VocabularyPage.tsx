@@ -93,6 +93,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
         title={locale === "zh" ? "动画词汇表｜Motion Lexicon" : "Animation vocabulary | Motion Lexicon"}
         description={labels.seoDescription}
         path={routePath}
+        image={`/og-vocabulary-${locale}.png`}
         structuredData={[
           breadcrumbStructuredData(locale, [
             { name: "Motion Lexicon", path: [] },

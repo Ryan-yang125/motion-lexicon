@@ -20,12 +20,12 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// V2.1 carries twenty-eight real product moments, the Motion Director, and
-// Iconoir-derived utility glyphs alongside the project-owned Motion Glyphs.
-// The Interior interaction system keeps Motion in its own vendor chunk; the
-// total budget retains a hard ceiling while covering those focused surfaces.
+// V2.1 carries twenty-eight real product moments, editorial hubs for all
+// twelve primitive categories, and eight lazy-loaded scenario guides. The
+// Interior interaction system keeps Motion in its own vendor chunk; this
+// remains a hard ceiling for the expanded static editorial surface.
 const maxMotionVendorGzipBytes = 48 * 1024;
-const maxTotalJsGzipBytes = 358 * 1024;
+const maxTotalJsGzipBytes = 390 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 

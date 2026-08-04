@@ -1,5 +1,5 @@
 import { ArrowRight, SlidersHorizontal } from "../components/icons";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FinderExportDisclosure } from "../components/FinderExportDisclosure";
@@ -12,7 +12,9 @@ import { ExpandingSearch } from "../components/interior/expanding-search";
 import { Ripple } from "../components/interior/ripple";
 import { Button } from "../components/ui/button";
 import { pathFor, siteUrl } from "../data/site";
-import { publisherStructuredData } from "../lib/structured-data";
+import { finderGuide } from "../data/finder-guide";
+import { getMotionPack } from "../data/motion-packs";
+import { breadcrumbStructuredData, publisherStructuredData } from "../lib/structured-data";
 import type { Locale, ParamValue, ParamValues } from "../data/types";
 import {
   buildRecipePrompt,
@@ -87,6 +89,9 @@ export function FinderPage({ locale }: { locale: Locale }) {
   const resultLabels = locale === "zh"
     ? { eyebrow: "动效基础", title: "相关动效基础" }
     : { eyebrow: "Motion primitives", title: "Related motion primitives" };
+  const guideLabels = locale === "zh"
+    ? { steps: "如何使用 Motion Finder", action: "查看候选", packs: "相关产品瞬间" }
+    : { steps: "How to use Motion Finder", action: "View candidates", packs: "Related product moments" };
 
   const cancelPendingParameterCommit = useCallback(() => {
     if (parameterFrameRef.current) window.cancelAnimationFrame(parameterFrameRef.current);
@@ -266,7 +271,12 @@ export function FinderPage({ locale }: { locale: Locale }) {
         title={t("seo.finderTitle")}
         description={t("seo.finderDescription")}
         path={pathFor(locale, ["finder"])}
+        image={`/og-finder-${locale}.png`}
         structuredData={[
+          breadcrumbStructuredData(locale, [
+            { name: "Motion Lexicon", path: [] },
+            { name: "Motion Finder", path: ["finder"] }
+          ]),
           {
             "@context": "https://schema.org",
             "@type": "WebApplication",
@@ -277,9 +287,22 @@ export function FinderPage({ locale }: { locale: Locale }) {
             operatingSystem: "Any",
             inLanguage: locale === "zh" ? "zh-CN" : "en",
             isAccessibleForFree: true,
-            image: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
-            screenshot: `${siteUrl}/${locale === "zh" ? "og-zh.png" : "og-en.png"}`,
+            image: `${siteUrl}/og-finder-${locale}.png`,
+            screenshot: `${siteUrl}/og-finder-${locale}.png`,
             publisher: publisherStructuredData
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: locale === "zh" ? "如何使用 Motion Finder" : "How to use Motion Finder",
+            description: finderGuide.copy[locale],
+            inLanguage: locale === "zh" ? "zh-CN" : "en",
+            step: finderGuide.steps.map((step, index) => ({
+              "@type": "HowToStep",
+              position: index + 1,
+              name: step.title[locale],
+              text: step.copy[locale]
+            }))
           }
         ]}
       />
@@ -418,6 +441,58 @@ export function FinderPage({ locale }: { locale: Locale }) {
             locale={locale}
             foundationIds={candidates.map((candidate) => candidate.recipe.id)}
           />
+        </section>
+      ) : null}
+
+      {!result ? (
+        <section className="finder-starter-guide" aria-labelledby="finder-starter-title">
+          <header>
+            <span className="motion-pack-kicker">{finderGuide.eyebrow[locale]}</span>
+            <h2 id="finder-starter-title">{finderGuide.title[locale]}</h2>
+            <p>{finderGuide.copy[locale]}</p>
+          </header>
+
+          <section className="finder-guide-steps" aria-labelledby="finder-guide-steps-title">
+            <h2 id="finder-guide-steps-title" className="sr-only">{guideLabels.steps}</h2>
+            {finderGuide.steps.map((step, index) => (
+              <article key={step.title[locale]}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{step.title[locale]}</h3>
+                <p>{step.copy[locale]}</p>
+              </article>
+            ))}
+          </section>
+
+          <div className="finder-starter-grid">
+            {finderGuide.starters.map((starter) => {
+              const params = new URLSearchParams({
+                q: starter.query[locale],
+                compare: starter.compare.join(",")
+              });
+              const packs = starter.packs.flatMap((packId) => {
+                const pack = getMotionPack(packId);
+                return pack ? [pack] : [];
+              });
+              return (
+                <article className="finder-starter-card" key={starter.question[locale]}>
+                  <h3>{starter.question[locale]}</h3>
+                  <a className="finder-starter-action" href={`${pathFor(locale, ["finder"])}?${params.toString()}`}>
+                    {guideLabels.action}
+                    <ArrowRight aria-hidden="true" size={15} />
+                  </a>
+                  {packs.length ? (
+                    <div aria-label={guideLabels.packs}>
+                      {packs.map((pack) => (
+                        <Link key={pack.id} to="/$locale/packs/$packId/" params={{ locale, packId: pack.id }}>
+                          {pack.name[locale]}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              );
+            })}
+          </div>
         </section>
       ) : null}
 

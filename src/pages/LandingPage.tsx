@@ -13,6 +13,7 @@ import { Seo } from "../components/Seo";
 import { Button } from "../components/ui/button";
 import { getRecipe } from "../data/recipes";
 import { motionPacks } from "../data/motion-packs";
+import { release } from "../data/release";
 import { pathFor, siteUrl } from "../data/site";
 import type { Locale } from "../data/types";
 import { publisherStructuredData } from "../lib/structured-data";
@@ -24,7 +25,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
   const featuredPrimitive = getRecipe("entrances", "slide-in");
   const labels = locale === "zh"
     ? {
-        status: "Motion Lexicon V2.0 · 免费开源",
+        status: `Motion Lexicon V${release.version} · 免费开源`,
         title: "把产品动效，\n带进真实界面。",
         copy: "产品瞬间与动效基础，都是可预览、可调节、可复制的产品动效。",
         placeholder: "描述一个界面、动作或感觉",
@@ -48,7 +49,7 @@ export function LandingPage({ locale }: { locale: Locale }) {
         directorAction: "进入 Motion Director"
       }
     : {
-        status: "Motion Lexicon V2.0 · Free and open source",
+        status: `Motion Lexicon V${release.version} · Free and open source`,
         title: "Bring product motion\ninto a real interface.",
         copy: "Product moments and motion primitives are both previewable, tunable, and ready to copy.",
         placeholder: "Describe an interface, action, or feeling",
@@ -88,13 +89,16 @@ export function LandingPage({ locale }: { locale: Locale }) {
           : "Motion Lexicon | Product moments and motion primitives"}
         description={labels.copy}
         path={pathFor(locale)}
+        image={`/og-home-${locale}.png`}
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Motion Lexicon V2.0",
+            name: "Motion Lexicon",
             description: labels.copy,
             url: `${siteUrl}${pathFor(locale)}`,
+            version: release.version,
+            dateModified: release.updatedAt,
             inLanguage: locale === "zh" ? "zh-CN" : "en",
             isAccessibleForFree: true,
             publisher: publisherStructuredData

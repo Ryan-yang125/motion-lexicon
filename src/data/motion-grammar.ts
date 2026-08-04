@@ -150,7 +150,7 @@ export const motionDirectorModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "2.0.1",
+  version: "2.1.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",

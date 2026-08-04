@@ -1,5 +1,8 @@
 import { categories } from "../src/data/categories";
+import { getCategorySeoHub } from "../src/data/category-seo";
 import { motionPacks } from "../src/data/motion-packs";
+import { release } from "../src/data/release";
+import { seoGuides } from "../src/data/seo-guides";
 import {
   aliasMetadata,
   canonicalIdByEntryId,
@@ -27,6 +30,8 @@ assert(entries.length === 91, `Expected 91 glossary entries, found ${entries.len
 assert(canonicalMotionCatalog.length === 44, `Expected 44 canonical entries, found ${canonicalMotionCatalog.length}`);
 assert(aliasMetadata.length === 47, `Expected 47 aliases, found ${aliasMetadata.length}`);
 assert(motionPacks.length === 28, `Expected 28 Motion Packs, found ${motionPacks.length}`);
+assert(release.version === "2.1.0", `Expected public release 2.1.0, found ${release.version}`);
+assert(seoGuides.length === 8, `Expected 8 scenario guides, found ${seoGuides.length}`);
 assert(new Set(motionPacks.map((pack) => pack.id)).size === motionPacks.length, "Motion Packs contain duplicate IDs");
 
 const canonicalIds = new Set(canonicalMotionCatalog.map((item) => item.id));
@@ -50,6 +55,11 @@ assert(surfaceCounts.guide === 4, `Expected 4 guides, found ${surfaceCounts.guid
 for (const category of categories) {
   const count = entries.filter((entry) => entry.categoryId === category.id).length;
   assert(count === category.plannedCount, `${category.id} plannedCount ${category.plannedCount} does not match ${count}`);
+  const hub = getCategorySeoHub(category.id);
+  assert(hub, `${category.id} is missing editorial SEO hub content`);
+  assert(hub.framework.length === 3, `${category.id} needs three editorial decision steps`);
+  assert(hub.faqs.length >= 2, `${category.id} needs at least two FAQs`);
+  assert(hub.featuredPackIds.length >= 2, `${category.id} needs related Product Moments`);
 }
 
 for (const item of canonicalMotionCatalog) {
@@ -84,18 +94,21 @@ const expectedIndexablePaths = locales.flatMap((locale) => [
   pathFor(locale),
   pathFor(locale, ["catalog"]),
   pathFor(locale, ["finder"]),
+  pathFor(locale, ["guides"]),
+  pathFor(locale, ["method"]),
   pathFor(locale, ["vocabulary"]),
   pathFor(locale, ["packs"]),
   pathFor(locale, ["director"]),
   ...motionPacks.map((pack) => pathFor(locale, ["packs", pack.id])),
+  ...seoGuides.map((guide) => pathFor(locale, ["guides", guide.id])),
   ...categories.map((category) => pathFor(locale, [category.id])),
   ...canonicalMotionCatalog.map((item) => pathFor(locale, [item.categoryId, item.id]))
 ]);
 const expectedCandidatePaths = locales.map((locale) => pathFor(locale, ["lab", "motion-blueprints"]));
 const expectedStaticPaths = [...expectedIndexablePaths, ...expectedCandidatePaths];
 
-assert(expectedIndexablePaths.length === 180, `Expected 180 indexable localized paths, found ${expectedIndexablePaths.length}`);
-assert(expectedStaticPaths.length === 182, `Expected 182 localized static paths, found ${expectedStaticPaths.length}`);
+assert(expectedIndexablePaths.length === 200, `Expected 200 indexable localized paths, found ${expectedIndexablePaths.length}`);
+assert(expectedStaticPaths.length === 202, `Expected 202 localized static paths, found ${expectedStaticPaths.length}`);
 assert(staticPaths.length === expectedStaticPaths.length, `Expected ${expectedStaticPaths.length} static paths, found ${staticPaths.length}`);
 assert(sitemap.length === expectedIndexablePaths.length, `Expected ${expectedIndexablePaths.length} sitemap URLs, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static paths contain duplicates");
@@ -156,11 +169,53 @@ for (const locale of locales) {
     const description = entry.seo.description[locale].trim();
     assert(title.length >= 12, `${entry.id}.${locale} title too short`);
     assert(description.length >= 50, `${entry.id}.${locale} description too short`);
+    if (locale === "en") {
+      assert(description.length <= 160, `${entry.id}.en description exceeds 160 characters (${description.length})`);
+    }
     assert(!titles.has(title), `Duplicate ${locale} title: ${title}`);
     assert(!descriptions.has(description), `Duplicate ${locale} description: ${description}`);
     titles.add(title);
     descriptions.add(description);
   }
+
+  for (const guide of seoGuides) {
+    assert(
+      guide.title[locale].trim().length >= (locale === "zh" ? 6 : 12),
+      `${guide.id}.${locale} title too short`
+    );
+    assert(
+      guide.description[locale].trim().length >= (locale === "zh" ? 20 : 50),
+      `${guide.id}.${locale} description too short`
+    );
+    if (locale === "en") {
+      assert(guide.description.en.length <= 155, `${guide.id}.en description exceeds 155 characters`);
+    }
+  }
+
+  const packTitles = new Set<string>();
+  const packDescriptions = new Set<string>();
+  for (const pack of motionPacks) {
+    const title = locale === "zh"
+      ? `${pack.name.zh}产品动效：HTML、CSS、JS 示例 | Motion Lexicon`
+      : `${pack.name.en} product motion: HTML, CSS, JS | Motion Lexicon`;
+    const description = pack.shortDescription[locale].trim();
+    assert(!packTitles.has(title), `Duplicate ${locale} Motion Pack title: ${title}`);
+    assert(!packDescriptions.has(description), `Duplicate ${locale} Motion Pack description: ${description}`);
+    if (locale === "en") {
+      assert(description.length <= 155, `${pack.id}.en source description exceeds 155 characters`);
+    }
+    packTitles.add(title);
+    packDescriptions.add(description);
+  }
+
+  const easingHub = getCategorySeoHub("easing");
+  const easingRecipe = canonicalMotionCatalog.find((item) => item.id === "easing");
+  const easingEntry = easingRecipe ? entries.find((entry) => entry.id === easingRecipe.representativeEntryId) : undefined;
+  assert(easingHub && easingEntry, "Easing hub or recipe is missing");
+  assert(
+    `${easingHub.title[locale]} | Motion Lexicon` !== easingEntry.seo.title[locale],
+    `${locale} easing category and recipe titles must be distinct`
+  );
 }
 
 console.log(

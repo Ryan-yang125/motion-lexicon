@@ -182,8 +182,8 @@ describe("public machine-readable artifacts", () => {
     };
 
     expect(grammar.kind).toBe("motion-grammar");
-    expect(grammar.version).toBe("2.0.1");
-    expect(grammar.project.releaseVersion).toBe("2.0.1");
+    expect(grammar.version).toBe("2.1.0");
+    expect(grammar.project.releaseVersion).toBe("2.1.0");
     expect(grammar.project.skillCommand).toBe(
       "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon"
     );

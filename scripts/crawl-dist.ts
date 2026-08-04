@@ -1,7 +1,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
+import { categories } from "../src/data/categories";
 import { glossaryTerms } from "../src/data/glossary";
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
+import { motionPacks } from "../src/data/motion-packs";
+import { seoGuides } from "../src/data/seo-guides";
 import {
   defaultLocale,
   getStaticPaths,
@@ -51,6 +54,7 @@ function assertPng(name: string, width: number, height: number) {
   assert(bytes.readUInt32BE(20) === height, `${name} height must be ${height}`);
 }
 
+const ogKinds = ["home", "finder", "packs", "primitives", "guides", "method", "director", "vocabulary"] as const;
 const requiredAssets = [
   "favicon.ico",
   "favicon.svg",
@@ -61,6 +65,7 @@ const requiredAssets = [
   "og-default.png",
   "og-zh.png",
   "og-en.png",
+  ...ogKinds.flatMap((kind) => [`og-${kind}-zh.png`, `og-${kind}-en.png`]),
   "robots.txt",
   "sitemap.xml",
   "_headers",
@@ -78,6 +83,10 @@ assertPng("icon-512.png", 512, 512);
 assertPng("og-default.png", 1200, 630);
 assertPng("og-zh.png", 1200, 630);
 assertPng("og-en.png", 1200, 630);
+for (const kind of ogKinds) {
+  assertPng(`og-${kind}-zh.png`, 1200, 630);
+  assertPng(`og-${kind}-en.png`, 1200, 630);
+}
 
 const favicon = readFileSync(path.join("dist", "favicon.ico"));
 assert(
@@ -168,6 +177,14 @@ for (const routePath of sitemapRoutePaths) {
   }
   assert(hasCanonicalWebPageSchema, `${routePath} WebPage schema is missing its canonical URL`);
 
+  const ogImage = htmlTags(html, "meta")
+    .map(attributes)
+    .find((tag) => tag.get("property") === "og:image")
+    ?.get("content");
+  assert(ogImage?.startsWith(siteUrl), `${routePath} is missing a first-party Open Graph image`);
+  const ogAssetPath = (ogImage ?? "").replace(siteUrl, "");
+  assert(existsSync(path.join("dist", ogAssetPath)), `${routePath} references a missing Open Graph image`);
+
   if (routeParts.length === 1 && routeParts[0] === "vocabulary") {
     const termSet = parsedSchemas.find((schema) => schema["@type"] === "DefinedTermSet");
     assert(termSet, `${routePath} is missing DefinedTermSet schema`);
@@ -211,6 +228,35 @@ for (const routePath of sitemapRoutePaths) {
         `${routePath} expected ${expectedMentionCount} related terms`
       );
     }
+
+    if (routeParts[0] === "packs") {
+      const pack = motionPacks.find((candidate) => candidate.id === routeParts[1]);
+      if (pack) {
+        const article = parsedSchemas.find((schema) => schema["@type"] === "TechArticle");
+        assert(article, `${routePath} is missing Motion Pack TechArticle schema`);
+        assert(article.dateModified, `${routePath} Motion Pack schema is missing dateModified`);
+        assert(article.author, `${routePath} Motion Pack schema is missing author`);
+      }
+    }
+
+    if (routeParts[0] === "guides") {
+      const guide = seoGuides.find((candidate) => candidate.id === routeParts[1]);
+      if (guide) {
+        const article = parsedSchemas.find((schema) => schema["@type"] === "TechArticle");
+        const howTo = parsedSchemas.find((schema) => schema["@type"] === "HowTo");
+        assert(article, `${routePath} is missing scenario guide TechArticle schema`);
+        assert(howTo, `${routePath} is missing scenario guide HowTo schema`);
+      }
+    }
+  }
+
+  if (routeParts.length === 1 && routeParts[0] === "finder") {
+    assert(html.includes("Common product moments") || html.includes("常见产品瞬间"), `${routePath} Finder static guide is missing`);
+  }
+
+  if (routeParts.length === 1 && categories.some((category) => category.id === routeParts[0])) {
+    assert(html.includes("Frequently asked questions") || html.includes("常见问题"), `${routePath} category FAQ is missing`);
+    assert(html.includes("Related product moments") || html.includes("相关产品瞬间"), `${routePath} category Product Moment links are missing`);
   }
 
   assert(/<div id="root">[\s\S]+<\/div>/.test(html), `${routePath} is missing prerendered application HTML`);
@@ -267,7 +313,8 @@ for (const header of [
   "X-Frame-Options: DENY",
   "Referrer-Policy:",
   "Permissions-Policy:",
-  "Cache-Control: public, max-age=31536000, immutable"
+  "Cache-Control: public, max-age=31536000, immutable",
+  "Cache-Control: public, max-age=0, s-maxage=300, stale-while-revalidate=86400"
 ]) {
   assert(headers.includes(header), `Static headers are missing ${header}`);
 }

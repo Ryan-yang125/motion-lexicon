@@ -21,6 +21,7 @@
 <p align="center">
   <a href="https://motion-lexicon.pages.dev/en/packs/"><strong>Explore Product Moments</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/catalog/"><strong>Explore Motion Primitives</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/guides/"><strong>Read Scenario Guides</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/director/"><strong>Meet Motion Director</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/"><strong>Visit the Website</strong></a>
 </p>
@@ -70,6 +71,15 @@ The current Pack collection covers four common product groups:
 | Choice | Card selection, Workspace switch, Template choice, Command menu, Assignee picker, Permission change, Search suggestions |
 | Change | Layer insertion, Archive undo, Filter results, Details disclosure, Kanban move, Cart update, Comment reply |
 | Workflow | Notification triage, Progress steps, Member invite, Media scrub, Approval request, Checkout payment, Scheduled publish |
+
+## Scenario guides for product decisions
+
+The [Scenario Guides](https://motion-lexicon.pages.dev/en/guides/) begin with
+the product question: save feedback, list continuity, CSS motion jank, spring
+versus ease-out, reduced motion, high-consequence actions, writing a motion
+brief, and choosing a Pack or Primitive. Each guide links back to the relevant
+Product Moments and Motion Primitives, so a decision can continue into a
+preview and implementation.
 
 ## Motion Director Agent Skill
 
@@ -136,6 +146,8 @@ concrete way to improve it.
 - [Product Moments JSON](https://motion-lexicon.pages.dev/data/v1/packs.json)
 - [Motion Primitives JSON](https://motion-lexicon.pages.dev/data/v1/catalog.json)
 - [Vocabulary JSON](https://motion-lexicon.pages.dev/data/v1/vocabulary.json)
+- [Scenario Guides](https://motion-lexicon.pages.dev/en/guides/)
+- [Method and Sources](https://motion-lexicon.pages.dev/en/method/)
 - [JSON Schema](https://motion-lexicon.pages.dev/data/v1/schema.json)
 - [llms.txt](https://motion-lexicon.pages.dev/llms.txt)
 - [llms-full.txt](https://motion-lexicon.pages.dev/llms-full.txt)
@@ -153,14 +165,15 @@ runtime.
 - Generated code fragments: [0BSD](./CONTENT-LICENSE)
 - Interior-derived interaction components: [MIT attribution](./NOTICE)
 
-## V2.1 snapshot
+## V2.1.0 snapshot
 
-**V2.1 sharpens the visual system around the work itself.** Iconoir now carries
+**V2.1.0 sharpens the visual system around the work itself.** Iconoir now carries
 shared utility actions, while the project-owned Motion Glyphs identify Product
 Moments, Motion Primitives, Motion Director, and the creation flow. Ink and
 neutral tones lead the interface; blue is reserved for current selection and
 keyboard focus. The collections remain equal product surfaces, connected by
-their shared Motion Grammar.
+their shared Motion Grammar. Twelve editorial category hubs and eight scenario
+guides make that system easier to discover from a real product question.
 
 <!-- markdownlint-disable MD013 MD033 -->
 
@@ -180,6 +193,9 @@ Every public product route is available in English (`/en/`) and Chinese
 | `/:locale/catalog/` | The 44 Motion Primitives |
 | `/:locale/:category/:recipe/` | A canonical Primitive workspace |
 | `/:locale/finder/` | Natural-language discovery across both collections |
+| `/:locale/guides/` | Eight scenario guides connected to Packs and Primitives |
+| `/:locale/guides/:guideId/` | A static bilingual guide with a decision path and related implementation |
+| `/:locale/method/` | Content method, licensing, and maintenance notes |
 | `/:locale/director/` | Motion Director and the shared creation workflow |
 | `/:locale/vocabulary/` | The complete bilingual 91-term vocabulary |
 | `/data/v2/motion-grammar.json` | Public source of truth for Motion Director and published motion content |
@@ -240,5 +256,6 @@ and [DESIGN.md](./DESIGN.md). Contribution guidelines are in
 
 **[Explore Product Moments](https://motion-lexicon.pages.dev/en/packs/)** ·
 **[Explore Motion Primitives](https://motion-lexicon.pages.dev/en/catalog/)** ·
+**[Read Scenario Guides](https://motion-lexicon.pages.dev/en/guides/)** ·
 **[Meet Motion Director](https://motion-lexicon.pages.dev/en/director/)** ·
 **[阅读中文 README](./README.zh-CN.md)**

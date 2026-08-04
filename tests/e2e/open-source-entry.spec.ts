@@ -5,7 +5,7 @@ const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 test("landing page exposes GitHub, Motion Director, Skill, and versioned public data", async ({ page, request }) => {
   await page.goto("/zh/");
 
-  await expect(page.getByText("Motion Lexicon V2.0 · 免费开源", { exact: true })).toBeVisible();
+  await expect(page.getByText("Motion Lexicon V2.1.0 · 免费开源", { exact: true })).toBeVisible();
 
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "GitHub" })).toHaveAttribute(
     "href",
@@ -34,7 +34,7 @@ test("landing page exposes GitHub, Motion Director, Skill, and versioned public 
   expect(motionGrammarResponse.ok()).toBe(true);
   await expect(motionGrammarResponse.json()).resolves.toMatchObject({
     kind: "motion-grammar",
-    version: "2.0.1",
+    version: "2.1.0",
     grammar: { collections: { primitives: { count: 44 }, moments: { count: 28 } } },
     modes: expect.arrayContaining([
       expect.objectContaining({ id: "recommend" }),

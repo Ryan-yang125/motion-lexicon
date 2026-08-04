@@ -38,6 +38,9 @@ export function Footer() {
           <Link to="/$locale/vocabulary/" params={{ locale }}>
             {locale === "zh" ? "动画词汇" : "Vocabulary"}
           </Link>
+          <Link to="/$locale/guides/" params={{ locale }}>
+            {locale === "zh" ? "场景指南" : "Scenario guides"}
+          </Link>
         </nav>
         <nav
           className="library-footer-resources"
@@ -63,6 +66,9 @@ export function Footer() {
             Packs JSON
             <ArrowUpRight aria-hidden="true" size={14} />
           </a>
+          <Link to="/$locale/method/" params={{ locale }}>
+            {locale === "zh" ? "方法与来源" : "Method and sources"}
+          </Link>
         </nav>
       </div>
     </footer>

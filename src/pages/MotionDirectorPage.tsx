@@ -232,6 +232,7 @@ export function MotionDirectorPage({ locale }: { locale: Locale }) {
           : "Motion Director | Design product motion from the scene"}
         description={labels.description}
         path={pathFor(locale, ["director"])}
+        image={`/og-director-${locale}.png`}
         structuredData={[{
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",

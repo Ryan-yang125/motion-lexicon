@@ -151,6 +151,7 @@ export function CatalogPage({
         title={t("seo.catalogTitle")}
         description={t("seo.catalogDescription")}
         path={pathFor(locale, ["catalog"])}
+        image={`/og-primitives-${locale}.png`}
         structuredData={[
           breadcrumbStructuredData(locale, [
             { name: "Motion Lexicon", path: [] },
@@ -163,6 +164,14 @@ export function CatalogPage({
       <section className="library-catalog-hero library-catalog-hero-unified">
         <h1>{t("catalog.title")}</h1>
       </section>
+
+      <nav className="library-category-hub-index" aria-label={locale === "zh" ? "动效基础分类" : "Motion primitive categories"}>
+        {categories.map((category) => (
+          <Link key={category.id} to="/$locale/$categoryId/" params={{ locale, categoryId: category.id }}>
+            {text(category.name, locale)}
+          </Link>
+        ))}
+      </nav>
 
       <section className="library-catalog-toolbar" aria-label={t("catalog.surfaceLabel")}>
         <div className="library-catalog-toolbar-primary">

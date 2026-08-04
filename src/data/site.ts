@@ -1,6 +1,7 @@
 import { categories } from "./categories";
 import { aliasMetadata, canonicalMotionCatalog } from "./motion-catalog";
 import { motionPacks } from "./motion-packs";
+import { seoGuideIds } from "./seo-guide-ids";
 import type { Locale } from "./types";
 
 export const siteUrl = "https://motion-lexicon.pages.dev";
@@ -55,9 +56,15 @@ export function sitemapPaths() {
     paths.add(pathFor(locale));
     paths.add(pathFor(locale, ["catalog"]));
     paths.add(pathFor(locale, ["finder"]));
+    paths.add(pathFor(locale, ["guides"]));
+    paths.add(pathFor(locale, ["method"]));
     paths.add(pathFor(locale, ["vocabulary"]));
     paths.add(pathFor(locale, ["packs"]));
     paths.add(pathFor(locale, ["director"]));
+
+    for (const guideId of seoGuideIds) {
+      paths.add(pathFor(locale, ["guides", guideId]));
+    }
 
     for (const pack of motionPacks) {
       paths.add(pathFor(locale, ["packs", pack.id]));

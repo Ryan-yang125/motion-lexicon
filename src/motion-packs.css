@@ -661,7 +661,7 @@
   .motion-pack-page-header h1 { font-size: 24px; }
 }
 
-/* V2.0 home — two equally weighted directories with a shared Finder intake. */
+/* V2.1 home — two equally weighted directories with a shared Finder intake. */
 .dual-library-home {
   width: min(100%, 1160px);
   margin: 0 auto;
