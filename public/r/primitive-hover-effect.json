@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-hover-effect",
+  "type": "registry:ui",
+  "title": "Hover effect",
+  "description": "Reinforce interactivity on pointer hover while keeping layout stable.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/hover-effect/",
+  "files": [
+    {
+      "path": "src/registry/primitives/hover-effect.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/hover-effect.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type HoverEffectPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function HoverEffectPrimitive({ children, ...props }: HoverEffectPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileHover={reduceMotion ? undefined : {y: -4,scale: 1.01}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.15, ease: [0.16, 1, 0.3, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

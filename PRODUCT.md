@@ -1,11 +1,11 @@
-# Motion Lexicon V3 Product Strategy
+# Motion Lexicon V3.1 Product Strategy
 
 ## Product promise
 
 Motion Lexicon gives builders production-ready motion at two useful levels:
 
 - **Components:** complete React interactions that can be previewed, copied, or installed through a shadcn registry.
-- **Primitives:** focused motion behaviors that can be tuned, understood, and reused inside any interface.
+- **Primitives:** focused React + Motion behaviors that can be previewed, tuned, copied, or installed.
 
 The Agent Skill sits beside the website and recommends, composes, implements,
 reviews, and contributes motion from a real product event.
@@ -26,7 +26,7 @@ Browse → Preview → Copy or install → Adapt → Review
 | Surface | Job | Public scope |
 | --- | --- | --- |
 | Components | Deliver complete product interactions | 28 React + Motion components |
-| Primitives | Explain and tune one behavior | 44 canonical workspaces and 91 bilingual terms |
+| Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
 | Agent Skill | Design and implement from product context | Recommend, Compose, Implement, Review, Contribute |
 | Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
 
@@ -77,13 +77,15 @@ The build publishes 172 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V3 JSON catalog,
 and the shadcn registry index.
 
-## V3 acceptance
+## V3.1 acceptance
 
 V3 is complete when:
 
 - Components and Primitives are the only primary product directories.
 - All 28 component previews use the same source delivered by code view and registry JSON.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
+- All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.
+- All 9 parameter tools drive the same typed props used by their live previews.
 - Global search, desktop sidebar, and mobile navigation cover both collections.
 - The Agent Skill uses the same component and primitive language.
 - Old Finder, Pack, Catalog, Director, Playground, and Lab routes are removed.

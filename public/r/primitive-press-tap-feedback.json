@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-press-tap-feedback",
+  "type": "registry:ui",
+  "title": "Press / Tap feedback",
+  "description": "Confirm input immediately with a brief scale and contrast response.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/",
+  "files": [
+    {
+      "path": "src/registry/primitives/press-tap-feedback.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/press-tap-feedback.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type PressTapFeedbackPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function PressTapFeedbackPrimitive({ children, ...props }: PressTapFeedbackPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileTap={reduceMotion ? undefined : {scale: 0.96}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.12, ease: [0.16, 1, 0.3, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

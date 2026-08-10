@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-typewriter",
+  "type": "registry:ui",
+  "title": "Typewriter",
+  "description": "Reveal short text character by character while preserving complete accessible text.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/typewriter/",
+  "files": [
+    {
+      "path": "src/registry/primitives/typewriter.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/typewriter.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport { useEffect, useMemo, useState } from \"react\";\n\nexport function TypewriterPrimitive({ text }: { text: string }) {\n  const reduceMotion = useReducedMotion();\n  const content = useMemo(() => text.slice(0, 18), [text]);\n  const [length, setLength] = useState(reduceMotion ? content.length : 0);\n\n  useEffect(() => {\n    if (reduceMotion) { setLength(content.length); return; }\n    setLength(0);\n    const interval = window.setInterval(() => {\n      setLength((value) => {\n        if (value >= content.length) { window.clearInterval(interval); return value; }\n        return value + 1;\n      });\n    }, Math.max(24, 1200 / Math.max(1, content.length)));\n    return () => window.clearInterval(interval);\n  }, [content, reduceMotion]);\n\n  return (\n    <motion.span>\n      <span style={{ position: \"absolute\", width: 1, height: 1, padding: 0, margin: -1, overflow: \"hidden\", clip: \"rect(0, 0, 0, 0)\", whiteSpace: \"nowrap\", border: 0 }}>{content}</span>\n      <span aria-hidden=\"true\">{content.slice(0, length)}<span className=\"motion-typewriter-caret\">▍</span></span>\n    </motion.span>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-skeleton-shimmer",
+  "type": "registry:ui",
+  "title": "Skeleton / Shimmer",
+  "description": "Communicate loading progress with a low-contrast shimmer across placeholders.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/",
+  "files": [
+    {
+      "path": "src/registry/primitives/skeleton-shimmer.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/skeleton-shimmer.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps, ReactNode } from \"react\";\n\nexport type SkeletonShimmerPrimitiveProps = Omit<ComponentProps<typeof motion.div>, \"children\"> & { children: ReactNode };\n\nexport function SkeletonShimmerPrimitive({ children, ...props }: SkeletonShimmerPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.div {...props} aria-busy=\"true\" style={{ ...props.style, position: \"relative\", overflow: \"hidden\" }}>\n      {children}\n      <motion.span\n        aria-hidden=\"true\"\n        initial={{ x: \"-140%\" }}\n        animate={{ x: reduceMotion ? \"0%\" : \"180%\" }}\n        transition={{ duration: reduceMotion ? 0.12 : 1.4, ease: \"linear\", repeat: reduceMotion ? 0 : Infinity }}\n        style={{ position: \"absolute\", inset: 0, background: \"linear-gradient(90deg, transparent, rgb(255 255 255 / 0.14), transparent)\", pointerEvents: \"none\" }}\n      />\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

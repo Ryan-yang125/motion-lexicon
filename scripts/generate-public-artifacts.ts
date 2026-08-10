@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { registryComponents } from "../src/data/component-registry";
 import { catalogRecipes } from "../src/data/recipes";
+import { getPrimitiveRegistryEntry } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
 import { motionDirectorModes, motionGrammar } from "../src/data/motion-grammar";
 import { pathFor, siteUrl } from "../src/data/site";
@@ -20,7 +21,7 @@ const catalog = {
   schemaVersion: 3,
   release: release.version,
   name: "Motion Lexicon",
-  description: "Copy-ready React motion components and adjustable motion primitives.",
+  description: "Copy-ready React + Motion components and primitives.",
   siteUrl,
   repositoryUrl,
   registryUrl: `${siteUrl}/r/registry.json`,
@@ -45,7 +46,10 @@ const catalog = {
     description: primitive.shortDescription,
     urls: {
       zh: absolute(pathFor("zh", ["primitives", primitive.id])),
-      en: absolute(pathFor("en", ["primitives", primitive.id]))
+      en: absolute(pathFor("en", ["primitives", primitive.id])),
+      ...(getPrimitiveRegistryEntry(primitive.id)?.installable ? {
+        registry: `${siteUrl}/r/primitive-${primitive.id}.json`
+      } : {})
     }
   }))
 };
@@ -53,7 +57,7 @@ const catalog = {
 const llmsHeader = [
   "# Motion Lexicon",
   "",
-  "> Copy-ready React motion components, adjustable motion primitives, and an Agent Skill for product motion.",
+  "> Copy-ready React + Motion components and primitives, plus an Agent Skill for product motion.",
   "",
   `- Components: ${absolute(pathFor("en", ["components"]))}`,
   `- Motion primitives: ${absolute(pathFor("en", ["primitives"]))}`,
@@ -80,7 +84,7 @@ const llmsFull = [
   "## Motion primitives",
   "",
   ...catalogRecipes.map((primitive) =>
-    `- [${primitive.name.en}](${absolute(pathFor("en", ["primitives", primitive.id]))}): ${primitive.shortDescription.en}`
+    `- [${primitive.name.en}](${absolute(pathFor("en", ["primitives", primitive.id]))}): ${primitive.shortDescription.en}${getPrimitiveRegistryEntry(primitive.id)?.installable ? ` [Registry](${siteUrl}/r/primitive-${primitive.id}.json)` : ""}`
   ),
   ""
 ].join("\n");

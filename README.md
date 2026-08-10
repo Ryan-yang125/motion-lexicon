@@ -7,7 +7,7 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>Copy-ready React motion components and adjustable motion primitives.</strong>
+  <strong>Copy-ready React + Motion components and primitives.</strong>
 </p>
 
 <p align="center">
@@ -24,8 +24,8 @@
 <p align="center">
   <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/components-28-4568FF.svg" alt="28 components" />
-  <img src="https://img.shields.io/badge/primitives-44-5D5D5D.svg" alt="44 primitives" />
+  <img src="https://img.shields.io/badge/components-28-292929.svg" alt="28 components" />
+  <img src="https://img.shields.io/badge/primitives-44-55745D.svg" alt="44 primitives" />
 </p>
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
@@ -37,20 +37,23 @@
 | Collection | Use it for | Output |
 | --- | --- | --- |
 | [Components](https://motion-lexicon.pages.dev/en/components/) | A polished product interaction you can place into a React app | One self-contained TypeScript file through the shadcn registry |
-| [Primitives](https://motion-lexicon.pages.dev/en/primitives/) | A precise behavior, timing curve, or motion rule | Adjustable preview, prompt, HTML, CSS, and JavaScript |
+| [Primitives](https://motion-lexicon.pages.dev/en/primitives/) | A precise behavior, timing curve, or motion rule | Live React + Motion preview, tunable props, source, and registry install |
 | [Agent Skill](https://motion-lexicon.pages.dev/en/skill/) | Recommendation, composition, implementation, or review inside an agent workflow | A product-aware motion decision and production implementation |
 
 Components and Primitives are parallel collections. A component can combine
 several primitives; each component page links back to the underlying motion
 decisions.
 
-## Install a component
+![Motion Lexicon primitive directory](docs/assets/readme-v3-primitives.png)
+
+## Install components and primitives
 
 Every preview, source view, and registry response is generated from the same
 React file.
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
 
 Add the project registry once to `components.json` for shorter commands:
@@ -67,11 +70,13 @@ Add the project registry once to `components.json` for shorter commands:
 npx shadcn@latest add @motion-lexicon/copy-button
 ```
 
-The 28 components cover actions, overlays, input, navigation, data, and
-feedback. They include TypeScript types, keyboard behavior, focus management,
-interruptible motion, and a reduced-motion path.
+The registry includes 28 complete product components and 40 executable motion
+primitives. Four editorial primitives remain design guides. Every installable
+item includes TypeScript types, interruptible motion, and a reduced-motion path.
 
 ![Drawer component page](docs/assets/readme-v3-component.png)
+
+![Slide-in primitive workbench](docs/assets/readme-v3-primitive.png)
 
 ## Agent Skill
 
@@ -92,6 +97,8 @@ The Skill works in five modes:
 ```text
 src/registry/components/  React component source of truth
 src/registry/demos/       Live product demos
+src/registry/primitive-preview.tsx  Live primitive renderer
+src/registry/primitive-source.ts    Copy-ready primitive source generator
 src/data/                 Component, primitive, guide, and SEO content
 skills/motion-lexicon/    Agent Skill and motion references
 scripts/                  Registry, prerender, SEO, and quality checks

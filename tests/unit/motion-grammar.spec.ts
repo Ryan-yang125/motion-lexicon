@@ -27,6 +27,7 @@ describe("Motion Grammar", () => {
     expect(motionGrammar.timing.leave.curve).toBe("cubic-bezier(0.4, 0, 1, 1)");
     expect(motionGrammar.timing.linear.curve).toBe("linear");
     expect(motionGrammar.timing.spring.rangeMs[1]).toBeLessThanOrEqual(360);
+    expect(motionGrammar.implementation.preferredDelivery[0]).toBe("react");
   });
 
   it("exposes a stable five-mode director workflow", () => {

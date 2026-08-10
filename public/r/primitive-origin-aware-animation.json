@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-origin-aware-animation",
+  "type": "registry:ui",
+  "title": "Origin-aware animation",
+  "description": "Expand or scale from the trigger point to preserve spatial continuity.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "transforms"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/",
+  "files": [
+    {
+      "path": "src/registry/primitives/origin-aware-animation.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/origin-aware-animation.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type OriginAwareAnimationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function OriginAwareAnimationPrimitive({ children, ...props }: OriginAwareAnimationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,scale: 0.88,transformOrigin: \"top left\"}}\n      animate={{opacity: 1,scale: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.22, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

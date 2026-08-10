@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-ripple",
+  "type": "registry:ui",
+  "title": "Ripple",
+  "description": "Expand a restrained ripple from the input coordinate for precise touch feedback.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/ripple/",
+  "files": [
+    {
+      "path": "src/registry/primitives/ripple.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/ripple.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport { useRef, useState } from \"react\";\nimport type { ComponentProps, PointerEvent, ReactNode } from \"react\";\n\ntype Ripple = { id: number; x: number; y: number };\n\nexport type RipplePrimitiveProps = Omit<ComponentProps<typeof motion.button>, \"children\" | \"onPointerDown\"> & {\n  children: ReactNode;\n};\n\nexport function RipplePrimitive({ children, ...props }: RipplePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  const nextId = useRef(0);\n  const [ripples, setRipples] = useState<Ripple[]>([]);\n\n  function addRipple(event: PointerEvent<HTMLButtonElement>) {\n    const bounds = event.currentTarget.getBoundingClientRect();\n    const ripple = { id: nextId.current++, x: event.clientX - bounds.left, y: event.clientY - bounds.top };\n    setRipples((current) => [...current, ripple]);\n  }\n\n  return (\n    <motion.button\n      {...props}\n      type={props.type ?? \"button\"}\n      onPointerDown={addRipple}\n      whileTap={reduceMotion ? undefined : { scale: 0.98 }}\n      style={{ ...props.style, position: props.style?.position ?? \"relative\", overflow: \"hidden\" }}\n    >\n      {ripples.map((ripple) => (\n        <motion.span\n          key={ripple.id}\n          aria-hidden=\"true\"\n          initial={{ scale: reduceMotion ? 1 : 0, opacity: 0.24 }}\n          animate={{ scale: 1, opacity: 0 }}\n          transition={{ duration: reduceMotion ? 0.12 : 0.16, ease: \"easeOut\" }}\n          onAnimationComplete={() => setRipples((current) => current.filter((item) => item.id !== ripple.id))}\n          style={{ position: \"absolute\", left: ripple.x, top: ripple.y, width: \"220%\", aspectRatio: 1, borderRadius: \"50%\", background: \"currentColor\", translate: \"-50% -50%\", pointerEvents: \"none\" }}\n        />\n      ))}\n      <span style={{ position: \"relative\" }}>{children}</span>\n    </motion.button>\n  );\n}\n"
+    }
+  ]
+}

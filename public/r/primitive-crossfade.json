@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-crossfade",
+  "type": "registry:ui",
+  "title": "Crossfade",
+  "description": "Crossfade overlapping, similarly sized states to reduce visual jumps.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "state-transitions"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/crossfade/",
+  "files": [
+    {
+      "path": "src/registry/primitives/crossfade.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/crossfade.tsx",
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function CrossfadePrimitive({ stateKey, children }: { stateKey: string; children: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence initial={false} mode=\"sync\">\n      <motion.div\n        key={stateKey}\n        initial={reduceMotion ? false : { opacity: 0 }}\n        animate={{ opacity: 1, transition: reduceMotion ? { duration: 0.12 } : { duration: 0.2, delay: 0.1, ease: [0.33, 1, 0.68, 1] } }}\n        exit={{ opacity: 0, transition: reduceMotion ? { duration: 0.12 } : { duration: 0.2, ease: [0.33, 1, 0.68, 1] } }}\n      >\n        {children}\n      </motion.div>\n    </AnimatePresence>\n  );\n}\n"
+    }
+  ]
+}

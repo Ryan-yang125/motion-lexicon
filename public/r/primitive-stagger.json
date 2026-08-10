@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-stagger",
+  "type": "registry:ui",
+  "title": "Stagger",
+  "description": "Introduce list items at short intervals to communicate order and rhythm.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "sequencing"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/stagger/",
+  "files": [
+    {
+      "path": "src/registry/primitives/stagger.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/stagger.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function StaggerPrimitive({ items }: { items: ReactNode[] }) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.ul\n      initial=\"hidden\"\n      animate=\"visible\"\n      variants={{ visible: { transition: { staggerChildren: reduceMotion ? 0 : 0.05 } } }}\n    >\n      {items.slice(0, 4).map((item, index) => (\n        <motion.li\n          key={index}\n          variants={{\n            hidden: { opacity: 0, y: reduceMotion ? 0 : 18 },\n            visible: { opacity: 1, y: 0 }\n          }}\n          transition={reduceMotion ? { duration: 0.12 } : { duration: 0.22, ease: [0.23, 1, 0.32, 1] }}\n        >\n          {item}\n        </motion.li>\n      ))}\n    </motion.ul>\n  );\n}\n"
+    }
+  ]
+}

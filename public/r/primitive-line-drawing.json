@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-line-drawing",
+  "type": "registry:ui",
+  "title": "Line drawing",
+  "description": "Draw icons, paths, or explanatory connectors with stroke offset animation.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/line-drawing/",
+  "files": [
+    {
+      "path": "src/registry/primitives/line-drawing.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/line-drawing.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport function LineDrawingPrimitive() {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n      <motion.path\n        d=\"m5 12 4 4 10-10\"\n        stroke=\"currentColor\"\n        strokeWidth=\"2\"\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n        initial={reduceMotion ? false : { pathLength: 0, opacity: 0 }}\n        animate={{ pathLength: 1, opacity: 1 }}\n        transition={reduceMotion ? { duration: 0.12 } : { duration: 1, ease: [0.33, 1, 0.68, 1] }}\n      />\n    </motion.svg>\n  );\n}\n"
+    }
+  ]
+}

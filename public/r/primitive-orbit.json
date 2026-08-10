@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-orbit",
+  "type": "registry:ui",
+  "title": "Orbit",
+  "description": "Move a decorative node slowly around a center for low-frequency status displays.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "loops"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/orbit/",
+  "files": [
+    {
+      "path": "src/registry/primitives/orbit.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/orbit.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function OrbitPrimitive({ center, orbiting }: { center: ReactNode; orbiting: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <div style={{ position: \"relative\", display: \"grid\", placeItems: \"center\", width: 112, height: 112 }}>\n      {center}\n      <motion.div\n        animate={{ rotate: reduceMotion ? 0 : 360 }}\n        transition={{ duration: 6, ease: \"linear\", repeat: reduceMotion ? 0 : Infinity }}\n        style={{ position: \"absolute\", inset: 0, display: \"grid\", placeItems: \"center\" }}\n      >\n        <span style={{ transform: \"translateX(56px)\" }}>{orbiting}</span>\n      </motion.div>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

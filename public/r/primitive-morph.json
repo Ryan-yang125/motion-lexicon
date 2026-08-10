@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-morph",
+  "type": "registry:ui",
+  "title": "Morph",
+  "description": "Create continuous transformation between before and after layouts of a shared element.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "state-transitions"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/morph/",
+  "files": [
+    {
+      "path": "src/registry/primitives/morph.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/morph.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MorphPrimitiveProps = ComponentProps<typeof motion.div> & { layoutId?: string };\n\nexport function MorphPrimitive({ children, layoutId = \"shared-motion-element\", ...props }: MorphPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.div\n      {...props}\n      layout={\"position\"}\n      layoutId={layoutId}\n      initial={reduceMotion ? false : { opacity: 0, y: 48, scale: 0.86 }}\n      animate={{ opacity: 1, y: 0, scale: 1 }}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n      data-continuity=\"morph\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-accordion-collapse",
+  "type": "registry:ui",
+  "title": "Accordion / Collapse",
+  "description": "Coordinate height, opacity, and icon state for clear disclosure transitions.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "state-transitions"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/",
+  "files": [
+    {
+      "path": "src/registry/primitives/accordion-collapse.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/accordion-collapse.tsx",
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function AccordionCollapsePrimitive({ open, children }: { open: boolean; children: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence initial={false}>\n      {open ? (\n        <motion.div\n          initial={reduceMotion ? false : { height: 0, opacity: 0 }}\n          animate={{ height: \"auto\", opacity: 1 }}\n          exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}\n          transition={reduceMotion ? { duration: 0.12 } : { duration: 0.22, ease: [0.23, 1, 0.32, 1] }}\n          style={{ overflow: \"hidden\", maxHeight: 140 }}\n        >\n          {children}\n        </motion.div>\n      ) : null}\n    </AnimatePresence>\n  );\n}\n"
+    }
+  ]
+}

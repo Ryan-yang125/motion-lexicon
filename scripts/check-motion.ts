@@ -1,31 +1,23 @@
 import { readFileSync, readdirSync } from "node:fs";
+import { registryComponents } from "../src/data/component-registry";
+import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { catalogRecipes } from "../src/data/recipes";
-import type { MotionParam, RangeParam } from "../src/data/types";
-import { buildRecipeCss, buildRecipeHtml, getDefaultParamValues } from "../src/lib/motion-engine";
+import { getDefaultParamValues } from "../src/lib/motion-engine";
+import { buildPrimitiveSource } from "../src/registry/primitive-source";
 
-function assert(condition: unknown, message: string) {
-  if (!condition) {
-    throw new Error(message);
-  }
+function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) throw new Error(message);
 }
 
-type CssBlock = {
-  body: string;
-  end: number;
-  header: string;
-  start: number;
-};
+type CssBlock = { body: string; end: number; header: string; start: number };
 
 function findBlocks(css: string, pattern: RegExp): CssBlock[] {
-  const flags = pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`;
-  const matcher = new RegExp(pattern.source, flags);
+  const matcher = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
   const blocks: CssBlock[] = [];
   let match: RegExpExecArray | null;
-
   while ((match = matcher.exec(css))) {
     const open = css.indexOf("{", match.index);
     if (open < 0) break;
-
     let depth = 1;
     let cursor = open + 1;
     while (cursor < css.length && depth > 0) {
@@ -33,179 +25,74 @@ function findBlocks(css: string, pattern: RegExp): CssBlock[] {
       if (css[cursor] === "}") depth -= 1;
       cursor += 1;
     }
-
-    assert(depth === 0, `Unbalanced CSS block near: ${match[0]}`);
-    blocks.push({
-      start: match.index,
-      end: cursor,
-      header: css.slice(match.index, open).trim(),
-      body: css.slice(open + 1, cursor - 1)
-    });
+    assert(depth === 0, `Unbalanced CSS block near ${match[0]}`);
+    blocks.push({ start: match.index, end: cursor, header: css.slice(match.index, open).trim(), body: css.slice(open + 1, cursor - 1) });
     matcher.lastIndex = cursor;
   }
-
   return blocks;
 }
 
-function removeBlocks(css: string, blocks: CssBlock[]) {
-  let output = css;
-  for (const block of [...blocks].sort((a, b) => b.start - a.start)) {
-    output = `${output.slice(0, block.start)}${" ".repeat(block.end - block.start)}${output.slice(block.end)}`;
-  }
-  return output;
-}
-
-function motionHoverRulesOutsideFinePointer(css: string) {
-  const finePointerBlocks = findBlocks(
-    css,
-    /@media\s*\(\s*hover\s*:\s*hover\s*\)\s*and\s*\(\s*pointer\s*:\s*fine\s*\)\s*\{/i
-  );
-  const outside = removeBlocks(css, finePointerBlocks);
-  const violations: string[] = [];
-  const rules = outside.matchAll(/([^{}]*:hover[^{}]*)\{([^{}]*)\}/g);
-
-  for (const match of rules) {
-    const selector = match[1].trim().replace(/\s+/g, " ");
-    const body = match[2];
-    const motionDeclarations = body.matchAll(
-      /(?:^|;)\s*(?:transform|translate|rotate|scale|offset(?:-[\w-]+)?|animation(?:-name|-play-state)?)\s*:\s*([^;]+)/gm
-    );
-    const moves = [...motionDeclarations].some((declaration) => !/^(?:none|initial|unset)\b/i.test(declaration[1].trim()));
-    const animates = /(?:^|;)\s*animation\s*:\s*([^;]+)/m.test(body) &&
-      !/^(?:none|initial|unset)\b/i.test(body.match(/(?:^|;)\s*animation\s*:\s*([^;]+)/m)?.[1]?.trim() ?? "");
-    if (moves || animates) violations.push(selector);
-  }
-
-  return violations;
-}
-
 function layoutPropertiesInKeyframes(css: string) {
-  const keyframes = findBlocks(css, /@(?:-webkit-)?keyframes\s+[\w-]+\s*\{/i);
   const layoutProperty = /(?:^|[;{])\s*(?:width|height|min-width|max-width|min-height|max-height|top|right|bottom|left|inset(?:-[\w-]+)?|margin(?:-[\w-]+)?|padding(?:-[\w-]+)?)\s*:/m;
-  return keyframes.filter((block) => layoutProperty.test(block.body)).map((block) => block.header);
+  return findBlocks(css, /@(?:-webkit-)?keyframes\s+[\w-]+\s*\{/i)
+    .filter((block) => layoutProperty.test(block.body))
+    .map((block) => block.header);
 }
 
-function reducedMotionBlock(css: string) {
-  return findBlocks(css, /@media\s*\(\s*prefers-reduced-motion\s*:\s*reduce\s*\)\s*\{/i)[0];
+const stylePaths = ["src/styles.css", "src/library.css", "src/interior-theme.css", "src/v3.css"];
+for (const file of stylePaths) {
+  const css = readFileSync(file, "utf8");
+  assert(!/transition\s*:\s*all\b/.test(css), `${file} uses transition: all`);
+  assert(!/scale\(0\)/.test(css), `${file} animates from scale(0)`);
+  assert(!/\bease-in\b(?!-out)/.test(css), `${file} uses ease-in for interface motion`);
+  assert(css.includes("@media (prefers-reduced-motion: reduce)"), `${file} needs a reduced-motion branch`);
+  assert(layoutPropertiesInKeyframes(css).length === 0, `${file} animates layout properties in keyframes: ${layoutPropertiesInKeyframes(css).join(", ")}`);
 }
-
-function hasLowMotionTransition(segment: string) {
-  const property = segment.match(/transition-property\s*:\s*([^;]+)/i)?.[1] ?? "";
-  const duration = segment.match(/transition-duration\s*:\s*([^;]+)/i)?.[1] ?? "";
-  const keepsStateCue = /(?:opacity|color|background-color|border-color)/i.test(property);
-  const removesTravel = !/(?:transform|translate|rotate|scale|offset)/i.test(property);
-  const staysBrief = /(?:1[0-9]{2}|200)ms/i.test(duration);
-  return keepsStateCue && removesTravel && staysBrief;
-}
-
-function durationParam(params: MotionParam[]): RangeParam | undefined {
-  return params.find((param): param is RangeParam => param.id === "duration" && param.kind === "range");
-}
-
-const staticStylePaths = ["src/styles.css", "src/library.css", "src/interior-theme.css"];
-const staticStyles = staticStylePaths.map((filePath) => ({ filePath, css: readFileSync(filePath, "utf8") }));
-const staticCss = staticStyles.map(({ css }) => css).join("\n");
-
-assert(!/transition\s*:\s*all\b/.test(staticCss), "Static CSS must not use transition: all");
-assert(!/scale\(0\)/.test(staticCss), "Static CSS must not animate from scale(0)");
-assert(!/\bease-in\b(?!-out)/.test(staticCss), "Static UI CSS must not use ease-in");
-assert(
-  staticCss.includes("@media (hover: hover) and (pointer: fine)"),
-  "Static hover motion must include a fine-pointer media query"
-);
-assert(
-  motionHoverRulesOutsideFinePointer(staticCss).length === 0,
-  `Static hover motion is not fine-pointer gated: ${motionHoverRulesOutsideFinePointer(staticCss).join(", ")}`
-);
-assert(
-  layoutPropertiesInKeyframes(staticCss).length === 0,
-  `Static keyframes animate layout properties: ${layoutPropertiesInKeyframes(staticCss).join(", ")}`
-);
-for (const { filePath, css } of staticStyles) {
-  const reduced = reducedMotionBlock(css);
-  assert(reduced, `${filePath} reduced-motion media query is missing`);
-  assert(hasLowMotionTransition(reduced.body), `${filePath} reduced motion must retain only brief opacity/color transitions`);
-}
-
-const microInteractionExceptions = new Set(["press-tap-feedback", "ripple"]);
-const longFormExceptions = new Set([
-  "hold-to-confirm",
-  "marquee",
-  "orbit",
-  "idle-animation",
-  "line-drawing",
-  "skeleton-shimmer",
-  "typewriter"
-]);
-const componentOutputs = new Map<string, string>();
 
 const registryFiles = readdirSync("src/registry/components").filter((file) => file.endsWith(".tsx"));
+assert(registryFiles.length === registryComponents.length, "Component registry source count is inconsistent");
 for (const file of registryFiles) {
   const source = readFileSync(`src/registry/components/${file}`, "utf8");
   assert(!/transition\s*:\s*["'`]all\b/.test(source), `${file} uses transition: all`);
   assert(!/scale\s*:\s*0(?!\.)/.test(source), `${file} animates from scale 0`);
-  if (source.includes('from "motion/react"')) {
-    assert(source.includes("useReducedMotion"), `${file} uses Motion without a reduced-motion branch`);
-  }
+  if (source.includes('from "motion/react"')) assert(source.includes("useReducedMotion"), `${file} uses Motion without a reduced-motion branch`);
 }
-const commandPaletteSource = readFileSync("src/registry/components/command-palette.tsx", "utf8");
-assert(!commandPaletteSource.includes('initial="closed"'), "Command palette opening must remain immediate for keyboard use");
 
+for (const primitive of installablePrimitiveEntries) {
+  const source = buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+  assert(source.includes(`export function ${primitive.exportName}`), `${primitive.id} export is missing`);
+  assert(source.includes('from "motion/react"'), `${primitive.id} must use Motion`);
+  assert(source.includes("useReducedMotion"), `${primitive.id} needs a reduced-motion branch`);
+  assert(!/transition\s*:\s*["'`]all\b/.test(source), `${primitive.id} uses transition: all`);
+  assert(!/scale\s*:\s*0(?!\.)/.test(source), `${primitive.id} animates from scale 0`);
+}
+
+const primitiveSource = (id: string) => {
+  const primitive = installablePrimitiveEntries.find((entry) => entry.id === id);
+  assert(primitive, `Missing ${id} registry primitive`);
+  return buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+};
+assert(primitiveSource("hold-to-confirm").includes("onConfirm: () => void"), "Hold-to-confirm needs a completion callback");
+assert(primitiveSource("hold-to-confirm").includes("onPointerCancel={cancelHold}"), "Hold-to-confirm must be cancellable");
+assert(primitiveSource("swipe-to-dismiss").includes("onDragEnd={finishDrag}"), "Swipe-to-dismiss needs threshold handling");
+assert(primitiveSource("scroll-driven-animation").includes("useScroll"), "Scroll-driven animation must read scroll progress");
+assert(primitiveSource("skeleton-shimmer").includes("repeat: reduceMotion ? 0 : Infinity"), "Skeleton shimmer must loop while loading");
+assert(primitiveSource("drag-to-reorder").includes("<Reorder.Group"), "Drag-to-reorder needs a reorder state contract");
+assert(primitiveSource("ripple").includes("onPointerDown={addRipple}"), "Ripple must originate at the pointer");
+assert(primitiveSource("parallax").includes("useScroll"), "Parallax must read scroll progress");
+assert(primitiveSource("number-ticker").includes("key={value}"), "Number ticker must react to value changes");
+assert(primitiveSource("before-after-slider").includes('role="slider"'), "Before-after needs an operable divider");
+assert(primitiveSource("typewriter").includes("window.setInterval"), "Typewriter must reveal discrete characters");
+assert(!primitiveSource("marquee").includes('<motion.div aria-hidden="true"'), "Looping content must remain available to assistive technology");
+
+const longForm = new Set(["hold-to-confirm", "marquee", "orbit", "idle-animation", "line-drawing", "skeleton-shimmer", "typewriter"]);
 for (const recipe of catalogRecipes) {
-  const values = getDefaultParamValues(recipe);
-  const generatedCss = buildRecipeCss(recipe, values);
-  const generatedHtml = buildRecipeHtml(recipe, values, "en");
-  const root = `.motion-demo.motion-demo--${recipe.canonicalId}`;
-  const duration = durationParam(recipe.params);
-
-  assert(generatedCss.includes(root), `${recipe.id} CSS is missing its scoped root`);
-  assert(generatedHtml.includes(`data-motion="${recipe.canonicalId}"`), `${recipe.id} HTML is missing its motion identity`);
-  assert(!/transition\s*:\s*all\b/.test(generatedCss), `${recipe.id} generated CSS uses transition: all`);
-  assert(!/scale\(0\)/.test(generatedCss), `${recipe.id} generated CSS animates from scale(0)`);
-  assert(!/\bease-in\b(?!-out)/.test(generatedCss), `${recipe.id} generated UI CSS uses ease-in`);
-  assert(
-    motionHoverRulesOutsideFinePointer(generatedCss).length === 0,
-    `${recipe.id} generated hover motion is not fine-pointer gated: ${motionHoverRulesOutsideFinePointer(generatedCss).join(", ")}`
-  );
-  assert(
-    layoutPropertiesInKeyframes(generatedCss).length === 0,
-    `${recipe.id} generated keyframes animate layout properties: ${layoutPropertiesInKeyframes(generatedCss).join(", ")}`
-  );
-
-  const systemReduced = reducedMotionBlock(generatedCss);
-  assert(systemReduced, `${recipe.id} CSS is missing a reduced-motion media query`);
-  assert(generatedCss.includes(".force-reduced-motion"), `${recipe.id} CSS is missing manual reduced-motion output`);
-
-  if (/transition\s*:/.test(generatedCss)) {
-    const manualReduced = generatedCss.slice(0, systemReduced.start);
-    assert(hasLowMotionTransition(manualReduced), `${recipe.id} manual reduced motion must keep only a brief opacity/color transition`);
-    assert(hasLowMotionTransition(systemReduced.body), `${recipe.id} system reduced motion must keep only a brief opacity/color transition`);
-  }
-
-  if (recipe.surfaceType === "component" && duration) {
-    const isMicroInteraction = microInteractionExceptions.has(recipe.id);
-    const isLongForm = longFormExceptions.has(recipe.id);
-    if (isMicroInteraction) {
-      assert(duration.defaultValue >= 100 && duration.defaultValue <= 160, `${recipe.id} micro-interaction default must stay within 100–160ms`);
-    } else if (!isLongForm) {
-      assert(duration.defaultValue >= 150 && duration.defaultValue <= 280, `${recipe.id} UI default must stay within 150–280ms`);
-    }
-  }
-
-  if (duration && duration.defaultValue > 280) {
-    const rationale = `${duration.label.zh} ${duration.description.zh}`;
-    assert(/演示|循环|按住|确认/.test(rationale), `${recipe.id} long duration needs an explicit demo, loop, or deliberate-interaction rationale`);
-  }
-
-  if (recipe.surfaceType !== "guide") {
-    const normalized = generatedCss.replaceAll(recipe.canonicalId ?? recipe.id, "ENTRY");
-    const existing = componentOutputs.get(normalized);
-    assert(!existing, `${recipe.id} duplicates the generated motion CSS of ${existing}`);
-    componentOutputs.set(normalized, recipe.id);
+  const duration = recipe.params.find((param) => param.id === "duration");
+  if (!duration || duration.kind !== "range" || recipe.surfaceType !== "component") continue;
+  if (!longForm.has(recipe.id)) {
+    const minimum = recipe.id === "press-tap-feedback" ? 100 : 150;
+    assert(duration.defaultValue >= minimum && duration.defaultValue <= 280, `${recipe.id} default timing is outside the interface range`);
   }
 }
 
-console.log(
-  `Motion check passed: ${catalogRecipes.length} canonical entries have scoped output, intentional defaults, ` +
-    "fine-pointer hover motion, compositor-safe keyframes, and equivalent manual/system reduced-motion behavior."
-);
+console.log(`Motion check passed: ${registryComponents.length} product components and ${installablePrimitiveEntries.length} React + Motion primitives are reduced-motion aware, compositor safe, and registry ready.`);

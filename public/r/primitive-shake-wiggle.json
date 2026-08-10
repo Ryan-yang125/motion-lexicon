@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-shake-wiggle",
+  "type": "registry:ui",
+  "title": "Shake / Wiggle",
+  "description": "Use one brief horizontal shake for errors or inputs that need attention.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/",
+  "files": [
+    {
+      "path": "src/registry/primitives/shake-wiggle.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/shake-wiggle.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type ShakeWigglePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function ShakeWigglePrimitive({ children, ...props }: ShakeWigglePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: 0}}\n      animate={{x: [0,-10,8.57,-7.14,5.71,-4.29,2.86,0]}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: \"linear\" }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

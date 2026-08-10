@@ -124,6 +124,12 @@ export const ProductMomentGlyph = glyph(() => <>
   <path d="M13.5 12.5L15.5 14.5L17.5 12.5" />
 </>, "ProductMomentGlyph");
 
+export const ComponentLibraryGlyph = glyph(() => <>
+  <rect x="3.5" y="4" width="7" height="6.5" rx="1.75" />
+  <rect x="13.5" y="4" width="7" height="6.5" rx="1.75" />
+  <rect x="3.5" y="13.5" width="17" height="6.5" rx="1.75" />
+</>, "ComponentLibraryGlyph");
+
 export const MotionPrimitiveGlyph = glyph(() => <>
   <path d="M4 19V5M4 19H20" />
   <path d="M5 17C7.5 8.5 12 7 19 6" />

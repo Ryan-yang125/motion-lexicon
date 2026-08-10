@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-direction-aware-transition",
+  "type": "registry:ui",
+  "title": "Direction-aware transition",
+  "description": "Match enter and exit directions to navigation order and preserve context.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "state-transitions"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/",
+  "files": [
+    {
+      "path": "src/registry/primitives/direction-aware-transition.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/direction-aware-transition.tsx",
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function DirectionAwareTransitionPrimitive({ stateKey, children }: { stateKey: string; children: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence mode=\"wait\" initial={false}>\n      <motion.div\n        key={stateKey}\n        initial={reduceMotion ? false : { opacity: 0, x: 40 }}\n        animate={{ opacity: 1, x: 0 }}\n        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -40 }}\n        transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.23, 1, 0.32, 1] }}\n      >\n        {children}\n      </motion.div>\n    </AnimatePresence>\n  );\n}\n"
+    }
+  ]
+}

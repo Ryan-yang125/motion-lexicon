@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-parallax",
+  "type": "registry:ui",
+  "title": "Parallax",
+  "description": "Move foreground and background at restrained relative speeds to create depth.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "scroll"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/parallax/",
+  "files": [
+    {
+      "path": "src/registry/primitives/parallax.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/parallax.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion, useScroll, useTransform } from \"motion/react\";\nimport { useRef } from \"react\";\nimport type { ComponentProps, ReactNode } from \"react\";\n\nexport type ParallaxPrimitiveProps = Omit<ComponentProps<typeof motion.div>, \"children\" | \"ref\"> & {\n  children: ReactNode;\n};\n\nexport function ParallaxPrimitive({ children, ...props }: ParallaxPrimitiveProps) {\n  const target = useRef<HTMLDivElement>(null);\n  const reduceMotion = useReducedMotion();\n  const { scrollYProgress } = useScroll({ target, offset: [\"start end\", \"end start\"] });\n  const travel = useTransform(scrollYProgress, [0, 1], [16.8, -16.8]);\n\n  return (\n    <motion.div\n      {...props}\n      ref={target}\n      style={{ ...props.style, y: reduceMotion ? 0 : travel }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

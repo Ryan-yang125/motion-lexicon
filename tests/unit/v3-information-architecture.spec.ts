@@ -1,7 +1,10 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { registryComponents } from "../../src/data/component-registry";
 import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
+import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
+import { getDefaultParamValues } from "../../src/lib/motion-engine";
+import { buildPrimitiveSource } from "../../src/registry/primitive-source";
 import { getStaticPaths, pathFor, sitemapPaths, staticRedirects } from "../../src/data/site";
 import { locales } from "../../src/data/types";
 
@@ -10,6 +13,7 @@ describe("V3 component registry architecture", () => {
     expect(registryComponents).toHaveLength(28);
     expect(canonicalMotionCatalog).toHaveLength(44);
     expect(new Set(registryComponents.map((item) => item.id)).size).toBe(28);
+    expect(installablePrimitiveEntries).toHaveLength(40);
 
     for (const locale of locales) {
       expect(sitemapPaths()).toContain(pathFor(locale, ["components"]));
@@ -29,6 +33,20 @@ describe("V3 component registry architecture", () => {
       expect(existsSync(`src/registry/demos/${component.id}-demo.tsx`)).toBe(true);
       expect(existsSync(`public/r/${component.id}.json`)).toBe(true);
     }
+    for (const primitive of installablePrimitiveEntries) {
+      expect(existsSync(`public/r/${primitive.registryId}.json`)).toBe(true);
+      const source = buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+      expect(source).toContain(`export function ${primitive.exportName}`);
+      expect(source).toContain('from "motion/react"');
+      expect(source).toContain("useReducedMotion");
+    }
+  });
+
+  it("uses the custom registry glyph in the sidebar", () => {
+    const shell = readFileSync("src/components/LibraryShell.tsx", "utf8");
+    const icons = readFileSync("src/components/icons.tsx", "utf8");
+    expect(shell).toContain("ComponentLibraryGlyph");
+    expect(icons).toContain("export const ComponentLibraryGlyph");
   });
 
   it("removes obsolete product routes", () => {

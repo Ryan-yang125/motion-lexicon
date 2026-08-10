@@ -1,6 +1,11 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { transform } from "esbuild";
 import path from "node:path";
+import ts from "typescript";
 import { registryComponents } from "../src/data/component-registry";
+import { installablePrimitiveEntries } from "../src/data/primitive-registry";
+import { getDefaultParamValues } from "../src/lib/motion-engine";
+import { buildPrimitiveSource } from "../src/registry/primitive-source";
 
 const schema = "https://ui.shadcn.com/schema/registry.json";
 const itemSchema = "https://ui.shadcn.com/schema/registry-item.json";
@@ -8,9 +13,10 @@ const outputDir = path.resolve("public/r");
 const sourceModulePath = path.resolve("src/registry/generated-sources.ts");
 const site = "https://motion-lexicon.pages.dev";
 
+await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
 
-const items = await Promise.all(registryComponents.map(async (entry) => {
+const componentItems = await Promise.all(registryComponents.map(async (entry) => {
   const sourcePath = `src/registry/components/${entry.id}.tsx`;
   const source = await readFile(sourcePath, "utf8");
   const meta = {
@@ -41,6 +47,78 @@ const items = await Promise.all(registryComponents.map(async (entry) => {
   return meta;
 }));
 
+const primitiveBuilds = await Promise.all(installablePrimitiveEntries.map(async (entry) => {
+  const source = buildPrimitiveSource(entry.recipe, getDefaultParamValues(entry.recipe));
+  try {
+    await transform(source, { loader: "tsx", jsx: "automatic", target: "es2022" });
+  } catch (error) {
+    throw new Error(`Generated primitive source failed to compile: ${entry.id}`, { cause: error });
+  }
+  const sourcePath = `src/registry/primitives/${entry.id}.tsx`;
+  const meta = {
+    name: entry.registryId,
+    type: "registry:ui" as const,
+    title: entry.recipe.name.en,
+    description: entry.recipe.shortDescription.en,
+    dependencies: ["motion"],
+    categories: ["primitive", entry.recipe.categoryId],
+    docs: `${site}/en/primitives/${entry.id}/`,
+    files: [{
+      path: sourcePath,
+      type: "registry:ui" as const,
+      target: `components/motion-lexicon/primitives/${entry.id}.tsx`
+    }]
+  };
+
+  await writeFile(
+    path.join(outputDir, `${entry.registryId}.json`),
+    `${JSON.stringify({
+      $schema: itemSchema,
+      ...meta,
+      files: [{ ...meta.files[0], content: source }]
+    }, null, 2)}\n`,
+    "utf8"
+  );
+
+  return { meta, source, sourcePath };
+}));
+const primitiveItems = primitiveBuilds.map(({ meta }) => meta);
+
+const compilerOptions: ts.CompilerOptions = {
+  allowSyntheticDefaultImports: true,
+  esModuleInterop: true,
+  jsx: ts.JsxEmit.ReactJSX,
+  module: ts.ModuleKind.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  noEmit: true,
+  skipLibCheck: true,
+  strict: true,
+  target: ts.ScriptTarget.ES2022
+};
+const virtualSources = new Map(
+  primitiveBuilds.map(({ source, sourcePath }) => [path.resolve(sourcePath), source])
+);
+const compilerHost = ts.createCompilerHost(compilerOptions);
+const readFileFromDisk = compilerHost.readFile.bind(compilerHost);
+const fileExistsOnDisk = compilerHost.fileExists.bind(compilerHost);
+compilerHost.fileExists = (fileName) => virtualSources.has(path.resolve(fileName)) || fileExistsOnDisk(fileName);
+compilerHost.readFile = (fileName) => virtualSources.get(path.resolve(fileName)) ?? readFileFromDisk(fileName);
+compilerHost.getSourceFile = (fileName, languageVersion) => {
+  const source = compilerHost.readFile(fileName);
+  return source === undefined ? undefined : ts.createSourceFile(fileName, source, languageVersion, true);
+};
+const primitiveProgram = ts.createProgram([...virtualSources.keys()], compilerOptions, compilerHost);
+const primitiveDiagnostics = ts.getPreEmitDiagnostics(primitiveProgram);
+if (primitiveDiagnostics.length > 0) {
+  throw new Error(`Generated primitive source failed type checking:\n${ts.formatDiagnosticsWithColorAndContext(primitiveDiagnostics, {
+    getCanonicalFileName: (fileName) => fileName,
+    getCurrentDirectory: () => process.cwd(),
+    getNewLine: () => "\n"
+  })}`);
+}
+
+const items = [...componentItems, ...primitiveItems];
+
 const sourceEntries = await Promise.all(registryComponents.map(async (entry) => [
   entry.id,
   await readFile(`src/registry/components/${entry.id}.tsx`, "utf8")
@@ -63,4 +141,4 @@ await writeFile(
   "utf8"
 );
 
-console.log(`Registry generated: ${items.length} components`);
+console.log(`Registry generated: ${componentItems.length} components and ${primitiveItems.length} primitives`);

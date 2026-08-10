@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-keyframes",
+  "type": "registry:ui",
+  "title": "Keyframes",
+  "description": "Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "sequencing"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/keyframes/",
+  "files": [
+    {
+      "path": "src/registry/primitives/keyframes.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/keyframes.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps, ReactNode } from \"react\";\n\nexport type KeyframesPrimitiveProps = Omit<ComponentProps<typeof motion.div>, \"children\"> & { children: ReactNode };\n\nexport function KeyframesPrimitive({ children, ...props }: KeyframesPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : { opacity: 0.35, x: 0 }}\n      animate={reduceMotion ? { opacity: 1, x: 0 } : { opacity: [0.35, 1, 0.72, 1], x: [0, 18, -8, 0] }}\n      transition={{ duration: reduceMotion ? 0.12 : 0.72, ease: [0.23, 1, 0.32, 1] }}\n      data-fill=\"both\"\n      data-steps={4}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}
