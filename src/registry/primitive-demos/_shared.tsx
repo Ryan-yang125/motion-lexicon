@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import type { Transition } from "motion/react";
 import type { Locale, ParamValues } from "@/data/types";
 
@@ -8,6 +8,18 @@ export type PrimitiveDemoProps = {
   compact?: boolean;
   replayKey?: number;
 };
+
+export function useEntryReplay(replayKey = 0): [boolean, Dispatch<SetStateAction<boolean>>] {
+  const [present, setPresent] = useState(false);
+
+  useEffect(() => {
+    setPresent(false);
+    const frame = requestAnimationFrame(() => setPresent(true));
+    return () => cancelAnimationFrame(frame);
+  }, [replayKey]);
+
+  return [present, setPresent];
+}
 
 export function numberValue(values: ParamValues, key: string, fallback: number) {
   const value = values[key];

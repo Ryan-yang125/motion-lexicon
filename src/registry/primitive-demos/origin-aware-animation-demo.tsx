@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { OriginAwareAnimationPrimitive, type MotionOrigin } from "@/registry/primitives/origin-aware-animation";
-import { PrimitiveDemoSurface, ProductButton, ProductPanel, easingValue, numberValue, stringValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductButton, ProductPanel, easingValue, numberValue, stringValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function OriginAwareAnimationDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [open, setOpen] = useState(true);
+export function OriginAwareAnimationDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [open, setOpen] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "图层工具", "Layer tools")} meta="origin" compact={compact}>
       <div className="relative h-full">

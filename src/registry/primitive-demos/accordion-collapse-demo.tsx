@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { AccordionCollapsePrimitive } from "@/registry/primitives/accordion-collapse";
-import { PrimitiveDemoSurface, ProductPanel, easingValue, numberValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductPanel, easingValue, numberValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function AccordionCollapseDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [open, setOpen] = useState(true);
+export function AccordionCollapseDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [open, setOpen] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "项目设置", "Project settings")} meta="disclosure" compact={compact}>
       <div className="grid h-full place-items-center">

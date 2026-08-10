@@ -157,6 +157,7 @@ describe("React + Motion primitive registry", () => {
     expect(dismiss).toContain('drag="x"');
     expect(dismiss).toContain("exit={reduceMotion");
     expect(dismiss).toContain("onDragEnd={finish}");
+    expect(dismiss).toContain("onExitComplete={() => onDismiss?.()}");
 
     const crossfade = source("crossfade");
     expect(crossfade).toContain("delay: overlapDelay");
@@ -212,6 +213,13 @@ describe("React + Motion primitive registry", () => {
     expect(directional).toContain("down: [0, distance]");
 
     expect(source("ripple")).toContain("if (reduceMotion) return");
+
+    const sharedDemo = readFileSync("src/registry/primitive-demos/_shared.tsx", "utf8");
+    expect(sharedDemo).toContain("export function useEntryReplay");
+    for (const id of ["fade-in-fade-out", "slide-in", "scale-in", "reveal", "blur", "accordion-collapse", "origin-aware-animation"]) {
+      expect(demo(id), id).toContain("useEntryReplay(replayKey)");
+    }
+    expect(demo("morph")).toContain("min-h-11 min-w-11");
 
     const typewriter = source("typewriter");
     expect(typewriter).toContain("window.setInterval");

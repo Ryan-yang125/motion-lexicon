@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { RevealPrimitive, type RevealMode } from "@/registry/primitives/reveal";
-import { PrimitiveDemoSurface, ProductButton, StatusPill, easingValue, numberValue, stringValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductButton, StatusPill, easingValue, numberValue, stringValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function RevealDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [present, setPresent] = useState(true);
+export function RevealDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [present, setPresent] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "版本说明", "Release notes")} meta="reveal" compact={compact}>
       <div className="grid h-full place-items-center">

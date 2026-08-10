@@ -27,12 +27,11 @@ export function SwipeToDismissPrimitive({
     const dismiss = Math.abs(info.offset.x) >= threshold || Math.abs(info.velocity.x) > 520;
     if (dismiss) {
       setPresent(false);
-      onDismiss?.();
     }
   };
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence initial={false} onExitComplete={() => onDismiss?.()}>
       {present ? (
         <motion.div
           className={className}

@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { SlideInPrimitive, type SlideDirection } from "@/registry/primitives/slide-in";
-import { PrimitiveDemoSurface, ProductButton, ProductPanel, Avatar, easingValue, numberValue, stringValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductButton, ProductPanel, Avatar, easingValue, numberValue, stringValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function SlideInDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [open, setOpen] = useState(true);
+export function SlideInDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [open, setOpen] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "团队动态", "Team activity")} meta="slide-in" compact={compact}>
       <div className="grid h-full place-items-center">

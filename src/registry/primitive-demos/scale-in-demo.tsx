@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { ScaleInPrimitive } from "@/registry/primitives/scale-in";
-import { PrimitiveDemoSurface, ProductButton, ProductPanel, booleanValue, easingValue, numberValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductButton, ProductPanel, booleanValue, easingValue, numberValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function ScaleInDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [open, setOpen] = useState(true);
+export function ScaleInDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [open, setOpen] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "快速创建", "Quick create")} meta="scale" compact={compact}>
       <div className="grid h-full place-items-center">

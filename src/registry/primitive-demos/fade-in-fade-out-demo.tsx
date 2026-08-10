@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { FadeInFadeOutPrimitive } from "@/registry/primitives/fade-in-fade-out";
-import { PrimitiveDemoSurface, ProductButton, ProductPanel, StatusPill, easingValue, numberValue, textFor, type PrimitiveDemoProps } from "./_shared";
+import { PrimitiveDemoSurface, ProductButton, ProductPanel, StatusPill, easingValue, numberValue, textFor, useEntryReplay, type PrimitiveDemoProps } from "./_shared";
 
-export function FadeInFadeOutDemo({ locale, values, compact }: PrimitiveDemoProps) {
-  const [visible, setVisible] = useState(true);
+export function FadeInFadeOutDemo({ locale, values, compact, replayKey }: PrimitiveDemoProps) {
+  const [visible, setVisible] = useEntryReplay(replayKey);
   return (
     <PrimitiveDemoSurface label={textFor(locale, "通知中心", "Notifications")} meta="opacity" compact={compact}>
       <div className="grid h-full place-items-center">
