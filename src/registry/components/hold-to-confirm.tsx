@@ -217,7 +217,7 @@ export function HoldToConfirm({
   disabled = false,
   className = "",
 }: HoldToConfirmProps) {
-  const { bind, phase, reset } = useHoldToConfirm({
+  const { bind, phase, progress, reset } = useHoldToConfirm({
     onConfirm,
     onAbort,
     duration,
@@ -246,7 +246,7 @@ export function HoldToConfirm({
 
   useEffect(() => {
     if (reduced) {
-      swept.set(phase === "holding" || phase === "committed" ? 1 : 0);
+      swept.set(progress);
       return;
     }
 
@@ -270,7 +270,7 @@ export function HoldToConfirm({
       ease: [0.23, 1, 0.32, 1],
     });
     return () => controls.stop();
-  }, [phase, duration, releaseRate, reduced, swept]);
+  }, [phase, progress, duration, releaseRate, reduced, swept]);
 
   return (
     <button
@@ -289,6 +289,7 @@ export function HoldToConfirm({
 
       <motion.span
         aria-hidden
+        data-hold-fill
         style={{ clipPath }}
         className="absolute inset-0 grid place-items-center bg-stone-800 px-4 text-white dark:bg-stone-100 dark:text-stone-900"
       >

@@ -29,14 +29,15 @@ export function CommandPaletteDemo() {
       >
         Open commands
       </button>
-      <CommandPalette
-        open={open}
-        items={commands}
-        autoFocus={open}
-        onDismiss={() => setOpen(false)}
-        onSelect={() => setOpen(false)}
-        placeholder="Type d, then o, then c"
-      />
+      {open ? (
+        <CommandPalette
+          open
+          items={commands}
+          onDismiss={() => setOpen(false)}
+          onSelect={() => setOpen(false)}
+          placeholder="Type d, then o, then c"
+        />
+      ) : null}
     </div>
   );
 }
