@@ -345,8 +345,12 @@ export function DitherRevealCard({
       />
       <span
         aria-hidden
-        className={`absolute inset-0 ${active ? "bg-[#DDE4D5]" : "bg-[#EEECE5]"} ${reduced ? "" : "transition-colors duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
-        style={{ opacity: supported ? 0 : 1 }}
+        data-webgl-fallback="dither-reveal-card"
+        className={`absolute inset-0 ${reduced ? "" : "transition-colors duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
+        style={{
+          backgroundColor: active ? colors.back : colors.front,
+          opacity: supported ? 0 : 1,
+        }}
       />
       <span className="relative z-10 grid min-h-[220px] p-5 sm:p-6">
         <span

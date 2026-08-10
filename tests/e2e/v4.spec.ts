@@ -230,15 +230,24 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
 
   await page.goto("/zh/components/cursor-lens/");
   const lensRoot = page.getByRole("group", { name: "Inspect restored image detail" });
+  await lensRoot.evaluate((root) => { root.style.height = "320px"; });
   await lensRoot.focus();
   await page.keyboard.press("ArrowRight");
   const lens = lensRoot.locator("[data-cursor-lens]");
   await expect(lens).toHaveAttribute("data-position-mode", "instant");
-  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+  await expect.poll(async () => lensRoot.evaluate((root) => ({
+    detail: root.querySelector<HTMLElement>("[data-cursor-lens-detail]")?.clientHeight,
+    root: root.clientHeight,
+  }))).toEqual({ detail: 320, root: 320 });
   const position = await lensRoot.evaluate((root) => {
     const node = root.querySelector<HTMLElement>("[data-cursor-lens]");
     const detail = root.querySelector<HTMLElement>("[data-cursor-lens-detail]");
-    return { transform: node?.style.transform, detailTransform: detail?.style.transform, width: root.clientWidth, height: root.clientHeight };
+    return {
+      transform: node?.style.transform,
+      detailTransform: detail?.style.transform,
+      width: root.clientWidth,
+      height: root.clientHeight,
+    };
   });
   expect(position.transform).toBe(`translate3d(${position.width / 2 + 10 - 66}px, ${position.height / 2 - 66}px, 0px)`);
   expect(position.detailTransform).toBe(`translate3d(${66 - (position.width / 2 + 10) * 1.35}px, ${66 - (position.height / 2) * 1.35}px, 0px) scale(1.35)`);

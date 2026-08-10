@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 
 const FOLLOW = { stiffness: 360, damping: 30, mass: 0.45 } as const;
@@ -25,6 +25,7 @@ export function CursorLens({
   const root = useRef<HTMLDivElement>(null);
   const pointerFocus = useRef(false);
   const [visible, setVisible] = useState(false);
+  const [rootSize, setRootSize] = useState({ width: 0, height: 0 });
   const reduced = useReducedMotion() === true;
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
@@ -44,6 +45,26 @@ export function CursorLens({
   );
   const transform = reduced ? rawTransform : springTransform;
   const detailTransform = reduced ? rawDetailTransform : springDetailTransform;
+
+  useEffect(() => {
+    const node = root.current;
+    if (!node) return;
+
+    const measure = () => {
+      const next = { width: node.clientWidth, height: node.clientHeight };
+      setRootSize((current) => current.width === next.width && current.height === next.height ? current : next);
+    };
+
+    measure();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const locate = (clientX: number, clientY: number) => {
     const box = root.current?.getBoundingClientRect();
@@ -119,8 +140,12 @@ export function CursorLens({
           >
             <motion.div
               data-cursor-lens-detail
-              className="absolute left-0 top-0 h-[240px] w-full origin-top-left"
-              style={{ transform: detailTransform, width: root.current?.clientWidth || "100%" }}
+              className="absolute left-0 top-0 origin-top-left"
+              style={{
+                transform: detailTransform,
+                width: rootSize.width || "100%",
+                height: rootSize.height || "100%",
+              }}
             >
               {detail}
             </motion.div>

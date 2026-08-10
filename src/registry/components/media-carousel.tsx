@@ -69,9 +69,12 @@ export function MediaCarousel({
   const [activeIndex, setActiveIndex] = useState(() =>
     clampIndex(initialIndex, items.length),
   );
+  const activeIndexRef = useRef(activeIndex);
 
   useEffect(() => {
-    setActiveIndex((current) => clampIndex(current, items.length));
+    const next = clampIndex(activeIndexRef.current, items.length);
+    activeIndexRef.current = next;
+    setActiveIndex(next);
   }, [items.length]);
 
   useEffect(
@@ -81,6 +84,18 @@ export function MediaCarousel({
       }
     },
     [],
+  );
+
+  const selectIndex = useCallback(
+    (nextIndex: number) => {
+      if (items.length === 0) return;
+      const index = clampIndex(nextIndex, items.length);
+      if (activeIndexRef.current === index) return;
+      activeIndexRef.current = index;
+      setActiveIndex(index);
+      onSelect?.(items[index], index);
+    },
+    [items, onSelect],
   );
 
   const goTo = useCallback(
@@ -95,11 +110,10 @@ export function MediaCarousel({
         left: slide.offsetLeft - viewport.offsetLeft,
         behavior: animate && !reduced ? "smooth" : "auto",
       });
-      setActiveIndex(index);
-      onSelect?.(items[index], index);
+      selectIndex(index);
       if (focus) slide.focus({ preventScroll: true });
     },
-    [items, onSelect, reduced],
+    [items.length, reduced, selectIndex],
   );
 
   const updateFromScroll = () => {
@@ -119,7 +133,7 @@ export function MediaCarousel({
           nearest = index;
         }
       });
-      setActiveIndex(nearest);
+      selectIndex(nearest);
     });
   };
 
