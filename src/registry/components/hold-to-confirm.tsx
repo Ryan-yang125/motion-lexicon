@@ -96,7 +96,7 @@ export function useHoldToConfirm({
           return;
         }
 
-        if (elapsed.current <= 0) {
+        if (elapsed.current <= 0 && !down.current) {
           raf.current = 0;
           elapsed.current = 0;
           origin.current = null;

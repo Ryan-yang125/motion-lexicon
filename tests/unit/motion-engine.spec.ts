@@ -209,4 +209,9 @@ describe("React + Motion primitive registry", () => {
     expect(source("easing")).toContain("custom: [0.25, 0.9, 0.3, 1]");
     expect(source("easing")).toContain("calm: [0.33, 1, 0.68, 1]");
   });
+
+  it("keeps a newly started hold alive when the first animation frame has no elapsed time", () => {
+    const hold = readFileSync("src/registry/components/hold-to-confirm.tsx", "utf8");
+    expect(hold).toContain("if (elapsed.current <= 0 && !down.current)");
+  });
 });
