@@ -276,8 +276,12 @@ export function NetworkGlobe({
       ref={mountRef}
       data-webgl-root="network-globe"
       role="group"
-      tabIndex={0}
-      aria-label={`${label}. Drag or use arrow keys to rotate.`}
+      tabIndex={rendererReady ? 0 : undefined}
+      aria-label={
+        rendererReady
+          ? `${label}. Drag or use arrow keys to rotate.`
+          : `${label}. Static network preview.`
+      }
       onPointerDown={(event) => {
         if (!(event.target instanceof HTMLCanvasElement)) return;
         const rotation = rotationRef.current;
@@ -305,12 +309,16 @@ export function NetworkGlobe({
         rotationRef.current.dragging = false;
         rotationRef.current.pointerId = -1;
       }}
-      onKeyDown={(event) => {
-        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-        rotationRef.current.targetY += event.key === "ArrowLeft" ? -0.16 : 0.16;
-        event.preventDefault();
-        requestFrame();
-      }}
+      onKeyDown={
+        rendererReady
+          ? (event) => {
+              if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+              rotationRef.current.targetY += event.key === "ArrowLeft" ? -0.16 : 0.16;
+              event.preventDefault();
+              requestFrame();
+            }
+          : undefined
+      }
       className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EDEBE4] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
     >
       <div
@@ -338,7 +346,9 @@ export function NetworkGlobe({
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Live network</span>
+          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">
+            {rendererReady ? "Live network" : "Static network"}
+          </span>
           <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{label}</strong>
         </span>
         <span className="text-right">

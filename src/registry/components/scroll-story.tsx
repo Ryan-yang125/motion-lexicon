@@ -27,7 +27,7 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
   const stage = useRef<HTMLDivElement>(null);
   const sections = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState<boolean | null>(null);
 
   useLayoutEffect(() => {
     const shell = root.current;
@@ -58,7 +58,7 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
 
   useLayoutEffect(() => {
     const node = stage.current;
-    if (!node) return;
+    if (!node || reduced === null) return;
     if (reduced) {
       gsap.set(node, { clearProps: "transform,filter,opacity" });
       return;
@@ -91,7 +91,7 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
             <button
               type="button"
               aria-current={index === active ? "step" : undefined}
-              onClick={() => sections.current[index]?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" })}
+              onClick={() => sections.current[index]?.scrollIntoView({ behavior: reduced === false ? "smooth" : "auto", block: "center" })}
               className={`min-h-11 rounded-[12px] px-3 py-2 text-left outline-none transition-[background-color,box-shadow,color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] ${index === active ? "bg-white text-stone-900 shadow-[0_8px_24px_-20px_rgba(28,25,23,.6)] dark:bg-white/10 dark:text-white" : "text-stone-500 hover:bg-white/55 dark:hover:bg-white/5"}`}
             >
               {chapter.eyebrow ? <span className="block text-[9px] uppercase tracking-[.1em] opacity-55">{chapter.eyebrow}</span> : null}
@@ -108,7 +108,11 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
         <div className="absolute bottom-3 right-3 flex items-center gap-1" aria-hidden>
           {chapters.map((chapter, index) => (
             <span key={chapter.id} className="h-1 w-4 overflow-hidden rounded-full bg-stone-500/20">
-              <span className={`block size-full origin-left rounded-full bg-stone-800 transition-transform duration-150 dark:bg-white ${index === active ? "scale-x-100" : "scale-x-25"}`} />
+              <span
+                data-scroll-story-indicator
+                data-motion-mode={reduced === false ? "standard" : "instant"}
+                className={`block h-full rounded-full bg-stone-800 dark:bg-white ${reduced === false ? `w-full origin-left transition-transform duration-150 ${index === active ? "scale-x-100" : "scale-x-25"}` : index === active ? "w-full" : "w-1/4"}`}
+              />
             </span>
           ))}
         </div>

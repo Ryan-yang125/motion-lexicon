@@ -122,10 +122,42 @@ test("Three.js components retain a static preview without WebGL", async ({ page 
 
   await page.goto("/zh/components/network-globe/");
   await expect(page.locator('[data-webgl-fallback="network-globe"]')).toBeVisible();
-  await expect(page.locator('[data-webgl-root="network-globe"]')).toHaveCSS("touch-action", "pan-y");
+  const globe = page.locator('[data-webgl-root="network-globe"]');
+  await expect(globe).toHaveCSS("touch-action", "pan-y");
+  await expect(globe).not.toHaveAttribute("tabindex");
+  await expect(globe).toHaveAttribute("aria-label", /Static network preview/);
+  await expect(globe.getByText("Static network")).toBeVisible();
+  expect(
+    await globe.evaluate((element) =>
+      element.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          bubbles: true,
+          cancelable: true,
+        }),
+      ),
+    ),
+  ).toBe(true);
+
   await page.goto("/zh/components/procedural-product-viewer/");
   await expect(page.locator('[data-webgl-fallback="procedural-product-viewer"]')).toBeVisible();
-  await expect(page.locator('[data-webgl-root="procedural-product-viewer"]')).toHaveCSS("touch-action", "pan-y");
+  const product = page.locator('[data-webgl-root="procedural-product-viewer"]');
+  await expect(product).toHaveCSS("touch-action", "pan-y");
+  await expect(product).not.toHaveAttribute("tabindex");
+  await expect(product).toHaveAttribute("aria-label", /Static product preview/);
+  await expect(product.getByText("STATIC PREVIEW")).toBeVisible();
+  await expect(product.getByRole("button", { name: "Reset view" })).toHaveCount(0);
+  expect(
+    await product.evaluate((element) =>
+      element.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowLeft",
+          bubbles: true,
+          cancelable: true,
+        }),
+      ),
+    ),
+  ).toBe(true);
 });
 
 test("theme snapshots and dropped files honor their component contracts", async ({ page }, testInfo) => {

@@ -14,21 +14,26 @@ export type RegistrySourceState = {
   retry: () => void;
 };
 
+type LoadedRegistrySourceState = Omit<RegistrySourceState, "retry"> & {
+  registryId: string | null;
+};
+
 export function useRegistrySource(registryId: string | null): RegistrySourceState {
   const [attempt, setAttempt] = useState(0);
-  const [state, setState] = useState<Omit<RegistrySourceState, "retry">>({
+  const [state, setState] = useState<LoadedRegistrySourceState>({
+    registryId,
     source: "",
     status: registryId ? "loading" : "ready"
   });
 
   useEffect(() => {
     if (!registryId) {
-      setState({ source: "", status: "ready" });
+      setState({ registryId: null, source: "", status: "ready" });
       return;
     }
 
     const controller = new AbortController();
-    setState({ source: "", status: "loading" });
+    setState({ registryId, source: "", status: "loading" });
 
     void fetch(`/r/${encodeURIComponent(registryId)}.json`, {
       signal: controller.signal,
@@ -39,19 +44,27 @@ export function useRegistrySource(registryId: string | null): RegistrySourceStat
         return response.json() as Promise<RegistryItem>;
       })
       .then((item) => {
+        if (controller.signal.aborted) return;
         const source = item.files?.map((file) => file.content).find((content): content is string => typeof content === "string");
         if (!source) throw new Error("Registry item has no copyable source");
-        setState({ source, status: "ready" });
+        setState({ registryId, source, status: "ready" });
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
         console.error("Unable to load registry source", error);
-        setState({ source: "", status: "error" });
+        setState({ registryId, source: "", status: "error" });
       });
 
     return () => controller.abort();
   }, [attempt, registryId]);
 
   const retry = useCallback(() => setAttempt((value) => value + 1), []);
-  return { ...state, retry };
+  if (state.registryId !== registryId) {
+    return {
+      source: "",
+      status: registryId ? "loading" : "ready",
+      retry
+    };
+  }
+  return { source: state.source, status: state.status, retry };
 }

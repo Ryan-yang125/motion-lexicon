@@ -356,8 +356,12 @@ export function ProceduralProductViewer({
       ref={mountRef}
       data-webgl-root="procedural-product-viewer"
       role="group"
-      tabIndex={0}
-      aria-label={`${productName} interactive 3D viewer. Drag or use arrow keys to rotate.`}
+      tabIndex={rendererReady ? 0 : undefined}
+      aria-label={
+        rendererReady
+          ? `${productName} interactive 3D viewer. Drag or use arrow keys to rotate.`
+          : `${productName}. Static product preview.`
+      }
       onPointerDown={(event) => {
         if (!(event.target instanceof HTMLCanvasElement)) return;
         const state = rotation.current;
@@ -397,20 +401,24 @@ export function ProceduralProductViewer({
         rotation.current.dragging = false;
         rotation.current.pointerId = null;
       }}
-      onKeyDown={(event) => {
-        const state = rotation.current;
-        const step = event.shiftKey ? 0.2 : 0.1;
-        if (event.key === "ArrowLeft") state.targetY -= step;
-        else if (event.key === "ArrowRight") state.targetY += step;
-        else if (event.key === "ArrowUp") state.targetX -= step;
-        else if (event.key === "ArrowDown") state.targetX += step;
-        else if (event.key === "Home") reset();
-        else return;
-        state.targetX = clamp(state.targetX, -LIMIT_X, LIMIT_X);
-        state.targetY = clamp(state.targetY, -LIMIT_Y, LIMIT_Y);
-        event.preventDefault();
-        requestFrame();
-      }}
+      onKeyDown={
+        rendererReady
+          ? (event) => {
+              const state = rotation.current;
+              const step = event.shiftKey ? 0.2 : 0.1;
+              if (event.key === "ArrowLeft") state.targetY -= step;
+              else if (event.key === "ArrowRight") state.targetY += step;
+              else if (event.key === "ArrowUp") state.targetX -= step;
+              else if (event.key === "ArrowDown") state.targetX += step;
+              else if (event.key === "Home") reset();
+              else return;
+              state.targetX = clamp(state.targetX, -LIMIT_X, LIMIT_X);
+              state.targetY = clamp(state.targetY, -LIMIT_Y, LIMIT_Y);
+              event.preventDefault();
+              requestFrame();
+            }
+          : undefined
+      }
       className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_48px_-38px_rgba(41,41,41,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
     >
       <div
@@ -434,7 +442,9 @@ export function ProceduralProductViewer({
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Object study</span>
           <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{productName}</strong>
         </span>
-        <span className="rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1 font-mono text-[9px] text-stone-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-300">DRAG TO TURN</span>
+        <span className="rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1 font-mono text-[9px] text-stone-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-300">
+          {rendererReady ? "DRAG TO TURN" : "STATIC PREVIEW"}
+        </span>
       </div>
 
       <button
@@ -461,16 +471,18 @@ export function ProceduralProductViewer({
         <span className="mt-0.5 block text-[10px] leading-4 text-stone-500">Machined control with a quiet detent.</span>
       </div>
 
-      <button
-        type="button"
-        onClick={reset}
-        className="absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] shadow-sm outline-none backdrop-blur-md transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-black/25 dark:text-white"
-      >
-        <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
-          <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <span className="sr-only">Reset view</span>
-      </button>
+      {rendererReady ? (
+        <button
+          type="button"
+          onClick={reset}
+          className="absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] shadow-sm outline-none backdrop-blur-md transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-black/25 dark:text-white"
+        >
+          <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
+            <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="sr-only">Reset view</span>
+        </button>
+      ) : null}
     </div>
   );
 }
