@@ -16,6 +16,10 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await expect(page.getByRole("heading", { level: 1, name: "把成熟动效，直接带进产品。" })).toBeVisible();
   await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
   const firstTab = page.getByRole("tab", { name: "拖拽排序列表" });
+  for (const tab of await page.getByRole("tab").all()) {
+    await expect(tab).toHaveAttribute("aria-controls", "landing-stage-panel");
+  }
+  await expect(page.locator("#landing-stage-panel")).toBeVisible();
   await firstTab.focus();
   await page.keyboard.press("ArrowRight");
   await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();

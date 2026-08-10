@@ -46,6 +46,7 @@ function Stage({ locale }: { locale: Locale }) {
     value: activeId,
     onValueChange: (value) => setActiveId(value as (typeof stageIds)[number])
   });
+  const panelProps = tabs.getPanelProps(activeId);
 
   return (
     <div className="landing-stage mat-float">
@@ -55,13 +56,16 @@ function Stage({ locale }: { locale: Locale }) {
         <code>React + Motion</code>
       </div>
       <div {...tabs.tabListProps} className="landing-stage-tabs" aria-label={locale === "zh" ? "组件预览" : "Component previews"}>
-        {items.map((item, index) => (
-          <button key={item.value} {...tabs.getTabProps(item, index)}>
-            {item.label}
-          </button>
-        ))}
+        {items.map((item, index) => {
+          const tabProps = tabs.getTabProps(item, index);
+          return (
+            <button key={item.value} {...tabProps} aria-controls="landing-stage-panel">
+              {item.label}
+            </button>
+          );
+        })}
       </div>
-      <div {...tabs.getPanelProps(activeId)} className="landing-stage-canvas">
+      <div {...panelProps} id="landing-stage-panel" className="landing-stage-canvas">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             className="landing-stage-motion"
