@@ -35,4 +35,4 @@ for (const obsolete of ["/packs/", "/catalog/", "/finder/", "/director/"]) {
   assert(!llms.includes(obsolete), `llms.txt contains obsolete route ${obsolete}`);
 }
 
-console.log(`Public artifact check passed: V4.0 catalog, llms files, pricing, and registry expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);
+console.log(`Public artifact check passed: V4.1 catalog, llms files, pricing, and registry expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);

@@ -10,14 +10,14 @@ export function ComponentsPage({ locale }: { locale: Locale }) {
   const copy = locale === "zh"
     ? {
         title: "可直接复制的 React 动效组件",
-        description: "28 个适用于真实产品界面的 React + Motion 组件，支持键盘操作与减弱动效。",
-        count: "28 个组件",
+        description: "48 个适用于真实产品与网站界面的 React 动效组件，覆盖 Motion、GSAP、Three.js 与 WebGL。",
+        count: "48 个组件",
         open: "查看组件"
       }
     : {
         title: "Copy-ready React motion components",
-        description: "28 React + Motion components for real product interfaces, with keyboard and reduced-motion support.",
-        count: "28 components",
+        description: "48 React motion components for real products and websites, spanning Motion, GSAP, Three.js, and WebGL.",
+        count: "48 components",
         open: "Open component"
       };
 
@@ -33,7 +33,7 @@ export function ComponentsPage({ locale }: { locale: Locale }) {
 
       <div className="directory-page">
         <header className="directory-hero">
-          <span className="directory-kicker">React · Motion · shadcn registry</span>
+          <span className="directory-kicker">React · Motion · GSAP · Three.js · WebGL · shadcn registry</span>
           <h1>{copy.title}</h1>
           <div className="directory-hero-meta">
             <span>{copy.count}</span>

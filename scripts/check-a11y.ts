@@ -32,6 +32,16 @@ assert(shell.includes("aria-label"), "Shell controls need accessible names");
 for (const component of registryComponents) {
   const source = readFileSync(`src/registry/components/${component.id}.tsx`, "utf8");
   assert(!source.includes('outline: "none"'), `${component.id} removes focus without a replacement`);
+  assert(
+    source.includes("useReducedMotion") || source.includes("prefers-reduced-motion"),
+    `${component.id} needs an equivalent reduced-motion result`
+  );
+  if (source.includes("<canvas")) {
+    assert(
+      source.includes("aria-hidden") || (source.includes('role="group"') && source.includes("aria-label=")),
+      `${component.id} canvas needs a DOM accessibility equivalent`
+    );
+  }
 }
 for (const primitive of installablePrimitiveEntries) {
   const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");

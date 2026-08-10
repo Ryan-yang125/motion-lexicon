@@ -7,7 +7,7 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>Copy-ready React + Motion components and primitives.</strong>
+  <strong>Copy-ready React motion components and primitives.</strong>
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 <p align="center">
   <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/components-28-292929.svg" alt="28 components" />
+  <img src="https://img.shields.io/badge/components-48-292929.svg" alt="48 components" />
   <img src="https://img.shields.io/badge/primitives-44-55745D.svg" alt="44 primitives" />
 </p>
 
@@ -71,11 +71,12 @@ Add the project registry once to `components.json` for shorter commands:
 npx shadcn@latest add @motion-lexicon/copy-button
 ```
 
-The registry includes 28 complete product components and 40 executable motion
+The registry includes 48 complete product and website components spanning
+Motion, GSAP, Three.js, native WebGL, SVG, and CSS, plus 40 executable motion
 primitives. Four editorial primitives remain design guides. Every installable
-item includes TypeScript types, interruptible motion, and a reduced-motion path.
+item includes TypeScript types, real dependencies, and a reduced-motion path.
 
-![Drawer component page](docs/assets/readme-v4-component.png)
+![3D product viewer component page](docs/assets/readme-v4-component.png)
 
 ![Slide-in primitive workbench](docs/assets/readme-v4-primitive.png)
 

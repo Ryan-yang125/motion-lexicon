@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radial-actions",
+  "type": "registry:ui",
+  "title": "Radial actions",
+  "description": "Fans a compact set of shortcuts around one anchored action.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "actions"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/radial-actions/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Radial reveal anchored to the primary action"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/radial-actions.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/radial-actions.tsx",
+      "content": "\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState, type ReactNode } from \"react\";\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\n\nconst SPRING = { type: \"spring\", stiffness: 430, damping: 30, mass: 0.55 } as const;\nconst INSTANT = { duration: 0 } as const;\n\nexport type RadialAction = {\n  id: string;\n  label: string;\n  icon: ReactNode;\n  onSelect: () => void;\n};\n\nexport type RadialActionsProps = {\n  actions: readonly RadialAction[];\n  label: string;\n  trigger: ReactNode;\n  radius?: number;\n  startAngle?: number;\n  endAngle?: number;\n  className?: string;\n};\n\nexport function RadialActions({\n  actions,\n  label,\n  trigger,\n  radius = 82,\n  startAngle = 200,\n  endAngle = 340,\n  className = \"\",\n}: RadialActionsProps) {\n  const [open, setOpen] = useState(false);\n  const [active, setActive] = useState(0);\n  const reduced = useReducedMotion() === true;\n  const uid = useId();\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const buttons = useRef<(HTMLButtonElement | null)[]>([]);\n\n  const close = useCallback(() => {\n    setOpen(false);\n    requestAnimationFrame(() => triggerRef.current?.focus());\n  }, []);\n\n  useEffect(() => {\n    if (open) requestAnimationFrame(() => buttons.current[active]?.focus());\n  }, [open, active]);\n\n  const move = (next: number) => {\n    const index = (next + actions.length) % actions.length;\n    setActive(index);\n    buttons.current[index]?.focus();\n  };\n\n  const keyDown = (event: React.KeyboardEvent, index: number) => {\n    if (event.key === \"Escape\") {\n      event.preventDefault();\n      close();\n    } else if ([\"ArrowRight\", \"ArrowDown\"].includes(event.key)) {\n      event.preventDefault();\n      move(index + 1);\n    } else if ([\"ArrowLeft\", \"ArrowUp\"].includes(event.key)) {\n      event.preventDefault();\n      move(index - 1);\n    } else if (event.key === \"Home\") {\n      event.preventDefault();\n      move(0);\n    } else if (event.key === \"End\") {\n      event.preventDefault();\n      move(actions.length - 1);\n    }\n  };\n\n  return (\n    <div className={`relative grid size-[220px] place-items-center ${className}`}>\n      <AnimatePresence>\n        {open ? (\n          <motion.div\n            id={`${uid}-menu`}\n            role=\"menu\"\n            aria-label={label}\n            initial={false}\n            exit={{ opacity: 0 }}\n            transition={reduced ? INSTANT : { duration: 0.12 }}\n            className=\"absolute inset-0\"\n          >\n            {actions.map((action, index) => {\n              const progress = actions.length === 1 ? 0.5 : index / (actions.length - 1);\n              const angle = (startAngle + (endAngle - startAngle) * progress) * Math.PI / 180;\n              const x = Math.cos(angle) * radius;\n              const y = Math.sin(angle) * radius;\n              return (\n                <motion.button\n                  key={action.id}\n                  ref={(node) => { buttons.current[index] = node; }}\n                  type=\"button\"\n                  role=\"menuitem\"\n                  aria-label={action.label}\n                  initial={reduced ? { opacity: 1, transform: `translate(${x}px, ${y}px)` } : { opacity: 0, transform: \"translate(0px, 0px) scale(.94)\" }}\n                  animate={{ opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)` }}\n                  exit={{ opacity: 0, transform: \"translate(0px, 0px) scale(.96)\" }}\n                  transition={reduced ? INSTANT : { ...SPRING, delay: index * 0.035 }}\n                  onFocus={() => setActive(index)}\n                  onKeyDown={(event) => keyDown(event, index)}\n                  onClick={() => { action.onSelect(); close(); }}\n                  className=\"absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-[0_10px_24px_-16px_rgba(28,25,23,.65)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_10px_24px_-16px_rgba(28,25,23,.65)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200\"\n                >\n                  {action.icon}\n                </motion.button>\n              );\n            })}\n          </motion.div>\n        ) : null}\n      </AnimatePresence>\n      <motion.button\n        ref={triggerRef}\n        type=\"button\"\n        aria-label={label}\n        aria-expanded={open}\n        aria-controls={`${uid}-menu`}\n        onClick={() => setOpen((value) => !value)}\n        animate={{ transform: open && !reduced ? \"rotate(45deg)\" : \"rotate(0deg)\" }}\n        transition={reduced ? INSTANT : SPRING}\n        className=\"relative z-10 grid size-14 place-items-center rounded-full bg-stone-900 text-white shadow-[0_16px_32px_-18px_rgba(28,25,23,.8)] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_16px_32px_-18px_rgba(28,25,23,.8)] dark:bg-stone-100 dark:text-stone-950\"\n      >\n        {trigger}\n      </motion.button>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/command-palette/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Combines search, keyboard navigation, and deliberate focus management."
+  },
   "files": [
     {
       "path": "src/registry/components/command-palette.tsx",

@@ -11,6 +11,13 @@
     "inputs"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/tag-input/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Gives clear feedback for adding, removing, and rejecting tags."
+  },
   "files": [
     {
       "path": "src/registry/components/tag-input.tsx",

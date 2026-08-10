@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { registryComponents } from "../src/data/component-registry";
+import { registryComponentEngines, registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { catalogRecipes } from "../src/data/recipes";
 
@@ -51,9 +51,33 @@ const registryFiles = readdirSync("src/registry/components").filter((file) => fi
 assert(registryFiles.length === registryComponents.length, "Component registry source count is inconsistent");
 for (const file of registryFiles) {
   const source = readFileSync(`src/registry/components/${file}`, "utf8");
+  const entry = registryComponents.find((component) => `${component.id}.tsx` === file);
+  assert(entry, `${file} has no registry metadata`);
+  const engines = registryComponentEngines(entry);
   assert(!/transition\s*:\s*["'`]all\b/.test(source), `${file} uses transition: all`);
   assert(!/scale\s*:\s*0(?!\.)/.test(source), `${file} animates from scale 0`);
   if (source.includes('from "motion/react"')) assert(source.includes("useReducedMotion"), `${file} uses Motion without a reduced-motion branch`);
+  if (engines.includes("gsap")) {
+    assert(source.includes("prefers-reduced-motion"), `${file} needs a reduced-motion preference for GSAP`);
+    assert(source.includes("revert()") || source.includes("killTweensOf") || source.includes(".kill()"), `${file} must clean up GSAP animations`);
+  }
+  if (source.includes("frameRef.current = requestAnimationFrame")) {
+    assert(source.includes("cancelAnimationFrame"), `${file} starts animation frames without cancelling them`);
+  }
+  if (source.includes("new ResizeObserver")) {
+    assert(source.includes(".disconnect()"), `${file} creates a ResizeObserver without disconnecting it`);
+  }
+  if (engines.includes("three")) {
+    assert(source.includes("prefers-reduced-motion") || source.includes("useReducedMotion"), `${file} needs a reduced-motion branch for Three.js`);
+    assert(source.includes("renderer.dispose()"), `${file} must dispose its Three.js renderer`);
+    assert(source.includes(".dispose()"), `${file} must dispose Three.js GPU resources`);
+    assert(source.includes("Math.min(window.devicePixelRatio"), `${file} must cap its Three.js device pixel ratio`);
+  }
+  if (engines.includes("webgl")) {
+    assert(source.includes("prefers-reduced-motion") || source.includes("useReducedMotion"), `${file} needs a reduced-motion branch for WebGL`);
+    assert(source.includes("deleteBuffer") && source.includes("deleteProgram"), `${file} must release WebGL buffers and programs`);
+    assert(source.includes("Math.min(window.devicePixelRatio"), `${file} must cap its WebGL device pixel ratio`);
+  }
 }
 
 for (const primitive of installablePrimitiveEntries) {

@@ -11,6 +11,13 @@
     "actions"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/long-press/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "A long-press gesture that works across touch, pointer, and keyboard."
+  },
   "files": [
     {
       "path": "src/registry/components/long-press.tsx",

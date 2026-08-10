@@ -1,8 +1,8 @@
-# Motion Lexicon V4.0 Product Design
+# Motion Lexicon V4.1 Product Design
 
 ## Experience model
 
-Motion Lexicon V4.0 gives Components and Primitives one React + Motion registry architecture.
+Motion Lexicon V4.1 gives Components and Primitives one copy-ready React registry architecture.
 
 ```text
 Components: Browse → Interact → Inspect source → Install
@@ -18,7 +18,7 @@ the visual interest; the shell stays calm, compact, and predictable.
 Primary routes:
 
 - `/:locale/` — live product showcase and the shortest path into both collections.
-- `/:locale/components/` — 28 React motion components.
+- `/:locale/components/` — 48 React motion components.
 - `/:locale/components/:componentId/` — live preview, source, install command, and related primitives.
 - `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
 - `/:locale/primitives/:primitiveId/` — live preview, props, React source, install command, and guidance.
@@ -37,7 +37,7 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 - The landing page uses a compact top navigation with Components, Primitives, and Guides.
 - Skill sits immediately left of GitHub in the top-right actions.
 - Internal product pages use a fixed 248px desktop sidebar for Components, Primitives, Guides, and the Agent Skill.
-- Component entries are grouped by product role: actions, overlays, inputs, navigation, data, and feedback.
+- Component entries are grouped by product role: actions, overlays, inputs, navigation, data, feedback, media, and visual.
 - Primitive links are grouped by motion family.
 - A mobile off-canvas sidebar preserves the same hierarchy.
 - Global search opens with `Cmd/Ctrl + K`, searches both collections, and appears immediately.
@@ -112,7 +112,7 @@ Component and Primitive implementation files are the source of truth for:
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V4.0 catalog.
+4. the public V4.1 catalog.
 
 The Primitive chain is explicit:
 
@@ -136,7 +136,7 @@ must install at least one generated item successfully with `shadcn@latest`.
 
 ## Static delivery and SEO
 
-The build prerenders 174 localized canonical pages and generates the sitemap,
+The build prerenders 214 localized canonical pages and generates the sitemap,
 robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
 and shadcn registry. Each public route carries one H1, one canonical URL,
 reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

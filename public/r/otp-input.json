@@ -11,6 +11,13 @@
     "inputs"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/otp-input/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Coordinates typing, paste, error, and success feedback."
+  },
   "files": [
     {
       "path": "src/registry/components/otp-input.tsx",

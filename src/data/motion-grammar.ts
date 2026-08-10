@@ -132,7 +132,7 @@ export const motionDirectorModes = [
   {
     id: "implement" as const,
     title: text("实现", "Implement"),
-    description: text("产出贴合现有界面的 React + Motion，或按需求交付便携实现。", "Produce React + Motion that fits the interface, or a portable implementation when requested."),
+    description: text("产出贴合现有界面的可复制实现，并按场景选择 Motion、GSAP、Three.js、WebGL 或 CSS。", "Produce a copy-ready implementation that fits the interface, choosing Motion, GSAP, Three.js, WebGL, or CSS for the scene."),
     deliverable: text("可接入实现", "Integration-ready implementation")
   },
   {
@@ -150,7 +150,7 @@ export const motionDirectorModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "4.0.0",
+  version: "4.1.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -163,7 +163,7 @@ export const motionGrammar = {
       purpose: text("构成动作的底层语言。", "The foundational language used to build motion.")
     },
     components: {
-      count: 28,
+      count: 48,
       title: text("组件", "Components"),
       purpose: text("把多个原子动效编排成可安装的 React 产品交互。", "Installable React interactions composed from motion primitives.")
     }
@@ -216,7 +216,7 @@ export const motionGrammar = {
   },
   implementation: {
     preferredDelivery: ["react", "html", "css", "js"] as const,
-    rule: text("React 产品优先使用 Motion 交付；便携场景保留语义 HTML、局部 CSS 和少量 JavaScript。代码与状态图保持同源。", "Prefer Motion for React products; keep semantic HTML, local CSS, and small JavaScript available for portable delivery. Keep code aligned with the state graph.")
+    rule: text("按动效需求选择最小可行引擎，组件保持独立、可复制并与状态图同源。", "Choose the smallest capable engine for the motion, keeping every component independent, copy-ready, and aligned with its state graph.")
   }
 } as const;
 

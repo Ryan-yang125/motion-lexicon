@@ -43,7 +43,7 @@ const routes = sitemapPaths();
 const staticRoutes = getStaticPaths();
 const routeSet = new Set(routes);
 assert(routeSet.size === routes.length, "Sitemap routes contain duplicates");
-assert(routes.length === 174, `Expected 174 canonical routes, found ${routes.length}`);
+assert(routes.length === 214, `Expected 214 canonical routes, found ${routes.length}`);
 assert(staticRoutes.length === routes.length, "Static and sitemap route counts differ");
 
 const sitemapXml = readFileSync("dist/sitemap.xml", "utf8");

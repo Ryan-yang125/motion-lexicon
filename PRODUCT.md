@@ -1,4 +1,4 @@
-# Motion Lexicon V4.0 Product Strategy
+# Motion Lexicon V4.1 Product Strategy
 
 ## Product promise
 
@@ -26,7 +26,7 @@ Browse → Preview → Copy or install → Adapt → Review
 | Surface | Job | Public scope |
 | --- | --- | --- |
 | Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
-| Components | Deliver complete product interactions | 28 React + Motion components |
+| Components | Deliver complete product and website interactions | 48 React components across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
 | Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
 | Agent Skill | Design and implement from product context | Recommend, Compose, Implement, Review, Contribute |
 | Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
@@ -56,7 +56,7 @@ and precise feedback.
 
 Components and Primitives use the same delivery architecture:
 
-- one typed React + Motion implementation per public item;
+- one typed React implementation with explicit runtime dependencies per public item;
 - one realistic, interactive product demo that imports that implementation;
 - one lazy preview entry used by directory cards and detail workbenches;
 - one source view and one shadcn Registry response generated from the implementation file;
@@ -89,17 +89,17 @@ No account, server, API key, or paid tier is required.
 
 ## Discoverability
 
-The build publishes 174 localized canonical pages, reciprocal hreflang,
+The build publishes 214 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V4.0 acceptance
+## V4.1 acceptance
 
 V4 is complete when:
 
 - Components and Primitives are the only primary product directories.
 - Each locale root presents both directories through real, interactive previews.
-- All 28 component previews use the same source delivered by code view and registry JSON.
+- All 48 component previews use the same source delivered by code view and registry JSON.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
 - All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.
 - Every executable primitive owns an independent implementation and an independent real-product demo.

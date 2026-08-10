@@ -11,6 +11,13 @@
     "actions"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Protects destructive actions with cancellable hold progress."
+  },
   "files": [
     {
       "path": "src/registry/components/hold-to-confirm.tsx",

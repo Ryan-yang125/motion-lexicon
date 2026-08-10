@@ -11,6 +11,13 @@
     "navigation"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/pagination/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Keeps the current page legible while the visible range changes."
+  },
   "files": [
     {
       "path": "src/registry/components/pagination.tsx",

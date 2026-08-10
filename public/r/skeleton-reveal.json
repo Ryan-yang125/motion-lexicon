@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-reveal",
+  "type": "registry:ui",
+  "title": "Skeleton reveal",
+  "description": "Shares stable geometry between skeleton and content for a composed handoff.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/skeleton-reveal/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Skeleton-to-content handoff on stable geometry"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/skeleton-reveal.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/skeleton-reveal.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nconst REVEAL = { duration: 0.24, ease: [0.23, 1, 0.32, 1] } as const;\nconst HIDE = { duration: 0.13, ease: [0.4, 0, 1, 1] } as const;\nconst INSTANT = { duration: 0 } as const;\n\nexport type SkeletonRevealProps = {\n  loading: boolean;\n  skeleton: ReactNode;\n  children: ReactNode;\n  label?: string;\n  minHeight?: number | string;\n  className?: string;\n};\n\nexport function SkeletonReveal({\n  loading,\n  skeleton,\n  children,\n  label = \"Content\",\n  minHeight = 160,\n  className = \"\",\n}: SkeletonRevealProps) {\n  const reduced = useReducedMotion() === true;\n  const mounted = useRef(false);\n  const skeletonRef = useRef<HTMLDivElement>(null);\n  const contentRef = useRef<HTMLDivElement>(null);\n  const [announcement, setAnnouncement] = useState(loading ? \"Loading\" : \"Content loaded\");\n\n  useEffect(() => {\n    if (mounted.current) setAnnouncement(loading ? \"Loading\" : \"Content loaded\");\n    mounted.current = true;\n  }, [loading]);\n\n  useEffect(() => {\n    const setInert = (node: HTMLDivElement | null, inert: boolean) => {\n      if (!node) return;\n      if (inert) node.setAttribute(\"inert\", \"\");\n      else node.removeAttribute(\"inert\");\n    };\n    setInert(skeletonRef.current, !loading);\n    setInert(contentRef.current, loading);\n  }, [loading]);\n\n  const style: CSSProperties = { minHeight };\n\n  return (\n    <section aria-label={label} className={`w-full ${className}`}>\n      <motion.div layout={!reduced} style={style} className=\"relative grid overflow-hidden\">\n        <motion.div\n          ref={skeletonRef}\n          aria-hidden={!loading}\n          initial={false}\n          animate={\n            loading\n              ? { opacity: 1, filter: \"blur(0px)\", clipPath: \"inset(0% 0% 0% 0%)\" }\n              : { opacity: 0, filter: \"blur(2px)\", clipPath: \"inset(0% 0% 100% 0%)\" }\n          }\n          transition={reduced ? INSTANT : loading ? REVEAL : HIDE}\n          className={`col-start-1 row-start-1 ${loading ? \"pointer-events-auto\" : \"pointer-events-none\"}`}\n        >\n          {skeleton}\n        </motion.div>\n\n        <motion.div\n          ref={contentRef}\n          aria-hidden={loading}\n          initial={false}\n          animate={\n            loading\n              ? { opacity: 0, filter: \"blur(3px)\", clipPath: \"inset(8% 0% 0% 0%)\", transform: \"translate3d(0, 5px, 0)\" }\n              : { opacity: 1, filter: \"blur(0px)\", clipPath: \"inset(0% 0% 0% 0%)\", transform: \"translate3d(0, 0, 0)\" }\n          }\n          transition={reduced ? INSTANT : loading ? HIDE : REVEAL}\n          className={`col-start-1 row-start-1 ${loading ? \"pointer-events-none\" : \"pointer-events-auto\"}`}\n        >\n          {children}\n        </motion.div>\n      </motion.div>\n      <span role=\"status\" aria-live=\"polite\" className=\"sr-only\">{announcement}</span>\n    </section>\n  );\n}\n"
+    }
+  ]
+}

@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/popover/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Derives its reveal origin from the trigger and available space."
+  },
   "files": [
     {
       "path": "src/registry/components/popover.tsx",

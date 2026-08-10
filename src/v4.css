@@ -285,6 +285,7 @@ body {
 .component-detail-stage { min-height: 520px; display: grid; place-items: center; overflow: hidden; padding: 46px; background: var(--sub); }
 .component-detail-stage .registry-preview { min-height: 420px; }
 .component-source { max-height: 680px; overflow: auto; margin: 0; padding: 24px; color: var(--ink-2); background: var(--sub); font: 12px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 2; }
+.registry-source-state { min-height: 180px; display: flex; align-items: center; justify-content: center; gap: 12px; white-space: normal; }
 .component-install-panel { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 16px; }
 .component-install-panel > div { min-width: 0; display: grid; gap: 5px; }
 .component-install-panel span { color: var(--ink-3); font-size: 11px; }

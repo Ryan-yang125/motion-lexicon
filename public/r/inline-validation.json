@@ -11,6 +11,13 @@
     "inputs"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Places pending, error, and success states next to the input."
+  },
   "files": [
     {
       "path": "src/registry/components/inline-validation.tsx",

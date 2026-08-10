@@ -11,6 +11,13 @@
     "data"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Explains sorting through row position while keeping data readable."
+  },
   "files": [
     {
       "path": "src/registry/components/sortable-table.tsx",

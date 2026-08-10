@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/drawer/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Includes focus containment, drag dismissal, and interruptible spring motion."
+  },
   "files": [
     {
       "path": "src/registry/components/drawer.tsx",

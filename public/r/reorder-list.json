@@ -11,6 +11,13 @@
     "data"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Provides clear drop position for pointer and keyboard reordering."
+  },
   "files": [
     {
       "path": "src/registry/components/reorder-list.tsx",

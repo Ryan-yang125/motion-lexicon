@@ -13,8 +13,8 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 assert(siteUrl === "https://motion-lexicon.pages.dev", "Production site URL is inconsistent");
-assert(release.version === "4.0.0", `Expected release 4.0.0, found ${release.version}`);
-assert(registryComponents.length === 28, `Expected 28 registry components, found ${registryComponents.length}`);
+assert(release.version === "4.1.0", `Expected release 4.1.0, found ${release.version}`);
+assert(registryComponents.length === 48, `Expected 48 registry components, found ${registryComponents.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 motion primitives, found ${canonicalMotionCatalog.length}`);
 assert(installablePrimitiveEntries.length === 40, `Expected 40 installable primitives, found ${installablePrimitiveEntries.length}`);
 assert(seoGuides.length === 8, `Expected 8 scenario guides, found ${seoGuides.length}`);
@@ -76,7 +76,7 @@ const expectedPaths = locales.flatMap((locale) => [
 ]);
 const staticPaths = getStaticPaths();
 const sitemap = sitemapPaths();
-assert(expectedPaths.length === 174, `Expected 174 localized routes, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 214, `Expected 214 localized routes, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static routes, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap routes, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static routes contain duplicates");
@@ -93,4 +93,4 @@ for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playgrou
   assert(!sitemap.some((item) => item.includes(obsolete)), `Obsolete route remains in sitemap: ${obsolete}`);
 }
 
-console.log(`SEO check passed: 28 components, 40 installable primitives, 4 primitive guides, 8 bilingual long-form guides, and ${sitemap.length} canonical localized pages.`);
+console.log(`SEO check passed: 48 components, 40 installable primitives, 4 primitive guides, 8 bilingual long-form guides, and ${sitemap.length} canonical localized pages.`);

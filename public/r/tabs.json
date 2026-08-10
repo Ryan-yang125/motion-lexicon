@@ -11,6 +11,13 @@
     "navigation"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/tabs/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Coordinates the indicator, direction, and panel change."
+  },
   "files": [
     {
       "path": "src/registry/components/tabs.tsx",

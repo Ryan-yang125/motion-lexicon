@@ -94,6 +94,21 @@ test("component detail keeps preview, source, install, and related primitives to
   await expectNoHorizontalOverflow(page);
 });
 
+test("new component engines stay inside the page viewport", async ({ page }) => {
+  for (const id of [
+    "dither-reveal-card",
+    "procedural-product-viewer",
+    "network-globe",
+    "scroll-story",
+    "media-carousel",
+    "image-lightbox",
+  ]) {
+    await page.goto(`/zh/components/${id}/`);
+    await expect(page.locator(`[data-component="${id}"]`)).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
+});
+
 test("primitive directory and workbench use the direct V4 routes", async ({ page }) => {
   await page.goto("/zh/primitives/");
   await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
@@ -198,4 +213,8 @@ test("English routes and the shadcn registry are publishable", async ({ page, re
   const slideIn = await request.get("/r/primitive-slide-in.json");
   expect(slideIn.ok()).toBe(true);
   expect(await slideIn.json()).toMatchObject({ name: "primitive-slide-in", type: "registry:ui" });
+  const scrollStory = await request.get("/r/scroll-story.json");
+  expect(await scrollStory.json()).toMatchObject({ dependencies: ["gsap"], meta: { engines: ["gsap"], runtimeCost: "medium" } });
+  const productViewer = await request.get("/r/procedural-product-viewer.json");
+  expect(await productViewer.json()).toMatchObject({ dependencies: ["motion", "three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
 });

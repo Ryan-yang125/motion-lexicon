@@ -11,6 +11,13 @@
     "inputs"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/floating-label/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Keeps the field label and context visible while typing."
+  },
   "files": [
     {
       "path": "src/registry/components/floating-label.tsx",
