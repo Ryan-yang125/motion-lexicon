@@ -72,4 +72,9 @@ describe("V4 component registry architecture", () => {
       status: 301
     });
   });
+
+  it("keeps public deployment examples aligned with the static route count", () => {
+    const demo = readFileSync("src/registry/primitive-demos/line-drawing-demo.tsx", "utf8");
+    expect(demo).toContain(`${getStaticPaths().length} pages`);
+  });
 });
