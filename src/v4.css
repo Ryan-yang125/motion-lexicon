@@ -560,6 +560,11 @@ body {
 .landing-stage-canvas { min-height: 410px; display: grid; overflow: hidden; padding: 34px; background: var(--well); }
 .landing-stage-motion { min-width: 0; display: grid; place-items: center; }
 .landing-stage-canvas .registry-preview { min-height: 330px; }
+.landing-stage-canvas :where(button, a, input, select, textarea, [role="button"]),
+.landing-component-stage :where(button, a, input, select, textarea, [role="button"]) {
+  min-width: 44px;
+  min-height: 44px;
+}
 .landing-stage-footer,
 .landing-component-footer,
 .landing-primitive-footer {

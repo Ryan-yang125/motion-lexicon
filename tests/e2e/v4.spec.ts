@@ -24,6 +24,16 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await expect(page.getByRole("tabpanel", { name: "标签页" })).toBeVisible();
   await expect(page.locator(".landing-component-card")).toHaveCount(4);
   await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
+  for (const [index, id] of [[1, "loading-button"], [3, "value-flash"]] as const) {
+    const card = page.locator(".landing-component-card").nth(index);
+    await card.scrollIntoViewIfNeeded();
+    await expect(card.locator(`[data-component="${id}"]`)).toBeVisible();
+    for (const control of await card.locator("button, a, input, select, textarea, [role='button']").all()) {
+      const box = await control.boundingBox();
+      expect(box?.width).toBeGreaterThanOrEqual(44);
+      expect(box?.height).toBeGreaterThanOrEqual(44);
+    }
+  }
   const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
   await expect(skill).toHaveAttribute("href", "/zh/skill/");
   const github = page.locator(".library-shell-header").getByRole("link", { name: "GitHub" });

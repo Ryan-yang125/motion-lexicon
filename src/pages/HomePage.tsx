@@ -186,7 +186,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="landing-delivery-copy">
             <span className="landing-eyebrow">COPY · INSTALL · ADAPT</span>
             <h2 id="landing-delivery-title">{zh ? "代码归你，细节继续调。" : "Own the code. Tune every detail."}</h2>
-            <code>npx shadcn@latest add @motion-lexicon/copy-button</code>
+            <code>npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json</code>
           </div>
           <Link className="landing-skill-card" to="/$locale/skill/" params={{ locale }}>
             <MotionSkillGlyph size={24} aria-hidden="true" />
