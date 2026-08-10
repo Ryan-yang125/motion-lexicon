@@ -208,11 +208,37 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
 
   await page.goto("/zh/components/mega-menu/");
   const productMenu = page.getByRole("button", { name: "Product" });
-  await productMenu.click();
+  await productMenu.hover();
   await expect(productMenu).toHaveAttribute("aria-expanded", "true");
-  await expect(page.getByRole("menu", { name: "Product" })).toBeVisible();
-  await productMenu.click();
+  const menu = page.getByRole("menu", { name: "Product" });
+  await expect(menu).toBeVisible();
+  const productBox = await productMenu.boundingBox();
+  const menuBox = await menu.boundingBox();
+  expect(productBox).not.toBeNull();
+  expect(menuBox).not.toBeNull();
+  await page.mouse.move(productBox!.x + productBox!.width / 2, productBox!.y + productBox!.height - 1);
+  await page.mouse.move(menuBox!.x + 20, menuBox!.y + 8, { steps: 4 });
+  await page.waitForTimeout(160);
+  await expect(menu).toBeVisible();
+
+  await productMenu.focus();
+  await page.keyboard.press("ArrowDown");
+  const menuItems = menu.getByRole("menuitem");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("ArrowUp");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("Escape");
   await expect(productMenu).toHaveAttribute("aria-expanded", "false");
+  await expect(productMenu).toBeFocused();
+  await page.mouse.move(0, 0);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/components/hold-to-confirm/");

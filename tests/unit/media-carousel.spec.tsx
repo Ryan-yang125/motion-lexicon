@@ -22,6 +22,60 @@ afterEach(() => {
 });
 
 describe("MediaCarousel", () => {
+  it("positions a non-zero initial slide without emitting a selection", () => {
+    let frame: FrameRequestCallback | null = null;
+    vi.stubGlobal(
+      "requestAnimationFrame",
+      vi.fn((callback: FrameRequestCallback) => {
+        frame = callback;
+        return 5;
+      }),
+    );
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    const originalOffsetLeft = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "offsetLeft",
+    );
+    Object.defineProperty(HTMLElement.prototype, "offsetLeft", {
+      configurable: true,
+      get() {
+        const slideLabel = this.parentElement?.getAttribute("aria-label");
+        const slideNumber = slideLabel ? Number.parseInt(slideLabel, 10) : Number.NaN;
+        return Number.isNaN(slideNumber) ? 0 : (slideNumber - 1) * 200;
+      },
+    });
+
+    try {
+      const onSelect = vi.fn();
+      const { container } = render(
+        <MediaCarousel items={items} initialIndex={2} onSelect={onSelect} />,
+      );
+      const viewport = container.querySelector<HTMLDivElement>(
+        '[aria-roledescription="carousel"]',
+      );
+      if (!viewport) throw new Error("Carousel viewport was not rendered");
+
+      expect(viewport.scrollLeft).toBe(400);
+      expect(screen.getByText("03 / 03")).toBeInTheDocument();
+      expect(
+        screen.getByRole("group", { name: "3 of 3" }).querySelector("button"),
+      ).toHaveAttribute("aria-current", "true");
+      fireEvent.scroll(viewport);
+      act(() => frame?.(0));
+      expect(onSelect).not.toHaveBeenCalled();
+    } finally {
+      if (originalOffsetLeft) {
+        Object.defineProperty(
+          HTMLElement.prototype,
+          "offsetLeft",
+          originalOffsetLeft,
+        );
+      } else {
+        Reflect.deleteProperty(HTMLElement.prototype, "offsetLeft");
+      }
+    }
+  });
+
   it("emits once when native scrolling changes the nearest slide", () => {
     let frame: FrameRequestCallback | null = null;
     vi.stubGlobal(

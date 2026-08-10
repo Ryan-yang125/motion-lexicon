@@ -15,6 +15,25 @@ type DitherPalette = {
   ink: string;
 };
 
+type ColorChannels = [number, number, number, number];
+
+type ResolvedColor = {
+  css: string;
+  channels: ColorChannels;
+};
+
+type ResolvedPalette = {
+  front: ResolvedColor;
+  back: ResolvedColor;
+  ink: ResolvedColor;
+};
+
+const DEFAULT_COLORS: ResolvedPalette = {
+  front: { css: "rgb(238, 236, 229)", channels: [238 / 255, 236 / 255, 229 / 255, 1] },
+  back: { css: "rgb(221, 228, 213)", channels: [221 / 255, 228 / 255, 213 / 255, 1] },
+  ink: { css: "rgb(41, 41, 41)", channels: [41 / 255, 41 / 255, 41 / 255, 1] },
+};
+
 export type DitherRevealCardProps = {
   front: ReactNode;
   back: ReactNode;
@@ -50,9 +69,9 @@ precision highp float;
 uniform vec2 u_resolution;
 uniform float u_progress;
 uniform float u_time;
-uniform vec3 u_front;
-uniform vec3 u_back;
-uniform vec3 u_ink;
+uniform vec4 u_front;
+uniform vec4 u_back;
+uniform vec4 u_ink;
 
 float bayer4(vec2 p) {
   vec2 cell = mod(floor(p), 4.0);
@@ -92,9 +111,9 @@ void main() {
   if (u_progress <= 0.001) reveal = 0.0;
   if (u_progress >= 0.999) reveal = 1.0;
   float edge = 1.0 - smoothstep(0.0, 0.075, abs(pattern - threshold));
-  vec3 base = mix(u_front, u_back, reveal);
-  vec3 color = mix(base, u_ink, edge * 0.055 * (1.0 - abs(u_progress - 0.5) * 1.3));
-  gl_FragColor = vec4(color, 1.0);
+  vec4 base = mix(u_front, u_back, reveal);
+  vec4 color = mix(base, u_ink, edge * 0.055 * (1.0 - abs(u_progress - 0.5) * 1.3));
+  gl_FragColor = color;
 }`;
 
 function compile(
@@ -126,9 +145,10 @@ function uniform(
 
 function createWebGL(canvas: HTMLCanvasElement): WebGLState | null {
   const gl = canvas.getContext("webgl", {
-    alpha: false,
+    alpha: true,
     antialias: false,
     depth: false,
+    premultipliedAlpha: false,
     powerPreference: "low-power",
   });
   if (!gl) return null;
@@ -181,18 +201,71 @@ function createWebGL(canvas: HTMLCanvasElement): WebGLState | null {
   };
 }
 
-function rgb(value: string): [number, number, number] {
-  const normalized = value.replace("#", "");
-  const full =
-    normalized.length === 3
-      ? normalized
-          .split("")
-          .map((part) => `${part}${part}`)
-          .join("")
-      : normalized.padEnd(6, "0").slice(0, 6);
-  return [0, 2, 4].map((offset) =>
-    Number.parseInt(full.slice(offset, offset + 2), 16) / 255,
-  ) as [number, number, number];
+function parseComputedRgb(value: string): ColorChannels | null {
+  const match = value.match(
+    /^rgba?\(\s*([+-]?[\d.]+)(%)?[,\s]+([+-]?[\d.]+)(%)?[,\s]+([+-]?[\d.]+)(%)?(?:\s*[,/]\s*([+-]?[\d.]+)(%)?)?\s*\)$/i,
+  );
+  if (!match) return null;
+  const toByte = (part: string, percent: string | undefined) =>
+    Math.min(255, Math.max(0, Number.parseFloat(part) * (percent ? 2.55 : 1)));
+  const alphaText = match[7];
+  const alpha = alphaText
+    ? Math.min(1, Math.max(0, Number.parseFloat(alphaText) * (match[8] ? 0.01 : 1)))
+    : 1;
+  const bytes = [
+    toByte(match[1], match[2]),
+    toByte(match[3], match[4]),
+    toByte(match[5], match[6]),
+  ];
+  if (bytes.some((channel) => Number.isNaN(channel)) || Number.isNaN(alpha)) return null;
+  return [bytes[0] / 255, bytes[1] / 255, bytes[2] / 255, alpha];
+}
+
+function rgbaCss(channels: ColorChannels) {
+  const [red, green, blue, alpha] = channels;
+  return `rgba(${Math.round(red * 255)}, ${Math.round(green * 255)}, ${Math.round(blue * 255)}, ${Math.round(alpha * 1000) / 1000})`;
+}
+
+function sampleCssColor(value: string): ColorChannels | null {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1;
+  canvas.height = 1;
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  if (!context) return null;
+  context.clearRect(0, 0, 1, 1);
+  context.fillStyle = value;
+  context.fillRect(0, 0, 1, 1);
+  const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+  return [red / 255, green / 255, blue / 255, alpha / 255];
+}
+
+function resolveCssColor(
+  value: string | undefined,
+  fallback: ResolvedColor,
+  scope: HTMLElement | null,
+): ResolvedColor {
+  const candidate = value?.trim();
+  if (!candidate || typeof document === "undefined") {
+    return candidate
+      ? { css: candidate, channels: fallback.channels }
+      : fallback;
+  }
+
+  const probe = document.createElement("span");
+  probe.style.position = "fixed";
+  probe.style.pointerEvents = "none";
+  probe.style.visibility = "hidden";
+  probe.style.color = candidate;
+  if (!probe.style.color) return fallback;
+
+  const host = scope ?? document.body;
+  if (!host) return fallback;
+  host.append(probe);
+  const computed = window.getComputedStyle(probe).color;
+  probe.remove();
+
+  const channels = sampleCssColor(computed) ?? parseComputedRgb(computed);
+  return channels ? { css: rgbaCss(channels), channels } : fallback;
 }
 
 export function DitherRevealCard({
@@ -205,6 +278,7 @@ export function DitherRevealCard({
   className = "",
 }: DitherRevealCardProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rootRef = useRef<HTMLButtonElement>(null);
   const stateRef = useRef<WebGLState | null>(null);
   const frameRef = useRef<number | null>(null);
   const visibleRef = useRef(true);
@@ -216,11 +290,28 @@ export function DitherRevealCard({
   const [focused, setFocused] = useState(false);
   const [supported, setSupported] = useState(true);
   const active = pinned || hovered || focused;
-  const colors: DitherPalette = {
-    front: palette?.front ?? "#EEECE5",
-    back: palette?.back ?? "#DDE4D5",
-    ink: palette?.ink ?? "#292929",
-  };
+  const paletteFront = palette?.front;
+  const paletteBack = palette?.back;
+  const paletteInk = palette?.ink;
+  const [colors, setColors] = useState<ResolvedPalette>(() => ({
+    front: paletteFront?.trim()
+      ? { css: paletteFront, channels: DEFAULT_COLORS.front.channels }
+      : DEFAULT_COLORS.front,
+    back: paletteBack?.trim()
+      ? { css: paletteBack, channels: DEFAULT_COLORS.back.channels }
+      : DEFAULT_COLORS.back,
+    ink: paletteInk?.trim()
+      ? { css: paletteInk, channels: DEFAULT_COLORS.ink.channels }
+      : DEFAULT_COLORS.ink,
+  }));
+
+  useEffect(() => {
+    setColors({
+      front: resolveCssColor(paletteFront, DEFAULT_COLORS.front, rootRef.current),
+      back: resolveCssColor(paletteBack, DEFAULT_COLORS.back, rootRef.current),
+      ink: resolveCssColor(paletteInk, DEFAULT_COLORS.ink, rootRef.current),
+    });
+  }, [paletteBack, paletteFront, paletteInk]);
 
   const render = useCallback((time = performance.now()) => {
     const state = stateRef.current;
@@ -231,11 +322,11 @@ export function DitherRevealCard({
     gl.uniform2f(state.resolution, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.uniform1f(state.progress, progressRef.current);
     gl.uniform1f(state.time, time);
-    gl.uniform3fv(state.front, rgb(colors.front));
-    gl.uniform3fv(state.back, rgb(colors.back));
-    gl.uniform3fv(state.ink, rgb(colors.ink));
+    gl.uniform4fv(state.front, colors.front.channels);
+    gl.uniform4fv(state.back, colors.back.channels);
+    gl.uniform4fv(state.ink, colors.ink.channels);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }, [colors.back, colors.front, colors.ink]);
+  }, [colors]);
 
   const tick = useCallback(
     (time: number) => {
@@ -326,6 +417,7 @@ export function DitherRevealCard({
 
   return (
     <button
+      ref={rootRef}
       type="button"
       aria-label={label}
       aria-pressed={pinned}
@@ -348,7 +440,7 @@ export function DitherRevealCard({
         data-webgl-fallback="dither-reveal-card"
         className={`absolute inset-0 ${reduced ? "" : "transition-colors duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
         style={{
-          backgroundColor: active ? colors.back : colors.front,
+          backgroundColor: active ? colors.back.css : colors.front.css,
           opacity: supported ? 0 : 1,
         }}
       />

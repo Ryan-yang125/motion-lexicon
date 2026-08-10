@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ReactNode,
@@ -29,6 +30,9 @@ export type MediaCarouselProps = {
 
 const clampIndex = (value: number, length: number) =>
   Math.min(Math.max(value, 0), Math.max(0, length - 1));
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const PREVIOUS_ICON = (
   <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden="true">
@@ -66,10 +70,24 @@ export function MediaCarousel({
   const viewportRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const scrollFrameRef = useRef<number | null>(null);
+  const initialPositionedRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(() =>
     clampIndex(initialIndex, items.length),
   );
   const activeIndexRef = useRef(activeIndex);
+
+  useIsomorphicLayoutEffect(() => {
+    if (initialPositionedRef.current || items.length === 0) return;
+    const index = clampIndex(initialIndex, items.length);
+    const viewport = viewportRef.current;
+    const slide = slideRefs.current[index];
+    if (!viewport || !slide) return;
+
+    activeIndexRef.current = index;
+    setActiveIndex(index);
+    viewport.scrollLeft = slide.offsetLeft - viewport.offsetLeft;
+    initialPositionedRef.current = true;
+  }, [initialIndex, items.length]);
 
   useEffect(() => {
     const next = clampIndex(activeIndexRef.current, items.length);
