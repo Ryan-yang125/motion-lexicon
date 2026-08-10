@@ -214,8 +214,10 @@ export function CommandPalette({
   const count = results.length;
 
   useEffect(() => {
-    if (autoFocus) inputRef.current?.focus({ preventScroll: true });
-  }, [autoFocus]);
+    if (autoFocus || open === true) {
+      inputRef.current?.focus({ preventScroll: true });
+    }
+  }, [autoFocus, open]);
 
   useEffect(() => {
     if (open) setQuery("");

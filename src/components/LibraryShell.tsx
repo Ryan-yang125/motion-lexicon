@@ -229,7 +229,6 @@ export function LibraryShell({ locale }: { locale: Locale }) {
 
       <CommandPalette
         open={searchOpen}
-        autoFocus={searchOpen}
         items={searchItems}
         onDismiss={() => setSearchOpen(false)}
         onSelect={selectSearch}
