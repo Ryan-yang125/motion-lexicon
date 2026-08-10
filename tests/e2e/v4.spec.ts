@@ -175,6 +175,14 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await expect(activity).toBeFocused();
   await expect(activity).toHaveAttribute("aria-selected", "true");
 
+  await page.goto("/zh/components/mega-menu/");
+  const productMenu = page.getByRole("button", { name: "Product" });
+  await productMenu.click();
+  await expect(productMenu).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("menu", { name: "Product" })).toBeVisible();
+  await productMenu.click();
+  await expect(productMenu).toHaveAttribute("aria-expanded", "false");
+
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/components/hold-to-confirm/");
   const hold = page.getByRole("button", { name: /Hold to delete workspace/ });
@@ -198,9 +206,25 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
   const position = await lensRoot.evaluate((root) => {
     const node = root.querySelector<HTMLElement>("[data-cursor-lens]");
-    return { transform: node?.style.transform, width: root.clientWidth, height: root.clientHeight };
+    const detail = root.querySelector<HTMLElement>("[data-cursor-lens-detail]");
+    return { transform: node?.style.transform, detailTransform: detail?.style.transform, width: root.clientWidth, height: root.clientHeight };
   });
   expect(position.transform).toBe(`translate3d(${position.width / 2 + 10 - 66}px, ${position.height / 2 - 66}px, 0px)`);
+  expect(position.detailTransform).toBe(`translate3d(${66 - (position.width / 2 + 10) * 1.35}px, ${66 - (position.height / 2) * 1.35}px, 0px) scale(1.35)`);
+
+  await lensRoot.evaluate((node) => node.blur());
+  const rootBox = await lensRoot.boundingBox();
+  expect(rootBox).not.toBeNull();
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 7,
+    clientX: rootBox!.x + 20,
+    clientY: rootBox!.y + 30,
+  });
+  await lensRoot.focus();
+  await lensRoot.dispatchEvent("pointerup", { pointerType: "touch", pointerId: 7 });
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+  await expect(lensRoot.locator("[data-cursor-lens]")).toHaveCSS("transform", "matrix(1, 0, 0, 1, -46, -36)");
 });
 
 test("mobile navigation, language, theme, and Agent Skill remain reachable", async ({ page }, testInfo) => {

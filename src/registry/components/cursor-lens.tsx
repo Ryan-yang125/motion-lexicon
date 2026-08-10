@@ -23,6 +23,7 @@ export function CursorLens({
   className = "",
 }: CursorLensProps) {
   const root = useRef<HTMLDivElement>(null);
+  const pointerFocus = useRef(false);
   const [visible, setVisible] = useState(false);
   const reduced = useReducedMotion() === true;
   const rawX = useMotionValue(0);
@@ -36,10 +37,10 @@ export function CursorLens({
     `translate3d(${Number(latestX) - size / 2}px, ${Number(latestY) - size / 2}px, 0)`,
   );
   const springDetailTransform = useTransform([x, y], ([latestX, latestY]) =>
-    `translate3d(${-Number(latestX) * (zoom - 1)}px, ${-Number(latestY) * (zoom - 1)}px, 0) scale(${zoom})`,
+    `translate3d(${size / 2 - Number(latestX) * zoom}px, ${size / 2 - Number(latestY) * zoom}px, 0) scale(${zoom})`,
   );
   const rawDetailTransform = useTransform([rawX, rawY], ([latestX, latestY]) =>
-    `translate3d(${-Number(latestX) * (zoom - 1)}px, ${-Number(latestY) * (zoom - 1)}px, 0) scale(${zoom})`,
+    `translate3d(${size / 2 - Number(latestX) * zoom}px, ${size / 2 - Number(latestY) * zoom}px, 0) scale(${zoom})`,
   );
   const transform = reduced ? rawTransform : springTransform;
   const detailTransform = reduced ? rawDetailTransform : springDetailTransform;
@@ -84,16 +85,20 @@ export function CursorLens({
       onPointerMove={pointerMove}
       onPointerLeave={() => setVisible(false)}
       onPointerDown={(event) => {
+        pointerFocus.current = true;
         if (event.pointerType === "touch") {
           locate(event.clientX, event.clientY);
           setVisible((value) => !value);
         }
       }}
+      onPointerUp={() => { pointerFocus.current = false; }}
+      onPointerCancel={() => { pointerFocus.current = false; }}
       onFocus={() => {
+        if (pointerFocus.current) return;
         const box = root.current?.getBoundingClientRect();
         if (box) { rawX.set(box.width / 2); rawY.set(box.height / 2); }
       }}
-      onBlur={() => setVisible(false)}
+      onBlur={() => { pointerFocus.current = false; setVisible(false); }}
       onKeyDown={keyDown}
       className={`relative isolate min-h-[240px] w-full overflow-hidden rounded-[16px] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] ${className}`}
       style={{ touchAction: "pan-y" }}
@@ -113,6 +118,7 @@ export function CursorLens({
             style={{ width: size, height: size, transform }}
           >
             <motion.div
+              data-cursor-lens-detail
               className="absolute left-0 top-0 h-[240px] w-full origin-top-left"
               style={{ transform: detailTransform, width: root.current?.clientWidth || "100%" }}
             >

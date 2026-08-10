@@ -61,7 +61,6 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
               aria-expanded={open}
               aria-controls={`${uid}-panel`}
               onPointerEnter={(event) => { if (event.pointerType !== "touch") setActive(section.id); }}
-              onFocus={() => setActive(section.id)}
               onClick={() => setActive(open ? null : section.id)}
               onKeyDown={(event) => keyDown(event, at)}
               className={`relative min-h-11 flex-1 rounded-[9px] px-3 text-[12px] font-medium outline-none transition-colors duration-150 focus-visible:shadow-[0_0_0_2px_rgba(69,104,255,.22)] ${open ? "text-stone-900 dark:text-white" : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"}`}
