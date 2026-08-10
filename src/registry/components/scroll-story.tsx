@@ -74,6 +74,20 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
   const current = chapters[active] ?? chapters[0];
   if (!current) return null;
 
+  const scrollToChapter = (index: number) => {
+    const scroll = scroller.current;
+    const section = sections.current[index];
+    if (!scroll || !section) return;
+    const scrollRect = scroll.getBoundingClientRect();
+    const sectionRect = section.getBoundingClientRect();
+    const sectionTop = scroll.scrollTop + sectionRect.top - scrollRect.top;
+    const centeredTop = sectionTop - (scroll.clientHeight - sectionRect.height) / 2;
+    scroll.scrollTo({
+      top: Math.max(0, centeredTop),
+      behavior: reduced === false ? "smooth" : "auto",
+    });
+  };
+
   return (
     <div
       ref={root}
@@ -91,7 +105,7 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
             <button
               type="button"
               aria-current={index === active ? "step" : undefined}
-              onClick={() => sections.current[index]?.scrollIntoView({ behavior: reduced === false ? "smooth" : "auto", block: "center" })}
+              onClick={() => scrollToChapter(index)}
               className={`min-h-11 rounded-[12px] px-3 py-2 text-left outline-none transition-[background-color,box-shadow,color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] ${index === active ? "bg-white text-stone-900 shadow-[0_8px_24px_-20px_rgba(28,25,23,.6)] dark:bg-white/10 dark:text-white" : "text-stone-500 hover:bg-white/55 dark:hover:bg-white/5"}`}
             >
               {chapter.eyebrow ? <span className="block text-[9px] uppercase tracking-[.1em] opacity-55">{chapter.eyebrow}</span> : null}

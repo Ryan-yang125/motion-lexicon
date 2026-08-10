@@ -366,18 +366,31 @@ export function DitherRevealCard({
     }
     const canvas = canvasRef.current;
     if (!canvas) return;
-    let state: WebGLState | null = null;
-    try {
-      state = createWebGL(canvas);
-    } catch {
-      state = null;
-    }
-    if (!state) {
+    const initialize = () => {
+      let nextState: WebGLState | null = null;
+      try {
+        nextState = createWebGL(canvas);
+      } catch {
+        nextState = null;
+      }
+      stateRef.current = nextState;
+      setSupported(Boolean(nextState));
+      return nextState;
+    };
+    if (!initialize()) return;
+
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      stateRef.current = null;
       setSupported(false);
-      return;
-    }
-    stateRef.current = state;
-    setSupported(true);
+    };
+    const onContextRestored = () => {
+      if (initialize()) requestRender();
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    canvas.addEventListener("webglcontextrestored", onContextRestored);
 
     const resize = new ResizeObserver(([entry]) => {
       const width = Math.max(1, entry.contentRect.width);
@@ -401,6 +414,8 @@ export function DitherRevealCard({
     requestRender();
 
     return () => {
+      canvas.removeEventListener("webglcontextlost", onContextLost);
+      canvas.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
       intersection.disconnect();
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);

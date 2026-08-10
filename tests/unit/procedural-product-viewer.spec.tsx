@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ProceduralProductViewer } from "@/registry/components/procedural-product-viewer";
 
@@ -67,6 +67,38 @@ describe("ProceduralProductViewer reset motion", () => {
 
     await waitFor(() => {
       expect(reset).toHaveClass("transition-transform", "active:scale-[0.96]");
+    });
+  });
+});
+
+describe("ProceduralProductViewer WebGL recovery", () => {
+  it("shows the fallback on context loss and requests a reduced-motion redraw after restore", async () => {
+    harness.reduced = true;
+    const { container } = render(<ProceduralProductViewer />);
+    const root = container.querySelector<HTMLElement>('[data-webgl-root="procedural-product-viewer"]');
+    const fallback = container.querySelector<HTMLElement>('[data-webgl-fallback="procedural-product-viewer"]');
+    const canvas = await waitFor(() => {
+      const next = container.querySelector("canvas");
+      expect(next).toBeInTheDocument();
+      return next as HTMLCanvasElement;
+    });
+
+    const lost = new Event("webglcontextlost", { cancelable: true });
+    fireEvent(canvas, lost);
+    expect(lost.defaultPrevented).toBe(true);
+    await waitFor(() => {
+      expect(fallback).toHaveClass("opacity-100");
+      expect(root).not.toHaveAttribute("tabindex");
+      expect(screen.queryByRole("button", { name: "Reset view" })).not.toBeInTheDocument();
+    });
+
+    const frameCalls = vi.mocked(requestAnimationFrame).mock.calls.length;
+    fireEvent(canvas, new Event("webglcontextrestored"));
+    await waitFor(() => {
+      expect(fallback).toHaveClass("opacity-0");
+      expect(root).toHaveAttribute("tabindex", "0");
+      expect(screen.getByRole("button", { name: "Reset view" })).toBeInTheDocument();
+      expect(vi.mocked(requestAnimationFrame).mock.calls.length).toBeGreaterThan(frameCalls);
     });
   });
 });

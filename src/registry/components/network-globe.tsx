@@ -132,6 +132,18 @@ export function NetworkGlobe({
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
     mount.prepend(renderer.domElement);
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      setRendererReady(false);
+    };
+    const onContextRestored = () => {
+      setRendererReady(true);
+      requestFrameRef.current();
+    };
+    renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+    renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
     setRendererReady(true);
 
     const globe = new THREE.Group();
@@ -238,6 +250,8 @@ export function NetworkGlobe({
     requestFrameRef.current();
 
     return () => {
+      renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
+      renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
       intersection.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);

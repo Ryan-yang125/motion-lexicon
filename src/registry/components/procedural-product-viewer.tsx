@@ -268,6 +268,18 @@ export function ProceduralProductViewer({
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
     mount.prepend(renderer.domElement);
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      setRendererReady(false);
+    };
+    const onContextRestored = () => {
+      setRendererReady(true);
+      requestFrameRef.current();
+    };
+    renderer.domElement.addEventListener("webglcontextlost", onContextLost);
+    renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
     setRendererReady(true);
 
     const ambient = new THREE.HemisphereLight(0xf8f5ed, 0x8b7f70, 2.4);
@@ -323,6 +335,8 @@ export function ProceduralProductViewer({
     requestFrameRef.current();
 
     return () => {
+      renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
+      renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
       intersection.disconnect();
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);

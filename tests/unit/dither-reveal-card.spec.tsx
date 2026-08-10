@@ -176,6 +176,58 @@ describe("DitherRevealCard WebGL fallback", () => {
     await waitFor(() => expect(loseContext).toHaveBeenCalledOnce());
   });
 
+  it("falls back on context loss and rebuilds resources after restoration", async () => {
+    const {
+      getContext,
+      loseContext,
+      drawArrays,
+      flushFrame,
+    } = installWebGL();
+    const { container, unmount } = render(
+      <DitherRevealCard
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    const canvas = container.querySelector("canvas");
+    const fallback = container.querySelector(
+      '[data-webgl-fallback="dither-reveal-card"]',
+    );
+    if (!canvas) throw new Error("Dither canvas was not rendered");
+
+    await waitFor(() =>
+      expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1),
+    );
+    let lossAllowed = true;
+    act(() => {
+      lossAllowed = canvas.dispatchEvent(
+        new Event("webglcontextlost", { cancelable: true }),
+      );
+    });
+
+    expect(lossAllowed).toBe(false);
+    await waitFor(() => expect(fallback).toHaveStyle({ opacity: "1" }));
+    const drawsBeforeRestore = drawArrays.mock.calls.length;
+
+    act(() => {
+      canvas.dispatchEvent(new Event("webglcontextrestored"));
+    });
+    await waitFor(() => {
+      expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(2);
+      expect(fallback).toHaveStyle({ opacity: "0" });
+    });
+    act(() => flushFrame(48));
+    expect(drawArrays.mock.calls.length).toBeGreaterThan(drawsBeforeRestore);
+
+    unmount();
+    await waitFor(() => expect(loseContext).toHaveBeenCalledOnce());
+    const contextCallsAfterUnmount = getContext.mock.calls.length;
+    act(() => {
+      canvas.dispatchEvent(new Event("webglcontextrestored"));
+    });
+    expect(getContext).toHaveBeenCalledTimes(contextCallsAfterUnmount);
+  });
+
   it("removes arrow transform motion when reduced motion is enabled", () => {
     motionPreference.reduced = true;
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);

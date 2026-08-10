@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, render } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { gsap } from "gsap";
 import { ScrollStory, type ScrollStoryChapter } from "@/registry/components/scroll-story";
@@ -82,5 +82,33 @@ describe("ScrollStory chapter motion", () => {
     act(() => harness.toggles[1]?.({ isActive: true }));
     expect(indicators[0]).toHaveClass("scale-x-25");
     expect(indicators[1]).toHaveClass("scale-x-100");
+  });
+
+  it.each([
+    { reduce: false, behavior: "smooth" as const },
+    { reduce: true, behavior: "auto" as const },
+  ])("scrolls only the internal scroller with $behavior behavior", ({ reduce, behavior }) => {
+    harness.reduced = reduce;
+    const { container } = render(<ScrollStory label="Release story" chapters={chapters} />);
+    const shipButton = screen.getByRole("button", { name: "Ship" });
+    const shipSection = shipButton.closest("section");
+    const scroll = shipSection?.parentElement;
+    if (!shipSection || !scroll) throw new Error("Scroll story structure was not rendered");
+
+    const scrollTo = vi.fn();
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(scroll, "scrollTop", { configurable: true, value: 120, writable: true });
+    Object.defineProperty(scroll, "clientHeight", { configurable: true, value: 300 });
+    Object.defineProperty(scroll, "scrollTo", { configurable: true, value: scrollTo });
+    Object.defineProperty(shipSection, "scrollIntoView", { configurable: true, value: scrollIntoView });
+    vi.spyOn(scroll, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
+    vi.spyOn(shipSection, "getBoundingClientRect").mockReturnValue({ top: 430, height: 180 } as DOMRect);
+
+    fireEvent.click(shipButton);
+
+    expect(scrollTo).toHaveBeenCalledOnce();
+    expect(scrollTo).toHaveBeenCalledWith({ top: 390, behavior });
+    expect(scrollIntoView).not.toHaveBeenCalled();
+    expect(container).toContainElement(scroll);
   });
 });
