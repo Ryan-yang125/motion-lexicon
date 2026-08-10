@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   registryComponentDependencies,
+  registryComponentDevDependencies,
   registryComponentEngines,
   registryComponentRuntimeCost,
   registryComponentSignature,
@@ -40,6 +41,9 @@ const catalog = {
     description: component.description,
     primitiveIds: component.primitiveIds,
     dependencies: registryComponentDependencies(component),
+    ...(registryComponentDevDependencies(component).length > 0 ? {
+      devDependencies: registryComponentDevDependencies(component)
+    } : {}),
     engines: registryComponentEngines(component),
     runtimeCost: registryComponentRuntimeCost(component),
     signature: registryComponentSignature(component),

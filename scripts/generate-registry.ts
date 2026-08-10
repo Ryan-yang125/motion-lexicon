@@ -4,6 +4,7 @@ import path from "node:path";
 import ts from "typescript";
 import {
   registryComponentDependencies,
+  registryComponentDevDependencies,
   registryComponentEngines,
   registryComponentRuntimeCost,
   registryComponentSignature,
@@ -65,6 +66,7 @@ const componentBuilds = await Promise.all(registryComponents.map(async (entry) =
     throw new Error(`${entry.id} must export ${entry.exportName}`);
   }
   const dependencies = registryComponentDependencies(entry);
+  const devDependencies = registryComponentDevDependencies(entry);
   assertDependencies(source, sourcePath, dependencies);
   const meta = {
     name: entry.id,
@@ -72,6 +74,7 @@ const componentBuilds = await Promise.all(registryComponents.map(async (entry) =
     title: entry.name.en,
     description: entry.description.en,
     dependencies,
+    ...(devDependencies.length > 0 ? { devDependencies } : {}),
     categories: [entry.category],
     docs: `${site}/en/components/${entry.id}/`,
     meta: {

@@ -392,5 +392,7 @@ test("English routes and the shadcn registry are publishable", async ({ page, re
   const scrollStory = await request.get("/r/scroll-story.json");
   expect(await scrollStory.json()).toMatchObject({ dependencies: ["gsap"], meta: { engines: ["gsap"], runtimeCost: "medium" } });
   const productViewer = await request.get("/r/procedural-product-viewer.json");
-  expect(await productViewer.json()).toMatchObject({ dependencies: ["motion", "three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
+  expect(await productViewer.json()).toMatchObject({ dependencies: ["motion", "three"], devDependencies: ["@types/three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
+  const networkGlobe = await request.get("/r/network-globe.json");
+  expect(await networkGlobe.json()).toMatchObject({ dependencies: ["motion", "three"], devDependencies: ["@types/three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
 });

@@ -8,6 +8,9 @@
     "motion",
     "three"
   ],
+  "devDependencies": [
+    "@types/three"
+  ],
   "categories": [
     "media"
   ],

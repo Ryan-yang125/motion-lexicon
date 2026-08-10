@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   registryComponentEngines,
+  registryComponentDevDependencies,
   registryComponentRuntimeCost,
   registryComponentSignature,
   registryComponents
@@ -38,6 +39,15 @@ describe("component distinctness contract", () => {
       expect(new Set(engines).size, entry.id).toBe(engines.length);
       expect(["light", "medium", "heavy"]).toContain(registryComponentRuntimeCost(entry));
       expect(entry.primitiveIds.length, entry.id).toBeGreaterThan(0);
+    }
+  });
+
+  it("declares Three.js type packages as installable development dependencies", () => {
+    for (const id of ["procedural-product-viewer", "network-globe"]) {
+      const entry = registryComponents.find((component) => component.id === id);
+      expect(entry, id).toBeDefined();
+      if (!entry) continue;
+      expect(registryComponentDevDependencies(entry)).toContain("@types/three");
     }
   });
 });

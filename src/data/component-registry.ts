@@ -21,6 +21,7 @@ export type RegistryComponent = {
   description: LocalizedText;
   primitiveIds: readonly string[];
   dependencies?: readonly string[];
+  devDependencies?: readonly string[];
   engines?: readonly ComponentEngine[];
   runtimeCost?: ComponentRuntimeCost;
   signature?: LocalizedText;
@@ -54,7 +55,8 @@ const component = (
   dependencies?: readonly string[],
   engines?: readonly ComponentEngine[],
   runtimeCost?: ComponentRuntimeCost,
-  signature?: LocalizedText
+  signature?: LocalizedText,
+  devDependencies?: readonly string[]
 ): RegistryComponent => ({
   id,
   exportName,
@@ -63,6 +65,7 @@ const component = (
   description: { zh: zhDescription, en: enDescription },
   primitiveIds,
   dependencies,
+  devDependencies,
   engines,
   runtimeCost,
   signature,
@@ -123,10 +126,10 @@ export const registryComponents: readonly RegistryComponent[] = [
   component("media-carousel", "MediaCarousel", "media", "惯性媒体轮播", "Media carousel", "媒体卡片保留原生拖动惯性、吸附位置与键盘导航。", "Keeps native drag inertia, deliberate snap positions, and keyboard navigation across media cards.", ["drag-to-reorder", "parallax"], true, ["motion"], ["motion"], "light", { zh: "原生滚动惯性与吸附驱动的媒体轨道", en: "Media rail driven by native scroll inertia and snap" }),
   component("image-lightbox", "ImageLightbox", "media", "连续画廊灯箱", "Gallery lightbox", "缩略图连续扩展为沉浸画面，并完整管理焦点与键盘浏览。", "Expands a thumbnail into an immersive gallery while managing focus and keyboard browsing.", ["morph", "scale-in"], true, ["motion"], ["motion"], "medium", { zh: "共享元素过渡连接缩略图与画廊", en: "Shared-element transition from thumbnail to gallery" }),
   component("scroll-story", "ScrollStory", "media", "滚动产品叙事", "Scroll story", "将章节进度绑定到局部滚动，逐步改写产品画面。", "Binds local scroll progress to chapters that progressively reshape a product scene.", ["scroll-driven-animation", "stagger"], true, ["gsap"], ["gsap"], "medium", { zh: "ScrollTrigger 驱动的章节化产品场景", en: "Chaptered product scene driven by ScrollTrigger" }),
-  component("procedural-product-viewer", "ProceduralProductViewer", "media", "三维产品查看器", "3D product viewer", "程序化三维产品支持拖拽观察、惯性和回正。", "Presents a procedural 3D product with drag inspection, inertia, and recentering.", ["3d-tilt-flip", "spring"], true, ["motion", "three"], ["motion", "three"], "heavy", { zh: "可拖拽检查的 Three.js 产品模型", en: "Drag-inspectable Three.js product model" }),
+  component("procedural-product-viewer", "ProceduralProductViewer", "media", "三维产品查看器", "3D product viewer", "程序化三维产品支持拖拽观察、惯性和回正。", "Presents a procedural 3D product with drag inspection, inertia, and recentering.", ["3d-tilt-flip", "spring"], true, ["motion", "three"], ["motion", "three"], "heavy", { zh: "可拖拽检查的 Three.js 产品模型", en: "Drag-inspectable Three.js product model" }, ["@types/three"]),
 
   component("dither-reveal-card", "DitherRevealCard", "visual", "抖动显影卡", "Dither reveal card", "像素抖动阈值随交互推进，让图像以材质感逐步显现。", "Advances a pixel-dither threshold so imagery develops with a tactile texture.", ["reveal", "hover-effect"], true, ["motion"], ["motion", "webgl"], "heavy", { zh: "原生 WebGL Bayer 阈值显影", en: "Native WebGL Bayer-threshold reveal" }),
-  component("network-globe", "NetworkGlobe", "visual", "交互网络地球", "Network globe", "三维地球用节点、弧线和焦点切换展示全球连接。", "Maps global connections across a 3D globe with nodes, arcs, and selectable focus.", ["orbit", "line-drawing"], true, ["motion", "three"], ["motion", "three"], "heavy", { zh: "Three.js 节点弧线网络地球", en: "Three.js globe with routed network arcs" }),
+  component("network-globe", "NetworkGlobe", "visual", "交互网络地球", "Network globe", "三维地球用节点、弧线和焦点切换展示全球连接。", "Maps global connections across a 3D globe with nodes, arcs, and selectable focus.", ["orbit", "line-drawing"], true, ["motion", "three"], ["motion", "three"], "heavy", { zh: "Three.js 节点弧线网络地球", en: "Three.js globe with routed network arcs" }, ["@types/three"]),
   component("kinetic-logo-exchange", "KineticLogoExchange", "visual", "动态品牌墙", "Kinetic logo exchange", "品牌标记在队列中换位、显影并自动停在当前选择。", "Reorders and reveals brand marks in a kinetic queue that yields to user selection.", ["morph", "blur"], false, ["motion"], ["motion"], "light", { zh: "布局交换与遮罩显影的品牌队列", en: "Brand queue with layout exchange and masked reveal" }),
   component("spotlight-bento", "SpotlightBento", "visual", "联动聚光矩阵", "Spotlight bento", "一个连续光场跨越多张卡片，强化矩阵之间的整体关系。", "Carries one continuous spotlight across multiple tiles to unify the bento surface.", ["hover-effect", "compositing"], true, ["motion"], ["motion"], "medium", { zh: "跨卡片共享坐标的连续光场", en: "Continuous spotlight sharing coordinates across tiles" })
 ];
@@ -137,6 +140,10 @@ export function getRegistryComponent(id: string) {
 
 export function registryComponentDependencies(entry: RegistryComponent) {
   return entry.dependencies ?? ["motion"];
+}
+
+export function registryComponentDevDependencies(entry: RegistryComponent) {
+  return entry.devDependencies ?? [];
 }
 
 export function registryComponentEngines(entry: RegistryComponent): readonly ComponentEngine[] {

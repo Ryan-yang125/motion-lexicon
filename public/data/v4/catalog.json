@@ -1408,6 +1408,9 @@
         "motion",
         "three"
       ],
+      "devDependencies": [
+        "@types/three"
+      ],
       "engines": [
         "motion",
         "three"
@@ -1474,6 +1477,9 @@
       "dependencies": [
         "motion",
         "three"
+      ],
+      "devDependencies": [
+        "@types/three"
       ],
       "engines": [
         "motion",

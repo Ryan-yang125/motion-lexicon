@@ -1171,6 +1171,9 @@
         "motion",
         "three"
       ],
+      "devDependencies": [
+        "@types/three"
+      ],
       "categories": [
         "media"
       ],
@@ -1227,6 +1230,9 @@
       "dependencies": [
         "motion",
         "three"
+      ],
+      "devDependencies": [
+        "@types/three"
       ],
       "categories": [
         "visual"

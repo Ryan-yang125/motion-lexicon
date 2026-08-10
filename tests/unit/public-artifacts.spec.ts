@@ -19,7 +19,7 @@ describe("V4 public machine-readable artifacts", () => {
       schemaVersion: number;
       release: string;
       counts: { components: number; primitives: number };
-      components: Array<{ id: string; dependencies: string[]; engines: string[]; runtimeCost: string; urls: { registry: string } }>;
+      components: Array<{ id: string; dependencies: string[]; devDependencies?: string[]; engines: string[]; runtimeCost: string; urls: { registry: string } }>;
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(4);
@@ -30,6 +30,8 @@ describe("V4 public machine-readable artifacts", () => {
     expect(catalog.components.every((item) => item.urls.registry.endsWith(`/r/${item.id}.json`))).toBe(true);
     expect(catalog.components.find((item) => item.id === "scroll-story")).toMatchObject({ dependencies: ["gsap"], engines: ["gsap"], runtimeCost: "medium" });
     expect(catalog.components.find((item) => item.id === "network-globe")).toMatchObject({ dependencies: ["motion", "three"], engines: ["motion", "three"], runtimeCost: "heavy" });
+    expect(catalog.components.find((item) => item.id === "network-globe")?.devDependencies).toEqual(["@types/three"]);
+    expect(catalog.components.find((item) => item.id === "procedural-product-viewer")?.devDependencies).toEqual(["@types/three"]);
     expect(catalog.primitives.every((item) => item.urls.en.includes(`/en/primitives/${item.id}/`))).toBe(true);
     expect(catalog.primitives.filter((item) => item.urls.registry)).toHaveLength(installablePrimitiveEntries.length);
     expect(catalog.primitives.filter((item) => item.urls.registry).every((item) => item.urls.registry?.endsWith(`/r/primitive-${item.id}.json`))).toBe(true);
