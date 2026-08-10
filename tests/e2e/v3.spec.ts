@@ -78,7 +78,8 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/components/hold-to-confirm/");
   const hold = page.getByRole("button", { name: /Hold to delete workspace/ });
-  await hold.dispatchEvent("pointerdown", { pointerId: 1, pointerType: "mouse", button: 0, clientX: 20, clientY: 20 });
+  await hold.focus();
+  await page.keyboard.down("Space");
   await page.waitForTimeout(80);
   const initialClip = await hold.locator("[data-hold-fill]").evaluate((node) => (node as HTMLElement).style.clipPath);
   expect(Number(initialClip.match(/inset\(0px ([\d.]+)%/)?.[1])).toBeGreaterThan(0);
@@ -86,7 +87,7 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
     const clip = await hold.locator("[data-hold-fill]").evaluate((node) => (node as HTMLElement).style.clipPath);
     return Number(clip.match(/inset\(0px ([\d.]+)%/)?.[1]);
   }).toBeLessThan(100);
-  await hold.dispatchEvent("pointerup", { pointerId: 1, pointerType: "mouse", button: 0, clientX: 20, clientY: 20 });
+  await page.keyboard.up("Space");
 });
 
 test("mobile navigation, language, theme, and Agent Skill remain reachable", async ({ page }, testInfo) => {
