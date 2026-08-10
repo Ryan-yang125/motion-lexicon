@@ -419,7 +419,7 @@ body {
 
 /* Landing — live product motion carries the visual identity. */
 .shell-header-link {
-  min-height: 34px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 7px;

@@ -234,7 +234,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
             <MotionSkillGlyph size={15} aria-hidden="true" />
             <span>Skill</span>
           </Link>
-          <a className="shell-header-link" href={repositoryUrl} target="_blank" rel="noreferrer">
+          <a className="shell-header-link" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label="GitHub">
             <GithubIcon size={15} aria-hidden="true" />
             <span>GitHub</span>
           </a>

@@ -26,6 +26,11 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
   const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
   await expect(skill).toHaveAttribute("href", "/zh/skill/");
+  const github = page.locator(".library-shell-header").getByRole("link", { name: "GitHub" });
+  await expect(github).toBeVisible();
+  for (const link of [skill, github]) {
+    expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  }
   await expectNoHorizontalOverflow(page);
 });
 
