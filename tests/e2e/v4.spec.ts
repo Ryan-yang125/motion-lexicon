@@ -15,13 +15,29 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await page.goto("/zh/");
   await expect(page.getByRole("heading", { level: 1, name: "把成熟动效，直接带进产品。" })).toBeVisible();
   await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
-  await page.getByRole("tab", { name: "标签页" }).click();
+  const firstTab = page.getByRole("tab", { name: "拖拽排序列表" });
+  await firstTab.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
+  await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('[data-component="tabs"]')).toBeVisible();
+  await expect(page.getByRole("tabpanel", { name: "标签页" })).toBeVisible();
   await expect(page.locator(".landing-component-card")).toHaveCount(4);
   await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
   const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
   await expect(skill).toHaveAttribute("href", "/zh/skill/");
   await expectNoHorizontalOverflow(page);
+});
+
+test("landing preview switches instantly with reduced motion", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion landing contract runs once.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/zh/");
+  await page.getByRole("tab", { name: "标签页" }).click();
+  const runningTransitions = await page.locator(".landing-stage-motion").evaluate((node) =>
+    node.getAnimations().filter((animation) => animation.playState === "running").length
+  );
+  expect(runningTransitions).toBe(0);
 });
 
 test("component directory exposes all live registry components", async ({ page }) => {

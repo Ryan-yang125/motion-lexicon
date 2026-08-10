@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRightIcon,
   ComponentLibraryGlyph,
@@ -8,6 +8,7 @@ import {
   MotionSkillGlyph,
 } from "../components/icons";
 import { Seo } from "../components/Seo";
+import { useTabs } from "../components/interior/tabs";
 import { getRegistryComponent, registryComponents } from "../data/component-registry";
 import { getCatalogRecipe } from "../data/recipes";
 import { pathFor, text } from "../data/site";
@@ -36,6 +37,15 @@ function Stage({ locale }: { locale: Locale }) {
   const [activeId, setActiveId] = useState<(typeof stageIds)[number]>(stageIds[0]);
   const reduceMotion = useReducedMotion();
   const active = getRegistryComponent(activeId);
+  const items = useMemo(() => stageIds.map((id) => ({
+    value: id,
+    label: text(getRegistryComponent(id)?.name ?? { zh: id, en: id }, locale)
+  })), [locale]);
+  const tabs = useTabs({
+    items,
+    value: activeId,
+    onValueChange: (value) => setActiveId(value as (typeof stageIds)[number])
+  });
 
   return (
     <div className="landing-stage mat-float">
@@ -44,31 +54,22 @@ function Stage({ locale }: { locale: Locale }) {
         <span>{locale === "zh" ? "实时组件" : "Live component"}</span>
         <code>React + Motion</code>
       </div>
-      <div className="landing-stage-tabs" role="tablist" aria-label={locale === "zh" ? "组件预览" : "Component previews"}>
-        {stageIds.map((id) => {
-          const entry = getRegistryComponent(id);
-          return (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={activeId === id}
-              onClick={() => setActiveId(id)}
-            >
-              {entry ? text(entry.name, locale) : id}
-            </button>
-          );
-        })}
+      <div {...tabs.tabListProps} className="landing-stage-tabs" aria-label={locale === "zh" ? "组件预览" : "Component previews"}>
+        {items.map((item, index) => (
+          <button key={item.value} {...tabs.getTabProps(item, index)}>
+            {item.label}
+          </button>
+        ))}
       </div>
-      <div className="landing-stage-canvas">
+      <div {...tabs.getPanelProps(activeId)} className="landing-stage-canvas">
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             className="landing-stage-motion"
             key={activeId}
-            initial={{ opacity: 0, transform: reduceMotion ? "none" : "translate3d(0, 8px, 0)" }}
+            initial={reduceMotion ? false : { opacity: 0, transform: "translate3d(0, 8px, 0)" }}
             animate={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-            exit={{ opacity: 0, transform: reduceMotion ? "none" : "translate3d(0, -4px, 0)" }}
-            transition={{ duration: reduceMotion ? 0.12 : 0.18, ease: [0.23, 1, 0.32, 1] }}
+            exit={reduceMotion ? { opacity: 1, transform: "translate3d(0, 0, 0)" } : { opacity: 0, transform: "translate3d(0, -4px, 0)" }}
+            transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
             <RegistryPreview id={activeId} />
           </motion.div>
