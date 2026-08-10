@@ -251,18 +251,31 @@ function resolveCssColor(
       : fallback;
   }
 
+  const probeHost = document.createElement("span");
+  probeHost.style.position = "fixed";
+  probeHost.style.pointerEvents = "none";
+  probeHost.style.visibility = "hidden";
   const probe = document.createElement("span");
-  probe.style.position = "fixed";
-  probe.style.pointerEvents = "none";
-  probe.style.visibility = "hidden";
   probe.style.color = candidate;
   if (!probe.style.color) return fallback;
 
   const host = scope ?? document.body;
   if (!host) return fallback;
-  host.append(probe);
-  const computed = window.getComputedStyle(probe).color;
-  probe.remove();
+  probeHost.append(probe);
+  host.append(probeHost);
+  let computed: string;
+  if (usesCssVariable(candidate)) {
+    probeHost.style.color = "rgb(1, 2, 3)";
+    const first = window.getComputedStyle(probe).color;
+    probeHost.style.color = "rgb(4, 5, 6)";
+    const second = window.getComputedStyle(probe).color;
+    probeHost.remove();
+    if (!first || first !== second) return fallback;
+    computed = second;
+  } else {
+    computed = window.getComputedStyle(probe).color;
+    probeHost.remove();
+  }
 
   const channels = sampleCssColor(computed) ?? parseComputedRgb(computed);
   return channels ? { css: rgbaCss(channels), channels } : fallback;

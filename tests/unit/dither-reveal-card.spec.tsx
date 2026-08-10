@@ -170,7 +170,9 @@ describe("DitherRevealCard WebGL fallback", () => {
         return new Proxy(computed, {
           get(target, property) {
             if (property === "color") {
-              return document.documentElement.style.getPropertyValue("--dither-front");
+              return document.documentElement.style.getPropertyValue("--dither-front") ||
+                element.parentElement?.style.color ||
+                target.color;
             }
             return Reflect.get(target, property, target);
           },
@@ -215,6 +217,113 @@ describe("DitherRevealCard WebGL fallback", () => {
 
     document.documentElement.style.removeProperty("--dither-front");
     delete document.documentElement.dataset.theme;
+  });
+
+  it("uses the safe fallback for an undefined CSS variable and resolves it when defined", async () => {
+    const {
+      uniform4fv,
+      getContext,
+      frames,
+      flushFrame,
+    } = installWebGL();
+    const getComputedStyle = window.getComputedStyle.bind(window);
+    vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudoElement) => {
+      const computed = getComputedStyle(element, pseudoElement);
+      if (
+        element instanceof HTMLElement &&
+        element.style.color === "var(--missing-dither-front)"
+      ) {
+        return new Proxy(computed, {
+          get(target, property) {
+            if (property === "color") {
+              return document.documentElement.style.getPropertyValue("--missing-dither-front") ||
+                element.parentElement?.style.color ||
+                target.color;
+            }
+            return Reflect.get(target, property, target);
+          },
+        });
+      }
+      return computed;
+    });
+    document.documentElement.style.color = "rgb(190 20 30)";
+
+    const { container } = render(
+      <DitherRevealCard
+        palette={{ front: "var(--missing-dither-front)" }}
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    const fallback = container.querySelector<HTMLElement>(
+      '[data-webgl-fallback="dither-reveal-card"]',
+    );
+
+    await waitFor(() =>
+      expect(fallback).toHaveStyle({ backgroundColor: "rgb(238, 236, 229)" }),
+    );
+    expect(fallback).not.toHaveStyle({ backgroundColor: "rgb(190, 20, 30)" });
+    act(() => {
+      while (frames.length > 0) flushFrame(16);
+    });
+
+    act(() => {
+      document.documentElement.style.setProperty(
+        "--missing-dither-front",
+        "rgb(70 80 90)",
+      );
+    });
+    await waitFor(() => expect(frames.length).toBeGreaterThan(0));
+    act(() => {
+      while (frames.length > 0) flushFrame(32);
+    });
+
+    await waitFor(() =>
+      expect(fallback).toHaveStyle({ backgroundColor: "rgb(70, 80, 90)" }),
+    );
+    expect(uniform4fv).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.arrayContaining([70 / 255, 80 / 255, 90 / 255, 1]),
+    );
+    expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1);
+
+    document.documentElement.style.removeProperty("--missing-dither-front");
+    document.documentElement.style.removeProperty("color");
+  });
+
+  it("keeps nested CSS variable fallbacks valid", async () => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
+    const getComputedStyle = window.getComputedStyle.bind(window);
+    vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudoElement) => {
+      const computed = getComputedStyle(element, pseudoElement);
+      if (
+        element instanceof HTMLElement &&
+        element.style.color === "var(--missing-outer, var(--missing-inner, #fff))"
+      ) {
+        return new Proxy(computed, {
+          get(target, property) {
+            if (property === "color") return "rgb(255, 255, 255)";
+            return Reflect.get(target, property, target);
+          },
+        });
+      }
+      return computed;
+    });
+
+    const { container } = render(
+      <DitherRevealCard
+        palette={{ front: "var(--missing-outer, var(--missing-inner, #fff))" }}
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    const fallback = container.querySelector<HTMLElement>(
+      '[data-webgl-fallback="dither-reveal-card"]',
+    );
+
+    await waitFor(() =>
+      expect(fallback).toHaveStyle({ backgroundColor: "rgb(255, 255, 255)" }),
+    );
   });
 
   it("keeps WebGL active through StrictMode effect replay", async () => {
