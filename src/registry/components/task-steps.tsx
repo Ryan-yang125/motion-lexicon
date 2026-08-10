@@ -174,7 +174,7 @@ export function TaskSteps({
                       exit={{ opacity: 0, transition: STILL }}
                       transition={reduced ? STILL : CELL}
                     >
-                      <Arc spin />
+                      <Arc spin={!reduced} />
                     </motion.span>
                   ) : (
                     <motion.span

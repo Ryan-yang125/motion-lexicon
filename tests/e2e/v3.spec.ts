@@ -41,14 +41,14 @@ test("primitive directory and workbench use the direct V3 routes", async ({ page
   await expectNoHorizontalOverflow(page);
 });
 
-test("global search opens immediately and navigates by keyboard", async ({ page }, testInfo) => {
+test("global search opens immediately and navigates by keyboard", async ({ page }) => {
   await page.goto("/zh/components/");
-  if (testInfo.project.name.includes("mobile")) {
-    await page.locator(".shell-search-trigger").click();
-  } else {
-    await page.keyboard.press("ControlOrMeta+K");
-  }
+  await page.locator(".shell-search-trigger").click();
   const search = page.getByRole("combobox", { name: "搜索 Motion Lexicon" });
+  await expect(search).toBeFocused();
+  await page.locator(".fixed.inset-0.z-50 > .absolute.inset-0").click({ position: { x: 4, y: 4 } });
+  await expect(search).toBeHidden();
+  await page.locator(".shell-search-trigger").click();
   await expect(search).toBeFocused();
   await search.fill("drawer");
   await expect(page.getByRole("option", { name: /抽屉/ })).toBeVisible();
@@ -66,7 +66,21 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await dialog.getByRole("link", { name: "Agent Skill" }).click();
   await expect(page).toHaveURL(/\/zh\/skill\//);
   await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
+  await page.goto("/zh/components/copy-button/");
+  const copyHeight = await page.getByRole("button", { name: "复制代码" }).first().evaluate((button) => button.getBoundingClientRect().height);
+  expect(copyHeight).toBeGreaterThanOrEqual(44);
   await expectNoHorizontalOverflow(page);
+});
+
+test("reduced motion stops non-essential task progress rotation", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion runtime contract runs once.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/zh/components/task-steps/");
+  await expect(page.locator('[data-component="task-steps"]')).toBeVisible();
+  const rotations = await page.locator('[data-component="task-steps"] svg').evaluateAll((icons) =>
+    icons.flatMap((icon) => icon.getAnimations()).filter((animation) => animation.playState === "running").length
+  );
+  expect(rotations).toBe(0);
 });
 
 test("English routes and the shadcn registry are publishable", async ({ page, request }, testInfo) => {

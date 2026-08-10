@@ -408,6 +408,7 @@ function PaletteLayer({
           <div
             aria-hidden
             className="absolute inset-0 bg-stone-900/40 dark:bg-black/65"
+            onPointerDown={() => leave.current?.()}
           />
           <div className="relative flex w-full justify-center">
             {children}
