@@ -41,9 +41,13 @@ test("primitive directory and workbench use the direct V3 routes", async ({ page
   await expectNoHorizontalOverflow(page);
 });
 
-test("global search opens immediately and navigates by keyboard", async ({ page }) => {
+test("global search opens immediately and navigates by keyboard", async ({ page }, testInfo) => {
   await page.goto("/zh/components/");
-  await page.keyboard.press("ControlOrMeta+K");
+  if (testInfo.project.name.includes("mobile")) {
+    await page.locator(".shell-search-trigger").click();
+  } else {
+    await page.keyboard.press("ControlOrMeta+K");
+  }
   const search = page.getByRole("combobox", { name: "搜索 Motion Lexicon" });
   await expect(search).toBeFocused();
   await search.fill("drawer");
