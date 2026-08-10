@@ -7,8 +7,10 @@ import {
   type MediaCarouselItem,
 } from "@/registry/components/media-carousel";
 
+const motionPreference = vi.hoisted(() => ({ reduced: false }));
+
 vi.mock("motion/react", () => ({
-  useReducedMotion: () => false,
+  useReducedMotion: () => motionPreference.reduced,
 }));
 
 const items: readonly MediaCarouselItem[] = [
@@ -18,6 +20,7 @@ const items: readonly MediaCarouselItem[] = [
 ];
 
 afterEach(() => {
+  motionPreference.reduced = false;
   vi.unstubAllGlobals();
 });
 
@@ -127,5 +130,72 @@ describe("MediaCarousel", () => {
     fireEvent.scroll(viewport);
     act(() => frame?.(32));
     expect(onSelect).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps the active item id through reorder and preceding deletion", () => {
+    const onSelect = vi.fn();
+    const { rerender } = render(
+      <MediaCarousel items={items} initialIndex={1} onSelect={onSelect} />,
+    );
+
+    rerender(
+      <MediaCarousel
+        items={[items[2], items[0], items[1]]}
+        initialIndex={1}
+        onSelect={onSelect}
+      />,
+    );
+    expect(
+      screen.getByRole("group", { name: "3 of 3" }).querySelector("button"),
+    ).toHaveAttribute("aria-current", "true");
+    expect(screen.getByText("03 / 03")).toBeInTheDocument();
+    expect(onSelect).not.toHaveBeenCalled();
+
+    rerender(
+      <MediaCarousel
+        items={[items[2], items[1]]}
+        initialIndex={1}
+        onSelect={onSelect}
+      />,
+    );
+    expect(
+      screen.getByRole("group", { name: "2 of 2" }).querySelector("button"),
+    ).toHaveAttribute("aria-current", "true");
+    expect(screen.getByText("02 / 02")).toBeInTheDocument();
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("selects the item at the same position when the active item is deleted", () => {
+    const onSelect = vi.fn();
+    const { rerender } = render(
+      <MediaCarousel items={items} initialIndex={1} onSelect={onSelect} />,
+    );
+
+    rerender(
+      <MediaCarousel
+        items={[items[0], items[2]]}
+        initialIndex={1}
+        onSelect={onSelect}
+      />,
+    );
+
+    expect(
+      screen.getByRole("group", { name: "2 of 2" }).querySelector("button"),
+    ).toHaveAttribute("aria-current", "true");
+    expect(screen.getByText("02 / 02")).toBeInTheDocument();
+    expect(onSelect).toHaveBeenCalledOnce();
+    expect(onSelect).toHaveBeenCalledWith(items[2], 1);
+  });
+
+  it("removes arrow transform feedback when reduced motion is requested", () => {
+    motionPreference.reduced = true;
+    render(<MediaCarousel items={items} />);
+
+    for (const label of ["Previous slide", "Next slide"]) {
+      const button = screen.getByRole("button", { name: label });
+      expect(button.className).toContain("transition-[background-color,color]");
+      expect(button.className).not.toContain("transform");
+      expect(button.className).not.toContain("active:scale");
+    }
   });
 });

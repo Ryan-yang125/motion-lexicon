@@ -71,29 +71,58 @@ export function MediaCarousel({
   const slideRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const scrollFrameRef = useRef<number | null>(null);
   const initialPositionedRef = useRef(false);
-  const [activeIndex, setActiveIndex] = useState(() =>
-    clampIndex(initialIndex, items.length),
+  const initialActiveIndex = items.length > 0
+    ? clampIndex(initialIndex, items.length)
+    : -1;
+  const [activeId, setActiveId] = useState<string | null>(
+    () => items[initialActiveIndex]?.id ?? null,
   );
-  const activeIndexRef = useRef(activeIndex);
+  const activeIdRef = useRef(activeId);
+  const activeIndexRef = useRef(initialActiveIndex);
+  const matchedActiveIndex = activeId === null
+    ? -1
+    : items.findIndex((item) => item.id === activeId);
+  const activeIndex = matchedActiveIndex >= 0
+    ? matchedActiveIndex
+    : activeId !== null && items.length > 0
+      ? clampIndex(activeIndexRef.current, items.length)
+      : -1;
+  const positioningIndex = initialPositionedRef.current
+    ? activeIndex
+    : initialActiveIndex;
+  const positioningId = items[positioningIndex]?.id ?? null;
 
   useIsomorphicLayoutEffect(() => {
-    if (initialPositionedRef.current || items.length === 0) return;
-    const index = clampIndex(initialIndex, items.length);
+    if (positioningIndex < 0 || positioningId === null) return;
     const viewport = viewportRef.current;
-    const slide = slideRefs.current[index];
+    const slide = slideRefs.current[positioningIndex];
     if (!viewport || !slide) return;
 
-    activeIndexRef.current = index;
-    setActiveIndex(index);
+    if (!initialPositionedRef.current) {
+      activeIdRef.current = positioningId;
+      setActiveId(positioningId);
+    }
+    activeIndexRef.current = positioningIndex;
     viewport.scrollLeft = slide.offsetLeft - viewport.offsetLeft;
     initialPositionedRef.current = true;
-  }, [initialIndex, items.length]);
+  }, [positioningId, positioningIndex]);
 
   useEffect(() => {
-    const next = clampIndex(activeIndexRef.current, items.length);
-    activeIndexRef.current = next;
-    setActiveIndex(next);
-  }, [items.length]);
+    if (activeId === null || matchedActiveIndex >= 0) return;
+    if (items.length === 0) {
+      activeIdRef.current = null;
+      activeIndexRef.current = -1;
+      setActiveId(null);
+      return;
+    }
+
+    const index = clampIndex(activeIndexRef.current, items.length);
+    const item = items[index];
+    activeIdRef.current = item.id;
+    activeIndexRef.current = index;
+    setActiveId(item.id);
+    onSelect?.(item, index);
+  }, [activeId, items, matchedActiveIndex, onSelect]);
 
   useEffect(
     () => () => {
@@ -108,10 +137,15 @@ export function MediaCarousel({
     (nextIndex: number) => {
       if (items.length === 0) return;
       const index = clampIndex(nextIndex, items.length);
-      if (activeIndexRef.current === index) return;
+      const item = items[index];
+      if (activeIdRef.current === item.id) {
+        activeIndexRef.current = index;
+        return;
+      }
+      activeIdRef.current = item.id;
       activeIndexRef.current = index;
-      setActiveIndex(index);
-      onSelect?.(items[index], index);
+      setActiveId(item.id);
+      onSelect?.(item, index);
     },
     [items, onSelect],
   );
@@ -170,6 +204,9 @@ export function MediaCarousel({
 
   const hasPrevious = activeIndex > 0;
   const hasNext = activeIndex < items.length - 1;
+  const arrowMotionClass = reduced
+    ? "transition-[background-color,color] duration-150"
+    : "transition-[background-color,color,transform] duration-150 active:scale-[0.96] disabled:active:scale-100";
 
   return (
     <section
@@ -200,7 +237,7 @@ export function MediaCarousel({
             aria-label="Previous slide"
             disabled={!hasPrevious}
             onClick={() => goTo(activeIndex - 1, true)}
-            className="grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none transition-[background-color,color,transform] duration-150 active:scale-[0.96] disabled:cursor-default disabled:text-stone-300 disabled:active:scale-100 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600"
+            className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
           >
             {PREVIOUS_ICON}
           </button>
@@ -209,7 +246,7 @@ export function MediaCarousel({
             aria-label="Next slide"
             disabled={!hasNext}
             onClick={() => goTo(activeIndex + 1, true)}
-            className="grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none transition-[background-color,color,transform] duration-150 active:scale-[0.96] disabled:cursor-default disabled:text-stone-300 disabled:active:scale-100 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600"
+            className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
           >
             {NEXT_ICON}
           </button>

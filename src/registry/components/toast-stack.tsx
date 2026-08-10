@@ -66,8 +66,8 @@ export function ToastStack({
   const reduced = useReducedMotion() === true;
   const finePointer = useFinePointer();
   const [expanded, setExpanded] = useState(false);
-  const previousFirst = useRef<string | null>(null);
-  const [announcement, setAnnouncement] = useState("");
+  const previousIds = useRef<Set<string> | null>(null);
+  const [announcement, setAnnouncement] = useState<{ id: string; text: string } | null>(null);
   const visible = useMemo(
     () => items.slice(0, Math.max(1, maxVisible)),
     [items, maxVisible],
@@ -75,10 +75,15 @@ export function ToastStack({
 
   useEffect(() => {
     const first = items[0];
-    if (first && previousFirst.current && previousFirst.current !== first.id) {
-      setAnnouncement(first.description ? `${first.title}. ${first.description}` : first.title);
+    if (first && previousIds.current && !previousIds.current.has(first.id)) {
+      setAnnouncement({
+        id: first.id,
+        text: first.description ? `${first.title}. ${first.description}` : first.title,
+      });
+    } else if (!first) {
+      setAnnouncement(null);
     }
-    previousFirst.current = first?.id ?? null;
+    previousIds.current = new Set(items.map((item) => item.id));
   }, [items]);
 
   const dismissFromKeyboard = (event: KeyboardEvent<HTMLElement>, id: string) => {
@@ -192,7 +197,7 @@ export function ToastStack({
         </AnimatePresence>
       </motion.ol>
       <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        {announcement}
+        {announcement ? <span key={announcement.id}>{announcement.text}</span> : null}
       </span>
     </section>
   );
