@@ -437,9 +437,10 @@ body {
 }
 .shell-landing-start { min-width: 0; display: flex; align-items: center; }
 .shell-landing-start .shell-mobile-menu { margin-right: 4px; }
+.shell-landing-start .shell-brand { min-width: 44px; min-height: 44px; }
 .shell-landing-nav { display: flex; align-items: center; gap: 4px; }
 .shell-landing-nav a {
-  min-height: 34px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   border-radius: 8px;

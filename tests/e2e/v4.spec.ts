@@ -11,7 +11,7 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
 }
 
-test("landing page presents live components, primitives, and the Skill entry", async ({ page }) => {
+test("landing page presents live components, primitives, and the Skill entry", async ({ page }, testInfo) => {
   await page.goto("/zh/");
   await expect(page.getByRole("heading", { level: 1, name: "把成熟动效，直接带进产品。" })).toBeVisible();
   await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
@@ -30,6 +30,15 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await expect(github).toBeVisible();
   for (const link of [skill, github]) {
     expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  }
+  const brand = page.locator(".shell-landing-start").getByRole("link", { name: "Motion Lexicon" });
+  const brandBox = await brand.boundingBox();
+  expect(brandBox?.width).toBeGreaterThanOrEqual(44);
+  expect(brandBox?.height).toBeGreaterThanOrEqual(44);
+  if (!testInfo.project.name.includes("mobile")) {
+    for (const link of await page.locator(".shell-landing-nav a").all()) {
+      expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    }
   }
   await expectNoHorizontalOverflow(page);
 });

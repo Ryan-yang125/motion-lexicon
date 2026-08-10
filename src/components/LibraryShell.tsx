@@ -200,7 +200,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
               <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
                 <MenuIcon size={16} aria-hidden="true" />
               </button>
-              <Link to="/$locale/" params={{ locale }} className="shell-brand">
+              <Link to="/$locale/" params={{ locale }} className="shell-brand" aria-label="Motion Lexicon">
                 <BrandMark className="shell-brand-mark" />
                 <span>Motion Lexicon</span>
               </Link>
