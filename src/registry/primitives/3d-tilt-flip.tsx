@@ -27,6 +27,7 @@ export function Motion3dTiltFlipPrimitive({
   className,
 }: Motion3dTiltFlipPrimitiveProps) {
   const reduceMotion = useReducedMotion();
+  const rotation = Math.max(100, Math.min(180, angle));
 
   return (
     <div className={className} style={{ perspective }}>
@@ -34,13 +35,13 @@ export function Motion3dTiltFlipPrimitive({
         className="relative size-full"
         style={{ transformStyle: "preserve-3d" }}
         initial={false}
-        animate={{ transform: flipped ? `rotateY(${angle}deg)` : "rotateY(0deg)" }}
+        animate={{ transform: flipped ? `rotateY(${rotation}deg)` : "rotateY(0deg)" }}
         transition={reduceMotion ? { duration: 0 } : { duration, ease: easing }}
       >
         <div className="absolute inset-0" style={{ backfaceVisibility: "hidden" }}>{front}</div>
         <div
           className="absolute inset-0"
-          style={{ backfaceVisibility: "hidden", transform: `rotateY(${angle}deg)` }}
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           {back}
         </div>

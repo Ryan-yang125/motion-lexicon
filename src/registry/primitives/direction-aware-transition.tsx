@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
-export type NavigationDirection = -1 | 1;
+export type NavigationDirection = "left" | "right" | "up" | "down";
 
 export type DirectionAwareTransitionPrimitiveProps = {
   stateKey: string | number;
@@ -27,8 +27,14 @@ export function DirectionAwareTransitionPrimitive({
   className,
 }: DirectionAwareTransitionPrimitiveProps) {
   const reduceMotion = useReducedMotion();
-  const enter = `translate3d(${direction * distance}px, 0, 0)`;
-  const exit = `translate3d(${-direction * distance}px, 0, 0)`;
+  const offset = {
+    left: [-distance, 0],
+    right: [distance, 0],
+    up: [0, -distance],
+    down: [0, distance],
+  }[direction];
+  const enter = `translate3d(${offset[0]}px, ${offset[1]}px, 0)`;
+  const exit = `translate3d(${-offset[0]}px, ${-offset[1]}px, 0)`;
 
   return (
     <AnimatePresence initial={false} mode="popLayout" custom={direction}>

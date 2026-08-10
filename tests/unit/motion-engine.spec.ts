@@ -158,6 +158,11 @@ describe("React + Motion primitive registry", () => {
     expect(dismiss).toContain("exit={reduceMotion");
     expect(dismiss).toContain("onDragEnd={finish}");
 
+    const crossfade = source("crossfade");
+    expect(crossfade).toContain("delay: overlapDelay");
+    expect(crossfade).toContain("exit={{");
+    expect(crossfade).not.toContain("transition={reduceMotion");
+
     const scroll = source("scroll-driven-animation");
     expect(scroll).toContain("useScroll");
     expect(scroll).toContain("useTransform(scrollYProgress, [from, to], [distance, -distance])");
@@ -197,8 +202,16 @@ describe("React + Motion primitive registry", () => {
     expect(compare).toContain("}, [initialPosition])");
 
     const flip = source("3d-tilt-flip");
-    expect(flip).toContain('animate={{ transform: flipped ? `rotateY(${angle}deg)` : "rotateY(0deg)" }}');
+    expect(flip).toContain('animate={{ transform: flipped ? `rotateY(${rotation}deg)` : "rotateY(0deg)" }}');
+    expect(flip).toContain('transform: "rotateY(180deg)"');
     expect(flip).toContain("transition={reduceMotion ? { duration: 0 }");
+
+    const directional = source("direction-aware-transition");
+    expect(directional).toContain('"left" | "right" | "up" | "down"');
+    expect(directional).toContain("up: [0, -distance]");
+    expect(directional).toContain("down: [0, distance]");
+
+    expect(source("ripple")).toContain("if (reduceMotion) return");
 
     const typewriter = source("typewriter");
     expect(typewriter).toContain("window.setInterval");

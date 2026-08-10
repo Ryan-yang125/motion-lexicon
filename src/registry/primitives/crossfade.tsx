@@ -32,9 +32,16 @@ export function CrossfadePrimitive({
           className="col-start-1 row-start-1"
           key={stateKey}
           initial={{ opacity: 0, filter: reduceMotion ? "blur(0px)" : "blur(2px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, filter: reduceMotion ? "blur(0px)" : "blur(2px)" }}
-          transition={reduceMotion ? { duration: 0.12 } : { duration, delay: overlapDelay, ease: easing }}
+          animate={{
+            opacity: 1,
+            filter: "blur(0px)",
+            transition: reduceMotion ? { duration: 0.12 } : { duration, delay: overlapDelay, ease: easing },
+          }}
+          exit={{
+            opacity: 0,
+            filter: reduceMotion ? "blur(0px)" : "blur(2px)",
+            transition: reduceMotion ? { duration: 0.12 } : { duration, ease: easing },
+          }}
         >
           {children}
         </motion.div>

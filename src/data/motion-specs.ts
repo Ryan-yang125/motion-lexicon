@@ -194,7 +194,7 @@ function parametersFor(canonicalId: string): MotionParam[] {
     case "translate":
       return [duration(280), segmented("transform", "变换", "Transform", "translate", [["translate", "位移", "Translate"], ["scale", "缩放", "Scale"], ["rotate", "旋转", "Rotate"], ["skew", "倾斜", "Skew"], ["perspective", "透视", "Perspective"]]), distance(36), range("angle", "角度", "Angle", 12, -45, 45, 1, "deg"), scale(92), segmented("origin", "原点", "Origin", "center", [["center", "中心", "Center"], ["top", "顶部", "Top"], ["bottom", "底部", "Bottom"], ["left", "左侧", "Left"], ["right", "右侧", "Right"]]), ease()];
     case "3d-tilt-flip":
-      return [duration(280), range("angle", "翻转角度", "Flip angle", 180, 45, 180, 5, "deg"), range("perspective", "透视距离", "Perspective distance", 800, 320, 1400, 40, "px"), ease()];
+      return [duration(280), range("angle", "翻转角度", "Flip angle", 180, 100, 180, 5, "deg"), range("perspective", "透视距离", "Perspective distance", 800, 320, 1400, 40, "px"), ease()];
     case "origin-aware-animation":
       return [duration(220), scale(88), segmented("origin", "动作来源", "Motion origin", "top-left", [["top-left", "左上", "Top left"], ["top-right", "右上", "Top right"], ["bottom-left", "左下", "Bottom left"], ["bottom-right", "右下", "Bottom right"], ["center", "中心", "Center"]]), ease()];
     case "crossfade":

@@ -32,6 +32,7 @@ export function RipplePrimitive({
       whileTap={reduceMotion ? { opacity: 0.78 } : { transform: "scale(0.97)" }}
       transition={{ duration: 0.12, ease: [0.16, 1, 0.3, 1] }}
       onPointerDown={(event) => {
+        if (reduceMotion) return;
         const rect = event.currentTarget.getBoundingClientRect();
         setRipples((current) => [...current, {
           id: event.timeStamp,
@@ -51,7 +52,7 @@ export function RipplePrimitive({
             initial={{ opacity, transform: "translate(-50%, -50%) scale(0.08)" }}
             animate={{ opacity: 0, transform: `translate(-50%, -50%) scale(${size})` }}
             exit={{ opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0.1 : duration, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration, ease: [0.23, 1, 0.32, 1] }}
             onAnimationComplete={() => setRipples((current) => current.filter((item) => item.id !== ripple.id))}
           />
         ))}
