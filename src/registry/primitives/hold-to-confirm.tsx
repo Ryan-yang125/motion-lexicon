@@ -49,7 +49,7 @@ export function HoldToConfirmPrimitive({
     const current = progress.get();
     control.current?.stop();
     control.current = animate(progress, 1, {
-      duration: reduceMotion ? 0.25 : duration * (1 - current),
+      duration: duration * (1 - current),
       ease: "linear",
       onComplete: () => {
         setHolding(false);
@@ -93,7 +93,9 @@ export function HoldToConfirmPrimitive({
         if (event.key === " " || event.key === "Enter") cancel();
       }}
     >
-      <motion.span aria-hidden className="absolute inset-0 origin-left bg-current opacity-15" style={{ scaleX }} />
+      {reduceMotion ? null : (
+        <motion.span aria-hidden className="absolute inset-0 origin-left bg-current opacity-15" style={{ scaleX }} />
+      )}
       <span className="relative">{complete ? confirmed : children}</span>
     </motion.button>
   );

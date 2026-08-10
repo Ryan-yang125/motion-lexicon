@@ -34,8 +34,8 @@ export function Motion3dTiltFlipPrimitive({
         className="relative size-full"
         style={{ transformStyle: "preserve-3d" }}
         initial={false}
-        animate={{ transform: reduceMotion || !flipped ? "rotateY(0deg)" : `rotateY(${angle}deg)` }}
-        transition={reduceMotion ? { duration: 0.12 } : { duration, ease: easing }}
+        animate={{ transform: flipped ? `rotateY(${angle}deg)` : "rotateY(0deg)" }}
+        transition={reduceMotion ? { duration: 0 } : { duration, ease: easing }}
       >
         <div className="absolute inset-0" style={{ backfaceVisibility: "hidden" }}>{front}</div>
         <div

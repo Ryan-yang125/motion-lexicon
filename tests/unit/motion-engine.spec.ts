@@ -146,12 +146,16 @@ describe("React + Motion primitive registry", () => {
     const hold = source("hold-to-confirm");
     expect(hold).toContain("onConfirm: () => void");
     expect(hold).toContain("animate(progress, 1");
+    expect(hold).toContain("duration: duration * (1 - current)");
+    expect(hold).not.toContain("reduceMotion ? 0.25");
     expect(hold).toContain("onPointerCancel={cancel}");
     expect(hold).toContain("onKeyDown");
 
     const dismiss = source("swipe-to-dismiss");
     expect(dismiss).toContain("onDismiss?: () => void");
     expect(dismiss).toContain("Math.abs(info.offset.x) >= threshold");
+    expect(dismiss).toContain('drag="x"');
+    expect(dismiss).toContain("exit={reduceMotion");
     expect(dismiss).toContain("onDragEnd={finish}");
 
     const scroll = source("scroll-driven-animation");
@@ -190,6 +194,11 @@ describe("React + Motion primitive registry", () => {
     expect(compare).toContain('type="range"');
     expect(compare).toContain("clipPath");
     expect(compare).toContain("initialPosition = 50");
+    expect(compare).toContain("}, [initialPosition])");
+
+    const flip = source("3d-tilt-flip");
+    expect(flip).toContain('animate={{ transform: flipped ? `rotateY(${angle}deg)` : "rotateY(0deg)" }}');
+    expect(flip).toContain("transition={reduceMotion ? { duration: 0 }");
 
     const typewriter = source("typewriter");
     expect(typewriter).toContain("window.setInterval");

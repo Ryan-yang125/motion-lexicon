@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 export type BeforeAfterSliderPrimitiveProps = {
   before: ReactNode;
@@ -24,6 +24,10 @@ export function BeforeAfterSliderPrimitive({
 }: BeforeAfterSliderPrimitiveProps) {
   const reduceMotion = useReducedMotion();
   const [position, setPosition] = useState(() => Math.max(10, Math.min(90, initialPosition)));
+
+  useEffect(() => {
+    setPosition(Math.max(10, Math.min(90, initialPosition)));
+  }, [initialPosition]);
 
   return (
     <div className={`relative isolate overflow-hidden ${className ?? ""}`}>
