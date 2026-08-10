@@ -8,6 +8,8 @@ const harness = vi.hoisted(() => ({
   createRenderer: vi.fn(),
   dispose: vi.fn(),
   forceContextLoss: vi.fn(),
+  nodeMaterials: [] as Array<{ emissiveIntensity: number }>,
+  arcMaterials: [] as Array<{ opacity: number }>,
   reduced: false,
 }));
 
@@ -38,7 +40,26 @@ vi.mock("three", async (importOriginal) => {
     }
   }
 
-  return { ...actual, WebGLRenderer: WebGLRendererStub };
+  class MeshStandardMaterialStub extends actual.MeshStandardMaterial {
+    constructor(parameters?: ConstructorParameters<typeof actual.MeshStandardMaterial>[0]) {
+      super(parameters);
+      harness.nodeMaterials.push(this);
+    }
+  }
+
+  class LineBasicMaterialStub extends actual.LineBasicMaterial {
+    constructor(parameters?: ConstructorParameters<typeof actual.LineBasicMaterial>[0]) {
+      super(parameters);
+      harness.arcMaterials.push(this);
+    }
+  }
+
+  return {
+    ...actual,
+    WebGLRenderer: WebGLRendererStub,
+    MeshStandardMaterial: MeshStandardMaterialStub,
+    LineBasicMaterial: LineBasicMaterialStub,
+  };
 });
 
 class ResizeObserverStub {
@@ -55,6 +76,8 @@ beforeEach(() => {
   harness.createRenderer.mockClear();
   harness.dispose.mockClear();
   harness.forceContextLoss.mockClear();
+  harness.nodeMaterials = [];
+  harness.arcMaterials = [];
   harness.reduced = false;
   vi.stubGlobal("ResizeObserver", ResizeObserverStub);
   vi.stubGlobal("IntersectionObserver", IntersectionObserverStub);
@@ -67,6 +90,47 @@ afterEach(() => {
 });
 
 describe("NetworkGlobe", () => {
+  it("reapplies the active node styles when scene data rebuilds the runtime", async () => {
+    const shanghai = {
+      id: "shanghai",
+      label: "Shanghai",
+      latitude: 31.23,
+      longitude: 121.47,
+      color: "#4568FF",
+    };
+    const london = {
+      id: "london",
+      label: "London",
+      latitude: 51.51,
+      longitude: -0.13,
+      color: "#B3654A",
+    };
+    const { rerender } = render(<NetworkGlobe nodes={[shanghai, london]} />);
+    const londonButton = await waitFor(() => {
+      const button = document.querySelectorAll<HTMLButtonElement>("button")[1];
+      expect(button).toHaveTextContent("London");
+      return button;
+    });
+
+    fireEvent.click(londonButton);
+    expect(harness.nodeMaterials[1]?.emissiveIntensity).toBe(0.72);
+    expect(harness.arcMaterials[0]?.opacity).toBe(0.92);
+
+    rerender(
+      <NetworkGlobe
+        nodes={[
+          shanghai,
+          { ...london, longitude: 2.35, color: "#73806B" },
+        ]}
+      />,
+    );
+
+    await waitFor(() => expect(harness.createRenderer).toHaveBeenCalledTimes(2));
+    expect(harness.nodeMaterials[3]?.emissiveIntensity).toBe(0.72);
+    expect(harness.arcMaterials[1]?.opacity).toBe(0.92);
+    expect(document.querySelectorAll("button")[1]).toHaveAttribute("aria-pressed", "true");
+  });
+
   it("reuses WebGL resources for equivalent node content and rebuilds for scene changes", async () => {
     const nodes = [
       {

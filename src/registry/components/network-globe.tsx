@@ -29,6 +29,17 @@ type GlobeRuntime = {
   arcMaterials: Map<string, THREE.LineBasicMaterial>;
 };
 
+function applyFocusStyles(runtime: GlobeRuntime, focusedId: string | undefined) {
+  runtime.nodeMeshes.forEach((mesh, id) => {
+    const selected = id === focusedId;
+    mesh.scale.setScalar(selected ? 1.42 : 1);
+    mesh.material.emissiveIntensity = selected ? 0.72 : 0.18;
+  });
+  runtime.arcMaterials.forEach((material, id) => {
+    material.opacity = id === focusedId ? 0.92 : 0.24;
+  });
+}
+
 function pointOnGlobe(latitude: number, longitude: number, radius: number) {
   const phi = THREE.MathUtils.degToRad(90 - latitude);
   const theta = THREE.MathUtils.degToRad(longitude + 180);
@@ -76,6 +87,8 @@ export function NetworkGlobe({
   const effectiveFocusedId = nodes.some((node) => node.id === focusedId)
     ? focusedId
     : firstId;
+  const effectiveFocusedIdRef = useRef(effectiveFocusedId);
+  effectiveFocusedIdRef.current = effectiveFocusedId;
 
   const focused = useMemo(
     () => nodes.find((node) => node.id === effectiveFocusedId),
@@ -233,7 +246,9 @@ export function NetworkGlobe({
       }
     });
 
-    runtimeRef.current = { renderer, scene, camera, globe, nodeMeshes, arcMaterials };
+    const runtime = { renderer, scene, camera, globe, nodeMeshes, arcMaterials };
+    applyFocusStyles(runtime, effectiveFocusedIdRef.current || undefined);
+    runtimeRef.current = runtime;
 
     const resize = new ResizeObserver(([entry]) => {
       const width = Math.max(1, entry.contentRect.width);
@@ -287,14 +302,7 @@ export function NetworkGlobe({
   useEffect(() => {
     const runtime = runtimeRef.current;
     if (!runtime) return;
-    runtime.nodeMeshes.forEach((mesh, id) => {
-      const selected = id === focused?.id;
-      mesh.scale.setScalar(selected ? 1.42 : 1);
-      mesh.material.emissiveIntensity = selected ? 0.72 : 0.18;
-    });
-    runtime.arcMaterials.forEach((material, id) => {
-      material.opacity = id === focused?.id ? 0.92 : 0.24;
-    });
+    applyFocusStyles(runtime, focused?.id);
     requestFrameRef.current();
   }, [focused?.id]);
 
