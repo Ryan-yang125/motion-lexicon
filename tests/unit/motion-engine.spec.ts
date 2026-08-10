@@ -136,6 +136,8 @@ describe("React + Motion primitive registry", () => {
   it("exports interaction semantics for direct-manipulation primitives", () => {
     expect(source("drag-to-reorder")).toContain("<Reorder.Group");
     expect(source("drag-to-reorder")).toContain("onReorder={onReorder}");
+    expect(source("drag-to-reorder")).toContain("scale: pickupScale");
+    expect(source("drag-to-reorder")).not.toContain("transform: `translate3d");
     expect(source("scroll-reveal")).toContain("whileInView");
     expect(source("stagger")).toContain("staggerChildren");
     expect(source("accordion-collapse")).toContain("AnimatePresence");
@@ -213,6 +215,10 @@ describe("React + Motion primitive registry", () => {
     expect(directional).toContain("down: [0, distance]");
 
     expect(source("ripple")).toContain("if (reduceMotion) return");
+    expect(demo("ripple")).toContain("min-h-11");
+
+    const shake = source("shake-wiggle");
+    expect(shake).toContain("frames.push(-distance, distance)");
 
     const sharedDemo = readFileSync("src/registry/primitive-demos/_shared.tsx", "utf8");
     expect(sharedDemo).toContain("export function useEntryReplay");
@@ -220,6 +226,10 @@ describe("React + Motion primitive registry", () => {
       expect(demo(id), id).toContain("useEntryReplay(replayKey)");
     }
     expect(demo("morph")).toContain("min-h-11 min-w-11");
+
+    const directory = readFileSync("src/pages/PrimitivesPage.tsx", "utf8");
+    expect(directory).toContain('<article className="primitive-card"');
+    expect(directory).toContain('<Link className="primitive-card-footer"');
 
     const typewriter = source("typewriter");
     expect(typewriter).toContain("window.setInterval");

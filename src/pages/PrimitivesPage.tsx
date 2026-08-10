@@ -82,7 +82,7 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
         {entries.length > 0 ? (
           <div className="primitive-card-grid">
             {entries.map((recipe) => (
-              <Link className="primitive-card" key={recipe.id} to="/$locale/primitives/$primitiveId/" params={{ locale, primitiveId: recipe.id }}>
+              <article className="primitive-card" key={recipe.id}>
                 <div className="primitive-card-stage">
                   <PrimitivePreview
                     locale={locale}
@@ -92,11 +92,11 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
                     compact
                   />
                 </div>
-                <div className="primitive-card-footer">
+                <Link className="primitive-card-footer" to="/$locale/primitives/$primitiveId/" params={{ locale, primitiveId: recipe.id }}>
                   <span><strong>{text(recipe.name, locale)}</strong><code>{recipe.id}</code></span>
                   <small data-surface={recipe.surfaceType}>{primitiveSurfaceLabel(recipe, locale)}</small>
-                </div>
-              </Link>
+                </Link>
+              </article>
             ))}
           </div>
         ) : (

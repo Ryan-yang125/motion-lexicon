@@ -23,7 +23,7 @@ export function ShakeWigglePrimitive({
   const reduceMotion = useReducedMotion();
   const count = Math.max(1, Math.round(cycles));
   const frames = [0];
-  for (let index = 0; index < count; index += 1) frames.push(index % 2 ? distance : -distance);
+  for (let index = 0; index < count; index += 1) frames.push(-distance, distance);
   frames.push(0);
 
   return (

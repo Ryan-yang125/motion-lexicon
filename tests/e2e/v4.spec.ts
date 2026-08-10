@@ -36,7 +36,7 @@ test("primitive directory and workbench use the direct V4 routes", async ({ page
   await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
   await expect(page.locator(".primitive-card")).toHaveCount(canonicalMotionCatalog.length);
   await expect(page.locator('[data-primitive="slide-in"]')).toBeVisible();
-  await page.locator('.primitive-card[href="/zh/primitives/slide-in/"]').click();
+  await page.locator('.primitive-card-footer[href="/zh/primitives/slide-in/"]').click();
   await expect(page).toHaveURL(/\/zh\/primitives\/slide-in\//);
   await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();
   await expect(page.getByRole("slider").first()).toBeVisible();

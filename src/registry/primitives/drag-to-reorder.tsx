@@ -38,7 +38,8 @@ export function DragToReorderPrimitive({
           value={item}
           className={itemClassName}
           whileDrag={reduceMotion ? undefined : {
-            transform: `translate3d(0, ${Math.min(8, distance / 6)}px, 0) scale(${pickupScale})`,
+            scale: pickupScale,
+            boxShadow: `0 ${Math.min(12, Math.max(2, distance / 6))}px 28px rgb(0 0 0 / 0.14)`,
             zIndex: 2,
           }}
           transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.7 }}
