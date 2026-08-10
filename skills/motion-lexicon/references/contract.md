@@ -4,8 +4,8 @@ Motion Director and the public website share the Motion Blueprint contract.
 Use the public data when the task needs the current published vocabulary or a
 machine-readable handoff:
 
-- Grammar data: `https://motion-lexicon.pages.dev/data/v2/motion-grammar.json`
-- Blueprint schema: `https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json`
+- Grammar data: `https://motion-lexicon.pages.dev/data/v3/motion-grammar.json`
+- Blueprint schema: `https://motion-lexicon.pages.dev/data/v3/motion-blueprint.schema.json`
 
 The bundled references explain selection and implementation. The public
 contract keeps reusable artifacts consistent across the website, candidate

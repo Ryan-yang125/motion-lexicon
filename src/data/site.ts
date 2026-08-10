@@ -1,6 +1,5 @@
-import { categories } from "./categories";
-import { aliasMetadata, canonicalMotionCatalog } from "./motion-catalog";
-import { motionPacks } from "./motion-packs";
+import { registryComponents } from "./component-registry";
+import { canonicalMotionCatalog } from "./motion-catalog";
 import { seoGuideIds } from "./seo-guide-ids";
 import type { Locale } from "./types";
 
@@ -25,7 +24,7 @@ export function pathFor(locale: Locale, parts: string[] = []) {
 
 export function firstEntryPathForCategory(locale: Locale, categoryId: string) {
   const entry = canonicalMotionCatalog.find((item) => item.categoryId === categoryId);
-  return entry ? pathFor(locale, [entry.categoryId, entry.id]) : pathFor(locale, [categoryId]);
+  return entry ? pathFor(locale, ["primitives", entry.id]) : pathFor(locale, ["primitives"]);
 }
 
 export function switchLocalePath(pathname: string, nextLocale: Locale) {
@@ -40,42 +39,30 @@ export function switchLocalePath(pathname: string, nextLocale: Locale) {
 }
 
 export function getStaticPaths() {
-  const paths = new Set(sitemapPaths());
-
-  for (const locale of ["zh", "en"] as const) {
-    paths.add(pathFor(locale, ["lab", "motion-blueprints"]));
-  }
-
-  return Array.from(paths);
+  return sitemapPaths();
 }
 
 export function sitemapPaths() {
   const paths = new Set<string>();
 
   for (const locale of ["zh", "en"] as const) {
-    paths.add(pathFor(locale));
-    paths.add(pathFor(locale, ["catalog"]));
-    paths.add(pathFor(locale, ["finder"]));
+    paths.add(pathFor(locale, ["components"]));
+    paths.add(pathFor(locale, ["primitives"]));
     paths.add(pathFor(locale, ["guides"]));
     paths.add(pathFor(locale, ["method"]));
     paths.add(pathFor(locale, ["vocabulary"]));
-    paths.add(pathFor(locale, ["packs"]));
-    paths.add(pathFor(locale, ["director"]));
+    paths.add(pathFor(locale, ["skill"]));
 
     for (const guideId of seoGuideIds) {
       paths.add(pathFor(locale, ["guides", guideId]));
     }
 
-    for (const pack of motionPacks) {
-      paths.add(pathFor(locale, ["packs", pack.id]));
-    }
-
-    for (const category of categories) {
-      paths.add(pathFor(locale, [category.id]));
+    for (const component of registryComponents) {
+      paths.add(pathFor(locale, ["components", component.id]));
     }
 
     for (const item of canonicalMotionCatalog) {
-      paths.add(pathFor(locale, [item.categoryId, item.id]));
+      paths.add(pathFor(locale, ["primitives", item.id]));
     }
   }
 
@@ -94,7 +81,7 @@ export function staticRedirects(): StaticRedirect[] {
     redirects.set(source, { source, destination, status: 301 });
   };
 
-  add("/", pathFor(defaultLocale));
+  add("/", pathFor(defaultLocale, ["components"]));
 
   for (const canonicalPath of sitemapPaths()) {
     const withoutTrailingSlash = canonicalPath.replace(/\/$/, "");
@@ -104,22 +91,8 @@ export function staticRedirects(): StaticRedirect[] {
   }
 
   for (const locale of ["zh", "en"] as const) {
-    const primaryPlaygroundPath = pathFor(locale, ["easing", "easing"]);
-    add(pathFor(locale, ["playground"]), primaryPlaygroundPath);
-    add(pathFor(locale, ["playground"]).replace(/\/$/, ""), primaryPlaygroundPath);
-
-    const blueprintLabPath = pathFor(locale, ["lab", "motion-blueprints"]);
-    add(blueprintLabPath.replace(/\/$/, ""), blueprintLabPath);
-
-    for (const alias of aliasMetadata) {
-      const source = pathFor(locale, alias.sourcePath.split("/").filter(Boolean));
-      const canonical = pathFor(locale, alias.canonicalPath.split("/").filter(Boolean));
-      const focus = new URLSearchParams(alias.query ?? "");
-      focus.set("term", alias.entryId);
-      const destination = `${canonical}?${focus.toString()}`;
-      add(source, destination);
-      add(source.replace(/\/$/, ""), destination);
-    }
+    add(pathFor(locale), pathFor(locale, ["components"]));
+    add(pathFor(locale).replace(/\/$/, ""), pathFor(locale, ["components"]));
   }
 
   return Array.from(redirects.values());

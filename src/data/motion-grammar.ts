@@ -150,7 +150,7 @@ export const motionDirectorModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "2.1.0",
+  version: "3.0.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -162,10 +162,10 @@ export const motionGrammar = {
       title: text("动效基础", "Motion Primitives"),
       purpose: text("构成动作的底层语言。", "The foundational language used to build motion.")
     },
-    moments: {
+    components: {
       count: 28,
-      title: text("产品瞬间", "Product Moments"),
-      purpose: text("把多个基础动作编排成真实的产品交互。", "Composed interactions built from several motion primitives.")
+      title: text("组件", "Components"),
+      purpose: text("把多个原子动效编排成可安装的 React 产品交互。", "Installable React interactions composed from motion primitives.")
     }
   },
   material: {
@@ -383,4 +383,4 @@ export const motionBlueprintExample: MotionBlueprint = {
   contract: motionBlueprintContract
 };
 
-export const motionGrammarDataPath = "/data/v2/motion-grammar.json";
+export const motionGrammarDataPath = "/data/v3/motion-grammar.json";

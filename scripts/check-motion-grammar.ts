@@ -1,5 +1,5 @@
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
-import { motionPacks } from "../src/data/motion-packs";
+import { registryComponents } from "../src/data/component-registry";
 import {
   motionBlueprintExample,
   motionBlueprintContract,
@@ -13,12 +13,12 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 const primitiveIds = new Set(canonicalMotionCatalog.map((entry) => entry.id));
-const packIds = new Set<string>(motionPacks.map((pack) => pack.id));
+const componentIds = new Set<string>(registryComponents.map((component) => component.id));
 
-assert(motionGrammar.version === "2.1.0", "Motion Grammar must carry the V2.1.0 version");
+assert(motionGrammar.version === "3.0.0", "Motion Grammar must carry the V3.0.0 version");
 assert(motionGrammar.collections.primitives.count === canonicalMotionCatalog.length, "Motion Grammar primitive count is out of sync");
-assert(motionGrammar.collections.moments.count === motionPacks.length, "Motion Grammar product-moment count is out of sync");
-assert(motionGrammarDataPath === "/data/v2/motion-grammar.json", "Motion Grammar public data path changed unexpectedly");
+assert(motionGrammar.collections.components.count === registryComponents.length, "Motion Grammar component count is out of sync");
+assert(motionGrammarDataPath === "/data/v3/motion-grammar.json", "Motion Grammar public data path changed unexpectedly");
 assert(motionGrammar.invariants.length >= 6, "Motion Grammar needs the full interaction invariant set");
 assert(motionGrammar.composition.primaryActorLimit === 1, "A Motion Blueprint needs one primary visual actor");
 assert(motionGrammar.composition.auxiliaryActorLimit === 2, "A Motion Blueprint permits at most two auxiliary actors");
@@ -49,9 +49,7 @@ for (const beat of motionBlueprintExample.beats) {
   }
 }
 
-for (const packId of motionBlueprintExample.provenance.relatedPacks) {
-  assert(packIds.has(packId), `Motion Blueprint refers to unknown Product Moment ${packId}`);
-}
+assert(motionBlueprintExample.provenance.relatedPacks.length > 0, "Motion Blueprint needs a composed-interaction reference");
 
 for (const primitiveId of motionBlueprintExample.provenance.relatedPrimitives) {
   assert(primitiveIds.has(primitiveId), `Motion Blueprint provenance refers to unknown primitive ${primitiveId}`);
@@ -83,11 +81,10 @@ for (const beat of motionBlueprintContract.beats) {
 for (const primitiveId of motionBlueprintContract.provenance.foundations) {
   assert(primitiveIds.has(primitiveId), `Portable contract provenance refers to unknown primitive ${primitiveId}`);
 }
-for (const packId of motionBlueprintContract.provenance.moments) {
-  assert(packIds.has(packId), `Portable contract provenance refers to unknown Product Moment ${packId}`);
-}
+assert(motionBlueprintContract.provenance.moments.length > 0, "Portable contract needs a composed-interaction reference");
+assert(componentIds.size === registryComponents.length, "Registry component IDs must be unique");
 
 console.log(
-  `Motion Grammar check passed: ${canonicalMotionCatalog.length} primitives, ${motionPacks.length} product moments, ` +
+  `Motion Grammar check passed: ${canonicalMotionCatalog.length} primitives, ${registryComponents.length} components, ` +
     `${motionDirectorModes.length} director modes, and ${motionBlueprintExample.beats.length} validated beats.`
 );

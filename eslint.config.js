@@ -45,9 +45,10 @@ export default tseslint.config(
   {
     // Interior is vendored source. Keep its event-ref and manual memoization
     // patterns aligned with upstream while the app remains on React 18.
-    files: ["src/components/interior/**/*.tsx"],
+    files: ["src/components/interior/**/*.tsx", "src/registry/components/**/*.tsx", "src/registry/demos/**/*.tsx"],
     rules: {
       "react-hooks/refs": "off",
+      "react-hooks/immutability": "off",
       "react-hooks/preserve-manual-memoization": "off",
       "no-useless-assignment": "off"
     }

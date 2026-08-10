@@ -3,11 +3,11 @@ name: motion-lexicon
 description: Design, compose, implement, review, and contribute polished interface motion for real product states. Use this skill whenever a user asks what motion fits a UI event, needs a single interaction or a multi-step product moment, requests HTML, CSS, JavaScript, or React motion code, wants an animation review, or wants to add a Motion Lexicon candidate. Apply it to Chinese and English requests, precise motion terms, and vague product-feeling descriptions.
 ---
 
-# Motion Director
+# Motion Lexicon
 
 Motion Lexicon is a design system for product motion. It connects two equal
-collections: Motion Primitives describe a precise behavior; Product Moments
-show that behavior inside a complete product state.
+collections: Motion Primitives describe a precise behavior; Components turn
+one or more behaviors into a complete, copy-ready product interaction.
 
 Design from the user's product event. Produce code only when it supports a
 clear state change, a focused actor, and an accessible handoff.

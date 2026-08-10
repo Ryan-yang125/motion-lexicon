@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { catalogRecipes } from "../src/data/recipes";
 import type { MotionParam, RangeParam } from "../src/data/types";
 import { buildRecipeCss, buildRecipeHtml, getDefaultParamValues } from "../src/lib/motion-engine";
@@ -138,6 +138,18 @@ const longFormExceptions = new Set([
   "typewriter"
 ]);
 const componentOutputs = new Map<string, string>();
+
+const registryFiles = readdirSync("src/registry/components").filter((file) => file.endsWith(".tsx"));
+for (const file of registryFiles) {
+  const source = readFileSync(`src/registry/components/${file}`, "utf8");
+  assert(!/transition\s*:\s*["'`]all\b/.test(source), `${file} uses transition: all`);
+  assert(!/scale\s*:\s*0(?!\.)/.test(source), `${file} animates from scale 0`);
+  if (source.includes('from "motion/react"')) {
+    assert(source.includes("useReducedMotion"), `${file} uses Motion without a reduced-motion branch`);
+  }
+}
+const commandPaletteSource = readFileSync("src/registry/components/command-palette.tsx", "utf8");
+assert(!commandPaletteSource.includes('initial="closed"'), "Command palette opening must remain immediate for keyboard use");
 
 for (const recipe of catalogRecipes) {
   const values = getDefaultParamValues(recipe);

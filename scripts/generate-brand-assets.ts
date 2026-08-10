@@ -29,20 +29,16 @@ async function captureIcon(size: number, filename: string) {
   await browser.close();
 }
 
-type OgKind = "home" | "finder" | "packs" | "primitives" | "guides" | "method" | "director" | "vocabulary";
+type OgKind = "home" | "components" | "primitives" | "guides" | "method" | "skill" | "vocabulary";
 
 const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: string; preview: string; meta: string }>> = {
   home: {
-    zh: { title: "把产品动效，<br>带进真实界面。", copy: "产品瞬间与动效基础，都能预览、调节并直接复制。", preview: "Motion Lexicon", meta: "28 PRODUCT MOMENTS · 44 PRIMITIVES · FREE & OPEN" },
-    en: { title: "Bring product motion<br>into a real interface.", copy: "Product moments and motion primitives to preview, tune, and take into your interface.", preview: "Motion Lexicon", meta: "28 PRODUCT MOMENTS · 44 PRIMITIVES · FREE & OPEN" }
+    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "28 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "28 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" },
+    en: { title: "Bring refined motion<br>straight into your product.", copy: "28 React motion components and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "28 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" }
   },
-  finder: {
-    zh: { title: "说出感觉，<br>找到准确动效。", copy: "一个主预览，三个静态候选；选好动效并调参，再复制 Prompt 或前端实现。", preview: "Motion Finder", meta: "44 MOTION RECIPES · 91 TERMS · FREE & OPEN" },
-    en: { title: "Describe the feeling.<br>Find the right motion.", copy: "Use one active preview and three static choices, tune the motion, then copy the prompt or implementation.", preview: "Motion Finder", meta: "44 MOTION RECIPES · 91 TERMS · FREE & OPEN" }
-  },
-  packs: {
-    zh: { title: "一段完整交互，<br>直接带进界面。", copy: "从触发到结果，查看完整状态，再复制 HTML、CSS 和 JavaScript。", preview: "Product Moments", meta: "28 PRODUCT MOMENTS · COPY-READY · FREE & OPEN" },
-    en: { title: "A complete interaction,<br>ready for your interface.", copy: "See the full state change from trigger to outcome, then copy HTML, CSS, and JavaScript.", preview: "Product Moments", meta: "28 PRODUCT MOMENTS · COPY-READY · FREE & OPEN" }
+  components: {
+    zh: { title: "完整交互组件，<br>预览后直接安装。", copy: "真实状态、键盘操作与减弱动效，封装在同一份 React 源码里。", preview: "React Components", meta: "28 COMPONENTS · SHADCN REGISTRY · MIT" },
+    en: { title: "Complete interactions,<br>ready to install.", copy: "Real states, keyboard behavior, and reduced motion in one React source.", preview: "React Components", meta: "28 COMPONENTS · SHADCN REGISTRY · MIT" }
   },
   primitives: {
     zh: { title: "一个动效，<br>放进真实场景。", copy: "44 个可预览、可调节的动效基础，覆盖进入、节奏、状态和反馈。", preview: "Motion Primitives", meta: "44 MOTION PRIMITIVES · 91 TERMS · FREE & OPEN" },
@@ -56,9 +52,9 @@ const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: strin
     zh: { title: "内容方法、来源和<br>开源维护方式。", copy: "了解 Motion Lexicon 如何编写、验证和维护每一条公开内容。", preview: "Method and sources", meta: "OPEN SOURCE · BILINGUAL · VERIFIED" },
     en: { title: "Method, sources, and<br>open maintenance.", copy: "See how Motion Lexicon authors, verifies, and maintains public content.", preview: "Method and sources", meta: "OPEN SOURCE · BILINGUAL · VERIFIED" }
   },
-  director: {
-    zh: { title: "从产品场景，<br>写出动效规格。", copy: "Motion Director 把状态、节奏和实现边界写成可交付的 Motion Blueprint。", preview: "Motion Director", meta: "AGENT SKILL · OPEN SOURCE · FREE" },
-    en: { title: "Write motion specs<br>from a product scene.", copy: "Motion Director turns state, rhythm, and implementation boundaries into a Motion Blueprint.", preview: "Motion Director", meta: "AGENT SKILL · OPEN SOURCE · FREE" }
+  skill: {
+    zh: { title: "让 Agent 设计、<br>实现并审查动效。", copy: "从产品场景选择原子动效，组合完整交互，并输出可用代码。", preview: "Agent Skill", meta: "RECOMMEND · COMPOSE · IMPLEMENT · REVIEW" },
+    en: { title: "Let your agent design,<br>build, and review motion.", copy: "Choose primitives from product context, compose interactions, and deliver working code.", preview: "Agent Skill", meta: "RECOMMEND · COMPOSE · IMPLEMENT · REVIEW" }
   },
   vocabulary: {
     zh: { title: "91 个中英双语，<br>界面动效术语。", copy: "定义、辨析和对应工作区，帮助团队说清同一段动效。", preview: "Animation vocabulary", meta: "91 MOTION TERMS · BILINGUAL · FREE" },
@@ -100,7 +96,8 @@ function ogMarkup(locale: "zh" | "en", kind: OgKind) {
       .preview-head { height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; border-bottom: 1px solid rgb(29 29 31 / 9%); color: #86868b; font-size: 13px; }
       .preview-head strong { color: #1d1d1f; font-size: 14px; }
       .preview-body { padding: 20px; }
-      .query { height: 48px; display: flex; align-items: center; padding: 0 16px; border-radius: 14px; color: #6e6e73; background: #f5f5f7; font-size: 13px; }
+      .query { height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-radius: 14px; color: #1d1d1f; background: #f5f5f7; font-size: 13px; font-weight: 650; }
+      .query span { color: #86868b; font: 600 11px/1 ui-monospace, monospace; }
       .choice { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; margin-top: 12px; padding: 17px; border: 1px solid rgb(29 29 31 / 9%); border-radius: 17px; }
       .choice.primary { border-color: rgb(10 132 255 / 42%); box-shadow: inset 3px 0 #0a84ff; }
       .choice div { display: grid; gap: 5px; }
@@ -126,12 +123,12 @@ function ogMarkup(locale: "zh" | "en", kind: OgKind) {
     <div class="preview">
       <div class="preview-head"><strong>${content.preview}</strong><span>${locale === "zh" ? "可直接带走" : "ready to take"}</span></div>
       <div class="preview-body">
-        <div class="query">${locale === "zh" ? "卡片弹出来要有重量，最后收得住" : "Make the card feel weighted, then settle"}</div>
-        <div class="choice primary"><div><strong>${locale === "zh" ? "弹簧" : "Spring"}</strong><span>${locale === "zh" ? "有重量，落点自然" : "Weighted with a natural settle"}</span></div><i></i></div>
-        <div class="choice"><div><strong>${locale === "zh" ? "弹入" : "Pop in"}</strong><span>${locale === "zh" ? "更直接、更有活力" : "Direct and energetic"}</span></div><i></i></div>
-        <div class="choice"><div><strong>${locale === "zh" ? "缩放入场" : "Scale in"}</strong><span>${locale === "zh" ? "平稳、克制" : "Calm and restrained"}</span></div><i></i></div>
+        <div class="query">${locale === "zh" ? "组件目录" : "Component directory"}<span>28</span></div>
+        <div class="choice primary"><div><strong>${locale === "zh" ? "复制按钮" : "Copy button"}</strong><span>React · Motion</span></div><i></i></div>
+        <div class="choice"><div><strong>${locale === "zh" ? "抽屉" : "Drawer"}</strong><span>${locale === "zh" ? "焦点 · 拖拽 · 中断" : "Focus · drag · interrupt"}</span></div><i></i></div>
+        <div class="choice"><div><strong>${locale === "zh" ? "行内校验" : "Inline validation"}</strong><span>${locale === "zh" ? "等待 · 错误 · 通过" : "Pending · error · success"}</span></div><i></i></div>
       </div>
-      <div class="steps"><b>Describe</b><span>Choose</span><span>Tune</span><span>Use</span></div>
+      <div class="steps"><b>Preview</b><span>Source</span><span>Registry</span><span>Install</span></div>
       <svg class="curve" viewBox="0 0 88 88"><path d="M22 64V24M22 64H66" fill="none" stroke="#1d1d1f" stroke-linecap="round" stroke-width="4"/><path d="M23 62C26 35 37 27 65 25" fill="none" stroke="#1d1d1f" stroke-linecap="round" stroke-width="6"/><circle cx="65" cy="25" r="6.5" fill="#0a84ff"/></svg>
     </div>
   `;
@@ -151,7 +148,7 @@ await captureIcon(512, "icon-512.png");
 await captureOg("en", "home", "og-default.png");
 await captureOg("en", "home", "og-en.png");
 await captureOg("zh", "home", "og-zh.png");
-for (const kind of ["home", "finder", "packs", "primitives", "guides", "method", "director", "vocabulary"] as const) {
+for (const kind of ["home", "components", "primitives", "guides", "method", "skill", "vocabulary"] as const) {
   await captureOg("zh", kind, `og-${kind}-zh.png`);
   await captureOg("en", kind, `og-${kind}-en.png`);
 }

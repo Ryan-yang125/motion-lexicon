@@ -204,7 +204,7 @@ const validateSchema = () => {
   }
 
   const requiredFields = ["version", "locale", "intent", "scope", "stateGraph", "actors", "beats", "accessibility", "delivery", "provenance"];
-  if (schema.$id !== "https://motion-lexicon.pages.dev/data/v2/motion-blueprint.schema.json") {
+  if (schema.$id !== "https://motion-lexicon.pages.dev/data/v3/motion-blueprint.schema.json") {
     fail("Motion Blueprint schema needs the public v2 schema URL.");
   }
   for (const field of requiredFields) {

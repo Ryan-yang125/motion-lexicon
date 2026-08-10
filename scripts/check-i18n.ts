@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { categories } from "../src/data/categories";
+import { registryComponents } from "../src/data/component-registry";
 import { aliasMetadata, canonicalMotionCatalog } from "../src/data/motion-catalog";
 import { entries } from "../src/data/recipes";
 import { locales, type LocalizedText } from "../src/data/types";
@@ -91,8 +92,19 @@ const paths = getStaticPaths();
 for (const entry of canonicalMotionCatalog) {
   for (const locale of locales) {
     assert(
-      paths.includes(pathFor(locale, [entry.categoryId, entry.id])),
-      `Missing static path for ${locale}/${entry.categoryId}/${entry.id}`
+      paths.includes(pathFor(locale, ["primitives", entry.id])),
+      `Missing static path for ${locale}/primitives/${entry.id}`
+    );
+  }
+}
+
+for (const component of registryComponents) {
+  assertLocalized(component.name, `component.${component.id}.name`);
+  assertLocalized(component.description, `component.${component.id}.description`);
+  for (const locale of locales) {
+    assert(
+      paths.includes(pathFor(locale, ["components", component.id])),
+      `Missing static path for ${locale}/components/${component.id}`
     );
   }
 }
@@ -102,6 +114,6 @@ for (const alias of aliasMetadata) {
 }
 
 console.log(
-  `i18n check passed: ${entries.length} localized terms, ${canonicalMotionCatalog.length} canonical routes, ` +
-    `${aliasMetadata.length} localized aliases, ${categories.length} categories, ${zhKeys.length} UI keys.`
+  `i18n check passed: ${registryComponents.length} components, ${entries.length} localized terms, ` +
+    `${canonicalMotionCatalog.length} primitives, ${aliasMetadata.length} aliases, ${categories.length} categories, and ${zhKeys.length} UI keys.`
 );

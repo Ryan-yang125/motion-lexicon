@@ -127,7 +127,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
                   ? {
                       subjectOf: {
                         "@type": "WebPage",
-                        url: `${siteUrl}${pathFor(locale, [canonical.categoryId, canonical.id])}`
+                        url: `${siteUrl}${pathFor(locale, ["primitives", canonical.id])}`
                       }
                     }
                   : {})
@@ -194,7 +194,7 @@ export function VocabularyPage({ locale }: { locale: Locale }) {
                     const alias = aliasMetadataById.get(term.id);
                     const focus = new URLSearchParams(alias?.query ?? "");
                     focus.set("term", term.id);
-                    const href = `${pathFor(locale, [canonical.categoryId, canonical.id])}?${focus.toString()}#workspace-term-${term.id}`;
+                    const href = `${pathFor(locale, ["primitives", canonical.id])}?${focus.toString()}#workspace-term-${term.id}`;
                     return (
                       <article key={term.id} id={`term-${term.id}`} className={term.canonical ? "is-canonical" : undefined}>
                         <div className="vocabulary-term-heading">
