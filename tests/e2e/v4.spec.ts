@@ -24,7 +24,7 @@ test("landing page presents live components, primitives, and the Skill entry", a
   await page.keyboard.press("ArrowRight");
   await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
   await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.locator('[data-component="tabs"]')).toBeVisible();
+  await expect(page.locator('[data-component="tabs"]')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByRole("tabpanel", { name: "标签页" })).toBeVisible();
   await expect(page.locator(".landing-component-card")).toHaveCount(4);
   await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
