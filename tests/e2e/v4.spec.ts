@@ -40,6 +40,12 @@ test("landing page presents live components, primitives, and the Skill entry", a
       expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
     }
   }
+  for (const control of await page.locator(".library-shell-header a, .library-shell-header button").all()) {
+    if (!await control.isVisible()) continue;
+    const box = await control.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  }
   await expectNoHorizontalOverflow(page);
 });
 
