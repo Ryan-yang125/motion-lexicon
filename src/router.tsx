@@ -12,7 +12,7 @@ import { LibraryShell } from "./components/LibraryShell";
 import { defaultLocale, pathFor } from "./data/site";
 import type { Locale } from "./data/types";
 import { setI18nLanguage } from "./i18n";
-import { ComponentsPage } from "./pages/ComponentsPage";
+import { HomePage } from "./pages/HomePage";
 import { useRouteLocale } from "./routes/route-locale";
 
 function LocaleSync({ locale }: { locale: Locale }) {
@@ -41,12 +41,12 @@ function AppShell() {
 }
 
 function RootIndex() {
-  return <ComponentsPage locale={defaultLocale} />;
+  return <HomePage locale={defaultLocale} />;
 }
 
 function LocaleIndex() {
   const locale = useRouteLocale();
-  return <ComponentsPage locale={locale} />;
+  return <HomePage locale={locale} />;
 }
 
 const rootRoute = createRootRoute({

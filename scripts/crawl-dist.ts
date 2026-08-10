@@ -43,7 +43,7 @@ const routes = sitemapPaths();
 const staticRoutes = getStaticPaths();
 const routeSet = new Set(routes);
 assert(routeSet.size === routes.length, "Sitemap routes contain duplicates");
-assert(routes.length === 172, `Expected 172 canonical routes, found ${routes.length}`);
+assert(routes.length === 174, `Expected 174 canonical routes, found ${routes.length}`);
 assert(staticRoutes.length === routes.length, "Static and sitemap route counts differ");
 
 const sitemapXml = readFileSync("dist/sitemap.xml", "utf8");
@@ -102,7 +102,7 @@ for (const primitive of installablePrimitiveEntries) {
 }
 
 const redirects = readFileSync("dist/_redirects", "utf8");
-assert(redirects.includes(`/ ${pathFor(defaultLocale, ["components"])} 301`), "Root redirect must open Components");
+assert(redirects.includes(`/ ${pathFor(defaultLocale)} 301`), "Root redirect must open the landing page");
 for (const redirect of staticRedirects()) {
   assert(redirects.includes(`${redirect.source} ${redirect.destination} ${redirect.status}`), `Missing redirect ${redirect.source}`);
 }

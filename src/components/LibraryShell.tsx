@@ -61,7 +61,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
   return (
     <aside className="library-shell-sidebar" aria-label={locale === "zh" ? "站点导航" : "Site navigation"}>
       <div className="shell-brand-row">
-        <Link to="/$locale/components/" params={{ locale }} className="shell-brand" onClick={onNavigate}>
+        <Link to="/$locale/" params={{ locale }} className="shell-brand" onClick={onNavigate}>
           <BrandMark className="shell-brand-mark" />
           <span>Motion Lexicon</span>
         </Link>
@@ -71,7 +71,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
         <section className="shell-nav-section">
           <ShellLink
             href={pathFor(locale, ["components"])}
-            current={pathname === pathFor(locale, ["components"]) || pathname === pathFor(locale) || pathname === "/"}
+            current={pathname === pathFor(locale, ["components"])}
             className="shell-nav-heading"
           >
             <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
@@ -142,6 +142,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
   const { theme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const landing = location.pathname === pathFor(locale) || location.pathname === "/";
   const dark = theme === "dark" || (theme === "system" && typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const otherLocale: Locale = locale === "zh" ? "en" : "zh";
   const languageHref = `${switchLocalePath(location.pathname, otherLocale)}${location.searchStr}${location.hash}`;
@@ -185,20 +186,43 @@ export function LibraryShell({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="library-shell">
-      <div className="library-shell-desktop">
-        <LibrarySidebar locale={locale} pathname={location.pathname} />
-      </div>
+    <div className={`library-shell${landing ? " is-landing" : ""}`}>
+      {!landing ? (
+        <div className="library-shell-desktop">
+          <LibrarySidebar locale={locale} pathname={location.pathname} />
+        </div>
+      ) : null}
 
-      <header className="library-shell-header">
-        <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
-          <MenuIcon size={16} aria-hidden="true" />
-        </button>
-        <button className="shell-search-trigger" type="button" onClick={() => setSearchOpen(true)}>
-          <SearchIcon size={14} aria-hidden="true" />
-          <span>{locale === "zh" ? "搜索组件与动效" : "Search components and motion"}</span>
-          <kbd>⌘ K</kbd>
-        </button>
+      <header className={`library-shell-header${landing ? " is-landing" : ""}`}>
+        {landing ? (
+          <>
+            <div className="shell-landing-start">
+              <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
+                <MenuIcon size={16} aria-hidden="true" />
+              </button>
+              <Link to="/$locale/" params={{ locale }} className="shell-brand" aria-label="Motion Lexicon">
+                <BrandMark className="shell-brand-mark" />
+                <span>Motion Lexicon</span>
+              </Link>
+            </div>
+            <nav className="shell-landing-nav" aria-label={locale === "zh" ? "主要导航" : "Primary navigation"}>
+              <Link to="/$locale/components/" params={{ locale }}>{locale === "zh" ? "组件" : "Components"}</Link>
+              <Link to="/$locale/primitives/" params={{ locale }}>{locale === "zh" ? "原子动效" : "Primitives"}</Link>
+              <Link to="/$locale/guides/" params={{ locale }}>{locale === "zh" ? "指南" : "Guides"}</Link>
+            </nav>
+          </>
+        ) : (
+          <>
+            <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
+              <MenuIcon size={16} aria-hidden="true" />
+            </button>
+            <button className="shell-search-trigger" type="button" onClick={() => setSearchOpen(true)}>
+              <SearchIcon size={14} aria-hidden="true" />
+              <span>{locale === "zh" ? "搜索组件与动效" : "Search components and motion"}</span>
+              <kbd>⌘ K</kbd>
+            </button>
+          </>
+        )}
         <div className="shell-header-actions">
           <a className="shell-icon-button" href={languageHref} aria-label={locale === "zh" ? "Switch to English" : "切换到中文"}>
             <LanguagesIcon size={15} aria-hidden="true" />
@@ -206,13 +230,18 @@ export function LibraryShell({ locale }: { locale: Locale }) {
           <button className="shell-icon-button shell-theme-button" type="button" onClick={() => setTheme(dark ? "light" : "dark")} aria-label={dark ? (locale === "zh" ? "切换浅色" : "Use light theme") : (locale === "zh" ? "切换深色" : "Use dark theme")}>
             <ThemeGlyph dark={dark} />
           </button>
-          <a className="shell-icon-button" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label="GitHub">
+          <Link className="shell-header-link" to="/$locale/skill/" params={{ locale }} aria-label="Skill">
+            <MotionSkillGlyph size={15} aria-hidden="true" />
+            <span>Skill</span>
+          </Link>
+          <a className="shell-header-link" href={repositoryUrl} target="_blank" rel="noreferrer" aria-label="GitHub">
             <GithubIcon size={15} aria-hidden="true" />
+            <span>GitHub</span>
           </a>
         </div>
       </header>
 
-      <main className="library-shell-main" id="main-content" tabIndex={-1}>
+      <main className={`library-shell-main${landing ? " is-landing" : ""}`} id="main-content" tabIndex={-1}>
         <Outlet />
       </main>
 

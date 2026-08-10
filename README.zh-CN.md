@@ -15,6 +15,7 @@
 </p>
 
 <p align="center">
+  <a href="https://motion-lexicon.pages.dev/zh/"><strong>官网</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/components/"><strong>组件</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/primitives/"><strong>原子动效</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/skill/"><strong>Agent Skill</strong></a> ·
