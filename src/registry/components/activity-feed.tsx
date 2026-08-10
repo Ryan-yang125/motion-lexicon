@@ -43,13 +43,20 @@ export function ActivityFeed({
 }: ActivityFeedProps) {
   const reduced = useReducedMotion() === true;
   const first = useRef<string | null>(null);
+  const initialized = useRef(false);
   const [announcement, setAnnouncement] = useState("");
   let previousGroup: string | undefined;
   let unreadDividerShown = false;
 
   useEffect(() => {
     const newest = items[0];
-    if (newest && first.current && first.current !== newest.id) setAnnouncement(newest.title);
+    if (!initialized.current) {
+      initialized.current = true;
+      first.current = newest?.id ?? null;
+      return;
+    }
+    if (newest && first.current !== newest.id) setAnnouncement(newest.title);
+    else if (!newest) setAnnouncement("");
     first.current = newest?.id ?? null;
   }, [items]);
 

@@ -105,7 +105,10 @@ export function NetworkGlobe({
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount || nodes.length === 0) return;
+    if (!mount || nodes.length === 0) {
+      setRendererReady(false);
+      return;
+    }
     const resources = new Set<{ dispose: () => void }>();
     const track = <T extends { dispose: () => void }>(resource: T) => {
       resources.add(resource);

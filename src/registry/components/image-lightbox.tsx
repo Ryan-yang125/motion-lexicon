@@ -70,20 +70,21 @@ export function ImageLightbox({
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
+  const triggerRefs = useRef(new Map<string, HTMLButtonElement>());
   const focusFrameRef = useRef<number | null>(null);
   const backdropDownRef = useRef(false);
   const navigationSourceRef = useRef<NavigationSource>("pointer");
   const [portalNode, setPortalNode] = useState<HTMLDivElement | null>(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const open = activeIndex !== null;
-  const activeItem = activeIndex === null ? null : items[activeIndex] ?? null;
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeIndex = activeId === null
+    ? -1
+    : items.findIndex((item) => item.id === activeId);
+  const activeItem = activeIndex < 0 ? null : items[activeIndex];
+  const open = activeItem !== null;
 
   useEffect(() => {
-    setActiveIndex((current) => {
-      if (current === null || current < items.length) return current;
-      return items.length > 0 ? items.length - 1 : null;
-    });
-  }, [items.length]);
+    if (activeId !== null && activeIndex < 0) setActiveId(null);
+  }, [activeId, activeIndex]);
 
   useEffect(() => {
     const node = document.createElement("div");
@@ -97,6 +98,7 @@ export function ImageLightbox({
 
   useEffect(() => {
     if (!open || !portalNode) return;
+    const triggers = triggerRefs.current;
     const body = document.body;
     const previousOverflow = body.style.overflow;
     const siblings = Array.from(body.children).filter((child) => child !== portalNode);
@@ -119,7 +121,10 @@ export function ImageLightbox({
         if (previous === null) element.removeAttribute("inert");
         else element.setAttribute("inert", previous);
       });
-      const returnTarget = returnFocusRef.current;
+      const previousTarget = returnFocusRef.current;
+      const returnTarget = previousTarget?.isConnected
+        ? previousTarget
+        : Array.from(triggers.values()).find((trigger) => trigger.isConnected);
       if (returnTarget?.isConnected) returnTarget.focus({ preventScroll: true });
     };
   }, [open, portalNode]);
@@ -129,24 +134,25 @@ export function ImageLightbox({
     trigger: HTMLElement,
     source: NavigationSource,
   ) => {
+    const item = items[index];
+    if (!item) return;
     navigationSourceRef.current = source;
     returnFocusRef.current = trigger;
-    setActiveIndex(index);
-    const item = items[index];
-    if (item) onChange?.(item, index);
+    setActiveId(item.id);
+    onChange?.(item, index);
   };
 
   const close = useCallback((source: NavigationSource = "pointer") => {
     navigationSourceRef.current = source;
-    setActiveIndex(null);
+    setActiveId(null);
   }, []);
 
   const move = useCallback(
     (delta: -1 | 1, source: NavigationSource) => {
-      if (items.length < 2 || activeIndex === null) return;
+      if (items.length < 2 || activeIndex < 0) return;
       navigationSourceRef.current = source;
       const next = (activeIndex + delta + items.length) % items.length;
-      setActiveIndex(next);
+      setActiveId(items[next].id);
       onChange?.(items[next], next);
     },
     [activeIndex, items, onChange],
@@ -213,6 +219,10 @@ export function ImageLightbox({
           {items.map((item, index) => (
             <button
               key={item.id}
+              ref={(node) => {
+                if (node) triggerRefs.current.set(item.id, node);
+                else triggerRefs.current.delete(item.id);
+              }}
               type="button"
               aria-label={`Open ${item.title}`}
               onClick={(event) =>
@@ -247,7 +257,7 @@ export function ImageLightbox({
       {portalNode
         ? createPortal(
             <AnimatePresence>
-              {activeItem && activeIndex !== null ? (
+              {activeItem && activeIndex >= 0 ? (
                 <motion.div
                   key="image-lightbox"
                   initial={{ opacity: 0 }}
