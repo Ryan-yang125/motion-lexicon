@@ -11,6 +11,19 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
 }
 
+test("landing page presents live components, primitives, and the Skill entry", async ({ page }) => {
+  await page.goto("/zh/");
+  await expect(page.getByRole("heading", { level: 1, name: "把成熟动效，直接带进产品。" })).toBeVisible();
+  await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
+  await page.getByRole("tab", { name: "标签页" }).click();
+  await expect(page.locator('[data-component="tabs"]')).toBeVisible();
+  await expect(page.locator(".landing-component-card")).toHaveCount(4);
+  await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
+  const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
+  await expect(skill).toHaveAttribute("href", "/zh/skill/");
+  await expectNoHorizontalOverflow(page);
+});
+
 test("component directory exposes all live registry components", async ({ page }) => {
   await page.goto("/zh/components/");
   await expect(page.getByRole("heading", { level: 1, name: "可直接复制的 React 动效组件" })).toBeVisible();

@@ -64,7 +64,7 @@ export function Seo({
     isPartOf: {
       "@type": "WebSite",
       name: "Motion Lexicon",
-      url: `${siteUrl}${pathFor(defaultLocale, ["components"])}`,
+      url: `${siteUrl}${pathFor(defaultLocale)}`,
       isAccessibleForFree: true
     }
   };

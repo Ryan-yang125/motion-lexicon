@@ -25,6 +25,7 @@ Browse → Preview → Copy or install → Adapt → Review
 
 | Surface | Job | Public scope |
 | --- | --- | --- |
+| Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
 | Components | Deliver complete product interactions | 28 React + Motion components |
 | Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
 | Agent Skill | Design and implement from product context | Recommend, Compose, Implement, Review, Contribute |
@@ -88,7 +89,7 @@ No account, server, API key, or paid tier is required.
 
 ## Discoverability
 
-The build publishes 172 localized canonical pages, reciprocal hreflang,
+The build publishes 174 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
@@ -97,6 +98,7 @@ and the shadcn registry index.
 V4 is complete when:
 
 - Components and Primitives are the only primary product directories.
+- Each locale root presents both directories through real, interactive previews.
 - All 28 component previews use the same source delivered by code view and registry JSON.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
 - All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.

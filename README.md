@@ -15,6 +15,7 @@
 </p>
 
 <p align="center">
+  <a href="https://motion-lexicon.pages.dev/en/"><strong>Website</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/components/"><strong>Components</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/primitives/"><strong>Primitives</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/skill/"><strong>Agent Skill</strong></a> ·

@@ -17,6 +17,7 @@ the visual interest; the shell stays calm, compact, and predictable.
 
 Primary routes:
 
+- `/:locale/` — live product showcase and the shortest path into both collections.
 - `/:locale/components/` — 28 React motion components.
 - `/:locale/components/:componentId/` — live preview, source, install command, and related primitives.
 - `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
@@ -29,16 +30,26 @@ Resource routes:
 - `/:locale/method/`.
 - `/:locale/vocabulary/`.
 
-The domain root and locale roots open Components. Old product routes are removed.
+The domain root opens the Chinese landing page. Locale roots render the localized landing page. Old product routes are removed.
 
 ## Navigation
 
-- A fixed 248px desktop sidebar exposes Components, Primitives, Guides, and the Agent Skill.
+- The landing page uses a compact top navigation with Components, Primitives, and Guides.
+- Skill sits immediately left of GitHub in the top-right actions.
+- Internal product pages use a fixed 248px desktop sidebar for Components, Primitives, Guides, and the Agent Skill.
 - Component entries are grouped by product role: actions, overlays, inputs, navigation, data, and feedback.
 - Primitive links are grouped by motion family.
 - A mobile off-canvas sidebar preserves the same hierarchy.
 - Global search opens with `Cmd/Ctrl + K`, searches both collections, and appears immediately.
 - Language, theme, and GitHub remain in the compact top bar.
+
+## Landing page
+
+- The hero renders one real component at a time and switches among three representative product interactions.
+- Components and Primitives receive equal entry points and real working previews.
+- Featured cards reuse the same preview registry as the directories and detail pages.
+- Installation and Agent Skill complete the path from discovery to implementation.
+- Motion supports comprehension and state continuity; reduced motion keeps every route and action intact.
 
 ## Component directory
 
@@ -125,7 +136,7 @@ must install at least one generated item successfully with `shadcn@latest`.
 
 ## Static delivery and SEO
 
-The build prerenders 172 localized canonical pages and generates the sitemap,
+The build prerenders 174 localized canonical pages and generates the sitemap,
 robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
 and shadcn registry. Each public route carries one H1, one canonical URL,
 reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

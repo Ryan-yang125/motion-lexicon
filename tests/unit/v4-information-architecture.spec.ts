@@ -14,6 +14,7 @@ describe("V4 component registry architecture", () => {
     expect(installablePrimitiveEntries).toHaveLength(40);
 
     for (const locale of locales) {
+      expect(sitemapPaths()).toContain(pathFor(locale));
       expect(sitemapPaths()).toContain(pathFor(locale, ["components"]));
       expect(sitemapPaths()).toContain(pathFor(locale, ["primitives"]));
       for (const component of registryComponents) {
@@ -57,17 +58,17 @@ describe("V4 component registry architecture", () => {
 
   it("removes obsolete product routes", () => {
     const obsolete = ["/packs", "/catalog", "/finder", "/director", "/playground"];
-    expect(getStaticPaths()).toHaveLength(172);
+    expect(getStaticPaths()).toHaveLength(174);
     for (const fragment of obsolete) {
       expect(sitemapPaths().some((route) => route.includes(fragment))).toBe(false);
       expect(staticRedirects().some((route) => route.source.includes(fragment))).toBe(false);
     }
   });
 
-  it("opens the Chinese component directory from the domain root", () => {
+  it("opens the Chinese landing page from the domain root", () => {
     expect(staticRedirects()).toContainEqual({
       source: "/",
-      destination: "/zh/components/",
+      destination: "/zh/",
       status: 301
     });
   });

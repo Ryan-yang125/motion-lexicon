@@ -46,6 +46,7 @@ export function sitemapPaths() {
   const paths = new Set<string>();
 
   for (const locale of ["zh", "en"] as const) {
+    paths.add(pathFor(locale));
     paths.add(pathFor(locale, ["components"]));
     paths.add(pathFor(locale, ["primitives"]));
     paths.add(pathFor(locale, ["guides"]));
@@ -81,18 +82,13 @@ export function staticRedirects(): StaticRedirect[] {
     redirects.set(source, { source, destination, status: 301 });
   };
 
-  add("/", pathFor(defaultLocale, ["components"]));
+  add("/", pathFor(defaultLocale));
 
   for (const canonicalPath of sitemapPaths()) {
     const withoutTrailingSlash = canonicalPath.replace(/\/$/, "");
     if (withoutTrailingSlash) {
       add(withoutTrailingSlash, canonicalPath);
     }
-  }
-
-  for (const locale of ["zh", "en"] as const) {
-    add(pathFor(locale), pathFor(locale, ["components"]));
-    add(pathFor(locale).replace(/\/$/, ""), pathFor(locale, ["components"]));
   }
 
   return Array.from(redirects.values());

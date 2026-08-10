@@ -63,6 +63,7 @@ assert(
 );
 
 const expectedPaths = locales.flatMap((locale) => [
+  pathFor(locale),
   pathFor(locale, ["components"]),
   ...registryComponents.map((component) => pathFor(locale, ["components", component.id])),
   pathFor(locale, ["primitives"]),
@@ -75,7 +76,7 @@ const expectedPaths = locales.flatMap((locale) => [
 ]);
 const staticPaths = getStaticPaths();
 const sitemap = sitemapPaths();
-assert(expectedPaths.length === 172, `Expected 172 localized routes, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 174, `Expected 174 localized routes, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static routes, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap routes, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static routes contain duplicates");
@@ -86,7 +87,7 @@ for (const routePath of expectedPaths) {
 }
 
 const redirects = staticRedirects();
-assert(redirects.some((item) => item.source === "/" && item.destination === "/zh/components/"), "Root must redirect to the Chinese component directory");
+assert(redirects.some((item) => item.source === "/" && item.destination === "/zh/"), "Root must redirect to the Chinese landing page");
 for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playground"]) {
   assert(!redirects.some((item) => item.source.includes(obsolete)), `Obsolete redirect remains: ${obsolete}`);
   assert(!sitemap.some((item) => item.includes(obsolete)), `Obsolete route remains in sitemap: ${obsolete}`);
