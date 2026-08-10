@@ -238,9 +238,8 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
   await page.goto("/zh/components/copy-button/");
   const copyButton = page.locator(".component-primary-copy");
-  await expect(copyButton).toBeVisible();
-  const copyHeight = await copyButton.evaluate((button) => button.getBoundingClientRect().height);
-  expect(copyHeight).toBeGreaterThanOrEqual(44);
+  await expect(copyButton).toBeEnabled();
+  await expect.poll(async () => (await copyButton.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
   await expectNoHorizontalOverflow(page);
 });
 
