@@ -48,6 +48,8 @@ export function KineticLogoExchange({
   const reduced = useReducedMotion() === true;
   const [order, setOrder] = useState(() => items.map((item) => item.id));
   const [paused, setPaused] = useState(false);
+  const [pointerPaused, setPointerPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
   const [selected, setSelected] = useState(items[0]?.id ?? "");
   const [cycle, setCycle] = useState(0);
   const root = useRef<HTMLElement>(null);
@@ -90,13 +92,13 @@ export function KineticLogoExchange({
   }, []);
 
   useEffect(() => {
-    if (reduced || paused || !visible || order.length < 2) return;
+    if (reduced || paused || pointerPaused || focusPaused || !visible || order.length < 2) return;
     const timer = window.setInterval(() => {
       setOrder((current) => rotate(current));
       setCycle((current) => current + 1);
     }, Math.max(1800, interval));
     return () => window.clearInterval(timer);
-  }, [interval, order.length, paused, reduced, visible]);
+  }, [focusPaused, interval, order.length, paused, pointerPaused, reduced, visible]);
 
   const pause = () => setPaused(true);
 
@@ -105,9 +107,17 @@ export function KineticLogoExchange({
       ref={root}
       aria-label={label}
       onPointerEnter={(event) => {
-        if (event.pointerType === "mouse") pause();
+        if (event.pointerType === "mouse") setPointerPaused(true);
       }}
-      onFocusCapture={pause}
+      onPointerLeave={(event) => {
+        if (event.pointerType === "mouse") setPointerPaused(false);
+      }}
+      onFocusCapture={() => setFocusPaused(true)}
+      onBlurCapture={(event) => {
+        const next = event.relatedTarget as Node | null;
+        if (next && event.currentTarget.contains(next)) return;
+        setFocusPaused(false);
+      }}
       className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 shadow-[0_16px_44px_-36px_rgba(41,41,41,0.48)] dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">

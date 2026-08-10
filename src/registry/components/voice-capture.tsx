@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const SPRING = { type: "spring", stiffness: 430, damping: 32, mass: 0.58 } as const;
@@ -44,8 +44,21 @@ export function VoiceCapture({
   const startedAt = useRef<number | null>(null);
   const recordedMs = useRef(0);
   const root = useRef<HTMLDivElement>(null);
+  const recordButton = useRef<HTMLButtonElement>(null);
+  const primaryControl = useRef<HTMLButtonElement>(null);
+  const pendingFocus = useRef<"record" | "primary" | null>(null);
   const [visible, setVisible] = useState(true);
   const reduced = useReducedMotion() === true;
+
+  useLayoutEffect(() => {
+    if (pendingFocus.current === "primary" && state !== "idle") {
+      pendingFocus.current = null;
+      primaryControl.current?.focus({ preventScroll: true });
+    } else if (pendingFocus.current === "record" && state === "idle") {
+      pendingFocus.current = null;
+      recordButton.current?.focus({ preventScroll: true });
+    }
+  }, [state]);
 
   useEffect(() => {
     const node = root.current;
@@ -95,6 +108,7 @@ export function VoiceCapture({
     recordedMs.current = 0;
     startedAt.current = Date.now();
     setSeconds(0);
+    pendingFocus.current = "primary";
     setPhase("recording");
   };
 
@@ -117,12 +131,28 @@ export function VoiceCapture({
     return Math.floor((recordedMs.current + runningMs) / 1000);
   };
 
+  const remove = () => {
+    pendingFocus.current = "record";
+    setPhase("idle");
+    resetDuration();
+    onDelete?.();
+  };
+
+  const send = () => {
+    const duration = durationSeconds();
+    onSend?.(duration);
+    pendingFocus.current = "record";
+    setPhase("idle");
+    resetDuration();
+  };
+
   const time = useMemo(() => `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`, [seconds]);
   const transition = reduced ? INSTANT : SPRING;
 
   if (state === "idle") {
     return (
       <button
+        ref={recordButton}
         type="button"
         aria-label={recordLabel}
         onClick={start}
@@ -142,6 +172,7 @@ export function VoiceCapture({
       className={`flex min-h-14 w-full max-w-[420px] items-center gap-2 rounded-[16px] border border-stone-200 bg-white p-2 shadow-[0_16px_34px_-26px_rgba(28,25,23,.72)] dark:border-white/15 dark:bg-[#242421] ${className}`}
     >
       <button
+        ref={primaryControl}
         type="button"
         aria-label={state === "recording" ? pauseLabel : resumeLabel}
         onClick={state === "recording" ? pause : resume}
@@ -175,7 +206,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={deleteLabel}
-        onClick={() => { setPhase("idle"); resetDuration(); onDelete?.(); }}
+        onClick={remove}
         className="grid size-11 shrink-0 place-items-center rounded-[12px] text-[18px] text-stone-400 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-700 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:hover:bg-white/10 dark:hover:text-stone-200"
       >
         <span aria-hidden>×</span>
@@ -183,7 +214,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={sendLabel}
-        onClick={() => { onSend?.(durationSeconds()); setPhase("idle"); resetDuration(); }}
+        onClick={send}
         className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#4568FF] text-white outline-none transition-[background-color,box-shadow] duration-150 hover:bg-[#3658EC] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.25)]"
       >
         <span aria-hidden>↗</span>

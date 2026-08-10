@@ -53,3 +53,47 @@ describe("VoiceCapture duration", () => {
     expect(onSend).toHaveBeenCalledWith(5);
   });
 });
+
+describe("VoiceCapture focus", () => {
+  it("does not steal focus on mount or unrelated parent prop updates", () => {
+    const outside = document.createElement("button");
+    document.body.appendChild(outside);
+    outside.focus();
+    const { rerender } = render(<VoiceCapture label="Voice message" />);
+
+    expect(outside).toHaveFocus();
+    rerender(<VoiceCapture label="Updated voice message" levels={[0.2, 0.5]} />);
+    expect(outside).toHaveFocus();
+
+    outside.remove();
+  });
+
+  it("moves focus from keyboard-activated Record to Pause", () => {
+    render(<VoiceCapture />);
+    const record = screen.getByRole("button", { name: "Record voice message" });
+
+    record.focus();
+    fireEvent.keyDown(record, { key: "Enter" });
+    fireEvent.click(record, { detail: 0 });
+
+    expect(screen.getByRole("button", { name: "Pause recording" })).toHaveFocus();
+  });
+
+  it("returns focus to Record after sending", () => {
+    render(<VoiceCapture />);
+    fireEvent.click(screen.getByRole("button", { name: "Record voice message" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Send recording" }));
+
+    expect(screen.getByRole("button", { name: "Record voice message" })).toHaveFocus();
+  });
+
+  it("returns focus to Record after deleting", () => {
+    render(<VoiceCapture />);
+    fireEvent.click(screen.getByRole("button", { name: "Record voice message" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Delete recording" }));
+
+    expect(screen.getByRole("button", { name: "Record voice message" })).toHaveFocus();
+  });
+});

@@ -108,4 +108,45 @@ describe("KineticLogoExchange reduced motion", () => {
     act(() => { vi.advanceTimersByTime(1800); });
     expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
   });
+
+  it("keeps focus pause separate from keyboard pause and resume", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <>
+        <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />
+        <button type="button">Outside</button>
+      </>,
+    );
+    const outside = screen.getByRole("button", { name: "Outside" });
+    const pause = screen.getByRole("button", { name: "Pause logo exchange" });
+
+    act(() => { pause.focus(); });
+    expect(pause).toHaveFocus();
+    expect(pause).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toBe(pause);
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    fireEvent.keyDown(pause, { key: "Enter" });
+    fireEvent.click(pause);
+    fireEvent.keyUp(pause, { key: "Enter" });
+    const resume = screen.getByRole("button", { name: "Resume logo exchange" });
+    expect(resume).toHaveAttribute("aria-pressed", "true");
+    act(() => { outside.focus(); });
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    act(() => { resume.focus(); });
+    expect(screen.getByRole("button", { name: "Resume logo exchange" })).toBe(resume);
+    fireEvent.keyDown(resume, { key: "Enter" });
+    fireEvent.click(resume);
+    fireEvent.keyUp(resume, { key: "Enter" });
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toHaveAttribute("aria-pressed", "false");
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    act(() => { outside.focus(); });
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+  });
 });
