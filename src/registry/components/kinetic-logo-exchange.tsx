@@ -115,23 +115,25 @@ export function KineticLogoExchange({
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Connections</span>
           <h3 className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{label}</h3>
         </div>
-        <button
-          type="button"
-          aria-label={paused ? "Resume logo exchange" : "Pause logo exchange"}
-          aria-pressed={paused}
-          onClick={() => setPaused((value) => !value)}
-          className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
-        >
-          {paused ? (
-            <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
-              <path d="m7.3 5.4 7 4.6-7 4.6V5.4Z" fill="currentColor" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
-              <path d="M6.8 5.2v9.6M13.2 5.2v9.6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-          )}
-        </button>
+        {reduced ? null : (
+          <button
+            type="button"
+            aria-label={paused ? "Resume logo exchange" : "Pause logo exchange"}
+            aria-pressed={paused}
+            onClick={() => setPaused((value) => !value)}
+            className="grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] outline-none transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-white"
+          >
+            {paused ? (
+              <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
+                <path d="m7.3 5.4 7 4.6-7 4.6V5.4Z" fill="currentColor" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
+                <path d="M6.8 5.2v9.6M13.2 5.2v9.6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
+        )}
       </header>
 
       <div

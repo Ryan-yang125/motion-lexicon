@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NetworkGlobe } from "@/registry/components/network-globe";
 
 const harness = vi.hoisted(() => ({
+  createRenderer: vi.fn(),
   dispose: vi.fn(),
   forceContextLoss: vi.fn(),
   reduced: false,
@@ -20,6 +21,10 @@ vi.mock("three", async (importOriginal) => {
   class WebGLRendererStub {
     domElement = document.createElement("canvas");
     outputColorSpace = actual.SRGBColorSpace;
+
+    constructor() {
+      harness.createRenderer();
+    }
 
     setClearColor() {}
     setPixelRatio() {}
@@ -47,6 +52,7 @@ class IntersectionObserverStub {
 }
 
 beforeEach(() => {
+  harness.createRenderer.mockClear();
   harness.dispose.mockClear();
   harness.forceContextLoss.mockClear();
   harness.reduced = false;
@@ -61,6 +67,52 @@ afterEach(() => {
 });
 
 describe("NetworkGlobe", () => {
+  it("reuses WebGL resources for equivalent node content and rebuilds for scene changes", async () => {
+    const nodes = [
+      {
+        id: "shanghai",
+        label: "Shanghai",
+        latitude: 31.23,
+        longitude: 121.47,
+        color: "#4568FF",
+      },
+      {
+        id: "london",
+        label: "London",
+        latitude: 51.51,
+        longitude: -0.13,
+        color: "#B3654A",
+      },
+    ];
+    const { container, rerender } = render(<NetworkGlobe nodes={nodes} />);
+    const firstCanvas = await waitFor(() => {
+      const canvas = container.querySelector("canvas");
+      expect(canvas).toBeInTheDocument();
+      return canvas;
+    });
+    expect(harness.createRenderer).toHaveBeenCalledOnce();
+
+    rerender(<NetworkGlobe nodes={nodes.map((node) => ({ ...node }))} />);
+    expect(container.querySelector("canvas")).toBe(firstCanvas);
+    expect(harness.createRenderer).toHaveBeenCalledOnce();
+    expect(harness.dispose).not.toHaveBeenCalled();
+    expect(harness.forceContextLoss).not.toHaveBeenCalled();
+
+    const frameCalls = vi.mocked(requestAnimationFrame).mock.calls.length;
+    rerender(
+      <NetworkGlobe
+        nodes={nodes.map((node) => node.id === "london" ? { ...node, longitude: 2.35 } : node)}
+      />,
+    );
+    await waitFor(() => {
+      expect(harness.createRenderer).toHaveBeenCalledTimes(2);
+      expect(container.querySelector("canvas")).not.toBe(firstCanvas);
+    });
+    expect(harness.dispose).toHaveBeenCalledOnce();
+    expect(harness.forceContextLoss).toHaveBeenCalledOnce();
+    expect(vi.mocked(requestAnimationFrame).mock.calls.length).toBeGreaterThan(frameCalls);
+  });
+
   it("keeps the legal fallback focused after a removed node is added again", async () => {
     const shanghai = {
       id: "shanghai",

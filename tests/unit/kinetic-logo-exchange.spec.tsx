@@ -77,25 +77,35 @@ describe("KineticLogoExchange dynamic items", () => {
 });
 
 describe("KineticLogoExchange reduced motion", () => {
-  it("removes press scaling and transform transitions across pause and resume", () => {
+  it("keeps a static exchange without exposing an ineffective pause control", () => {
+    vi.useFakeTimers();
     harness.reduced = true;
-    render(<KineticLogoExchange items={[alpha, bravo]} />);
-    const pause = screen.getByRole("button", { name: "Pause logo exchange" });
+    const { container } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
 
-    expect(pause).not.toHaveClass("transition-transform");
-    expect(pause).not.toHaveClass("active:scale-[0.96]");
-    fireEvent.click(pause);
-    const resume = screen.getByRole("button", { name: "Resume logo exchange" });
-    expect(resume).not.toHaveClass("transition-transform");
-    expect(resume).not.toHaveClass("active:scale-[0.96]");
-    fireEvent.click(resume);
-    expect(screen.getByRole("button", { name: "Pause logo exchange" })).not.toHaveClass("transition-transform");
+    expect(screen.queryByRole("button", { name: /logo exchange/i })).not.toBeInTheDocument();
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+    act(() => { vi.advanceTimersByTime(7200); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
   });
 
-  it("retains press feedback in standard motion", () => {
-    render(<KineticLogoExchange items={[alpha, bravo]} />);
+  it("exposes a working pause and resume control in standard motion", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
     const pause = screen.getByRole("button", { name: "Pause logo exchange" });
 
     expect(pause).toHaveClass("transition-transform", "active:scale-[0.96]");
+    fireEvent.click(pause);
+    expect(screen.getByRole("button", { name: "Resume logo exchange" })).toBeInTheDocument();
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    fireEvent.click(screen.getByRole("button", { name: "Resume logo exchange" }));
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toBeInTheDocument();
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
   });
 });

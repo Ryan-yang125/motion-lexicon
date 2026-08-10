@@ -62,12 +62,17 @@ export function NetworkGlobe({
   const requestFrameRef = useRef<() => void>(() => undefined);
   const visibleRef = useRef(true);
   const rotationRef = useRef({ y: -0.42, targetY: -0.42, dragging: false, pointerId: -1, x: 0 });
+  const sceneNodesRef = useRef(nodes);
+  sceneNodesRef.current = nodes;
   const reduced = useReducedMotion() === true;
   const reducedRef = useRef(reduced);
   reducedRef.current = reduced;
   const firstId = nodes[0]?.id ?? "";
   const [focusedId, setFocusedId] = useState(firstId);
   const [rendererReady, setRendererReady] = useState(false);
+  const sceneSignature = JSON.stringify(
+    nodes.map(({ id, latitude, longitude, color }) => [id, latitude, longitude, color]),
+  );
   const effectiveFocusedId = nodes.some((node) => node.id === focusedId)
     ? focusedId
     : firstId;
@@ -112,7 +117,8 @@ export function NetworkGlobe({
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount || nodes.length === 0) {
+    const sceneNodes = sceneNodesRef.current;
+    if (!mount || sceneNodes.length === 0) {
       setRendererReady(false);
       return;
     }
@@ -192,9 +198,9 @@ export function NetworkGlobe({
 
     const nodeMeshes = new Map<string, THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>>();
     const arcMaterials = new Map<string, THREE.LineBasicMaterial>();
-    const hub = pointOnGlobe(nodes[0].latitude, nodes[0].longitude, 1.58);
+    const hub = pointOnGlobe(sceneNodes[0].latitude, sceneNodes[0].longitude, 1.58);
 
-    nodes.forEach((node, index) => {
+    sceneNodes.forEach((node, index) => {
       const geometry = track(new THREE.SphereGeometry(index === 0 ? 0.075 : 0.055, 18, 12));
       const material = track(
         new THREE.MeshStandardMaterial({
@@ -276,7 +282,7 @@ export function NetworkGlobe({
       runtimeRef.current = null;
       frameRef.current = null;
     };
-  }, [nodes]);
+  }, [sceneSignature]);
 
   useEffect(() => {
     const runtime = runtimeRef.current;
