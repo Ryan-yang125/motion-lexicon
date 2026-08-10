@@ -1,5 +1,6 @@
 // @vitest-environment node
 
+import { readFileSync } from "node:fs";
 import { transform } from "esbuild";
 import { describe, expect, it } from "vitest";
 import {
@@ -18,7 +19,6 @@ import {
   parseParamValues,
   valuesToSearchParams
 } from "../../src/lib/motion-engine";
-import { buildPrimitiveSource } from "../../src/registry/primitive-source";
 
 describe("canonical motion catalog", () => {
   it("publishes 31 motion examples, 9 playgrounds, and 4 guides", () => {
@@ -105,55 +105,39 @@ describe("typed primitive parameters", () => {
 });
 
 describe("React + Motion primitive registry", () => {
-  it("builds every installable primitive from typed catalog data", async () => {
+  const source = (id: string) => readFileSync(`src/registry/primitives/${id}.tsx`, "utf8");
+  const demo = (id: string) => readFileSync(`src/registry/primitive-demos/${id}-demo.tsx`, "utf8");
+
+  it("ships one typed primitive and one real demo for every installable entry", async () => {
     for (const entry of installablePrimitiveEntries) {
-      const source = buildPrimitiveSource(entry.recipe, getDefaultParamValues(entry.recipe));
-      expect(source, entry.id).toContain(`export function ${entry.exportName}`);
-      expect(source, entry.id).toContain('from "motion/react"');
-      expect(source, entry.id).toContain("useReducedMotion");
-      expect(source, entry.id).not.toContain("transition: all");
-      expect(source, entry.id).not.toContain("scale: 0,");
-      await expect(transform(source, { loader: "tsx", jsx: "automatic", target: "es2022" }), entry.id).resolves.toBeTruthy();
+      const implementation = source(entry.id);
+      const scene = demo(entry.id);
+      expect(implementation, entry.id).toContain(`export function ${entry.exportName}`);
+      expect(implementation, entry.id).toContain('from "motion/react"');
+      expect(implementation, entry.id).toContain("useReducedMotion");
+      expect(implementation, entry.id).not.toContain("transition: all");
+      expect(implementation, entry.id).not.toMatch(/scale\(0\)(?!\.)/);
+      expect(scene, entry.id).toContain(`@/registry/primitives/${entry.id}`);
+      await expect(transform(implementation, { loader: "tsx", jsx: "automatic", target: "es2022" }), entry.id).resolves.toBeTruthy();
     }
   });
 
-  it("reflects every public parameter in the generated source", () => {
+  it("connects every public parameter to its real demo", () => {
+    const missing: string[] = [];
     for (const entry of installablePrimitiveEntries) {
-      const defaults = getDefaultParamValues(entry.recipe);
-      const baseline = buildPrimitiveSource(entry.recipe, defaults);
+      const scene = demo(entry.id);
       for (const param of entry.recipe.params) {
-        const nextValue = param.kind === "range"
-          ? (param.defaultValue + param.step <= param.max ? param.defaultValue + param.step : param.defaultValue - param.step)
-          : param.kind === "toggle"
-            ? !param.defaultValue
-            : param.options.find((option) => option.value !== param.defaultValue)?.value;
-        if (nextValue === undefined) continue;
-        const changed = buildPrimitiveSource(entry.recipe, { ...defaults, [param.id]: nextValue });
-        expect(changed, `${entry.id}.${param.id}`).not.toBe(baseline);
+        if (!scene.includes(`"${param.id}"`)) missing.push(`${entry.id}.${param.id}`);
       }
     }
-  });
-
-  it("turns parameter changes into the copied React source", () => {
-    const slide = catalogRecipes.find((entry) => entry.id === "slide-in")!;
-    const source = buildPrimitiveSource(slide, { ...getDefaultParamValues(slide), duration: 360, distance: 44 });
-    expect(source).toContain("y: 44");
-    expect(source).toContain("duration: 0.36");
-
-    const spring = catalogRecipes.find((entry) => entry.id === "spring")!;
-    const springSource = buildPrimitiveSource(spring, { stiffness: 320, damping: 28, mass: 0.8, velocity: 0, distance: 64 });
-    expect(springSource).toContain("stiffness: 320");
-    expect(springSource).toContain("damping: 28");
-    expect(springSource).toContain("mass: 0.8");
+    expect(missing).toEqual([]);
   });
 
   it("exports interaction semantics for direct-manipulation primitives", () => {
-    const source = (id: string) => {
-      const entry = catalogRecipes.find((item) => item.id === id)!;
-      return buildPrimitiveSource(entry, getDefaultParamValues(entry));
-    };
     expect(source("drag-to-reorder")).toContain("<Reorder.Group");
     expect(source("drag-to-reorder")).toContain("onReorder={onReorder}");
+    expect(source("drag-to-reorder")).toContain("scale: pickupScale");
+    expect(source("drag-to-reorder")).not.toContain("transform: `translate3d");
     expect(source("scroll-reveal")).toContain("whileInView");
     expect(source("stagger")).toContain("staggerChildren");
     expect(source("accordion-collapse")).toContain("AnimatePresence");
@@ -161,71 +145,104 @@ describe("React + Motion primitive registry", () => {
   });
 
   it("preserves the complete behavior contract of stateful primitives", () => {
-    const source = (id: string, values?: Record<string, string | number | boolean>) => {
-      const entry = catalogRecipes.find((item) => item.id === id)!;
-      return buildPrimitiveSource(entry, values ?? getDefaultParamValues(entry));
-    };
-
     const hold = source("hold-to-confirm");
     expect(hold).toContain("onConfirm: () => void");
-    expect(hold).toContain("setTimeout");
-    expect(hold).toContain("onPointerCancel={cancelHold}");
+    expect(hold).toContain("animate(progress, 1");
+    expect(hold).toContain("duration: duration * (1 - current)");
+    expect(hold).not.toContain("reduceMotion ? 0.25");
+    expect(hold).toContain("onPointerCancel={cancel}");
     expect(hold).toContain("onKeyDown");
 
     const dismiss = source("swipe-to-dismiss");
     expect(dismiss).toContain("onDismiss?: () => void");
     expect(dismiss).toContain("Math.abs(info.offset.x) >= threshold");
-    expect(dismiss).toContain("onDragEnd={finishDrag}");
+    expect(dismiss).toContain('drag="x"');
+    expect(dismiss).toContain("exit={reduceMotion");
+    expect(dismiss).toContain("onDragEnd={finish}");
+    expect(dismiss).toContain("onExitComplete={() => onDismiss?.()}");
 
-    const scroll = source("scroll-driven-animation", { start: 20, end: 75, distance: 120, axis: "x" });
+    const crossfade = source("crossfade");
+    expect(crossfade).toContain("delay: overlapDelay");
+    expect(crossfade).toContain("exit={{");
+    expect(crossfade).not.toContain("transition={reduceMotion");
+
+    const scroll = source("scroll-driven-animation");
     expect(scroll).toContain("useScroll");
-    expect(scroll).toContain("useTransform(scrollYProgress, [0.2, 0.75], [120, -120])");
-    expect(scroll).toContain("x: reduceMotion ? 0 : progress");
+    expect(scroll).toContain("useTransform(scrollYProgress, [from, to], [distance, -distance])");
+    expect(scroll).toContain("translate3d");
 
-    const loop = source("loop", { duration: 1600, pause: 240, direction: "alternate", iterations: 4, infinite: false });
-    expect(loop).toContain('repeat: 3, repeatType: "reverse", repeatDelay: 0.24');
+    const loop = source("loop");
+    expect(loop).toContain("repeat: infinite ? Infinity");
+    expect(loop).toContain('direction === "alternate" ? "reverse" : "loop"');
 
     const shimmer = source("skeleton-shimmer");
     expect(shimmer).toContain("repeat: reduceMotion ? 0 : Infinity");
   });
 
-  it("keeps specialized primitives faithful to their public parameters", () => {
-    const source = (id: string, values?: Record<string, string | number | boolean>) => {
-      const entry = catalogRecipes.find((item) => item.id === id)!;
-      return buildPrimitiveSource(entry, values ?? getDefaultParamValues(entry));
-    };
+  it("keeps specialized primitives faithful to their behavior", () => {
+    expect(source("ripple")).toContain("event.clientX - rect.left");
+    expect(source("ripple")).toContain("onPointerDown={(event)");
 
-    expect(source("ripple", { duration: 200, size: 260, opacity: 18 })).toMatch(/left: ripple\.x[\s\S]+width: "260%"/);
-    expect(source("ripple", { duration: 200, size: 260, opacity: 18 })).toContain("onPointerDown={addRipple}");
-
-    const parallax = source("parallax", { distance: 80, speed: 50, axis: "x" });
+    const parallax = source("parallax");
     expect(parallax).toContain("useScroll");
-    expect(parallax).toContain("[40, -40]");
-    expect(parallax).toContain("x: reduceMotion ? 0 : travel");
+    expect(parallax).toContain("[range, -range]");
+    expect(parallax).toContain("translate3d");
 
-    const ticker = source("number-ticker", { duration: 240, distance: 30, ease: "snap" });
+    const ticker = source("number-ticker");
     expect(ticker).toContain("value: number");
     expect(ticker).toContain("key={value}");
     expect(ticker).toContain("aria-live=\"polite\"");
 
     expect(source("marquee")).not.toContain('<motion.div aria-hidden="true"');
     expect(source("marquee")).toContain('<span aria-hidden="true"');
-    expect(source("slide-in", { duration: 240, distance: 32, direction: "up", delay: 0, ease: "soft" })).toContain("initial={reduceMotion ? false : {opacity: 0,y: 32}}");
-    expect(source("slide-in", { duration: 240, distance: 32, direction: "out", delay: 0, ease: "soft" })).toContain("animate={{opacity: 0,y: -32}}");
+    expect(source("slide-in")).toContain("function offset");
+    expect(source("slide-in")).toContain('direction === "out"');
 
-    const compare = source("before-after-slider", { position: 42, duration: 180 });
-    expect(compare).toContain('role="slider"');
+    const compare = source("before-after-slider");
+    expect(compare).toContain('type="range"');
     expect(compare).toContain("clipPath");
-    expect(compare).toContain("initialPosition = 42");
+    expect(compare).toContain("initialPosition = 50");
+    expect(compare).toContain("}, [initialPosition])");
 
-    const typewriter = source("typewriter", { duration: 900, characters: 12, caret: true });
+    const flip = source("3d-tilt-flip");
+    expect(flip).toContain('animate={{ transform: flipped ? `rotateY(${rotation}deg)` : "rotateY(0deg)" }}');
+    expect(flip).toContain('transform: "rotateY(180deg)"');
+    expect(flip).toContain("transition={reduceMotion ? { duration: 0 }");
+
+    const directional = source("direction-aware-transition");
+    expect(directional).toContain('"left" | "right" | "up" | "down"');
+    expect(directional).toContain("up: [0, -distance]");
+    expect(directional).toContain("down: [0, distance]");
+
+    expect(source("ripple")).toContain("if (reduceMotion) return");
+    expect(demo("ripple")).toContain("min-h-11");
+
+    const shake = source("shake-wiggle");
+    expect(shake).toContain("frames.push(-distance, distance)");
+
+    const sharedDemo = readFileSync("src/registry/primitive-demos/_shared.tsx", "utf8");
+    expect(sharedDemo).toContain("export function useEntryReplay");
+    for (const id of ["fade-in-fade-out", "slide-in", "scale-in", "reveal", "blur", "accordion-collapse", "origin-aware-animation"]) {
+      expect(demo(id), id).toContain("useEntryReplay(replayKey)");
+    }
+    expect(demo("morph")).toContain("min-h-11 min-w-11");
+
+    const directory = readFileSync("src/pages/PrimitivesPage.tsx", "utf8");
+    expect(directory).toContain('<article className="primitive-card"');
+    expect(directory).toContain('<Link className="primitive-card-footer"');
+
+    const typewriter = source("typewriter");
     expect(typewriter).toContain("window.setInterval");
-    expect(typewriter).toContain("text.slice(0, 12)");
-    expect(typewriter).toContain("motion-typewriter-caret");
-    expect(source("typewriter", { duration: 900, characters: 12, caret: false })).not.toContain("motion-typewriter-caret");
+    expect(typewriter).toContain("text.slice(0, characters ?? text.length)");
+    expect(typewriter).toContain("caret ?");
 
-    expect(source("origin-aware-animation", { duration: 220, scale: 88, origin: "top-left", ease: "soft" })).toContain('transformOrigin: "top left"');
-    expect(source("easing", { duration: 520, distance: 120, ease: "custom" })).toContain("ease: [0.25, 0.9, 0.3, 1]");
-    expect(source("easing", { duration: 520, distance: 120, ease: "calm" })).toContain("ease: [0.33, 1, 0.68, 1]");
+    expect(source("origin-aware-animation")).toContain('"top-left": "top left"');
+    expect(source("easing")).toContain("custom: [0.25, 0.9, 0.3, 1]");
+    expect(source("easing")).toContain("calm: [0.33, 1, 0.68, 1]");
+  });
+
+  it("keeps a newly started hold alive when the first animation frame has no elapsed time", () => {
+    const hold = readFileSync("src/registry/components/hold-to-confirm.tsx", "utf8");
+    expect(hold).toContain("if (elapsed.current <= 0 && !down.current)");
   });
 });

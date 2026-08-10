@@ -20,12 +20,12 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// V3 ships twenty-eight live registry components, forty-four primitives, and
+// V4 ships twenty-eight live registry components, forty-four primitives, and
 // eight lazy-loaded scenario guides. Motion and editorial content retain
 // independent chunk ceilings.
-const maxMotionVendorGzipBytes = 48 * 1024;
+const maxMotionVendorGzipBytes = 52 * 1024;
 const maxScenarioGuideArticlesGzipBytes = 70 * 1024;
-const maxTotalJsGzipBytes = 500 * 1024;
+const maxTotalJsGzipBytes = 520 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 

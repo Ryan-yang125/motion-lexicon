@@ -30,7 +30,7 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon component directory](docs/assets/readme-v3-components.png)
+![Motion Lexicon component directory](docs/assets/readme-v4-components.png)
 
 ## Start from the level you need
 
@@ -44,12 +44,12 @@ Components and Primitives are parallel collections. A component can combine
 several primitives; each component page links back to the underlying motion
 decisions.
 
-![Motion Lexicon primitive directory](docs/assets/readme-v3-primitives.png)
+![Motion Lexicon primitive directory](docs/assets/readme-v4-primitives.png)
 
 ## Install components and primitives
 
-Every preview, source view, and registry response is generated from the same
-React file.
+Every preview demo imports the same Primitive implementation published by the
+source view and registry response. There is no generated source-string layer.
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
@@ -74,9 +74,9 @@ The registry includes 28 complete product components and 40 executable motion
 primitives. Four editorial primitives remain design guides. Every installable
 item includes TypeScript types, interruptible motion, and a reduced-motion path.
 
-![Drawer component page](docs/assets/readme-v3-component.png)
+![Drawer component page](docs/assets/readme-v4-component.png)
 
-![Slide-in primitive workbench](docs/assets/readme-v3-primitive.png)
+![Slide-in primitive workbench](docs/assets/readme-v4-primitive.png)
 
 ## Agent Skill
 
@@ -97,8 +97,9 @@ The Skill works in five modes:
 ```text
 src/registry/components/  React component source of truth
 src/registry/demos/       Live product demos
-src/registry/primitive-preview.tsx  Live primitive renderer
-src/registry/primitive-source.ts    Copy-ready primitive source generator
+src/registry/primitives/        40 independent React + Motion primitives
+src/registry/primitive-demos/   40 real product demos using those primitives
+src/registry/primitive-preview-map.tsx  Lazy demo registry
 src/data/                 Component, primitive, guide, and SEO content
 skills/motion-lexicon/    Agent Skill and motion references
 scripts/                  Registry, prerender, SEO, and quality checks
@@ -121,6 +122,7 @@ npm run lint
 npm run typecheck
 npm run test
 npm run i18n:check
+npm run vocabulary:check
 npm run seo:check
 npm run motion:check
 npm run a11y:check

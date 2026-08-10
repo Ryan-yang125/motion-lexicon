@@ -1,8 +1,8 @@
-# Motion Lexicon V3.1 Product Design
+# Motion Lexicon V4.0 Product Design
 
 ## Experience model
 
-Motion Lexicon V3.1 gives Components and Primitives one React + Motion registry architecture.
+Motion Lexicon V4.0 gives Components and Primitives one React + Motion registry architecture.
 
 ```text
 Components: Browse → Interact → Inspect source → Install
@@ -63,6 +63,8 @@ The domain root and locale roots open Components. Old product routes are removed
 - Every direct route uses `/primitives/:id/`.
 - Forty executable entries expose props, replay, source, reduced motion, and a shadcn install command.
 - Four editorial entries remain focused design guides.
+- Each executable card mounts its own product demo. Repeated placeholder scenes and shared visual stand-ins are absent.
+- Each demo imports its corresponding Primitive, while source and Registry output read that Primitive file directly.
 
 ## Material and visual system
 
@@ -94,12 +96,22 @@ The visual language follows Interior's proven material hierarchy:
 
 ## Registry contract
 
-Component source files and the typed Primitive Registry are the source of truth for:
+Component and Primitive implementation files are the source of truth for:
 
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V3.1 catalog.
+4. the public V4.0 catalog.
+
+The Primitive chain is explicit:
+
+```text
+primitives/:id.tsx
+  → primitive-demos/:id-demo.tsx
+  → directory and workbench preview
+  → source view
+  → /r/primitive-:id.json
+```
 
 `scripts/generate-registry.ts` publishes the official shadcn schema. A release
 must install at least one generated item successfully with `shadcn@latest`.
@@ -114,6 +126,6 @@ must install at least one generated item successfully with `shadcn@latest`.
 ## Static delivery and SEO
 
 The build prerenders 172 localized canonical pages and generates the sitemap,
-robots file, security headers, redirects, Open Graph assets, V3 JSON catalog,
+robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
 and shadcn registry. Each public route carries one H1, one canonical URL,
 reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

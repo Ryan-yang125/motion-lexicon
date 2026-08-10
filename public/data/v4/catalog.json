@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 3,
-  "release": "3.1.0",
+  "schemaVersion": 4,
+  "release": "4.0.0",
   "name": "Motion Lexicon",
   "description": "Copy-ready React + Motion components and primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",

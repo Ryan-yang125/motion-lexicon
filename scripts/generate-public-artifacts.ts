@@ -18,7 +18,7 @@ function absolute(route: string) {
 }
 
 const catalog = {
-  schemaVersion: 3,
+  schemaVersion: 4,
   release: release.version,
   name: "Motion Lexicon",
   description: "Copy-ready React + Motion components and primitives.",
@@ -64,9 +64,9 @@ const llmsHeader = [
   `- Scenario guides: ${absolute(pathFor("en", ["guides"]))}`,
   `- Agent Skill: ${absolute(pathFor("en", ["skill"]))}`,
   `- shadcn registry: ${siteUrl}/r/registry.json`,
-  `- Machine-readable catalog: ${siteUrl}/data/v3/catalog.json`,
-  `- Motion Grammar: ${siteUrl}/data/v3/motion-grammar.json`,
-  `- Motion Blueprint schema: ${siteUrl}/data/v3/motion-blueprint.schema.json`,
+  `- Machine-readable catalog: ${siteUrl}/data/v4/catalog.json`,
+  `- Motion Grammar: ${siteUrl}/data/v4/motion-grammar.json`,
+  `- Motion Blueprint schema: ${siteUrl}/data/v4/motion-blueprint.schema.json`,
   `- Source: ${repositoryUrl}`,
   `- Skill install: \`${installSkill}\``,
   "- License: MIT for code; CC BY 4.0 for original editorial content.",
@@ -92,9 +92,10 @@ const llmsFull = [
 export async function generatePublicArtifacts(outputDir = publicDir) {
   await rm(path.join(outputDir, "data", "v1"), { recursive: true, force: true });
   await rm(path.join(outputDir, "data", "v2"), { recursive: true, force: true });
-  await mkdir(path.join(outputDir, "data", "v3"), { recursive: true });
-  await writeFile(path.join(outputDir, "data", "v3", "catalog.json"), `${JSON.stringify(catalog, null, 2)}\n`);
-  await writeFile(path.join(outputDir, "data", "v3", "motion-grammar.json"), `${JSON.stringify({
+  await rm(path.join(outputDir, "data", "v3"), { recursive: true, force: true });
+  await mkdir(path.join(outputDir, "data", "v4"), { recursive: true });
+  await writeFile(path.join(outputDir, "data", "v4", "catalog.json"), `${JSON.stringify(catalog, null, 2)}\n`);
+  await writeFile(path.join(outputDir, "data", "v4", "motion-grammar.json"), `${JSON.stringify({
     ...motionGrammar,
     modes: motionDirectorModes,
     urls: {
@@ -103,7 +104,7 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
     }
   }, null, 2)}\n`);
   const blueprintSchema = await readFile(path.join(root, "skills", "motion-lexicon", "assets", "motion-blueprint.schema.json"));
-  await writeFile(path.join(outputDir, "data", "v3", "motion-blueprint.schema.json"), blueprintSchema);
+  await writeFile(path.join(outputDir, "data", "v4", "motion-blueprint.schema.json"), blueprintSchema);
   await writeFile(path.join(outputDir, "llms.txt"), llmsHeader.join("\n"));
   await writeFile(path.join(outputDir, "llms-full.txt"), llmsFull);
   await writeFile(path.join(outputDir, "pricing.txt"), "Motion Lexicon is free and open source. No paid plan, account, API key, or usage limit is required.\n");
@@ -111,5 +112,5 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await generatePublicArtifacts();
-  console.log(`Generated V3 public artifacts: ${registryComponents.length} components and ${catalogRecipes.length} primitives.`);
+  console.log(`Generated V4 public artifacts: ${registryComponents.length} components and ${catalogRecipes.length} primitives.`);
 }

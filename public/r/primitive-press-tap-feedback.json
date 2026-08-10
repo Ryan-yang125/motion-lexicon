@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/press-tap-feedback.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/press-tap-feedback.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type PressTapFeedbackPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function PressTapFeedbackPrimitive({ children, ...props }: PressTapFeedbackPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileTap={reduceMotion ? undefined : {scale: 0.96}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.12, ease: [0.16, 1, 0.3, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion, type Transition } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nconst EASE_OUT = [0.16, 1, 0.3, 1] as const;\n\nexport type PressTapFeedbackPrimitiveProps = {\n  children: ReactNode;\n  scale?: number;\n  duration?: number;\n  easing?: Transition[\"ease\"];\n  className?: string;\n};\n\nexport function PressTapFeedbackPrimitive({\n  children,\n  scale = 0.96,\n  duration = 0.12,\n  easing = EASE_OUT,\n  className,\n}: PressTapFeedbackPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      className={className}\n      initial={false}\n      whileTap={reduceMotion ? { opacity: 0.78 } : { transform: `scale(${scale})`, opacity: 0.86 }}\n      transition={{ duration: reduceMotion ? 0.08 : duration, ease: easing }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

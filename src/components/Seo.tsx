@@ -86,7 +86,7 @@ export function Seo({
       <link rel="alternate" hrefLang="en" href={alternateEn} />
       <link rel="alternate" hrefLang="x-default" href={defaultAlternate} />
       <link rel="alternate" type="text/plain" href={`${siteUrl}/llms.txt`} title="Motion Lexicon for agents" />
-      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v3/motion-grammar.json`} title="Motion Lexicon Motion Grammar" />
+      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v4/motion-grammar.json`} title="Motion Lexicon Motion Grammar" />
       <link rel="alternate" type="application/json" href={`${siteUrl}/r/registry.json`} title="Motion Lexicon component registry" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />

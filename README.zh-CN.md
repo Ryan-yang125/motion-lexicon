@@ -23,7 +23,7 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon 组件目录](docs/assets/readme-v3-components.png)
+![Motion Lexicon 组件目录](docs/assets/readme-v4-components.png)
 
 ## 按需要选择层级
 
@@ -35,11 +35,11 @@
 
 组件与原子动效是并列内容。一个组件可以组合多个原子动效，组件详情页会标出对应的底层动效。
 
-![Motion Lexicon 原子动效目录](docs/assets/readme-v3-primitives.png)
+![Motion Lexicon 原子动效目录](docs/assets/readme-v4-primitives.png)
 
 ## 安装组件与原子动效
 
-网站预览、源码展示和 Registry 响应共用同一份 React 文件。
+每个预览 Demo 都直接导入对应 Primitive；源码展示与 Registry 发布同一份 Primitive 实现，中间没有字符串源码生成层。
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
@@ -62,9 +62,9 @@ npx shadcn@latest add @motion-lexicon/copy-button
 
 Registry 包含 28 个完整产品组件和 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、可中断动效和减弱动效方案。
 
-![抽屉组件页](docs/assets/readme-v3-component.png)
+![抽屉组件页](docs/assets/readme-v4-component.png)
 
-![滑入原子动效工作台](docs/assets/readme-v3-primitive.png)
+![滑入原子动效工作台](docs/assets/readme-v4-primitive.png)
 
 ## Agent Skill
 
@@ -83,13 +83,14 @@ Skill 支持五种工作模式：
 ## 开发
 
 ```text
-src/registry/components/  React 组件源码
-src/registry/demos/       真实交互预览
-src/registry/primitive-preview.tsx  原子动效实时预览
-src/registry/primitive-source.ts    可复制源码生成器
-src/data/                 组件、原子动效、指南和 SEO 内容
-skills/motion-lexicon/    Agent Skill 与动效参考
-scripts/                  Registry、预渲染与质量检查
+src/registry/components/        28 个 React 组件源码
+src/registry/demos/             组件真实交互预览
+src/registry/primitives/        40 个独立 React + Motion 原子动效
+src/registry/primitive-demos/   40 个直接使用原子动效的产品 Demo
+src/registry/primitive-preview-map.tsx  懒加载 Demo Registry
+src/data/                       组件、原子动效、指南和 SEO 内容
+skills/motion-lexicon/          Agent Skill 与动效参考
+scripts/                        Registry、预渲染与质量检查
 ```
 
 项目是静态 React + TypeScript 应用。`npm run build` 会生成网站、中英文静态页面、sitemap、公开数据，以及 `/r/` 下兼容 shadcn 的 Registry。

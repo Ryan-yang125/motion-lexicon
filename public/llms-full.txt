@@ -7,9 +7,9 @@
 - Scenario guides: https://motion-lexicon.pages.dev/en/guides/
 - Agent Skill: https://motion-lexicon.pages.dev/en/skill/
 - shadcn registry: https://motion-lexicon.pages.dev/r/registry.json
-- Machine-readable catalog: https://motion-lexicon.pages.dev/data/v3/catalog.json
-- Motion Grammar: https://motion-lexicon.pages.dev/data/v3/motion-grammar.json
-- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v3/motion-blueprint.schema.json
+- Machine-readable catalog: https://motion-lexicon.pages.dev/data/v4/catalog.json
+- Motion Grammar: https://motion-lexicon.pages.dev/data/v4/motion-grammar.json
+- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json
 - Source: https://github.com/Ryan-yang125/motion-lexicon
 - Skill install: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
 - License: MIT for code; CC BY 4.0 for original editorial content.

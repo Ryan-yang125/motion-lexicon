@@ -150,7 +150,7 @@ export const motionDirectorModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "3.1.0",
+  version: "4.0.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -383,4 +383,4 @@ export const motionBlueprintExample: MotionBlueprint = {
   contract: motionBlueprintContract
 };
 
-export const motionGrammarDataPath = "/data/v3/motion-grammar.json";
+export const motionGrammarDataPath = "/data/v4/motion-grammar.json";

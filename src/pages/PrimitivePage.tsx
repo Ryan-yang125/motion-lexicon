@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, RotateCcwIcon } from "../components/icons";
 import { ParameterControls } from "../components/ParameterControls";
 import { Seo } from "../components/Seo";
@@ -16,8 +16,8 @@ import { registryComponents } from "../data/component-registry";
 import { pathFor, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { useRecipeParams } from "../lib/useRecipeParams";
-import { PrimitiveRegistryPreview } from "../registry/primitive-preview";
-import { buildPrimitiveSource } from "../registry/primitive-source";
+import { PrimitivePreview } from "../registry/primitive-preview-map";
+import { getPrimitiveRegistrySource } from "../registry/source";
 import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
 
@@ -33,10 +33,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
   const { values, updateValue, resetValues } = useRecipeParams(recipe);
   const [view, setView] = useState("preview");
   const [replayKey, setReplayKey] = useState(0);
-  const source = useMemo(
-    () => registryEntry.installable ? buildPrimitiveSource(recipe, values) : "",
-    [recipe, registryEntry.installable, values]
-  );
+  const source = registryEntry.installable ? getPrimitiveRegistrySource(recipe.id) : "";
   const install = registryEntry.installable ? primitiveInstallCommand(recipe.id) : "";
   const glossaryTerms = getGlossaryTermsForCanonical(recipe.canonicalId);
   const guidance = getMotionGuidance(recipe.canonicalId);
@@ -144,7 +141,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
           {view === "preview" ? (
             <div className={`primitive-workbench-body${registryEntry.installable && recipe.params.length > 0 ? " has-controls" : ""}`}>
               <div className="component-detail-stage primitive-detail-stage">
-                <PrimitiveRegistryPreview locale={locale} recipe={recipe} values={values} replayKey={replayKey} />
+                <PrimitivePreview locale={locale} recipe={recipe} values={values} replayKey={replayKey} />
               </div>
               {registryEntry.installable && recipe.params.length > 0 ? (
                 <aside className="primitive-control-panel">

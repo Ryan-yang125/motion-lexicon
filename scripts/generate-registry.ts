@@ -4,8 +4,6 @@ import path from "node:path";
 import ts from "typescript";
 import { registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
-import { getDefaultParamValues } from "../src/lib/motion-engine";
-import { buildPrimitiveSource } from "../src/registry/primitive-source";
 
 const schema = "https://ui.shadcn.com/schema/registry.json";
 const itemSchema = "https://ui.shadcn.com/schema/registry-item.json";
@@ -48,13 +46,13 @@ const componentItems = await Promise.all(registryComponents.map(async (entry) =>
 }));
 
 const primitiveBuilds = await Promise.all(installablePrimitiveEntries.map(async (entry) => {
-  const source = buildPrimitiveSource(entry.recipe, getDefaultParamValues(entry.recipe));
+  const sourcePath = `src/registry/primitives/${entry.id}.tsx`;
+  const source = await readFile(sourcePath, "utf8");
   try {
     await transform(source, { loader: "tsx", jsx: "automatic", target: "es2022" });
   } catch (error) {
-    throw new Error(`Generated primitive source failed to compile: ${entry.id}`, { cause: error });
+    throw new Error(`Primitive source failed to compile: ${entry.id}`, { cause: error });
   }
-  const sourcePath = `src/registry/primitives/${entry.id}.tsx`;
   const meta = {
     name: entry.registryId,
     type: "registry:ui" as const,
@@ -110,7 +108,7 @@ compilerHost.getSourceFile = (fileName, languageVersion) => {
 const primitiveProgram = ts.createProgram([...virtualSources.keys()], compilerOptions, compilerHost);
 const primitiveDiagnostics = ts.getPreEmitDiagnostics(primitiveProgram);
 if (primitiveDiagnostics.length > 0) {
-  throw new Error(`Generated primitive source failed type checking:\n${ts.formatDiagnosticsWithColorAndContext(primitiveDiagnostics, {
+    throw new Error(`Primitive source failed type checking:\n${ts.formatDiagnosticsWithColorAndContext(primitiveDiagnostics, {
     getCanonicalFileName: (fileName) => fileName,
     getCurrentDirectory: () => process.cwd(),
     getNewLine: () => "\n"
@@ -119,10 +117,12 @@ if (primitiveDiagnostics.length > 0) {
 
 const items = [...componentItems, ...primitiveItems];
 
-const sourceEntries = await Promise.all(registryComponents.map(async (entry) => [
+const componentSourceEntries = await Promise.all(registryComponents.map(async (entry) => [
   entry.id,
   await readFile(`src/registry/components/${entry.id}.tsx`, "utf8")
 ] as const));
+const primitiveSourceEntries = primitiveBuilds.map(({ meta, source }) => [meta.name, source] as const);
+const sourceEntries = [...componentSourceEntries, ...primitiveSourceEntries];
 
 await writeFile(
   sourceModulePath,
