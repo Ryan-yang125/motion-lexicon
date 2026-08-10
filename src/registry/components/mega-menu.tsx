@@ -80,12 +80,17 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
     setFocusedLinkId(section.links[0].id);
     setActive(id);
   };
-  const choose = (next: number) => {
-    const normalized = (next + sections.length) % sections.length;
-    const section = sections[normalized];
-    if (!section || section.links.length === 0) return;
-    openSection(section.id);
-    buttons.current.get(section.id)?.focus({ preventScroll: true });
+  const choose = (at: number, direction: -1 | 1) => {
+    const count = sections.length;
+    if (count < 2) return;
+    for (let distance = 1; distance < count; distance += 1) {
+      const index = (at + direction * distance + count) % count;
+      const section = sections[index];
+      if (!section || section.links.length === 0) continue;
+      openSection(section.id);
+      buttons.current.get(section.id)?.focus({ preventScroll: true });
+      return;
+    }
   };
 
   const focusMenuItem = (next: number) => {
@@ -161,8 +166,8 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   const keyDown = (event: React.KeyboardEvent, at: number) => {
     const section = sections[at];
     if (!section || section.links.length === 0) return;
-    if (event.key === "ArrowRight") { event.preventDefault(); choose(at + 1); }
-    else if (event.key === "ArrowLeft") { event.preventDefault(); choose(at - 1); }
+    if (event.key === "ArrowRight") { event.preventDefault(); choose(at, 1); }
+    else if (event.key === "ArrowLeft") { event.preventDefault(); choose(at, -1); }
     else if (event.key === "ArrowDown") {
       event.preventDefault();
       openSection(section.id, true);

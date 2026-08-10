@@ -27,6 +27,11 @@ const emptyResources: MegaMenuSection = {
   label: "Resources",
   links: [],
 };
+const company: MegaMenuSection = {
+  id: "company",
+  label: "Company",
+  links: [{ id: "about", label: "About", onSelect: vi.fn() }],
+};
 
 beforeEach(() => {
   vi.stubGlobal("requestAnimationFrame", vi.fn());
@@ -38,6 +43,52 @@ afterEach(() => {
 });
 
 describe("MegaMenu", () => {
+  it("cycles top-level focus by direction while skipping empty sections", () => {
+    render(
+      <MegaMenu
+        label="Product navigation"
+        sections={[product, emptyResources, company]}
+      />,
+    );
+    const productTrigger = screen.getByRole("button", { name: "Product" });
+    const companyTrigger = screen.getByRole("button", { name: "Company" });
+    productTrigger.focus();
+    fireEvent.click(productTrigger);
+
+    fireEvent.keyDown(productTrigger, { key: "ArrowRight" });
+    expect(companyTrigger).toHaveFocus();
+    expect(companyTrigger).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.keyDown(companyTrigger, { key: "ArrowLeft" });
+    expect(productTrigger).toHaveFocus();
+    expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.keyDown(productTrigger, { key: "ArrowRight" });
+    expect(companyTrigger).toHaveFocus();
+    fireEvent.keyDown(companyTrigger, { key: "ArrowRight" });
+    expect(productTrigger).toHaveFocus();
+    expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("keeps the current trigger when no other section is available", () => {
+    render(
+      <MegaMenu
+        label="Product navigation"
+        sections={[product, emptyResources]}
+      />,
+    );
+    const productTrigger = screen.getByRole("button", { name: "Product" });
+    productTrigger.focus();
+    fireEvent.click(productTrigger);
+
+    fireEvent.keyDown(productTrigger, { key: "ArrowRight" });
+    fireEvent.keyDown(productTrigger, { key: "ArrowLeft" });
+
+    expect(productTrigger).toHaveFocus();
+    expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("menu", { name: "Product" })).toBeInTheDocument();
+  });
+
   it("keeps the open section and focus unchanged when an empty section is activated", () => {
     render(
       <MegaMenu label="Product navigation" sections={[product, emptyResources]} />,
