@@ -264,6 +264,7 @@ export function ${exportName}({ children, holdMs = ${holdMs}, onConfirm, ...prop
       {...props}
       type={props.type ?? "button"}
       aria-pressed={holding}
+      style={{ ...props.style, position: props.style?.position ?? "relative", overflow: "hidden" }}
       onPointerDown={startHold}
       onPointerUp={cancelHold}
       onPointerCancel={cancelHold}
@@ -282,9 +283,9 @@ export function ${exportName}({ children, holdMs = ${holdMs}, onConfirm, ...prop
       <motion.span
         aria-hidden="true"
         initial={false}
-        animate={{ scaleX: holding ? 1 : 0, opacity: holding ? 1 : 0 }}
+        animate={{ scaleX: holding ? 1 : 0, opacity: holding ? 0.12 : 0 }}
         transition={reduceMotion ? { duration: 0.12 } : { duration: holding ? holdMs / 1000 : 0.14, ease: "linear" }}
-        style={{ position: "absolute", inset: 0, transformOrigin: "left", pointerEvents: "none" }}
+        style={{ position: "absolute", inset: 0, background: "currentColor", transformOrigin: "left", pointerEvents: "none" }}
       />
       <span style={{ position: "relative" }}>{children}</span>
     </motion.button>
