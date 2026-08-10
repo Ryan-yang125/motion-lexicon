@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { BrandMark } from "./BrandMark";
 import {
   BookOpenIcon,
-  ComponentIcon,
+  ComponentLibraryGlyph,
   GithubIcon,
   LanguagesIcon,
   MenuIcon,
@@ -74,7 +74,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
             current={pathname === pathFor(locale, ["components"]) || pathname === pathFor(locale) || pathname === "/"}
             className="shell-nav-heading"
           >
-            <ComponentIcon size={15} aria-hidden="true" />
+            <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
             <span>{componentLabel}</span>
             <small>{registryComponents.length}</small>
           </ShellLink>

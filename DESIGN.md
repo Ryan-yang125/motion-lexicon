@@ -1,12 +1,12 @@
-# Motion Lexicon V3 Product Design
+# Motion Lexicon V3.1 Product Design
 
 ## Experience model
 
-Motion Lexicon V3 is a component registry with a motion reference layer.
+Motion Lexicon V3.1 gives Components and Primitives one React + Motion registry architecture.
 
 ```text
 Components: Browse → Interact → Inspect source → Install
-Primitives: Browse → Preview → Tune → Copy
+Primitives: Browse → Preview → Tune → Inspect source → Install
 Agent Skill: Understand → Compose → Implement → Review
 ```
 
@@ -19,8 +19,8 @@ Primary routes:
 
 - `/:locale/components/` — 28 React motion components.
 - `/:locale/components/:componentId/` — live preview, source, install command, and related primitives.
-- `/:locale/primitives/` — 44 adjustable motion primitives.
-- `/:locale/primitives/:primitiveId/` — primitive preview, parameters, prompt/code, and guidance.
+- `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
+- `/:locale/primitives/:primitiveId/` — live preview, props, React source, install command, and guidance.
 
 Resource routes:
 
@@ -59,9 +59,10 @@ The domain root and locale roots open Components. Old product routes are removed
 ## Primitive directory and workbench
 
 - Search and category pills filter 44 canonical primitives.
-- Gallery previews use the real HTML/CSS runtime and play without replacing their preview root.
+- Gallery previews use the real React + Motion renderer and mount only near the viewport.
 - Every direct route uses `/primitives/:id/`.
-- Existing parameter, replay, reduced-motion, prompt, code, and long-form guidance remain available.
+- Forty executable entries expose props, replay, source, reduced motion, and a shadcn install command.
+- Four editorial entries remain focused design guides.
 
 ## Material and visual system
 
@@ -93,12 +94,12 @@ The visual language follows Interior's proven material hierarchy:
 
 ## Registry contract
 
-`src/registry/components/:id.tsx` is the source of truth for:
+Component source files and the typed Primitive Registry are the source of truth for:
 
 1. the live website preview;
-2. the component source view;
+2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V3 catalog.
+4. the public V3.1 catalog.
 
 `scripts/generate-registry.ts` publishes the official shadcn schema. A release
 must install at least one generated item successfully with `shadcn@latest`.

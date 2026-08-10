@@ -1,13 +1,14 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { MotionThumbnail } from "../components/MotionThumbnail";
 import { SearchIcon } from "../components/icons";
 import { Seo } from "../components/Seo";
 import { categories } from "../data/categories";
+import { primitiveSurfaceLabel } from "../data/primitive-registry";
 import { catalogRecipes } from "../data/recipes";
 import { pathFor, text } from "../data/site";
 import type { Locale } from "../data/types";
-import { createRecipeSearchIndex } from "../lib/motion-engine";
+import { createRecipeSearchIndex, getDefaultParamValues } from "../lib/motion-engine";
+import { PrimitiveRegistryPreview } from "../registry/primitive-preview";
 
 function validCategory(id: string | null) {
   return categories.some((category) => category.id === id) ? id ?? undefined : undefined;
@@ -36,8 +37,8 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
   }, [categoryId, deferredQuery, locale]);
 
   const copy = locale === "zh"
-    ? { title: "原子动效", description: "44 个可调节、可复制的动效基础。", search: "搜索淡入、弹簧、拖拽", all: "全部" }
-    : { title: "Motion primitives", description: "44 adjustable, copy-ready motion foundations.", search: "Search fade, spring, drag", all: "All" };
+    ? { title: "可调节、可复制的 React 原子动效", description: "40 个 React + Motion 实现，4 个设计指南。", search: "搜索淡入、弹簧、拖拽", all: "全部" }
+    : { title: "Tunable, copy-ready React motion primitives", description: "40 React + Motion implementations and 4 design guides.", search: "Search fade, spring, drag", all: "All" };
 
   function update(nextQuery: string, nextCategory?: string) {
     setQuery(nextQuery);
@@ -54,9 +55,12 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
       <Seo locale={locale} title={`${copy.title} — Motion Lexicon`} description={copy.description} path={pathFor(locale, ["primitives"])} image={`/og-primitives-${locale}.png`} />
       <div className="directory-page primitives-directory">
         <header className="directory-hero primitive-hero">
-          <span className="directory-kicker">CSS · HTML · Motion vocabulary</span>
+          <span className="directory-kicker">React · Motion · shadcn registry</span>
           <h1>{copy.title}</h1>
-          <span className="primitive-result-count">{entries.length}</span>
+          <div className="directory-hero-meta">
+            <span>{copy.description}</span>
+            <code>{entries.length}/44</code>
+          </div>
         </header>
 
         <div className="primitive-toolbar">
@@ -79,8 +83,19 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
           <div className="primitive-card-grid">
             {entries.map((recipe) => (
               <Link className="primitive-card" key={recipe.id} to="/$locale/primitives/$primitiveId/" params={{ locale, primitiveId: recipe.id }}>
-                <div className="primitive-card-stage"><MotionThumbnail locale={locale} recipe={recipe} /></div>
-                <div className="primitive-card-footer"><strong>{text(recipe.name, locale)}</strong><code>{recipe.id}</code></div>
+                <div className="primitive-card-stage">
+                  <PrimitiveRegistryPreview
+                    locale={locale}
+                    recipe={recipe}
+                    values={getDefaultParamValues(recipe)}
+                    deferred
+                    compact
+                  />
+                </div>
+                <div className="primitive-card-footer">
+                  <span><strong>{text(recipe.name, locale)}</strong><code>{recipe.id}</code></span>
+                  <small data-surface={recipe.surfaceType}>{primitiveSurfaceLabel(recipe, locale)}</small>
+                </div>
               </Link>
             ))}
           </div>

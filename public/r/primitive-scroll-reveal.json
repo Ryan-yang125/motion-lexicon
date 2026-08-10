@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-scroll-reveal",
+  "type": "registry:ui",
+  "title": "Scroll reveal",
+  "description": "Reveal content once as it enters the viewport with a reduced-motion fallback.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "scroll"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/",
+  "files": [
+    {
+      "path": "src/registry/primitives/scroll-reveal.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/scroll-reveal.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type ScrollRevealPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function ScrollRevealPrimitive({ children, ...props }: ScrollRevealPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : { opacity: 0, y: 18 }}\n      viewport={{ once: true, amount: 0.5 }}\n      whileInView={reduceMotion ? undefined : {opacity: 1,y: 0}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

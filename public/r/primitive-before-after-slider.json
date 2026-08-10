@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-before-after-slider",
+  "type": "registry:ui",
+  "title": "Before / after slider",
+  "description": "Compare before and after states of the same visual with a draggable divider.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/before-after-slider/",
+  "files": [
+    {
+      "path": "src/registry/primitives/before-after-slider.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/before-after-slider.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type BeforeAfterSliderPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function BeforeAfterSliderPrimitive({ children, ...props }: BeforeAfterSliderPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      drag=\"x\"\n      dragConstraints={{ left: 0, right: 0 }}\n      dragElastic={0.18}\n      whileDrag={reduceMotion ? undefined : {scale: 1.015}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 360, damping: 30 }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

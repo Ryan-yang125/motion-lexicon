@@ -5,6 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { registryComponents } from "../../src/data/component-registry";
 import { catalogRecipes } from "../../src/data/recipes";
+import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
 
 const publicDir = path.resolve(process.cwd(), "public");
 
@@ -19,15 +20,17 @@ describe("V3 public machine-readable artifacts", () => {
       release: string;
       counts: { components: number; primitives: number };
       components: Array<{ id: string; urls: { registry: string } }>;
-      primitives: Array<{ id: string; urls: { en: string } }>;
+      primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(3);
-    expect(catalog.release).toBe("3.0.0");
+    expect(catalog.release).toBe("3.1.0");
     expect(catalog.counts).toEqual({ components: 28, primitives: 44 });
     expect(catalog.components).toHaveLength(registryComponents.length);
     expect(catalog.primitives).toHaveLength(catalogRecipes.length);
     expect(catalog.components.every((item) => item.urls.registry.endsWith(`/r/${item.id}.json`))).toBe(true);
     expect(catalog.primitives.every((item) => item.urls.en.includes(`/en/primitives/${item.id}/`))).toBe(true);
+    expect(catalog.primitives.filter((item) => item.urls.registry)).toHaveLength(installablePrimitiveEntries.length);
+    expect(catalog.primitives.filter((item) => item.urls.registry).every((item) => item.urls.registry?.endsWith(`/r/primitive-${item.id}.json`))).toBe(true);
   });
 
   it("publishes the V3 Motion Grammar and the Skill schema", async () => {
@@ -38,7 +41,7 @@ describe("V3 public machine-readable artifacts", () => {
     };
     const publicSchema = await parse("data/v3/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("3.0.0");
+    expect(grammar.version).toBe("3.1.0");
     expect(grammar.collections.components.count).toBe(28);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({

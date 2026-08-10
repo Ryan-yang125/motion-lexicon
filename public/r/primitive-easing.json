@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-easing",
+  "type": "registry:ui",
+  "title": "Easing",
+  "description": "Compare common easing curves and custom cubic-bezier velocity profiles.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "easing"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/easing/",
+  "files": [
+    {
+      "path": "src/registry/primitives/easing.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/easing.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type EasingPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function EasingPrimitive({ children, ...props }: EasingPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: -120}}\n      animate={{x: 120}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.52, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

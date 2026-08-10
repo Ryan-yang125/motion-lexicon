@@ -105,7 +105,7 @@ export type MotionBlueprint = {
     liveRegion: LocalizedText;
   };
   delivery: {
-    format: readonly ("html" | "css" | "js")[];
+    format: readonly ("react" | "html" | "css" | "js")[];
     implementation: LocalizedText;
   };
   provenance: {
@@ -132,7 +132,7 @@ export const motionDirectorModes = [
   {
     id: "implement" as const,
     title: text("实现", "Implement"),
-    description: text("产出贴合现有界面的 HTML、CSS 和必要的交互 JavaScript。", "Produce HTML, CSS, and the small amount of interaction JavaScript that fits the interface."),
+    description: text("产出贴合现有界面的 React + Motion，或按需求交付便携实现。", "Produce React + Motion that fits the interface, or a portable implementation when requested."),
     deliverable: text("可接入实现", "Integration-ready implementation")
   },
   {
@@ -150,7 +150,7 @@ export const motionDirectorModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "3.0.0",
+  version: "3.1.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -215,8 +215,8 @@ export const motionGrammar = {
     rule: text("一个瞬间聚焦一个主要视觉角色，辅助角色只负责建立因果和空间关系。", "One moment focuses on one primary visual actor; auxiliary actors establish cause and spatial context.")
   },
   implementation: {
-    preferredDelivery: ["html", "css", "js"] as const,
-    rule: text("用语义 HTML、局部 CSS 和少量 JavaScript 交付；代码与状态图保持同源。", "Deliver with semantic HTML, local CSS, and small JavaScript; keep the code aligned with the state graph.")
+    preferredDelivery: ["react", "html", "css", "js"] as const,
+    rule: text("React 产品优先使用 Motion 交付；便携场景保留语义 HTML、局部 CSS 和少量 JavaScript。代码与状态图保持同源。", "Prefer Motion for React products; keep semantic HTML, local CSS, and small JavaScript available for portable delivery. Keep code aligned with the state graph.")
   }
 } as const;
 

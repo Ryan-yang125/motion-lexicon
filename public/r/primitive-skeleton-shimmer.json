@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-skeleton-shimmer",
+  "type": "registry:ui",
+  "title": "Skeleton / Shimmer",
+  "description": "Communicate loading progress with a low-contrast shimmer across placeholders.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/",
+  "files": [
+    {
+      "path": "src/registry/primitives/skeleton-shimmer.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/skeleton-shimmer.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type SkeletonShimmerPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function SkeletonShimmerPrimitive({ children, ...props }: SkeletonShimmerPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {backgroundPosition: \"120% 0\"}}\n      animate={{backgroundPosition: \"-120% 0\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.4, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

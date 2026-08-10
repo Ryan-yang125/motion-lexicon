@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-loop",
+  "type": "registry:ui",
+  "title": "Loop",
+  "description": "Compare loop direction, count, pauses, and rhythm while controlling distraction.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "loops"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/loop/",
+  "files": [
+    {
+      "path": "src/registry/primitives/loop.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/loop.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type LoopPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function LoopPrimitive({ children, ...props }: LoopPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: -8}}\n      animate={{rotate: 8}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.2, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

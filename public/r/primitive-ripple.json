@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-ripple",
+  "type": "registry:ui",
+  "title": "Ripple",
+  "description": "Expand a restrained ripple from the input coordinate for precise touch feedback.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/ripple/",
+  "files": [
+    {
+      "path": "src/registry/primitives/ripple.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/ripple.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type RipplePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function RipplePrimitive({ children, ...props }: RipplePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileTap={reduceMotion ? undefined : {scale: 0.98}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.16, ease: [0.23, 1, 0.32, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

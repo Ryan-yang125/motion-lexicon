@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-compositing",
+  "type": "registry:ui",
+  "title": "Compositing",
+  "description": "Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "performance"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/compositing/",
+  "files": [
+    {
+      "path": "src/registry/primitives/compositing.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/compositing.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type CompositingPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function CompositingPrimitive({ children, ...props }: CompositingPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: -80,opacity: 0}}\n      animate={{x: 0,opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.52, ease: \"linear\" }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

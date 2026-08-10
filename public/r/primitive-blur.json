@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-blur",
+  "type": "registry:ui",
+  "title": "Blur",
+  "description": "Reveal media or content layers with coordinated blur, opacity, and masking.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/blur/",
+  "files": [
+    {
+      "path": "src/registry/primitives/blur.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/blur.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type BlurPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function BlurPrimitive({ children, ...props }: BlurPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,filter: \"blur(14px)\"}}\n      animate={{opacity: 1,filter: \"blur(0px)\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

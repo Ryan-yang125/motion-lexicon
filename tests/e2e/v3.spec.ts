@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { registryComponents } from "../../src/data/component-registry";
 import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
+import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
 
 async function expectNoHorizontalOverflow(page: import("@playwright/test").Page) {
   const layout = await page.evaluate(() => ({
@@ -32,12 +33,16 @@ test("component detail keeps preview, source, install, and related primitives to
 
 test("primitive directory and workbench use the direct V3 routes", async ({ page }) => {
   await page.goto("/zh/primitives/");
-  await expect(page.getByRole("heading", { level: 1, name: "原子动效" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
   await expect(page.locator(".primitive-card")).toHaveCount(canonicalMotionCatalog.length);
+  await expect(page.locator('[data-primitive="slide-in"]')).toBeVisible();
   await page.locator('.primitive-card[href="/zh/primitives/slide-in/"]').click();
   await expect(page).toHaveURL(/\/zh\/primitives\/slide-in\//);
   await expect(page.getByRole("heading", { level: 1, name: "滑入" })).toBeVisible();
   await expect(page.getByRole("slider").first()).toBeVisible();
+  await page.getByRole("radio", { name: "代码" }).click();
+  await expect(page.locator(".primitive-source")).toContainText("export function SlideInPrimitive");
+  await expect(page.locator(".component-install-panel code")).toContainText("/r/primitive-slide-in.json");
   await expectNoHorizontalOverflow(page);
 });
 
@@ -123,8 +128,11 @@ test("English routes and the shadcn registry are publishable", async ({ page, re
   const registry = await request.get("/r/registry.json");
   expect(registry.ok()).toBe(true);
   const index = await registry.json() as { items: Array<{ name: string }> };
-  expect(index.items).toHaveLength(registryComponents.length);
+  expect(index.items).toHaveLength(registryComponents.length + installablePrimitiveEntries.length);
   const copyButton = await request.get("/r/copy-button.json");
   expect(copyButton.ok()).toBe(true);
   expect(await copyButton.json()).toMatchObject({ name: "copy-button", type: "registry:ui" });
+  const slideIn = await request.get("/r/primitive-slide-in.json");
+  expect(slideIn.ok()).toBe(true);
+  expect(await slideIn.json()).toMatchObject({ name: "primitive-slide-in", type: "registry:ui" });
 });

@@ -1,7 +1,7 @@
 {
   "name": "motion-lexicon",
-  "version": "3.0.0",
-  "description": "Copy-ready React motion components, adjustable motion primitives, and an Agent Skill for product motion.",
+  "version": "3.1.0",
+  "description": "Copy-ready React motion components and primitives, plus an Agent Skill for product motion.",
   "license": "MIT",
   "repository": {
     "type": "git",

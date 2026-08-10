@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-idle-animation",
+  "type": "registry:ui",
+  "title": "Idle animation",
+  "description": "Use subtle breathing or floating motion for available, waiting, or active states.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "loops"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/idle-animation/",
+  "files": [
+    {
+      "path": "src/registry/primitives/idle-animation.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/idle-animation.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type IdleAnimationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function IdleAnimationPrimitive({ children, ...props }: IdleAnimationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {y: 0,scale: 1}}\n      animate={{y: [-2,2,-2],scale: [1,1.02,1]}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 2.2, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

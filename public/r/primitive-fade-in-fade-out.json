@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-fade-in-fade-out",
+  "type": "registry:ui",
+  "title": "Fade in / Fade out",
+  "description": "Introduce or remove an element with opacity for low-distraction state changes.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "entrances"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/",
+  "files": [
+    {
+      "path": "src/registry/primitives/fade-in-fade-out.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/fade-in-fade-out.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type FadeInFadeOutPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function FadeInFadeOutPrimitive({ children, ...props }: FadeInFadeOutPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0}}\n      animate={{opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.22, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

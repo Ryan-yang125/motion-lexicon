@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-marquee",
+  "type": "registry:ui",
+  "title": "Marquee",
+  "description": "Continuously scroll overflowing content and pause it on hover or focus.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "loops"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/marquee/",
+  "files": [
+    {
+      "path": "src/registry/primitives/marquee.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/marquee.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MarqueePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function MarqueePrimitive({ children, ...props }: MarqueePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: \"0%\"}}\n      animate={{x: \"-50%\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 8, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

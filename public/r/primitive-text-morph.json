@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-text-morph",
+  "type": "registry:ui",
+  "title": "Text morph",
+  "description": "Transition between similarly sized short labels while preserving reading position.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/text-morph/",
+  "files": [
+    {
+      "path": "src/registry/primitives/text-morph.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/text-morph.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type TextMorphPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function TextMorphPrimitive({ children, ...props }: TextMorphPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,y: 5}}\n      animate={{opacity: 1,y: 0}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.23, 1, 0.32, 1], delay: 0.12 }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

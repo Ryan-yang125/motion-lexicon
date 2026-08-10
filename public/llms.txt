@@ -1,6 +1,6 @@
 # Motion Lexicon
 
-> Copy-ready React motion components, adjustable motion primitives, and an Agent Skill for product motion.
+> Copy-ready React + Motion components and primitives, plus an Agent Skill for product motion.
 
 - Components: https://motion-lexicon.pages.dev/en/components/
 - Motion primitives: https://motion-lexicon.pages.dev/en/primitives/

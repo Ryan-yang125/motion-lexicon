@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-hold-to-confirm",
+  "type": "registry:ui",
+  "title": "Hold to confirm",
+  "description": "Show cancellable progress during hold-to-confirm interactions to reduce mistakes.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/",
+  "files": [
+    {
+      "path": "src/registry/primitives/hold-to-confirm.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/hold-to-confirm.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type HoldToConfirmPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function HoldToConfirmPrimitive({ children, ...props }: HoldToConfirmPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileTap={reduceMotion ? undefined : {scale: 0.97}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.2, ease: \"linear\" }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

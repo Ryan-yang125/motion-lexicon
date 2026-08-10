@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-orbit",
+  "type": "registry:ui",
+  "title": "Orbit",
+  "description": "Move a decorative node slowly around a center for low-frequency status displays.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "loops"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/orbit/",
+  "files": [
+    {
+      "path": "src/registry/primitives/orbit.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/orbit.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type OrbitPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function OrbitPrimitive({ children, ...props }: OrbitPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: 0}}\n      animate={{rotate: 360}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 6, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

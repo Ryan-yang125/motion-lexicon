@@ -1,8 +1,8 @@
 {
   "schemaVersion": 3,
-  "release": "3.0.0",
+  "release": "3.1.0",
   "name": "Motion Lexicon",
-  "description": "Copy-ready React motion components and adjustable motion primitives.",
+  "description": "Copy-ready React + Motion components and primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",
   "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
   "registryUrl": "https://motion-lexicon.pages.dev/r/registry.json",
@@ -618,7 +618,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/fade-in-fade-out/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-fade-in-fade-out.json"
       }
     },
     {
@@ -634,7 +635,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/slide-in/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/slide-in/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/slide-in/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-slide-in.json"
       }
     },
     {
@@ -650,7 +652,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/scale-in/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/scale-in/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scale-in/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-scale-in.json"
       }
     },
     {
@@ -666,7 +669,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/reveal/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/reveal/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/reveal/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-reveal.json"
       }
     },
     {
@@ -682,7 +686,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/stagger/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/stagger/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/stagger/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-stagger.json"
       }
     },
     {
@@ -698,7 +703,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/keyframes/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/keyframes/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/keyframes/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-keyframes.json"
       }
     },
     {
@@ -714,7 +720,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/duration/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/duration/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/duration/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-duration.json"
       }
     },
     {
@@ -730,7 +737,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/translate/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/translate/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/translate/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-translate.json"
       }
     },
     {
@@ -746,7 +754,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/3d-tilt-flip/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-3d-tilt-flip.json"
       }
     },
     {
@@ -762,7 +771,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/origin-aware-animation/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-origin-aware-animation.json"
       }
     },
     {
@@ -778,7 +788,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/crossfade/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/crossfade/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/crossfade/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-crossfade.json"
       }
     },
     {
@@ -794,7 +805,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/morph/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/morph/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/morph/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-morph.json"
       }
     },
     {
@@ -810,7 +822,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/accordion-collapse/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-accordion-collapse.json"
       }
     },
     {
@@ -826,7 +839,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/direction-aware-transition/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-direction-aware-transition.json"
       }
     },
     {
@@ -842,7 +856,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/scroll-reveal/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-scroll-reveal.json"
       }
     },
     {
@@ -858,7 +873,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/scroll-driven-animation/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-scroll-driven-animation.json"
       }
     },
     {
@@ -874,7 +890,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/parallax/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/parallax/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/parallax/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-parallax.json"
       }
     },
     {
@@ -890,7 +907,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/page-transition/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/page-transition/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/page-transition/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-page-transition.json"
       }
     },
     {
@@ -906,7 +924,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/hover-effect/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/hover-effect/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/hover-effect/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-hover-effect.json"
       }
     },
     {
@@ -922,7 +941,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/press-tap-feedback/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-press-tap-feedback.json"
       }
     },
     {
@@ -938,7 +958,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/hold-to-confirm/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-hold-to-confirm.json"
       }
     },
     {
@@ -954,7 +975,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/drag-to-reorder/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-drag-to-reorder.json"
       }
     },
     {
@@ -970,7 +992,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/swipe-to-dismiss/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-swipe-to-dismiss.json"
       }
     },
     {
@@ -986,7 +1009,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/shake-wiggle/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-shake-wiggle.json"
       }
     },
     {
@@ -1002,7 +1026,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/ripple/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/ripple/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/ripple/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-ripple.json"
       }
     },
     {
@@ -1018,7 +1043,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/easing/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/easing/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/easing/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-easing.json"
       }
     },
     {
@@ -1034,7 +1060,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/spring/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/spring/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/spring/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-spring.json"
       }
     },
     {
@@ -1050,7 +1077,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/loop/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/loop/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/loop/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-loop.json"
       }
     },
     {
@@ -1066,7 +1094,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/marquee/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/marquee/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/marquee/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-marquee.json"
       }
     },
     {
@@ -1082,7 +1111,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/orbit/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/orbit/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/orbit/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-orbit.json"
       }
     },
     {
@@ -1098,7 +1128,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/idle-animation/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/idle-animation/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/idle-animation/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-idle-animation.json"
       }
     },
     {
@@ -1114,7 +1145,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/blur/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/blur/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/blur/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-blur.json"
       }
     },
     {
@@ -1130,7 +1162,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/before-after-slider/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/before-after-slider/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/before-after-slider/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-before-after-slider.json"
       }
     },
     {
@@ -1146,7 +1179,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/line-drawing/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/line-drawing/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/line-drawing/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-line-drawing.json"
       }
     },
     {
@@ -1162,7 +1196,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/text-morph/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/text-morph/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/text-morph/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-text-morph.json"
       }
     },
     {
@@ -1178,7 +1213,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/skeleton-shimmer/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-skeleton-shimmer.json"
       }
     },
     {
@@ -1194,7 +1230,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/number-ticker/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/number-ticker/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/number-ticker/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-number-ticker.json"
       }
     },
     {
@@ -1210,7 +1247,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/typewriter/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/typewriter/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/typewriter/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-typewriter.json"
       }
     },
     {
@@ -1242,7 +1280,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/compositing/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/compositing/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/compositing/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-compositing.json"
       }
     },
     {
@@ -1274,7 +1313,8 @@
       },
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/primitives/anticipation/",
-        "en": "https://motion-lexicon.pages.dev/en/primitives/anticipation/"
+        "en": "https://motion-lexicon.pages.dev/en/primitives/anticipation/",
+        "registry": "https://motion-lexicon.pages.dev/r/primitive-anticipation.json"
       }
     },
     {

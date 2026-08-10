@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-page-transition",
+  "type": "registry:ui",
+  "title": "Page transition",
+  "description": "Preserve continuity across page or view changes with a safe fallback.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "scroll"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/page-transition/",
+  "files": [
+    {
+      "path": "src/registry/primitives/page-transition.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/page-transition.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type PageTransitionPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function PageTransitionPrimitive({ children, ...props }: PageTransitionPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      layout\n      animate={reduceMotion ? undefined : {opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 260, damping: 28 }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

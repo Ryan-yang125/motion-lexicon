@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-spring",
+  "type": "registry:ui",
+  "title": "Spring",
+  "description": "Tune a physical spring response with stiffness, damping, mass, and initial velocity.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "springs"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/spring/",
+  "files": [
+    {
+      "path": "src/registry/primitives/spring.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/spring.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type SpringPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function SpringPrimitive({ children, ...props }: SpringPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: -48}}\n      animate={{x: 48}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 220, damping: 24, mass: 1 }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

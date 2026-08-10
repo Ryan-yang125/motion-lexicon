@@ -562,6 +562,846 @@
           "target": "components/motion-lexicon/value-flash.tsx"
         }
       ]
+    },
+    {
+      "name": "primitive-fade-in-fade-out",
+      "type": "registry:ui",
+      "title": "Fade in / Fade out",
+      "description": "Introduce or remove an element with opacity for low-distraction state changes.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "entrances"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/",
+      "files": [
+        {
+          "path": "src/registry/primitives/fade-in-fade-out.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/fade-in-fade-out.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-slide-in",
+      "type": "registry:ui",
+      "title": "Slide in",
+      "description": "Bring content in from a clear direction so its spatial relationship stays legible.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "entrances"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/slide-in/",
+      "files": [
+        {
+          "path": "src/registry/primitives/slide-in.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/slide-in.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-scale-in",
+      "type": "registry:ui",
+      "title": "Scale in",
+      "description": "Scale from near the final size, with an optional slight overshoot for Pop in.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "entrances"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/scale-in/",
+      "files": [
+        {
+          "path": "src/registry/primitives/scale-in.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/scale-in.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-reveal",
+      "type": "registry:ui",
+      "title": "Reveal",
+      "description": "Reveal content with clipping and slight travel for headings, media, and sections.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "entrances"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/reveal/",
+      "files": [
+        {
+          "path": "src/registry/primitives/reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-stagger",
+      "type": "registry:ui",
+      "title": "Stagger",
+      "description": "Introduce list items at short intervals to communicate order and rhythm.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "sequencing"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/stagger/",
+      "files": [
+        {
+          "path": "src/registry/primitives/stagger.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/stagger.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-keyframes",
+      "type": "registry:ui",
+      "title": "Keyframes",
+      "description": "Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "sequencing"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/keyframes/",
+      "files": [
+        {
+          "path": "src/registry/primitives/keyframes.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/keyframes.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-duration",
+      "type": "registry:ui",
+      "title": "Duration",
+      "description": "Compare how duration and delay affect response, rhythm, and perceived waiting.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "sequencing"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/duration/",
+      "files": [
+        {
+          "path": "src/registry/primitives/duration.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/duration.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-translate",
+      "type": "registry:ui",
+      "title": "Translate",
+      "description": "Combine translation, scale, rotation, skew, perspective, and transform origin.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "transforms"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/translate/",
+      "files": [
+        {
+          "path": "src/registry/primitives/translate.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/translate.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-3d-tilt-flip",
+      "type": "registry:ui",
+      "title": "3D tilt / Flip",
+      "description": "Use controlled perspective and rotation for card flips or hover depth.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "transforms"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/",
+      "files": [
+        {
+          "path": "src/registry/primitives/3d-tilt-flip.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/3d-tilt-flip.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-origin-aware-animation",
+      "type": "registry:ui",
+      "title": "Origin-aware animation",
+      "description": "Expand or scale from the trigger point to preserve spatial continuity.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "transforms"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/",
+      "files": [
+        {
+          "path": "src/registry/primitives/origin-aware-animation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/origin-aware-animation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-crossfade",
+      "type": "registry:ui",
+      "title": "Crossfade",
+      "description": "Crossfade overlapping, similarly sized states to reduce visual jumps.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "state-transitions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/crossfade/",
+      "files": [
+        {
+          "path": "src/registry/primitives/crossfade.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/crossfade.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-morph",
+      "type": "registry:ui",
+      "title": "Morph",
+      "description": "Create continuous transformation between before and after layouts of a shared element.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "state-transitions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/morph/",
+      "files": [
+        {
+          "path": "src/registry/primitives/morph.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-accordion-collapse",
+      "type": "registry:ui",
+      "title": "Accordion / Collapse",
+      "description": "Coordinate height, opacity, and icon state for clear disclosure transitions.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "state-transitions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/",
+      "files": [
+        {
+          "path": "src/registry/primitives/accordion-collapse.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/accordion-collapse.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-direction-aware-transition",
+      "type": "registry:ui",
+      "title": "Direction-aware transition",
+      "description": "Match enter and exit directions to navigation order and preserve context.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "state-transitions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/",
+      "files": [
+        {
+          "path": "src/registry/primitives/direction-aware-transition.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/direction-aware-transition.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-scroll-reveal",
+      "type": "registry:ui",
+      "title": "Scroll reveal",
+      "description": "Reveal content once as it enters the viewport with a reduced-motion fallback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "scroll"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/",
+      "files": [
+        {
+          "path": "src/registry/primitives/scroll-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/scroll-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-scroll-driven-animation",
+      "type": "registry:ui",
+      "title": "Scroll-driven animation",
+      "description": "Bind animation progress to a scroll range and tune its start, end, and travel.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "scroll"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/",
+      "files": [
+        {
+          "path": "src/registry/primitives/scroll-driven-animation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/scroll-driven-animation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-parallax",
+      "type": "registry:ui",
+      "title": "Parallax",
+      "description": "Move foreground and background at restrained relative speeds to create depth.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "scroll"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/parallax/",
+      "files": [
+        {
+          "path": "src/registry/primitives/parallax.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/parallax.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-page-transition",
+      "type": "registry:ui",
+      "title": "Page transition",
+      "description": "Preserve continuity across page or view changes with a safe fallback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "scroll"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/page-transition/",
+      "files": [
+        {
+          "path": "src/registry/primitives/page-transition.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/page-transition.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-hover-effect",
+      "type": "registry:ui",
+      "title": "Hover effect",
+      "description": "Reinforce interactivity on pointer hover while keeping layout stable.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/hover-effect/",
+      "files": [
+        {
+          "path": "src/registry/primitives/hover-effect.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/hover-effect.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-press-tap-feedback",
+      "type": "registry:ui",
+      "title": "Press / Tap feedback",
+      "description": "Confirm input immediately with a brief scale and contrast response.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/",
+      "files": [
+        {
+          "path": "src/registry/primitives/press-tap-feedback.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/press-tap-feedback.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-hold-to-confirm",
+      "type": "registry:ui",
+      "title": "Hold to confirm",
+      "description": "Show cancellable progress during hold-to-confirm interactions to reduce mistakes.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/",
+      "files": [
+        {
+          "path": "src/registry/primitives/hold-to-confirm.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/hold-to-confirm.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-drag-to-reorder",
+      "type": "registry:ui",
+      "title": "Drag to reorder",
+      "description": "Keep pickup, placeholder, and drop states clear while reordering.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/",
+      "files": [
+        {
+          "path": "src/registry/primitives/drag-to-reorder.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/drag-to-reorder.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-swipe-to-dismiss",
+      "type": "registry:ui",
+      "title": "Swipe to dismiss",
+      "description": "Map swipe distance to travel and opacity with resistance before the threshold.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/",
+      "files": [
+        {
+          "path": "src/registry/primitives/swipe-to-dismiss.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/swipe-to-dismiss.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-shake-wiggle",
+      "type": "registry:ui",
+      "title": "Shake / Wiggle",
+      "description": "Use one brief horizontal shake for errors or inputs that need attention.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/",
+      "files": [
+        {
+          "path": "src/registry/primitives/shake-wiggle.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/shake-wiggle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-ripple",
+      "type": "registry:ui",
+      "title": "Ripple",
+      "description": "Expand a restrained ripple from the input coordinate for precise touch feedback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/ripple/",
+      "files": [
+        {
+          "path": "src/registry/primitives/ripple.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/ripple.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-easing",
+      "type": "registry:ui",
+      "title": "Easing",
+      "description": "Compare common easing curves and custom cubic-bezier velocity profiles.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "easing"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/easing/",
+      "files": [
+        {
+          "path": "src/registry/primitives/easing.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/easing.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-spring",
+      "type": "registry:ui",
+      "title": "Spring",
+      "description": "Tune a physical spring response with stiffness, damping, mass, and initial velocity.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "springs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/spring/",
+      "files": [
+        {
+          "path": "src/registry/primitives/spring.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/spring.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-loop",
+      "type": "registry:ui",
+      "title": "Loop",
+      "description": "Compare loop direction, count, pauses, and rhythm while controlling distraction.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "loops"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/loop/",
+      "files": [
+        {
+          "path": "src/registry/primitives/loop.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/loop.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-marquee",
+      "type": "registry:ui",
+      "title": "Marquee",
+      "description": "Continuously scroll overflowing content and pause it on hover or focus.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "loops"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/marquee/",
+      "files": [
+        {
+          "path": "src/registry/primitives/marquee.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/marquee.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-orbit",
+      "type": "registry:ui",
+      "title": "Orbit",
+      "description": "Move a decorative node slowly around a center for low-frequency status displays.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "loops"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/orbit/",
+      "files": [
+        {
+          "path": "src/registry/primitives/orbit.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/orbit.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-idle-animation",
+      "type": "registry:ui",
+      "title": "Idle animation",
+      "description": "Use subtle breathing or floating motion for available, waiting, or active states.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "loops"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/idle-animation/",
+      "files": [
+        {
+          "path": "src/registry/primitives/idle-animation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/idle-animation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-blur",
+      "type": "registry:ui",
+      "title": "Blur",
+      "description": "Reveal media or content layers with coordinated blur, opacity, and masking.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/blur/",
+      "files": [
+        {
+          "path": "src/registry/primitives/blur.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/blur.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-before-after-slider",
+      "type": "registry:ui",
+      "title": "Before / after slider",
+      "description": "Compare before and after states of the same visual with a draggable divider.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/before-after-slider/",
+      "files": [
+        {
+          "path": "src/registry/primitives/before-after-slider.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/before-after-slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-line-drawing",
+      "type": "registry:ui",
+      "title": "Line drawing",
+      "description": "Draw icons, paths, or explanatory connectors with stroke offset animation.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/line-drawing/",
+      "files": [
+        {
+          "path": "src/registry/primitives/line-drawing.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/line-drawing.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-text-morph",
+      "type": "registry:ui",
+      "title": "Text morph",
+      "description": "Transition between similarly sized short labels while preserving reading position.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/text-morph/",
+      "files": [
+        {
+          "path": "src/registry/primitives/text-morph.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/text-morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-skeleton-shimmer",
+      "type": "registry:ui",
+      "title": "Skeleton / Shimmer",
+      "description": "Communicate loading progress with a low-contrast shimmer across placeholders.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/",
+      "files": [
+        {
+          "path": "src/registry/primitives/skeleton-shimmer.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/skeleton-shimmer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-number-ticker",
+      "type": "registry:ui",
+      "title": "Number ticker",
+      "description": "Show changing values with tabular figures and stable vertical digit movement.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/number-ticker/",
+      "files": [
+        {
+          "path": "src/registry/primitives/number-ticker.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/number-ticker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-typewriter",
+      "type": "registry:ui",
+      "title": "Typewriter",
+      "description": "Reveal short text character by character while preserving complete accessible text.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "polish-effects"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/typewriter/",
+      "files": [
+        {
+          "path": "src/registry/primitives/typewriter.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/typewriter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-compositing",
+      "type": "registry:ui",
+      "title": "Compositing",
+      "description": "Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "performance"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/compositing/",
+      "files": [
+        {
+          "path": "src/registry/primitives/compositing.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/compositing.tsx"
+        }
+      ]
+    },
+    {
+      "name": "primitive-anticipation",
+      "type": "registry:ui",
+      "title": "Anticipation",
+      "description": "Tune anticipation, follow-through, and deformation to understand physical feedback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "primitive",
+        "principles"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/primitives/anticipation/",
+      "files": [
+        {
+          "path": "src/registry/primitives/anticipation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/primitives/anticipation.tsx"
+        }
+      ]
     }
   ]
 }

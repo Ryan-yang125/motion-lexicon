@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-number-ticker",
+  "type": "registry:ui",
+  "title": "Number ticker",
+  "description": "Show changing values with tabular figures and stable vertical digit movement.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/number-ticker/",
+  "files": [
+    {
+      "path": "src/registry/primitives/number-ticker.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/number-ticker.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type NumberTickerPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function NumberTickerPrimitive({ children, ...props }: NumberTickerPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,y: 14}}\n      animate={{opacity: 1,y: 0}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

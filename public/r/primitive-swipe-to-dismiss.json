@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-swipe-to-dismiss",
+  "type": "registry:ui",
+  "title": "Swipe to dismiss",
+  "description": "Map swipe distance to travel and opacity with resistance before the threshold.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "feedback"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/",
+  "files": [
+    {
+      "path": "src/registry/primitives/swipe-to-dismiss.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/swipe-to-dismiss.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type SwipeToDismissPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function SwipeToDismissPrimitive({ children, ...props }: SwipeToDismissPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      drag=\"x\"\n      dragConstraints={{ left: 0, right: 0 }}\n      dragElastic={0.18}\n      whileDrag={reduceMotion ? undefined : {scale: 1.015}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 360, damping: 30 }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

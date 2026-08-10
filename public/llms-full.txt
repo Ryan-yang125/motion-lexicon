@@ -1,6 +1,6 @@
 # Motion Lexicon
 
-> Copy-ready React motion components, adjustable motion primitives, and an Agent Skill for product motion.
+> Copy-ready React + Motion components and primitives, plus an Agent Skill for product motion.
 
 - Components: https://motion-lexicon.pages.dev/en/components/
 - Motion primitives: https://motion-lexicon.pages.dev/en/primitives/
@@ -47,47 +47,47 @@
 
 ## Motion primitives
 
-- [Fade in / Fade out](https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/): Introduce or remove an element with opacity for low-distraction state changes.
-- [Slide in](https://motion-lexicon.pages.dev/en/primitives/slide-in/): Bring content in from a clear direction so its spatial relationship stays legible.
-- [Scale in](https://motion-lexicon.pages.dev/en/primitives/scale-in/): Scale from near the final size, with an optional slight overshoot for Pop in.
-- [Reveal](https://motion-lexicon.pages.dev/en/primitives/reveal/): Reveal content with clipping and slight travel for headings, media, and sections.
-- [Stagger](https://motion-lexicon.pages.dev/en/primitives/stagger/): Introduce list items at short intervals to communicate order and rhythm.
-- [Keyframes](https://motion-lexicon.pages.dev/en/primitives/keyframes/): Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior.
-- [Duration](https://motion-lexicon.pages.dev/en/primitives/duration/): Compare how duration and delay affect response, rhythm, and perceived waiting.
-- [Translate](https://motion-lexicon.pages.dev/en/primitives/translate/): Combine translation, scale, rotation, skew, perspective, and transform origin.
-- [3D tilt / Flip](https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/): Use controlled perspective and rotation for card flips or hover depth.
-- [Origin-aware animation](https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/): Expand or scale from the trigger point to preserve spatial continuity.
-- [Crossfade](https://motion-lexicon.pages.dev/en/primitives/crossfade/): Crossfade overlapping, similarly sized states to reduce visual jumps.
-- [Morph](https://motion-lexicon.pages.dev/en/primitives/morph/): Create continuous transformation between before and after layouts of a shared element.
-- [Accordion / Collapse](https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/): Coordinate height, opacity, and icon state for clear disclosure transitions.
-- [Direction-aware transition](https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/): Match enter and exit directions to navigation order and preserve context.
-- [Scroll reveal](https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/): Reveal content once as it enters the viewport with a reduced-motion fallback.
-- [Scroll-driven animation](https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/): Bind animation progress to a scroll range and tune its start, end, and travel.
-- [Parallax](https://motion-lexicon.pages.dev/en/primitives/parallax/): Move foreground and background at restrained relative speeds to create depth.
-- [Page transition](https://motion-lexicon.pages.dev/en/primitives/page-transition/): Preserve continuity across page or view changes with a safe fallback.
-- [Hover effect](https://motion-lexicon.pages.dev/en/primitives/hover-effect/): Reinforce interactivity on pointer hover while keeping layout stable.
-- [Press / Tap feedback](https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/): Confirm input immediately with a brief scale and contrast response.
-- [Hold to confirm](https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/): Show cancellable progress during hold-to-confirm interactions to reduce mistakes.
-- [Drag to reorder](https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/): Keep pickup, placeholder, and drop states clear while reordering.
-- [Swipe to dismiss](https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/): Map swipe distance to travel and opacity with resistance before the threshold.
-- [Shake / Wiggle](https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/): Use one brief horizontal shake for errors or inputs that need attention.
-- [Ripple](https://motion-lexicon.pages.dev/en/primitives/ripple/): Expand a restrained ripple from the input coordinate for precise touch feedback.
-- [Easing](https://motion-lexicon.pages.dev/en/primitives/easing/): Compare common easing curves and custom cubic-bezier velocity profiles.
-- [Spring](https://motion-lexicon.pages.dev/en/primitives/spring/): Tune a physical spring response with stiffness, damping, mass, and initial velocity.
-- [Loop](https://motion-lexicon.pages.dev/en/primitives/loop/): Compare loop direction, count, pauses, and rhythm while controlling distraction.
-- [Marquee](https://motion-lexicon.pages.dev/en/primitives/marquee/): Continuously scroll overflowing content and pause it on hover or focus.
-- [Orbit](https://motion-lexicon.pages.dev/en/primitives/orbit/): Move a decorative node slowly around a center for low-frequency status displays.
-- [Idle animation](https://motion-lexicon.pages.dev/en/primitives/idle-animation/): Use subtle breathing or floating motion for available, waiting, or active states.
-- [Blur](https://motion-lexicon.pages.dev/en/primitives/blur/): Reveal media or content layers with coordinated blur, opacity, and masking.
-- [Before / after slider](https://motion-lexicon.pages.dev/en/primitives/before-after-slider/): Compare before and after states of the same visual with a draggable divider.
-- [Line drawing](https://motion-lexicon.pages.dev/en/primitives/line-drawing/): Draw icons, paths, or explanatory connectors with stroke offset animation.
-- [Text morph](https://motion-lexicon.pages.dev/en/primitives/text-morph/): Transition between similarly sized short labels while preserving reading position.
-- [Skeleton / Shimmer](https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/): Communicate loading progress with a low-contrast shimmer across placeholders.
-- [Number ticker](https://motion-lexicon.pages.dev/en/primitives/number-ticker/): Show changing values with tabular figures and stable vertical digit movement.
-- [Typewriter](https://motion-lexicon.pages.dev/en/primitives/typewriter/): Reveal short text character by character while preserving complete accessible text.
+- [Fade in / Fade out](https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/): Introduce or remove an element with opacity for low-distraction state changes. [Registry](https://motion-lexicon.pages.dev/r/primitive-fade-in-fade-out.json)
+- [Slide in](https://motion-lexicon.pages.dev/en/primitives/slide-in/): Bring content in from a clear direction so its spatial relationship stays legible. [Registry](https://motion-lexicon.pages.dev/r/primitive-slide-in.json)
+- [Scale in](https://motion-lexicon.pages.dev/en/primitives/scale-in/): Scale from near the final size, with an optional slight overshoot for Pop in. [Registry](https://motion-lexicon.pages.dev/r/primitive-scale-in.json)
+- [Reveal](https://motion-lexicon.pages.dev/en/primitives/reveal/): Reveal content with clipping and slight travel for headings, media, and sections. [Registry](https://motion-lexicon.pages.dev/r/primitive-reveal.json)
+- [Stagger](https://motion-lexicon.pages.dev/en/primitives/stagger/): Introduce list items at short intervals to communicate order and rhythm. [Registry](https://motion-lexicon.pages.dev/r/primitive-stagger.json)
+- [Keyframes](https://motion-lexicon.pages.dev/en/primitives/keyframes/): Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior. [Registry](https://motion-lexicon.pages.dev/r/primitive-keyframes.json)
+- [Duration](https://motion-lexicon.pages.dev/en/primitives/duration/): Compare how duration and delay affect response, rhythm, and perceived waiting. [Registry](https://motion-lexicon.pages.dev/r/primitive-duration.json)
+- [Translate](https://motion-lexicon.pages.dev/en/primitives/translate/): Combine translation, scale, rotation, skew, perspective, and transform origin. [Registry](https://motion-lexicon.pages.dev/r/primitive-translate.json)
+- [3D tilt / Flip](https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/): Use controlled perspective and rotation for card flips or hover depth. [Registry](https://motion-lexicon.pages.dev/r/primitive-3d-tilt-flip.json)
+- [Origin-aware animation](https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/): Expand or scale from the trigger point to preserve spatial continuity. [Registry](https://motion-lexicon.pages.dev/r/primitive-origin-aware-animation.json)
+- [Crossfade](https://motion-lexicon.pages.dev/en/primitives/crossfade/): Crossfade overlapping, similarly sized states to reduce visual jumps. [Registry](https://motion-lexicon.pages.dev/r/primitive-crossfade.json)
+- [Morph](https://motion-lexicon.pages.dev/en/primitives/morph/): Create continuous transformation between before and after layouts of a shared element. [Registry](https://motion-lexicon.pages.dev/r/primitive-morph.json)
+- [Accordion / Collapse](https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/): Coordinate height, opacity, and icon state for clear disclosure transitions. [Registry](https://motion-lexicon.pages.dev/r/primitive-accordion-collapse.json)
+- [Direction-aware transition](https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/): Match enter and exit directions to navigation order and preserve context. [Registry](https://motion-lexicon.pages.dev/r/primitive-direction-aware-transition.json)
+- [Scroll reveal](https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/): Reveal content once as it enters the viewport with a reduced-motion fallback. [Registry](https://motion-lexicon.pages.dev/r/primitive-scroll-reveal.json)
+- [Scroll-driven animation](https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/): Bind animation progress to a scroll range and tune its start, end, and travel. [Registry](https://motion-lexicon.pages.dev/r/primitive-scroll-driven-animation.json)
+- [Parallax](https://motion-lexicon.pages.dev/en/primitives/parallax/): Move foreground and background at restrained relative speeds to create depth. [Registry](https://motion-lexicon.pages.dev/r/primitive-parallax.json)
+- [Page transition](https://motion-lexicon.pages.dev/en/primitives/page-transition/): Preserve continuity across page or view changes with a safe fallback. [Registry](https://motion-lexicon.pages.dev/r/primitive-page-transition.json)
+- [Hover effect](https://motion-lexicon.pages.dev/en/primitives/hover-effect/): Reinforce interactivity on pointer hover while keeping layout stable. [Registry](https://motion-lexicon.pages.dev/r/primitive-hover-effect.json)
+- [Press / Tap feedback](https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/): Confirm input immediately with a brief scale and contrast response. [Registry](https://motion-lexicon.pages.dev/r/primitive-press-tap-feedback.json)
+- [Hold to confirm](https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/): Show cancellable progress during hold-to-confirm interactions to reduce mistakes. [Registry](https://motion-lexicon.pages.dev/r/primitive-hold-to-confirm.json)
+- [Drag to reorder](https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/): Keep pickup, placeholder, and drop states clear while reordering. [Registry](https://motion-lexicon.pages.dev/r/primitive-drag-to-reorder.json)
+- [Swipe to dismiss](https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/): Map swipe distance to travel and opacity with resistance before the threshold. [Registry](https://motion-lexicon.pages.dev/r/primitive-swipe-to-dismiss.json)
+- [Shake / Wiggle](https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/): Use one brief horizontal shake for errors or inputs that need attention. [Registry](https://motion-lexicon.pages.dev/r/primitive-shake-wiggle.json)
+- [Ripple](https://motion-lexicon.pages.dev/en/primitives/ripple/): Expand a restrained ripple from the input coordinate for precise touch feedback. [Registry](https://motion-lexicon.pages.dev/r/primitive-ripple.json)
+- [Easing](https://motion-lexicon.pages.dev/en/primitives/easing/): Compare common easing curves and custom cubic-bezier velocity profiles. [Registry](https://motion-lexicon.pages.dev/r/primitive-easing.json)
+- [Spring](https://motion-lexicon.pages.dev/en/primitives/spring/): Tune a physical spring response with stiffness, damping, mass, and initial velocity. [Registry](https://motion-lexicon.pages.dev/r/primitive-spring.json)
+- [Loop](https://motion-lexicon.pages.dev/en/primitives/loop/): Compare loop direction, count, pauses, and rhythm while controlling distraction. [Registry](https://motion-lexicon.pages.dev/r/primitive-loop.json)
+- [Marquee](https://motion-lexicon.pages.dev/en/primitives/marquee/): Continuously scroll overflowing content and pause it on hover or focus. [Registry](https://motion-lexicon.pages.dev/r/primitive-marquee.json)
+- [Orbit](https://motion-lexicon.pages.dev/en/primitives/orbit/): Move a decorative node slowly around a center for low-frequency status displays. [Registry](https://motion-lexicon.pages.dev/r/primitive-orbit.json)
+- [Idle animation](https://motion-lexicon.pages.dev/en/primitives/idle-animation/): Use subtle breathing or floating motion for available, waiting, or active states. [Registry](https://motion-lexicon.pages.dev/r/primitive-idle-animation.json)
+- [Blur](https://motion-lexicon.pages.dev/en/primitives/blur/): Reveal media or content layers with coordinated blur, opacity, and masking. [Registry](https://motion-lexicon.pages.dev/r/primitive-blur.json)
+- [Before / after slider](https://motion-lexicon.pages.dev/en/primitives/before-after-slider/): Compare before and after states of the same visual with a draggable divider. [Registry](https://motion-lexicon.pages.dev/r/primitive-before-after-slider.json)
+- [Line drawing](https://motion-lexicon.pages.dev/en/primitives/line-drawing/): Draw icons, paths, or explanatory connectors with stroke offset animation. [Registry](https://motion-lexicon.pages.dev/r/primitive-line-drawing.json)
+- [Text morph](https://motion-lexicon.pages.dev/en/primitives/text-morph/): Transition between similarly sized short labels while preserving reading position. [Registry](https://motion-lexicon.pages.dev/r/primitive-text-morph.json)
+- [Skeleton / Shimmer](https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/): Communicate loading progress with a low-contrast shimmer across placeholders. [Registry](https://motion-lexicon.pages.dev/r/primitive-skeleton-shimmer.json)
+- [Number ticker](https://motion-lexicon.pages.dev/en/primitives/number-ticker/): Show changing values with tabular figures and stable vertical digit movement. [Registry](https://motion-lexicon.pages.dev/r/primitive-number-ticker.json)
+- [Typewriter](https://motion-lexicon.pages.dev/en/primitives/typewriter/): Reveal short text character by character while preserving complete accessible text. [Registry](https://motion-lexicon.pages.dev/r/primitive-typewriter.json)
 - [Frame rate (FPS)](https://motion-lexicon.pages.dev/en/primitives/frame-rate/): Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank.
-- [Compositing](https://motion-lexicon.pages.dev/en/primitives/compositing/): Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties.
+- [Compositing](https://motion-lexicon.pages.dev/en/primitives/compositing/): Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties. [Registry](https://motion-lexicon.pages.dev/r/primitive-compositing.json)
 - [Purposeful animation](https://motion-lexicon.pages.dev/en/primitives/purposeful-animation/): Review the purpose, frequency, and spatial rules of motion for a consistent experience.
-- [Anticipation](https://motion-lexicon.pages.dev/en/primitives/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback.
+- [Anticipation](https://motion-lexicon.pages.dev/en/primitives/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback. [Registry](https://motion-lexicon.pages.dev/r/primitive-anticipation.json)
 - [Perceived performance](https://motion-lexicon.pages.dev/en/primitives/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback.
 - [Reduced motion](https://motion-lexicon.pages.dev/en/primitives/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax.

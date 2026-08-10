@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-scroll-driven-animation",
+  "type": "registry:ui",
+  "title": "Scroll-driven animation",
+  "description": "Bind animation progress to a scroll range and tune its start, end, and travel.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "scroll"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/",
+  "files": [
+    {
+      "path": "src/registry/primitives/scroll-driven-animation.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/scroll-driven-animation.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type ScrollDrivenAnimationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function ScrollDrivenAnimationPrimitive({ children, ...props }: ScrollDrivenAnimationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {y: 80}}\n      animate={{y: -80}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.52, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

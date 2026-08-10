@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { registryComponents } from "../src/data/component-registry";
+import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { defaultLocale, getStaticPaths, isLocale, pathFor, sitemapPaths, siteUrl, staticRedirects } from "../src/data/site";
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -87,11 +88,17 @@ for (const routePath of routes) {
 for (const href of internalLinks) assert(routeSet.has(href), `Internal link has no static target: ${href}`);
 
 const registry = JSON.parse(readFileSync("dist/r/registry.json", "utf8")) as { items?: Array<{ name?: string }> };
-assert(registry.items?.length === registryComponents.length, "Published shadcn registry count is inconsistent");
+const registryItemCount = registryComponents.length + installablePrimitiveEntries.length;
+assert(registry.items?.length === registryItemCount, "Published shadcn registry count is inconsistent");
 for (const component of registryComponents) {
   assert(registry.items?.some((item) => item.name === component.id), `Registry index is missing ${component.id}`);
   const item = JSON.parse(readFileSync(`dist/r/${component.id}.json`, "utf8")) as { name?: string; type?: string; files?: unknown[] };
   assert(item.name === component.id && item.type === "registry:ui" && (item.files?.length ?? 0) > 0, `Registry item ${component.id} is invalid`);
+}
+for (const primitive of installablePrimitiveEntries) {
+  assert(registry.items?.some((item) => item.name === primitive.registryId), `Registry index is missing ${primitive.registryId}`);
+  const item = JSON.parse(readFileSync(`dist/r/${primitive.registryId}.json`, "utf8")) as { name?: string; type?: string; files?: unknown[] };
+  assert(item.name === primitive.registryId && item.type === "registry:ui" && (item.files?.length ?? 0) > 0, `Registry item ${primitive.registryId} is invalid`);
 }
 
 const redirects = readFileSync("dist/_redirects", "utf8");
@@ -109,4 +116,4 @@ for (const header of ["Content-Security-Policy:", "Strict-Transport-Security:", 
 }
 assert(!listFiles("dist").some((file) => file.endsWith(".map")), "Production output contains source maps");
 
-console.log(`Dist crawl passed: ${routes.length} canonical pages, ${internalLinks.size} internal links, ${registryComponents.length} registry items, and ${requiredAssets.length} required assets.`);
+console.log(`Dist crawl passed: ${routes.length} canonical pages, ${internalLinks.size} internal links, ${registryItemCount} registry items, and ${requiredAssets.length} required assets.`);

@@ -7,7 +7,7 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>可直接复制的 React 动效组件，以及可调节的原子动效。</strong>
+  <strong>可直接复制的 React + Motion 组件与原子动效。</strong>
 </p>
 
 <p align="center">
@@ -30,17 +30,20 @@
 | 内容 | 适合场景 | 交付 |
 | --- | --- | --- |
 | [组件](https://motion-lexicon.pages.dev/zh/components/) | 想把一个精致的产品交互直接放进 React 项目 | 通过 shadcn Registry 安装的单文件 TypeScript 组件 |
-| [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 需要精确的行为、节奏或动效规则 | 可调预览、提示词、HTML、CSS 和 JavaScript |
+| [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 需要精确的行为、节奏或动效规则 | React + Motion 实时预览、Props 调节、源码与 Registry 安装 |
 | [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/) | 在 Agent 工作流中推荐、组合、实现或审查动效 | 贴合产品场景的动效决策与生产实现 |
 
 组件与原子动效是并列内容。一个组件可以组合多个原子动效，组件详情页会标出对应的底层动效。
 
-## 安装组件
+![Motion Lexicon 原子动效目录](docs/assets/readme-v3-primitives.png)
+
+## 安装组件与原子动效
 
 网站预览、源码展示和 Registry 响应共用同一份 React 文件。
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
 
 也可以在 `components.json` 中配置命名空间：
@@ -57,9 +60,11 @@ npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
 npx shadcn@latest add @motion-lexicon/copy-button
 ```
 
-28 个组件覆盖操作、浮层、输入、导航、数据和反馈。每个组件都包含 TypeScript 类型、键盘操作、焦点管理、可中断动效和减弱动效方案。
+Registry 包含 28 个完整产品组件和 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、可中断动效和减弱动效方案。
 
 ![抽屉组件页](docs/assets/readme-v3-component.png)
+
+![滑入原子动效工作台](docs/assets/readme-v3-primitive.png)
 
 ## Agent Skill
 
@@ -80,6 +85,8 @@ Skill 支持五种工作模式：
 ```text
 src/registry/components/  React 组件源码
 src/registry/demos/       真实交互预览
+src/registry/primitive-preview.tsx  原子动效实时预览
+src/registry/primitive-source.ts    可复制源码生成器
 src/data/                 组件、原子动效、指南和 SEO 内容
 skills/motion-lexicon/    Agent Skill 与动效参考
 scripts/                  Registry、预渲染与质量检查

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-typewriter",
+  "type": "registry:ui",
+  "title": "Typewriter",
+  "description": "Reveal short text character by character while preserving complete accessible text.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "polish-effects"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/typewriter/",
+  "files": [
+    {
+      "path": "src/registry/primitives/typewriter.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/typewriter.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type TypewriterPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function TypewriterPrimitive({ children, ...props }: TypewriterPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {clipPath: \"inset(0 100% 0 0)\"}}\n      animate={{clipPath: \"inset(0 0% 0 0)\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.2, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

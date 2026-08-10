@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "primitive-scale-in",
+  "type": "registry:ui",
+  "title": "Scale in",
+  "description": "Scale from near the final size, with an optional slight overshoot for Pop in.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "primitive",
+    "entrances"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/primitives/scale-in/",
+  "files": [
+    {
+      "path": "src/registry/primitives/scale-in.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/primitives/scale-in.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type ScaleInPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function ScaleInPrimitive({ children, ...props }: ScaleInPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,scale: 0.92}}\n      animate={{opacity: 1,scale: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.2, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}
