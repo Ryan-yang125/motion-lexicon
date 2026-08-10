@@ -1,6 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { transform } from "esbuild";
 import path from "node:path";
+import ts from "typescript";
 import { registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { getDefaultParamValues } from "../src/lib/motion-engine";
@@ -46,7 +47,7 @@ const componentItems = await Promise.all(registryComponents.map(async (entry) =>
   return meta;
 }));
 
-const primitiveItems = await Promise.all(installablePrimitiveEntries.map(async (entry) => {
+const primitiveBuilds = await Promise.all(installablePrimitiveEntries.map(async (entry) => {
   const source = buildPrimitiveSource(entry.recipe, getDefaultParamValues(entry.recipe));
   try {
     await transform(source, { loader: "tsx", jsx: "automatic", target: "es2022" });
@@ -79,8 +80,42 @@ const primitiveItems = await Promise.all(installablePrimitiveEntries.map(async (
     "utf8"
   );
 
-  return meta;
+  return { meta, source, sourcePath };
 }));
+const primitiveItems = primitiveBuilds.map(({ meta }) => meta);
+
+const compilerOptions: ts.CompilerOptions = {
+  allowSyntheticDefaultImports: true,
+  esModuleInterop: true,
+  jsx: ts.JsxEmit.ReactJSX,
+  module: ts.ModuleKind.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  noEmit: true,
+  skipLibCheck: true,
+  strict: true,
+  target: ts.ScriptTarget.ES2022
+};
+const virtualSources = new Map(
+  primitiveBuilds.map(({ source, sourcePath }) => [path.resolve(sourcePath), source])
+);
+const compilerHost = ts.createCompilerHost(compilerOptions);
+const readFileFromDisk = compilerHost.readFile.bind(compilerHost);
+const fileExistsOnDisk = compilerHost.fileExists.bind(compilerHost);
+compilerHost.fileExists = (fileName) => virtualSources.has(path.resolve(fileName)) || fileExistsOnDisk(fileName);
+compilerHost.readFile = (fileName) => virtualSources.get(path.resolve(fileName)) ?? readFileFromDisk(fileName);
+compilerHost.getSourceFile = (fileName, languageVersion) => {
+  const source = compilerHost.readFile(fileName);
+  return source === undefined ? undefined : ts.createSourceFile(fileName, source, languageVersion, true);
+};
+const primitiveProgram = ts.createProgram([...virtualSources.keys()], compilerOptions, compilerHost);
+const primitiveDiagnostics = ts.getPreEmitDiagnostics(primitiveProgram);
+if (primitiveDiagnostics.length > 0) {
+  throw new Error(`Generated primitive source failed type checking:\n${ts.formatDiagnosticsWithColorAndContext(primitiveDiagnostics, {
+    getCanonicalFileName: (fileName) => fileName,
+    getCurrentDirectory: () => process.cwd(),
+    getNewLine: () => "\n"
+  })}`);
+}
 
 const items = [...componentItems, ...primitiveItems];
 

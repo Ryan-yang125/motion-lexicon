@@ -457,8 +457,9 @@ function swipeToDismissSource(exportName: string, values: ParamValues) {
   return `"use client";
 
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useTransform } from "motion/react";
+import type { PanInfo } from "motion/react";
 import { useState } from "react";
-import type { ComponentProps, PanInfo, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 export type ${exportName}Props = Omit<ComponentProps<typeof motion.div>, "children" | "onDragEnd"> & {
   children: ReactNode;
@@ -828,9 +829,9 @@ function keyframesSource(exportName: string, values: ParamValues) {
   return `"use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
-export type ${exportName}Props = ComponentProps<typeof motion.div>;
+export type ${exportName}Props = Omit<ComponentProps<typeof motion.div>, "children"> & { children: ReactNode };
 
 export function ${exportName}({ children, ...props }: ${exportName}Props) {
   const reduceMotion = useReducedMotion();
@@ -989,9 +990,9 @@ function shimmerSource(exportName: string, values: ParamValues) {
   return `"use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
-export type ${exportName}Props = ComponentProps<typeof motion.div>;
+export type ${exportName}Props = Omit<ComponentProps<typeof motion.div>, "children"> & { children: ReactNode };
 
 export function ${exportName}({ children, ...props }: ${exportName}Props) {
   const reduceMotion = useReducedMotion();
