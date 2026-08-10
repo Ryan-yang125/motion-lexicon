@@ -1,0 +1,1313 @@
+{
+  "schemaVersion": 3,
+  "release": "3.0.0",
+  "name": "Motion Lexicon",
+  "description": "Copy-ready React motion components and adjustable motion primitives.",
+  "siteUrl": "https://motion-lexicon.pages.dev",
+  "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
+  "registryUrl": "https://motion-lexicon.pages.dev/r/registry.json",
+  "skill": {
+    "install": "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon",
+    "source": "https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon"
+  },
+  "counts": {
+    "components": 28,
+    "primitives": 44
+  },
+  "components": [
+    {
+      "id": "copy-button",
+      "category": "actions",
+      "name": {
+        "zh": "复制按钮",
+        "en": "Copy button"
+      },
+      "description": {
+        "zh": "复制完成后原位切换状态，宽度保持稳定。",
+        "en": "Reports clipboard state in place without shifting nearby content."
+      },
+      "primitiveIds": [
+        "press-tap-feedback",
+        "text-morph"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/copy-button/",
+        "en": "https://motion-lexicon.pages.dev/en/components/copy-button/",
+        "registry": "https://motion-lexicon.pages.dev/r/copy-button.json"
+      }
+    },
+    {
+      "id": "loading-button",
+      "category": "actions",
+      "name": {
+        "zh": "加载按钮",
+        "en": "Loading button"
+      },
+      "description": {
+        "zh": "把等待、成功与失败收进同一个操作位置。",
+        "en": "Keeps pending, success, and error feedback inside one action."
+      },
+      "primitiveIds": [
+        "press-tap-feedback",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/loading-button/",
+        "en": "https://motion-lexicon.pages.dev/en/components/loading-button/",
+        "registry": "https://motion-lexicon.pages.dev/r/loading-button.json"
+      }
+    },
+    {
+      "id": "hold-to-confirm",
+      "category": "actions",
+      "name": {
+        "zh": "长按确认",
+        "en": "Hold to confirm"
+      },
+      "description": {
+        "zh": "用可取消进度保护高风险操作。",
+        "en": "Protects destructive actions with cancellable hold progress."
+      },
+      "primitiveIds": [
+        "hold-to-confirm",
+        "line-drawing"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/hold-to-confirm/",
+        "en": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
+        "registry": "https://motion-lexicon.pages.dev/r/hold-to-confirm.json"
+      }
+    },
+    {
+      "id": "long-press",
+      "category": "actions",
+      "name": {
+        "zh": "长按操作",
+        "en": "Long press"
+      },
+      "description": {
+        "zh": "兼顾触控、指针和键盘的长按手势。",
+        "en": "A long-press gesture that works across touch, pointer, and keyboard."
+      },
+      "primitiveIds": [
+        "hold-to-confirm",
+        "press-tap-feedback"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/long-press/",
+        "en": "https://motion-lexicon.pages.dev/en/components/long-press/",
+        "registry": "https://motion-lexicon.pages.dev/r/long-press.json"
+      }
+    },
+    {
+      "id": "command-palette",
+      "category": "overlays",
+      "name": {
+        "zh": "命令面板",
+        "en": "Command palette"
+      },
+      "description": {
+        "zh": "搜索、键盘导航与焦点管理完整配合。",
+        "en": "Combines search, keyboard navigation, and deliberate focus management."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "stagger"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/command-palette/",
+        "en": "https://motion-lexicon.pages.dev/en/components/command-palette/",
+        "registry": "https://motion-lexicon.pages.dev/r/command-palette.json"
+      }
+    },
+    {
+      "id": "context-menu",
+      "category": "overlays",
+      "name": {
+        "zh": "上下文菜单",
+        "en": "Context menu"
+      },
+      "description": {
+        "zh": "从触发坐标展开，并自动避开视口边缘。",
+        "en": "Opens from the trigger coordinate and stays inside the viewport."
+      },
+      "primitiveIds": [
+        "origin-aware-animation",
+        "scale-in"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/context-menu/",
+        "en": "https://motion-lexicon.pages.dev/en/components/context-menu/",
+        "registry": "https://motion-lexicon.pages.dev/r/context-menu.json"
+      }
+    },
+    {
+      "id": "drawer",
+      "category": "overlays",
+      "name": {
+        "zh": "抽屉",
+        "en": "Drawer"
+      },
+      "description": {
+        "zh": "支持焦点锁定、拖拽关闭与可中断弹簧。",
+        "en": "Includes focus containment, drag dismissal, and interruptible spring motion."
+      },
+      "primitiveIds": [
+        "spring",
+        "slide-in"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/drawer/",
+        "en": "https://motion-lexicon.pages.dev/en/components/drawer/",
+        "registry": "https://motion-lexicon.pages.dev/r/drawer.json"
+      }
+    },
+    {
+      "id": "dropdown",
+      "category": "overlays",
+      "name": {
+        "zh": "下拉选择",
+        "en": "Dropdown"
+      },
+      "description": {
+        "zh": "选项高亮连续移动，键盘操作完整。",
+        "en": "Moves selection continuously with full keyboard behavior."
+      },
+      "primitiveIds": [
+        "morph",
+        "scale-in"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/dropdown/",
+        "en": "https://motion-lexicon.pages.dev/en/components/dropdown/",
+        "registry": "https://motion-lexicon.pages.dev/r/dropdown.json"
+      }
+    },
+    {
+      "id": "modal",
+      "category": "overlays",
+      "name": {
+        "zh": "模态框",
+        "en": "Modal"
+      },
+      "description": {
+        "zh": "稳定处理焦点、遮罩、退出与异步确认。",
+        "en": "Handles focus, backdrop, exit, and async confirmation as one flow."
+      },
+      "primitiveIds": [
+        "scale-in",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/modal/",
+        "en": "https://motion-lexicon.pages.dev/en/components/modal/",
+        "registry": "https://motion-lexicon.pages.dev/r/modal.json"
+      }
+    },
+    {
+      "id": "popover",
+      "category": "overlays",
+      "name": {
+        "zh": "气泡浮层",
+        "en": "Popover"
+      },
+      "description": {
+        "zh": "根据触发点与空间方向确定展开原点。",
+        "en": "Derives its reveal origin from the trigger and available space."
+      },
+      "primitiveIds": [
+        "origin-aware-animation",
+        "scale-in"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/popover/",
+        "en": "https://motion-lexicon.pages.dev/en/components/popover/",
+        "registry": "https://motion-lexicon.pages.dev/r/popover.json"
+      }
+    },
+    {
+      "id": "expanding-search",
+      "category": "inputs",
+      "name": {
+        "zh": "展开搜索",
+        "en": "Expanding search"
+      },
+      "description": {
+        "zh": "从工具栏动作自然展开为完整搜索框。",
+        "en": "Expands from a toolbar action into a focused search field."
+      },
+      "primitiveIds": [
+        "morph",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/expanding-search/",
+        "en": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
+        "registry": "https://motion-lexicon.pages.dev/r/expanding-search.json"
+      }
+    },
+    {
+      "id": "floating-label",
+      "category": "inputs",
+      "name": {
+        "zh": "浮动标签输入框",
+        "en": "Floating label"
+      },
+      "description": {
+        "zh": "输入内容时保留字段标签与上下文。",
+        "en": "Keeps the field label and context visible while typing."
+      },
+      "primitiveIds": [
+        "translate",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/floating-label/",
+        "en": "https://motion-lexicon.pages.dev/en/components/floating-label/",
+        "registry": "https://motion-lexicon.pages.dev/r/floating-label.json"
+      }
+    },
+    {
+      "id": "inline-validation",
+      "category": "inputs",
+      "name": {
+        "zh": "行内校验",
+        "en": "Inline validation"
+      },
+      "description": {
+        "zh": "把等待、错误和通过状态放在输入旁边。",
+        "en": "Places pending, error, and success states next to the input."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "shake-wiggle"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/inline-validation/",
+        "en": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
+        "registry": "https://motion-lexicon.pages.dev/r/inline-validation.json"
+      }
+    },
+    {
+      "id": "otp-input",
+      "category": "inputs",
+      "name": {
+        "zh": "验证码输入",
+        "en": "OTP input"
+      },
+      "description": {
+        "zh": "输入、粘贴、错误与成功反馈连续发生。",
+        "en": "Coordinates typing, paste, error, and success feedback."
+      },
+      "primitiveIds": [
+        "shake-wiggle",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/otp-input/",
+        "en": "https://motion-lexicon.pages.dev/en/components/otp-input/",
+        "registry": "https://motion-lexicon.pages.dev/r/otp-input.json"
+      }
+    },
+    {
+      "id": "password-strength",
+      "category": "inputs",
+      "name": {
+        "zh": "密码强度",
+        "en": "Password strength"
+      },
+      "description": {
+        "zh": "规则检查与强度变化保持清晰节奏。",
+        "en": "Makes rule checks and strength changes legible as one response."
+      },
+      "primitiveIds": [
+        "stagger",
+        "progress-bar"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/password-strength/",
+        "en": "https://motion-lexicon.pages.dev/en/components/password-strength/",
+        "registry": "https://motion-lexicon.pages.dev/r/password-strength.json"
+      }
+    },
+    {
+      "id": "slider-detents",
+      "category": "inputs",
+      "name": {
+        "zh": "刻度滑块",
+        "en": "Slider detents"
+      },
+      "description": {
+        "zh": "拖动时吸附语义刻度，并保留连续值。",
+        "en": "Snaps to meaningful detents while preserving continuous input."
+      },
+      "primitiveIds": [
+        "spring",
+        "drag-to-reorder"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/slider-detents/",
+        "en": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
+        "registry": "https://motion-lexicon.pages.dev/r/slider-detents.json"
+      }
+    },
+    {
+      "id": "tag-input",
+      "category": "inputs",
+      "name": {
+        "zh": "标签输入",
+        "en": "Tag input"
+      },
+      "description": {
+        "zh": "新增、删除和拒绝状态都有明确反馈。",
+        "en": "Gives clear feedback for adding, removing, and rejecting tags."
+      },
+      "primitiveIds": [
+        "scale-in",
+        "shake-wiggle"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/tag-input/",
+        "en": "https://motion-lexicon.pages.dev/en/components/tag-input/",
+        "registry": "https://motion-lexicon.pages.dev/r/tag-input.json"
+      }
+    },
+    {
+      "id": "accordion",
+      "category": "navigation",
+      "name": {
+        "zh": "折叠面板",
+        "en": "Accordion"
+      },
+      "description": {
+        "zh": "内容高度与开合状态保持连续。",
+        "en": "Keeps content height and disclosure state visually continuous."
+      },
+      "primitiveIds": [
+        "accordion-collapse",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/accordion/",
+        "en": "https://motion-lexicon.pages.dev/en/components/accordion/",
+        "registry": "https://motion-lexicon.pages.dev/r/accordion.json"
+      }
+    },
+    {
+      "id": "hide-on-scroll",
+      "category": "navigation",
+      "name": {
+        "zh": "滚动隐藏栏",
+        "en": "Hide on scroll"
+      },
+      "description": {
+        "zh": "跟随滚动方向收起与恢复工具栏。",
+        "en": "Hides and restores a toolbar in response to scroll direction."
+      },
+      "primitiveIds": [
+        "scroll-driven-animation",
+        "slide-in"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/hide-on-scroll/",
+        "en": "https://motion-lexicon.pages.dev/en/components/hide-on-scroll/",
+        "registry": "https://motion-lexicon.pages.dev/r/hide-on-scroll.json"
+      }
+    },
+    {
+      "id": "pagination",
+      "category": "navigation",
+      "name": {
+        "zh": "分页",
+        "en": "Pagination"
+      },
+      "description": {
+        "zh": "页码范围切换时保持当前页位置清楚。",
+        "en": "Keeps the current page legible while the visible range changes."
+      },
+      "primitiveIds": [
+        "morph",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/pagination/",
+        "en": "https://motion-lexicon.pages.dev/en/components/pagination/",
+        "registry": "https://motion-lexicon.pages.dev/r/pagination.json"
+      }
+    },
+    {
+      "id": "segmented-control",
+      "category": "navigation",
+      "name": {
+        "zh": "分段控制",
+        "en": "Segmented control"
+      },
+      "description": {
+        "zh": "共享高亮在选项之间连续移动。",
+        "en": "Carries one shared highlight between options."
+      },
+      "primitiveIds": [
+        "morph",
+        "press-tap-feedback"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/segmented-control/",
+        "en": "https://motion-lexicon.pages.dev/en/components/segmented-control/",
+        "registry": "https://motion-lexicon.pages.dev/r/segmented-control.json"
+      }
+    },
+    {
+      "id": "tabs",
+      "category": "navigation",
+      "name": {
+        "zh": "标签页",
+        "en": "Tabs"
+      },
+      "description": {
+        "zh": "指示器、方向与内容切换保持一致。",
+        "en": "Coordinates the indicator, direction, and panel change."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "morph"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/tabs/",
+        "en": "https://motion-lexicon.pages.dev/en/components/tabs/",
+        "registry": "https://motion-lexicon.pages.dev/r/tabs.json"
+      }
+    },
+    {
+      "id": "filter-grid",
+      "category": "data",
+      "name": {
+        "zh": "筛选网格",
+        "en": "Filter grid"
+      },
+      "description": {
+        "zh": "筛选结果重新排列时维持空间连续性。",
+        "en": "Preserves spatial continuity as filtered results rearrange."
+      },
+      "primitiveIds": [
+        "layout-animation",
+        "stagger"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/filter-grid/",
+        "en": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
+        "registry": "https://motion-lexicon.pages.dev/r/filter-grid.json"
+      }
+    },
+    {
+      "id": "reorder-list",
+      "category": "data",
+      "name": {
+        "zh": "拖拽排序列表",
+        "en": "Reorder list"
+      },
+      "description": {
+        "zh": "指针拖拽与键盘排序共享清晰落点。",
+        "en": "Provides clear drop position for pointer and keyboard reordering."
+      },
+      "primitiveIds": [
+        "drag-to-reorder",
+        "spring"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/reorder-list/",
+        "en": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
+        "registry": "https://motion-lexicon.pages.dev/r/reorder-list.json"
+      }
+    },
+    {
+      "id": "sortable-table",
+      "category": "data",
+      "name": {
+        "zh": "可排序表格",
+        "en": "Sortable table"
+      },
+      "description": {
+        "zh": "排序变化通过行位置表达，数据保持可读。",
+        "en": "Explains sorting through row position while keeping data readable."
+      },
+      "primitiveIds": [
+        "layout-animation",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/sortable-table/",
+        "en": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
+        "registry": "https://motion-lexicon.pages.dev/r/sortable-table.json"
+      }
+    },
+    {
+      "id": "progress-bar",
+      "category": "feedback",
+      "name": {
+        "zh": "进度条",
+        "en": "Progress bar"
+      },
+      "description": {
+        "zh": "支持等待、确定进度与完成三个阶段。",
+        "en": "Covers pending, determinate, and complete progress states."
+      },
+      "primitiveIds": [
+        "perceived-performance",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/progress-bar/",
+        "en": "https://motion-lexicon.pages.dev/en/components/progress-bar/",
+        "registry": "https://motion-lexicon.pages.dev/r/progress-bar.json"
+      }
+    },
+    {
+      "id": "task-steps",
+      "category": "feedback",
+      "name": {
+        "zh": "任务步骤",
+        "en": "Task steps"
+      },
+      "description": {
+        "zh": "让排队、执行、完成与失败状态连成一条流程。",
+        "en": "Connects queued, active, complete, and failed states into one flow."
+      },
+      "primitiveIds": [
+        "stagger",
+        "line-drawing"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/task-steps/",
+        "en": "https://motion-lexicon.pages.dev/en/components/task-steps/",
+        "registry": "https://motion-lexicon.pages.dev/r/task-steps.json"
+      }
+    },
+    {
+      "id": "value-flash",
+      "category": "feedback",
+      "name": {
+        "zh": "数值变化",
+        "en": "Value flash"
+      },
+      "description": {
+        "zh": "用方向与短暂颜色反馈解释数值变化。",
+        "en": "Explains value changes with direction and brief color feedback."
+      },
+      "primitiveIds": [
+        "number-ticker",
+        "crossfade"
+      ],
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/value-flash/",
+        "en": "https://motion-lexicon.pages.dev/en/components/value-flash/",
+        "registry": "https://motion-lexicon.pages.dev/r/value-flash.json"
+      }
+    }
+  ],
+  "primitives": [
+    {
+      "id": "fade-in-fade-out",
+      "categoryId": "entrances",
+      "name": {
+        "zh": "淡入 / 淡出",
+        "en": "Fade in / Fade out"
+      },
+      "description": {
+        "zh": "用透明度建立或移除元素，适合低干扰的内容出现与消失。",
+        "en": "Introduce or remove an element with opacity for low-distraction state changes."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/fade-in-fade-out/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/"
+      }
+    },
+    {
+      "id": "slide-in",
+      "categoryId": "entrances",
+      "name": {
+        "zh": "滑入",
+        "en": "Slide in"
+      },
+      "description": {
+        "zh": "沿明确方向引入内容，让新元素与界面空间关系保持清楚。",
+        "en": "Bring content in from a clear direction so its spatial relationship stays legible."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/slide-in/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/slide-in/"
+      }
+    },
+    {
+      "id": "scale-in",
+      "categoryId": "entrances",
+      "name": {
+        "zh": "缩放入场",
+        "en": "Scale in"
+      },
+      "description": {
+        "zh": "从接近最终尺寸的位置放大元素，并可切换为带轻微过冲的 Pop in。",
+        "en": "Scale from near the final size, with an optional slight overshoot for Pop in."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/scale-in/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scale-in/"
+      }
+    },
+    {
+      "id": "reveal",
+      "categoryId": "entrances",
+      "name": {
+        "zh": "揭示",
+        "en": "Reveal"
+      },
+      "description": {
+        "zh": "通过裁切与轻微位移逐步展示内容，适合标题、媒体和分段内容。",
+        "en": "Reveal content with clipping and slight travel for headings, media, and sections."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/reveal/"
+      }
+    },
+    {
+      "id": "stagger",
+      "categoryId": "sequencing",
+      "name": {
+        "zh": "交错动画",
+        "en": "Stagger"
+      },
+      "description": {
+        "zh": "让列表项按短间隔依次进入，表达顺序并保持整体节奏。",
+        "en": "Introduce list items at short intervals to communicate order and rhythm."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/stagger/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/stagger/"
+      }
+    },
+    {
+      "id": "keyframes",
+      "categoryId": "sequencing",
+      "name": {
+        "zh": "关键帧",
+        "en": "Keyframes"
+      },
+      "description": {
+        "zh": "编排多阶段关键帧、插值、步进与结束状态。",
+        "en": "Compose multi-stage keyframes, interpolation, stepped motion, and fill behavior."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/keyframes/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/keyframes/"
+      }
+    },
+    {
+      "id": "duration",
+      "categoryId": "sequencing",
+      "name": {
+        "zh": "时长",
+        "en": "Duration"
+      },
+      "description": {
+        "zh": "比较时长与延迟对响应速度、节奏和可感知等待的影响。",
+        "en": "Compare how duration and delay affect response, rhythm, and perceived waiting."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/duration/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/duration/"
+      }
+    },
+    {
+      "id": "translate",
+      "categoryId": "transforms",
+      "name": {
+        "zh": "位移",
+        "en": "Translate"
+      },
+      "description": {
+        "zh": "组合位移、缩放、旋转、倾斜、透视和变换原点。",
+        "en": "Combine translation, scale, rotation, skew, perspective, and transform origin."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/translate/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/translate/"
+      }
+    },
+    {
+      "id": "3d-tilt-flip",
+      "categoryId": "transforms",
+      "name": {
+        "zh": "3D 倾斜 / 翻转",
+        "en": "3D tilt / Flip"
+      },
+      "description": {
+        "zh": "用受控透视和旋转展示卡片正反面或悬停深度。",
+        "en": "Use controlled perspective and rotation for card flips or hover depth."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/3d-tilt-flip/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/3d-tilt-flip/"
+      }
+    },
+    {
+      "id": "origin-aware-animation",
+      "categoryId": "transforms",
+      "name": {
+        "zh": "基于触发源的动画",
+        "en": "Origin-aware animation"
+      },
+      "description": {
+        "zh": "让展开或缩放从触发点发生，保持动作来源的空间连续性。",
+        "en": "Expand or scale from the trigger point to preserve spatial continuity."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/origin-aware-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/origin-aware-animation/"
+      }
+    },
+    {
+      "id": "crossfade",
+      "categoryId": "state-transitions",
+      "name": {
+        "zh": "交叉淡入淡出",
+        "en": "Crossfade"
+      },
+      "description": {
+        "zh": "用重叠淡入淡出切换等尺寸状态，减少视觉跳变。",
+        "en": "Crossfade overlapping, similarly sized states to reduce visual jumps."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/crossfade/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/crossfade/"
+      }
+    },
+    {
+      "id": "morph",
+      "categoryId": "state-transitions",
+      "name": {
+        "zh": "形变",
+        "en": "Morph"
+      },
+      "description": {
+        "zh": "在共享元素的前后布局之间建立连续形变。",
+        "en": "Create continuous transformation between before and after layouts of a shared element."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/morph/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/morph/"
+      }
+    },
+    {
+      "id": "accordion-collapse",
+      "categoryId": "state-transitions",
+      "name": {
+        "zh": "手风琴 / 折叠",
+        "en": "Accordion / Collapse"
+      },
+      "description": {
+        "zh": "同步高度、透明度与图标状态，清晰表达内容展开和收起。",
+        "en": "Coordinate height, opacity, and icon state for clear disclosure transitions."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/accordion-collapse/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/accordion-collapse/"
+      }
+    },
+    {
+      "id": "direction-aware-transition",
+      "categoryId": "state-transitions",
+      "name": {
+        "zh": "方向感过渡",
+        "en": "Direction-aware transition"
+      },
+      "description": {
+        "zh": "根据导航方向匹配进入和离开方向，维持前后关系。",
+        "en": "Match enter and exit directions to navigation order and preserve context."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/direction-aware-transition/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/direction-aware-transition/"
+      }
+    },
+    {
+      "id": "scroll-reveal",
+      "categoryId": "scroll",
+      "name": {
+        "zh": "滚动揭示",
+        "en": "Scroll reveal"
+      },
+      "description": {
+        "zh": "内容进入视口时触发一次轻量展示，并支持减少动态偏好。",
+        "en": "Reveal content once as it enters the viewport with a reduced-motion fallback."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/scroll-reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-reveal/"
+      }
+    },
+    {
+      "id": "scroll-driven-animation",
+      "categoryId": "scroll",
+      "name": {
+        "zh": "滚动驱动动画",
+        "en": "Scroll-driven animation"
+      },
+      "description": {
+        "zh": "把动画进度绑定到滚动区间，调节起止位置与运动幅度。",
+        "en": "Bind animation progress to a scroll range and tune its start, end, and travel."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/scroll-driven-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/scroll-driven-animation/"
+      }
+    },
+    {
+      "id": "parallax",
+      "categoryId": "scroll",
+      "name": {
+        "zh": "视差",
+        "en": "Parallax"
+      },
+      "description": {
+        "zh": "让前后景以克制的速度差移动，建立轻量层次感。",
+        "en": "Move foreground and background at restrained relative speeds to create depth."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/parallax/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/parallax/"
+      }
+    },
+    {
+      "id": "page-transition",
+      "categoryId": "scroll",
+      "name": {
+        "zh": "页面过渡",
+        "en": "Page transition"
+      },
+      "description": {
+        "zh": "在页面或视图切换时保持内容连续，并为旧浏览器提供降级。",
+        "en": "Preserve continuity across page or view changes with a safe fallback."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/page-transition/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/page-transition/"
+      }
+    },
+    {
+      "id": "hover-effect",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "悬停效果",
+        "en": "Hover effect"
+      },
+      "description": {
+        "zh": "在指针悬停时强化可交互性，同时保持布局稳定。",
+        "en": "Reinforce interactivity on pointer hover while keeping layout stable."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/hover-effect/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/hover-effect/"
+      }
+    },
+    {
+      "id": "press-tap-feedback",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "按压 / 轻触反馈",
+        "en": "Press / Tap feedback"
+      },
+      "description": {
+        "zh": "在按下瞬间提供短促缩放和明暗反馈，确认输入已被接收。",
+        "en": "Confirm input immediately with a brief scale and contrast response."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/press-tap-feedback/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/press-tap-feedback/"
+      }
+    },
+    {
+      "id": "hold-to-confirm",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "长按确认",
+        "en": "Hold to confirm"
+      },
+      "description": {
+        "zh": "用可取消的进度反馈表达长按确认，降低误触风险。",
+        "en": "Show cancellable progress during hold-to-confirm interactions to reduce mistakes."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/hold-to-confirm/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/hold-to-confirm/"
+      }
+    },
+    {
+      "id": "drag-to-reorder",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "拖拽排序",
+        "en": "Drag to reorder"
+      },
+      "description": {
+        "zh": "在拖拽排序时保持拾取、占位和落点状态清楚。",
+        "en": "Keep pickup, placeholder, and drop states clear while reordering."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/drag-to-reorder/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/drag-to-reorder/"
+      }
+    },
+    {
+      "id": "swipe-to-dismiss",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "滑动关闭",
+        "en": "Swipe to dismiss"
+      },
+      "description": {
+        "zh": "让滑动距离映射到位移与透明度，并在阈值前提供阻尼。",
+        "en": "Map swipe distance to travel and opacity with resistance before the threshold."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/swipe-to-dismiss/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/swipe-to-dismiss/"
+      }
+    },
+    {
+      "id": "shake-wiggle",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "摇晃 / 抖动",
+        "en": "Shake / Wiggle"
+      },
+      "description": {
+        "zh": "用一次短促横向摆动提示错误或需要关注的输入。",
+        "en": "Use one brief horizontal shake for errors or inputs that need attention."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/shake-wiggle/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/shake-wiggle/"
+      }
+    },
+    {
+      "id": "ripple",
+      "categoryId": "feedback",
+      "name": {
+        "zh": "涟漪",
+        "en": "Ripple"
+      },
+      "description": {
+        "zh": "从输入坐标扩散轻量波纹，提供明确的触点反馈。",
+        "en": "Expand a restrained ripple from the input coordinate for precise touch feedback."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/ripple/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/ripple/"
+      }
+    },
+    {
+      "id": "easing",
+      "categoryId": "easing",
+      "name": {
+        "zh": "缓动",
+        "en": "Easing"
+      },
+      "description": {
+        "zh": "比较常用缓动曲线和自定义贝塞尔曲线的速度变化。",
+        "en": "Compare common easing curves and custom cubic-bezier velocity profiles."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/easing/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/easing/"
+      }
+    },
+    {
+      "id": "spring",
+      "categoryId": "springs",
+      "name": {
+        "zh": "弹簧",
+        "en": "Spring"
+      },
+      "description": {
+        "zh": "通过刚度、阻尼、质量和初速度调节真实的弹簧响应。",
+        "en": "Tune a physical spring response with stiffness, damping, mass, and initial velocity."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/spring/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/spring/"
+      }
+    },
+    {
+      "id": "loop",
+      "categoryId": "loops",
+      "name": {
+        "zh": "循环",
+        "en": "Loop"
+      },
+      "description": {
+        "zh": "比较循环方向、次数、暂停和节奏，避免持续动态干扰阅读。",
+        "en": "Compare loop direction, count, pauses, and rhythm while controlling distraction."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/loop/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/loop/"
+      }
+    },
+    {
+      "id": "marquee",
+      "categoryId": "loops",
+      "name": {
+        "zh": "跑马灯",
+        "en": "Marquee"
+      },
+      "description": {
+        "zh": "让超出容器的信息连续滚动，并在悬停或聚焦时暂停。",
+        "en": "Continuously scroll overflowing content and pause it on hover or focus."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/marquee/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/marquee/"
+      }
+    },
+    {
+      "id": "orbit",
+      "categoryId": "loops",
+      "name": {
+        "zh": "环绕",
+        "en": "Orbit"
+      },
+      "description": {
+        "zh": "让装饰节点围绕中心缓慢运行，适合低频状态展示。",
+        "en": "Move a decorative node slowly around a center for low-frequency status displays."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/orbit/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/orbit/"
+      }
+    },
+    {
+      "id": "idle-animation",
+      "categoryId": "loops",
+      "name": {
+        "zh": "空闲动效",
+        "en": "Idle animation"
+      },
+      "description": {
+        "zh": "用低幅度呼吸或漂浮提示元素仍处于可用、等待或活跃状态。",
+        "en": "Use subtle breathing or floating motion for available, waiting, or active states."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/idle-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/idle-animation/"
+      }
+    },
+    {
+      "id": "blur",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "模糊",
+        "en": "Blur"
+      },
+      "description": {
+        "zh": "结合模糊、透明度与遮罩柔和地揭示媒体或内容层。",
+        "en": "Reveal media or content layers with coordinated blur, opacity, and masking."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/blur/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/blur/"
+      }
+    },
+    {
+      "id": "before-after-slider",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "前后对比滑杆",
+        "en": "Before / after slider"
+      },
+      "description": {
+        "zh": "用可拖动分割线比较同一画面的前后状态。",
+        "en": "Compare before and after states of the same visual with a draggable divider."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/before-after-slider/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/before-after-slider/"
+      }
+    },
+    {
+      "id": "line-drawing",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "线条绘制",
+        "en": "Line drawing"
+      },
+      "description": {
+        "zh": "通过描边偏移逐步绘制图标、路径或解释性连线。",
+        "en": "Draw icons, paths, or explanatory connectors with stroke offset animation."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/line-drawing/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/line-drawing/"
+      }
+    },
+    {
+      "id": "text-morph",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "文字形变",
+        "en": "Text morph"
+      },
+      "description": {
+        "zh": "在长度接近的短文本之间进行平滑替换，保留阅读位置。",
+        "en": "Transition between similarly sized short labels while preserving reading position."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/text-morph/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/text-morph/"
+      }
+    },
+    {
+      "id": "skeleton-shimmer",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "骨架屏 / 微光",
+        "en": "Skeleton / Shimmer"
+      },
+      "description": {
+        "zh": "在内容加载期间用低对比扫光表达进行中状态。",
+        "en": "Communicate loading progress with a low-contrast shimmer across placeholders."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/skeleton-shimmer/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/skeleton-shimmer/"
+      }
+    },
+    {
+      "id": "number-ticker",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "数字滚动",
+        "en": "Number ticker"
+      },
+      "description": {
+        "zh": "使用等宽数字与垂直滚动稳定展示数值变化。",
+        "en": "Show changing values with tabular figures and stable vertical digit movement."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/number-ticker/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/number-ticker/"
+      }
+    },
+    {
+      "id": "typewriter",
+      "categoryId": "polish-effects",
+      "name": {
+        "zh": "打字机",
+        "en": "Typewriter"
+      },
+      "description": {
+        "zh": "按字符逐步显示短文本，并为辅助技术保留完整内容。",
+        "en": "Reveal short text character by character while preserving complete accessible text."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/typewriter/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/typewriter/"
+      }
+    },
+    {
+      "id": "frame-rate",
+      "categoryId": "performance",
+      "name": {
+        "zh": "帧率（FPS）",
+        "en": "Frame rate (FPS)"
+      },
+      "description": {
+        "zh": "检查帧率、主线程长任务和掉帧，定位动态卡顿。",
+        "en": "Inspect frame rate, long main-thread tasks, and dropped frames to diagnose jank."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/frame-rate/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/frame-rate/"
+      }
+    },
+    {
+      "id": "compositing",
+      "categoryId": "performance",
+      "name": {
+        "zh": "合成",
+        "en": "Compositing"
+      },
+      "description": {
+        "zh": "比较合成友好属性、硬件加速提示与布局触发属性的渲染成本。",
+        "en": "Compare compositor-friendly properties, hardware-acceleration hints, and layout-triggering properties."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/compositing/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/compositing/"
+      }
+    },
+    {
+      "id": "purposeful-animation",
+      "categoryId": "principles",
+      "name": {
+        "zh": "有目的的动效",
+        "en": "Purposeful animation"
+      },
+      "description": {
+        "zh": "审核每段动效的目的、出现频率和空间规则，保持一致体验。",
+        "en": "Review the purpose, frequency, and spatial rules of motion for a consistent experience."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/purposeful-animation/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/purposeful-animation/"
+      }
+    },
+    {
+      "id": "anticipation",
+      "categoryId": "principles",
+      "name": {
+        "zh": "预备动作",
+        "en": "Anticipation"
+      },
+      "description": {
+        "zh": "调节预备、跟随与形变幅度，理解物理感对反馈的影响。",
+        "en": "Tune anticipation, follow-through, and deformation to understand physical feedback."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/anticipation/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/anticipation/"
+      }
+    },
+    {
+      "id": "perceived-performance",
+      "categoryId": "principles",
+      "name": {
+        "zh": "感知性能",
+        "en": "Perceived performance"
+      },
+      "description": {
+        "zh": "通过即时状态、骨架和连续反馈缩短用户感受到的等待。",
+        "en": "Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/perceived-performance/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/perceived-performance/"
+      }
+    },
+    {
+      "id": "reduced-motion",
+      "categoryId": "principles",
+      "name": {
+        "zh": "减弱动效",
+        "en": "Reduced motion"
+      },
+      "description": {
+        "zh": "为移动、缩放、循环和视差提供等价的低动态表达。",
+        "en": "Provide equivalent low-motion treatments for travel, scaling, loops, and parallax."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/primitives/reduced-motion/",
+        "en": "https://motion-lexicon.pages.dev/en/primitives/reduced-motion/"
+      }
+    }
+  ]
+}

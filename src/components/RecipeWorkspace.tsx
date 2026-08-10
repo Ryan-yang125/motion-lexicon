@@ -174,7 +174,6 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
   );
   const guidance = getMotionGuidance(recipe.canonicalId);
   const inspectorRecipe = useMemo(() => splitInspectorRecipe(recipe), [recipe]);
-  const surfaceSearch = recipe.surfaceType === "component" ? "components" : recipe.surfaceType === "playground" ? "playgrounds" : "guides";
   const relatedEntries = Array.from(
     new Map(
       recipe.relatedEntries
@@ -242,14 +241,14 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
     <section className="library-entry apple-recipe-workspace" id="workspace" aria-labelledby="workspace-title">
       <div className="library-entry-main apple-recipe-main">
         <nav className="library-breadcrumbs apple-recipe-breadcrumbs" aria-label={t("workspace.breadcrumbLabel")}>
-          <Link to="/$locale/catalog/" params={{ locale }} search={{ surface: surfaceSearch }}>
-            {t(`nav.${surfaceSearch}`)}
+          <Link to="/$locale/primitives/" params={{ locale }}>
+            {locale === "zh" ? "原子动效" : "Primitives"}
           </Link>
           <span aria-hidden="true">/</span>
           {category ? (
-            <Link to="/$locale/$categoryId/" params={{ locale, categoryId: category.id }}>
+            <a href={`${locale === "zh" ? "/zh" : "/en"}/primitives/?category=${category.id}`}>
               {text(category.name, locale)}
-            </Link>
+            </a>
           ) : null}
         </nav>
 
@@ -403,8 +402,8 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
                       </article>
                     ))}
                   </div>
-                  <Link className="library-inline-link" to="/$locale/vocabulary/" params={{ locale }}>
-                    {labels.openVocabulary}
+                  <Link className="library-inline-link" to="/$locale/primitives/" params={{ locale }}>
+                    {locale === "zh" ? "查看全部原子动效" : "Browse all primitives"}
                     <ChevronRight aria-hidden="true" size={15} />
                   </Link>
                 </section>
@@ -513,8 +512,8 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
               {relatedEntries.map((entry) => (
                 <Link
                   key={entry.id}
-                  to="/$locale/$categoryId/$recipeId/"
-                  params={{ locale, categoryId: entry.categoryId, recipeId: entry.id }}
+                  to="/$locale/primitives/$primitiveId/"
+                  params={{ locale, primitiveId: entry.id }}
                 >
                   <span>{text(entry.name, locale)}</span>
                   <ChevronRight aria-hidden="true" size={15} />
@@ -527,8 +526,8 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
         <nav className="library-entry-pagination apple-recipe-pagination" aria-label={t("workspace.paginationLabel")}>
           {previousRecipe ? (
             <Link
-              to="/$locale/$categoryId/$recipeId/"
-              params={{ locale, categoryId: previousRecipe.categoryId, recipeId: previousRecipe.id }}
+              to="/$locale/primitives/$primitiveId/"
+              params={{ locale, primitiveId: previousRecipe.id }}
             >
               <ChevronLeft aria-hidden="true" size={16} />
               <span><small>{t("common.previous")}</small>{text(previousRecipe.name, locale)}</span>
@@ -536,8 +535,8 @@ export function RecipeWorkspace({ locale, recipe, mode = "embedded" }: RecipeWor
           ) : <span />}
           {nextRecipe ? (
             <Link
-              to="/$locale/$categoryId/$recipeId/"
-              params={{ locale, categoryId: nextRecipe.categoryId, recipeId: nextRecipe.id }}
+              to="/$locale/primitives/$primitiveId/"
+              params={{ locale, primitiveId: nextRecipe.id }}
             >
               <span><small>{t("common.next")}</small>{text(nextRecipe.name, locale)}</span>
               <ChevronRight aria-hidden="true" size={16} />

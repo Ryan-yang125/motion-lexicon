@@ -11,14 +11,14 @@ export function GuidesPage({ locale }: { locale: Locale }) {
     ? {
         eyebrow: "场景指南",
         title: "从真实产品问题开始设计动效",
-        copy: "八篇双语图文长文，把产品状态、动效基础和可复制的 Product Moments 连成一条可执行的路径。",
+        copy: "八篇双语图文长文，把产品状态、原子动效和可复制组件连成一条可执行的路径。",
         format: "1000+ 字 · 3 张图解 · 清单与代码",
         open: "阅读完整指南"
       }
     : {
         eyebrow: "Scenario guides",
         title: "Design motion from real product questions",
-        copy: "Eight illustrated, bilingual field guides connect product state, motion primitives, and copy-ready Product Moments into a practical path.",
+        copy: "Eight illustrated, bilingual field guides connect product state, motion primitives, and copy-ready components into a practical path.",
         format: "Long read · 3 diagrams · checklist and code",
         open: "Read full guide"
       };

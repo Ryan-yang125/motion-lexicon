@@ -1,5 +1,4 @@
 import {
-  Outlet,
   RouterProvider,
   createMemoryHistory,
   createRootRoute,
@@ -9,12 +8,11 @@ import {
 import type { RouterHistory } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { LibraryShell } from "./components/LibraryShell";
 import { defaultLocale, pathFor } from "./data/site";
 import type { Locale } from "./data/types";
 import { setI18nLanguage } from "./i18n";
-import { LandingPage } from "./pages/LandingPage";
+import { ComponentsPage } from "./pages/ComponentsPage";
 import { useRouteLocale } from "./routes/route-locale";
 
 function LocaleSync({ locale }: { locale: Locale }) {
@@ -37,22 +35,18 @@ function AppShell() {
       <a className="skip-link" href="#main-content">
         {locale === "zh" ? "跳到主要内容" : "Skip to content"}
       </a>
-      <Header locale={locale} />
-      <main className="page product-type-system" id="main-content" tabIndex={-1}>
-        <Outlet />
-      </main>
-      <Footer />
+      <LibraryShell locale={locale} />
     </>
   );
 }
 
 function RootIndex() {
-  return <LandingPage locale={defaultLocale} />;
+  return <ComponentsPage locale={defaultLocale} />;
 }
 
 function LocaleIndex() {
   const locale = useRouteLocale();
-  return <LandingPage locale={locale} />;
+  return <ComponentsPage locale={locale} />;
 }
 
 const rootRoute = createRootRoute({
@@ -71,25 +65,25 @@ const localeRoute = createRoute({
   component: LocaleIndex
 });
 
-const catalogRoute = createRoute({
+const componentsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/catalog"
-}).lazy(() => import("./routes/catalog.lazy").then((module) => module.Route));
+  path: "$locale/components"
+}).lazy(() => import("./routes/components.lazy").then((module) => module.Route));
 
-const playgroundRoute = createRoute({
+const componentRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/playground"
-}).lazy(() => import("./routes/playground.lazy").then((module) => module.Route));
+  path: "$locale/components/$componentId"
+}).lazy(() => import("./routes/component.lazy").then((module) => module.Route));
 
-const vocabularyRoute = createRoute({
+const primitivesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/vocabulary"
-}).lazy(() => import("./routes/vocabulary.lazy").then((module) => module.Route));
+  path: "$locale/primitives"
+}).lazy(() => import("./routes/primitives.lazy").then((module) => module.Route));
 
-const finderRoute = createRoute({
+const primitiveRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/finder"
-}).lazy(() => import("./routes/finder.lazy").then((module) => module.Route));
+  path: "$locale/primitives/$primitiveId"
+}).lazy(() => import("./routes/primitive.lazy").then((module) => module.Route));
 
 const guidesRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -106,83 +100,29 @@ const methodRoute = createRoute({
   path: "$locale/method"
 }).lazy(() => import("./routes/method.lazy").then((module) => module.Route));
 
-const packsRoute = createRoute({
+const vocabularyRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/packs"
-}).lazy(() => import("./routes/packs.lazy").then((module) => module.Route));
+  path: "$locale/vocabulary"
+}).lazy(() => import("./routes/vocabulary.lazy").then((module) => module.Route));
 
-const motionPackRoute = createRoute({
+const skillRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/packs/$packId"
-}).lazy(() => import("./routes/motion-pack.lazy").then((module) => module.Route));
+  path: "$locale/skill"
+}).lazy(() => import("./routes/skill.lazy").then((module) => module.Route));
 
-const directorRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "$locale/director"
-}).lazy(() => import("./routes/director.lazy").then((module) => module.Route));
-
-const motionBlueprintLabRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "$locale/lab/motion-blueprints"
-}).lazy(() => import("./routes/motion-blueprint-lab.lazy").then((module) => module.Route));
-
-const isLocalLabEnabled = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true;
-
-const quietProductMotionLabRoute = isLocalLabEnabled
-  ? createRoute({
-      getParentRoute: () => rootRoute,
-      path: "$locale/lab/quiet-product-motion"
-    }).lazy(() => import("./routes/quiet-product-motion-lab.lazy").then((module) => module.Route))
-  : null;
-
-const recipeRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "$locale/$categoryId/$recipeId"
-}).lazy(() => import("./routes/recipe.lazy").then((module) => module.Route));
-
-const categoryRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "$locale/$categoryId"
-}).lazy(() => import("./routes/category.lazy").then((module) => module.Route));
-
-const routeTree = rootRoute.addChildren(
-  quietProductMotionLabRoute
-    ? [
-        rootIndexRoute,
-        localeRoute,
-        catalogRoute,
-        playgroundRoute,
-        vocabularyRoute,
-        finderRoute,
-        guidesRoute,
-        seoGuideRoute,
-        methodRoute,
-        packsRoute,
-        motionPackRoute,
-        directorRoute,
-        motionBlueprintLabRoute,
-        quietProductMotionLabRoute,
-        recipeRoute,
-        categoryRoute
-      ]
-    : [
-        rootIndexRoute,
-        localeRoute,
-        catalogRoute,
-        playgroundRoute,
-        vocabularyRoute,
-        finderRoute,
-        guidesRoute,
-        seoGuideRoute,
-        methodRoute,
-        packsRoute,
-        motionPackRoute,
-        directorRoute,
-        motionBlueprintLabRoute,
-        recipeRoute,
-        categoryRoute
-      ]
-);
+const routeTree = rootRoute.addChildren([
+  rootIndexRoute,
+  localeRoute,
+  componentsRoute,
+  componentRoute,
+  primitivesRoute,
+  primitiveRoute,
+  guidesRoute,
+  seoGuideRoute,
+  methodRoute,
+  vocabularyRoute,
+  skillRoute
+]);
 
 export function createAppRouter(history?: RouterHistory) {
   return createRouter({

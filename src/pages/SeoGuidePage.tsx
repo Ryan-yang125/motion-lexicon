@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "../components/icons";
 import { SeoGuideDiagram } from "../components/SeoGuideDiagram";
 import { Seo } from "../components/Seo";
-import { getMotionPack } from "../data/motion-packs";
+import { registryComponents } from "../data/component-registry";
 import { getCatalogRecipe } from "../data/recipes";
 import { getSeoGuide } from "../data/seo-guides";
 import { getSeoGuideArticle } from "../data/seo-guide-articles";
@@ -19,7 +19,7 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
         decision: "先做这个判断",
         steps: "实施路径",
         foundations: "关联动效基础",
-        packs: "相关产品瞬间",
+        components: "相关组件",
         related: "继续阅读"
       }
     : {
@@ -27,7 +27,7 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
         decision: "Make this decision first",
         steps: "Implementation path",
         foundations: "Related motion primitives",
-        packs: "Related product moments",
+        components: "Related components",
         related: "Continue reading"
       };
 
@@ -45,10 +45,10 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
     const recipe = getCatalogRecipe(foundationId);
     return recipe ? [recipe] : [];
   });
-  const packs = guide.packs.flatMap((packId) => {
-    const pack = getMotionPack(packId);
-    return pack ? [pack] : [];
-  });
+  const foundationIds = new Set(foundations.map((recipe) => recipe.id));
+  const components = registryComponents
+    .filter((component) => component.primitiveIds.some((id) => foundationIds.has(id)))
+    .slice(0, 4);
   const related = guide.relatedGuideIds.flatMap((relatedId) => {
     const relatedGuide = getSeoGuide(relatedId);
     return relatedGuide ? [relatedGuide] : [];
@@ -180,19 +180,19 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
           <h2 id="guide-foundations-title">{labels.foundations}</h2>
           <div>
             {foundations.map((recipe) => (
-              <Link key={recipe.id} to="/$locale/$categoryId/$recipeId/" params={{ locale, categoryId: recipe.categoryId, recipeId: recipe.id }} activeOptions={{ exact: true }}>
+              <Link key={recipe.id} to="/$locale/primitives/$primitiveId/" params={{ locale, primitiveId: recipe.id }} activeOptions={{ exact: true }}>
                 <span><strong>{recipe.name[locale]}</strong><small>{recipe.shortDescription[locale]}</small></span>
                 <ArrowRight aria-hidden="true" size={15} />
               </Link>
             ))}
           </div>
         </section>
-        <section className="seo-guide-links" aria-labelledby="guide-packs-title">
-          <h2 id="guide-packs-title">{labels.packs}</h2>
+        <section className="seo-guide-links" aria-labelledby="guide-components-title">
+          <h2 id="guide-components-title">{labels.components}</h2>
           <div>
-            {packs.map((pack) => (
-              <Link key={pack.id} to="/$locale/packs/$packId/" params={{ locale, packId: pack.id }} activeOptions={{ exact: true }}>
-                <span><strong>{pack.name[locale]}</strong><small>{pack.shortDescription[locale]}</small></span>
+            {components.map((component) => (
+              <Link key={component.id} to="/$locale/components/$componentId/" params={{ locale, componentId: component.id }} activeOptions={{ exact: true }}>
+                <span><strong>{component.name[locale]}</strong><small>{component.description[locale]}</small></span>
                 <ArrowRight aria-hidden="true" size={15} />
               </Link>
             ))}

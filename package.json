@@ -1,7 +1,7 @@
 {
   "name": "motion-lexicon",
-  "version": "2.1.0",
-  "description": "An open product-motion system with Motion Packs, Motion Primitives, and the Motion Director Agent Skill.",
+  "version": "3.0.0",
+  "description": "Copy-ready React motion components, adjustable motion primitives, and an Agent Skill for product motion.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "preview": "vite preview",
-    "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
+    "build": "npm run registry:build && tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/prerender.ts",
+    "registry:build": "tsx scripts/generate-registry.ts",
     "lint": "eslint .",
     "typecheck": "tsc -b",
     "i18n:check": "tsx scripts/check-i18n.ts",
@@ -59,8 +60,8 @@
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^26.1.1",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
     "ajv": "^8.20.0",
     "class-variance-authority": "^0.7.1",

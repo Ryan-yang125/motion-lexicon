@@ -20,13 +20,12 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// V2.1 carries twenty-eight real product moments, editorial hubs for all
-// twelve primitive categories, and eight lazy-loaded scenario guides. The
-// Interior interaction system keeps Motion in its own vendor chunk; scenario
-// articles are isolated in their own lazy chunk and retain their own ceiling.
+// V3 ships twenty-eight live registry components, forty-four primitives, and
+// eight lazy-loaded scenario guides. Motion and editorial content retain
+// independent chunk ceilings.
 const maxMotionVendorGzipBytes = 48 * 1024;
 const maxScenarioGuideArticlesGzipBytes = 70 * 1024;
-const maxTotalJsGzipBytes = 450 * 1024;
+const maxTotalJsGzipBytes = 500 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 
@@ -39,11 +38,18 @@ for (const file of jsFiles) {
   assert(gzipSize <= maxChunkGzipBytes, `${file} gzip size ${gzipSize} exceeds ${maxChunkGzipBytes}`);
 }
 
-const finderChunk = jsFiles.find((file) => file.startsWith("finder.lazy-"));
-assert(finderChunk, "Motion Finder route chunk is missing");
+const componentsChunk = jsFiles.find((file) => file.startsWith("components.lazy-"));
+assert(componentsChunk, "Components route chunk is missing");
 assert(
-  gzipSync(readFileSync(path.join(assetsDir, finderChunk))).length <= 12 * 1024,
-  "Motion Finder route chunk exceeds 12 KiB gzip"
+  gzipSync(readFileSync(path.join(assetsDir, componentsChunk))).length <= 12 * 1024,
+  "Components route shell exceeds 12 KiB gzip"
+);
+
+const componentDetailChunk = jsFiles.find((file) => file.startsWith("component.lazy-"));
+assert(componentDetailChunk, "Component detail route chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, componentDetailChunk))).length <= 72 * 1024,
+  "Component detail source bundle exceeds 72 KiB gzip"
 );
 
 const motionVendorChunk = jsFiles.find((file) => file.startsWith("motion-vendor-"));

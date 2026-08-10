@@ -64,7 +64,7 @@ export function Seo({
     isPartOf: {
       "@type": "WebSite",
       name: "Motion Lexicon",
-      url: `${siteUrl}${pathFor(defaultLocale)}`,
+      url: `${siteUrl}${pathFor(defaultLocale, ["components"])}`,
       isAccessibleForFree: true
     }
   };
@@ -86,9 +86,8 @@ export function Seo({
       <link rel="alternate" hrefLang="en" href={alternateEn} />
       <link rel="alternate" hrefLang="x-default" href={defaultAlternate} />
       <link rel="alternate" type="text/plain" href={`${siteUrl}/llms.txt`} title="Motion Lexicon for agents" />
-      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v2/motion-grammar.json`} title="Motion Lexicon Motion Grammar" />
-      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v1/catalog.json`} title="Motion Lexicon catalog data" />
-      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v1/packs.json`} title="Motion Lexicon product moments data" />
+      <link rel="alternate" type="application/json" href={`${siteUrl}/data/v3/motion-grammar.json`} title="Motion Lexicon Motion Grammar" />
+      <link rel="alternate" type="application/json" href={`${siteUrl}/r/registry.json`} title="Motion Lexicon component registry" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />

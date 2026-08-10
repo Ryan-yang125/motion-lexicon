@@ -1,0 +1,567 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "motion-lexicon",
+  "homepage": "https://motion-lexicon.pages.dev",
+  "items": [
+    {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy button",
+      "description": "Reports clipboard state in place without shifting nearby content.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/copy-button/",
+      "files": [
+        {
+          "path": "src/registry/components/copy-button.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/copy-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "loading-button",
+      "type": "registry:ui",
+      "title": "Loading button",
+      "description": "Keeps pending, success, and error feedback inside one action.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/loading-button/",
+      "files": [
+        {
+          "path": "src/registry/components/loading-button.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/loading-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hold-to-confirm",
+      "type": "registry:ui",
+      "title": "Hold to confirm",
+      "description": "Protects destructive actions with cancellable hold progress.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
+      "files": [
+        {
+          "path": "src/registry/components/hold-to-confirm.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/hold-to-confirm.tsx"
+        }
+      ]
+    },
+    {
+      "name": "long-press",
+      "type": "registry:ui",
+      "title": "Long press",
+      "description": "A long-press gesture that works across touch, pointer, and keyboard.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/long-press/",
+      "files": [
+        {
+          "path": "src/registry/components/long-press.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/long-press.tsx"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "Command palette",
+      "description": "Combines search, keyboard navigation, and deliberate focus management.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/command-palette/",
+      "files": [
+        {
+          "path": "src/registry/components/command-palette.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/command-palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context menu",
+      "description": "Opens from the trigger coordinate and stays inside the viewport.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/context-menu/",
+      "files": [
+        {
+          "path": "src/registry/components/context-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/context-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Includes focus containment, drag dismissal, and interruptible spring motion.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/drawer/",
+      "files": [
+        {
+          "path": "src/registry/components/drawer.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/drawer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:ui",
+      "title": "Dropdown",
+      "description": "Moves selection continuously with full keyboard behavior.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/dropdown/",
+      "files": [
+        {
+          "path": "src/registry/components/dropdown.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/dropdown.tsx"
+        }
+      ]
+    },
+    {
+      "name": "modal",
+      "type": "registry:ui",
+      "title": "Modal",
+      "description": "Handles focus, backdrop, exit, and async confirmation as one flow.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/modal/",
+      "files": [
+        {
+          "path": "src/registry/components/modal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/modal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Derives its reveal origin from the trigger and available space.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/popover/",
+      "files": [
+        {
+          "path": "src/registry/components/popover.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/popover.tsx"
+        }
+      ]
+    },
+    {
+      "name": "expanding-search",
+      "type": "registry:ui",
+      "title": "Expanding search",
+      "description": "Expands from a toolbar action into a focused search field.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
+      "files": [
+        {
+          "path": "src/registry/components/expanding-search.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/expanding-search.tsx"
+        }
+      ]
+    },
+    {
+      "name": "floating-label",
+      "type": "registry:ui",
+      "title": "Floating label",
+      "description": "Keeps the field label and context visible while typing.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/floating-label/",
+      "files": [
+        {
+          "path": "src/registry/components/floating-label.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/floating-label.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inline-validation",
+      "type": "registry:ui",
+      "title": "Inline validation",
+      "description": "Places pending, error, and success states next to the input.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
+      "files": [
+        {
+          "path": "src/registry/components/inline-validation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/inline-validation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "OTP input",
+      "description": "Coordinates typing, paste, error, and success feedback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/otp-input/",
+      "files": [
+        {
+          "path": "src/registry/components/otp-input.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/otp-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "password-strength",
+      "type": "registry:ui",
+      "title": "Password strength",
+      "description": "Makes rule checks and strength changes legible as one response.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/password-strength/",
+      "files": [
+        {
+          "path": "src/registry/components/password-strength.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/password-strength.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slider-detents",
+      "type": "registry:ui",
+      "title": "Slider detents",
+      "description": "Snaps to meaningful detents while preserving continuous input.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
+      "files": [
+        {
+          "path": "src/registry/components/slider-detents.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/slider-detents.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tag-input",
+      "type": "registry:ui",
+      "title": "Tag input",
+      "description": "Gives clear feedback for adding, removing, and rejecting tags.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/tag-input/",
+      "files": [
+        {
+          "path": "src/registry/components/tag-input.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/tag-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Keeps content height and disclosure state visually continuous.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/accordion/",
+      "files": [
+        {
+          "path": "src/registry/components/accordion.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hide-on-scroll",
+      "type": "registry:ui",
+      "title": "Hide on scroll",
+      "description": "Hides and restores a toolbar in response to scroll direction.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/hide-on-scroll/",
+      "files": [
+        {
+          "path": "src/registry/components/hide-on-scroll.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/hide-on-scroll.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Keeps the current page legible while the visible range changes.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/pagination/",
+      "files": [
+        {
+          "path": "src/registry/components/pagination.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/pagination.tsx"
+        }
+      ]
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "Segmented control",
+      "description": "Carries one shared highlight between options.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/segmented-control/",
+      "files": [
+        {
+          "path": "src/registry/components/segmented-control.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/segmented-control.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Coordinates the indicator, direction, and panel change.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/tabs/",
+      "files": [
+        {
+          "path": "src/registry/components/tabs.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "filter-grid",
+      "type": "registry:ui",
+      "title": "Filter grid",
+      "description": "Preserves spatial continuity as filtered results rearrange.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
+      "files": [
+        {
+          "path": "src/registry/components/filter-grid.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/filter-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reorder-list",
+      "type": "registry:ui",
+      "title": "Reorder list",
+      "description": "Provides clear drop position for pointer and keyboard reordering.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
+      "files": [
+        {
+          "path": "src/registry/components/reorder-list.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/reorder-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sortable-table",
+      "type": "registry:ui",
+      "title": "Sortable table",
+      "description": "Explains sorting through row position while keeping data readable.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
+      "files": [
+        {
+          "path": "src/registry/components/sortable-table.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/sortable-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:ui",
+      "title": "Progress bar",
+      "description": "Covers pending, determinate, and complete progress states.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/progress-bar/",
+      "files": [
+        {
+          "path": "src/registry/components/progress-bar.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/progress-bar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "task-steps",
+      "type": "registry:ui",
+      "title": "Task steps",
+      "description": "Connects queued, active, complete, and failed states into one flow.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/task-steps/",
+      "files": [
+        {
+          "path": "src/registry/components/task-steps.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/task-steps.tsx"
+        }
+      ]
+    },
+    {
+      "name": "value-flash",
+      "type": "registry:ui",
+      "title": "Value flash",
+      "description": "Explains value changes with direction and brief color feedback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/value-flash/",
+      "files": [
+        {
+          "path": "src/registry/components/value-flash.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/value-flash.tsx"
+        }
+      ]
+    }
+  ]
+}

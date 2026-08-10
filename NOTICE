@@ -47,7 +47,7 @@ SOFTWARE.
 
 INTERIOR COMPONENTS
 
-Interaction components in src/components/interior are derived from interior:
+Interaction components in src/registry/components and their demos are derived from interior:
 
 https://github.com/ddoemonn/interior
 

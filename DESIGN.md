@@ -1,275 +1,118 @@
-# Motion Lexicon Product Design
+# Motion Lexicon V3 Product Design
 
 ## Experience model
 
-Motion Lexicon V2.0 is a static product-motion system with two equal website
-collections and one peer creation surface.
-
-- **Product Moments · Motion Packs:** 28 complete interactions with context,
-  trigger, state progression, outcome, and portable implementation.
-- **Motion Primitives:** 44 focused workspaces for exact behaviors, terminology,
-  parameters, and implementation detail.
-- **Motion Director:** an Agent Skill that turns product context into a
-  recommendation, composition, implementation, review, or contribution
-  blueprint.
-
-All three surfaces use the same versioned **Motion Grammar**. The website gives
-the grammar a visual form; Motion Director applies it inside an active product
-workflow.
+Motion Lexicon V3 is a component registry with a motion reference layer.
 
 ```text
-Website: Preview → Trigger → Inspect → Copy
-Motion Director: Understand → Blueprint → Build → Review → Contribute
+Components: Browse → Interact → Inspect source → Install
+Primitives: Browse → Preview → Tune → Copy
+Agent Skill: Understand → Compose → Implement → Review
 ```
 
-The intended result is calm confidence. Product state carries the visual
-interest; surrounding interface chrome gives that state room and clarity.
+The interface keeps attention on working interactions. Product state supplies
+the visual interest; the shell stays calm, compact, and predictable.
 
 ## Information architecture
 
-The header gives the core product paths equal access:
+Primary routes:
 
-- **Find motion:** `/:locale/finder/` receives a natural-language request and
-  directs it to relevant Product Moments and Motion Primitives.
-- **Product Moments:** `/:locale/packs/` is the gallery for 28 real product
-  interactions.
-- **Motion Primitives:** `/:locale/catalog/` is the catalog for 44 focused
-  workspaces.
-- **Motion Director:** `/:locale/director/` explains the shared grammar and the
-  Agent Skill creation workflow.
+- `/:locale/components/` — 28 React motion components.
+- `/:locale/components/:componentId/` — live preview, source, install command, and related primitives.
+- `/:locale/primitives/` — 44 adjustable motion primitives.
+- `/:locale/primitives/:primitiveId/` — primitive preview, parameters, prompt/code, and guidance.
 
-Supporting routes add depth and acquisition value:
+Resource routes:
 
-- `/:locale/packs/:packId/`: a live Pack preview, guidance, and portable
-  output.
-- `/:locale/catalog/`: the 44 canonical Motion Primitive workspaces.
-- `/:locale/vocabulary/`: the complete bilingual 91-term vocabulary.
-- `/:locale/:categoryId/`: indexable motion-family collections.
-- `/:locale/:categoryId/:recipeId/`: canonical Primitive workspaces.
-- `/:locale/lab/`: reviewable candidate work kept outside the canonical public
-  content surface.
+- `/:locale/guides/` and `/:locale/guides/:guideId/`.
+- `/:locale/skill/`.
+- `/:locale/method/`.
+- `/:locale/vocabulary/`.
 
-Pack details link to their related Motion Primitives; Primitive workspaces
-surface their related Packs. Motion Director offers a direct creation path to
-the same references. GitHub, Agent Skill installation, public data, vocabulary,
-theme, and locale remain available from the resources layer and footer.
+The domain root and locale roots open Components. Old product routes are removed.
 
-## Motion Grammar model
+## Navigation
 
-Every Motion Director decision and every new public content candidate uses one
-schema:
+- A fixed 248px desktop sidebar exposes Components, Primitives, Guides, and the Agent Skill.
+- Component entries are grouped by product role: actions, overlays, inputs, navigation, data, and feedback.
+- Primitive links are grouped by motion family.
+- A mobile off-canvas sidebar preserves the same hierarchy.
+- Global search opens with `Cmd/Ctrl + K`, searches both collections, and appears immediately.
+- Language, theme, and GitHub remain in the compact top bar.
 
-```text
-Intent → State graph → Actors → Beats → Accessibility → Delivery → Provenance
-```
+## Component directory
 
-### Intent
+- Every card contains a real lazy-loaded React demo.
+- The preview remains interactive; the footer owns navigation to avoid nested interactive controls.
+- Two columns provide enough room for realistic component states on desktop.
+- Cards collapse to one column on narrow layouts.
+- Category counts and identifiers use small mono labels.
 
-Capture the product task, user goal, trigger, outcome, existing visual language,
-and implementation constraints.
+## Component workbench
 
-### State graph
+- The header contains identity, one concise description, quality signals, and a copy action.
+- Preview and Code form one stable two-option control.
+- Code view displays the exact source rendered by the preview.
+- The install row publishes `npx shadcn@latest add https://motion-lexicon.pages.dev/r/:id.json`.
+- Related Primitives explain the building blocks inside the component.
 
-Name the states that matter to the product: idle, active, success, error,
-recovery, cancelled, or a domain-specific equivalent. A state transition earns
-motion when it improves orientation, feedback, continuity, or perceived task
-progress.
+## Primitive directory and workbench
 
-### Actors and beats
+- Search and category pills filter 44 canonical primitives.
+- Gallery previews use the real HTML/CSS runtime and play without replacing their preview root.
+- Every direct route uses `/primitives/:id/`.
+- Existing parameter, replay, reduced-motion, prompt, code, and long-form guidance remain available.
 
-One primary visual actor should carry each transition. Up to two supporting
-actors can clarify progress, result, or spatial continuity. Each beat includes
-its actor, purpose, from state, to state, timing, curve, and property changes.
+## Material and visual system
 
-### Accessibility and delivery
+The visual language follows Interior's proven material hierarchy:
 
-Every blueprint carries keyboard behavior, focus handling, semantic status, and
-a reduced-motion result. Delivery can be a Prompt, HTML, CSS, JavaScript, React
-guidance, review notes, or a contribution candidate.
+| Layer | Role |
+| --- | --- |
+| Bezel | warm page background and navigation context |
+| Panel | raised cards, workbenches, and dialogs |
+| Well | recessed previews, inputs, and code |
 
-### Provenance
-
-Published content, candidate work, confidence, source evidence, and quality
-checks stay visible. A candidate moves into public content only after explicit
-review.
-
-The public grammar file lives at `/data/v2/motion-grammar.json`.
-
-## Product Moments · Pack gallery
-
-- The gallery gives each Pack a stable product frame and a concise state-led
-  description.
-- Four filters organise the collection by feedback, choice, change, and
-  workflow.
-- Hover and focus play the existing live scene in place, so the preview remains
-  visually continuous.
-- Cards open dedicated detail routes and keep the gallery useful for browsing.
-- Narrow layouts keep Pack cards vertically readable without horizontal page
-  scrolling.
-
-## Pack detail
-
-- Identity, product scenario, and a direct path to output stay near the live
-  preview.
-- The preview stage gives the state transition enough space to communicate its
-  before-and-after relationship.
-- A compact inspector expresses timing, trigger, outcome, and reduced-motion
-  treatment in plain language.
-- The output area has two stable modes: **Prompt** and **Code**. Prompt opens
-  by default, and the selected mode owns the copy action.
-- Related Packs form a lightweight continuation path.
-- Related Motion Primitives explain the precise behaviors inside the current
-  scene.
-
-## Motion Primitives · catalog and workspaces
-
-- The catalog presents all 44 canonical workspaces with accurate live previews,
-  focused categories, and routes into each Primitive.
-- Each workspace pairs one primary preview with compact controls, then exposes
-  Prompt and Code through the same output pattern used on Pack details.
-- Related Packs show the behavior in a complete product context.
-- Vocabulary and category pages remain indexable acquisition surfaces.
-
-## Finder
-
-- Finder uses one primary preview for the selected candidate.
-- Other candidates remain stable choices. Selecting one switches the primary
-  scene and makes it the only active preview.
-- Results distinguish Product Moments and Motion Primitives while giving each
-  collection equal relevance.
-- The 91-term vocabulary supplies precise language and close-term distinctions.
-
-## Motion Director route
-
-`/:locale/director/` makes the Agent Skill legible as a product surface.
-
-- It explains the five creation modes: Recommend, Compose, Implement, Review,
-  and Contribute.
-- It presents a concise example Motion Blueprint with the intent, state graph,
-  actors, beats, accessibility, delivery, and provenance fields.
-- It links to the Skill installation path, public Motion Grammar, and both
-  website collections.
-- It gives contributors a visible route from real product request to candidate
-  content.
-
-The page stays static and indexable. Candidate experiments remain on the Lab
-surface and carry `noindex` metadata until publication.
-
-## Layout system
-
-### Product shell
-
-- The 64px header uses a translucent material, centered primary navigation, and
-  a source-anchored resources popover.
-- Desktop content is capped at 1240px with deliberate outer breathing room.
-- Mobile uses a compact gutter and keeps the active workflow ahead of reference
-  material.
-- Footer content is compact and separates product navigation from open-source
-  resources.
-
-### Material hierarchy
-
-The visual system absorbs Interior’s material approach.
-
-| Layer | Role | Light surface |
-| --- | --- | --- |
-| Bezel | Page background and quiet context | warm neutral |
-| Panel | Raised card, workspace, or popover | white or near-white |
-| Well | Recessed preview, input, or code region | soft neutral |
-
-Actual elevation, internal spacing, and nested radii communicate depth. Borders
-and shadows clarify structure with a light hand.
-
-### Collection galleries
-
-- Home presents Product Moments and Motion Primitives as equal routes.
-- Motion Director sits alongside them as a creation entry with its own workflow.
-- Desktop cards use responsive grids; narrow layouts use stable vertical flows.
-- Page-level horizontal scrolling is never an intended layout behavior.
-
-### Detail workspace
-
-- At wide widths, preview and inspector form a balanced workbench.
-- At narrow widths, the live preview stays first, followed by context, output,
-  and deeper guidance.
-- Prompt and Code use a compact switch; its copy action aligns to the opposite
-  edge and reserves its size across state changes.
-
-## Visual system
-
-- Platform system typography: `-apple-system`, `BlinkMacSystemFont`, SF Pro
-  where available, PingFang SC, Helvetica Neue, and Arial fallbacks.
-- Type uses 12px, 13px, 14px, and 24px steps with `-0.15px` letter spacing.
-- Text hierarchy uses `#292929`, `#5D5D5D`, and `#9E9E9E`.
-- Navigation icons are 14px; card icons are 20px.
-- Navigation components use 8px radii, cards use 16px radii, and primary CTAs
-  use pill shapes.
-- Chroma-zero neutrals establish depth; restrained blue carries focus,
-  selection, and readiness.
-- Preview scenes maintain solid white or warm-neutral material for reliable
-  visual judgement.
+- Platform system typography with SF Pro where available.
+- 12px, 13px, 14px, and 24px type steps with `-0.15px` letter spacing.
+- `#292929`, `#5D5D5D`, and a quiet tertiary neutral for hierarchy.
+- 14px navigation icons, 20px card icons, 8px navigation radii, 16px card radii, pill actions.
+- Blue is reserved for focus, selection, and active state.
+- Thin neutral boundaries and material shadows replace decorative color blocks.
 
 ## Interaction and motion
 
-The system follows the shared Motion Grammar and Interior-inspired interaction
-discipline.
+- Motion begins from a user action or a real system state.
+- Frequent keyboard surfaces such as the command palette open immediately.
+- State changes reserve space and preserve the final geometry.
+- Arrival motion typically resolves in 180–280ms; departure resolves in 110–180ms.
+- Direct manipulation uses interruptible springs.
+- Transform and opacity carry visible travel.
+- Fine-pointer hover behavior stays inside the matching media query.
+- Reduced motion preserves state, focus, outcome, and control.
 
-- Every visible motion begins from a meaningful product event.
-- Changing labels, actions, and status reserve their final space before the
-  change, avoiding layout shift.
-- Arrivals use `cubic-bezier(0.23, 1, 0.32, 1)`, typically 200–280ms.
-- Departures use `cubic-bezier(0.4, 0, 1, 1)`, typically 110–180ms.
-- Press and focus feedback lands within 70–140ms.
-- Process indicators follow the real task duration and communicate ongoing
-  progress.
-- Visible motion uses `transform` and `opacity` wherever possible.
-- Hover motion runs only under fine-pointer media queries.
-- `prefers-reduced-motion` preserves state, hierarchy, focus, control, and
-  outcome while removing large travel, looping, and nonessential scale.
-- `prefers-reduced-transparency` uses solid surfaces. Increased contrast
-  strengthens key boundaries.
+## Registry contract
 
-## Accessibility
+`src/registry/components/:id.tsx` is the source of truth for:
 
-- Buttons, links, forms, tabs, and controls use native semantics and keyboard
-  access.
-- Primary mobile targets are at least 44px.
-- Status changes, copy completion, errors, and Pack outcomes expose visible text
-  or an appropriate live region.
-- Light and dark themes retain readable contrast.
-- Layouts remain free of horizontal page overflow across supported viewports.
+1. the live website preview;
+2. the component source view;
+3. `/r/:id.json`;
+4. the public V3 catalog.
 
-## Data, SEO, and static delivery
+`scripts/generate-registry.ts` publishes the official shadcn schema. A release
+must install at least one generated item successfully with `shadcn@latest`.
 
-Pack data lives in `src/data/motion-packs.ts`. The existing public catalog,
-Packs, vocabulary, and schema remain available under `/data/v1/`. Motion Grammar
-is published independently at `/data/v2/motion-grammar.json` for the website,
-Motion Director, and machine-readable discovery.
+## Accessibility and responsive behavior
 
-The build pipeline renders static HTML for every localized canonical route.
-Product Moment, Motion Primitive, Finder, vocabulary, and Motion Director
-routes receive self canonicals, reciprocal hreflang values, Open Graph metadata,
-and static JSON-LD where appropriate. Candidate Lab content remains noindex.
+- Native controls, roles, labels, focus restoration, keyboard navigation, and live regions remain part of the component implementation.
+- Primary touch targets keep a 44px baseline.
+- Light and dark themes preserve readable contrast.
+- `html`, `body`, the shell, cards, source blocks, and previews never create page-level horizontal scrolling.
 
-`llms.txt`, `llms-full.txt`, `pricing.txt`, public JSON, the repository, and the
-Agent Skill all publish the same V2.0 model to people and tools.
+## Static delivery and SEO
 
-## Launch acceptance
-
-Launch is complete when:
-
-- Product Moments and Motion Primitives retain equal first-level website paths.
-- Motion Director is visible as a peer creation path with localized static
-  content.
-- The shared Motion Grammar validates and ships at `/data/v2/motion-grammar.json`.
-- Pack and Primitive detail routes preserve their live preview, Prompt, Code,
-  related references, and reduced-motion behavior.
-- Finder continues to surface useful results across both collections.
-- All 44 workspaces and 91 terms remain searchable and indexable.
-- Website, Skill, README files, public data, `llms.txt`, `llms-full.txt`, and
-  pricing use aligned V2.0 language.
-- Public product routes focus on visual discovery, portable output, Motion
-  Director, and shared data.
-- Desktop and mobile layouts have no horizontal page overflow.
-- Lint, typecheck, test, i18n, vocabulary, Motion Grammar, artifact, SEO,
-  motion, accessibility, build, bundle, crawl, and browser test gates pass.
+The build prerenders 172 localized canonical pages and generates the sitemap,
+robots file, security headers, redirects, Open Graph assets, V3 JSON catalog,
+and shadcn registry. Each public route carries one H1, one canonical URL,
+reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

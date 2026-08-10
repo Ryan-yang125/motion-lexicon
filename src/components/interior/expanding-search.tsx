@@ -93,8 +93,8 @@ export function useExpandingSearch({
   const query = value ?? ownValue;
   const isOpen = open ?? ownOpen;
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const openRef = useRef(isOpen);
 
