@@ -22,6 +22,11 @@ const resources: MegaMenuSection = {
   label: "Resources",
   links: [{ id: "guides", label: "Guides", onSelect: vi.fn() }],
 };
+const emptyResources: MegaMenuSection = {
+  id: "resources",
+  label: "Resources",
+  links: [],
+};
 
 beforeEach(() => {
   vi.stubGlobal("requestAnimationFrame", vi.fn());
@@ -33,6 +38,37 @@ afterEach(() => {
 });
 
 describe("MegaMenu", () => {
+  it("keeps the open section and focus unchanged when an empty section is activated", () => {
+    render(
+      <MegaMenu label="Product navigation" sections={[product, emptyResources]} />,
+    );
+    const productTrigger = screen.getByRole("button", { name: "Product" });
+    const emptyTrigger = screen.getByRole("button", { name: "Resources" });
+    productTrigger.focus();
+    fireEvent.click(productTrigger);
+    expect(productTrigger).toHaveFocus();
+    expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(productTrigger).toHaveAttribute("aria-controls");
+    expect(emptyTrigger).toHaveAttribute("aria-disabled", "true");
+    expect(emptyTrigger).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.pointerEnter(emptyTrigger, { pointerType: "mouse" });
+    fireEvent.pointerDown(emptyTrigger, { pointerType: "mouse" });
+    fireEvent.click(emptyTrigger);
+    fireEvent.keyDown(productTrigger, { key: "ArrowRight" });
+    fireEvent.keyDown(productTrigger, { key: "ArrowLeft" });
+    for (const key of ["ArrowDown", "Home", "End", "Enter", " "]) {
+      fireEvent.keyDown(emptyTrigger, { key });
+    }
+
+    expect(productTrigger).toHaveFocus();
+    expect(productTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(productTrigger).toHaveAttribute("aria-controls");
+    expect(emptyTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(emptyTrigger).not.toHaveAttribute("aria-controls");
+    expect(screen.getByRole("menu", { name: "Product" })).toBeInTheDocument();
+  });
+
   it("focuses the first item when ArrowDown reopens an already mounted menu", () => {
     render(<MegaMenu label="Product navigation" sections={[product]} />);
     const trigger = screen.getByRole("button", { name: "Product" });

@@ -86,4 +86,36 @@ describe("IntegrationMap", () => {
     expect(node.style.minHeight).toBe("44px");
     expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
+
+  it("restores keyboard focus highlighting after a pointer hover ends", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        matches: true,
+        media: "(hover: hover) and (pointer: fine)",
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(() => true),
+      })),
+    );
+    render(<IntegrationMap nodes={[removed, remaining]} edges={[]} />);
+    const keyboardNode = screen.getByRole("button", { name: removed.label });
+    const hoveredNode = screen.getByRole("button", { name: remaining.label });
+    const status = screen.getByRole("status");
+
+    fireEvent.focus(keyboardNode);
+    expect(status).toHaveTextContent("Removed service connections highlighted");
+
+    fireEvent.mouseEnter(hoveredNode);
+    expect(status).toHaveTextContent("Remaining service connections highlighted");
+
+    fireEvent.mouseLeave(hoveredNode);
+    expect(status).toHaveTextContent("Removed service connections highlighted");
+
+    fireEvent.blur(keyboardNode);
+    expect(status).toBeEmptyDOMElement();
+  });
 });

@@ -96,17 +96,20 @@ export function IntegrationMap({
   const reduced = useReducedMotion() === true;
   const finePointer = useFinePointer();
   const { ref, active } = useAnimationActivity<HTMLDivElement>();
-  const [focused, setFocused] = useState<string | null>(null);
+  const [keyboardFocused, setKeyboardFocused] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const nodeById = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
-  const validFocused = focused && nodeById.has(focused) ? focused : null;
+  const validKeyboardFocused = keyboardFocused && nodeById.has(keyboardFocused) ? keyboardFocused : null;
+  const validHovered = hovered && nodeById.has(hovered) ? hovered : null;
   const validSelected = selected && nodeById.has(selected) ? selected : null;
-  const activeNode = validFocused ?? validSelected;
+  const activeNode = validHovered ?? validKeyboardFocused ?? validSelected;
 
   useEffect(() => {
-    if (focused && !nodeById.has(focused)) setFocused(null);
+    if (keyboardFocused && !nodeById.has(keyboardFocused)) setKeyboardFocused(null);
+    if (hovered && !nodeById.has(hovered)) setHovered(null);
     if (selected && !nodeById.has(selected)) setSelected(null);
-  }, [focused, nodeById, selected]);
+  }, [hovered, keyboardFocused, nodeById, selected]);
 
   const related = useMemo(() => {
     if (!activeNode) return new Set(nodes.map((node) => node.id));
@@ -221,13 +224,13 @@ export function IntegrationMap({
               onKeyDown={(event) => {
                 if (event.key === "Escape") setSelected(null);
               }}
-              onFocus={() => setFocused(node.id)}
-              onBlur={() => setFocused(null)}
+              onFocus={() => setKeyboardFocused(node.id)}
+              onBlur={() => setKeyboardFocused((current) => current === node.id ? null : current)}
               onMouseEnter={() => {
-                if (finePointer) setFocused(node.id);
+                if (finePointer) setHovered(node.id);
               }}
-              onMouseLeave={(event) => {
-                if (finePointer && typeof document !== "undefined" && document.activeElement !== event.currentTarget) setFocused(null);
+              onMouseLeave={() => {
+                if (finePointer) setHovered((current) => current === node.id ? null : current);
               }}
               className="absolute min-h-11 min-w-11 rounded-[11px] bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:focus-visible:ring-[#93B0FF]"
               style={{

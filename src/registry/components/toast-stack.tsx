@@ -2,10 +2,12 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type KeyboardEvent,
+  type RefObject,
   type ReactNode,
 } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -31,6 +33,7 @@ export type ToastStackProps = {
   onDismiss: (id: string, reason: ToastDismissReason) => void;
   label?: string;
   maxVisible?: number;
+  returnFocusRef?: RefObject<HTMLElement | null>;
   className?: string;
 };
 
@@ -61,11 +64,15 @@ export function ToastStack({
   onDismiss,
   label = "Notifications",
   maxVisible = 4,
+  returnFocusRef,
   className = "",
 }: ToastStackProps) {
   const reduced = useReducedMotion() === true;
   const finePointer = useFinePointer();
   const [expanded, setExpanded] = useState(false);
+  const root = useRef<HTMLElement>(null);
+  const toastRefs = useRef(new Map<string, HTMLElement>());
+  const pendingDismiss = useRef<{ id: string; index: number; restoreFocus: boolean } | null>(null);
   const previousIds = useRef<Set<string> | null>(null);
   const [announcement, setAnnouncement] = useState<{ id: string; text: string } | null>(null);
   const visible = useMemo(
@@ -86,11 +93,38 @@ export function ToastStack({
     previousIds.current = new Set(items.map((item) => item.id));
   }, [items]);
 
-  const dismissFromKeyboard = (event: KeyboardEvent<HTMLElement>, id: string) => {
+  const visibleOrder = visible.map((item) => item.id).join("\u0000");
+
+  useLayoutEffect(() => {
+    const pending = pendingDismiss.current;
+    if (!pending || items.some((item) => item.id === pending.id)) return;
+    pendingDismiss.current = null;
+    if (!pending.restoreFocus) return;
+
+    if (visible.length === 0) {
+      (returnFocusRef?.current ?? root.current)?.focus({ preventScroll: true });
+      return;
+    }
+    const nextIndex = Math.min(pending.index, visible.length - 1);
+    toastRefs.current.get(visible[nextIndex].id)?.focus({ preventScroll: true });
+  }, [items, returnFocusRef, visible, visibleOrder]);
+
+  const requestDismiss = (id: string, index: number, reason: ToastDismissReason) => {
+    const toast = toastRefs.current.get(id);
+    pendingDismiss.current = {
+      id,
+      index,
+      restoreFocus: Boolean(toast?.contains(document.activeElement)),
+    };
+    onDismiss(id, reason);
+  };
+
+  const dismissFromKeyboard = (event: KeyboardEvent<HTMLElement>, id: string, index: number) => {
     const directDelete = event.target === event.currentTarget && (event.key === "Delete" || event.key === "Backspace");
-    if (event.key !== "Escape" && !directDelete) return;
+    const directEnter = event.target === event.currentTarget && event.key === "Enter";
+    if (event.key !== "Escape" && !directDelete && !directEnter) return;
     event.preventDefault();
-    onDismiss(id, "keyboard");
+    requestDismiss(id, index, "keyboard");
   };
 
   const collapsedHeight = visible.length === 0 ? 0 : 62 + (visible.length - 1) * 12;
@@ -98,8 +132,11 @@ export function ToastStack({
 
   return (
     <section
+      ref={root}
+      data-toast-stack
+      tabIndex={-1}
       aria-label={label}
-      className={`w-full max-w-[390px] ${className}`}
+      className={`w-full max-w-[390px] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 ${className}`}
       onFocusCapture={() => setExpanded(true)}
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
@@ -152,15 +189,20 @@ export function ToastStack({
               >
                 <motion.article
                   tabIndex={0}
+                  ref={(node) => {
+                    if (node) toastRefs.current.set(item.id, node);
+                    else toastRefs.current.delete(item.id);
+                  }}
+                  aria-label={item.title}
                   drag={reduced ? false : "x"}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.2}
                   onDragEnd={(_, info) => {
                     if (Math.abs(info.offset.x) > 88 || Math.abs(info.velocity.x) > 520) {
-                      onDismiss(item.id, "swipe");
+                      requestDismiss(item.id, index, "swipe");
                     }
                   }}
-                  onKeyDown={(event) => dismissFromKeyboard(event, item.id)}
+                  onKeyDown={(event) => dismissFromKeyboard(event, item.id, index)}
                   style={{ touchAction: "pan-y" }}
                   className="flex min-h-[58px] items-center gap-3 rounded-[12px] border border-stone-200 bg-white px-3 py-1.5 shadow-[0_6px_12px_-10px_rgba(28,25,23,0.55)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
                 >
@@ -182,7 +224,13 @@ export function ToastStack({
                   <button
                     type="button"
                     aria-label={`Dismiss ${item.title}`}
-                    onClick={() => onDismiss(item.id, "button")}
+                    onKeyDown={(event) => {
+                      if (!["Enter", "Escape", "Delete", "Backspace"].includes(event.key)) return;
+                      event.preventDefault();
+                      event.stopPropagation();
+                      requestDismiss(item.id, index, "keyboard");
+                    }}
+                    onClick={() => requestDismiss(item.id, index, "button")}
                     className="grid size-11 shrink-0 place-items-center rounded-[9px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
                   >
                     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">

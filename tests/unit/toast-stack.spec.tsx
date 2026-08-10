@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { createRef, useState, type RefObject } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ToastStack, type ToastItem } from "@/registry/components/toast-stack";
 
@@ -20,6 +21,28 @@ const newest: ToastItem = {
   title: "Build finished",
   description: "Preview is ready",
 };
+
+const last: ToastItem = {
+  id: "last",
+  title: "Last notification",
+};
+
+function ControlledStack({
+  initial = [newest, existing, last],
+  returnFocusRef,
+}: {
+  initial?: ToastItem[];
+  returnFocusRef?: RefObject<HTMLElement | null>;
+}) {
+  const [items, setItems] = useState(initial);
+  return (
+    <ToastStack
+      items={items}
+      returnFocusRef={returnFocusRef}
+      onDismiss={(id) => setItems((current) => current.filter((item) => item.id !== id))}
+    />
+  );
+}
 
 beforeEach(() => {
   vi.stubGlobal("matchMedia", vi.fn(() => ({
@@ -59,5 +82,55 @@ describe("ToastStack announcements", () => {
 
     rerender(<ToastStack items={[newest]} onDismiss={vi.fn()} />);
     expect(screen.getByRole("status")).toHaveTextContent("Build finished. Preview is ready");
+  });
+});
+
+describe("ToastStack dismissal focus", () => {
+  it("focuses the toast that takes the dismissed toast's index", () => {
+    render(<ControlledStack />);
+    const close = screen.getByRole("button", { name: "Dismiss Existing notification" });
+    close.focus();
+
+    fireEvent.keyDown(close, { key: "Enter" });
+
+    expect(screen.getByRole("article", { name: last.title })).toHaveFocus();
+  });
+
+  it("focuses the previous toast after deleting the last item", () => {
+    render(<ControlledStack />);
+    const toast = screen.getByRole("article", { name: last.title });
+    toast.focus();
+
+    fireEvent.keyDown(toast, { key: "Delete" });
+
+    expect(screen.getByRole("article", { name: existing.title })).toHaveFocus();
+  });
+
+  it("returns focus to the supplied trigger after dismissing its only toast", () => {
+    const trigger = createRef<HTMLButtonElement>();
+    render(
+      <>
+        <button ref={trigger} type="button">Open notifications</button>
+        <ControlledStack initial={[existing]} returnFocusRef={trigger} />
+      </>,
+    );
+    const toast = screen.getByRole("article", { name: existing.title });
+    toast.focus();
+
+    fireEvent.keyDown(toast, { key: "Escape" });
+
+    expect(screen.getByRole("button", { name: "Open notifications" })).toHaveFocus();
+  });
+
+  it("does not steal focus when items are removed externally", () => {
+    const outside = document.createElement("button");
+    document.body.appendChild(outside);
+    outside.focus();
+    const { rerender } = render(<ToastStack items={[existing]} onDismiss={vi.fn()} />);
+
+    rerender(<ToastStack items={[]} onDismiss={vi.fn()} />);
+
+    expect(outside).toHaveFocus();
+    outside.remove();
   });
 });

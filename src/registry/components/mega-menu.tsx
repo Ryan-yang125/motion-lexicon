@@ -66,16 +66,11 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
     }, 120);
   };
   const openSection = (id: string, moveFocusToPanel = false) => {
-    cancelClose();
     const nextIndex = sections.findIndex((section) => section.id === id);
     if (nextIndex < 0) return;
     const section = sections[nextIndex];
-    if (section.links.length === 0) {
-      pendingPanelFocus.current = null;
-      setFocusedLinkId(null);
-      setActive(null);
-      return;
-    }
+    if (section.links.length === 0) return;
+    cancelClose();
     lastActiveIndex.current = nextIndex;
     lastFocusedLinkIndex.current = 0;
     pendingPanelFocus.current = moveFocusToPanel
@@ -88,7 +83,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   const choose = (next: number) => {
     const normalized = (next + sections.length) % sections.length;
     const section = sections[normalized];
-    if (!section) return;
+    if (!section || section.links.length === 0) return;
     openSection(section.id);
     buttons.current.get(section.id)?.focus({ preventScroll: true });
   };
@@ -164,17 +159,17 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   }, [currentId, currentLinkOrder, focusCommit]);
 
   const keyDown = (event: React.KeyboardEvent, at: number) => {
+    const section = sections[at];
+    if (!section || section.links.length === 0) return;
     if (event.key === "ArrowRight") { event.preventDefault(); choose(at + 1); }
     else if (event.key === "ArrowLeft") { event.preventDefault(); choose(at - 1); }
     else if (event.key === "ArrowDown") {
       event.preventDefault();
-      const section = sections[at];
-      if (section) openSection(section.id, true);
+      openSection(section.id, true);
     } else if (event.key === "Escape") {
       event.preventDefault();
       close();
-      const section = sections[at];
-      if (section) buttons.current.get(section.id)?.focus({ preventScroll: true });
+      buttons.current.get(section.id)?.focus({ preventScroll: true });
     }
   };
 
@@ -207,6 +202,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
       <nav aria-label={label} className="flex min-h-12 items-center gap-1 rounded-[13px] border border-stone-200 bg-white p-1 shadow-[0_12px_30px_-24px_rgba(28,25,23,.68)] dark:border-white/15 dark:bg-[#22221F]">
         {sections.map((section, at) => {
           const isOpen = section.id === panelCurrent?.id;
+          const unavailable = section.links.length === 0;
           return (
             <button
               key={section.id}
@@ -217,10 +213,18 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
               type="button"
               aria-expanded={isOpen}
               aria-controls={isOpen ? `${uid}-panel` : undefined}
-              aria-disabled={section.links.length === 0}
-              onPointerEnter={(event) => { if (event.pointerType !== "touch") openSection(section.id); }}
-              onClick={() => { if (isOpen) close(); else openSection(section.id); }}
+              aria-disabled={unavailable}
+              onPointerDown={(event) => { if (unavailable) event.preventDefault(); }}
+              onPointerEnter={(event) => {
+                if (!unavailable && event.pointerType !== "touch") openSection(section.id);
+              }}
+              onClick={() => {
+                if (unavailable) return;
+                if (isOpen) close();
+                else openSection(section.id);
+              }}
               onFocus={() => {
+                if (unavailable) return;
                 focusedOwner.current = section.id;
                 focusInPanel.current = false;
               }}
