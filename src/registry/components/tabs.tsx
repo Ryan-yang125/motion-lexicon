@@ -250,12 +250,14 @@ export function Tabs({
 
         {items.map((item, index) => {
           const selected = item.value === tabs.value;
+          const tabProps = tabs.getTabProps(item, index);
           return (
             <button
               key={item.value}
-              {...tabs.getTabProps(item, index)}
+              {...tabProps}
               ref={(node) => {
                 tabRefs.current[index] = node;
+                tabProps.ref(node);
               }}
               className={`relative flex h-8 shrink-0 items-center justify-center rounded-t-[8px] px-3.5 text-[12.5px] outline-none transition-colors duration-150 after:pointer-events-none after:absolute after:inset-0 after:rounded-t-[8px] after:content-[''] focus-visible:after:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:after:shadow-[inset_0_0_0_1px_#93B0FF] ${
                 item.disabled

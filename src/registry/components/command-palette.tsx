@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "motion/react";
 
@@ -10,6 +10,9 @@ const BOUNDARY = /[\s\-_/.:]/;
 const ROW = 36;
 const GAP = 2;
 const PAD = 5;
+
+const useIsoLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export type CommandItem = {
   id: string;
@@ -350,31 +353,71 @@ export function CommandPalette({
   );
 
   if (!overlaid) return surface;
-  return <PaletteLayer open={open} onDismiss={onDismiss}>{surface}</PaletteLayer>;
+  return <PaletteLayer open={open} onDismiss={onDismiss} label={label}>{surface}</PaletteLayer>;
 }
 
 function PaletteLayer({
   open,
   onDismiss,
+  label,
   children,
 }: {
   open: boolean;
   onDismiss?: () => void;
+  label: string;
   children: React.ReactNode;
 }) {
   const [host, setHost] = useState<HTMLElement | null>(null);
+  const layerRef = useRef<HTMLDivElement | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
   const leave = useRef(onDismiss);
   leave.current = onDismiss;
 
   useEffect(() => setHost(document.body), []);
 
+  useIsoLayoutEffect(() => {
+    if (!open) return;
+    returnFocus.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    return () => {
+      const node = returnFocus.current;
+      requestAnimationFrame(() => node?.focus({ preventScroll: true }));
+      returnFocus.current = null;
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      event.stopPropagation();
-      leave.current?.();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        leave.current?.();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(
+        layerRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((node) => !node.hasAttribute("aria-hidden"));
+      if (focusable.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !layerRef.current?.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !layerRef.current?.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKeyDown, true);
     return () => document.removeEventListener("keydown", onKeyDown, true);
@@ -399,6 +442,10 @@ function PaletteLayer({
   return createPortal(
     open ? (
         <div
+          ref={layerRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={label}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onPointerDown={(event) => {
             if (event.target !== event.currentTarget) return;
