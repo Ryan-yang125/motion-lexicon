@@ -31,7 +31,7 @@ test("component detail keeps preview, source, install, and related primitives to
   await expectNoHorizontalOverflow(page);
 });
 
-test("primitive directory and workbench use the direct V3 routes", async ({ page }) => {
+test("primitive directory and workbench use the direct V4 routes", async ({ page }) => {
   await page.goto("/zh/primitives/");
   await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
   await expect(page.locator(".primitive-card")).toHaveCount(canonicalMotionCatalog.length);

@@ -10,7 +10,7 @@ import "./library.css";
 import "./vocabulary.css";
 import "./apple-redesign.css";
 import "./interior-theme.css";
-import "./v3.css";
+import "./v4.css";
 
 const helmetModule = helmetAsync as typeof helmetAsync & Record<string, typeof helmetAsync | undefined>;
 const { HelmetProvider } = (helmetModule["default"] ?? helmetAsync) as typeof helmetAsync;

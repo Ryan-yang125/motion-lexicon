@@ -1,4 +1,4 @@
-# Motion Lexicon V3.1 Product Strategy
+# Motion Lexicon V4.0 Product Strategy
 
 ## Product promise
 
@@ -51,6 +51,21 @@ The interaction language follows Interior's material and motion discipline:
 warm bezel, raised panel, recessed well, compact travel, stable resting states,
 and precise feedback.
 
+## Shared architecture quality bar
+
+Components and Primitives use the same delivery architecture:
+
+- one typed React + Motion implementation per public item;
+- one realistic, interactive product demo that imports that implementation;
+- one lazy preview entry used by directory cards and detail workbenches;
+- one source view and one shadcn Registry response generated from the implementation file;
+- one parameter contract connected to the demo's real props;
+- one reduced-motion result, keyboard path, and interruption policy.
+
+Primitives keep a narrower behavioral scope. Their implementation, product
+scene, material language, code quality, and delivery chain meet the same bar as
+Components.
+
 ## Content loop
 
 ```text
@@ -74,17 +89,19 @@ No account, server, API key, or paid tier is required.
 ## Discoverability
 
 The build publishes 172 localized canonical pages, reciprocal hreflang,
-structured data, Open Graph images, a sitemap, `llms.txt`, a V3 JSON catalog,
+structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V3.1 acceptance
+## V4.0 acceptance
 
-V3 is complete when:
+V4 is complete when:
 
 - Components and Primitives are the only primary product directories.
 - All 28 component previews use the same source delivered by code view and registry JSON.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
 - All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.
+- Every executable primitive owns an independent implementation and an independent real-product demo.
+- Primitive source views and Registry files read the implementation file directly; generated source strings are absent.
 - All 9 parameter tools drive the same typed props used by their live previews.
 - Global search, desktop sidebar, and mobile navigation cover both collections.
 - The Agent Skill uses the same component and primitive language.

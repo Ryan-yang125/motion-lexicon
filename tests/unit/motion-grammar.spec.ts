@@ -38,7 +38,7 @@ describe("Motion Grammar", () => {
       "review",
       "contribute"
     ]);
-    expect(motionGrammarDataPath).toBe("/data/v3/motion-grammar.json");
+    expect(motionGrammarDataPath).toBe("/data/v4/motion-grammar.json");
   });
 
   it("grounds the public blueprint in existing motion content", () => {

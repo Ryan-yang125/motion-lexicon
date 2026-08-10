@@ -8,7 +8,7 @@ import { catalogRecipes } from "../data/recipes";
 import { pathFor, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { createRecipeSearchIndex, getDefaultParamValues } from "../lib/motion-engine";
-import { PrimitiveRegistryPreview } from "../registry/primitive-preview";
+import { PrimitivePreview } from "../registry/primitive-preview-map";
 
 function validCategory(id: string | null) {
   return categories.some((category) => category.id === id) ? id ?? undefined : undefined;
@@ -84,7 +84,7 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
             {entries.map((recipe) => (
               <Link className="primitive-card" key={recipe.id} to="/$locale/primitives/$primitiveId/" params={{ locale, primitiveId: recipe.id }}>
                 <div className="primitive-card-stage">
-                  <PrimitiveRegistryPreview
+                  <PrimitivePreview
                     locale={locale}
                     recipe={recipe}
                     values={getDefaultParamValues(recipe)}

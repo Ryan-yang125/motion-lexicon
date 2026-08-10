@@ -13,7 +13,7 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 assert(siteUrl === "https://motion-lexicon.pages.dev", "Production site URL is inconsistent");
-assert(release.version === "3.1.0", `Expected release 3.1.0, found ${release.version}`);
+assert(release.version === "4.0.0", `Expected release 4.0.0, found ${release.version}`);
 assert(registryComponents.length === 28, `Expected 28 registry components, found ${registryComponents.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 motion primitives, found ${canonicalMotionCatalog.length}`);
 assert(installablePrimitiveEntries.length === 40, `Expected 40 installable primitives, found ${installablePrimitiveEntries.length}`);
@@ -32,6 +32,8 @@ for (const component of registryComponents) {
 }
 
 for (const primitive of installablePrimitiveEntries) {
+  assert(existsSync(`src/registry/primitives/${primitive.id}.tsx`), `${primitive.id} primitive source is missing`);
+  assert(existsSync(`src/registry/primitive-demos/${primitive.id}-demo.tsx`), `${primitive.id} primitive demo is missing`);
   assert(existsSync(`public/r/${primitive.registryId}.json`), `${primitive.registryId} registry item is missing`);
 }
 

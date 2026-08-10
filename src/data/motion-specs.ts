@@ -207,10 +207,7 @@ function parametersFor(canonicalId: string): MotionParam[] {
           ["continuity", "连续过渡", "Continuity transition"],
           ["shared", "共享元素", "Shared element"],
           ["layout", "布局变化", "Layout change"]
-        ], "选择前后状态保持连续的方式。", "Selects how continuity is preserved between states."),
-        distance(48),
-        scale(86),
-        ease()
+        ], "选择前后状态保持连续的方式。", "Selects how continuity is preserved between states.")
       ];
     case "accordion-collapse":
       return [duration(220), range("height", "内容高度", "Content height", 140, 60, 320, 10, "px"), ease()];
@@ -229,11 +226,11 @@ function parametersFor(canonicalId: string): MotionParam[] {
     case "press-tap-feedback":
       return [duration(120), activeScale(96, "按压缩放", "Pressed scale"), ease("snap")];
     case "hold-to-confirm":
-      return [deliberateDuration(1200, 2400), activeScale(98, "长按缩放", "Hold scale"), ease("linear")];
+      return [deliberateDuration(1200, 2400), activeScale(98, "长按缩放", "Hold scale")];
     case "drag-to-reorder":
-      return [duration(180), distance(48), activeScale(103, "拾取缩放", "Pickup scale"), ease("snap")];
+      return [distance(48), activeScale(103, "拾取缩放", "Pickup scale")];
     case "swipe-to-dismiss":
-      return [duration(240), distance(96, 240), range("resistance", "阻尼", "Resistance", 65, 0, 90, 5, "%"), ease("snap")];
+      return [distance(96, 240), range("resistance", "阻尼", "Resistance", 65, 0, 90, 5, "%")];
     case "shake-wiggle":
       return [duration(240), distance(10, 30), range("cycles", "摆动次数", "Cycles", 3, 1, 6, 1, "")];
     case "ripple":
@@ -265,7 +262,7 @@ function parametersFor(canonicalId: string): MotionParam[] {
     case "typewriter":
       return [explanatoryDuration(1200, 4000, 600), range("characters", "字符数", "Characters", 18, 6, 36, 1, ""), toggle("caret", "显示光标", "Show caret", true, "显示闪烁输入光标。", "Shows a blinking text caret.")];
     case "compositing":
-      return [explanatoryDuration(520, 1200), distance(80, 180), segmented("property", "对比属性", "Compared property", "transform", [["transform", "Transform", "Transform"], ["left", "Left", "Left"], ["opacity", "Opacity", "Opacity"]]), ease("linear")];
+      return [explanatoryDuration(520, 1200), distance(80, 180), segmented("property", "对比属性", "Compared property", "transform", [["transform", "Transform", "Transform"], ["opacity", "Opacity", "Opacity"]]), ease("linear")];
     case "anticipation":
       return [explanatoryDuration(520, 1200), distance(32, 80), range("anticipation", "预备幅度", "Anticipation", 18, 0, 40, 2, "%"), range("followThrough", "跟随幅度", "Follow-through", 12, 0, 30, 2, "%"), ease("snap")];
     case "frame-rate":
@@ -391,8 +388,8 @@ export function enrichMotionEntry(entry: MotionEntry): MotionRecipe {
         en: `${summary.en} Review guidance and reduced-motion notes included.`
       }
       : {
-        zh: `${summary.zh} 可调节相关参数，复制同源的提示词、HTML、CSS 与交互 JS，并包含减弱动效方案。`,
-        en: `${summary.en} Preview, tune, and copy HTML, CSS, and JS.`
+        zh: `${summary.zh} 可调节真实 Props，复制同源 React + Motion 实现或通过 Registry 安装，并包含减弱动效方案。`,
+        en: `${summary.en} Tune real props, copy the React + Motion source, or install it from the registry.`
       };
   return {
     ...entry,

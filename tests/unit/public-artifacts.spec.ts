@@ -13,17 +13,17 @@ async function parse(relativePath: string) {
   return JSON.parse(await readFile(path.join(publicDir, relativePath), "utf8")) as Record<string, unknown>;
 }
 
-describe("V3 public machine-readable artifacts", () => {
+describe("V4 public machine-readable artifacts", () => {
   it("publishes one catalog for components and primitives", async () => {
-    const catalog = await parse("data/v3/catalog.json") as unknown as {
+    const catalog = await parse("data/v4/catalog.json") as unknown as {
       schemaVersion: number;
       release: string;
       counts: { components: number; primitives: number };
       components: Array<{ id: string; urls: { registry: string } }>;
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
-    expect(catalog.schemaVersion).toBe(3);
-    expect(catalog.release).toBe("3.1.0");
+    expect(catalog.schemaVersion).toBe(4);
+    expect(catalog.release).toBe("4.0.0");
     expect(catalog.counts).toEqual({ components: 28, primitives: 44 });
     expect(catalog.components).toHaveLength(registryComponents.length);
     expect(catalog.primitives).toHaveLength(catalogRecipes.length);
@@ -33,15 +33,15 @@ describe("V3 public machine-readable artifacts", () => {
     expect(catalog.primitives.filter((item) => item.urls.registry).every((item) => item.urls.registry?.endsWith(`/r/primitive-${item.id}.json`))).toBe(true);
   });
 
-  it("publishes the V3 Motion Grammar and the Skill schema", async () => {
-    const grammar = await parse("data/v3/motion-grammar.json") as unknown as {
+  it("publishes the V4 Motion Grammar and the Skill schema", async () => {
+    const grammar = await parse("data/v4/motion-grammar.json") as unknown as {
       version: string;
       collections: { components: { count: number }; primitives: { count: number } };
       urls: { zh: string; en: string };
     };
-    const publicSchema = await parse("data/v3/motion-blueprint.schema.json");
+    const publicSchema = await parse("data/v4/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("3.1.0");
+    expect(grammar.version).toBe("4.0.0");
     expect(grammar.collections.components.count).toBe(28);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({
@@ -49,15 +49,15 @@ describe("V3 public machine-readable artifacts", () => {
       en: "https://motion-lexicon.pages.dev/en/skill/"
     });
     expect(publicSchema).toEqual(skillSchema);
-    expect(publicSchema.$id).toBe("https://motion-lexicon.pages.dev/data/v3/motion-blueprint.schema.json");
+    expect(publicSchema.$id).toBe("https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json");
   });
 
   it("publishes current agent discovery files", async () => {
     const llms = await readFile(path.join(publicDir, "llms.txt"), "utf8");
     expect(llms).toContain("/en/components/");
     expect(llms).toContain("/en/primitives/");
-    expect(llms).toContain("/data/v3/catalog.json");
-    expect(llms).toContain("/data/v3/motion-grammar.json");
+    expect(llms).toContain("/data/v4/catalog.json");
+    expect(llms).toContain("/data/v4/motion-grammar.json");
     expect(llms).not.toMatch(/\/(?:packs|catalog|finder|director)\//);
   });
 });

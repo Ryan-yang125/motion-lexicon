@@ -20,7 +20,7 @@ const ASSETS: Asset[] = [
   { id: "a5", name: "changelog", kind: "doc", size: "22 KB" },
   { id: "a6", name: "teaser-cut", kind: "clip", size: "31 MB" },
   { id: "a7", name: "grid-study", kind: "image", size: "1.1 MB" },
-  { id: "a8", name: "contract-v3", kind: "doc", size: "96 KB" },
+  { id: "a8", name: "contract-v4", kind: "doc", size: "96 KB" },
   { id: "a9", name: "still-frame", kind: "image", size: "3.0 MB" },
 ];
 

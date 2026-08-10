@@ -3,12 +3,10 @@ import { describe, expect, it } from "vitest";
 import { registryComponents } from "../../src/data/component-registry";
 import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
 import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
-import { getDefaultParamValues } from "../../src/lib/motion-engine";
-import { buildPrimitiveSource } from "../../src/registry/primitive-source";
 import { getStaticPaths, pathFor, sitemapPaths, staticRedirects } from "../../src/data/site";
 import { locales } from "../../src/data/types";
 
-describe("V3 component registry architecture", () => {
+describe("V4 component registry architecture", () => {
   it("publishes Components and Primitives as the two primary directories", () => {
     expect(registryComponents).toHaveLength(28);
     expect(canonicalMotionCatalog).toHaveLength(44);
@@ -34,11 +32,19 @@ describe("V3 component registry architecture", () => {
       expect(existsSync(`public/r/${component.id}.json`)).toBe(true);
     }
     for (const primitive of installablePrimitiveEntries) {
+      expect(existsSync(`src/registry/primitives/${primitive.id}.tsx`)).toBe(true);
+      expect(existsSync(`src/registry/primitive-demos/${primitive.id}-demo.tsx`)).toBe(true);
       expect(existsSync(`public/r/${primitive.registryId}.json`)).toBe(true);
-      const source = buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+      const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
+      const registry = JSON.parse(readFileSync(`public/r/${primitive.registryId}.json`, "utf8")) as {
+        files: Array<{ content: string }>;
+      };
       expect(source).toContain(`export function ${primitive.exportName}`);
       expect(source).toContain('from "motion/react"');
       expect(source).toContain("useReducedMotion");
+      expect(source).not.toMatch(/from ["'](?:@\/|\.\.?\/)/);
+      expect(registry.files).toHaveLength(1);
+      expect(registry.files[0]?.content).toBe(source);
     }
   });
 

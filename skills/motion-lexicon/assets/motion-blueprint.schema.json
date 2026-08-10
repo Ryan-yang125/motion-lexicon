@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://motion-lexicon.pages.dev/data/v3/motion-blueprint.schema.json",
+  "$id": "https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json",
   "title": "Motion Lexicon Motion Blueprint",
   "description": "A portable contract for a product-motion decision, its state graph, accessible behavior, and delivery plan.",
   "type": "object",

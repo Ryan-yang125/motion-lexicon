@@ -1,8 +1,6 @@
 import { readFileSync } from "node:fs";
 import { registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
-import { getDefaultParamValues } from "../src/lib/motion-engine";
-import { buildPrimitiveSource } from "../src/registry/primitive-source";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -14,7 +12,7 @@ const stylePaths = [
   "src/vocabulary.css",
   "src/apple-redesign.css",
   "src/interior-theme.css",
-  "src/v3.css"
+  "src/v4.css"
 ];
 const css = stylePaths.map((file) => readFileSync(file, "utf8")).join("\n");
 
@@ -36,7 +34,7 @@ for (const component of registryComponents) {
   assert(!source.includes('outline: "none"'), `${component.id} removes focus without a replacement`);
 }
 for (const primitive of installablePrimitiveEntries) {
-  const source = buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+  const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
   assert(source.includes("useReducedMotion"), `${primitive.id} needs an equivalent reduced-motion result`);
   assert(!source.includes('outline: "none"'), `${primitive.id} removes focus without a replacement`);
 }

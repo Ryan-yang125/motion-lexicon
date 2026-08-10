@@ -2,8 +2,6 @@ import { readFileSync, readdirSync } from "node:fs";
 import { registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { catalogRecipes } from "../src/data/recipes";
-import { getDefaultParamValues } from "../src/lib/motion-engine";
-import { buildPrimitiveSource } from "../src/registry/primitive-source";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -39,7 +37,7 @@ function layoutPropertiesInKeyframes(css: string) {
     .map((block) => block.header);
 }
 
-const stylePaths = ["src/styles.css", "src/library.css", "src/interior-theme.css", "src/v3.css"];
+const stylePaths = ["src/styles.css", "src/library.css", "src/interior-theme.css", "src/v4.css"];
 for (const file of stylePaths) {
   const css = readFileSync(file, "utf8");
   assert(!/transition\s*:\s*all\b/.test(css), `${file} uses transition: all`);
@@ -59,7 +57,7 @@ for (const file of registryFiles) {
 }
 
 for (const primitive of installablePrimitiveEntries) {
-  const source = buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+  const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
   assert(source.includes(`export function ${primitive.exportName}`), `${primitive.id} export is missing`);
   assert(source.includes('from "motion/react"'), `${primitive.id} must use Motion`);
   assert(source.includes("useReducedMotion"), `${primitive.id} needs a reduced-motion branch`);
@@ -70,18 +68,18 @@ for (const primitive of installablePrimitiveEntries) {
 const primitiveSource = (id: string) => {
   const primitive = installablePrimitiveEntries.find((entry) => entry.id === id);
   assert(primitive, `Missing ${id} registry primitive`);
-  return buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+  return readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
 };
 assert(primitiveSource("hold-to-confirm").includes("onConfirm: () => void"), "Hold-to-confirm needs a completion callback");
-assert(primitiveSource("hold-to-confirm").includes("onPointerCancel={cancelHold}"), "Hold-to-confirm must be cancellable");
-assert(primitiveSource("swipe-to-dismiss").includes("onDragEnd={finishDrag}"), "Swipe-to-dismiss needs threshold handling");
+assert(primitiveSource("hold-to-confirm").includes("onPointerCancel={cancel}"), "Hold-to-confirm must be cancellable");
+assert(primitiveSource("swipe-to-dismiss").includes("onDragEnd={finish}"), "Swipe-to-dismiss needs threshold handling");
 assert(primitiveSource("scroll-driven-animation").includes("useScroll"), "Scroll-driven animation must read scroll progress");
 assert(primitiveSource("skeleton-shimmer").includes("repeat: reduceMotion ? 0 : Infinity"), "Skeleton shimmer must loop while loading");
 assert(primitiveSource("drag-to-reorder").includes("<Reorder.Group"), "Drag-to-reorder needs a reorder state contract");
-assert(primitiveSource("ripple").includes("onPointerDown={addRipple}"), "Ripple must originate at the pointer");
+assert(primitiveSource("ripple").includes("onPointerDown={(event)"), "Ripple must originate at the pointer");
 assert(primitiveSource("parallax").includes("useScroll"), "Parallax must read scroll progress");
 assert(primitiveSource("number-ticker").includes("key={value}"), "Number ticker must react to value changes");
-assert(primitiveSource("before-after-slider").includes('role="slider"'), "Before-after needs an operable divider");
+assert(primitiveSource("before-after-slider").includes('type="range"'), "Before-after needs an operable divider");
 assert(primitiveSource("typewriter").includes("window.setInterval"), "Typewriter must reveal discrete characters");
 assert(!primitiveSource("marquee").includes('<motion.div aria-hidden="true"'), "Looping content must remain available to assistive technology");
 
