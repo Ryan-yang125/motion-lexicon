@@ -304,43 +304,41 @@ export function DitherRevealCard({
       ? { css: paletteInk, channels: DEFAULT_COLORS.ink.channels }
       : DEFAULT_COLORS.ink,
   }));
-
-  useEffect(() => {
-    setColors({
-      front: resolveCssColor(paletteFront, DEFAULT_COLORS.front, rootRef.current),
-      back: resolveCssColor(paletteBack, DEFAULT_COLORS.back, rootRef.current),
-      ink: resolveCssColor(paletteInk, DEFAULT_COLORS.ink, rootRef.current),
-    });
-  }, [paletteBack, paletteFront, paletteInk]);
+  const colorsRef = useRef(colors);
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
 
   const render = useCallback((time = performance.now()) => {
     const state = stateRef.current;
     if (!state || !visibleRef.current) return;
     const { gl } = state;
+    const currentColors = colorsRef.current;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.useProgram(state.program);
     gl.uniform2f(state.resolution, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.uniform1f(state.progress, progressRef.current);
     gl.uniform1f(state.time, time);
-    gl.uniform4fv(state.front, colors.front.channels);
-    gl.uniform4fv(state.back, colors.back.channels);
-    gl.uniform4fv(state.ink, colors.ink.channels);
+    gl.uniform4fv(state.front, currentColors.front.channels);
+    gl.uniform4fv(state.back, currentColors.back.channels);
+    gl.uniform4fv(state.ink, currentColors.ink.channels);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }, [colors]);
+  }, []);
 
   const tick = useCallback(
     (time: number) => {
       frameRef.current = null;
       const target = targetRef.current;
       const current = progressRef.current;
-      const next = reduced ? target : current + (target - current) * 0.18;
+      const next = reducedRef.current
+        ? target
+        : current + (target - current) * 0.18;
       progressRef.current = Math.abs(target - next) < 0.002 ? target : next;
       render(time);
       if (progressRef.current !== target && visibleRef.current) {
         frameRef.current = requestAnimationFrame(tick);
       }
     },
-    [reduced, render],
+    [render],
   );
 
   const requestRender = useCallback(() => {
@@ -348,6 +346,17 @@ export function DitherRevealCard({
       frameRef.current = requestAnimationFrame(tick);
     }
   }, [tick]);
+
+  useEffect(() => {
+    const nextColors = {
+      front: resolveCssColor(paletteFront, DEFAULT_COLORS.front, rootRef.current),
+      back: resolveCssColor(paletteBack, DEFAULT_COLORS.back, rootRef.current),
+      ink: resolveCssColor(paletteInk, DEFAULT_COLORS.ink, rootRef.current),
+    };
+    colorsRef.current = nextColors;
+    setColors(nextColors);
+    requestRender();
+  }, [paletteBack, paletteFront, paletteInk, requestRender]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

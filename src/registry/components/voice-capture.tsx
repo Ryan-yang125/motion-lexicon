@@ -41,6 +41,8 @@ export function VoiceCapture({
 }: VoiceCaptureProps) {
   const [state, setState] = useState<VoiceCaptureState>("idle");
   const [seconds, setSeconds] = useState(0);
+  const startedAt = useRef<number | null>(null);
+  const recordedMs = useRef(0);
   const root = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(true);
   const reduced = useReducedMotion() === true;
@@ -69,13 +71,50 @@ export function VoiceCapture({
 
   useEffect(() => {
     if (state !== "recording") return;
-    const timer = window.setInterval(() => setSeconds((value) => value + 1), 1000);
+    const update = () => {
+      const runningMs = startedAt.current === null ? 0 : Math.max(0, Date.now() - startedAt.current);
+      setSeconds(Math.floor((recordedMs.current + runningMs) / 1000));
+    };
+    update();
+    const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
   }, [state]);
 
   const setPhase = (next: VoiceCaptureState) => {
     setState(next);
     onStateChange?.(next);
+  };
+
+  const resetDuration = () => {
+    startedAt.current = null;
+    recordedMs.current = 0;
+    setSeconds(0);
+  };
+
+  const start = () => {
+    recordedMs.current = 0;
+    startedAt.current = Date.now();
+    setSeconds(0);
+    setPhase("recording");
+  };
+
+  const pause = () => {
+    if (startedAt.current !== null) {
+      recordedMs.current += Math.max(0, Date.now() - startedAt.current);
+      startedAt.current = null;
+    }
+    setSeconds(Math.floor(recordedMs.current / 1000));
+    setPhase("paused");
+  };
+
+  const resume = () => {
+    startedAt.current = Date.now();
+    setPhase("recording");
+  };
+
+  const durationSeconds = () => {
+    const runningMs = startedAt.current === null ? 0 : Math.max(0, Date.now() - startedAt.current);
+    return Math.floor((recordedMs.current + runningMs) / 1000);
   };
 
   const time = useMemo(() => `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`, [seconds]);
@@ -86,7 +125,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={recordLabel}
-        onClick={() => { setSeconds(0); setPhase("recording"); }}
+        onClick={start}
         className={`inline-flex min-h-11 items-center gap-2 rounded-full border border-stone-200 bg-white px-4 text-[13px] font-medium text-stone-700 shadow-[0_8px_24px_-18px_rgba(28,25,23,.65)] outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200 ${className}`}
       >
         <span className="grid size-7 place-items-center rounded-full bg-[#93664F]/12 text-[#93664F]"><Mic /></span>
@@ -105,7 +144,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={state === "recording" ? pauseLabel : resumeLabel}
-        onClick={() => setPhase(state === "recording" ? "paused" : "recording")}
+        onClick={state === "recording" ? pause : resume}
         className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-stone-900 text-white outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] dark:bg-stone-100 dark:text-stone-950"
       >
         {state === "recording" ? <Pause /> : <Play />}
@@ -136,7 +175,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={deleteLabel}
-        onClick={() => { setPhase("idle"); setSeconds(0); onDelete?.(); }}
+        onClick={() => { setPhase("idle"); resetDuration(); onDelete?.(); }}
         className="grid size-11 shrink-0 place-items-center rounded-[12px] text-[18px] text-stone-400 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-700 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:hover:bg-white/10 dark:hover:text-stone-200"
       >
         <span aria-hidden>×</span>
@@ -144,7 +183,7 @@ export function VoiceCapture({
       <button
         type="button"
         aria-label={sendLabel}
-        onClick={() => { onSend?.(seconds); setPhase("idle"); setSeconds(0); }}
+        onClick={() => { onSend?.(durationSeconds()); setPhase("idle"); resetDuration(); }}
         className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#4568FF] text-white outline-none transition-[background-color,box-shadow] duration-150 hover:bg-[#3658EC] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.25)]"
       >
         <span aria-hidden>↗</span>

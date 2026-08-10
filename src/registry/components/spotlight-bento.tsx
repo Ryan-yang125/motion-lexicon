@@ -111,34 +111,54 @@ export function SpotlightBento({
           }`}
         />
 
-        {items.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onSelect?.(item)}
-            className={`group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-[12px] border border-black/[0.075] bg-white/72 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] outline-none backdrop-blur-[18px] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:border-white/[0.1] dark:bg-[#242421]/78 ${
-              item.wide ? "col-span-2" : ""
-            } ${
-              reduced
-                ? ""
-                : "transition-[transform,border-color,box-shadow] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-black/[0.14] [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_12px_26px_-20px_rgba(41,41,41,0.6)]"
-            }`}
-          >
-            <span className="flex items-start justify-between gap-2">
-              <span className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${toneClass[item.tone ?? "ink"]}`}>
-                {item.icon ?? <span className="size-1.5 rounded-full bg-current" />}
+        {items.map((item) => {
+          const interactive = typeof onSelect === "function";
+          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-[12px] border border-black/[0.075] bg-white/72 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-[18px] dark:border-white/[0.1] dark:bg-[#242421]/78 ${
+            item.wide ? "col-span-2" : ""
+          } ${
+            interactive
+              ? "outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1"
+              : ""
+          } ${
+            interactive && !reduced
+              ? "transition-[transform,border-color,box-shadow] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-black/[0.14] [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_12px_26px_-20px_rgba(41,41,41,0.6)]"
+              : ""
+          }`;
+          const content = (
+            <>
+              <span className="flex items-start justify-between gap-2">
+                <span className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${toneClass[item.tone ?? "ink"]}`}>
+                  {item.icon ?? <span className="size-1.5 rounded-full bg-current" />}
+                </span>
+                {item.meta ? (
+                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-stone-400 dark:text-stone-500">{item.meta}</span>
+                ) : null}
               </span>
-              {item.meta ? (
-                <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-stone-400 dark:text-stone-500">{item.meta}</span>
+              <span className="mt-3 block min-w-0">
+                <strong className="block truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{item.value}</strong>
+                <span className="mt-0.5 block truncate text-[10.5px] text-stone-500 dark:text-stone-400">{item.label}</span>
+              </span>
+              {interactive ? (
+                <span aria-hidden className="absolute inset-x-3 bottom-0 h-px origin-left scale-x-0 bg-[#4568FF] opacity-0 transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-focus-visible:scale-x-100 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100" />
               ) : null}
-            </span>
-            <span className="mt-3 block min-w-0">
-              <strong className="block truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{item.value}</strong>
-              <span className="mt-0.5 block truncate text-[10.5px] text-stone-500 dark:text-stone-400">{item.label}</span>
-            </span>
-            <span aria-hidden className="absolute inset-x-3 bottom-0 h-px origin-left scale-x-0 bg-[#4568FF] opacity-0 transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-focus-visible:scale-x-100 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100" />
-          </button>
-        ))}
+            </>
+          );
+
+          return interactive ? (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onSelect(item)}
+              className={cardClassName}
+            >
+              {content}
+            </button>
+          ) : (
+            <article key={item.id} className={cardClassName}>
+              {content}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

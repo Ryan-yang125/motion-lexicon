@@ -1,10 +1,124 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DitherRevealCard } from "../../src/registry/components/dither-reveal-card";
 
 describe("DitherRevealCard WebGL fallback", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("updates palette uniforms without recreating or losing the WebGL context", async () => {
+    const loseContext = vi.fn();
+    const drawArrays = vi.fn();
+    const uniform4fv = vi.fn();
+    const gl = {
+      VERTEX_SHADER: 35633,
+      FRAGMENT_SHADER: 35632,
+      COMPILE_STATUS: 35713,
+      LINK_STATUS: 35714,
+      ARRAY_BUFFER: 34962,
+      STATIC_DRAW: 35044,
+      FLOAT: 5126,
+      TRIANGLES: 4,
+      drawingBufferWidth: 440,
+      drawingBufferHeight: 250,
+      createShader: vi.fn(() => ({})),
+      shaderSource: vi.fn(),
+      compileShader: vi.fn(),
+      getShaderParameter: vi.fn(() => true),
+      getShaderInfoLog: vi.fn(() => null),
+      deleteShader: vi.fn(),
+      createProgram: vi.fn(() => ({})),
+      createBuffer: vi.fn(() => ({})),
+      attachShader: vi.fn(),
+      linkProgram: vi.fn(),
+      getProgramParameter: vi.fn(() => true),
+      getProgramInfoLog: vi.fn(() => null),
+      deleteBuffer: vi.fn(),
+      deleteProgram: vi.fn(),
+      useProgram: vi.fn(),
+      bindBuffer: vi.fn(),
+      bufferData: vi.fn(),
+      getAttribLocation: vi.fn(() => 0),
+      enableVertexAttribArray: vi.fn(),
+      vertexAttribPointer: vi.fn(),
+      getUniformLocation: vi.fn(() => ({})),
+      viewport: vi.fn(),
+      uniform2f: vi.fn(),
+      uniform1f: vi.fn(),
+      uniform4fv,
+      drawArrays,
+      getExtension: vi.fn((name: string) =>
+        name === "WEBGL_lose_context" ? { loseContext } : null,
+      ),
+    } as unknown as WebGLRenderingContext;
+    const getContext = vi
+      .spyOn(HTMLCanvasElement.prototype, "getContext")
+      .mockImplementation(((type: string) =>
+        type === "webgl" ? gl : null) as typeof HTMLCanvasElement.prototype.getContext);
+    class ResizeObserverStub {
+      observe() {}
+      disconnect() {}
+    }
+    class IntersectionObserverStub {
+      observe() {}
+      disconnect() {}
+    }
+    vi.stubGlobal("ResizeObserver", ResizeObserverStub);
+    vi.stubGlobal("IntersectionObserver", IntersectionObserverStub);
+    const frames: FrameRequestCallback[] = [];
+    vi.stubGlobal(
+      "requestAnimationFrame",
+      vi.fn((callback: FrameRequestCallback) => {
+        frames.push(callback);
+        return frames.length;
+      }),
+    );
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    const flushFrame = (time: number) => {
+      const callback = frames.shift();
+      if (callback) callback(time);
+    };
+
+    const { rerender, unmount } = render(
+      <DitherRevealCard
+        palette={{ front: "rgb(12 34 56)" }}
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    await waitFor(() =>
+      expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1),
+    );
+    act(() => flushFrame(16));
+    const drawsBeforePaletteUpdate = drawArrays.mock.calls.length;
+
+    rerender(
+      <DitherRevealCard
+        palette={{ front: "rgb(120 140 160)" }}
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    await waitFor(() => expect(frames.length).toBeGreaterThan(0));
+    act(() => flushFrame(32));
+
+    expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1);
+    expect(loseContext).not.toHaveBeenCalled();
+    expect(drawArrays.mock.calls.length).toBeGreaterThan(drawsBeforePaletteUpdate);
+    expect(uniform4fv).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.arrayContaining([
+        120 / 255,
+        140 / 255,
+        160 / 255,
+        1,
+      ]),
+    );
+
+    unmount();
+    expect(loseContext).toHaveBeenCalledOnce();
   });
 
   it("uses the custom palette for both static reveal states", async () => {
