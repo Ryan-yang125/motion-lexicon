@@ -21,6 +21,12 @@ const newest: ActivityItem = {
   time: "now",
 };
 
+const second: ActivityItem = {
+  id: "second",
+  title: "Existing review completed",
+  time: "2m",
+};
+
 describe("ActivityFeed announcements", () => {
   it("announces the first item added after an initially empty feed", () => {
     const { rerender } = render(<ActivityFeed items={[]} />);
@@ -40,5 +46,13 @@ describe("ActivityFeed announcements", () => {
 
     rerender(<ActivityFeed items={[newest, first]} />);
     expect(screen.getByRole("status")).toHaveTextContent(newest.title);
+  });
+
+  it("keeps the existing second item silent when the current first item is removed", () => {
+    const { rerender } = render(<ActivityFeed items={[first, second]} />);
+    const status = screen.getByRole("status");
+
+    rerender(<ActivityFeed items={[second]} />);
+    expect(status).toBeEmptyDOMElement();
   });
 });

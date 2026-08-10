@@ -42,22 +42,19 @@ export function ActivityFeed({
   className = "",
 }: ActivityFeedProps) {
   const reduced = useReducedMotion() === true;
-  const first = useRef<string | null>(null);
-  const initialized = useRef(false);
-  const [announcement, setAnnouncement] = useState("");
+  const previousIds = useRef<Set<string> | null>(null);
+  const [announcement, setAnnouncement] = useState<{ id: string; title: string } | null>(null);
   let previousGroup: string | undefined;
   let unreadDividerShown = false;
 
   useEffect(() => {
     const newest = items[0];
-    if (!initialized.current) {
-      initialized.current = true;
-      first.current = newest?.id ?? null;
-      return;
+    if (newest && previousIds.current && !previousIds.current.has(newest.id)) {
+      setAnnouncement({ id: newest.id, title: newest.title });
+    } else if (!newest) {
+      setAnnouncement(null);
     }
-    if (newest && first.current !== newest.id) setAnnouncement(newest.title);
-    else if (!newest) setAnnouncement("");
-    first.current = newest?.id ?? null;
+    previousIds.current = new Set(items.map((item) => item.id));
   }, [items]);
 
   if (items.length === 0) {
@@ -130,7 +127,9 @@ export function ActivityFeed({
           })}
         </AnimatePresence>
       </ol>
-      <span className="sr-only" role="status" aria-live="polite">{announcement}</span>
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {announcement ? <span key={announcement.id}>{announcement.title}</span> : null}
+      </span>
     </section>
   );
 }

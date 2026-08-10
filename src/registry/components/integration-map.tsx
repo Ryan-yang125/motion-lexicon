@@ -98,8 +98,16 @@ export function IntegrationMap({
   const { ref, active } = useAnimationActivity<HTMLDivElement>();
   const [focused, setFocused] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const activeNode = focused ?? selected;
   const nodeById = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
+  const validFocused = focused && nodeById.has(focused) ? focused : null;
+  const validSelected = selected && nodeById.has(selected) ? selected : null;
+  const activeNode = validFocused ?? validSelected;
+
+  useEffect(() => {
+    if (focused && !nodeById.has(focused)) setFocused(null);
+    if (selected && !nodeById.has(selected)) setSelected(null);
+  }, [focused, nodeById, selected]);
+
   const related = useMemo(() => {
     if (!activeNode) return new Set(nodes.map((node) => node.id));
     const ids = new Set([activeNode]);
@@ -177,7 +185,7 @@ export function IntegrationMap({
         {nodes.map((node) => {
           const colors = tone[node.tone ?? "neutral"];
           const visible = related.has(node.id);
-          const pressed = selected === node.id;
+          const pressed = validSelected === node.id;
           return (
             <motion.g
               key={node.id}

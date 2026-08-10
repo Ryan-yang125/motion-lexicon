@@ -58,11 +58,9 @@ export function KineticLogoExchange({
   );
 
   useEffect(() => {
-    const known = new Set(items.map((item) => item.id));
-    setOrder((current) => [
-      ...current.filter((id) => known.has(id)),
-      ...items.map((item) => item.id).filter((id) => !current.includes(id)),
-    ]);
+    const nextOrder = items.map((item) => item.id);
+    setOrder(nextOrder);
+    setSelected((current) => current && nextOrder.includes(current) ? current : nextOrder[0] ?? "");
   }, [items]);
 
   useEffect(() => {
@@ -118,7 +116,7 @@ export function KineticLogoExchange({
           aria-label={paused ? "Resume logo exchange" : "Pause logo exchange"}
           aria-pressed={paused}
           onClick={() => setPaused((value) => !value)}
-          className="grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] outline-none transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-white"
+          className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
         >
           {paused ? (
             <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
@@ -142,8 +140,9 @@ export function KineticLogoExchange({
           const active = selected === item.id;
           return (
             <motion.button
-              layout
+              layout={!reduced}
               key={item.id}
+              data-kinetic-logo-item={item.id}
               type="button"
               aria-pressed={active}
               onClick={() => {

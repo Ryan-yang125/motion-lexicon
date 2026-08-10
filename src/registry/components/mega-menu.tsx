@@ -21,10 +21,12 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   const root = useRef<HTMLDivElement>(null);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const closeTimer = useRef<number | null>(null);
+  const lastActiveIndex = useRef(0);
+  const focusedOwner = useRef<string | null>(null);
   const uid = useId();
   const reduced = useReducedMotion() === true;
-  const index = Math.max(0, sections.findIndex((item) => item.id === active));
-  const current = sections[index];
+  const index = sections.findIndex((item) => item.id === active);
+  const current = index >= 0 ? sections[index] : null;
 
   const cancelClose = () => {
     if (closeTimer.current === null) return;
@@ -44,6 +46,9 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   };
   const openSection = (id: string) => {
     cancelClose();
+    const nextIndex = sections.findIndex((section) => section.id === id);
+    if (nextIndex < 0) return;
+    lastActiveIndex.current = nextIndex;
     setFocusedLink(0);
     setActive(id);
   };
@@ -66,6 +71,25 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   useEffect(() => () => {
     if (closeTimer.current !== null) window.clearTimeout(closeTimer.current);
   }, []);
+
+  useEffect(() => {
+    if (active !== null && index >= 0) lastActiveIndex.current = index;
+  }, [active, index]);
+
+  useEffect(() => {
+    if (active === null || index >= 0) return;
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    const shouldRestoreFocus = focusedOwner.current === active;
+    const fallbackIndex = Math.min(lastActiveIndex.current, sections.length - 1);
+    setFocusedLink(0);
+    setActive(null);
+    if (shouldRestoreFocus && fallbackIndex >= 0) {
+      buttons.current[fallbackIndex]?.focus({ preventScroll: true });
+    }
+  }, [active, index, sections.length]);
 
   const keyDown = (event: React.KeyboardEvent, at: number) => {
     if (event.key === "ArrowRight") { event.preventDefault(); choose(at + 1); }
@@ -92,7 +116,11 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
       className={`relative w-full max-w-[620px] ${className}`}
       onPointerEnter={(event) => { if (event.pointerType !== "touch") cancelClose(); }}
       onPointerLeave={(event) => { if (event.pointerType !== "touch") scheduleClose(); }}
-      onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) close(); }}
+      onBlur={(event) => {
+        if (event.currentTarget.contains(event.relatedTarget)) return;
+        focusedOwner.current = null;
+        close();
+      }}
     >
       <nav aria-label={label} className="flex min-h-12 items-center gap-1 rounded-[13px] border border-stone-200 bg-white p-1 shadow-[0_12px_30px_-24px_rgba(28,25,23,.68)] dark:border-white/15 dark:bg-[#22221F]">
         {sections.map((section, at) => {
@@ -103,9 +131,10 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
               ref={(node) => { buttons.current[at] = node; }}
               type="button"
               aria-expanded={isOpen}
-              aria-controls={`${uid}-panel`}
+              aria-controls={isOpen ? `${uid}-panel` : undefined}
               onPointerEnter={(event) => { if (event.pointerType !== "touch") openSection(section.id); }}
               onClick={() => { if (isOpen) close(); else openSection(section.id); }}
+              onFocus={() => { focusedOwner.current = section.id; }}
               onKeyDown={(event) => keyDown(event, at)}
               className={`relative min-h-11 flex-1 rounded-[9px] px-3 text-[12px] font-medium outline-none transition-colors duration-150 focus-visible:shadow-[0_0_0_2px_rgba(69,104,255,.22)] ${isOpen ? "text-stone-900 dark:text-white" : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"}`}
             >
@@ -117,7 +146,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
       </nav>
 
       <AnimatePresence>
-        {active && current ? (
+        {current ? (
           <motion.div
             id={`${uid}-panel`}
             key={current.id}
@@ -137,7 +166,10 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
                   role="menuitem"
                   tabIndex={at === focusedLink ? 0 : -1}
                   onClick={() => { link.onSelect(); close(); }}
-                  onFocus={() => setFocusedLink(at)}
+                  onFocus={() => {
+                    focusedOwner.current = current.id;
+                    setFocusedLink(at);
+                  }}
                   onKeyDown={(event) => menuKeyDown(event, at)}
                   className="group min-h-11 rounded-[10px] px-3 py-2 text-left outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_2px_rgba(69,104,255,.25)] dark:hover:bg-white/[.07] dark:focus-visible:bg-white/[.07]"
                 >
