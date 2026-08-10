@@ -214,6 +214,7 @@ function UploadRow({
   const complete = item.status === "complete";
   const error = item.status === "error";
   const unknown = item.status === "uploading" && item.progress === undefined;
+  const hasActions = (error && Boolean(onRetry)) || Boolean(onRemove);
   const status = complete ? "Complete" : error ? item.error ?? "Upload failed" : item.status === "uploading" ? item.progress === undefined ? "Uploading" : `${Math.round(progress)}%` : "Queued";
 
   return (
@@ -242,10 +243,29 @@ function UploadRow({
           </span>
           {!complete ? <span className="mt-0.5 block text-[10.5px] text-stone-400 dark:text-stone-500">{formatBytes(item.size)}</span> : null}
         </span>
-        {error && onRetry ? (
-          <button type="button" onClick={() => onRetry(item.id)} className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-stone-700 outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]">Retry</button>
-        ) : onRemove ? (
-          <button type="button" onClick={() => onRemove(item.id)} aria-label={`Remove ${item.name}`} className="grid size-11 shrink-0 place-items-center rounded-[8px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"><svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg></button>
+        {hasActions ? (
+          <span className="flex shrink-0 items-center gap-0.5">
+            {error && onRetry ? (
+              <button
+                type="button"
+                onClick={() => onRetry(item.id)}
+                aria-label={`Retry ${item.name}`}
+                className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-stone-700 outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+              >
+                Retry
+              </button>
+            ) : null}
+            {onRemove ? (
+              <button
+                type="button"
+                onClick={() => onRemove(item.id)}
+                aria-label={`Remove ${item.name}`}
+                className="grid size-11 shrink-0 place-items-center rounded-[8px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+              >
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
+              </button>
+            ) : null}
+          </span>
         ) : null}
       </div>
       {!complete && !error ? (

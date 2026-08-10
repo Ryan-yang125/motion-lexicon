@@ -24,8 +24,17 @@ export function CursorLens({
 }: CursorLensProps) {
   const root = useRef<HTMLDivElement>(null);
   const pointerFocus = useRef(false);
-  const [visible, setVisible] = useState(false);
+  const touchGesture = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    moved: boolean;
+  } | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const [touchPinned, setTouchPinned] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [rootSize, setRootSize] = useState({ width: 0, height: 0 });
+  const visible = hovered || touchPinned || keyboardVisible;
   const reduced = useReducedMotion() === true;
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
@@ -75,7 +84,18 @@ export function CursorLens({
 
   const pointerMove = (event: PointerEvent<HTMLDivElement>) => {
     locate(event.clientX, event.clientY);
-    if (event.pointerType !== "touch") setVisible(true);
+    if (event.pointerType !== "touch") {
+      setHovered(true);
+      return;
+    }
+    const gesture = touchGesture.current;
+    if (
+      gesture &&
+      gesture.pointerId === event.pointerId &&
+      Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > 8
+    ) {
+      gesture.moved = true;
+    }
   };
 
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -88,12 +108,17 @@ export function CursorLens({
     else if (event.key === "ArrowRight") nextX += step;
     else if (event.key === "ArrowUp") nextY -= step;
     else if (event.key === "ArrowDown") nextY += step;
-    else if (event.key === "Escape") { setVisible(false); return; }
+    else if (event.key === "Escape") {
+      setHovered(false);
+      setTouchPinned(false);
+      setKeyboardVisible(false);
+      return;
+    }
     else return;
     event.preventDefault();
     rawX.set(Math.max(0, Math.min(box.width, nextX)));
     rawY.set(Math.max(0, Math.min(box.height, nextY)));
-    setVisible(true);
+    setKeyboardVisible(true);
   };
 
   return (
@@ -104,22 +129,48 @@ export function CursorLens({
       aria-label={label}
       onPointerEnter={pointerMove}
       onPointerMove={pointerMove}
-      onPointerLeave={() => setVisible(false)}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "touch") setHovered(false);
+      }}
       onPointerDown={(event) => {
         pointerFocus.current = true;
         if (event.pointerType === "touch") {
           locate(event.clientX, event.clientY);
-          setVisible((value) => !value);
+          touchGesture.current = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            moved: false,
+          };
         }
       }}
-      onPointerUp={() => { pointerFocus.current = false; }}
-      onPointerCancel={() => { pointerFocus.current = false; }}
+      onPointerUp={(event) => {
+        pointerFocus.current = false;
+        if (event.pointerType !== "touch") return;
+        const gesture = touchGesture.current;
+        touchGesture.current = null;
+        if (!gesture || gesture.pointerId !== event.pointerId || gesture.moved) return;
+        setKeyboardVisible(false);
+        setTouchPinned((pinned) => !pinned);
+      }}
+      onPointerCancel={(event) => {
+        pointerFocus.current = false;
+        if (touchGesture.current?.pointerId === event.pointerId) {
+          touchGesture.current = null;
+        }
+      }}
       onFocus={() => {
         if (pointerFocus.current) return;
         const box = root.current?.getBoundingClientRect();
         if (box) { rawX.set(box.width / 2); rawY.set(box.height / 2); }
       }}
-      onBlur={() => { pointerFocus.current = false; setVisible(false); }}
+      onBlur={() => {
+        pointerFocus.current = false;
+        touchGesture.current = null;
+        setHovered(false);
+        setTouchPinned(false);
+        setKeyboardVisible(false);
+      }}
       onKeyDown={keyDown}
       className={`relative isolate min-h-[240px] w-full overflow-hidden rounded-[16px] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] ${className}`}
       style={{ touchAction: "pan-y" }}

@@ -321,8 +321,31 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   });
   await lensRoot.focus();
   await lensRoot.dispatchEvent("pointerup", { pointerType: "touch", pointerId: 7 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 7 });
+  await lensRoot.dispatchEvent("pointerleave", { pointerType: "touch", pointerId: 7 });
   await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
   await expect(lensRoot.locator("[data-cursor-lens]")).toHaveCSS("transform", "matrix(1, 0, 0, 1, -46, -36)");
+
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 8,
+    clientX: rootBox!.x + 22,
+    clientY: rootBox!.y + 32,
+  });
+  await lensRoot.dispatchEvent("pointercancel", { pointerType: "touch", pointerId: 8 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 8 });
+  await expect(lensRoot.locator("[data-cursor-lens]")).toBeVisible();
+
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 9,
+    clientX: rootBox!.x + 24,
+    clientY: rootBox!.y + 34,
+  });
+  await lensRoot.dispatchEvent("pointerup", { pointerType: "touch", pointerId: 9 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 9 });
+  await lensRoot.dispatchEvent("pointerleave", { pointerType: "touch", pointerId: 9 });
+  await expect(lensRoot.locator("[data-cursor-lens]")).toHaveCount(0);
 });
 
 test("mobile navigation, language, theme, and Agent Skill remain reachable", async ({ page }, testInfo) => {
