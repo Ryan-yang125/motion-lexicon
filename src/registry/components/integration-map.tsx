@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 const DRAW = { duration: 0.38, ease: [0.23, 1, 0.32, 1] } as const;
@@ -118,24 +118,15 @@ export function IntegrationMap({
     return ids;
   }, [activeNode, edges, nodes]);
 
-  const onNodeKeyDown = (event: KeyboardEvent<SVGGElement>, id: string) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      setSelected((current) => current === id ? null : id);
-    } else if (event.key === "Escape") {
-      setSelected(null);
-    }
-  };
-
   return (
     <div ref={ref} className={`w-full ${className}`}>
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        role="group"
-        aria-label={label}
-        className="block h-auto w-full overflow-visible"
-        onClick={() => setSelected(null)}
-      >
+      <div className="relative">
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          aria-hidden="true"
+          focusable="false"
+          className="block h-auto w-full overflow-visible"
+        >
         <g aria-hidden="true">
           {edges.map((edge, index) => {
             const from = nodeById.get(edge.from);
@@ -185,32 +176,13 @@ export function IntegrationMap({
         {nodes.map((node) => {
           const colors = tone[node.tone ?? "neutral"];
           const visible = related.has(node.id);
-          const pressed = validSelected === node.id;
           return (
             <motion.g
               key={node.id}
-              role="button"
-              tabIndex={0}
-              aria-label={`${node.label}${node.meta ? `, ${node.meta}` : ""}`}
-              aria-pressed={pressed}
               initial={false}
               animate={{ opacity: visible ? 1 : 0.3, scale: activeNode === node.id ? 1.035 : 1 }}
               transition={reduced ? INSTANT : CELL}
-              style={{ transformOrigin: `${node.x}px ${node.y}px`, cursor: "pointer" }}
-              onClick={(event) => {
-                event.stopPropagation();
-                setSelected((current) => current === node.id ? null : node.id);
-              }}
-              onKeyDown={(event) => onNodeKeyDown(event, node.id)}
-              onFocus={() => setFocused(node.id)}
-              onBlur={() => setFocused(null)}
-              onMouseEnter={() => {
-                if (finePointer) setFocused(node.id);
-              }}
-              onMouseLeave={(event) => {
-                if (finePointer && typeof document !== "undefined" && document.activeElement !== event.currentTarget) setFocused(null);
-              }}
-              className="outline-none"
+              style={{ transformOrigin: `${node.x}px ${node.y}px` }}
             >
               <rect
                 x={node.x - 48}
@@ -228,7 +200,49 @@ export function IntegrationMap({
             </motion.g>
           );
         })}
-      </svg>
+        </svg>
+        <div
+          role="group"
+          aria-label={label}
+          className="absolute inset-0"
+          onClick={() => setSelected(null)}
+        >
+          {nodes.map((node) => (
+            <button
+              key={node.id}
+              data-integration-map-node={node.id}
+              type="button"
+              aria-label={`${node.label}${node.meta ? `, ${node.meta}` : ""}`}
+              aria-pressed={validSelected === node.id}
+              onClick={(event) => {
+                event.stopPropagation();
+                setSelected((current) => current === node.id ? null : node.id);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") setSelected(null);
+              }}
+              onFocus={() => setFocused(node.id)}
+              onBlur={() => setFocused(null)}
+              onMouseEnter={() => {
+                if (finePointer) setFocused(node.id);
+              }}
+              onMouseLeave={(event) => {
+                if (finePointer && typeof document !== "undefined" && document.activeElement !== event.currentTarget) setFocused(null);
+              }}
+              className="absolute min-h-11 min-w-11 rounded-[11px] bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:focus-visible:ring-[#93B0FF]"
+              style={{
+                left: `${(node.x / width) * 100}%`,
+                top: `${(node.y / height) * 100}%`,
+                width: `${(96 / width) * 100}%`,
+                height: `${(44 / height) * 100}%`,
+                minWidth: 44,
+                minHeight: 44,
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          ))}
+        </div>
+      </div>
       <span className="sr-only" role="status" aria-live="polite">
         {activeNode ? `${nodeById.get(activeNode)?.label ?? activeNode} connections highlighted` : ""}
       </span>

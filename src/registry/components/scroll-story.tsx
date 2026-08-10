@@ -25,9 +25,40 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
   const root = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
-  const sections = useRef<(HTMLElement | null)[]>([]);
-  const [active, setActive] = useState(0);
+  const sections = useRef(new Map<string, HTMLElement>());
+  const chaptersRef = useRef(chapters);
+  const lastActiveIndex = useRef(chapters.length > 0 ? 0 : -1);
+  const [activeId, setActiveId] = useState<string | null>(() => chapters[0]?.id ?? null);
   const [reduced, setReduced] = useState<boolean | null>(null);
+  chaptersRef.current = chapters;
+
+  const matchedActiveIndex = activeId === null
+    ? -1
+    : chapters.findIndex((chapter) => chapter.id === activeId);
+  const activeIndex = matchedActiveIndex >= 0
+    ? matchedActiveIndex
+    : chapters.length > 0
+      ? activeId === null
+        ? 0
+        : Math.min(Math.max(lastActiveIndex.current, 0), chapters.length - 1)
+      : -1;
+  const current = chapters[activeIndex] ?? null;
+  const effectiveActiveId = current?.id ?? null;
+
+  useLayoutEffect(() => {
+    if (chapters.length === 0) {
+      lastActiveIndex.current = -1;
+      if (activeId !== null) setActiveId(null);
+      return;
+    }
+    if (matchedActiveIndex >= 0) {
+      lastActiveIndex.current = matchedActiveIndex;
+      return;
+    }
+    if (effectiveActiveId === null) return;
+    lastActiveIndex.current = activeIndex;
+    setActiveId(effectiveActiveId);
+  }, [activeId, activeIndex, chapters.length, effectiveActiveId, matchedActiveIndex]);
 
   useLayoutEffect(() => {
     const shell = root.current;
@@ -39,14 +70,21 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
       (context) => {
         const reduce = Boolean(context.conditions?.reduceMotion);
         setReduced(reduce);
-        const triggers = sections.current.flatMap((section, index) => {
+        const triggers = chapters.flatMap((chapter) => {
+          const section = sections.current.get(chapter.id);
           if (!section) return [];
           return ScrollTrigger.create({
             trigger: section,
             scroller: scroll,
             start: "top 58%",
             end: "bottom 42%",
-            onToggle: ({ isActive }) => { if (isActive) setActive(index); },
+            onToggle: ({ isActive }) => {
+              if (!isActive) return;
+              const liveIndex = chaptersRef.current.findIndex((item) => item.id === chapter.id);
+              if (liveIndex < 0) return;
+              lastActiveIndex.current = liveIndex;
+              setActiveId(chapter.id);
+            },
           });
         });
         return () => triggers.forEach((trigger) => trigger.kill());
@@ -69,14 +107,13 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
       { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.26, ease: "power3.out", overwrite: true },
     );
     return () => { tween.kill(); };
-  }, [active, reduced]);
+  }, [effectiveActiveId, reduced]);
 
-  const current = chapters[active] ?? chapters[0];
   if (!current) return null;
 
-  const scrollToChapter = (index: number) => {
+  const scrollToChapter = (id: string) => {
     const scroll = scroller.current;
-    const section = sections.current[index];
+    const section = sections.current.get(id);
     if (!scroll || !section) return;
     const scrollRect = scroll.getBoundingClientRect();
     const sectionRect = section.getBoundingClientRect();
@@ -96,17 +133,20 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
       style={{ height }}
     >
       <div ref={scroller} className="overscroll-contain overflow-y-auto border-r border-stone-200 bg-[#F4F1EB] px-3 py-[38%] [scrollbar-width:none] dark:border-white/10 dark:bg-[#1C1C1A]">
-        {chapters.map((chapter, index) => (
+        {chapters.map((chapter) => (
           <section
             key={chapter.id}
-            ref={(node) => { sections.current[index] = node; }}
+            ref={(node) => {
+              if (node) sections.current.set(chapter.id, node);
+              else sections.current.delete(chapter.id);
+            }}
             className="grid min-h-[72%] content-center py-6"
           >
             <button
               type="button"
-              aria-current={index === active ? "step" : undefined}
-              onClick={() => scrollToChapter(index)}
-              className={`min-h-11 rounded-[12px] px-3 py-2 text-left outline-none transition-[background-color,box-shadow,color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] ${index === active ? "bg-white text-stone-900 shadow-[0_8px_24px_-20px_rgba(28,25,23,.6)] dark:bg-white/10 dark:text-white" : "text-stone-500 hover:bg-white/55 dark:hover:bg-white/5"}`}
+              aria-current={chapter.id === effectiveActiveId ? "step" : undefined}
+              onClick={() => scrollToChapter(chapter.id)}
+              className={`min-h-11 rounded-[12px] px-3 py-2 text-left outline-none transition-[background-color,box-shadow,color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] ${chapter.id === effectiveActiveId ? "bg-white text-stone-900 shadow-[0_8px_24px_-20px_rgba(28,25,23,.6)] dark:bg-white/10 dark:text-white" : "text-stone-500 hover:bg-white/55 dark:hover:bg-white/5"}`}
             >
               {chapter.eyebrow ? <span className="block text-[9px] uppercase tracking-[.1em] opacity-55">{chapter.eyebrow}</span> : null}
               <strong className="mt-1 block text-[12px] leading-tight">{chapter.title}</strong>
@@ -120,12 +160,12 @@ export function ScrollStory({ chapters, label, height = 360, className = "" }: S
           {current.scene}
         </div>
         <div className="absolute bottom-3 right-3 flex items-center gap-1" aria-hidden>
-          {chapters.map((chapter, index) => (
+          {chapters.map((chapter) => (
             <span key={chapter.id} className="h-1 w-4 overflow-hidden rounded-full bg-stone-500/20">
               <span
                 data-scroll-story-indicator
                 data-motion-mode={reduced === false ? "standard" : "instant"}
-                className={`block h-full rounded-full bg-stone-800 dark:bg-white ${reduced === false ? `w-full origin-left transition-transform duration-150 ${index === active ? "scale-x-100" : "scale-x-25"}` : index === active ? "w-full" : "w-1/4"}`}
+                className={`block h-full rounded-full bg-stone-800 dark:bg-white ${reduced === false ? `w-full origin-left transition-transform duration-150 ${chapter.id === effectiveActiveId ? "scale-x-100" : "scale-x-25"}` : chapter.id === effectiveActiveId ? "w-full" : "w-1/4"}`}
               />
             </span>
           ))}

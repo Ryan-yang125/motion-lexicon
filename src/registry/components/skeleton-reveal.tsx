@@ -26,8 +26,6 @@ export function SkeletonReveal({
 }: SkeletonRevealProps) {
   const reduced = useReducedMotion() === true;
   const mounted = useRef(false);
-  const skeletonRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
   const [announcement, setAnnouncement] = useState(loading ? "Loading" : "Content loaded");
 
   useEffect(() => {
@@ -35,50 +33,50 @@ export function SkeletonReveal({
     mounted.current = true;
   }, [loading]);
 
-  useEffect(() => {
-    const setInert = (node: HTMLDivElement | null, inert: boolean) => {
-      if (!node) return;
-      if (inert) node.setAttribute("inert", "");
-      else node.removeAttribute("inert");
-    };
-    setInert(skeletonRef.current, !loading);
-    setInert(contentRef.current, loading);
-  }, [loading]);
-
   const style: CSSProperties = { minHeight };
+  const skeletonInert: Record<string, string> = !loading ? { inert: "" } : {};
+  const contentInert: Record<string, string> = loading ? { inert: "" } : {};
 
   return (
     <section aria-label={label} className={`w-full ${className}`}>
       <motion.div layout={!reduced} style={style} className="relative grid overflow-hidden">
-        <motion.div
-          ref={skeletonRef}
+        <div
+          data-skeleton-reveal-layer="skeleton"
           aria-hidden={!loading}
-          initial={false}
-          animate={
-            loading
-              ? { opacity: 1, filter: "blur(0px)", clipPath: "inset(0% 0% 0% 0%)" }
-              : { opacity: 0, filter: "blur(2px)", clipPath: "inset(0% 0% 100% 0%)" }
-          }
-          transition={reduced ? INSTANT : loading ? REVEAL : HIDE}
+          {...skeletonInert}
           className={`col-start-1 row-start-1 ${loading ? "pointer-events-auto" : "pointer-events-none"}`}
         >
-          {skeleton}
-        </motion.div>
+          <motion.div
+            initial={false}
+            animate={
+              loading
+                ? { opacity: 1, filter: "blur(0px)", clipPath: "inset(0% 0% 0% 0%)" }
+                : { opacity: 0, filter: "blur(2px)", clipPath: "inset(0% 0% 100% 0%)" }
+            }
+            transition={reduced ? INSTANT : loading ? REVEAL : HIDE}
+          >
+            {skeleton}
+          </motion.div>
+        </div>
 
-        <motion.div
-          ref={contentRef}
+        <div
+          data-skeleton-reveal-layer="content"
           aria-hidden={loading}
-          initial={false}
-          animate={
-            loading
-              ? { opacity: 0, filter: "blur(3px)", clipPath: "inset(8% 0% 0% 0%)", transform: "translate3d(0, 5px, 0)" }
-              : { opacity: 1, filter: "blur(0px)", clipPath: "inset(0% 0% 0% 0%)", transform: "translate3d(0, 0, 0)" }
-          }
-          transition={reduced ? INSTANT : loading ? HIDE : REVEAL}
+          {...contentInert}
           className={`col-start-1 row-start-1 ${loading ? "pointer-events-none" : "pointer-events-auto"}`}
         >
-          {children}
-        </motion.div>
+          <motion.div
+            initial={false}
+            animate={
+              loading
+                ? { opacity: 0, filter: "blur(3px)", clipPath: "inset(8% 0% 0% 0%)", transform: "translate3d(0, 5px, 0)" }
+                : { opacity: 1, filter: "blur(0px)", clipPath: "inset(0% 0% 0% 0%)", transform: "translate3d(0, 0, 0)" }
+            }
+            transition={reduced ? INSTANT : loading ? HIDE : REVEAL}
+          >
+            {children}
+          </motion.div>
+        </div>
       </motion.div>
       <span role="status" aria-live="polite" className="sr-only">{announcement}</span>
     </section>

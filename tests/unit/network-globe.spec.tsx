@@ -61,6 +61,40 @@ afterEach(() => {
 });
 
 describe("NetworkGlobe", () => {
+  it("keeps the legal fallback focused after a removed node is added again", async () => {
+    const shanghai = {
+      id: "shanghai",
+      label: "Shanghai",
+      latitude: 31.23,
+      longitude: 121.47,
+    };
+    const london = {
+      id: "london",
+      label: "London",
+      latitude: 51.51,
+      longitude: -0.13,
+    };
+    const { rerender } = render(<NetworkGlobe nodes={[shanghai, london]} />);
+
+    const londonButton = await waitFor(() => {
+      const button = document.querySelector<HTMLButtonElement>("button[aria-pressed='false']");
+      expect(button).toHaveTextContent("London");
+      return button as HTMLButtonElement;
+    });
+    fireEvent.click(londonButton);
+    expect(londonButton).toHaveAttribute("aria-pressed", "true");
+
+    rerender(<NetworkGlobe nodes={[shanghai]} />);
+    expect(document.querySelector("button")).toHaveAttribute("aria-pressed", "true");
+
+    rerender(<NetworkGlobe nodes={[shanghai, london]} />);
+    const buttons = document.querySelectorAll("button");
+    expect(buttons[0]).toHaveTextContent("Shanghai");
+    expect(buttons[0]).toHaveAttribute("aria-pressed", "true");
+    expect(buttons[1]).toHaveTextContent("London");
+    expect(buttons[1]).toHaveAttribute("aria-pressed", "false");
+  });
+
   it("returns to a static fallback when runtime nodes become empty", async () => {
     const { container, rerender } = render(
       <NetworkGlobe
@@ -113,16 +147,30 @@ describe("NetworkGlobe", () => {
       expect(next).toBeInTheDocument();
       return next as HTMLCanvasElement;
     });
+    const setPointerCapture = vi.fn();
+    const releasePointerCapture = vi.fn();
+    Object.defineProperties(root, {
+      setPointerCapture: { configurable: true, value: setPointerCapture },
+      hasPointerCapture: { configurable: true, value: () => true },
+      releasePointerCapture: { configurable: true, value: releasePointerCapture },
+    });
+    fireEvent.pointerDown(canvas, { pointerId: 7, pointerType: "mouse", clientX: 20 });
+    expect(setPointerCapture).toHaveBeenCalledWith(7);
 
     const lost = new Event("webglcontextlost", { cancelable: true });
     fireEvent(canvas, lost);
     expect(lost.defaultPrevented).toBe(true);
+    expect(releasePointerCapture).toHaveBeenCalledWith(7);
     await waitFor(() => {
       expect(fallback).toHaveClass("opacity-100");
       expect(root).not.toHaveAttribute("tabindex");
     });
 
     const frameCalls = vi.mocked(requestAnimationFrame).mock.calls.length;
+    fireEvent.pointerDown(canvas, { pointerId: 8, pointerType: "mouse", clientX: 40 });
+    fireEvent.pointerMove(root as HTMLElement, { pointerId: 8, pointerType: "mouse", clientX: 80 });
+    expect(setPointerCapture).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(requestAnimationFrame)).toHaveBeenCalledTimes(frameCalls);
     fireEvent(canvas, new Event("webglcontextrestored"));
     await waitFor(() => {
       expect(fallback).toHaveClass("opacity-0");

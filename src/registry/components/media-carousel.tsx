@@ -84,37 +84,43 @@ export function MediaCarousel({
     : items.findIndex((item) => item.id === activeId);
   const activeIndex = matchedActiveIndex >= 0
     ? matchedActiveIndex
-    : activeId !== null && items.length > 0
-      ? clampIndex(activeIndexRef.current, items.length)
+    : items.length > 0
+      ? activeId === null
+        ? initialActiveIndex
+        : clampIndex(activeIndexRef.current, items.length)
       : -1;
-  const positioningIndex = initialPositionedRef.current
-    ? activeIndex
-    : initialActiveIndex;
-  const positioningId = items[positioningIndex]?.id ?? null;
+  const activeItemId = items[activeIndex]?.id ?? null;
 
   useIsomorphicLayoutEffect(() => {
-    if (positioningIndex < 0 || positioningId === null) return;
-    const viewport = viewportRef.current;
-    const slide = slideRefs.current[positioningIndex];
-    if (!viewport || !slide) return;
-
-    if (!initialPositionedRef.current) {
-      activeIdRef.current = positioningId;
-      setActiveId(positioningId);
-    }
-    activeIndexRef.current = positioningIndex;
-    viewport.scrollLeft = slide.offsetLeft - viewport.offsetLeft;
-    initialPositionedRef.current = true;
-  }, [positioningId, positioningIndex]);
-
-  useEffect(() => {
-    if (activeId === null || matchedActiveIndex >= 0) return;
     if (items.length === 0) {
+      initialPositionedRef.current = false;
+      slideRefs.current = [];
       activeIdRef.current = null;
       activeIndexRef.current = -1;
-      setActiveId(null);
+      if (activeId !== null) setActiveId(null);
       return;
     }
+    if (activeIndex < 0 || activeItemId === null) return;
+
+    if (activeId === null) {
+      activeIdRef.current = activeItemId;
+      activeIndexRef.current = activeIndex;
+      setActiveId(activeItemId);
+    } else if (activeId === activeItemId) {
+      activeIndexRef.current = activeIndex;
+    }
+    if (initialPositionedRef.current) return;
+
+    const viewport = viewportRef.current;
+    const slide = slideRefs.current[activeIndex];
+    if (!viewport || !slide) return;
+
+    viewport.scrollLeft = slide.offsetLeft - viewport.offsetLeft;
+    initialPositionedRef.current = true;
+  }, [activeId, activeIndex, activeItemId, items.length]);
+
+  useEffect(() => {
+    if (activeId === null || matchedActiveIndex >= 0 || items.length === 0) return;
 
     const index = clampIndex(activeIndexRef.current, items.length);
     const item = items[index];

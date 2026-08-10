@@ -25,6 +25,42 @@ afterEach(() => {
 });
 
 describe("MediaCarousel", () => {
+  it("initializes the requested slide when an empty collection receives items", () => {
+    const onSelect = vi.fn();
+    const { rerender } = render(
+      <MediaCarousel items={[]} initialIndex={1} onSelect={onSelect} />,
+    );
+    expect(screen.getByText("00 / 00")).toBeInTheDocument();
+
+    rerender(
+      <MediaCarousel items={items} initialIndex={1} onSelect={onSelect} />,
+    );
+
+    expect(screen.getByText("02 / 03")).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "2 of 3" }).querySelector("button"),
+    ).toHaveAttribute("aria-current", "true");
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("reapplies initialIndex after the collection is emptied and repopulated", () => {
+    const onSelect = vi.fn();
+    const { rerender } = render(
+      <MediaCarousel items={items} initialIndex={2} onSelect={onSelect} />,
+    );
+    expect(screen.getByText("03 / 03")).toBeInTheDocument();
+
+    rerender(<MediaCarousel items={[]} initialIndex={1} onSelect={onSelect} />);
+    expect(screen.getByText("00 / 00")).toBeInTheDocument();
+
+    rerender(<MediaCarousel items={items} initialIndex={1} onSelect={onSelect} />);
+    expect(screen.getByText("02 / 03")).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", { name: "2 of 3" }).querySelector("button"),
+    ).toHaveAttribute("aria-current", "true");
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
   it("positions a non-zero initial slide without emitting a selection", () => {
     let frame: FrameRequestCallback | null = null;
     vi.stubGlobal(

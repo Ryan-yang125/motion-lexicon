@@ -52,16 +52,20 @@ export function KineticLogoExchange({
   const [cycle, setCycle] = useState(0);
   const root = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(true);
+  const incomingIds = useMemo(() => items.map((item) => item.id), [items]);
+  const incomingIdSequence = JSON.stringify(incomingIds);
+  const syncedIdSequence = useRef(incomingIdSequence);
   const byId = useMemo(
     () => new Map(items.map((item) => [item.id, item])),
     [items],
   );
 
   useEffect(() => {
-    const nextOrder = items.map((item) => item.id);
-    setOrder(nextOrder);
-    setSelected((current) => current && nextOrder.includes(current) ? current : nextOrder[0] ?? "");
-  }, [items]);
+    if (syncedIdSequence.current === incomingIdSequence) return;
+    syncedIdSequence.current = incomingIdSequence;
+    setOrder(incomingIds);
+    setSelected((current) => current && incomingIds.includes(current) ? current : incomingIds[0] ?? "");
+  }, [incomingIdSequence, incomingIds]);
 
   useEffect(() => {
     const node = root.current;

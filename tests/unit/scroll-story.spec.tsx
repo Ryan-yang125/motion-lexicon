@@ -43,6 +43,12 @@ const chapters: readonly ScrollStoryChapter[] = [
   { id: "ship", title: "Ship", scene: <div>Ship scene</div> },
 ];
 
+const polish: ScrollStoryChapter = {
+  id: "polish",
+  title: "Polish",
+  scene: <div>Polish scene</div>,
+};
+
 beforeEach(() => {
   harness.reduced = false;
   harness.toggles = [];
@@ -50,6 +56,59 @@ beforeEach(() => {
 });
 
 describe("ScrollStory chapter motion", () => {
+  it("keeps the active chapter id when chapters reorder", () => {
+    const threeChapters = [...chapters, polish];
+    const { rerender } = render(
+      <ScrollStory label="Release story" chapters={threeChapters} />,
+    );
+    act(() => harness.toggles[1]?.({ isActive: true }));
+    expect(screen.getByRole("button", { name: "Ship" })).toHaveAttribute("aria-current", "step");
+
+    rerender(
+      <ScrollStory
+        label="Release story"
+        chapters={[polish, chapters[0], chapters[1]]}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "Ship" })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("status")).toHaveTextContent("Ship");
+  });
+
+  it("selects the chapter at the same position when the active chapter is deleted", () => {
+    const threeChapters = [...chapters, polish];
+    const { rerender } = render(
+      <ScrollStory label="Release story" chapters={threeChapters} />,
+    );
+    const staleShipToggle = harness.toggles[1];
+    act(() => staleShipToggle?.({ isActive: true }));
+
+    rerender(
+      <ScrollStory
+        label="Release story"
+        chapters={[chapters[0], polish]}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "Polish" })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("status")).toHaveTextContent("Polish");
+    act(() => staleShipToggle?.({ isActive: true }));
+    expect(screen.getByRole("button", { name: "Polish" })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("status")).toHaveTextContent("Polish");
+  });
+
+  it("initializes the first chapter when an empty story receives chapters", () => {
+    const { rerender } = render(
+      <ScrollStory label="Release story" chapters={[]} />,
+    );
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+
+    rerender(<ScrollStory label="Release story" chapters={chapters} />);
+
+    expect(screen.getByRole("button", { name: "Capture" })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("status")).toHaveTextContent("Capture");
+  });
+
   it("uses width-only, immediate indicators with reduced motion", () => {
     harness.reduced = true;
     const { container } = render(<ScrollStory label="Release story" chapters={chapters} />);

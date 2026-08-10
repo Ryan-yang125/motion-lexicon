@@ -270,6 +270,14 @@ export function ProceduralProductViewer({
     mount.prepend(renderer.domElement);
     const onContextLost = (event: Event) => {
       event.preventDefault();
+      const state = rotation.current;
+      if (state.pointerId !== null && mount.hasPointerCapture(state.pointerId)) {
+        mount.releasePointerCapture(state.pointerId);
+      }
+      state.dragging = false;
+      state.pointerId = null;
+      state.velocityX = 0;
+      state.velocityY = 0;
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
       setRendererReady(false);
@@ -377,7 +385,7 @@ export function ProceduralProductViewer({
           : `${productName}. Static product preview.`
       }
       onPointerDown={(event) => {
-        if (!(event.target instanceof HTMLCanvasElement)) return;
+        if (!rendererReady || !(event.target instanceof HTMLCanvasElement)) return;
         const state = rotation.current;
         state.dragging = true;
         state.pointerId = event.pointerId;
@@ -388,6 +396,7 @@ export function ProceduralProductViewer({
         event.currentTarget.focus({ preventScroll: true });
       }}
       onPointerMove={(event) => {
+        if (!rendererReady) return;
         const state = rotation.current;
         if (!state.dragging || state.pointerId !== event.pointerId) return;
         const now = performance.now();
@@ -404,6 +413,7 @@ export function ProceduralProductViewer({
         requestFrame();
       }}
       onPointerUp={(event) => {
+        if (!rendererReady) return;
         const state = rotation.current;
         if (state.pointerId !== event.pointerId) return;
         state.dragging = false;
@@ -412,6 +422,7 @@ export function ProceduralProductViewer({
         requestFrame();
       }}
       onPointerCancel={() => {
+        if (!rendererReady) return;
         rotation.current.dragging = false;
         rotation.current.pointerId = null;
       }}

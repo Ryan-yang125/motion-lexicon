@@ -58,9 +58,10 @@ describe("IntegrationMap", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("status")).toBeEmptyDOMElement();
-      expect(screen.getByRole("button", { name: "Remaining service" })).toHaveStyle({
-        opacity: "1",
-      });
+      expect(screen.getByRole("button", { name: "Remaining service" })).toHaveAttribute(
+        "aria-pressed",
+        "false",
+      );
     });
 
     rerender(<IntegrationMap nodes={[removed, remaining]} edges={[]} />);
@@ -69,5 +70,20 @@ describe("IntegrationMap", () => {
       "false",
     );
     expect(screen.getByRole("status")).toBeEmptyDOMElement();
+  });
+
+  it("keeps node hit targets at least 44 CSS pixels as the SVG scales", () => {
+    const { container } = render(
+      <IntegrationMap nodes={[removed]} edges={[]} width={440} height={230} />,
+    );
+
+    const node = screen.getByRole("button", { name: "Removed service" });
+    expect(node.tagName).toBe("BUTTON");
+    expect(node).toHaveClass("min-h-11", "min-w-11");
+    expect(node.style.width).toBe(`${(96 / 440) * 100}%`);
+    expect(node.style.height).toBe(`${(44 / 230) * 100}%`);
+    expect(node.style.minWidth).toBe("44px");
+    expect(node.style.minHeight).toBe("44px");
+    expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 });

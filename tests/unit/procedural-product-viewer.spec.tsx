@@ -82,10 +82,25 @@ describe("ProceduralProductViewer WebGL recovery", () => {
       expect(next).toBeInTheDocument();
       return next as HTMLCanvasElement;
     });
+    const setPointerCapture = vi.fn();
+    const releasePointerCapture = vi.fn();
+    Object.defineProperties(root, {
+      setPointerCapture: { configurable: true, value: setPointerCapture },
+      hasPointerCapture: { configurable: true, value: () => true },
+      releasePointerCapture: { configurable: true, value: releasePointerCapture },
+    });
+    fireEvent.pointerDown(canvas, {
+      pointerId: 7,
+      pointerType: "mouse",
+      clientX: 20,
+      clientY: 20,
+    });
+    expect(setPointerCapture).toHaveBeenCalledWith(7);
 
     const lost = new Event("webglcontextlost", { cancelable: true });
     fireEvent(canvas, lost);
     expect(lost.defaultPrevented).toBe(true);
+    expect(releasePointerCapture).toHaveBeenCalledWith(7);
     await waitFor(() => {
       expect(fallback).toHaveClass("opacity-100");
       expect(root).not.toHaveAttribute("tabindex");
@@ -93,6 +108,20 @@ describe("ProceduralProductViewer WebGL recovery", () => {
     });
 
     const frameCalls = vi.mocked(requestAnimationFrame).mock.calls.length;
+    fireEvent.pointerDown(canvas, {
+      pointerId: 8,
+      pointerType: "mouse",
+      clientX: 40,
+      clientY: 40,
+    });
+    fireEvent.pointerMove(root as HTMLElement, {
+      pointerId: 8,
+      pointerType: "mouse",
+      clientX: 80,
+      clientY: 80,
+    });
+    expect(setPointerCapture).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(requestAnimationFrame)).toHaveBeenCalledTimes(frameCalls);
     fireEvent(canvas, new Event("webglcontextrestored"));
     await waitFor(() => {
       expect(fallback).toHaveClass("opacity-0");

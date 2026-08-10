@@ -68,11 +68,18 @@ export function NetworkGlobe({
   const firstId = nodes[0]?.id ?? "";
   const [focusedId, setFocusedId] = useState(firstId);
   const [rendererReady, setRendererReady] = useState(false);
+  const effectiveFocusedId = nodes.some((node) => node.id === focusedId)
+    ? focusedId
+    : firstId;
 
   const focused = useMemo(
-    () => nodes.find((node) => node.id === focusedId) ?? nodes[0],
-    [focusedId, nodes],
+    () => nodes.find((node) => node.id === effectiveFocusedId),
+    [effectiveFocusedId, nodes],
   );
+
+  useEffect(() => {
+    if (focusedId !== effectiveFocusedId) setFocusedId(effectiveFocusedId);
+  }, [effectiveFocusedId, focusedId]);
 
   const draw = () => {
     const runtime = runtimeRef.current;
@@ -134,6 +141,12 @@ export function NetworkGlobe({
     mount.prepend(renderer.domElement);
     const onContextLost = (event: Event) => {
       event.preventDefault();
+      const rotation = rotationRef.current;
+      if (rotation.pointerId >= 0 && mount.hasPointerCapture(rotation.pointerId)) {
+        mount.releasePointerCapture(rotation.pointerId);
+      }
+      rotation.dragging = false;
+      rotation.pointerId = -1;
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
       setRendererReady(false);
@@ -300,7 +313,7 @@ export function NetworkGlobe({
           : `${label}. Static network preview.`
       }
       onPointerDown={(event) => {
-        if (!(event.target instanceof HTMLCanvasElement)) return;
+        if (!rendererReady || !(event.target instanceof HTMLCanvasElement)) return;
         const rotation = rotationRef.current;
         rotation.dragging = true;
         rotation.pointerId = event.pointerId;
@@ -309,6 +322,7 @@ export function NetworkGlobe({
         event.currentTarget.focus({ preventScroll: true });
       }}
       onPointerMove={(event) => {
+        if (!rendererReady) return;
         const rotation = rotationRef.current;
         if (!rotation.dragging || rotation.pointerId !== event.pointerId) return;
         rotation.targetY += (event.clientX - rotation.x) * 0.007;
@@ -316,6 +330,7 @@ export function NetworkGlobe({
         requestFrame();
       }}
       onPointerUp={(event) => {
+        if (!rendererReady) return;
         const rotation = rotationRef.current;
         if (rotation.pointerId !== event.pointerId) return;
         rotation.dragging = false;
@@ -323,6 +338,7 @@ export function NetworkGlobe({
         event.currentTarget.releasePointerCapture?.(event.pointerId);
       }}
       onPointerCancel={() => {
+        if (!rendererReady) return;
         rotationRef.current.dragging = false;
         rotationRef.current.pointerId = -1;
       }}

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   KineticLogoExchange,
   type KineticLogoItem,
@@ -22,12 +22,34 @@ beforeEach(() => {
   harness.reduced = false;
 });
 
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 function renderedOrder(container: HTMLElement) {
   return Array.from(container.querySelectorAll<HTMLElement>("[data-kinetic-logo-item]"))
     .map((node) => node.dataset.kineticLogoItem);
 }
 
 describe("KineticLogoExchange dynamic items", () => {
+  it("preserves its rotated order when an equivalent id sequence rerenders", () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+
+    rerender(
+      <KineticLogoExchange
+        items={[{ ...alpha }, { ...bravo }, { ...charlie }]}
+        interval={1800}
+      />,
+    );
+
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+  });
+
   it("adopts the incoming order and chooses the new first item when the selection is removed", () => {
     const { container, rerender } = render(
       <KineticLogoExchange items={[alpha, bravo, charlie]} />,
