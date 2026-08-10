@@ -475,7 +475,7 @@ export function ProceduralProductViewer({
         <button
           type="button"
           onClick={reset}
-          className="absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] shadow-sm outline-none backdrop-blur-md transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-black/25 dark:text-white"
+          className={`absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] shadow-sm outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-black/25 dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
         >
           <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
             <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

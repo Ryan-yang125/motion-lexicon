@@ -198,6 +198,9 @@ export function ImageLightbox({
   const sharedTransition = instant
     ? { duration: 0 }
     : { duration: 0.26, ease: EASE_MOVE };
+  const controlPressClass = reduced
+    ? ""
+    : "transition-[background-color,transform] duration-150 active:scale-[0.96]";
 
   return (
     <LayoutGroup id={layoutGroupId}>
@@ -305,7 +308,7 @@ export function ImageLightbox({
                         type="button"
                         aria-label="Close gallery"
                         onClick={() => close("pointer")}
-                        className="grid size-11 shrink-0 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none transition-[background-color,transform] duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white"
+                        className={`grid size-11 shrink-0 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
                       >
                         {CLOSE_ICON}
                       </button>
@@ -335,7 +338,7 @@ export function ImageLightbox({
                         aria-label="Previous image"
                         onClick={() => move(-1, "pointer")}
                         disabled={items.length < 2}
-                        className="grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none transition-[background-color,transform] duration-150 active:scale-[0.96] disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white"
+                        className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
                       >
                         <span className="rotate-180">{ARROW_ICON}</span>
                       </button>
@@ -350,7 +353,7 @@ export function ImageLightbox({
                         aria-label="Next image"
                         onClick={() => move(1, "pointer")}
                         disabled={items.length < 2}
-                        className="grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none transition-[background-color,transform] duration-150 active:scale-[0.96] disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white"
+                        className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
                       >
                         {ARROW_ICON}
                       </button>

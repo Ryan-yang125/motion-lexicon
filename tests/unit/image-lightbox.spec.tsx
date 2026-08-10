@@ -7,9 +7,11 @@ import {
   type ImageLightboxItem,
 } from "@/registry/components/image-lightbox";
 
+const harness = vi.hoisted(() => ({ reduced: true }));
+
 vi.mock("motion/react", async (importOriginal) => {
   const actual = await importOriginal<typeof import("motion/react")>();
-  return { ...actual, useReducedMotion: () => true };
+  return { ...actual, useReducedMotion: () => harness.reduced };
 });
 
 const alpha: ImageLightboxItem = {
@@ -29,6 +31,7 @@ const gamma: ImageLightboxItem = {
 };
 
 beforeEach(() => {
+  harness.reduced = true;
   vi.stubGlobal(
     "requestAnimationFrame",
     vi.fn((callback: FrameRequestCallback) => {
@@ -82,5 +85,29 @@ describe("ImageLightbox", () => {
     });
     expect(onChange).toHaveBeenCalledOnce();
     expect(onChange).toHaveBeenLastCalledWith(beta, 1);
+  });
+
+  it("removes transform press feedback from every reduced-motion dialog control", () => {
+    render(<ImageLightbox items={[alpha, beta]} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open Alpha study" }));
+
+    for (const name of ["Close gallery", "Previous image", "Next image"]) {
+      const control = screen.getByRole("button", { name });
+      expect(control).not.toHaveClass("transition-[background-color,transform]");
+      expect(control).not.toHaveClass("active:scale-[0.96]");
+    }
+  });
+
+  it("retains transform press feedback in standard motion", () => {
+    harness.reduced = false;
+    render(<ImageLightbox items={[alpha, beta]} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open Alpha study" }));
+
+    for (const name of ["Close gallery", "Previous image", "Next image"]) {
+      expect(screen.getByRole("button", { name })).toHaveClass(
+        "transition-[background-color,transform]",
+        "active:scale-[0.96]",
+      );
+    }
   });
 });

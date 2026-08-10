@@ -33,25 +33,60 @@ export function RadialActions({
   className = "",
 }: RadialActionsProps) {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(0);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const reduced = useReducedMotion() === true;
   const uid = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const activeIndexRef = useRef(0);
+  const matchedActiveIndex = activeId === null
+    ? -1
+    : actions.findIndex((action) => action.id === activeId);
+  const activeIndex = matchedActiveIndex >= 0
+    ? matchedActiveIndex
+    : actions.length > 0
+      ? Math.min(activeIndexRef.current, actions.length - 1)
+      : -1;
+  const effectiveActiveId = actions[activeIndex]?.id ?? null;
+  const actionOrder = actions.map((action) => action.id).join("\u0000");
+  const menuOpen = open && actions.length > 0;
 
   const close = useCallback(() => {
     setOpen(false);
-    requestAnimationFrame(() => triggerRef.current?.focus());
+    triggerRef.current?.focus({ preventScroll: true });
   }, []);
 
   useEffect(() => {
-    if (open) requestAnimationFrame(() => buttons.current[active]?.focus());
-  }, [open, active]);
+    if (!open) return;
+    if (actions.length === 0) {
+      activeIndexRef.current = 0;
+      setActiveId(null);
+      setOpen(false);
+      triggerRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    if (effectiveActiveId === null || activeIndex < 0) return;
+    activeIndexRef.current = activeIndex;
+    if (activeId !== effectiveActiveId) setActiveId(effectiveActiveId);
+    buttons.current.get(effectiveActiveId)?.focus({ preventScroll: true });
+  }, [actionOrder, actions.length, activeId, activeIndex, effectiveActiveId, open]);
+
+  const openMenu = () => {
+    if (actions.length === 0) return;
+    const index = matchedActiveIndex >= 0
+      ? matchedActiveIndex
+      : Math.min(activeIndexRef.current, actions.length - 1);
+    activeIndexRef.current = index;
+    setActiveId(actions[index].id);
+    setOpen(true);
+  };
 
   const move = (next: number) => {
+    if (actions.length === 0) return;
     const index = (next + actions.length) % actions.length;
-    setActive(index);
-    buttons.current[index]?.focus();
+    activeIndexRef.current = index;
+    setActiveId(actions[index].id);
+    buttons.current.get(actions[index].id)?.focus({ preventScroll: true });
   };
 
   const keyDown = (event: React.KeyboardEvent, index: number) => {
@@ -76,7 +111,7 @@ export function RadialActions({
   return (
     <div className={`relative grid size-[220px] place-items-center ${className}`}>
       <AnimatePresence>
-        {open ? (
+        {menuOpen ? (
           <motion.div
             id={`${uid}-menu`}
             role="menu"
@@ -94,15 +129,22 @@ export function RadialActions({
               return (
                 <motion.button
                   key={action.id}
-                  ref={(node) => { buttons.current[index] = node; }}
+                  ref={(node) => {
+                    if (node) buttons.current.set(action.id, node);
+                    else buttons.current.delete(action.id);
+                  }}
                   type="button"
                   role="menuitem"
                   aria-label={action.label}
+                  tabIndex={action.id === effectiveActiveId ? 0 : -1}
                   initial={reduced ? { opacity: 1, transform: `translate(${x}px, ${y}px)` } : { opacity: 0, transform: "translate(0px, 0px) scale(.94)" }}
                   animate={{ opacity: 1, transform: `translate(${x}px, ${y}px) scale(1)` }}
                   exit={{ opacity: 0, transform: "translate(0px, 0px) scale(.96)" }}
                   transition={reduced ? INSTANT : { ...SPRING, delay: index * 0.035 }}
-                  onFocus={() => setActive(index)}
+                  onFocus={() => {
+                    activeIndexRef.current = index;
+                    setActiveId(action.id);
+                  }}
                   onKeyDown={(event) => keyDown(event, index)}
                   onClick={() => { action.onSelect(); close(); }}
                   className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-[0_10px_24px_-16px_rgba(28,25,23,.65)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_10px_24px_-16px_rgba(28,25,23,.65)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200"
@@ -118,12 +160,13 @@ export function RadialActions({
         ref={triggerRef}
         type="button"
         aria-label={label}
-        aria-expanded={open}
-        aria-controls={`${uid}-menu`}
-        onClick={() => setOpen((value) => !value)}
-        animate={{ transform: open && !reduced ? "rotate(45deg)" : "rotate(0deg)" }}
+        aria-expanded={menuOpen}
+        aria-controls={menuOpen ? `${uid}-menu` : undefined}
+        aria-disabled={actions.length === 0}
+        onClick={() => { if (menuOpen) close(); else openMenu(); }}
+        animate={{ transform: menuOpen && !reduced ? "rotate(45deg)" : "rotate(0deg)" }}
         transition={reduced ? INSTANT : SPRING}
-        className="relative z-10 grid size-14 place-items-center rounded-full bg-stone-900 text-white shadow-[0_16px_32px_-18px_rgba(28,25,23,.8)] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_16px_32px_-18px_rgba(28,25,23,.8)] dark:bg-stone-100 dark:text-stone-950"
+        className="relative z-10 grid size-14 place-items-center rounded-full bg-stone-900 text-white shadow-[0_16px_32px_-18px_rgba(28,25,23,.8)] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_16px_32px_-18px_rgba(28,25,23,.8)] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-stone-100 dark:text-stone-950"
       >
         {trigger}
       </motion.button>

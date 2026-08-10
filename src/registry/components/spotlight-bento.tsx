@@ -139,7 +139,12 @@ export function SpotlightBento({
                 <span className="mt-0.5 block truncate text-[10.5px] text-stone-500 dark:text-stone-400">{item.label}</span>
               </span>
               {interactive ? (
-                <span aria-hidden className="absolute inset-x-3 bottom-0 h-px origin-left scale-x-0 bg-[#4568FF] opacity-0 transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-focus-visible:scale-x-100 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100" />
+                <span
+                  aria-hidden
+                  data-spotlight-indicator
+                  data-motion-mode={reduced ? "instant" : "standard"}
+                  className={`absolute inset-x-3 bottom-0 h-px bg-[#4568FF] opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 ${reduced ? "" : "origin-left scale-x-0 transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-focus-visible:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100"}`}
+                />
               ) : null}
             </>
           );

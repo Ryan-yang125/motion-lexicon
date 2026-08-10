@@ -281,6 +281,7 @@ export function DitherRevealCard({
   const rootRef = useRef<HTMLButtonElement>(null);
   const stateRef = useRef<WebGLState | null>(null);
   const frameRef = useRef<number | null>(null);
+  const contextLossRef = useRef<number | null>(null);
   const visibleRef = useRef(true);
   const progressRef = useRef(defaultRevealed ? 1 : 0);
   const targetRef = useRef(defaultRevealed ? 1 : 0);
@@ -359,6 +360,10 @@ export function DitherRevealCard({
   }, [paletteBack, paletteFront, paletteInk, requestRender]);
 
   useEffect(() => {
+    if (contextLossRef.current !== null) {
+      window.clearTimeout(contextLossRef.current);
+      contextLossRef.current = null;
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
     let state: WebGLState | null = null;
@@ -372,6 +377,7 @@ export function DitherRevealCard({
       return;
     }
     stateRef.current = state;
+    setSupported(true);
 
     const resize = new ResizeObserver(([entry]) => {
       const width = Math.max(1, entry.contentRect.width);
@@ -405,7 +411,14 @@ export function DitherRevealCard({
         gl.deleteProgram(current.program);
         gl.deleteShader(current.vertex);
         gl.deleteShader(current.fragment);
-        gl.getExtension("WEBGL_lose_context")?.loseContext();
+        const extension = gl.getExtension("WEBGL_lose_context");
+        if (extension) {
+          const timer = window.setTimeout(() => {
+            extension.loseContext();
+            if (contextLossRef.current === timer) contextLossRef.current = null;
+          }, 0);
+          contextLossRef.current = timer;
+        }
       }
       stateRef.current = null;
       frameRef.current = null;
@@ -475,7 +488,10 @@ export function DitherRevealCard({
           {back}
         </span>
       </span>
-      <span className="absolute bottom-4 right-4 z-20 grid size-11 place-items-center rounded-full border border-black/10 bg-white/70 text-[#292929] shadow-sm backdrop-blur-md transition-transform duration-150 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-active:scale-[0.96] dark:border-white/[0.14] dark:bg-black/30 dark:text-white">
+      <span
+        data-dither-arrow
+        className={`absolute bottom-4 right-4 z-20 grid size-11 place-items-center rounded-full border border-black/10 bg-white/70 text-[#292929] shadow-sm backdrop-blur-md dark:border-white/[0.14] dark:bg-black/30 dark:text-white ${reduced ? "" : "transition-transform duration-150 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-active:scale-[0.96]"}`}
+      >
         <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
           <path d="M5 10h10M11.5 6.5 15 10l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

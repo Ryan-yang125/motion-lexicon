@@ -7,8 +7,10 @@ import {
   type SpotlightBentoItem,
 } from "@/registry/components/spotlight-bento";
 
+const harness = vi.hoisted(() => ({ reduced: false }));
+
 vi.mock("motion/react", () => ({
-  useReducedMotion: () => false,
+  useReducedMotion: () => harness.reduced,
 }));
 
 const items: readonly SpotlightBentoItem[] = [
@@ -22,6 +24,7 @@ class ResizeObserverStub {
 }
 
 beforeEach(() => {
+  harness.reduced = false;
   vi.stubGlobal("ResizeObserver", ResizeObserverStub);
 });
 
@@ -53,5 +56,32 @@ describe("SpotlightBento", () => {
     fireEvent.click(buttons[1]);
     expect(onSelect).toHaveBeenCalledOnce();
     expect(onSelect).toHaveBeenCalledWith(items[1]);
+  });
+
+  it("shows the interaction indicator instantly with reduced motion", () => {
+    harness.reduced = true;
+    const { container } = render(<SpotlightBento items={items} onSelect={vi.fn()} />);
+    const indicators = container.querySelectorAll<HTMLElement>("[data-spotlight-indicator]");
+
+    expect(indicators).toHaveLength(items.length);
+    for (const indicator of indicators) {
+      expect(indicator).toHaveAttribute("data-motion-mode", "instant");
+      expect(indicator).not.toHaveClass("transition-[opacity,transform]");
+      expect(indicator).not.toHaveClass("scale-x-0");
+      expect(indicator).not.toHaveClass("group-focus-visible:scale-x-100");
+      expect(indicator).toHaveClass("group-focus-visible:opacity-100");
+    }
+  });
+
+  it("retains the transform indicator transition in standard motion", () => {
+    const { container } = render(<SpotlightBento items={items} onSelect={vi.fn()} />);
+    const indicator = container.querySelector<HTMLElement>("[data-spotlight-indicator]");
+
+    expect(indicator).toHaveAttribute("data-motion-mode", "standard");
+    expect(indicator).toHaveClass(
+      "transition-[opacity,transform]",
+      "scale-x-0",
+      "group-focus-visible:scale-x-100",
+    );
   });
 });
