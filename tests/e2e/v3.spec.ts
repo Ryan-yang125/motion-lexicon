@@ -62,6 +62,10 @@ test("global search opens immediately and navigates by keyboard", async ({ page 
 
 test("component keyboard and reduced-motion contracts remain intact", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Component keyboard contract runs once.");
+  await page.goto("/zh/components/command-palette/");
+  await page.getByRole("button", { name: "Open commands" }).click();
+  await expect(page.getByRole("combobox", { name: "Command palette" })).toBeFocused();
+
   await page.goto("/zh/components/tabs/");
   const tabs = page.getByRole("tablist", { name: "Workspace sections" });
   const overview = tabs.getByRole("tab", { name: "Overview" });

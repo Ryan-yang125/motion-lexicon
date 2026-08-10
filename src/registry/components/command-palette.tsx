@@ -214,7 +214,7 @@ export function CommandPalette({
   const count = results.length;
 
   useEffect(() => {
-    if (autoFocus || open === true) {
+    if (autoFocus && open === undefined) {
       inputRef.current?.focus({ preventScroll: true });
     }
   }, [autoFocus, open]);
@@ -378,16 +378,21 @@ function PaletteLayer({
   useEffect(() => setHost(document.body), []);
 
   useIsoLayoutEffect(() => {
-    if (!open) return;
+    if (!open || !host) return;
     returnFocus.current = document.activeElement instanceof HTMLElement
       ? document.activeElement
       : null;
+    layerRef.current
+      ?.querySelector<HTMLElement>(
+        'input:not([disabled]), button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+      )
+      ?.focus({ preventScroll: true });
     return () => {
       const node = returnFocus.current;
       requestAnimationFrame(() => node?.focus({ preventScroll: true }));
       returnFocus.current = null;
     };
-  }, [open]);
+  }, [host, open]);
 
   useEffect(() => {
     if (!open) return;
