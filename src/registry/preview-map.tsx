@@ -1,4 +1,12 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ComponentType } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from "react";
 import { getRegistryComponent, registryComponentRuntimeCost } from "../data/component-registry";
 
 type DemoModule = Record<string, ComponentType>;
@@ -29,12 +37,16 @@ function PreviewFallback() {
   return <div className="registry-preview-loading" aria-hidden="true" />;
 }
 
-export function RegistryPreview({ id, deferred = false }: { id: string; deferred?: boolean }) {
+type DeferredPreviewProps = {
+  id: string;
+  deferred: boolean;
+  heavy: boolean;
+  children: ReactNode;
+};
+
+export function DeferredPreview({ id, deferred, heavy, children }: DeferredPreviewProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(!deferred);
-  const Demo = lazyDemos[id];
-  const entry = getRegistryComponent(id);
-  const heavy = entry ? registryComponentRuntimeCost(entry) === "heavy" : false;
 
   useEffect(() => {
     if (!deferred || !frameRef.current) return;
@@ -44,9 +56,7 @@ export function RegistryPreview({ id, deferred = false }: { id: string; deferred
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (heavy) {
-          setActive(entry.isIntersecting);
-        } else if (entry.isIntersecting) {
+        if (entry.isIntersecting) {
           setActive(true);
           observer.disconnect();
         }
@@ -59,13 +69,25 @@ export function RegistryPreview({ id, deferred = false }: { id: string; deferred
 
   return (
     <div className="registry-preview" ref={frameRef} data-component={id}>
-      {active && Demo ? (
+      {active ? children : <PreviewFallback />}
+    </div>
+  );
+}
+
+export function RegistryPreview({ id, deferred = false }: { id: string; deferred?: boolean }) {
+  const Demo = lazyDemos[id];
+  const entry = getRegistryComponent(id);
+  const heavy = entry ? registryComponentRuntimeCost(entry) === "heavy" : false;
+
+  return (
+    <DeferredPreview id={id} deferred={deferred} heavy={heavy}>
+      {Demo ? (
         <Suspense fallback={<PreviewFallback />}>
           <Demo />
         </Suspense>
       ) : (
         <PreviewFallback />
       )}
-    </div>
+    </DeferredPreview>
   );
 }
