@@ -141,4 +141,34 @@ describe("React + Motion primitive registry", () => {
     expect(source("accordion-collapse")).toContain("AnimatePresence");
     expect(source("line-drawing")).toContain("pathLength");
   });
+
+  it("preserves the complete behavior contract of stateful primitives", () => {
+    const source = (id: string, values?: Record<string, string | number | boolean>) => {
+      const entry = catalogRecipes.find((item) => item.id === id)!;
+      return buildPrimitiveSource(entry, values ?? getDefaultParamValues(entry));
+    };
+
+    const hold = source("hold-to-confirm");
+    expect(hold).toContain("onConfirm: () => void");
+    expect(hold).toContain("setTimeout");
+    expect(hold).toContain("onPointerCancel={cancelHold}");
+    expect(hold).toContain("onKeyDown");
+
+    const dismiss = source("swipe-to-dismiss");
+    expect(dismiss).toContain("onDismiss?: () => void");
+    expect(dismiss).toContain("Math.abs(info.offset.x) >= threshold");
+    expect(dismiss).toContain("onDragEnd={finishDrag}");
+
+    const scroll = source("scroll-driven-animation", { start: 20, end: 75, distance: 120, axis: "x" });
+    expect(scroll).toContain("useScroll");
+    expect(scroll).toContain("useTransform(scrollYProgress, [0.2, 0.75], [120, -120])");
+    expect(scroll).toContain("x: reduceMotion ? 0 : progress");
+
+    const loop = source("loop", { duration: 1600, pause: 240, direction: "alternate", iterations: 4, infinite: false });
+    expect(loop).toContain('repeat: 3, repeatType: "reverse", repeatDelay: 0.24');
+
+    const shimmer = source("skeleton-shimmer");
+    expect(shimmer).toContain("repeat: Infinity");
+    expect(shimmer).toContain('repeatType: "loop"');
+  });
 });

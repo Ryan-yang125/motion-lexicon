@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/marquee.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/marquee.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MarqueePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function MarqueePrimitive({ children, ...props }: MarqueePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: \"0%\"}}\n      animate={{x: \"-50%\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 8, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MarqueePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function MarqueePrimitive({ children, ...props }: MarqueePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: \"0%\"}}\n      animate={{x: \"-50%\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 8, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"loop\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

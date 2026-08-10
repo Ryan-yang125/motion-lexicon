@@ -67,6 +67,17 @@ for (const primitive of installablePrimitiveEntries) {
   assert(!/scale\s*:\s*0(?!\.)/.test(source), `${primitive.id} animates from scale 0`);
 }
 
+const primitiveSource = (id: string) => {
+  const primitive = installablePrimitiveEntries.find((entry) => entry.id === id);
+  assert(primitive, `Missing ${id} registry primitive`);
+  return buildPrimitiveSource(primitive.recipe, getDefaultParamValues(primitive.recipe));
+};
+assert(primitiveSource("hold-to-confirm").includes("onConfirm: () => void"), "Hold-to-confirm needs a completion callback");
+assert(primitiveSource("hold-to-confirm").includes("onPointerCancel={cancelHold}"), "Hold-to-confirm must be cancellable");
+assert(primitiveSource("swipe-to-dismiss").includes("onDragEnd={finishDrag}"), "Swipe-to-dismiss needs threshold handling");
+assert(primitiveSource("scroll-driven-animation").includes("useScroll"), "Scroll-driven animation must read scroll progress");
+assert(primitiveSource("skeleton-shimmer").includes("repeat: Infinity"), "Skeleton shimmer must loop while loading");
+
 const longForm = new Set(["hold-to-confirm", "marquee", "orbit", "idle-animation", "line-drawing", "skeleton-shimmer", "typewriter"]);
 for (const recipe of catalogRecipes) {
   const duration = recipe.params.find((param) => param.id === "duration");

@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/orbit.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/orbit.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type OrbitPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function OrbitPrimitive({ children, ...props }: OrbitPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: 0}}\n      animate={{rotate: 360}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 6, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"mirror\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type OrbitPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function OrbitPrimitive({ children, ...props }: OrbitPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: 0}}\n      animate={{rotate: 360}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 6, ease: [0.23, 1, 0.32, 1], repeat: Infinity, repeatType: \"loop\" }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }
