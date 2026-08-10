@@ -274,6 +274,7 @@ export function NetworkGlobe({
   return (
     <div
       ref={mountRef}
+      data-webgl-root="network-globe"
       role="group"
       tabIndex={0}
       aria-label={`${label}. Drag or use arrow keys to rotate.`}
@@ -310,7 +311,7 @@ export function NetworkGlobe({
         event.preventDefault();
         requestFrame();
       }}
-      className={`relative isolate min-h-[250px] w-full touch-none overflow-hidden rounded-[18px] border border-stone-200 bg-[#EDEBE4] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EDEBE4] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
     >
       <div
         data-webgl-fallback="network-globe"

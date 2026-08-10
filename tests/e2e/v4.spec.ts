@@ -122,8 +122,39 @@ test("Three.js components retain a static preview without WebGL", async ({ page 
 
   await page.goto("/zh/components/network-globe/");
   await expect(page.locator('[data-webgl-fallback="network-globe"]')).toBeVisible();
+  await expect(page.locator('[data-webgl-root="network-globe"]')).toHaveCSS("touch-action", "pan-y");
   await page.goto("/zh/components/procedural-product-viewer/");
   await expect(page.locator('[data-webgl-fallback="procedural-product-viewer"]')).toBeVisible();
+  await expect(page.locator('[data-webgl-root="procedural-product-viewer"]')).toHaveCSS("touch-action", "pan-y");
+});
+
+test("theme snapshots and dropped files honor their component contracts", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Advanced component contracts run once.");
+  await page.addInitScript(() => {
+    Object.defineProperty(document, "startViewTransition", {
+      configurable: true,
+      value: (update: () => void | Promise<void>) => {
+        const ready = Promise.resolve(update()).then(() => {
+          (window as typeof window & { __snapshotTheme?: string | null }).__snapshotTheme = document.querySelector("[data-theme-reveal-state]")?.getAttribute("data-theme-reveal-state");
+        });
+        return { ready, finished: ready };
+      },
+    });
+  });
+  await page.goto("/zh/components/theme-reveal/");
+  await page.getByRole("button", { name: "Use dark theme" }).click();
+  await expect.poll(() => page.evaluate(() => (window as typeof window & { __snapshotTheme?: string | null }).__snapshotTheme)).toBe("dark");
+
+  await page.goto("/zh/components/upload-queue/");
+  const files = await page.evaluateHandle(() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(["image"], "accepted.png", { type: "image/png" }));
+    transfer.items.add(new File(["text"], "rejected.txt", { type: "text/plain" }));
+    return transfer;
+  });
+  await page.locator("[data-upload-drop-zone]").dispatchEvent("drop", { dataTransfer: files });
+  await expect(page.getByText("accepted.png", { exact: true })).toBeVisible();
+  await expect(page.getByText("rejected.txt", { exact: true })).toHaveCount(0);
 });
 
 test("primitive directory and workbench use the direct V4 routes", async ({ page }) => {

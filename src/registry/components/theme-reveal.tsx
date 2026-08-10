@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ButtonHTMLAttributes } from "react";
+import { flushSync } from "react-dom";
 
 type ViewTransitionLike = { ready: Promise<void>; finished: Promise<void> };
 type TransitionDocument = Document & { startViewTransition?: (update: () => void | Promise<void>) => ViewTransitionLike };
@@ -46,7 +47,11 @@ export function ThemeReveal({
     const x = box.left + box.width / 2;
     const y = box.top + box.height / 2;
     const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    const transition = start.call(document, () => onThemeChange(next));
+    const transition = start.call(document, () => {
+      let result: void | Promise<void> = undefined;
+      flushSync(() => { result = onThemeChange(next); });
+      return result;
+    });
     await transition.ready;
     document.documentElement.animate(
       { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },

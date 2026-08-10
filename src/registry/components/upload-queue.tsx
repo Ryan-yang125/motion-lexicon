@@ -45,6 +45,19 @@ function formatBytes(value?: number) {
   return `${(value / 1024 / 1024).toFixed(1)} MB`;
 }
 
+function accepts(file: File, accept?: string) {
+  if (!accept?.trim()) return true;
+  const type = file.type.toLowerCase();
+  const name = file.name.toLowerCase();
+  return accept.split(",").some((entry) => {
+    const rule = entry.trim().toLowerCase();
+    if (!rule) return false;
+    if (rule.startsWith(".")) return name.endsWith(rule);
+    if (rule.endsWith("/*")) return type.startsWith(rule.slice(0, -1));
+    return type === rule;
+  });
+}
+
 function useAnimationActivity<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const [active, setActive] = useState(true);
@@ -94,7 +107,9 @@ export function UploadQueue({
 
   const submitFiles = (source: FileList | null) => {
     if (!source || remaining === 0) return;
-    const files = Array.from(source).slice(0, multiple ? remaining : Math.min(1, remaining));
+    const files = Array.from(source)
+      .filter((file) => accepts(file, accept))
+      .slice(0, multiple ? remaining : Math.min(1, remaining));
     if (files.length > 0) onFiles(files);
   };
 
@@ -112,6 +127,7 @@ export function UploadQueue({
   return (
     <div ref={ref} className={`w-full max-w-[430px] ${className}`}>
       <div
+        data-upload-drop-zone
         onDragEnter={(event) => {
           event.preventDefault();
           setDragging(true);

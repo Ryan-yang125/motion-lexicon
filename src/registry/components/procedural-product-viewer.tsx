@@ -354,6 +354,7 @@ export function ProceduralProductViewer({
   return (
     <div
       ref={mountRef}
+      data-webgl-root="procedural-product-viewer"
       role="group"
       tabIndex={0}
       aria-label={`${productName} interactive 3D viewer. Drag or use arrow keys to rotate.`}
@@ -410,7 +411,7 @@ export function ProceduralProductViewer({
         event.preventDefault();
         requestFrame();
       }}
-      className={`relative isolate min-h-[250px] w-full cursor-grab touch-none overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_48px_-38px_rgba(41,41,41,0.55)] outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_48px_-38px_rgba(41,41,41,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
     >
       <div
         data-webgl-fallback="procedural-product-viewer"
