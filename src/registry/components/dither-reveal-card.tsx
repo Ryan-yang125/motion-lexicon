@@ -268,6 +268,16 @@ function resolveCssColor(
   return channels ? { css: rgbaCss(channels), channels } : fallback;
 }
 
+function samePalette(left: ResolvedPalette, right: ResolvedPalette) {
+  return left.front.css === right.front.css &&
+    left.back.css === right.back.css &&
+    left.ink.css === right.ink.css;
+}
+
+function usesCssVariable(value: string | undefined) {
+  return value?.toLowerCase().includes("var(") === true;
+}
+
 export function DitherRevealCard({
   front,
   back,
@@ -348,16 +358,53 @@ export function DitherRevealCard({
     }
   }, [tick]);
 
-  useEffect(() => {
+  const resolvePalette = useCallback(() => {
     const nextColors = {
       front: resolveCssColor(paletteFront, DEFAULT_COLORS.front, rootRef.current),
       back: resolveCssColor(paletteBack, DEFAULT_COLORS.back, rootRef.current),
       ink: resolveCssColor(paletteInk, DEFAULT_COLORS.ink, rootRef.current),
     };
+    if (samePalette(colorsRef.current, nextColors)) return;
     colorsRef.current = nextColors;
     setColors(nextColors);
     requestRender();
   }, [paletteBack, paletteFront, paletteInk, requestRender]);
+
+  useEffect(() => {
+    resolvePalette();
+    if (
+      !usesCssVariable(paletteFront) &&
+      !usesCssVariable(paletteBack) &&
+      !usesCssVariable(paletteInk)
+    ) {
+      return;
+    }
+
+    const root = rootRef.current;
+    if (!root || typeof MutationObserver === "undefined") return;
+    let paletteFrame: number | null = null;
+    const scheduleResolve = () => {
+      if (paletteFrame !== null) return;
+      paletteFrame = requestAnimationFrame(() => {
+        paletteFrame = null;
+        resolvePalette();
+      });
+    };
+    const observer = new MutationObserver(scheduleResolve);
+    for (let ancestor: HTMLElement | null = root; ancestor; ancestor = ancestor.parentElement) {
+      observer.observe(ancestor, { attributes: true });
+    }
+    const colorScheme = typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-color-scheme: dark)")
+      : null;
+    colorScheme?.addEventListener("change", scheduleResolve);
+
+    return () => {
+      observer.disconnect();
+      colorScheme?.removeEventListener("change", scheduleResolve);
+      if (paletteFrame !== null) cancelAnimationFrame(paletteFrame);
+    };
+  }, [paletteBack, paletteFront, paletteInk, resolvePalette]);
 
   useEffect(() => {
     if (contextLossRef.current !== null) {

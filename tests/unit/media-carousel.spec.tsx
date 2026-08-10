@@ -201,6 +201,70 @@ describe("MediaCarousel", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
+  it("realigns a retained active item after external reorder without resetting ordinary rerenders", () => {
+    const originalOffsetLeft = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "offsetLeft",
+    );
+    Object.defineProperty(HTMLElement.prototype, "offsetLeft", {
+      configurable: true,
+      get() {
+        const slideLabel = this.parentElement?.getAttribute("aria-label");
+        const slideNumber = slideLabel ? Number.parseInt(slideLabel, 10) : Number.NaN;
+        return Number.isNaN(slideNumber) ? 0 : (slideNumber - 1) * 200;
+      },
+    });
+
+    try {
+      const onSelect = vi.fn();
+      const { container, rerender } = render(
+        <MediaCarousel items={items} initialIndex={1} onSelect={onSelect} />,
+      );
+      const viewport = container.querySelector<HTMLDivElement>(
+        '[aria-roledescription="carousel"]',
+      );
+      if (!viewport) throw new Error("Carousel viewport was not rendered");
+      expect(viewport.scrollLeft).toBe(200);
+
+      rerender(
+        <MediaCarousel
+          items={[items[1], items[2], items[0]]}
+          initialIndex={1}
+          onSelect={onSelect}
+        />,
+      );
+
+      expect(viewport.scrollLeft).toBe(0);
+      expect(
+        screen.getByRole("group", { name: "1 of 3" }).querySelector("button"),
+      ).toHaveAttribute("aria-current", "true");
+      expect(screen.getByText("01 / 03")).toBeInTheDocument();
+      expect(onSelect).not.toHaveBeenCalled();
+
+      viewport.scrollLeft = 137;
+      rerender(
+        <MediaCarousel
+          items={[{ ...items[1] }, { ...items[2] }, { ...items[0] }]}
+          initialIndex={1}
+          onSelect={onSelect}
+        />,
+      );
+
+      expect(viewport.scrollLeft).toBe(137);
+      expect(onSelect).not.toHaveBeenCalled();
+    } finally {
+      if (originalOffsetLeft) {
+        Object.defineProperty(
+          HTMLElement.prototype,
+          "offsetLeft",
+          originalOffsetLeft,
+        );
+      } else {
+        Reflect.deleteProperty(HTMLElement.prototype, "offsetLeft");
+      }
+    }
+  });
+
   it("selects the item at the same position when the active item is deleted", () => {
     const onSelect = vi.fn();
     const { rerender } = render(

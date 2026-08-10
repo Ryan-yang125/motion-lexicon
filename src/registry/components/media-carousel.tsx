@@ -71,6 +71,8 @@ export function MediaCarousel({
   const slideRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const scrollFrameRef = useRef<number | null>(null);
   const initialPositionedRef = useRef(false);
+  const itemIdSequence = JSON.stringify(items.map((item) => item.id));
+  const positionedItemIdSequenceRef = useRef(itemIdSequence);
   const initialActiveIndex = items.length > 0
     ? clampIndex(initialIndex, items.length)
     : -1;
@@ -94,6 +96,7 @@ export function MediaCarousel({
   useIsomorphicLayoutEffect(() => {
     if (items.length === 0) {
       initialPositionedRef.current = false;
+      positionedItemIdSequenceRef.current = itemIdSequence;
       slideRefs.current = [];
       activeIdRef.current = null;
       activeIndexRef.current = -1;
@@ -102,6 +105,13 @@ export function MediaCarousel({
     }
     if (activeIndex < 0 || activeItemId === null) return;
 
+    const previousActiveIndex = activeIndexRef.current;
+    const itemOrderChanged = positionedItemIdSequenceRef.current !== itemIdSequence;
+    const retainedActiveItemMoved = activeId === activeItemId
+      && itemOrderChanged
+      && previousActiveIndex !== activeIndex;
+    positionedItemIdSequenceRef.current = itemIdSequence;
+
     if (activeId === null) {
       activeIdRef.current = activeItemId;
       activeIndexRef.current = activeIndex;
@@ -109,7 +119,7 @@ export function MediaCarousel({
     } else if (activeId === activeItemId) {
       activeIndexRef.current = activeIndex;
     }
-    if (initialPositionedRef.current) return;
+    if (initialPositionedRef.current && !retainedActiveItemMoved) return;
 
     const viewport = viewportRef.current;
     const slide = slideRefs.current[activeIndex];
@@ -117,7 +127,7 @@ export function MediaCarousel({
 
     viewport.scrollLeft = slide.offsetLeft - viewport.offsetLeft;
     initialPositionedRef.current = true;
-  }, [activeId, activeIndex, activeItemId, items.length]);
+  }, [activeId, activeIndex, activeItemId, itemIdSequence, items.length]);
 
   useEffect(() => {
     if (activeId === null || matchedActiveIndex >= 0 || items.length === 0) return;

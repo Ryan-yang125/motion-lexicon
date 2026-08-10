@@ -152,6 +152,71 @@ describe("DitherRevealCard WebGL fallback", () => {
     await waitFor(() => expect(loseContext).toHaveBeenCalledOnce());
   });
 
+  it("updates CSS variable palettes after theme changes without recreating WebGL", async () => {
+    const {
+      drawArrays,
+      uniform4fv,
+      getContext,
+      frames,
+      flushFrame,
+    } = installWebGL();
+    const getComputedStyle = window.getComputedStyle.bind(window);
+    vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudoElement) => {
+      const computed = getComputedStyle(element, pseudoElement);
+      if (
+        element instanceof HTMLElement &&
+        element.style.color === "var(--dither-front)"
+      ) {
+        return new Proxy(computed, {
+          get(target, property) {
+            if (property === "color") {
+              return document.documentElement.style.getPropertyValue("--dither-front");
+            }
+            return Reflect.get(target, property, target);
+          },
+        });
+      }
+      return computed;
+    });
+    document.documentElement.style.setProperty("--dither-front", "rgb(12 34 56)");
+
+    const { container } = render(
+      <DitherRevealCard
+        palette={{ front: "var(--dither-front)" }}
+        front={<span>Front</span>}
+        back={<span>Back</span>}
+      />,
+    );
+    const fallback = container.querySelector<HTMLElement>(
+      '[data-webgl-fallback="dither-reveal-card"]',
+    );
+    await waitFor(() => expect(fallback).toHaveStyle({ backgroundColor: "rgb(12, 34, 56)" }));
+    act(() => {
+      while (frames.length > 0) flushFrame(16);
+    });
+    const drawsBeforeThemeChange = drawArrays.mock.calls.length;
+
+    act(() => {
+      document.documentElement.dataset.theme = "night";
+      document.documentElement.style.setProperty("--dither-front", "rgb(120 140 160)");
+    });
+    await waitFor(() => expect(frames.length).toBeGreaterThan(0));
+    act(() => {
+      while (frames.length > 0) flushFrame(32);
+    });
+
+    await waitFor(() => expect(fallback).toHaveStyle({ backgroundColor: "rgb(120, 140, 160)" }));
+    expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1);
+    expect(drawArrays.mock.calls.length).toBeGreaterThan(drawsBeforeThemeChange);
+    expect(uniform4fv).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.arrayContaining([120 / 255, 140 / 255, 160 / 255, 1]),
+    );
+
+    document.documentElement.style.removeProperty("--dither-front");
+    delete document.documentElement.dataset.theme;
+  });
+
   it("keeps WebGL active through StrictMode effect replay", async () => {
     const { getContext, loseContext } = installWebGL();
 
