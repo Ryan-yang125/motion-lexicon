@@ -76,7 +76,14 @@ assert(primitiveSource("hold-to-confirm").includes("onConfirm: () => void"), "Ho
 assert(primitiveSource("hold-to-confirm").includes("onPointerCancel={cancelHold}"), "Hold-to-confirm must be cancellable");
 assert(primitiveSource("swipe-to-dismiss").includes("onDragEnd={finishDrag}"), "Swipe-to-dismiss needs threshold handling");
 assert(primitiveSource("scroll-driven-animation").includes("useScroll"), "Scroll-driven animation must read scroll progress");
-assert(primitiveSource("skeleton-shimmer").includes("repeat: Infinity"), "Skeleton shimmer must loop while loading");
+assert(primitiveSource("skeleton-shimmer").includes("repeat: reduceMotion ? 0 : Infinity"), "Skeleton shimmer must loop while loading");
+assert(primitiveSource("drag-to-reorder").includes("<Reorder.Group"), "Drag-to-reorder needs a reorder state contract");
+assert(primitiveSource("ripple").includes("onPointerDown={addRipple}"), "Ripple must originate at the pointer");
+assert(primitiveSource("parallax").includes("useScroll"), "Parallax must read scroll progress");
+assert(primitiveSource("number-ticker").includes("key={value}"), "Number ticker must react to value changes");
+assert(primitiveSource("before-after-slider").includes('role="slider"'), "Before-after needs an operable divider");
+assert(primitiveSource("typewriter").includes("window.setInterval"), "Typewriter must reveal discrete characters");
+assert(!primitiveSource("marquee").includes('<motion.div aria-hidden="true"'), "Looping content must remain available to assistive technology");
 
 const longForm = new Set(["hold-to-confirm", "marquee", "orbit", "idle-animation", "line-drawing", "skeleton-shimmer", "typewriter"]);
 for (const recipe of catalogRecipes) {

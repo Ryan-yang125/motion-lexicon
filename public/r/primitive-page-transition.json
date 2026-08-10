@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/page-transition.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/page-transition.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type PageTransitionPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function PageTransitionPrimitive({ children, ...props }: PageTransitionPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      layout\n      animate={reduceMotion ? undefined : {opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 260, damping: 28 }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function PageTransitionPrimitive({ stateKey, children }: { stateKey: string; children: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence mode=\"wait\" initial={false}>\n      <motion.div\n        key={stateKey}\n        initial={reduceMotion ? false : { opacity: 0, x: 32 }}\n        animate={{ opacity: 1, x: 0 }}\n        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -32 }}\n        transition={reduceMotion ? { duration: 0.12 } : { duration: 0.28, ease: [0.23, 1, 0.32, 1] }}\n      >\n        {children}\n      </motion.div>\n    </AnimatePresence>\n  );\n}\n"
     }
   ]
 }

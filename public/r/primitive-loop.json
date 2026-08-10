@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/loop.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/loop.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type LoopPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function LoopPrimitive({ children, ...props }: LoopPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: -8}}\n      animate={{rotate: 8}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.2, ease: [0.23, 1, 0.32, 1], repeat: 2, repeatType: \"loop\", repeatDelay: 0.16 }}\n      aria-hidden=\"true\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type LoopPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function LoopPrimitive({ children, ...props }: LoopPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {rotate: -8}}\n      animate={{rotate: 8}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 1.2, ease: [0.16, 1, 0.3, 1], repeat: 2, repeatType: \"loop\", repeatDelay: 0.16 }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

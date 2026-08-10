@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/anticipation.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/anticipation.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type AnticipationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function AnticipationPrimitive({ children, ...props }: AnticipationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {scale: 1}}\n      animate={{scale: [1,0.96,1.04,1]}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.52, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type AnticipationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function AnticipationPrimitive({ children, ...props }: AnticipationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: 0,scale: 1}}\n      animate={{x: [0,-5.76,32,3.84,0],scale: [1,0.982,1.012,1]}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.52, ease: [0.16, 1, 0.3, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

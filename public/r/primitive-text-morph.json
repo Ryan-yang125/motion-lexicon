@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/text-morph.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/text-morph.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type TextMorphPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function TextMorphPrimitive({ children, ...props }: TextMorphPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,y: 5}}\n      animate={{opacity: 1,y: 0}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.23, 1, 0.32, 1], delay: 0.12 }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\n\nexport function TextMorphPrimitive({ value }: { value: string }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence mode=\"wait\" initial={false}>\n      <motion.span\n        key={value}\n        initial={reduceMotion ? false : { opacity: 0, filter: \"blur(8px)\", y: 5 }}\n        animate={{ opacity: 1, filter: \"blur(0px)\", y: 0 }}\n        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, filter: \"blur(8px)\", y: -5 }}\n        transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, delay: 0.12, ease: [0.23, 1, 0.32, 1] }}\n      >\n        {value}\n      </motion.span>\n    </AnimatePresence>\n  );\n}\n"
     }
   ]
 }

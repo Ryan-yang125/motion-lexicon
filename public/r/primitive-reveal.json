@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/reveal.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/reveal.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type RevealPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function RevealPrimitive({ children, ...props }: RevealPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,y: 12,clipPath: \"inset(0 0 100% 0)\"}}\n      animate={{opacity: 1,y: 0,clipPath: \"inset(0 0 0% 0)\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type RevealPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function RevealPrimitive({ children, ...props }: RevealPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0,y: 20,clipPath: \"inset(0 0 100% 0)\"}}\n      animate={{opacity: 1,y: 0,clipPath: \"inset(0 0 0% 0)\"}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

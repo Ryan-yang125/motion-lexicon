@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/keyframes.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/keyframes.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type KeyframesPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function KeyframesPrimitive({ children, ...props }: KeyframesPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0.5,x: 0}}\n      animate={{opacity: [0.5,1,1],x: [0,28,0]}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.72, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type KeyframesPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function KeyframesPrimitive({ children, ...props }: KeyframesPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : { opacity: 0.35, x: 0 }}\n      animate={reduceMotion ? { opacity: 1, x: 0 } : { opacity: [0.35, 1, 0.72, 1], x: [0, 18, -8, 0] }}\n      transition={{ duration: reduceMotion ? 0.12 : 0.72, ease: [0.23, 1, 0.32, 1] }}\n      data-fill=\"both\"\n      data-steps={4}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

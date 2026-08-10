@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/parallax.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/parallax.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type ParallaxPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function ParallaxPrimitive({ children, ...props }: ParallaxPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {y: 24}}\n      animate={{y: -24}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.22, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion, useScroll, useTransform } from \"motion/react\";\nimport { useRef } from \"react\";\nimport type { ComponentProps, ReactNode } from \"react\";\n\nexport type ParallaxPrimitiveProps = Omit<ComponentProps<typeof motion.div>, \"children\" | \"ref\"> & {\n  children: ReactNode;\n};\n\nexport function ParallaxPrimitive({ children, ...props }: ParallaxPrimitiveProps) {\n  const target = useRef<HTMLDivElement>(null);\n  const reduceMotion = useReducedMotion();\n  const { scrollYProgress } = useScroll({ target, offset: [\"start end\", \"end start\"] });\n  const travel = useTransform(scrollYProgress, [0, 1], [16.8, -16.8]);\n\n  return (\n    <motion.div\n      {...props}\n      ref={target}\n      style={{ ...props.style, y: reduceMotion ? 0 : travel }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

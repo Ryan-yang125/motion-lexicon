@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/crossfade.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/crossfade.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type CrossfadePrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function CrossfadePrimitive({ children, ...props }: CrossfadePrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {opacity: 0}}\n      animate={{opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.2, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport type { ReactNode } from \"react\";\n\nexport function CrossfadePrimitive({ stateKey, children }: { stateKey: string; children: ReactNode }) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <AnimatePresence initial={false} mode=\"sync\">\n      <motion.div\n        key={stateKey}\n        initial={reduceMotion ? false : { opacity: 0 }}\n        animate={{ opacity: 1, transition: reduceMotion ? { duration: 0.12 } : { duration: 0.2, delay: 0.1, ease: [0.33, 1, 0.68, 1] } }}\n        exit={{ opacity: 0, transition: reduceMotion ? { duration: 0.12 } : { duration: 0.2, ease: [0.33, 1, 0.68, 1] } }}\n      >\n        {children}\n      </motion.div>\n    </AnimatePresence>\n  );\n}\n"
     }
   ]
 }

@@ -117,10 +117,27 @@ describe("React + Motion primitive registry", () => {
     }
   });
 
+  it("reflects every public parameter in the generated source", () => {
+    for (const entry of installablePrimitiveEntries) {
+      const defaults = getDefaultParamValues(entry.recipe);
+      const baseline = buildPrimitiveSource(entry.recipe, defaults);
+      for (const param of entry.recipe.params) {
+        const nextValue = param.kind === "range"
+          ? (param.defaultValue + param.step <= param.max ? param.defaultValue + param.step : param.defaultValue - param.step)
+          : param.kind === "toggle"
+            ? !param.defaultValue
+            : param.options.find((option) => option.value !== param.defaultValue)?.value;
+        if (nextValue === undefined) continue;
+        const changed = buildPrimitiveSource(entry.recipe, { ...defaults, [param.id]: nextValue });
+        expect(changed, `${entry.id}.${param.id}`).not.toBe(baseline);
+      }
+    }
+  });
+
   it("turns parameter changes into the copied React source", () => {
     const slide = catalogRecipes.find((entry) => entry.id === "slide-in")!;
     const source = buildPrimitiveSource(slide, { ...getDefaultParamValues(slide), duration: 360, distance: 44 });
-    expect(source).toContain("x: 44");
+    expect(source).toContain("y: 44");
     expect(source).toContain("duration: 0.36");
 
     const spring = catalogRecipes.find((entry) => entry.id === "spring")!;
@@ -135,7 +152,8 @@ describe("React + Motion primitive registry", () => {
       const entry = catalogRecipes.find((item) => item.id === id)!;
       return buildPrimitiveSource(entry, getDefaultParamValues(entry));
     };
-    expect(source("drag-to-reorder")).toContain('drag="x"');
+    expect(source("drag-to-reorder")).toContain("<Reorder.Group");
+    expect(source("drag-to-reorder")).toContain("onReorder={onReorder}");
     expect(source("scroll-reveal")).toContain("whileInView");
     expect(source("stagger")).toContain("staggerChildren");
     expect(source("accordion-collapse")).toContain("AnimatePresence");
@@ -168,7 +186,46 @@ describe("React + Motion primitive registry", () => {
     expect(loop).toContain('repeat: 3, repeatType: "reverse", repeatDelay: 0.24');
 
     const shimmer = source("skeleton-shimmer");
-    expect(shimmer).toContain("repeat: Infinity");
-    expect(shimmer).toContain('repeatType: "loop"');
+    expect(shimmer).toContain("repeat: reduceMotion ? 0 : Infinity");
+  });
+
+  it("keeps specialized primitives faithful to their public parameters", () => {
+    const source = (id: string, values?: Record<string, string | number | boolean>) => {
+      const entry = catalogRecipes.find((item) => item.id === id)!;
+      return buildPrimitiveSource(entry, values ?? getDefaultParamValues(entry));
+    };
+
+    expect(source("ripple", { duration: 200, size: 260, opacity: 18 })).toMatch(/left: ripple\.x[\s\S]+width: "260%"/);
+    expect(source("ripple", { duration: 200, size: 260, opacity: 18 })).toContain("onPointerDown={addRipple}");
+
+    const parallax = source("parallax", { distance: 80, speed: 50, axis: "x" });
+    expect(parallax).toContain("useScroll");
+    expect(parallax).toContain("[40, -40]");
+    expect(parallax).toContain("x: reduceMotion ? 0 : travel");
+
+    const ticker = source("number-ticker", { duration: 240, distance: 30, ease: "snap" });
+    expect(ticker).toContain("value: number");
+    expect(ticker).toContain("key={value}");
+    expect(ticker).toContain("aria-live=\"polite\"");
+
+    expect(source("marquee")).not.toContain('<motion.div aria-hidden="true"');
+    expect(source("marquee")).toContain('<span aria-hidden="true"');
+    expect(source("slide-in", { duration: 240, distance: 32, direction: "up", delay: 0, ease: "soft" })).toContain("initial={reduceMotion ? false : {opacity: 0,y: 32}}");
+    expect(source("slide-in", { duration: 240, distance: 32, direction: "out", delay: 0, ease: "soft" })).toContain("animate={{opacity: 0,y: -32}}");
+
+    const compare = source("before-after-slider", { position: 42, duration: 180 });
+    expect(compare).toContain('role="slider"');
+    expect(compare).toContain("clipPath");
+    expect(compare).toContain("initialPosition = 42");
+
+    const typewriter = source("typewriter", { duration: 900, characters: 12, caret: true });
+    expect(typewriter).toContain("window.setInterval");
+    expect(typewriter).toContain("text.slice(0, 12)");
+    expect(typewriter).toContain("motion-typewriter-caret");
+    expect(source("typewriter", { duration: 900, characters: 12, caret: false })).not.toContain("motion-typewriter-caret");
+
+    expect(source("origin-aware-animation", { duration: 220, scale: 88, origin: "top-left", ease: "soft" })).toContain('transformOrigin: "top left"');
+    expect(source("easing", { duration: 520, distance: 120, ease: "custom" })).toContain("ease: [0.25, 0.9, 0.3, 1]");
+    expect(source("easing", { duration: 520, distance: 120, ease: "calm" })).toContain("ease: [0.33, 1, 0.68, 1]");
   });
 });

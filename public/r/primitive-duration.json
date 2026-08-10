@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/duration.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/duration.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type DurationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function DurationPrimitive({ children, ...props }: DurationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: 0}}\n      animate={{x: 28}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.23, 1, 0.32, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type DurationPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function DurationPrimitive({ children, ...props }: DurationPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      initial={reduceMotion ? false : {x: 0}}\n      animate={{x: 28}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.24, ease: [0.16, 1, 0.3, 1] }}\n      \n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }

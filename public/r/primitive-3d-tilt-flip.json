@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/3d-tilt-flip.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/3d-tilt-flip.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type Motion3dTiltFlipPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function Motion3dTiltFlipPrimitive({ children, ...props }: Motion3dTiltFlipPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      whileHover={reduceMotion ? undefined : {rotateX: -4,rotateY: 7,y: -3}}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.28, ease: [0.23, 1, 0.32, 1] }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type Motion3dTiltFlipPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function Motion3dTiltFlipPrimitive({ children, ...props }: Motion3dTiltFlipPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <div style={{ perspective: 800 }}>\n      <motion.div\n        {...props}\n        whileHover={reduceMotion ? undefined : { rotateY: 180, rotateX: -10.8 }}\n        transition={reduceMotion ? { duration: 0.12 } : { duration: 0.28, ease: [0.23, 1, 0.32, 1] }}\n        style={{ ...props.style, transformStyle: \"preserve-3d\" }}\n      >\n        {children}\n      </motion.div>\n    </div>\n  );\n}\n"
     }
   ]
 }

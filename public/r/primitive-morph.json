@@ -17,7 +17,7 @@
       "path": "src/registry/primitives/morph.tsx",
       "type": "registry:ui",
       "target": "components/motion-lexicon/primitives/morph.tsx",
-      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MorphPrimitiveProps = ComponentProps<typeof motion.div>;\n\nexport function MorphPrimitive({ children, ...props }: MorphPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      {...props}\n      layout\n      animate={reduceMotion ? undefined : {opacity: 1}}\n      transition={reduceMotion ? { duration: 0.12 } : { type: \"spring\", stiffness: 260, damping: 28 }}\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"motion/react\";\nimport type { ComponentProps } from \"react\";\n\nexport type MorphPrimitiveProps = ComponentProps<typeof motion.div> & { layoutId?: string };\n\nexport function MorphPrimitive({ children, layoutId = \"shared-motion-element\", ...props }: MorphPrimitiveProps) {\n  const reduceMotion = useReducedMotion();\n  return (\n    <motion.div\n      {...props}\n      layout={\"position\"}\n      layoutId={layoutId}\n      initial={reduceMotion ? false : { opacity: 0, y: 48, scale: 0.86 }}\n      animate={{ opacity: 1, y: 0, scale: 1 }}\n      transition={reduceMotion ? { duration: 0.12 } : { duration: 0.26, ease: [0.23, 1, 0.32, 1] }}\n      data-continuity=\"morph\"\n    >\n      {children}\n    </motion.div>\n  );\n}\n"
     }
   ]
 }
