@@ -109,6 +109,23 @@ test("new component engines stay inside the page viewport", async ({ page }) => 
   }
 });
 
+test("Three.js components retain a static preview without WebGL", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "WebGL fallback contract runs once.");
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, ...args) {
+      const type = args[0];
+      if (type === "webgl" || type === "webgl2" || type === "experimental-webgl") return null;
+      return getContext.apply(this, args as Parameters<typeof getContext>);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+
+  await page.goto("/zh/components/network-globe/");
+  await expect(page.locator('[data-webgl-fallback="network-globe"]')).toBeVisible();
+  await page.goto("/zh/components/procedural-product-viewer/");
+  await expect(page.locator('[data-webgl-fallback="procedural-product-viewer"]')).toBeVisible();
+});
+
 test("primitive directory and workbench use the direct V4 routes", async ({ page }) => {
   await page.goto("/zh/primitives/");
   await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
@@ -171,6 +188,19 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
     return Number(clip.match(/inset\(0px ([\d.]+)%/)?.[1]);
   }).toBeLessThan(100);
   await page.keyboard.up("Space");
+
+  await page.goto("/zh/components/cursor-lens/");
+  const lensRoot = page.getByRole("group", { name: "Inspect restored image detail" });
+  await lensRoot.focus();
+  await page.keyboard.press("ArrowRight");
+  const lens = lensRoot.locator("[data-cursor-lens]");
+  await expect(lens).toHaveAttribute("data-position-mode", "instant");
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+  const position = await lensRoot.evaluate((root) => {
+    const node = root.querySelector<HTMLElement>("[data-cursor-lens]");
+    return { transform: node?.style.transform, width: root.clientWidth, height: root.clientHeight };
+  });
+  expect(position.transform).toBe(`translate3d(${position.width / 2 + 10 - 66}px, ${position.height / 2 - 66}px, 0px)`);
 });
 
 test("mobile navigation, language, theme, and Agent Skill remain reachable", async ({ page }, testInfo) => {

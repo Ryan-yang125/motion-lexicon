@@ -67,6 +67,7 @@ export function NetworkGlobe({
   reducedRef.current = reduced;
   const firstId = nodes[0]?.id ?? "";
   const [focusedId, setFocusedId] = useState(firstId);
+  const [rendererReady, setRendererReady] = useState(false);
 
   const focused = useMemo(
     () => nodes.find((node) => node.id === focusedId) ?? nodes[0],
@@ -114,7 +115,13 @@ export function NetworkGlobe({
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
     camera.position.set(0, 0.12, 5.15);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    } catch {
+      setRendererReady(false);
+      return;
+    }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.setAttribute("aria-hidden", "true");
@@ -122,6 +129,7 @@ export function NetworkGlobe({
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
     mount.prepend(renderer.domElement);
+    setRendererReady(true);
 
     const globe = new THREE.Group();
     globe.rotation.set(-0.12, rotationRef.current.y, 0.02);
@@ -304,6 +312,29 @@ export function NetworkGlobe({
       }}
       className={`relative isolate min-h-[250px] w-full touch-none overflow-hidden rounded-[18px] border border-stone-200 bg-[#EDEBE4] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
     >
+      <div
+        data-webgl-fallback="network-globe"
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
+      >
+        <div className="relative size-40 rounded-full border border-stone-400/35 bg-[#DDE4D5] shadow-lg dark:border-white/20 dark:bg-[#2A2A27]">
+          <span className="absolute inset-[18%] rounded-full border border-stone-500/20" />
+          <span className="absolute inset-x-2 top-1/2 border-t border-stone-500/20" />
+          <span className="absolute inset-y-2 left-1/2 border-l border-stone-500/20" />
+          {nodes.slice(0, 6).map((node, index) => (
+            <span
+              key={node.id}
+              className="absolute size-2 rounded-full border border-white/80 shadow-[0_2px_8px_rgba(41,41,41,.3)]"
+              style={{
+                left: `${20 + ((node.longitude + 180) / 360) * 60}%`,
+                top: `${18 + ((90 - node.latitude) / 180) * 64}%`,
+                background: node.color ?? (index === 0 ? "#4568FF" : "#B3654A"),
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-4">
         <span>
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Live network</span>

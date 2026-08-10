@@ -29,12 +29,20 @@ export function CursorLens({
   const rawY = useMotionValue(0);
   const x = useSpring(rawX, FOLLOW);
   const y = useSpring(rawY, FOLLOW);
-  const transform = useTransform([x, y], ([latestX, latestY]) =>
+  const springTransform = useTransform([x, y], ([latestX, latestY]) =>
     `translate3d(${Number(latestX) - size / 2}px, ${Number(latestY) - size / 2}px, 0)`,
   );
-  const detailTransform = useTransform([x, y], ([latestX, latestY]) =>
+  const rawTransform = useTransform([rawX, rawY], ([latestX, latestY]) =>
+    `translate3d(${Number(latestX) - size / 2}px, ${Number(latestY) - size / 2}px, 0)`,
+  );
+  const springDetailTransform = useTransform([x, y], ([latestX, latestY]) =>
     `translate3d(${-Number(latestX) * (zoom - 1)}px, ${-Number(latestY) * (zoom - 1)}px, 0) scale(${zoom})`,
   );
+  const rawDetailTransform = useTransform([rawX, rawY], ([latestX, latestY]) =>
+    `translate3d(${-Number(latestX) * (zoom - 1)}px, ${-Number(latestY) * (zoom - 1)}px, 0) scale(${zoom})`,
+  );
+  const transform = reduced ? rawTransform : springTransform;
+  const detailTransform = reduced ? rawDetailTransform : springDetailTransform;
 
   const locate = (clientX: number, clientY: number) => {
     const box = root.current?.getBoundingClientRect();
@@ -94,6 +102,8 @@ export function CursorLens({
       <AnimatePresence>
         {visible ? (
           <motion.div
+            data-cursor-lens
+            data-position-mode={reduced ? "instant" : "spring"}
             aria-hidden
             initial={reduced ? { opacity: 1 } : { opacity: 0, transform: `${transform.get()} scale(.96)` }}
             animate={{ opacity: 1 }}

@@ -189,6 +189,7 @@ export function ProceduralProductViewer({
     lastTime: 0,
   });
   const [detailOpen, setDetailOpen] = useState(false);
+  const [rendererReady, setRendererReady] = useState(false);
 
   const draw = () => {
     const renderer = rendererRef.current;
@@ -247,11 +248,17 @@ export function ProceduralProductViewer({
     const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
     camera.position.set(0, 0.08, 4.35);
 
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: "high-performance",
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      setRendererReady(false);
+      return;
+    }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -261,6 +268,7 @@ export function ProceduralProductViewer({
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
     mount.prepend(renderer.domElement);
+    setRendererReady(true);
 
     const ambient = new THREE.HemisphereLight(0xf8f5ed, 0x8b7f70, 2.4);
     const key = new THREE.DirectionalLight(0xffffff, 3.6);
@@ -404,6 +412,22 @@ export function ProceduralProductViewer({
       }}
       className={`relative isolate min-h-[250px] w-full cursor-grab touch-none overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_48px_-38px_rgba(41,41,41,0.55)] outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
     >
+      <div
+        data-webgl-fallback="procedural-product-viewer"
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
+      >
+        <div className="relative h-40 w-28 -rotate-3 rounded-[22px] border border-white/80 bg-[#E8E5DD] shadow-lg dark:border-white/20 dark:bg-[#353531]">
+          <span className="absolute inset-x-3 top-4 h-16 rounded-[10px] border border-black/10 bg-[#171918] shadow-inner">
+            <span className="absolute left-3 top-5 h-1 w-10 rounded-full" style={{ background: accent }} />
+            <span className="absolute left-3 top-8 h-1 w-6 rounded-full bg-white/40" />
+          </span>
+          <span className="absolute bottom-7 left-4 size-8 rounded-full border-[5px]" style={{ borderColor: accent }} />
+          <span className="absolute bottom-7 right-4 size-7 rounded-full bg-[#292929] shadow-[inset_2px_2px_4px_rgba(255,255,255,.16)]" />
+          <span className="absolute -bottom-2 left-1/2 h-3 w-20 -translate-x-1/2 rounded-full bg-[#292929] shadow-lg" />
+        </div>
+      </div>
+
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4">
         <span>
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Object study</span>
