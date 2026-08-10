@@ -119,8 +119,8 @@ export function HomePage({ locale }: { locale: Locale }) {
   const zh = locale === "zh";
   const title = zh ? "把成熟动效，直接带进产品。" : "Bring refined motion straight into your product.";
   const description = zh
-    ? "28 个 React 动效组件，44 个可调节原子动效。预览、复制、安装。"
-    : "28 React motion components and 44 tunable primitives. Preview, copy, and install.";
+    ? "48 个 React 动效组件，44 个可调节原子动效。预览、复制、安装。"
+    : "48 React motion components and 44 tunable primitives. Preview, copy, and install.";
 
   return (
     <>
@@ -157,7 +157,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         <section className="landing-section" aria-labelledby="landing-components-title">
           <header className="landing-section-heading">
             <div><ComponentLibraryGlyph size={20} aria-hidden="true" /><h2 id="landing-components-title">{zh ? "产品级动效组件" : "Product-ready motion components"}</h2></div>
-            <Link to="/$locale/components/" params={{ locale }}>{zh ? "查看全部 28 个" : "View all 28"}<ArrowRightIcon size={14} aria-hidden="true" /></Link>
+            <Link to="/$locale/components/" params={{ locale }}>{zh ? "查看全部 48 个" : "View all 48"}<ArrowRightIcon size={14} aria-hidden="true" /></Link>
           </header>
           <div className="landing-component-grid">
             {featuredComponents.map((entry) => (

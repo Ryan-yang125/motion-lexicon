@@ -11,6 +11,13 @@
     "feedback"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/task-steps/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Connects queued, active, complete, and failed states into one flow."
+  },
   "files": [
     {
       "path": "src/registry/components/task-steps.tsx",

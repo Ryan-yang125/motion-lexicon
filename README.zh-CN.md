@@ -7,7 +7,7 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>可直接复制的 React + Motion 组件与原子动效。</strong>
+  <strong>可直接复制的 React 动效组件与原子动效。</strong>
 </p>
 
 <p align="center">
@@ -61,9 +61,9 @@ npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 npx shadcn@latest add @motion-lexicon/copy-button
 ```
 
-Registry 包含 28 个完整产品组件和 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、可中断动效和减弱动效方案。
+Registry 包含 48 个完整产品与网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
 
-![抽屉组件页](docs/assets/readme-v4-component.png)
+![三维产品查看器组件页](docs/assets/readme-v4-component.png)
 
 ![滑入原子动效工作台](docs/assets/readme-v4-primitive.png)
 
@@ -84,7 +84,7 @@ Skill 支持五种工作模式：
 ## 开发
 
 ```text
-src/registry/components/        28 个 React 组件源码
+src/registry/components/        48 个 React 组件源码
 src/registry/demos/             组件真实交互预览
 src/registry/primitives/        40 个独立 React + Motion 原子动效
 src/registry/primitive-demos/   40 个直接使用原子动效的产品 Demo

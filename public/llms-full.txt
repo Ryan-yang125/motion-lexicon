@@ -1,6 +1,6 @@
 # Motion Lexicon
 
-> Copy-ready React + Motion components and primitives, plus an Agent Skill for product motion.
+> Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.
 
 - Components: https://motion-lexicon.pages.dev/en/components/
 - Motion primitives: https://motion-lexicon.pages.dev/en/primitives/
@@ -44,6 +44,26 @@
 - [Progress bar](https://motion-lexicon.pages.dev/en/components/progress-bar/): Covers pending, determinate, and complete progress states. [Registry](https://motion-lexicon.pages.dev/r/progress-bar.json)
 - [Task steps](https://motion-lexicon.pages.dev/en/components/task-steps/): Connects queued, active, complete, and failed states into one flow. [Registry](https://motion-lexicon.pages.dev/r/task-steps.json)
 - [Value flash](https://motion-lexicon.pages.dev/en/components/value-flash/): Explains value changes with direction and brief color feedback. [Registry](https://motion-lexicon.pages.dev/r/value-flash.json)
+- [Magnetic action](https://motion-lexicon.pages.dev/en/components/magnetic-action/): Lets a primary action lean toward a nearby pointer and settle cleanly on release. [Registry](https://motion-lexicon.pages.dev/r/magnetic-action.json)
+- [Radial actions](https://motion-lexicon.pages.dev/en/components/radial-actions/): Fans a compact set of shortcuts around one anchored action. [Registry](https://motion-lexicon.pages.dev/r/radial-actions.json)
+- [Theme reveal](https://motion-lexicon.pages.dev/en/components/theme-reveal/): Reveals a new theme outward from the exact toggle point. [Registry](https://motion-lexicon.pages.dev/r/theme-reveal.json)
+- [Mega menu](https://motion-lexicon.pages.dev/en/components/mega-menu/): Keeps highlight, panel, and focus movement in one continuous navigation path. [Registry](https://motion-lexicon.pages.dev/r/mega-menu.json)
+- [Floating dock](https://motion-lexicon.pages.dev/en/components/floating-dock/): Scales nearby destinations with restrained spring response to pointer distance. [Registry](https://motion-lexicon.pages.dev/r/floating-dock.json)
+- [Voice capture](https://motion-lexicon.pages.dev/en/components/voice-capture/): Coordinates recording, levels, pause, and completion inside one input surface. [Registry](https://motion-lexicon.pages.dev/r/voice-capture.json)
+- [Toast stack](https://motion-lexicon.pages.dev/en/components/toast-stack/): Layers incoming notices into a stack that expands and dismisses by swipe or keyboard. [Registry](https://motion-lexicon.pages.dev/r/toast-stack.json)
+- [Upload queue](https://motion-lexicon.pages.dev/en/components/upload-queue/): Turns file intake, per-item progress, retry, and completion into one compact flow. [Registry](https://motion-lexicon.pages.dev/r/upload-queue.json)
+- [Skeleton reveal](https://motion-lexicon.pages.dev/en/components/skeleton-reveal/): Shares stable geometry between skeleton and content for a composed handoff. [Registry](https://motion-lexicon.pages.dev/r/skeleton-reveal.json)
+- [Activity feed](https://motion-lexicon.pages.dev/en/components/activity-feed/): Preserves date groups and the unread boundary as live activity arrives. [Registry](https://motion-lexicon.pages.dev/r/activity-feed.json)
+- [Integration map](https://motion-lexicon.pages.dev/en/components/integration-map/): Explains system relationships through nodes, routed links, and moving signals. [Registry](https://motion-lexicon.pages.dev/r/integration-map.json)
+- [Cursor lens](https://motion-lexicon.pages.dev/en/components/cursor-lens/): Compares two states of the same media through a movable detail lens. [Registry](https://motion-lexicon.pages.dev/r/cursor-lens.json)
+- [Media carousel](https://motion-lexicon.pages.dev/en/components/media-carousel/): Keeps native drag inertia, deliberate snap positions, and keyboard navigation across media cards. [Registry](https://motion-lexicon.pages.dev/r/media-carousel.json)
+- [Gallery lightbox](https://motion-lexicon.pages.dev/en/components/image-lightbox/): Expands a thumbnail into an immersive gallery while managing focus and keyboard browsing. [Registry](https://motion-lexicon.pages.dev/r/image-lightbox.json)
+- [Scroll story](https://motion-lexicon.pages.dev/en/components/scroll-story/): Binds local scroll progress to chapters that progressively reshape a product scene. [Registry](https://motion-lexicon.pages.dev/r/scroll-story.json)
+- [3D product viewer](https://motion-lexicon.pages.dev/en/components/procedural-product-viewer/): Presents a procedural 3D product with drag inspection, inertia, and recentering. [Registry](https://motion-lexicon.pages.dev/r/procedural-product-viewer.json)
+- [Dither reveal card](https://motion-lexicon.pages.dev/en/components/dither-reveal-card/): Advances a pixel-dither threshold so imagery develops with a tactile texture. [Registry](https://motion-lexicon.pages.dev/r/dither-reveal-card.json)
+- [Network globe](https://motion-lexicon.pages.dev/en/components/network-globe/): Maps global connections across a 3D globe with nodes, arcs, and selectable focus. [Registry](https://motion-lexicon.pages.dev/r/network-globe.json)
+- [Kinetic logo exchange](https://motion-lexicon.pages.dev/en/components/kinetic-logo-exchange/): Reorders and reveals brand marks in a kinetic queue that yields to user selection. [Registry](https://motion-lexicon.pages.dev/r/kinetic-logo-exchange.json)
+- [Spotlight bento](https://motion-lexicon.pages.dev/en/components/spotlight-bento/): Carries one continuous spotlight across multiple tiles to unify the bento surface. [Registry](https://motion-lexicon.pages.dev/r/spotlight-bento.json)
 
 ## Motion primitives
 

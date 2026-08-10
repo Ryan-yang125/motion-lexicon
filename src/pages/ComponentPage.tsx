@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
 import { RegistryPreview } from "../registry/preview-map";
-import { getRegistrySource } from "../registry/source";
+import { useRegistrySource } from "../registry/use-registry-source";
 import { getRegistryComponent, registryInstallCommand } from "../data/component-registry";
 import { getCanonicalRecipe } from "../data/recipes";
 import { pathFor, text } from "../data/site";
@@ -14,7 +14,7 @@ import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "../components/icons";
 export function ComponentPage({ locale, componentId }: { locale: Locale; componentId: string }) {
   const entry = getRegistryComponent(componentId);
   const [view, setView] = useState("preview");
-  const source = getRegistrySource(componentId);
+  const sourceState = useRegistrySource(entry?.id ?? null);
 
   if (!entry) {
     return <ComponentsFallback locale={locale} />;
@@ -28,6 +28,9 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         copyCode: "复制代码",
         copied: "已复制",
         failed: "复制失败",
+        loadingCode: "正在载入源码…",
+        loadCodeFailed: "源码载入失败",
+        retry: "重试",
         install: "安装",
         access: ["键盘可用", "支持减弱动效", "TypeScript"],
         foundations: "相关原子动效"
@@ -39,6 +42,9 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         copyCode: "Copy code",
         copied: "Copied",
         failed: "Copy failed",
+        loadingCode: "Loading source…",
+        loadCodeFailed: "Source failed to load",
+        retry: "Retry",
         install: "Install",
         access: ["Keyboard ready", "Reduced motion", "TypeScript"],
         foundations: "Related primitives"
@@ -81,10 +87,11 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
               <p>{text(entry.description, locale)}</p>
             </div>
             <CopyButton
-              value={source}
+              value={sourceState.source}
               label={copy.copyCode}
               copiedLabel={copy.copied}
               errorLabel={copy.failed}
+              disabled={sourceState.status !== "ready"}
               className="component-primary-copy"
             />
           </div>
@@ -105,15 +112,22 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
               ]}
             />
             {view === "code" ? (
-              <CopyButton value={source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} />
             ) : null}
           </div>
           {view === "preview" ? (
             <div className="component-detail-stage">
               <RegistryPreview id={entry.id} />
             </div>
+          ) : sourceState.status === "ready" ? (
+            <pre className="component-source"><code>{sourceState.source}</code></pre>
+          ) : sourceState.status === "error" ? (
+            <div className="component-source registry-source-state" role="alert">
+              <span>{copy.loadCodeFailed}</span>
+              <button className="primitive-replay-button" type="button" onClick={sourceState.retry}>{copy.retry}</button>
+            </div>
           ) : (
-            <pre className="component-source"><code>{source}</code></pre>
+            <pre className="component-source registry-source-state" aria-busy="true"><code>{copy.loadingCode}</code></pre>
           )}
         </section>
 

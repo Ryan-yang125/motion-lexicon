@@ -11,6 +11,13 @@
     "navigation"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/accordion/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Keeps content height and disclosure state visually continuous."
+  },
   "files": [
     {
       "path": "src/registry/components/accordion.tsx",

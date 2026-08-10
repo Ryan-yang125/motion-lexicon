@@ -19,15 +19,19 @@ describe("V4 public machine-readable artifacts", () => {
       schemaVersion: number;
       release: string;
       counts: { components: number; primitives: number };
-      components: Array<{ id: string; urls: { registry: string } }>;
+      components: Array<{ id: string; dependencies: string[]; devDependencies?: string[]; engines: string[]; runtimeCost: string; urls: { registry: string } }>;
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(4);
-    expect(catalog.release).toBe("4.0.0");
-    expect(catalog.counts).toEqual({ components: 28, primitives: 44 });
+    expect(catalog.release).toBe("4.1.0");
+    expect(catalog.counts).toEqual({ components: 48, primitives: 44 });
     expect(catalog.components).toHaveLength(registryComponents.length);
     expect(catalog.primitives).toHaveLength(catalogRecipes.length);
     expect(catalog.components.every((item) => item.urls.registry.endsWith(`/r/${item.id}.json`))).toBe(true);
+    expect(catalog.components.find((item) => item.id === "scroll-story")).toMatchObject({ dependencies: ["gsap"], engines: ["gsap"], runtimeCost: "medium" });
+    expect(catalog.components.find((item) => item.id === "network-globe")).toMatchObject({ dependencies: ["motion", "three"], engines: ["motion", "three"], runtimeCost: "heavy" });
+    expect(catalog.components.find((item) => item.id === "network-globe")?.devDependencies).toEqual(["@types/three"]);
+    expect(catalog.components.find((item) => item.id === "procedural-product-viewer")?.devDependencies).toEqual(["@types/three"]);
     expect(catalog.primitives.every((item) => item.urls.en.includes(`/en/primitives/${item.id}/`))).toBe(true);
     expect(catalog.primitives.filter((item) => item.urls.registry)).toHaveLength(installablePrimitiveEntries.length);
     expect(catalog.primitives.filter((item) => item.urls.registry).every((item) => item.urls.registry?.endsWith(`/r/primitive-${item.id}.json`))).toBe(true);
@@ -41,8 +45,8 @@ describe("V4 public machine-readable artifacts", () => {
     };
     const publicSchema = await parse("data/v4/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("4.0.0");
-    expect(grammar.collections.components.count).toBe(28);
+    expect(grammar.version).toBe("4.1.0");
+    expect(grammar.collections.components.count).toBe(48);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({
       zh: "https://motion-lexicon.pages.dev/zh/skill/",

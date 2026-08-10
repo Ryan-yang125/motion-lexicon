@@ -11,6 +11,13 @@
     "navigation"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/hide-on-scroll/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Hides and restores a toolbar in response to scroll direction."
+  },
   "files": [
     {
       "path": "src/registry/components/hide-on-scroll.tsx",

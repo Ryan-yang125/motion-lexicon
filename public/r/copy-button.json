@@ -11,6 +11,13 @@
     "actions"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/copy-button/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Reports clipboard state in place without shifting nearby content."
+  },
   "files": [
     {
       "path": "src/registry/components/copy-button.tsx",

@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/context-menu/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Opens from the trigger coordinate and stays inside the viewport."
+  },
   "files": [
     {
       "path": "src/registry/components/context-menu.tsx",

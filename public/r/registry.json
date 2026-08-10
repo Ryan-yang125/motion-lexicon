@@ -15,6 +15,13 @@
         "actions"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/copy-button/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Reports clipboard state in place without shifting nearby content."
+      },
       "files": [
         {
           "path": "src/registry/components/copy-button.tsx",
@@ -35,6 +42,13 @@
         "actions"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/loading-button/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Keeps pending, success, and error feedback inside one action."
+      },
       "files": [
         {
           "path": "src/registry/components/loading-button.tsx",
@@ -55,6 +69,13 @@
         "actions"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Protects destructive actions with cancellable hold progress."
+      },
       "files": [
         {
           "path": "src/registry/components/hold-to-confirm.tsx",
@@ -75,6 +96,13 @@
         "actions"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/long-press/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "A long-press gesture that works across touch, pointer, and keyboard."
+      },
       "files": [
         {
           "path": "src/registry/components/long-press.tsx",
@@ -95,6 +123,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/command-palette/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Combines search, keyboard navigation, and deliberate focus management."
+      },
       "files": [
         {
           "path": "src/registry/components/command-palette.tsx",
@@ -115,6 +150,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/context-menu/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Opens from the trigger coordinate and stays inside the viewport."
+      },
       "files": [
         {
           "path": "src/registry/components/context-menu.tsx",
@@ -135,6 +177,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/drawer/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Includes focus containment, drag dismissal, and interruptible spring motion."
+      },
       "files": [
         {
           "path": "src/registry/components/drawer.tsx",
@@ -155,6 +204,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/dropdown/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Moves selection continuously with full keyboard behavior."
+      },
       "files": [
         {
           "path": "src/registry/components/dropdown.tsx",
@@ -175,6 +231,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/modal/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Handles focus, backdrop, exit, and async confirmation as one flow."
+      },
       "files": [
         {
           "path": "src/registry/components/modal.tsx",
@@ -195,6 +258,13 @@
         "overlays"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/popover/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Derives its reveal origin from the trigger and available space."
+      },
       "files": [
         {
           "path": "src/registry/components/popover.tsx",
@@ -215,6 +285,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Expands from a toolbar action into a focused search field."
+      },
       "files": [
         {
           "path": "src/registry/components/expanding-search.tsx",
@@ -235,6 +312,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/floating-label/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Keeps the field label and context visible while typing."
+      },
       "files": [
         {
           "path": "src/registry/components/floating-label.tsx",
@@ -255,6 +339,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Places pending, error, and success states next to the input."
+      },
       "files": [
         {
           "path": "src/registry/components/inline-validation.tsx",
@@ -275,6 +366,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/otp-input/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Coordinates typing, paste, error, and success feedback."
+      },
       "files": [
         {
           "path": "src/registry/components/otp-input.tsx",
@@ -295,6 +393,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/password-strength/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Makes rule checks and strength changes legible as one response."
+      },
       "files": [
         {
           "path": "src/registry/components/password-strength.tsx",
@@ -315,6 +420,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Snaps to meaningful detents while preserving continuous input."
+      },
       "files": [
         {
           "path": "src/registry/components/slider-detents.tsx",
@@ -335,6 +447,13 @@
         "inputs"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/tag-input/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Gives clear feedback for adding, removing, and rejecting tags."
+      },
       "files": [
         {
           "path": "src/registry/components/tag-input.tsx",
@@ -355,6 +474,13 @@
         "navigation"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/accordion/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Keeps content height and disclosure state visually continuous."
+      },
       "files": [
         {
           "path": "src/registry/components/accordion.tsx",
@@ -375,6 +501,13 @@
         "navigation"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/hide-on-scroll/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Hides and restores a toolbar in response to scroll direction."
+      },
       "files": [
         {
           "path": "src/registry/components/hide-on-scroll.tsx",
@@ -395,6 +528,13 @@
         "navigation"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/pagination/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Keeps the current page legible while the visible range changes."
+      },
       "files": [
         {
           "path": "src/registry/components/pagination.tsx",
@@ -415,6 +555,13 @@
         "navigation"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/segmented-control/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Carries one shared highlight between options."
+      },
       "files": [
         {
           "path": "src/registry/components/segmented-control.tsx",
@@ -435,6 +582,13 @@
         "navigation"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/tabs/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Coordinates the indicator, direction, and panel change."
+      },
       "files": [
         {
           "path": "src/registry/components/tabs.tsx",
@@ -455,6 +609,13 @@
         "data"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Preserves spatial continuity as filtered results rearrange."
+      },
       "files": [
         {
           "path": "src/registry/components/filter-grid.tsx",
@@ -475,6 +636,13 @@
         "data"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Provides clear drop position for pointer and keyboard reordering."
+      },
       "files": [
         {
           "path": "src/registry/components/reorder-list.tsx",
@@ -495,6 +663,13 @@
         "data"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Explains sorting through row position while keeping data readable."
+      },
       "files": [
         {
           "path": "src/registry/components/sortable-table.tsx",
@@ -515,6 +690,13 @@
         "feedback"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/progress-bar/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Covers pending, determinate, and complete progress states."
+      },
       "files": [
         {
           "path": "src/registry/components/progress-bar.tsx",
@@ -535,6 +717,13 @@
         "feedback"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/task-steps/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Connects queued, active, complete, and failed states into one flow."
+      },
       "files": [
         {
           "path": "src/registry/components/task-steps.tsx",
@@ -555,11 +744,567 @@
         "feedback"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/value-flash/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Explains value changes with direction and brief color feedback."
+      },
       "files": [
         {
           "path": "src/registry/components/value-flash.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/value-flash.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-action",
+      "type": "registry:ui",
+      "title": "Magnetic action",
+      "description": "Lets a primary action lean toward a nearby pointer and settle cleanly on release.",
+      "dependencies": [
+        "gsap"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/magnetic-action/",
+      "meta": {
+        "engines": [
+          "gsap"
+        ],
+        "runtimeCost": "light",
+        "signature": "GSAP pointer tracking with a clean return"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/magnetic-action.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/magnetic-action.tsx"
+        }
+      ]
+    },
+    {
+      "name": "radial-actions",
+      "type": "registry:ui",
+      "title": "Radial actions",
+      "description": "Fans a compact set of shortcuts around one anchored action.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/radial-actions/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Radial reveal anchored to the primary action"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/radial-actions.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/radial-actions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "theme-reveal",
+      "type": "registry:ui",
+      "title": "Theme reveal",
+      "description": "Reveals a new theme outward from the exact toggle point.",
+      "dependencies": [],
+      "categories": [
+        "actions"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/theme-reveal/",
+      "meta": {
+        "engines": [
+          "css"
+        ],
+        "runtimeCost": "light",
+        "signature": "Circular View Transition theme reveal"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/theme-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/theme-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mega-menu",
+      "type": "registry:ui",
+      "title": "Mega menu",
+      "description": "Keeps highlight, panel, and focus movement in one continuous navigation path.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/mega-menu/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Mega menu driven by a shared highlight"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/mega-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/mega-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "floating-dock",
+      "type": "registry:ui",
+      "title": "Floating dock",
+      "description": "Scales nearby destinations with restrained spring response to pointer distance.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/floating-dock/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Distance-aware spring dock"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/floating-dock.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/floating-dock.tsx"
+        }
+      ]
+    },
+    {
+      "name": "voice-capture",
+      "type": "registry:ui",
+      "title": "Voice capture",
+      "description": "Coordinates recording, levels, pause, and completion inside one input surface.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/voice-capture/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Voice capture flow with responsive levels"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/voice-capture.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/voice-capture.tsx"
+        }
+      ]
+    },
+    {
+      "name": "toast-stack",
+      "type": "registry:ui",
+      "title": "Toast stack",
+      "description": "Layers incoming notices into a stack that expands and dismisses by swipe or keyboard.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/toast-stack/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Expandable notification queue with swipe dismissal"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/toast-stack.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/toast-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "upload-queue",
+      "type": "registry:ui",
+      "title": "Upload queue",
+      "description": "Turns file intake, per-item progress, retry, and completion into one compact flow.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/upload-queue/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Per-file upload flow that resolves into completion"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/upload-queue.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/upload-queue.tsx"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-reveal",
+      "type": "registry:ui",
+      "title": "Skeleton reveal",
+      "description": "Shares stable geometry between skeleton and content for a composed handoff.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/skeleton-reveal/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Skeleton-to-content handoff on stable geometry"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/skeleton-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/skeleton-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "activity-feed",
+      "type": "registry:ui",
+      "title": "Activity feed",
+      "description": "Preserves date groups and the unread boundary as live activity arrives.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/activity-feed/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Live insertion feed with an unread boundary"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/activity-feed.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/activity-feed.tsx"
+        }
+      ]
+    },
+    {
+      "name": "integration-map",
+      "type": "registry:ui",
+      "title": "Integration map",
+      "description": "Explains system relationships through nodes, routed links, and moving signals.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/integration-map/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Integration topology connected by SVG paths"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/integration-map.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/integration-map.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cursor-lens",
+      "type": "registry:ui",
+      "title": "Cursor lens",
+      "description": "Compares two states of the same media through a movable detail lens.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/cursor-lens/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Pointer and keyboard controlled comparison lens"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/cursor-lens.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/cursor-lens.tsx"
+        }
+      ]
+    },
+    {
+      "name": "media-carousel",
+      "type": "registry:ui",
+      "title": "Media carousel",
+      "description": "Keeps native drag inertia, deliberate snap positions, and keyboard navigation across media cards.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/media-carousel/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Media rail driven by native scroll inertia and snap"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/media-carousel.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/media-carousel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-lightbox",
+      "type": "registry:ui",
+      "title": "Gallery lightbox",
+      "description": "Expands a thumbnail into an immersive gallery while managing focus and keyboard browsing.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/image-lightbox/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Shared-element transition from thumbnail to gallery"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/image-lightbox.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/image-lightbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-story",
+      "type": "registry:ui",
+      "title": "Scroll story",
+      "description": "Binds local scroll progress to chapters that progressively reshape a product scene.",
+      "dependencies": [
+        "gsap"
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/scroll-story/",
+      "meta": {
+        "engines": [
+          "gsap"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Chaptered product scene driven by ScrollTrigger"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/scroll-story.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/scroll-story.tsx"
+        }
+      ]
+    },
+    {
+      "name": "procedural-product-viewer",
+      "type": "registry:ui",
+      "title": "3D product viewer",
+      "description": "Presents a procedural 3D product with drag inspection, inertia, and recentering.",
+      "dependencies": [
+        "motion",
+        "three"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/procedural-product-viewer/",
+      "meta": {
+        "engines": [
+          "motion",
+          "three"
+        ],
+        "runtimeCost": "heavy",
+        "signature": "Drag-inspectable Three.js product model"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/procedural-product-viewer.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/procedural-product-viewer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dither-reveal-card",
+      "type": "registry:ui",
+      "title": "Dither reveal card",
+      "description": "Advances a pixel-dither threshold so imagery develops with a tactile texture.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/dither-reveal-card/",
+      "meta": {
+        "engines": [
+          "motion",
+          "webgl"
+        ],
+        "runtimeCost": "heavy",
+        "signature": "Native WebGL Bayer-threshold reveal"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/dither-reveal-card.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/dither-reveal-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "network-globe",
+      "type": "registry:ui",
+      "title": "Network globe",
+      "description": "Maps global connections across a 3D globe with nodes, arcs, and selectable focus.",
+      "dependencies": [
+        "motion",
+        "three"
+      ],
+      "devDependencies": [
+        "@types/three"
+      ],
+      "categories": [
+        "visual"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/network-globe/",
+      "meta": {
+        "engines": [
+          "motion",
+          "three"
+        ],
+        "runtimeCost": "heavy",
+        "signature": "Three.js globe with routed network arcs"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/network-globe.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/network-globe.tsx"
+        }
+      ]
+    },
+    {
+      "name": "kinetic-logo-exchange",
+      "type": "registry:ui",
+      "title": "Kinetic logo exchange",
+      "description": "Reorders and reveals brand marks in a kinetic queue that yields to user selection.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/kinetic-logo-exchange/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Brand queue with layout exchange and masked reveal"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/kinetic-logo-exchange.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/kinetic-logo-exchange.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-bento",
+      "type": "registry:ui",
+      "title": "Spotlight bento",
+      "description": "Carries one continuous spotlight across multiple tiles to unify the bento surface.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/spotlight-bento/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Continuous spotlight sharing coordinates across tiles"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/spotlight-bento.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/spotlight-bento.tsx"
         }
       ]
     },

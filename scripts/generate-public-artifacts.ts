@@ -1,7 +1,14 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { registryComponents } from "../src/data/component-registry";
+import {
+  registryComponentDependencies,
+  registryComponentDevDependencies,
+  registryComponentEngines,
+  registryComponentRuntimeCost,
+  registryComponentSignature,
+  registryComponents
+} from "../src/data/component-registry";
 import { catalogRecipes } from "../src/data/recipes";
 import { getPrimitiveRegistryEntry } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
@@ -21,7 +28,7 @@ const catalog = {
   schemaVersion: 4,
   release: release.version,
   name: "Motion Lexicon",
-  description: "Copy-ready React + Motion components and primitives.",
+  description: "Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   siteUrl,
   repositoryUrl,
   registryUrl: `${siteUrl}/r/registry.json`,
@@ -33,6 +40,13 @@ const catalog = {
     name: component.name,
     description: component.description,
     primitiveIds: component.primitiveIds,
+    dependencies: registryComponentDependencies(component),
+    ...(registryComponentDevDependencies(component).length > 0 ? {
+      devDependencies: registryComponentDevDependencies(component)
+    } : {}),
+    engines: registryComponentEngines(component),
+    runtimeCost: registryComponentRuntimeCost(component),
+    signature: registryComponentSignature(component),
     urls: {
       zh: absolute(pathFor("zh", ["components", component.id])),
       en: absolute(pathFor("en", ["components", component.id])),
@@ -57,7 +71,7 @@ const catalog = {
 const llmsHeader = [
   "# Motion Lexicon",
   "",
-  "> Copy-ready React + Motion components and primitives, plus an Agent Skill for product motion.",
+  "> Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.",
   "",
   `- Components: ${absolute(pathFor("en", ["components"]))}`,
   `- Motion primitives: ${absolute(pathFor("en", ["primitives"]))}`,

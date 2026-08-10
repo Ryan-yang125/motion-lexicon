@@ -20,12 +20,13 @@ assert(jsFiles.some((file) => file.startsWith("vendor-")), "Stable vendor bundle
 
 const maxChunkRawBytes = 650 * 1024;
 const maxChunkGzipBytes = 160 * 1024;
-// V4 ships twenty-eight live registry components, forty-four primitives, and
-// eight lazy-loaded scenario guides. Motion and editorial content retain
-// independent chunk ceilings.
+// Component previews load independently. Their optional animation engines keep
+// dedicated ceilings so a Three.js scene never becomes part of the base shell.
 const maxMotionVendorGzipBytes = 52 * 1024;
+const maxGsapVendorGzipBytes = 45 * 1024;
+const maxThreeVendorGzipBytes = 200 * 1024;
 const maxScenarioGuideArticlesGzipBytes = 70 * 1024;
-const maxTotalJsGzipBytes = 520 * 1024;
+const maxTotalJsGzipBytes = 920 * 1024;
 const maxTotalCssGzipBytes = 48 * 1024;
 let totalJsGzipBytes = 0;
 
@@ -34,9 +35,13 @@ for (const file of jsFiles) {
   const rawSize = statSync(fullPath).size;
   const gzipSize = gzipSync(readFileSync(fullPath)).length;
   totalJsGzipBytes += gzipSize;
-  assert(rawSize <= maxChunkRawBytes, `${file} raw size ${rawSize} exceeds ${maxChunkRawBytes}`);
-  assert(gzipSize <= maxChunkGzipBytes, `${file} gzip size ${gzipSize} exceeds ${maxChunkGzipBytes}`);
+  if (!file.startsWith("three-vendor-")) {
+    assert(rawSize <= maxChunkRawBytes, `${file} raw size ${rawSize} exceeds ${maxChunkRawBytes}`);
+    assert(gzipSize <= maxChunkGzipBytes, `${file} gzip size ${gzipSize} exceeds ${maxChunkGzipBytes}`);
+  }
 }
+
+assert(!jsFiles.some((file) => file.startsWith("source-")), "Registry sources must load from individual /r/*.json files");
 
 const componentsChunk = jsFiles.find((file) => file.startsWith("components.lazy-"));
 assert(componentsChunk, "Components route chunk is missing");
@@ -48,8 +53,8 @@ assert(
 const componentDetailChunk = jsFiles.find((file) => file.startsWith("component.lazy-"));
 assert(componentDetailChunk, "Component detail route chunk is missing");
 assert(
-  gzipSync(readFileSync(path.join(assetsDir, componentDetailChunk))).length <= 72 * 1024,
-  "Component detail source bundle exceeds 72 KiB gzip"
+  gzipSync(readFileSync(path.join(assetsDir, componentDetailChunk))).length <= 20 * 1024,
+  "Component detail shell exceeds 20 KiB gzip"
 );
 
 const motionVendorChunk = jsFiles.find((file) => file.startsWith("motion-vendor-"));
@@ -58,6 +63,22 @@ assert(
   gzipSync(readFileSync(path.join(assetsDir, motionVendorChunk))).length <= maxMotionVendorGzipBytes,
   `Motion vendor chunk exceeds ${Math.round(maxMotionVendorGzipBytes / 1024)} KiB gzip`
 );
+
+const gsapVendorChunk = jsFiles.find((file) => file.startsWith("gsap-vendor-"));
+if (gsapVendorChunk) {
+  assert(
+    gzipSync(readFileSync(path.join(assetsDir, gsapVendorChunk))).length <= maxGsapVendorGzipBytes,
+    `GSAP vendor chunk exceeds ${Math.round(maxGsapVendorGzipBytes / 1024)} KiB gzip`
+  );
+}
+
+const threeVendorChunk = jsFiles.find((file) => file.startsWith("three-vendor-"));
+if (threeVendorChunk) {
+  assert(
+    gzipSync(readFileSync(path.join(assetsDir, threeVendorChunk))).length <= maxThreeVendorGzipBytes,
+    `Three vendor chunk exceeds ${Math.round(maxThreeVendorGzipBytes / 1024)} KiB gzip`
+  );
+}
 
 const scenarioGuideArticlesChunk = jsFiles.find((file) => file.startsWith("seo-guide.lazy-"));
 assert(scenarioGuideArticlesChunk, "Scenario guide route chunk is missing");

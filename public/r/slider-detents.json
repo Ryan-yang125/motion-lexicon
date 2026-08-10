@@ -11,6 +11,13 @@
     "inputs"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Snaps to meaningful detents while preserving continuous input."
+  },
   "files": [
     {
       "path": "src/registry/components/slider-detents.tsx",

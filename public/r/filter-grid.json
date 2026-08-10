@@ -11,6 +11,13 @@
     "data"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Preserves spatial continuity as filtered results rearrange."
+  },
   "files": [
     {
       "path": "src/registry/components/filter-grid.tsx",

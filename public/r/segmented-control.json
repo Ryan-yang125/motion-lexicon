@@ -11,6 +11,13 @@
     "navigation"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/segmented-control/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Carries one shared highlight between options."
+  },
   "files": [
     {
       "path": "src/registry/components/segmented-control.tsx",

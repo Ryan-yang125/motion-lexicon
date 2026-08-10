@@ -4,8 +4,8 @@
  * signals from lingering in search results after a release.
  */
 export const release = {
-  version: "4.0.0",
-  publishedAt: "2026-08-10T00:00:00.000Z",
-  updatedAt: "2026-08-10T00:00:00.000Z",
-  updatedDate: "2026-08-10"
+  version: "4.1.0",
+  publishedAt: "2026-08-11T00:00:00.000Z",
+  updatedAt: "2026-08-11T00:00:00.000Z",
+  updatedDate: "2026-08-11"
 } as const;

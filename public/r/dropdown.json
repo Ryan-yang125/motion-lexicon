@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/dropdown/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Moves selection continuously with full keyboard behavior."
+  },
   "files": [
     {
       "path": "src/registry/components/dropdown.tsx",

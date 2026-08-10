@@ -1,37 +1,25 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ComponentType } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from "react";
+import { getRegistryComponent, registryComponentRuntimeCost } from "../data/component-registry";
 
 type DemoModule = Record<string, ComponentType>;
 
-const demoLoaders: Record<string, () => Promise<DemoModule>> = {
-  "accordion": () => import("./demos/accordion-demo"),
-  "command-palette": () => import("./demos/command-palette-demo"),
-  "context-menu": () => import("./demos/context-menu-demo"),
-  "copy-button": () => import("./demos/copy-button-demo"),
-  "drawer": () => import("./demos/drawer-demo"),
-  "dropdown": () => import("./demos/dropdown-demo"),
-  "expanding-search": () => import("./demos/expanding-search-demo"),
-  "filter-grid": () => import("./demos/filter-grid-demo"),
-  "floating-label": () => import("./demos/floating-label-demo"),
-  "hide-on-scroll": () => import("./demos/hide-on-scroll-demo"),
-  "hold-to-confirm": () => import("./demos/hold-to-confirm-demo"),
-  "inline-validation": () => import("./demos/inline-validation-demo"),
-  "loading-button": () => import("./demos/loading-button-demo"),
-  "long-press": () => import("./demos/long-press-demo"),
-  "modal": () => import("./demos/modal-demo"),
-  "otp-input": () => import("./demos/otp-input-demo"),
-  "pagination": () => import("./demos/pagination-demo"),
-  "password-strength": () => import("./demos/password-strength-demo"),
-  "popover": () => import("./demos/popover-demo"),
-  "progress-bar": () => import("./demos/progress-bar-demo"),
-  "reorder-list": () => import("./demos/reorder-list-demo"),
-  "segmented-control": () => import("./demos/segmented-control-demo"),
-  "slider-detents": () => import("./demos/slider-detents-demo"),
-  "sortable-table": () => import("./demos/sortable-table-demo"),
-  "tabs": () => import("./demos/tabs-demo"),
-  "tag-input": () => import("./demos/tag-input-demo"),
-  "task-steps": () => import("./demos/task-steps-demo"),
-  "value-flash": () => import("./demos/value-flash-demo")
-};
+const demoModules = typeof import.meta.env === "undefined"
+  ? {}
+  : import.meta.glob<DemoModule>("./demos/*-demo.tsx");
+const demoLoaders = Object.fromEntries(
+  Object.entries(demoModules).map(([modulePath, loader]) => {
+    const id = modulePath.slice("./demos/".length, -"-demo.tsx".length);
+    return [id, loader];
+  })
+) as Record<string, () => Promise<DemoModule>>;
 
 const lazyDemos = Object.fromEntries(
   Object.entries(demoLoaders).map(([id, loader]) => [
@@ -49,13 +37,23 @@ function PreviewFallback() {
   return <div className="registry-preview-loading" aria-hidden="true" />;
 }
 
-export function RegistryPreview({ id, deferred = false }: { id: string; deferred?: boolean }) {
+type DeferredPreviewProps = {
+  id: string;
+  deferred: boolean;
+  heavy: boolean;
+  children: ReactNode;
+};
+
+export function DeferredPreview({ id, deferred, heavy, children }: DeferredPreviewProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(!deferred);
-  const Demo = lazyDemos[id];
 
   useEffect(() => {
-    if (!deferred || active || !frameRef.current || typeof IntersectionObserver === "undefined") return;
+    if (!deferred || !frameRef.current) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setActive(true);
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -63,22 +61,33 @@ export function RegistryPreview({ id, deferred = false }: { id: string; deferred
           observer.disconnect();
         }
       },
-      { rootMargin: "220px" }
+      { rootMargin: heavy ? "420px 0px" : "220px" }
     );
     observer.observe(frameRef.current);
     return () => observer.disconnect();
-  }, [active, deferred]);
+  }, [deferred, heavy]);
 
   return (
     <div className="registry-preview" ref={frameRef} data-component={id}>
-      {active && Demo ? (
+      {active ? children : <PreviewFallback />}
+    </div>
+  );
+}
+
+export function RegistryPreview({ id, deferred = false }: { id: string; deferred?: boolean }) {
+  const Demo = lazyDemos[id];
+  const entry = getRegistryComponent(id);
+  const heavy = entry ? registryComponentRuntimeCost(entry) === "heavy" : false;
+
+  return (
+    <DeferredPreview id={id} deferred={deferred} heavy={heavy}>
+      {Demo ? (
         <Suspense fallback={<PreviewFallback />}>
           <Demo />
         </Suspense>
       ) : (
         <PreviewFallback />
       )}
-    </div>
+    </DeferredPreview>
   );
 }
-

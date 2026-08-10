@@ -11,6 +11,13 @@
     "feedback"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/progress-bar/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Covers pending, determinate, and complete progress states."
+  },
   "files": [
     {
       "path": "src/registry/components/progress-bar.tsx",

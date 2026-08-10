@@ -94,6 +94,101 @@ test("component detail keeps preview, source, install, and related primitives to
   await expectNoHorizontalOverflow(page);
 });
 
+test("new component engines stay inside the page viewport", async ({ page }) => {
+  for (const id of [
+    "dither-reveal-card",
+    "procedural-product-viewer",
+    "network-globe",
+    "scroll-story",
+    "media-carousel",
+    "image-lightbox",
+  ]) {
+    await page.goto(`/zh/components/${id}/`);
+    await expect(page.locator(`[data-component="${id}"]`)).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
+});
+
+test("Three.js components retain a static preview without WebGL", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "WebGL fallback contract runs once.");
+  await page.addInitScript(() => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, ...args) {
+      const type = args[0];
+      if (type === "webgl" || type === "webgl2" || type === "experimental-webgl") return null;
+      return getContext.apply(this, args as Parameters<typeof getContext>);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+
+  await page.goto("/zh/components/network-globe/");
+  await expect(page.locator('[data-webgl-fallback="network-globe"]')).toBeVisible();
+  const globe = page.locator('[data-webgl-root="network-globe"]');
+  await expect(globe).toHaveCSS("touch-action", "pan-y");
+  await expect(globe).not.toHaveAttribute("tabindex");
+  await expect(globe).toHaveAttribute("aria-label", /Static network preview/);
+  await expect(globe.getByText("Static network")).toBeVisible();
+  expect(
+    await globe.evaluate((element) =>
+      element.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowRight",
+          bubbles: true,
+          cancelable: true,
+        }),
+      ),
+    ),
+  ).toBe(true);
+
+  await page.goto("/zh/components/procedural-product-viewer/");
+  await expect(page.locator('[data-webgl-fallback="procedural-product-viewer"]')).toBeVisible();
+  const product = page.locator('[data-webgl-root="procedural-product-viewer"]');
+  await expect(product).toHaveCSS("touch-action", "pan-y");
+  await expect(product).not.toHaveAttribute("tabindex");
+  await expect(product).toHaveAttribute("aria-label", /Static product preview/);
+  await expect(product.getByText("STATIC PREVIEW")).toBeVisible();
+  await expect(product.getByRole("button", { name: "Reset view" })).toHaveCount(0);
+  expect(
+    await product.evaluate((element) =>
+      element.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowLeft",
+          bubbles: true,
+          cancelable: true,
+        }),
+      ),
+    ),
+  ).toBe(true);
+});
+
+test("theme snapshots and dropped files honor their component contracts", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Advanced component contracts run once.");
+  await page.addInitScript(() => {
+    Object.defineProperty(document, "startViewTransition", {
+      configurable: true,
+      value: (update: () => void | Promise<void>) => {
+        const ready = Promise.resolve(update()).then(() => {
+          (window as typeof window & { __snapshotTheme?: string | null }).__snapshotTheme = document.querySelector("[data-theme-reveal-state]")?.getAttribute("data-theme-reveal-state");
+        });
+        return { ready, finished: ready };
+      },
+    });
+  });
+  await page.goto("/zh/components/theme-reveal/");
+  await page.getByRole("button", { name: "Use dark theme" }).click();
+  await expect.poll(() => page.evaluate(() => (window as typeof window & { __snapshotTheme?: string | null }).__snapshotTheme)).toBe("dark");
+
+  await page.goto("/zh/components/upload-queue/");
+  const files = await page.evaluateHandle(() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(["image"], "accepted.png", { type: "image/png" }));
+    transfer.items.add(new File(["text"], "rejected.txt", { type: "text/plain" }));
+    return transfer;
+  });
+  await page.locator("[data-upload-drop-zone]").dispatchEvent("drop", { dataTransfer: files });
+  await expect(page.getByText("accepted.png", { exact: true })).toBeVisible();
+  await expect(page.getByText("rejected.txt", { exact: true })).toHaveCount(0);
+});
+
 test("primitive directory and workbench use the direct V4 routes", async ({ page }) => {
   await page.goto("/zh/primitives/");
   await expect(page.getByRole("heading", { level: 1, name: "可调节、可复制的 React 原子动效" })).toBeVisible();
@@ -143,6 +238,40 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await expect(activity).toBeFocused();
   await expect(activity).toHaveAttribute("aria-selected", "true");
 
+  await page.goto("/zh/components/mega-menu/");
+  const productMenu = page.getByRole("button", { name: "Product" });
+  await productMenu.hover();
+  await expect(productMenu).toHaveAttribute("aria-expanded", "true");
+  const menu = page.getByRole("menu", { name: "Product" });
+  await expect(menu).toBeVisible();
+  const productBox = await productMenu.boundingBox();
+  const menuBox = await menu.boundingBox();
+  expect(productBox).not.toBeNull();
+  expect(menuBox).not.toBeNull();
+  await page.mouse.move(productBox!.x + productBox!.width / 2, productBox!.y + productBox!.height - 1);
+  await page.mouse.move(menuBox!.x + 20, menuBox!.y + 8, { steps: 4 });
+  await page.waitForTimeout(160);
+  await expect(menu).toBeVisible();
+
+  await productMenu.focus();
+  await page.keyboard.press("ArrowDown");
+  const menuItems = menu.getByRole("menuitem");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("ArrowUp");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(menuItems.nth(0)).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(menuItems.nth(1)).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(productMenu).toHaveAttribute("aria-expanded", "false");
+  await expect(productMenu).toBeFocused();
+  await page.mouse.move(0, 0);
+
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/components/hold-to-confirm/");
   const hold = page.getByRole("button", { name: /Hold to delete workspace/ });
@@ -156,6 +285,67 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
     return Number(clip.match(/inset\(0px ([\d.]+)%/)?.[1]);
   }).toBeLessThan(100);
   await page.keyboard.up("Space");
+
+  await page.goto("/zh/components/cursor-lens/");
+  const lensRoot = page.getByRole("group", { name: "Inspect restored image detail" });
+  await lensRoot.evaluate((root) => { root.style.height = "320px"; });
+  await lensRoot.focus();
+  await page.keyboard.press("ArrowRight");
+  const lens = lensRoot.locator("[data-cursor-lens]");
+  await expect(lens).toHaveAttribute("data-position-mode", "instant");
+  await expect.poll(async () => lensRoot.evaluate((root) => ({
+    detail: root.querySelector<HTMLElement>("[data-cursor-lens-detail]")?.clientHeight,
+    root: root.clientHeight,
+  }))).toEqual({ detail: 320, root: 320 });
+  const position = await lensRoot.evaluate((root) => {
+    const node = root.querySelector<HTMLElement>("[data-cursor-lens]");
+    const detail = root.querySelector<HTMLElement>("[data-cursor-lens-detail]");
+    return {
+      transform: node?.style.transform,
+      detailTransform: detail?.style.transform,
+      width: root.clientWidth,
+      height: root.clientHeight,
+    };
+  });
+  expect(position.transform).toBe(`translate3d(${position.width / 2 + 10 - 66}px, ${position.height / 2 - 66}px, 0px)`);
+  expect(position.detailTransform).toBe(`translate3d(${66 - (position.width / 2 + 10) * 1.35}px, ${66 - (position.height / 2) * 1.35}px, 0px) scale(1.35)`);
+
+  await lensRoot.evaluate((node) => node.blur());
+  const rootBox = await lensRoot.boundingBox();
+  expect(rootBox).not.toBeNull();
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 7,
+    clientX: rootBox!.x + 20,
+    clientY: rootBox!.y + 30,
+  });
+  await lensRoot.focus();
+  await lensRoot.dispatchEvent("pointerup", { pointerType: "touch", pointerId: 7 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 7 });
+  await lensRoot.dispatchEvent("pointerleave", { pointerType: "touch", pointerId: 7 });
+  await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+  await expect(lensRoot.locator("[data-cursor-lens]")).toHaveCSS("transform", "matrix(1, 0, 0, 1, -46, -36)");
+
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 8,
+    clientX: rootBox!.x + 22,
+    clientY: rootBox!.y + 32,
+  });
+  await lensRoot.dispatchEvent("pointercancel", { pointerType: "touch", pointerId: 8 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 8 });
+  await expect(lensRoot.locator("[data-cursor-lens]")).toBeVisible();
+
+  await lensRoot.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    pointerId: 9,
+    clientX: rootBox!.x + 24,
+    clientY: rootBox!.y + 34,
+  });
+  await lensRoot.dispatchEvent("pointerup", { pointerType: "touch", pointerId: 9 });
+  await lensRoot.dispatchEvent("pointerout", { pointerType: "touch", pointerId: 9 });
+  await lensRoot.dispatchEvent("pointerleave", { pointerType: "touch", pointerId: 9 });
+  await expect(lensRoot.locator("[data-cursor-lens]")).toHaveCount(0);
 });
 
 test("mobile navigation, language, theme, and Agent Skill remain reachable", async ({ page }, testInfo) => {
@@ -168,8 +358,9 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await expect(page).toHaveURL(/\/zh\/skill\//);
   await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
   await page.goto("/zh/components/copy-button/");
-  const copyHeight = await page.getByRole("button", { name: "复制代码" }).first().evaluate((button) => button.getBoundingClientRect().height);
-  expect(copyHeight).toBeGreaterThanOrEqual(44);
+  const copyButton = page.locator(".component-primary-copy");
+  await expect(copyButton).toBeEnabled();
+  await expect.poll(async () => (await copyButton.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
   await expectNoHorizontalOverflow(page);
 });
 
@@ -198,4 +389,10 @@ test("English routes and the shadcn registry are publishable", async ({ page, re
   const slideIn = await request.get("/r/primitive-slide-in.json");
   expect(slideIn.ok()).toBe(true);
   expect(await slideIn.json()).toMatchObject({ name: "primitive-slide-in", type: "registry:ui" });
+  const scrollStory = await request.get("/r/scroll-story.json");
+  expect(await scrollStory.json()).toMatchObject({ dependencies: ["gsap"], meta: { engines: ["gsap"], runtimeCost: "medium" } });
+  const productViewer = await request.get("/r/procedural-product-viewer.json");
+  expect(await productViewer.json()).toMatchObject({ dependencies: ["motion", "three"], devDependencies: ["@types/three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
+  const networkGlobe = await request.get("/r/network-globe.json");
+  expect(await networkGlobe.json()).toMatchObject({ dependencies: ["motion", "three"], devDependencies: ["@types/three"], meta: { engines: ["motion", "three"], runtimeCost: "heavy" } });
 });

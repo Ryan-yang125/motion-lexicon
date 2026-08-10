@@ -1,0 +1,152 @@
+// @vitest-environment jsdom
+
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  KineticLogoExchange,
+  type KineticLogoItem,
+} from "@/registry/components/kinetic-logo-exchange";
+
+const harness = vi.hoisted(() => ({ reduced: false }));
+
+vi.mock("motion/react", async (importOriginal) => ({
+  ...await importOriginal<typeof import("motion/react")>(),
+  useReducedMotion: () => harness.reduced,
+}));
+
+const alpha: KineticLogoItem = { id: "alpha", label: "Alpha", tone: "blue" };
+const bravo: KineticLogoItem = { id: "bravo", label: "Bravo", tone: "clay" };
+const charlie: KineticLogoItem = { id: "charlie", label: "Charlie", tone: "moss" };
+
+beforeEach(() => {
+  harness.reduced = false;
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+function renderedOrder(container: HTMLElement) {
+  return Array.from(container.querySelectorAll<HTMLElement>("[data-kinetic-logo-item]"))
+    .map((node) => node.dataset.kineticLogoItem);
+}
+
+describe("KineticLogoExchange dynamic items", () => {
+  it("preserves its rotated order when an equivalent id sequence rerenders", () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+
+    rerender(
+      <KineticLogoExchange
+        items={[{ ...alpha }, { ...bravo }, { ...charlie }]}
+        interval={1800}
+      />,
+    );
+
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+  });
+
+  it("adopts the incoming order and chooses the new first item when the selection is removed", () => {
+    const { container, rerender } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Bravo/ }));
+    expect(screen.getByRole("button", { name: /Bravo/ })).toHaveAttribute("aria-pressed", "true");
+
+    rerender(<KineticLogoExchange items={[charlie, alpha]} />);
+    expect(renderedOrder(container)).toEqual(["charlie", "alpha"]);
+    expect(screen.getByRole("button", { name: /Charlie/ })).toHaveAttribute("aria-pressed", "true");
+
+    rerender(<KineticLogoExchange items={[alpha, charlie]} />);
+    expect(renderedOrder(container)).toEqual(["alpha", "charlie"]);
+    expect(screen.getByRole("button", { name: /Charlie/ })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("clears an empty exchange and initializes selection when items return", () => {
+    const { container, rerender } = render(<KineticLogoExchange items={[]} />);
+    expect(renderedOrder(container)).toEqual([]);
+
+    rerender(<KineticLogoExchange items={[bravo, alpha]} />);
+    expect(renderedOrder(container)).toEqual(["bravo", "alpha"]);
+    expect(screen.getByRole("button", { name: /Bravo/ })).toHaveAttribute("aria-pressed", "true");
+  });
+});
+
+describe("KineticLogoExchange reduced motion", () => {
+  it("keeps a static exchange without exposing an ineffective pause control", () => {
+    vi.useFakeTimers();
+    harness.reduced = true;
+    const { container } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
+
+    expect(screen.queryByRole("button", { name: /logo exchange/i })).not.toBeInTheDocument();
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+    act(() => { vi.advanceTimersByTime(7200); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+  });
+
+  it("exposes a working pause and resume control in standard motion", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />,
+    );
+    const pause = screen.getByRole("button", { name: "Pause logo exchange" });
+
+    expect(pause).toHaveClass("transition-transform", "active:scale-[0.96]");
+    fireEvent.click(pause);
+    expect(screen.getByRole("button", { name: "Resume logo exchange" })).toBeInTheDocument();
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    fireEvent.click(screen.getByRole("button", { name: "Resume logo exchange" }));
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toBeInTheDocument();
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+  });
+
+  it("keeps focus pause separate from keyboard pause and resume", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <>
+        <KineticLogoExchange items={[alpha, bravo, charlie]} interval={1800} />
+        <button type="button">Outside</button>
+      </>,
+    );
+    const outside = screen.getByRole("button", { name: "Outside" });
+    const pause = screen.getByRole("button", { name: "Pause logo exchange" });
+
+    act(() => { pause.focus(); });
+    expect(pause).toHaveFocus();
+    expect(pause).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toBe(pause);
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    fireEvent.keyDown(pause, { key: "Enter" });
+    fireEvent.click(pause);
+    fireEvent.keyUp(pause, { key: "Enter" });
+    const resume = screen.getByRole("button", { name: "Resume logo exchange" });
+    expect(resume).toHaveAttribute("aria-pressed", "true");
+    act(() => { outside.focus(); });
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    act(() => { resume.focus(); });
+    expect(screen.getByRole("button", { name: "Resume logo exchange" })).toBe(resume);
+    fireEvent.keyDown(resume, { key: "Enter" });
+    fireEvent.click(resume);
+    fireEvent.keyUp(resume, { key: "Enter" });
+    expect(screen.getByRole("button", { name: "Pause logo exchange" })).toHaveAttribute("aria-pressed", "false");
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["alpha", "bravo", "charlie"]);
+
+    act(() => { outside.focus(); });
+    act(() => { vi.advanceTimersByTime(1800); });
+    expect(renderedOrder(container)).toEqual(["bravo", "charlie", "alpha"]);
+  });
+});

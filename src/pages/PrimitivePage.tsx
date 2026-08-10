@@ -17,7 +17,7 @@ import { pathFor, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { useRecipeParams } from "../lib/useRecipeParams";
 import { PrimitivePreview } from "../registry/primitive-preview-map";
-import { getPrimitiveRegistrySource } from "../registry/source";
+import { useRegistrySource } from "../registry/use-registry-source";
 import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
 
@@ -33,7 +33,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
   const { values, updateValue, resetValues } = useRecipeParams(recipe);
   const [view, setView] = useState("preview");
   const [replayKey, setReplayKey] = useState(0);
-  const source = registryEntry.installable ? getPrimitiveRegistrySource(recipe.id) : "";
+  const sourceState = useRegistrySource(registryEntry.installable ? registryEntry.registryId : null);
   const install = registryEntry.installable ? primitiveInstallCommand(recipe.id) : "";
   const glossaryTerms = getGlossaryTermsForCanonical(recipe.canonicalId);
   const guidance = getMotionGuidance(recipe.canonicalId);
@@ -53,6 +53,9 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
         copyCode: "复制代码",
         copied: "已复制",
         failed: "复制失败",
+        loadingCode: "正在载入源码…",
+        loadCodeFailed: "源码载入失败",
+        retry: "重试",
         install: "安装",
         capabilities: ["React + Motion", "参数可调", "支持减弱动效"],
         guidance: "实现规则",
@@ -68,6 +71,9 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
         copyCode: "Copy code",
         copied: "Copied",
         failed: "Copy failed",
+        loadingCode: "Loading source…",
+        loadCodeFailed: "Source failed to load",
+        retry: "Retry",
         install: "Install",
         capabilities: ["React + Motion", "Tunable props", "Reduced motion"],
         guidance: "Implementation rules",
@@ -110,7 +116,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
               <p>{text(recipe.shortDescription, locale)}</p>
             </div>
             {registryEntry.installable ? (
-              <CopyButton value={source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} className="component-primary-copy" />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} className="component-primary-copy" />
             ) : null}
           </div>
           <ul className="component-quality-list" aria-label={locale === "zh" ? "原子动效能力" : "Primitive capabilities"}>
@@ -135,7 +141,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
                 <RotateCcwIcon size={14} aria-hidden="true" />{copy.replay}
               </button>
             ) : (
-              <CopyButton value={source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} />
             )}
           </div>
           {view === "preview" ? (
@@ -149,8 +155,15 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
                 </aside>
               ) : null}
             </div>
+          ) : sourceState.status === "ready" ? (
+            <pre className="component-source primitive-source"><code>{sourceState.source}</code></pre>
+          ) : sourceState.status === "error" ? (
+            <div className="component-source primitive-source registry-source-state" role="alert">
+              <span>{copy.loadCodeFailed}</span>
+              <button className="primitive-replay-button" type="button" onClick={sourceState.retry}>{copy.retry}</button>
+            </div>
           ) : (
-            <pre className="component-source primitive-source"><code>{source}</code></pre>
+            <pre className="component-source primitive-source registry-source-state" aria-busy="true"><code>{copy.loadingCode}</code></pre>
           )}
         </section>
 

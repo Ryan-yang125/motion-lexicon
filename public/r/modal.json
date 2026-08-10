@@ -11,6 +11,13 @@
     "overlays"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/modal/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Handles focus, backdrop, exit, and async confirmation as one flow."
+  },
   "files": [
     {
       "path": "src/registry/components/modal.tsx",

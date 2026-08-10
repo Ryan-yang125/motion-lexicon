@@ -1,5 +1,5 @@
 {
-  "version": "4.0.0",
+  "version": "4.1.0",
   "name": "Motion Grammar",
   "promise": {
     "zh": "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -18,7 +18,7 @@
       }
     },
     "components": {
-      "count": 28,
+      "count": 48,
       "title": {
         "zh": "组件",
         "en": "Components"
@@ -154,8 +154,8 @@
       "js"
     ],
     "rule": {
-      "zh": "React 产品优先使用 Motion 交付；便携场景保留语义 HTML、局部 CSS 和少量 JavaScript。代码与状态图保持同源。",
-      "en": "Prefer Motion for React products; keep semantic HTML, local CSS, and small JavaScript available for portable delivery. Keep code aligned with the state graph."
+      "zh": "按动效需求选择最小可行引擎，组件保持独立、可复制并与状态图同源。",
+      "en": "Choose the smallest capable engine for the motion, keeping every component independent, copy-ready, and aligned with its state graph."
     }
   },
   "modes": [
@@ -196,8 +196,8 @@
         "en": "Implement"
       },
       "description": {
-        "zh": "产出贴合现有界面的 React + Motion，或按需求交付便携实现。",
-        "en": "Produce React + Motion that fits the interface, or a portable implementation when requested."
+        "zh": "产出贴合现有界面的可复制实现，并按场景选择 Motion、GSAP、Three.js、WebGL 或 CSS。",
+        "en": "Produce a copy-ready implementation that fits the interface, choosing Motion, GSAP, Three.js, WebGL, or CSS for the scene."
       },
       "deliverable": {
         "zh": "可接入实现",

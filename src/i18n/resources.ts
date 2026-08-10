@@ -209,7 +209,7 @@ export const resources = {
       },
       seo: {
         homeTitle: "Motion Lexicon | 产品瞬间与动效基础",
-        homeDescription: "探索 28 个产品瞬间与 44 个动效基础，在真实界面中预览、调节并复制产品动效。",
+        homeDescription: "探索 48 个产品组件与 44 个动效基础，在真实界面中预览、调节并复制产品动效。",
         catalogTitle: "动效基础 | Motion Lexicon",
         catalogDescription: "浏览 44 个动效基础的组件、参数工具和设计指南，并追溯它们参与的产品瞬间。",
         playgroundTitle: "参数工具 | Motion Lexicon",
@@ -427,7 +427,7 @@ export const resources = {
       },
       seo: {
         homeTitle: "Motion Lexicon | Product moments and motion primitives",
-        homeDescription: "Explore 28 product moments and 44 motion primitives. Preview, tune, and copy product motion in real interface contexts.",
+        homeDescription: "Explore 48 product components and 44 motion primitives. Preview, tune, and copy product motion in real interface contexts.",
         catalogTitle: "Motion primitives | Motion Lexicon",
         catalogDescription: "Browse 44 motion primitives across components, playgrounds, and guides, then open their declared Product Moment relationships.",
         playgroundTitle: "Motion playgrounds | Motion Lexicon",

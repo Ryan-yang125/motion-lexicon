@@ -11,6 +11,13 @@
     "actions"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/loading-button/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Keeps pending, success, and error feedback inside one action."
+  },
   "files": [
     {
       "path": "src/registry/components/loading-button.tsx",

@@ -11,6 +11,13 @@
     "feedback"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/value-flash/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Explains value changes with direction and brief color feedback."
+  },
   "files": [
     {
       "path": "src/registry/components/value-flash.tsx",

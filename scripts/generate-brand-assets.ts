@@ -33,12 +33,12 @@ type OgKind = "home" | "components" | "primitives" | "guides" | "method" | "skil
 
 const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: string; preview: string; meta: string }>> = {
   home: {
-    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "28 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "28 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" },
-    en: { title: "Bring refined motion<br>straight into your product.", copy: "28 React motion components and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "28 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" }
+    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "48 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "48 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" },
+    en: { title: "Bring refined motion<br>straight into your product.", copy: "48 React motion components and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "48 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" }
   },
   components: {
-    zh: { title: "完整交互组件，<br>预览后直接安装。", copy: "真实状态、键盘操作与减弱动效，封装在同一份 React 源码里。", preview: "React Components", meta: "28 COMPONENTS · SHADCN REGISTRY · MIT" },
-    en: { title: "Complete interactions,<br>ready to install.", copy: "Real states, keyboard behavior, and reduced motion in one React source.", preview: "React Components", meta: "28 COMPONENTS · SHADCN REGISTRY · MIT" }
+    zh: { title: "完整交互组件，<br>预览后直接安装。", copy: "真实状态、键盘操作与减弱动效，封装在同一份 React 源码里。", preview: "React Components", meta: "48 COMPONENTS · SHADCN REGISTRY · MIT" },
+    en: { title: "Complete interactions,<br>ready to install.", copy: "Real states, keyboard behavior, and reduced motion in one React source.", preview: "React Components", meta: "48 COMPONENTS · SHADCN REGISTRY · MIT" }
   },
   primitives: {
     zh: { title: "一个动效，<br>放进真实场景。", copy: "44 个可预览、可调节的动效基础，覆盖进入、节奏、状态和反馈。", preview: "Motion Primitives", meta: "44 MOTION PRIMITIVES · 91 TERMS · FREE & OPEN" },
@@ -123,7 +123,7 @@ function ogMarkup(locale: "zh" | "en", kind: OgKind) {
     <div class="preview">
       <div class="preview-head"><strong>${content.preview}</strong><span>${locale === "zh" ? "可直接带走" : "ready to take"}</span></div>
       <div class="preview-body">
-        <div class="query">${locale === "zh" ? "组件目录" : "Component directory"}<span>28</span></div>
+        <div class="query">${locale === "zh" ? "组件目录" : "Component directory"}<span>48</span></div>
         <div class="choice primary"><div><strong>${locale === "zh" ? "复制按钮" : "Copy button"}</strong><span>React · Motion</span></div><i></i></div>
         <div class="choice"><div><strong>${locale === "zh" ? "抽屉" : "Drawer"}</strong><span>${locale === "zh" ? "焦点 · 拖拽 · 中断" : "Focus · drag · interrupt"}</span></div><i></i></div>
         <div class="choice"><div><strong>${locale === "zh" ? "行内校验" : "Inline validation"}</strong><span>${locale === "zh" ? "等待 · 错误 · 通过" : "Pending · error · success"}</span></div><i></i></div>
