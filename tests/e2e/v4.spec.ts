@@ -183,7 +183,9 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await expect(page).toHaveURL(/\/zh\/skill\//);
   await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
   await page.goto("/zh/components/copy-button/");
-  const copyHeight = await page.getByRole("button", { name: "复制代码" }).first().evaluate((button) => button.getBoundingClientRect().height);
+  const copyButton = page.locator(".component-primary-copy");
+  await expect(copyButton).toBeVisible();
+  const copyHeight = await copyButton.evaluate((button) => button.getBoundingClientRect().height);
   expect(copyHeight).toBeGreaterThanOrEqual(44);
   await expectNoHorizontalOverflow(page);
 });
