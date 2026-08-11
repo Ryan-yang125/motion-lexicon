@@ -41,7 +41,7 @@ const works: readonly ImageLightboxItem[] = [
     meta: "A–03",
     art: (
       <div aria-hidden="true" className="relative size-full overflow-hidden bg-[#171817]">
-        <div className="absolute left-[10%] top-[17%] size-[36%] rounded-full border border-[#728BFF]/50 bg-[#4568FF]/18 shadow-[0_0_42px_rgba(69,104,255,0.28)]" />
+        <div className="absolute left-[10%] top-[17%] size-[36%] rounded-full border border-[#728BFF]/50 bg-[#4568FF]/18 shadow-[0_0_8px_rgba(69,104,255,0.28)]" />
         <div className="absolute inset-y-[14%] right-[16%] w-px bg-white/18" />
         <div className="absolute bottom-[19%] right-[9%] h-px w-[48%] bg-[#728BFF]/70" />
       </div>
@@ -106,6 +106,7 @@ export function ImageLightboxDemo({ locale = "en" }: DemoLocaleProps = {}) {
         copy={locale === "zh" ? {
           gallery: "画廊",
           works: (count) => `${String(count).padStart(2, "0")} 件作品`,
+          empty: "画廊中暂无作品",
           open: (title) => `打开${title}`,
           close: "关闭画廊",
           previous: "上一张图片",

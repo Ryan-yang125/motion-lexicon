@@ -129,6 +129,21 @@ test("component detail keeps preview, source, install, and related primitives to
   await expectNoHorizontalOverflow(page);
 });
 
+test("desktop component sidebar reveals the active route without moving the page", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Desktop sidebar contract runs once.");
+  await page.goto("/en/components/skeleton-reveal/");
+  const scroll = page.locator(".library-shell-desktop .shell-nav-scroll");
+  const active = page.locator(".library-shell-desktop .shell-nav-link.is-active");
+  await expect(active).toHaveText("Skeleton reveal");
+  await expect.poll(async () => active.evaluate((node) => {
+    const item = node.getBoundingClientRect();
+    const viewport = node.closest(".shell-nav-scroll")?.getBoundingClientRect();
+    return Boolean(viewport && item.top >= viewport.top && item.bottom <= viewport.bottom);
+  })).toBe(true);
+  expect(await scroll.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+});
+
 test("new component engines stay inside the page viewport", async ({ page }) => {
   for (const id of [
     "dither-reveal-card",

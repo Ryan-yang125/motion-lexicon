@@ -25,6 +25,7 @@ export type ActivityFeedProps = {
   emptyLabel?: string;
   unreadLabel?: string;
   unreadStartLabel?: string;
+  toneLabels?: Partial<Record<ActivityTone, string>>;
   onItemClick?: (item: ActivityItem) => void;
   className?: string;
 };
@@ -36,15 +37,24 @@ const dotClass: Record<ActivityTone, string> = {
   error: "bg-[#93664F] dark:bg-[#C99078]",
 };
 
+const DEFAULT_TONE_LABELS: Record<ActivityTone, string> = {
+  neutral: "",
+  success: "Success",
+  warning: "Warning",
+  error: "Error",
+};
+
 export function ActivityFeed({
   items,
   label = "Activity",
   emptyLabel = "No activity yet",
   unreadLabel = "Unread",
   unreadStartLabel = "Unread activity starts here",
+  toneLabels: toneLabelOverrides,
   onItemClick,
   className = "",
 }: ActivityFeedProps) {
+  const toneLabels = { ...DEFAULT_TONE_LABELS, ...toneLabelOverrides };
   const reduced = useReducedMotion() === true;
   const previousIds = useRef<Set<string> | null>(null);
   const [announcement, setAnnouncement] = useState<{ id: string; title: string } | null>(null);
@@ -63,9 +73,11 @@ export function ActivityFeed({
 
   if (items.length === 0) {
     return (
-      <div className={`grid min-h-28 place-items-center rounded-[12px] border border-stone-200 bg-white text-[12.5px] text-stone-500 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-400 ${className}`}>
-        {emptyLabel}
-      </div>
+      <section aria-label={label} className={`w-full max-w-[430px] ${className}`}>
+        <div role="status" className="grid min-h-28 place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12.5px] text-stone-600 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-300">
+          {emptyLabel}
+        </div>
+      </section>
     );
   }
 
@@ -84,11 +96,14 @@ export function ActivityFeed({
                   <span className={`size-2 rounded-[3px] ${dotClass[item.tone ?? "neutral"]}`} />
                 </span>
                 <span className="min-w-0 flex-1 py-2.5">
+                  {toneLabels[item.tone ?? "neutral"] ? (
+                    <span className="sr-only">{toneLabels[item.tone ?? "neutral"]}. </span>
+                  ) : null}
                   <span className="flex items-baseline justify-between gap-3">
                     <strong className="truncate text-[12.5px] font-medium text-stone-800 dark:text-stone-100">{item.title}</strong>
-                    <time className="shrink-0 font-mono text-[10px] tabular-nums text-stone-400 dark:text-stone-500">{item.time}</time>
+                    <time className="max-w-[45%] shrink-0 truncate font-mono text-[10px] tabular-nums text-stone-600 dark:text-stone-400">{item.time}</time>
                   </span>
-                  {item.description ? <span className="mt-0.5 block text-[11.5px] leading-relaxed text-stone-500 dark:text-stone-400">{item.description}</span> : null}
+                  {item.description ? <span className="mt-0.5 block text-[11.5px] leading-relaxed text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400">{item.description}</span> : null}
                 </span>
               </>
             );
@@ -103,12 +118,12 @@ export function ActivityFeed({
                 transition={reduced ? INSTANT : { ...INSERT, delay: Math.min(index, 3) * 0.025 }}
               >
                 {showGroup ? (
-                  <div className="pb-1 pt-2 text-[10.5px] font-medium text-stone-400 dark:text-stone-500">{item.group}</div>
+                  <div className="pb-1 pt-2 text-[10.5px] font-medium text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400">{item.group}</div>
                 ) : null}
                 {showUnread ? (
                   <div className="flex items-center gap-2 py-1" aria-label={unreadStartLabel}>
                     <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
-                    <span className="text-[9.5px] font-medium text-[#4568FF] dark:text-[#93B0FF]">{unreadLabel}</span>
+                    <span className="text-[9.5px] font-medium text-[#3D5FDA] dark:text-[#93B0FF]">{unreadLabel}</span>
                     <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
                   </div>
                 ) : null}

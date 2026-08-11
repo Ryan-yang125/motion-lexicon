@@ -16,6 +16,7 @@ export function FloatingDockDemo({ locale = "en" }: DemoLocaleProps = {}) {
     <div role="group" aria-label={demoText("floating-dock", locale)} className="grid w-full max-w-[430px] place-items-center rounded-[18px] bg-[#DDD7CD] px-4 py-16 dark:bg-[#292825]">
       <FloatingDock
         label={demoValue(locale, "工作区工具", "Workspace tools")}
+        emptyLabel={demoValue(locale, "暂无工作区工具", "No workspace tools")}
         activeId={active}
         items={items.map(([id, label, glyph]) => ({ id, label, icon: <Glyph>{glyph}</Glyph>, onSelect: () => setActive(id) }))}
       />

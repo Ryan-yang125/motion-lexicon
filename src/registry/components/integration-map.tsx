@@ -30,6 +30,7 @@ export type IntegrationMapProps = {
   label?: string;
   width?: number;
   height?: number;
+  emptyLabel?: string;
   formatStatus?: (label: string) => string;
   className?: string;
 };
@@ -44,7 +45,7 @@ const tone: Record<IntegrationNodeTone, { node: string; text: string }> = {
 function useFinePointer() {
   const [fine, setFine] = useState(false);
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
     const query = window.matchMedia("(hover: hover) and (pointer: fine)");
     const update = () => setFine(query.matches);
     update();
@@ -86,15 +87,31 @@ function edgePath(from: IntegrationNode, to: IntegrationNode) {
   return `M ${from.x} ${from.y} C ${middle} ${from.y}, ${middle} ${to.y}, ${to.x} ${to.y}`;
 }
 
+function fitNodeText(value: string, maxUnits: number) {
+  const characters = Array.from(value);
+  let units = 0;
+  let result = "";
+  for (const character of characters) {
+    const next = (character.codePointAt(0) ?? 0) <= 0xff ? 0.55 : 1;
+    if (units + next > maxUnits) return `${result.trimEnd()}…`;
+    result += character;
+    units += next;
+  }
+  return result;
+}
+
 export function IntegrationMap({
   nodes,
   edges,
   label = "Integration map",
   width = 440,
   height = 230,
+  emptyLabel = "No integrations available",
   formatStatus = (name) => `${name} connections highlighted`,
   className = "",
 }: IntegrationMapProps) {
+  const resolvedWidth = Number.isFinite(width) && width > 0 ? width : 440;
+  const resolvedHeight = Number.isFinite(height) && height > 0 ? height : 230;
   const reduced = useReducedMotion() === true;
   const finePointer = useFinePointer();
   const { ref, active } = useAnimationActivity<HTMLDivElement>();
@@ -123,11 +140,19 @@ export function IntegrationMap({
     return ids;
   }, [activeNode, edges, nodes]);
 
+  if (nodes.length === 0) {
+    return (
+      <div ref={ref} className={`grid min-h-28 w-full place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:text-stone-300 ${className}`}>
+        <span role="status">{emptyLabel}</span>
+      </div>
+    );
+  }
+
   return (
     <div ref={ref} className={`w-full ${className}`}>
       <div className="relative">
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${resolvedWidth} ${resolvedHeight}`}
           aria-hidden="true"
           focusable="false"
           className="block h-auto w-full overflow-visible"
@@ -199,9 +224,9 @@ export function IntegrationMap({
                 className={`${colors.node} ${activeNode === node.id ? "stroke-[#4568FF] dark:stroke-[#93B0FF]" : ""}`}
               />
               <text x={node.x} y={node.y - (node.meta ? 2 : -4)} textAnchor="middle" fontSize="12" fontWeight="600" className={colors.text}>
-                {node.label}
+                {fitNodeText(node.label, 7.4)}
               </text>
-              {node.meta ? <text x={node.x} y={node.y + 12} textAnchor="middle" opacity="0.65" fontSize="9.5" className={colors.text}>{node.meta}</text> : null}
+              {node.meta ? <text x={node.x} y={node.y + 12} textAnchor="middle" fontSize="9.5" className={colors.text}>{fitNodeText(node.meta, 9.2)}</text> : null}
             </motion.g>
           );
         })}
@@ -236,10 +261,10 @@ export function IntegrationMap({
               }}
               className="absolute min-h-11 min-w-11 rounded-[11px] bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:focus-visible:ring-[#93B0FF]"
               style={{
-                left: `${(node.x / width) * 100}%`,
-                top: `${(node.y / height) * 100}%`,
-                width: `${(96 / width) * 100}%`,
-                height: `${(44 / height) * 100}%`,
+                left: `${(node.x / resolvedWidth) * 100}%`,
+                top: `${(node.y / resolvedHeight) * 100}%`,
+                width: `${(96 / resolvedWidth) * 100}%`,
+                height: `${(44 / resolvedHeight) * 100}%`,
                 minWidth: 44,
                 minHeight: 44,
                 transform: "translate(-50%, -50%)",

@@ -111,6 +111,18 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
   }, []);
 
   useEffect(() => {
+    if (active === null) return;
+    const dismissFromOutside = (event: globalThis.PointerEvent) => {
+      if (!(event.target instanceof Node) || root.current?.contains(event.target)) return;
+      cancelClose();
+      pendingPanelFocus.current = null;
+      setActive(null);
+    };
+    document.addEventListener("pointerdown", dismissFromOutside, true);
+    return () => document.removeEventListener("pointerdown", dismissFromOutside, true);
+  }, [active]);
+
+  useEffect(() => {
     if (active !== null && index >= 0) lastActiveIndex.current = index;
   }, [active, index]);
 
@@ -204,7 +216,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
         close();
       }}
     >
-      <nav aria-label={label} className="flex min-h-12 items-center gap-1 rounded-[13px] border border-stone-200 bg-white p-1 shadow-[0_12px_30px_-24px_rgba(28,25,23,.68)] dark:border-white/15 dark:bg-[#22221F]">
+      <nav aria-label={label} className="flex min-h-12 items-center gap-1 rounded-[13px] border border-stone-200 bg-white p-1 shadow-[0_4px_8px_-7px_rgba(28,25,23,.64)] dark:border-white/15 dark:bg-[#22221F]">
         {sections.map((section, at) => {
           const isOpen = section.id === panelCurrent?.id;
           const unavailable = section.links.length === 0;
@@ -216,6 +228,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
                 else buttons.current.delete(section.id);
               }}
               type="button"
+              aria-haspopup="menu"
               aria-expanded={isOpen}
               aria-controls={isOpen ? `${uid}-panel` : undefined}
               aria-disabled={unavailable}
@@ -234,10 +247,10 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
                 focusInPanel.current = false;
               }}
               onKeyDown={(event) => keyDown(event, at)}
-              className={`relative min-h-11 flex-1 rounded-[9px] px-3 text-[12px] font-medium outline-none transition-colors duration-150 focus-visible:shadow-[0_0_0_2px_rgba(69,104,255,.22)] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 ${isOpen ? "text-stone-900 dark:text-white" : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"}`}
+              className={`relative min-h-11 min-w-0 flex-1 rounded-[9px] px-3 text-[12px] font-medium outline-none transition-colors duration-150 focus-visible:shadow-[0_0_0_2px_rgba(69,104,255,.22)] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 ${isOpen ? "text-stone-900 dark:text-white" : "text-stone-600 hover:text-stone-800 dark:text-stone-300 dark:hover:text-stone-100"}`}
             >
               {isOpen ? <motion.span layoutId={`${uid}-active`} transition={reduced ? INSTANT : MOVE} className="absolute inset-0 rounded-[9px] bg-stone-100 shadow-[inset_0_0_0_1px_rgba(41,41,41,.05)] dark:bg-white/[.08]" /> : null}
-              <span className="relative">{section.label}</span>
+              <span className="relative block truncate">{section.label}</span>
             </button>
           );
         })}
@@ -253,7 +266,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
             exit={{ opacity: 0, transform: reduced ? "none" : "translate3d(0,-4px,0) scale(.99)" }}
             transition={reduced ? INSTANT : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
             onPointerEnter={(event) => { if (event.pointerType !== "touch") cancelClose(); }}
-            className="absolute inset-x-0 top-[calc(100%+7px)] z-30 grid min-h-[190px] grid-cols-[minmax(0,1fr)_minmax(150px,.72fr)] overflow-hidden rounded-[16px] border border-stone-200 bg-white shadow-[0_28px_58px_-30px_rgba(28,25,23,.72)] dark:border-white/15 dark:bg-[#1F1F1C]"
+            className="absolute inset-x-0 top-[calc(100%+7px)] z-30 grid min-h-[190px] grid-cols-[minmax(0,1fr)_minmax(120px,.72fr)] overflow-hidden rounded-[16px] border border-stone-200 bg-white shadow-[0_4px_8px_-6px_rgba(28,25,23,.68)] dark:border-white/15 dark:bg-[#1F1F1C]"
           >
             <div role="menu" aria-label={panelCurrent.label} className="grid content-start gap-1 p-2.5">
               {panelCurrent.links.map((link, at) => (
@@ -279,7 +292,7 @@ export function MegaMenu({ sections, label, className = "" }: MegaMenuProps) {
                   className="group min-h-11 rounded-[10px] px-3 py-2 text-left outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_2px_rgba(69,104,255,.25)] dark:hover:bg-white/[.07] dark:focus-visible:bg-white/[.07]"
                 >
                   <strong className="block text-[12px] font-medium text-stone-800 dark:text-stone-100">{link.label}</strong>
-                  {link.description ? <span className="mt-0.5 block text-[10px] text-stone-400">{link.description}</span> : null}
+                  {link.description ? <span className="mt-0.5 block text-[10px] text-stone-600 dark:text-stone-300">{link.description}</span> : null}
                 </button>
               ))}
             </div>

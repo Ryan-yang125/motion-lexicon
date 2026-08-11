@@ -100,6 +100,7 @@ body {
 }
 
 .shell-brand {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -123,7 +124,7 @@ body {
 .shell-nav-group + .shell-nav-group { margin-top: 5px; }
 .shell-nav-link {
   min-width: 0;
-  min-height: 32px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -138,7 +139,7 @@ body {
 .shell-nav-link.is-active { color: var(--ink); background: var(--well); box-shadow: var(--shadow-row); font-weight: 500; }
 .shell-nav-link.is-context { color: var(--ink); }
 .shell-nav-link svg { flex: 0 0 auto; }
-.shell-nav-heading { min-height: 36px; padding-left: 10px; color: var(--ink); font-weight: 600; }
+.shell-nav-heading { min-height: 44px; padding-left: 10px; color: var(--ink); font-weight: 600; }
 .shell-nav-heading small { margin-left: auto; color: var(--ink-3); font: 500 10.5px/1 var(--mono); }
 .shell-primitive-groups .shell-nav-link { padding-left: 28px; }
 
@@ -161,7 +162,7 @@ body {
 
 .shell-search-trigger {
   grid-column: 2;
-  height: 34px;
+  height: 44px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -179,8 +180,8 @@ body {
 .shell-search-trigger kbd { font: 500 10px/1 var(--mono); }
 .shell-header-actions { grid-column: 3; display: flex; justify-content: flex-end; gap: 4px; }
 .shell-icon-button {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   display: inline-grid;
   place-items: center;
   border: 0;
@@ -274,7 +275,7 @@ body {
   box-shadow: var(--shadow-lift);
 }
 .component-detail-header { padding: 22px 24px; }
-.component-back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-3); font-size: 12px; }
+.component-back-link { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-3); font-size: 12px; }
 .component-detail-title-row { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-top: 36px; }
 .component-detail-title-row > div { min-width: 0; }
 .component-detail-title-row code { color: var(--ink-3); font: 500 10.5px/1 var(--mono); }
@@ -535,7 +536,6 @@ body {
 .landing-stage {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--hairline);
   border-radius: 20px;
 }
 .landing-stage-bar {

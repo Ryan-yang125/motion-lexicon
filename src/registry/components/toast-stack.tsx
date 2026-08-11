@@ -15,6 +15,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 const SETTLE = { type: "spring", stiffness: 460, damping: 38, mass: 0.7 } as const;
 const LEAVE = { duration: 0.16, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
+const TOAST_HEIGHT = 62;
+const COLLAPSED_OFFSET = 12;
+const EXPANDED_OFFSET = 64;
 
 export type ToastTone = "neutral" | "success" | "warning" | "error";
 
@@ -131,8 +134,8 @@ export function ToastStack({
     requestDismiss(id, index, "keyboard");
   };
 
-  const collapsedHeight = visible.length === 0 ? 0 : 62 + (visible.length - 1) * 12;
-  const expandedHeight = visible.length === 0 ? 0 : visible.length * 58 + (visible.length - 1) * 6;
+  const collapsedHeight = visible.length === 0 ? 0 : TOAST_HEIGHT + (visible.length - 1) * COLLAPSED_OFFSET;
+  const expandedHeight = visible.length === 0 ? 0 : TOAST_HEIGHT + (visible.length - 1) * EXPANDED_OFFSET;
 
   return (
     <section
@@ -162,7 +165,7 @@ export function ToastStack({
         <AnimatePresence initial={false}>
           {visible.map((item, index) => {
             const depth = visible.length - index - 1;
-            const y = expanded ? index * 64 : index * 12;
+            const y = expanded ? index * EXPANDED_OFFSET : index * COLLAPSED_OFFSET;
             const scale = expanded ? 1 : 1 - index * 0.025;
             const tone = item.tone ?? "neutral";
             return (

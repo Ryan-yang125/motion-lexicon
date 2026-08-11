@@ -22,6 +22,7 @@ export type SpotlightBentoProps = {
   items: readonly SpotlightBentoItem[];
   label?: string;
   className?: string;
+  selectedId?: string;
   onSelect?: (item: SpotlightBentoItem) => void;
 };
 
@@ -36,6 +37,7 @@ export function SpotlightBento({
   items,
   label = "Product signals",
   className = "",
+  selectedId,
   onSelect,
 }: SpotlightBentoProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -90,7 +92,7 @@ export function SpotlightBento({
   return (
     <section
       aria-label={label}
-      className={`w-full rounded-[18px] border border-stone-200 bg-[#EAE8E1] p-2 shadow-[0_16px_44px_-36px_rgba(41,41,41,0.48)] dark:border-white/[0.14] dark:bg-[#191917] ${className}`}
+      className={`w-full rounded-[16px] border border-stone-200 bg-[#EAE8E1] p-2 dark:border-white/[0.14] dark:bg-[#191917] ${className}`}
     >
       <div
         ref={rootRef}
@@ -101,7 +103,7 @@ export function SpotlightBento({
           pointRef.current = { x: root.clientWidth * 0.72, y: root.clientHeight * 0.28 };
           schedule();
         }}
-        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-[13px]"
+        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-[12px]"
       >
         <div
           ref={lightRef}
@@ -113,7 +115,12 @@ export function SpotlightBento({
 
         {items.map((item) => {
           const interactive = typeof onSelect === "function";
-          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-[12px] border border-black/[0.075] bg-white/72 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-[18px] dark:border-white/[0.1] dark:bg-[#242421]/78 ${
+          const selected = interactive && item.id === selectedId;
+          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-[12px] border bg-white/80 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] dark:bg-[#242421]/88 ${
+            selected
+              ? "border-[#4568FF] dark:border-[#93B0FF]"
+              : "border-black/[0.075] dark:border-white/[0.1]"
+          } ${
             item.wide ? "col-span-2" : ""
           } ${
             interactive
@@ -121,7 +128,7 @@ export function SpotlightBento({
               : ""
           } ${
             interactive && !reduced
-              ? "transition-[transform,border-color,box-shadow] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-black/[0.14] [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_12px_26px_-20px_rgba(41,41,41,0.6)]"
+              ? "transition-[transform,border-color,background-color] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-black/[0.16] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:border-white/[0.2]"
               : ""
           }`;
           const content = (
@@ -131,7 +138,7 @@ export function SpotlightBento({
                   {item.icon ?? <span className="size-1.5 rounded-full bg-current" />}
                 </span>
                 {item.meta ? (
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-stone-400 dark:text-stone-500">{item.meta}</span>
+                  <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-stone-600 dark:text-stone-300">{item.meta}</span>
                 ) : null}
               </span>
               <span className="mt-3 block min-w-0">
@@ -143,7 +150,11 @@ export function SpotlightBento({
                   aria-hidden
                   data-spotlight-indicator
                   data-motion-mode={reduced ? "instant" : "standard"}
-                  className={`absolute inset-x-3 bottom-0 h-px bg-[#4568FF] opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 ${reduced ? "" : "origin-left scale-x-0 transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-focus-visible:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100"}`}
+                  className={`absolute inset-x-3 bottom-0 h-px bg-[#4568FF] ${selected ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"} ${
+                    reduced
+                      ? ""
+                      : `origin-left transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] ${selected ? "scale-x-100" : "scale-x-0 group-focus-visible:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100"}`
+                  }`}
                 />
               ) : null}
             </>
@@ -153,6 +164,7 @@ export function SpotlightBento({
             <button
               key={item.id}
               type="button"
+              aria-pressed={selected}
               onClick={() => onSelect(item)}
               className={cardClassName}
             >

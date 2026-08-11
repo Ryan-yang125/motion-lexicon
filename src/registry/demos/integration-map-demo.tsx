@@ -25,6 +25,7 @@ export function IntegrationMapDemo({ locale = "en" }: DemoLocaleProps = {}) {
         nodes={nodes}
         edges={edges}
         label={demoValue(locale, "集成关系图", "Integration map")}
+        emptyLabel={demoValue(locale, "暂无集成", "No integrations available")}
         formatStatus={locale === "zh" ? (label) => `已突出显示${label}的连接` : undefined}
       />
     </div>

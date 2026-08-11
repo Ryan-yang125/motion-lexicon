@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import * as THREE from "three";
 
@@ -215,6 +215,7 @@ export function ProceduralProductViewer({
     ...labels,
   };
   const mountRef = useRef<HTMLDivElement>(null);
+  const detailId = useId();
   const groupRef = useRef<THREE.Group | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -404,15 +405,26 @@ export function ProceduralProductViewer({
     });
     resize.observe(mount);
 
+    let intersecting = true;
     const intersection = new IntersectionObserver(([entry]) => {
-      visibleRef.current = entry.isIntersecting;
-      if (entry.isIntersecting) requestFrameRef.current();
+      intersecting = entry.isIntersecting;
+      visibleRef.current = intersecting && !document.hidden;
+      if (visibleRef.current) requestFrameRef.current();
       else if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
       }
     });
+    const onVisibility = () => {
+      visibleRef.current = intersecting && !document.hidden;
+      if (visibleRef.current) requestFrameRef.current();
+      else if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
+    };
     intersection.observe(mount);
+    document.addEventListener("visibilitychange", onVisibility);
     void precompileMaterialStages(renderer, scene, camera, () => cancelled).then(() => {
       if (cancelled) return;
       setRendererReady(true);
@@ -425,6 +437,7 @@ export function ProceduralProductViewer({
       renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
       intersection.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
       resources.forEach((resource) => resource.dispose());
       renderer.dispose();
@@ -509,6 +522,14 @@ export function ProceduralProductViewer({
         if (!rendererReady) return;
         rotation.current.dragging = false;
         rotation.current.pointerId = null;
+        rotation.current.velocityX = 0;
+        rotation.current.velocityY = 0;
+      }}
+      onLostPointerCapture={() => {
+        rotation.current.dragging = false;
+        rotation.current.pointerId = null;
+        rotation.current.velocityX = 0;
+        rotation.current.velocityY = 0;
       }}
       onKeyDown={
         rendererReady
@@ -528,14 +549,14 @@ export function ProceduralProductViewer({
             }
           : undefined
       }
-      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_48px_-38px_rgba(41,41,41,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_4px_8px_-7px_rgba(41,41,41,0.5)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
     >
       <div
         data-webgl-fallback="procedural-product-viewer"
         aria-hidden
         className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
       >
-        <div className="relative h-40 w-28 -rotate-3 rounded-[22px] border border-white/80 bg-[#E8E5DD] shadow-lg dark:border-white/20 dark:bg-[#353531]">
+        <div className="relative h-40 w-28 -rotate-3 rounded-[22px] border border-white/80 bg-[#E8E5DD] shadow-md dark:border-white/20 dark:bg-[#353531]">
           <span className="absolute inset-x-3 top-4 h-16 rounded-[10px] border border-black/10 bg-[#171918] shadow-inner">
             <span className="absolute left-3 top-5 h-1 w-10 rounded-full" style={{ background: accent }} />
             <span className="absolute left-3 top-8 h-1 w-6 rounded-full bg-white/40" />
@@ -555,7 +576,7 @@ export function ProceduralProductViewer({
             focusAfterActivationRef.current = true;
             setActivationRequested(true);
           }}
-          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_10px_30px_-16px_rgba(41,41,41,.65)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_4px_8px_-4px_rgba(41,41,41,.6)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
         >
           {copy.activateInteractive}
         </button>
@@ -563,7 +584,7 @@ export function ProceduralProductViewer({
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">{copy.objectStudy}</span>
+          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-300">{copy.objectStudy}</span>
           <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{productName}</strong>
         </span>
         <span className="rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1 font-mono text-[9px] text-stone-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-300">
@@ -574,6 +595,7 @@ export function ProceduralProductViewer({
       <button
         type="button"
         aria-expanded={detailOpen}
+        aria-controls={detailId}
         onClick={() => setDetailOpen((open) => !open)}
         className="absolute left-[62%] top-[44%] z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2"
       >
@@ -584,15 +606,18 @@ export function ProceduralProductViewer({
       </button>
 
       <div
+        id={detailId}
+        role="region"
+        aria-label={detailLabel}
         aria-hidden={!detailOpen}
-        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-[12px] border border-black/[0.08] bg-white/80 px-3 py-2.5 shadow-lg backdrop-blur-xl ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
+        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-[12px] border border-black/[0.08] bg-white/90 px-3 py-2.5 shadow-md backdrop-blur-xl dark:border-white/[0.12] dark:bg-[#242421]/95 ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
         style={{
           opacity: detailOpen ? 1 : 0,
           transform: detailOpen ? "translate3d(0,0,0)" : "translate3d(0,6px,0)",
         }}
       >
-        <strong className="block text-[12px] font-medium text-[#292929]">{detailLabel}</strong>
-        <span className="mt-0.5 block text-[10px] leading-4 text-stone-500">{copy.detailDescription}</span>
+        <strong className="block text-[12px] font-medium text-[#292929] dark:text-stone-100">{detailLabel}</strong>
+        <span className="mt-0.5 block text-[10px] leading-4 text-stone-500 dark:text-stone-300">{copy.detailDescription}</span>
       </div>
 
       {rendererReady ? (

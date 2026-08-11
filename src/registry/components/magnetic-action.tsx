@@ -39,7 +39,13 @@ export function MagneticAction({
   useEffect(() => {
     const button = root.current;
     const text = label.current;
-    if (!button || !text || reduced) return;
+    if (!button || !text) return;
+    if (reduced || disabled) {
+      movers.current = null;
+      gsap.killTweensOf([button, text]);
+      gsap.set([button, text], { clearProps: "transform" });
+      return;
+    }
     movers.current = {
       x: gsap.quickTo(button, "x", { duration: 0.42, ease: "power3.out" }),
       y: gsap.quickTo(button, "y", { duration: 0.42, ease: "power3.out" }),
@@ -51,7 +57,7 @@ export function MagneticAction({
       gsap.killTweensOf([button, text]);
       gsap.set([button, text], { clearProps: "transform" });
     };
-  }, [reduced]);
+  }, [disabled, reduced]);
 
   const move = (event: PointerEvent<HTMLButtonElement>) => {
     if (reduced || disabled || event.pointerType === "touch") return;
@@ -71,6 +77,8 @@ export function MagneticAction({
     movers.current?.y(0);
     movers.current?.lx(0);
     movers.current?.ly(0);
+    root.current?.style.setProperty("--magnetic-x", "50%");
+    root.current?.style.setProperty("--magnetic-y", "50%");
   };
 
   return (

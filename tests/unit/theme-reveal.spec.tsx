@@ -62,13 +62,17 @@ describe("ThemeReveal", () => {
     fireEvent.click(trigger);
 
     expect(onThemeChange).toHaveBeenCalledTimes(1);
-    expect(trigger).toBeDisabled();
+    expect(trigger).toBeEnabled();
     expect(trigger).toHaveAttribute("aria-busy", "true");
     expect(trigger).toHaveAttribute("aria-disabled", "true");
 
+    trigger.focus();
+    expect(trigger).toHaveFocus();
+
     await act(async () => { first.resolve(); });
 
-    await waitFor(() => expect(trigger).toBeEnabled());
+    await waitFor(() => expect(trigger).not.toHaveAttribute("aria-busy"));
+    expect(trigger).toHaveFocus();
     expect(trigger).not.toHaveAttribute("aria-busy");
     expect(trigger).not.toHaveAttribute("aria-disabled");
 
@@ -94,9 +98,10 @@ describe("ThemeReveal", () => {
 
     expect(onThemeChange).toHaveBeenCalledTimes(1);
     expect(startViewTransition).not.toHaveBeenCalled();
-    expect(trigger).toBeDisabled();
+    expect(trigger).toBeEnabled();
+    expect(trigger).toHaveAttribute("aria-disabled", "true");
     await act(async () => { change.resolve(); });
-    await waitFor(() => expect(trigger).toBeEnabled());
+    await waitFor(() => expect(trigger).not.toHaveAttribute("aria-disabled"));
   });
 
   it("holds the lock through the View Transition and restores it afterward", async () => {
@@ -124,11 +129,12 @@ describe("ThemeReveal", () => {
 
     expect(startViewTransition).toHaveBeenCalledTimes(1);
     expect(onThemeChange).toHaveBeenCalledTimes(1);
-    expect(trigger).toBeDisabled();
+    expect(trigger).toBeEnabled();
+    expect(trigger).toHaveAttribute("aria-disabled", "true");
     await act(async () => { change.resolve(); });
-    expect(trigger).toBeDisabled();
+    expect(trigger).toHaveAttribute("aria-disabled", "true");
     await act(async () => { finished.resolve(); });
-    await waitFor(() => expect(trigger).toBeEnabled());
+    await waitFor(() => expect(trigger).not.toHaveAttribute("aria-disabled"));
     expect(animate).toHaveBeenCalledTimes(1);
   });
 
@@ -142,7 +148,7 @@ describe("ThemeReveal", () => {
     fireEvent.click(trigger);
     await act(async () => { change.reject(new Error("theme failed")); });
 
-    await waitFor(() => expect(trigger).toBeEnabled());
+    await waitFor(() => expect(trigger).not.toHaveAttribute("aria-busy"));
     expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: "theme failed" }));
     expect(trigger).not.toHaveAttribute("aria-busy");
   });

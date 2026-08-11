@@ -31,6 +31,7 @@ export type MediaCarouselProps = {
 
 export type MediaCarouselCopy = {
   collection: string;
+  emptyCollection: string;
   previousSlide: string;
   nextSlide: string;
   carouselRole: string;
@@ -41,6 +42,7 @@ export type MediaCarouselCopy = {
 
 const DEFAULT_COPY: MediaCarouselCopy = {
   collection: "Collection",
+  emptyCollection: "No slides available.",
   previousSlide: "Previous slide",
   nextSlide: "Next slide",
   carouselRole: "carousel",
@@ -250,11 +252,11 @@ export function MediaCarousel({
   return (
     <section
       aria-labelledby={titleId}
-      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 shadow-[0_18px_48px_-38px_rgba(41,41,41,0.55)] dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
+      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
         <div className="min-w-0">
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
+          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-300">
             {copy.collection}
           </span>
           <h3
@@ -267,7 +269,7 @@ export function MediaCarousel({
         <div className="flex items-center gap-1.5">
           <span
             aria-live="polite"
-            className="mr-1 font-mono text-[10px] tabular-nums text-stone-500 dark:text-stone-400"
+            className="mr-1 font-mono text-[10px] tabular-nums text-stone-600 dark:text-stone-300"
           >
             {items.length === 0 ? "00 / 00" : `${String(activeIndex + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`}
           </span>
@@ -303,6 +305,11 @@ export function MediaCarousel({
         className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain rounded-[14px] outline-none [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden"
         style={{ touchAction: "pan-x pan-y" }}
       >
+        {items.length === 0 ? (
+          <p role="status" className="grid min-h-[180px] min-w-full place-items-center px-4 text-center text-[12px] text-stone-600 dark:text-stone-300">
+            {copy.emptyCollection}
+          </p>
+        ) : null}
         {items.map((item, index) => {
           const active = index === activeIndex;
           return (
@@ -325,7 +332,7 @@ export function MediaCarousel({
                 }}
                 className={`group block w-full overflow-hidden rounded-[14px] border bg-white text-left outline-none transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-inset dark:bg-[#151513] ${
                   active
-                    ? "border-black/[0.16] shadow-[0_12px_30px_-24px_rgba(41,41,41,0.55)] dark:border-white/[0.22]"
+                    ? "border-black/[0.16] shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.22]"
                     : "border-black/[0.07] dark:border-white/[0.1]"
                 }`}
               >
@@ -335,7 +342,7 @@ export function MediaCarousel({
                 <span className="grid min-h-[112px] grid-cols-[1fr_auto] gap-x-4 gap-y-2 p-3.5">
                   <span className="min-w-0">
                     {item.eyebrow ? (
-                      <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
+                      <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300">
                         {item.eyebrow}
                       </span>
                     ) : null}
@@ -343,13 +350,13 @@ export function MediaCarousel({
                       {item.title}
                     </span>
                     {item.description ? (
-                      <span className="mt-1.5 block max-w-[34rem] text-[11px] leading-[1.55] text-stone-500 dark:text-stone-400">
+                      <span className="mt-1.5 block max-w-[34rem] text-[11px] leading-[1.55] text-stone-500 dark:text-stone-300">
                         {item.description}
                       </span>
                     ) : null}
                   </span>
                   {item.meta ? (
-                    <span className="self-start whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-stone-400 dark:text-stone-500">
+                    <span className="self-start whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-stone-600 dark:text-stone-300">
                       {item.meta}
                     </span>
                   ) : null}

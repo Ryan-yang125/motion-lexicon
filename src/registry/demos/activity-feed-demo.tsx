@@ -31,7 +31,7 @@ export function ActivityFeedDemo({ locale = "en" }: DemoLocaleProps = {}) {
           {demoValue(locale, "添加动态", "Add activity")}
         </button>
       </div>
-      <ActivityFeed items={items} label={demoValue(locale, "动态", "Activity")} emptyLabel={demoValue(locale, "暂无动态", "No activity yet")} unreadLabel={demoValue(locale, "未读", "Unread")} unreadStartLabel={demoValue(locale, "未读动态从这里开始", "Unread activity starts here")} />
+      <ActivityFeed items={items} label={demoValue(locale, "动态", "Activity")} emptyLabel={demoValue(locale, "暂无动态", "No activity yet")} unreadLabel={demoValue(locale, "未读", "Unread")} unreadStartLabel={demoValue(locale, "未读动态从这里开始", "Unread activity starts here")} toneLabels={locale === "zh" ? { success: "成功", warning: "警告", error: "错误" } : undefined} />
     </div>
   );
 }

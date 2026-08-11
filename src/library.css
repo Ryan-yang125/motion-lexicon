@@ -282,7 +282,7 @@ kbd {
   margin: 1.15rem 0 1.2rem;
   font-size: clamp(3.15rem, 4vw, 4.1rem);
   line-height: 1.01;
-  letter-spacing: -0.052em;
+  letter-spacing: -0.04em;
   font-weight: 690;
   text-wrap: balance;
   white-space: pre-line;

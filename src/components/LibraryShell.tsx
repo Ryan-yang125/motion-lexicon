@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { BrandMark } from "./BrandMark";
 import {
   BookOpenIcon,
@@ -47,26 +47,33 @@ function ShellLink({
   href,
   current,
   children,
-  className = ""
+  className = "",
+  activeRef,
 }: {
   href: string;
   current: boolean;
   children: ReactNode;
   className?: string;
+  activeRef?: Ref<HTMLAnchorElement>;
 }) {
   return (
-    <a className={`shell-nav-link${current ? " is-active" : ""} ${className}`.trim()} href={href} aria-current={current ? "page" : undefined}>
+    <a ref={current ? activeRef : undefined} className={`shell-nav-link${current ? " is-active" : ""} ${className}`.trim()} href={href} aria-current={current ? "page" : undefined}>
       {children}
     </a>
   );
 }
 
 function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; pathname: string; onNavigate?: () => void }) {
+  const activeLinkRef = useRef<HTMLAnchorElement>(null);
   const activeComponent = pathname.match(/\/components\/([^/]+)/)?.[1];
   const activePrimitive = pathname.match(/\/primitives\/([^/]+)/)?.[1];
   const componentLabel = locale === "zh" ? "组件" : "Components";
   const primitiveLabel = locale === "zh" ? "原子动效" : "Primitives";
   const resourceLabel = locale === "zh" ? "资源" : "Resources";
+
+  useEffect(() => {
+    activeLinkRef.current?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+  }, [pathname]);
 
   return (
     <aside className="library-shell-sidebar" aria-label={locale === "zh" ? "站点导航" : "Site navigation"}>
@@ -83,6 +90,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
             href={pathFor(locale, ["components"])}
             current={pathname === pathFor(locale, ["components"])}
             className="shell-nav-heading"
+            activeRef={activeLinkRef}
           >
             <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
             <span>{componentLabel}</span>
@@ -97,6 +105,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
                   <ShellLink
                     href={pathFor(locale, ["components", entry.id])}
                     current={activeComponent === entry.id}
+                    activeRef={activeLinkRef}
                     key={entry.id}
                   >
                     {text(entry.name, locale)}
@@ -108,7 +117,7 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
         </section>
 
         <section className="shell-nav-section">
-          <ShellLink href={pathFor(locale, ["primitives"])} current={pathname === pathFor(locale, ["primitives"])} className="shell-nav-heading">
+          <ShellLink href={pathFor(locale, ["primitives"])} current={pathname === pathFor(locale, ["primitives"])} className="shell-nav-heading" activeRef={activeLinkRef}>
             <MotionPrimitiveGlyph size={15} aria-hidden="true" />
             <span>{primitiveLabel}</span>
             <small>{catalogRecipes.length}</small>
@@ -128,15 +137,15 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
 
         <section className="shell-nav-section">
           <span className="shell-nav-section-title">{resourceLabel}</span>
-          <ShellLink href={pathFor(locale, ["vocabulary"])} current={pathname.includes("/vocabulary/")}>
+          <ShellLink href={pathFor(locale, ["vocabulary"])} current={pathname.includes("/vocabulary/")} activeRef={activeLinkRef}>
             <MotionPrimitiveGlyph size={14} aria-hidden="true" />
             <span>{locale === "zh" ? "动效词汇" : "Vocabulary"}</span>
           </ShellLink>
-          <ShellLink href={pathFor(locale, ["guides"])} current={pathname.includes("/guides/")}>
+          <ShellLink href={pathFor(locale, ["guides"])} current={pathname.includes("/guides/")} activeRef={activeLinkRef}>
             <BookOpenIcon size={14} aria-hidden="true" />
             <span>{locale === "zh" ? "场景指南" : "Guides"}</span>
           </ShellLink>
-          <ShellLink href={pathFor(locale, ["skill"])} current={pathname.includes("/skill/")}>
+          <ShellLink href={pathFor(locale, ["skill"])} current={pathname.includes("/skill/")} activeRef={activeLinkRef}>
             <MotionSkillGlyph size={14} aria-hidden="true" />
             <span>Agent Skill</span>
           </ShellLink>
