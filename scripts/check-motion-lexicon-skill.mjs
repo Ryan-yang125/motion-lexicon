@@ -49,6 +49,34 @@ const isInside = (parentDirectory, candidatePath) => {
   const relativePath = path.relative(parentDirectory, candidatePath);
   return relativePath === "" || (!relativePath.startsWith("..") && !path.isAbsolute(relativePath));
 };
+const staysInsideRealEvidenceRoot = (evidenceRoot, absolutePath, label) => {
+  if (!fs.existsSync(evidenceRoot)) return false;
+  if (fs.lstatSync(evidenceRoot).isSymbolicLink()) {
+    fail(`${label} cannot use a symbolic-link evidence root.`);
+    return false;
+  }
+
+  const relativePath = path.relative(evidenceRoot, absolutePath);
+  let currentPath = evidenceRoot;
+  for (const segment of relativePath.split(path.sep).filter(Boolean)) {
+    currentPath = path.join(currentPath, segment);
+    if (!fs.existsSync(currentPath)) break;
+    if (fs.lstatSync(currentPath).isSymbolicLink()) {
+      fail(`${label} cannot traverse symbolic link ${path.relative(repositoryRoot, currentPath)}.`);
+      return false;
+    }
+  }
+
+  if (fs.existsSync(absolutePath)) {
+    const realEvidenceRoot = fs.realpathSync.native(evidenceRoot);
+    const realAbsolutePath = fs.realpathSync.native(absolutePath);
+    if (!isInside(realEvidenceRoot, realAbsolutePath)) {
+      fail(`${label} must stay inside the real recorded evidence root.`);
+      return false;
+    }
+  }
+  return true;
+};
 const resolveRepositoryEvidencePath = (relativePath, evidenceRoot, label) => {
   if (typeof relativePath !== "string" || relativePath.length === 0 || path.isAbsolute(relativePath)) {
     fail(`${label} must be a non-empty repository-relative path.`);
@@ -59,6 +87,7 @@ const resolveRepositoryEvidencePath = (relativePath, evidenceRoot, label) => {
     fail(`${label} must stay inside the recorded evidence root.`);
     return null;
   }
+  if (!staysInsideRealEvidenceRoot(evidenceRoot, absolutePath, label)) return null;
   return absolutePath;
 };
 const readJsonArtifact = (absolutePath, label) => {
@@ -764,7 +793,7 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   if (result.evidenceRoot !== expectedEvidenceRootPath) {
     fail(`Recorded fresh-context evidenceRoot must equal ${expectedEvidenceRootPath}.`);
   }
-  if (!fs.existsSync(evidenceRoot) || !fs.statSync(evidenceRoot).isDirectory()) {
+  if (!fs.existsSync(evidenceRoot) || !fs.lstatSync(evidenceRoot).isDirectory()) {
     fail("Recorded fresh-context evidence root is missing.");
   }
   if (typeof result.scorer?.identity !== "string" || result.scorer.identity.trim().length < 3) {
