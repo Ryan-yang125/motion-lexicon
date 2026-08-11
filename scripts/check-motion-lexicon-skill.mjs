@@ -30,6 +30,8 @@ const sha256Tree = (rootDirectory, excludedTopLevel = new Set(), excludedPaths =
       const absolutePath = path.join(directory, entry.name);
       if (entry.isDirectory()) visit(absolutePath, relativePath);
       else if (entry.isFile()) files.push([relativePath, absolutePath]);
+      else if (entry.isSymbolicLink()) fail(`Tree hash rejects symbolic link: ${path.relative(repositoryRoot, absolutePath)}.`);
+      else fail(`Tree hash rejects unsupported entry: ${path.relative(repositoryRoot, absolutePath)}.`);
     }
   };
   visit(rootDirectory);
@@ -746,6 +748,19 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   } else if (Date.parse(result.completedAt) < Date.parse(result.startedAt)) {
     fail("Recorded fresh-context result completes before it starts.");
   }
+  const suiteStartedAt = Date.parse(result.startedAt);
+  const suiteCompletedAt = Date.parse(result.completedAt);
+  const validateEvidenceTimeRange = (artifact, label) => {
+    const startedAt = Date.parse(artifact?.startedAt);
+    const completedAt = Date.parse(artifact?.completedAt);
+    if (!Number.isFinite(startedAt) || !Number.isFinite(completedAt)) {
+      fail(`${label} needs valid timestamps.`);
+    } else if (completedAt < startedAt) {
+      fail(`${label} completes before it starts.`);
+    } else if (startedAt < suiteStartedAt || completedAt > suiteCompletedAt) {
+      fail(`${label} timestamps must stay inside the recorded suite interval.`);
+    }
+  };
   if (result.evidenceRoot !== expectedEvidenceRootPath) {
     fail(`Recorded fresh-context evidenceRoot must equal ${expectedEvidenceRootPath}.`);
   }
@@ -898,6 +913,7 @@ const validateForwardTestResult = (contract, taskFixtures) => {
       }
     }
     if (isolationManifest) {
+      validateEvidenceTimeRange(isolationManifest, `${runPath}.isolationManifestPath`);
       for (const [field, expected] of [["evalId", run.evalId], ["repetition", run.repetition], ["promptSha256", run.promptSha256], ["skillSha256", result.skillSha256], ["skillTreeSha256", result.skillTreeSha256], ["evalsPresent", false]]) {
         if (isolationManifest[field] !== expected) fail(`${runPath} isolation manifest ${field} is inconsistent.`);
       }
@@ -938,6 +954,7 @@ const validateForwardTestResult = (contract, taskFixtures) => {
       if (!buildEvidence || buildEvidence.exitCode !== 0 || buildEvidence.command !== "npm run build") {
         fail(`${runPath}.buildEvidencePath must record npm run build with exit code 0.`);
       } else {
+        validateEvidenceTimeRange(buildEvidence, `${runPath}.buildEvidencePath`);
         if (buildEvidence.sourceTreeSha256 !== sourceTreeSha256 || buildEvidence.distTreeSha256 !== distTreeSha256) {
           fail(`${runPath}.buildEvidencePath tree hashes do not match preserved source and dist.`);
         }
@@ -1027,8 +1044,11 @@ const validateForwardTestResult = (contract, taskFixtures) => {
         contributeBuildEvidence = buildEvidence;
         if (!buildEvidence || buildEvidence.exitCode !== 0 || buildEvidence.command !== "npm run build" || buildEvidence.sourceTreeSha256 !== sourceTreeSha256 || buildEvidence.distTreeSha256 !== distTreeSha256) {
           fail(`${runPath}.buildEvidencePath must bind a successful npm run build to preserved source and dist.`);
-        } else if (!Number.isFinite(Date.parse(buildEvidence.startedAt)) || !Number.isFinite(Date.parse(buildEvidence.completedAt)) || typeof buildEvidence.stdout !== "string" || buildEvidence.stdout.length === 0 || typeof buildEvidence.stderr !== "string") {
-          fail(`${runPath}.buildEvidencePath must preserve timestamps, stdout, and stderr.`);
+        } else {
+          validateEvidenceTimeRange(buildEvidence, `${runPath}.buildEvidencePath`);
+          if (typeof buildEvidence.stdout !== "string" || buildEvidence.stdout.length === 0 || typeof buildEvidence.stderr !== "string") {
+            fail(`${runPath}.buildEvidencePath must preserve stdout and stderr.`);
+          }
         }
         if (distArtifact && !fs.existsSync(path.join(distArtifact, "index.html"))) fail(`${runPath}.distPath needs a built index.html.`);
         if (sourceArtifact && (!fs.existsSync(path.join(sourceArtifact, "package.json")) || !fs.existsSync(path.join(sourceArtifact, "src")))) {
@@ -1060,8 +1080,11 @@ const validateForwardTestResult = (contract, taskFixtures) => {
         const validatorEvidence = validatorArtifact ? readJsonArtifact(validatorArtifact, `${runPath}.validatorEvidencePath`) : null;
         if (!validatorEvidence || validatorEvidence.exitCode !== 0 || !String(validatorEvidence.command ?? "").includes("validate-motion-blueprint.mjs")) {
           fail(`${runPath}.validatorEvidencePath must record the bundled validator with exit code 0.`);
-        } else if (blueprintArtifact && validatorEvidence.blueprintSha256 !== sha256(fs.readFileSync(blueprintArtifact))) {
-          fail(`${runPath}.validatorEvidencePath Blueprint hash does not match.`);
+        } else {
+          validateEvidenceTimeRange(validatorEvidence, `${runPath}.validatorEvidencePath`);
+          if (blueprintArtifact && validatorEvidence.blueprintSha256 !== sha256(fs.readFileSync(blueprintArtifact))) {
+            fail(`${runPath}.validatorEvidencePath Blueprint hash does not match.`);
+          }
         }
         for (const field of ["candidatePath", "placeholderScanPath"]) {
           if (run[field] !== null) fail(`${runPath}.${field} must be null for Compose.`);
@@ -1090,8 +1113,11 @@ const validateForwardTestResult = (contract, taskFixtures) => {
         const validatorEvidence = validatorArtifact ? readJsonArtifact(validatorArtifact, `${runPath}.validatorEvidencePath`) : null;
         if (!validatorEvidence || validatorEvidence.exitCode !== 0 || !String(validatorEvidence.command ?? "").includes("validate-motion-blueprint.mjs")) {
           fail(`${runPath}.validatorEvidencePath must record the bundled validator with exit code 0.`);
-        } else if (blueprintArtifact && validatorEvidence.blueprintSha256 !== sha256(fs.readFileSync(blueprintArtifact))) {
-          fail(`${runPath}.validatorEvidencePath Blueprint hash does not match.`);
+        } else {
+          validateEvidenceTimeRange(validatorEvidence, `${runPath}.validatorEvidencePath`);
+          if (blueprintArtifact && validatorEvidence.blueprintSha256 !== sha256(fs.readFileSync(blueprintArtifact))) {
+            fail(`${runPath}.validatorEvidencePath Blueprint hash does not match.`);
+          }
         }
         if (candidateArtifact) {
           const candidateText = readText(candidateArtifact);
