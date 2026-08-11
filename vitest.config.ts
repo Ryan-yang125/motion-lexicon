@@ -8,7 +8,12 @@ export default mergeConfig(
       environment: "jsdom",
       globals: true,
       setupFiles: "./tests/setup.ts",
-      exclude: ["tests/e2e/**", "node_modules/**", "dist/**"],
+      exclude: [
+        "tests/e2e/**",
+        "skills/motion-lexicon/evals/**",
+        "node_modules/**",
+        "dist/**",
+      ],
       coverage: {
         reporter: ["text", "json", "html"]
       }

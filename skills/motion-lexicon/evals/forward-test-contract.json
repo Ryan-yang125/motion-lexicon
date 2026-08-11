@@ -1,15 +1,17 @@
 {
   "schemaVersion": 1,
   "suite": "motion-lexicon-fresh-context",
-  "status": "contract-only",
-  "description": "A repeatable scoring contract for future model runs. Presence of this file does not mean a forward-test has run or passed.",
+  "status": "recorded",
+  "description": "A repeatable scoring contract for the complete Skill, backed by 36 independently scored fresh-context runs and repository-bound evidence.",
   "runRequirements": {
     "freshContextPerRun": true,
     "repetitionsPerCase": 3,
+    "installedSkillExcludes": ["evals"],
     "allowedContext": [
       "the installed motion-lexicon Skill",
       "one raw user prompt",
-      "raw code or artifacts explicitly named by that prompt"
+      "raw code or artifacts explicitly named by that prompt",
+      "generic build and browser-tool help that contains no expected answer or Motion design guidance"
     ],
     "forbiddenContext": [
       "expected answers",
@@ -18,15 +20,19 @@
       "intended fixes",
       "outputs from earlier repetitions"
     ],
-    "artifactPolicy": "Use an empty temporary directory for each run and remove it after scoring."
+    "artifactPolicy": "Use a unique fresh temporary directory for each run containing only the declared empty or case-specific starter fixture. Every case with a fixture binding in evals.json must copy that fixture and verify its committed manifest before launch. Preserve independently scored evidence under evals/evidence/forward-test-2026-08-11/<eval-id>/r<repetition>/: prompt.txt, events.jsonl, final.md, isolation-manifest.json, initial-fixture-manifest.json, and any mode-specific evidence. Build Page preserves source/, dist/, build.json, and browser-acceptance.json. Implement preserves source/, dist/, and build.json. Compose preserves blueprint.json and validator.json. Contribute preserves candidate.md, blueprint.json, validator.json, placeholder-scan.json, source/, dist/, and build.json; build.json portableArtifacts binds each portable HTML/CSS/JS sourcePath to a byte-identical distPath with sourceSha256 and distSha256. All result paths are repository-relative and remain available to skill:check."
   },
   "cases": [
     { "evalId": "zh-recommend-card-arrival", "critical": ["correct-trigger", "published-id-only", "language-match"] },
     { "evalId": "zh-compose-async-save-failure", "critical": ["correct-trigger", "blueprint-valid", "failure-retry-race", "accessibility"] },
     { "evalId": "zh-review-layout-jank", "critical": ["correct-trigger", "evidence-based-review", "prioritized-findings"] },
+    { "evalId": "zh-build-page-project-dashboard", "critical": ["correct-trigger", "host-project-inspection", "page-plan-with-registry-composition", "complete-route-implementation", "acceptance-evidence"] },
+    { "evalId": "zh-build-page-product-landing", "critical": ["correct-trigger", "host-project-inspection", "page-plan-with-registry-composition", "visual-profile-adaptation", "complete-page-composition", "primary-moment-accessibility", "acceptance-evidence"] },
     { "evalId": "zh-negative-copy-edit", "critical": ["correct-skip"] },
-    { "evalId": "en-implement-react-selection", "critical": ["correct-trigger", "requested-format", "keyboard-focus", "reduced-motion"] },
-    { "evalId": "en-contribute-primitive-candidate", "critical": ["correct-trigger", "candidate-status", "three-scene-proof"] },
+    { "evalId": "en-implement-react-selection", "critical": ["correct-trigger", "requested-format", "runnable-framework-code", "keyboard-focus", "reduced-motion"] },
+    { "evalId": "en-build-page-analytics-dashboard", "critical": ["correct-trigger", "host-project-inspection", "page-plan-with-registry-composition", "complete-route-implementation", "acceptance-evidence"] },
+    { "evalId": "en-build-page-support-inbox", "critical": ["correct-trigger", "host-project-inspection", "async-state-recovery", "interruption-safe-selection", "acceptance-evidence"] },
+    { "evalId": "en-contribute-primitive-candidate", "critical": ["correct-trigger", "candidate-status", "complete-candidate-record", "three-scene-proof", "validated-blueprint", "runnable-portable-source"] },
     { "evalId": "en-review-async-race", "critical": ["correct-trigger", "race-diagnosis", "coherent-final-state"] },
     { "evalId": "en-negative-data-table", "critical": ["correct-skip"] }
   ],
@@ -40,29 +46,97 @@
   "resultFormat": {
     "suite": "motion-lexicon-fresh-context",
     "skillVersion": "string",
+    "skillSha256": "lowercase SHA-256 digest of SKILL.md",
+    "skillTreeSha256": "SHA-256 over sorted path + NUL + bytes + NUL records for the installed Skill payload, excluding evals/",
     "model": "string",
     "startedAt": "ISO-8601 string",
     "completedAt": "ISO-8601 string",
+    "evidenceRoot": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11",
+    "scorer": {
+      "identity": "non-empty independent scorer identity",
+      "independent": true,
+      "promptPath": "repository-relative path under evidenceRoot",
+      "promptSha256": "lowercase SHA-256 digest of the scorer prompt"
+    },
     "runs": [
       {
         "evalId": "string",
         "repetition": "integer from 1 through 3",
+        "prompt": "exact fixture prompt",
+        "promptPath": "path to captured raw prompt",
+        "promptSha256": "lowercase SHA-256 digest",
         "triggered": "boolean",
+        "processExitCode": "integer",
+        "buildExitCode": "integer or null",
+        "browserAcceptanceExitCode": "integer or null",
         "outputPath": "path to captured raw output",
+        "transcriptPath": "path to captured JSONL event transcript",
+        "sourcePath": "repository-relative source directory or null",
+        "distPath": "repository-relative dist directory or null",
+        "buildEvidencePath": "repository-relative build.json or null",
+        "browserAcceptancePath": "repository-relative browser-acceptance.json or null",
+        "blueprintPath": "repository-relative blueprint.json or null",
+        "validatorEvidencePath": "repository-relative validator.json or null",
+        "candidatePath": "repository-relative candidate.md or null",
+        "placeholderScanPath": "repository-relative placeholder-scan.json or null",
         "artifactPaths": ["path"],
+        "artifactFileSha256": {
+          "repository-relative artifact file path": "lowercase SHA-256 digest; every file in artifactPaths appears exactly once"
+        },
+        "artifactSha256": {
+          "prompt": "lowercase SHA-256 digest",
+          "output": "lowercase SHA-256 digest",
+          "transcript": "lowercase SHA-256 digest",
+          "isolationManifest": "lowercase SHA-256 digest",
+          "initialFixtureManifest": "lowercase SHA-256 digest",
+          "sourceTree": "lowercase SHA-256 digest or null",
+          "distTree": "lowercase SHA-256 digest or null",
+          "buildEvidence": "lowercase SHA-256 digest or null",
+          "browserAcceptance": "lowercase SHA-256 digest or null",
+          "blueprint": "lowercase SHA-256 digest or null",
+          "validatorEvidence": "lowercase SHA-256 digest or null",
+          "candidate": "lowercase SHA-256 digest or null",
+          "placeholderScan": "lowercase SHA-256 digest or null"
+        },
+        "isolationManifestPath": "path to machine-readable isolation manifest",
+        "isolation": {
+          "freshHome": true,
+          "freshCodexHome": true,
+          "freshProject": true,
+          "declaredFixtureOnly": true,
+          "initialFixturePath": "path to captured initial fixture manifest",
+          "initialFixtureFileCount": "non-negative integer",
+          "initialFixtureSha256": "lowercase SHA-256 digest",
+          "skillEvalsExcluded": true,
+          "neighborRunHits": 0,
+          "sourceRepositoryHits": 0,
+          "expectedAnswerExposure": false
+        },
         "validatorExitCode": "integer or null",
         "assertions": [
-          { "id": "string", "critical": "boolean", "score": "0 or 1", "evidence": "string" }
+          {
+            "id": "string",
+            "critical": "boolean",
+            "score": "0 or 1",
+            "evidence": {
+              "artifactPath": "repository-relative file included in artifactPaths",
+              "locator": "lines:<start>-<end> or json:/pointer",
+              "note": "specific observed fact"
+            }
+          }
         ],
         "passed": "boolean"
       }
     ],
     "summary": {
+      "cleanRuns": "integer",
       "criticalPassed": "integer",
       "criticalTotal": "integer",
       "assertionsPassed": "integer",
       "assertionsTotal": "integer",
       "overallPassRate": "number",
+      "casesPassingAllThreeRepetitions": "integer",
+      "casesTotal": "integer",
       "passed": "boolean"
     }
   }

@@ -2,7 +2,7 @@ import type { Locale, LocalizedText } from "./types";
 
 const text = (zh: string, en: string): LocalizedText => ({ zh, en });
 
-export type MotionSkillModeId = "recommend" | "compose" | "implement" | "review" | "contribute";
+export type MotionSkillModeId = "build-page" | "recommend" | "compose" | "implement" | "review" | "contribute";
 
 export type MotionBlueprintActor = {
   id: string;
@@ -118,6 +118,12 @@ export type MotionBlueprint = {
 
 export const motionSkillModes = [
   {
+    id: "build-page" as const,
+    title: text("构建页面", "Build Page"),
+    description: text("把产品任务、页面层级和已发布组件组合成完整 React 页面。", "Combine a product job, page hierarchy, and published components into a complete React page."),
+    deliverable: text("页面计划、完整实现与验收记录", "Page plan, complete implementation, and acceptance evidence")
+  },
+  {
     id: "recommend" as const,
     title: text("推荐", "Recommend"),
     description: text("把一句产品需求收敛为一组有理由的动效候选。", "Turn a product brief into a reasoned set of motion candidates."),
@@ -150,7 +156,7 @@ export const motionSkillModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "4.1.1",
+  version: "4.2.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",

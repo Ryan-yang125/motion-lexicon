@@ -1,0 +1,221 @@
+{
+  "version": "2.0",
+  "locale": "en",
+  "intent": {
+    "productGoal": "Carry a completed operation directly into its most useful next step without adding another control.",
+    "userIntent": "Confirm that the operation finished and continue from the same place.",
+    "feeling": "Continuous, assured, and ready"
+  },
+  "scope": {
+    "surface": "Inline async action control across desktop and mobile product surfaces",
+    "framework": "Portable semantic HTML, CSS, and JavaScript",
+    "input": [
+      "pointer",
+      "keyboard",
+      "touch"
+    ]
+  },
+  "stateGraph": {
+    "initial": "idle",
+    "states": [
+      {
+        "id": "idle",
+        "label": "The original operation is available",
+        "role": "initial"
+      },
+      {
+        "id": "pending",
+        "label": "The operation is in progress in the persistent control",
+        "role": "pending"
+      },
+      {
+        "id": "ready",
+        "label": "Completion is confirmed and the same control offers the next action",
+        "role": "success"
+      },
+      {
+        "id": "failure",
+        "label": "The operation failed and the same control offers retry",
+        "role": "failure"
+      },
+      {
+        "id": "recovering",
+        "label": "Retry is accepted before the operation resumes",
+        "role": "recovery"
+      },
+      {
+        "id": "opened",
+        "label": "The revealed next action has been used",
+        "role": "terminal"
+      }
+    ],
+    "transitions": [
+      {
+        "event": "activate-operation",
+        "from": "idle",
+        "to": "pending",
+        "interrupt": "replace"
+      },
+      {
+        "event": "operation-completes",
+        "from": "pending",
+        "to": "ready",
+        "interrupt": "settle"
+      },
+      {
+        "event": "operation-fails",
+        "from": "pending",
+        "to": "failure",
+        "interrupt": "settle"
+      },
+      {
+        "event": "activate-retry",
+        "from": "failure",
+        "to": "recovering",
+        "interrupt": "replace"
+      },
+      {
+        "event": "retry-starts",
+        "from": "recovering",
+        "to": "pending",
+        "interrupt": "replace"
+      },
+      {
+        "event": "cancel-pending",
+        "from": "pending",
+        "to": "idle",
+        "interrupt": "replace"
+      },
+      {
+        "event": "activate-next-action",
+        "from": "ready",
+        "to": "opened",
+        "interrupt": "settle"
+      }
+    ]
+  },
+  "actors": [
+    {
+      "id": "action-control",
+      "role": "primary",
+      "kind": "hero",
+      "element": "Persistent native button containing reserved operation and next-action labels"
+    },
+    {
+      "id": "live-status",
+      "role": "supporting",
+      "kind": "status",
+      "element": "Polite atomic status paragraph"
+    },
+    {
+      "id": "result-well",
+      "role": "supporting",
+      "kind": "environment",
+      "element": "Stable result preview region"
+    }
+  ],
+  "beats": [
+    {
+      "id": "press-cue",
+      "at": 0,
+      "actor": "action-control",
+      "purpose": "confirm",
+      "primitive": "press-tap-feedback",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 140,
+      "easing": "feedback",
+      "properties": [
+        "transform",
+        "color"
+      ]
+    },
+    {
+      "id": "pending-status",
+      "at": 0,
+      "actor": "live-status",
+      "purpose": "confirm",
+      "primitive": "crossfade",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": [
+        "opacity"
+      ]
+    },
+    {
+      "id": "handoff-to-next-action",
+      "at": "operation-complete",
+      "actor": "action-control",
+      "purpose": "preserve-continuity",
+      "primitive": "status-action-handoff",
+      "from": "pending",
+      "to": "ready",
+      "durationMs": 240,
+      "easing": "arrive",
+      "properties": [
+        "transform",
+        "opacity",
+        "color"
+      ]
+    },
+    {
+      "id": "failure-cue",
+      "at": "operation-failure",
+      "actor": "action-control",
+      "purpose": "recover",
+      "primitive": "shake-wiggle",
+      "from": "pending",
+      "to": "failure",
+      "durationMs": 180,
+      "easing": "feedback",
+      "properties": [
+        "transform",
+        "color"
+      ]
+    },
+    {
+      "id": "retry-cue",
+      "at": "retry-accepted",
+      "actor": "live-status",
+      "purpose": "recover",
+      "primitive": "crossfade",
+      "from": "failure",
+      "to": "recovering",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": [
+        "opacity"
+      ]
+    }
+  ],
+  "accessibility": {
+    "reducedMotion": "Apply every state immediately with a 1 ms opacity change; remove label travel, spin, and shake while preserving the ready action and result.",
+    "focus": "Focus enters the persistent native button and remains there through pending, success, failure, retry, and next-action activation.",
+    "aria": "A polite atomic live region announces pending, completion with the available next action, failure with retry, cancellation, and the opened result.",
+    "keyboard": "Tab reaches each action; Enter or Space activates its current meaning; Escape cancels only the focused pending operation and restores idle."
+  },
+  "delivery": {
+    "formats": [
+      "html",
+      "css",
+      "js"
+    ],
+    "integration": "Copy the three source files, retain the data-status-action hooks, provide product callbacks or data attributes, and call initStatusActionHandoffs after rendering."
+  },
+  "provenance": {
+    "status": "candidate",
+    "foundations": [
+      "press-tap-feedback",
+      "crossfade",
+      "text-morph",
+      "shake-wiggle"
+    ],
+    "moments": [
+      "none"
+    ],
+    "confidence": "exploratory",
+    "evidence": "The same persistent-control handoff is demonstrated in analytics export, member invitation, and backup creation, including cancellation, failure, retry, and next-action use."
+  }
+}

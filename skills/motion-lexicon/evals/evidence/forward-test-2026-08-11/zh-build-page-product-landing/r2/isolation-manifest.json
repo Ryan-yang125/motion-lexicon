@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "evalId": "zh-build-page-product-landing",
+  "repetition": 2,
+  "startedAt": "2026-08-11T16:02:44.574Z",
+  "completedAt": "2026-08-11T16:11:56.614Z",
+  "promptSha256": "2ff062021e5004947e8c1dff734ebfb3d2836618a209cf9f3107b834ad4cf54d",
+  "skillSha256": "b5ea0f0b1b93e7f5cae7460ed46a94e9ba4fa7d5b24a8cea92e7470e7ea3183d",
+  "skillTreeSha256": "d35c5bca00979abd1156b4aaa1fcf1cd548f4e32acd0c3b05a32c6a9b2181997",
+  "evalsPresent": false,
+  "home": "/private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-product-landing-r2/home",
+  "codexHome": "/private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-product-landing-r2/codex-home",
+  "workdir": "/private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-product-landing-r2/work",
+  "skillPath": "/private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-product-landing-r2/codex-home/skills/motion-lexicon",
+  "isolation": {
+    "freshHome": true,
+    "freshCodexHome": true,
+    "freshProject": true,
+    "declaredFixtureOnly": true,
+    "initialFixturePath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/initial-fixture-manifest.json",
+    "initialFixtureFileCount": 14,
+    "initialFixtureSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9",
+    "skillEvalsExcluded": true,
+    "neighborRunHits": 0,
+    "sourceRepositoryHits": 0,
+    "expectedAnswerExposure": false
+  }
+}

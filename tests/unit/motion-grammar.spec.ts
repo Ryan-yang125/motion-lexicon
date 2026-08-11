@@ -30,8 +30,9 @@ describe("Motion Grammar", () => {
     expect(motionGrammar.implementation.preferredDelivery[0]).toBe("react");
   });
 
-  it("exposes a stable five-mode Agent Skill workflow", () => {
+  it("exposes a stable six-mode Agent Skill workflow", () => {
     expect(motionSkillModes.map((mode) => mode.id)).toEqual([
+      "build-page",
       "recommend",
       "compose",
       "implement",

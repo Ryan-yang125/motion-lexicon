@@ -1,13 +1,13 @@
-# Motion Lexicon V4.1 Product Design
+# Motion Lexicon V4.2 Product Design
 
 ## Experience model
 
-Motion Lexicon V4.1 gives Components and Primitives one copy-ready React registry architecture.
+Motion Lexicon V4.2 gives Components, Primitives, and the Agent Skill one copy-ready React design language.
 
 ```text
 Components: Browse → Interact → Inspect source → Install
 Primitives: Browse → Preview → Tune → Inspect source → Install
-Agent Skill: Understand → Compose → Implement → Review
+Agent Skill: Understand → Plan Page → Build → Review
 ```
 
 The interface keeps attention on working interactions. Product state supplies
@@ -112,7 +112,7 @@ Component and Primitive implementation files are the source of truth for:
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V4.1 catalog.
+4. the public V4.2 catalog.
 
 The Primitive chain is explicit:
 

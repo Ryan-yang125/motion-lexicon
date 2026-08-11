@@ -18,6 +18,16 @@ generic.
 | Performance | Animated properties, paint work, frame consistency | Movement relies on transform and opacity where possible |
 | Accessibility | Reduced motion, focus, keyboard, live status | Meaning survives with movement reduced |
 
+### Async race rule
+
+When responses can resolve out of order, assign each user intent a monotonic
+request or intent version. A response may commit product state, visual state,
+or ARIA status only when its version still matches the current intent. Discard
+a stale response, cancel or settle any obsolete animation it started, and keep
+focus and the visible control aligned with the current state. An
+`AbortController` may reduce obsolete work; the current-version comparison
+remains the commit gate even when cancellation races with completion.
+
 ## Diagnose common symptoms
 
 ### Motion feels slow
@@ -56,6 +66,15 @@ generic.
 - Add shared-element continuity, a stable anchor, or a directional entrance.
 - Keep selection and focus visible through the transition.
 - Use a crossfade only when spatial identity carries little value.
+
+### A stale async result replays old motion
+
+- Name the late response as a stale completion tied to an earlier intent.
+- Increment a request or intent version for every authoritative user change.
+- Commit a response only when its captured version equals the current version.
+- Discard stale data and cancel or settle its obsolete animation immediately.
+- Announce only the current intent's pending, success, failure, or recovery
+  state through the active ARIA status region.
 
 ## Report format
 

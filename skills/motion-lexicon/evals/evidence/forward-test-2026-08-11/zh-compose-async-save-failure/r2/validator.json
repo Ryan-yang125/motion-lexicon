@@ -1,0 +1,9 @@
+{
+  "command": "node /private/tmp/motion-lexicon-v420-skill.v9Q4Ox/skills/motion-lexicon/scripts/validate-motion-blueprint.mjs skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-compose-async-save-failure/r2/blueprint.json",
+  "startedAt": "2026-08-11T18:17:19.230Z",
+  "completedAt": "2026-08-11T18:17:19.300Z",
+  "exitCode": 0,
+  "stdout": "Motion Blueprint validation passed: /private/tmp/motion-lexicon-v420-skill.v9Q4Ox/skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-compose-async-save-failure/r2/blueprint.json\n",
+  "stderr": "",
+  "blueprintSha256": "86e735345988db3f8cdabb2540bdb00fa5c342f01776694573f7ad9fa20d0ad9"
+}

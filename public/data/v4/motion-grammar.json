@@ -1,5 +1,5 @@
 {
-  "version": "4.1.1",
+  "version": "4.2.0",
   "name": "Motion Grammar",
   "promise": {
     "zh": "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -159,6 +159,21 @@
     }
   },
   "modes": [
+    {
+      "id": "build-page",
+      "title": {
+        "zh": "构建页面",
+        "en": "Build Page"
+      },
+      "description": {
+        "zh": "把产品任务、页面层级和已发布组件组合成完整 React 页面。",
+        "en": "Combine a product job, page hierarchy, and published components into a complete React page."
+      },
+      "deliverable": {
+        "zh": "页面计划、完整实现与验收记录",
+        "en": "Page plan, complete implementation, and acceptance evidence"
+      }
+    },
     {
       "id": "recommend",
       "title": {

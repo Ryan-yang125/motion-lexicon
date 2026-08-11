@@ -1,0 +1,304 @@
+{
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-final-WyIAsP/en-build-page-analytics-dashboard-r3/work /analytics 43128",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 8 tests using 1 worker\n\nAUDIT 320: {\"viewport\":320,\"document\":320,\"targets\":[{\"name\":\"Switch to dark theme\",\"width\":44,\"height\":44},{\"name\":\"Export CSV\",\"width\":44,\"height\":44},{\"name\":\"7 days\",\"width\":89.3,\"height\":44},{\"name\":\"30 days\",\"width\":89.3,\"height\":44},{\"name\":\"90 days\",\"width\":89.3,\"height\":44}],\"offenders\":[],\"minWidth\":44,\"minHeight\":44}\n  ✓  1 tests/smoke.spec.ts:11:3 › 320px layout has no overflow and all targets are at least 44px (346ms)\nAUDIT 390: {\"viewport\":390,\"document\":390,\"targets\":[{\"name\":\"Switch to dark theme\",\"width\":44,\"height\":44},{\"name\":\"Export CSV\",\"width\":44,\"height\":44},{\"name\":\"7 days\",\"width\":110,\"height\":44},{\"name\":\"30 days\",\"width\":110,\"height\":44},{\"name\":\"90 days\",\"width\":110,\"height\":44}],\"offenders\":[],\"minWidth\":44,\"minHeight\":44}\n  ✓  2 tests/smoke.spec.ts:11:3 › 390px layout has no overflow and all targets are at least 44px (252ms)\nAUDIT 768: {\"viewport\":768,\"document\":768,\"targets\":[{\"name\":\"Switch to dark theme\",\"width\":44,\"height\":44},{\"name\":\"Export CSV\",\"width\":126.5,\"height\":44},{\"name\":\"7 days\",\"width\":234,\"height\":44},{\"name\":\"30 days\",\"width\":234,\"height\":44},{\"name\":\"90 days\",\"width\":234,\"height\":44}],\"offenders\":[],\"minWidth\":44,\"minHeight\":44}\n  ✓  3 tests/smoke.spec.ts:11:3 › 768px layout has no overflow and all targets are at least 44px (256ms)\nAUDIT 1440: {\"viewport\":1440,\"document\":1440,\"targets\":[{\"name\":\"Overview\",\"width\":207,\"height\":44},{\"name\":\"Retention\",\"width\":207,\"height\":44},{\"name\":\"Audiences\",\"width\":207,\"height\":44},{\"name\":\"Preferences\",\"width\":207,\"height\":44},{\"name\":\"Switch to dark theme\",\"width\":207,\"height\":44},{\"name\":\"Export CSV\",\"width\":126.5,\"height\":44},{\"name\":\"7 days\",\"width\":91.3,\"height\":44},{\"name\":\"30 days\",\"width\":91.3,\"height\":44},{\"name\":\"90 days\",\"width\":91.3,\"height\":44},{\"name\":\"View audience report ↗\",\"width\":333.3,\"height\":44}],\"offenders\":[],\"minWidth\":91.3,\"minHeight\":44}\n  ✓  4 tests/smoke.spec.ts:11:3 › 1440px layout has no overflow and all targets are at least 44px (257ms)\n  ✓  5 tests/smoke.spec.ts:48:1 › range change updates the full workspace and supports keyboard selection (714ms)\nFOCUS PATH: [\"Skip to analytics\",\"Overview\",\"Retention\",\"Audiences\",\"Preferences\",\"Switch to dark theme\",\"Export CSV\",\"30 days\"]\n  ✓  6 tests/smoke.spec.ts:62:1 › keyboard order enters the page, reaches the range control, and returns to export (308ms)\n  ✓  7 tests/smoke.spec.ts:87:1 › theme and reduced-motion paths preserve state (466ms)\n  ✓  8 tests/smoke.spec.ts:98:1 › export supports cancel, success, error, and retry (1.7s)\n\n  8 passed (5.6s)\n",
+  "testStderr": "(node:45791) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:45791) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a:nth-interactive(1)",
+          "label": "Skip to analytics",
+          "width": 143.719,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Switch to dark theme\"]",
+          "label": "Switch to dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "Export CSV",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "7 days",
+          "width": 89.328,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "30 days",
+          "width": 89.328,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "90 days",
+          "width": 89.344,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "View audience report ↗",
+          "width": 262,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Skip to analytics"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a:nth-interactive(1)",
+          "label": "Skip to analytics",
+          "width": 143.719,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Switch to dark theme\"]",
+          "label": "Switch to dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "Export CSV",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "7 days",
+          "width": 110,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "30 days",
+          "width": 110,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "90 days",
+          "width": 110,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "View audience report ↗",
+          "width": 324,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Skip to analytics"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a:nth-interactive(1)",
+          "label": "Skip to analytics",
+          "width": 143.719,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Switch to dark theme\"]",
+          "label": "Switch to dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "Export CSV",
+          "width": 126.547,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "7 days",
+          "width": 234,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "30 days",
+          "width": 234,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "90 days",
+          "width": 234,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "View audience report ↗",
+          "width": 694,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Skip to analytics"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 11,
+      "minimumTargetWidth": 91.328,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a:nth-interactive(1)",
+          "label": "Skip to analytics",
+          "width": 143.719,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "Overview",
+          "width": 207,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "Retention",
+          "width": 207,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "Audiences",
+          "width": 207,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "Preferences",
+          "width": 207,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Switch to dark theme\"]",
+          "label": "Switch to dark theme",
+          "width": 207,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Export CSV",
+          "width": 126.547,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "7 days",
+          "width": 91.328,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "30 days",
+          "width": 91.328,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "90 days",
+          "width": 91.344,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "View audience report ↗",
+          "width": 333.344,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Skip to analytics"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked Switch to light theme",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "Export CSV",
+    "focusReturn": "Export CSV",
+    "result": "second focus: 30 days; Shift+Tab returned to Export CSV"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "updating",
+      "latest range applied",
+      "export error/retry/success"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43128\n\n  ➜  Local:   http://127.0.0.1:43128/\n",
+    "stderr": ""
+  }
+}

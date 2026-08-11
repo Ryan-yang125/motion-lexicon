@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>Status Action Handoff — Motion Lexicon candidate</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="sah-page">
+      <header class="sah-intro">
+        <div>
+          <p class="sah-eyebrow">Primitive candidate · status-action-handoff</p>
+          <h1 class="sah-title">Done becomes<br />what’s next.</h1>
+        </div>
+        <p class="sah-lede">A completed operation hands the same stable control forward as the next useful action. Three contexts, one persistent behavioral contract.</p>
+      </header>
+
+      <div class="sah-grid">
+        <section
+          class="sah-scene"
+          data-status-action
+          data-state="idle"
+          data-idle-label="Generate report"
+          data-pending-label="Generating report…"
+          data-next-label="Open report"
+          data-idle-status="Ready to generate the weekly acquisition report."
+          data-pending-status="Generating the weekly acquisition report…"
+          data-ready-status="Report generated. Open report is now available."
+          data-repeat-status="Report generation is already in progress."
+          data-cancel-status="Report generation cancelled. Ready to try again."
+          data-opened-status="Weekly acquisition report opened."
+          data-result="Weekly acquisition · 18 pages · generated just now"
+          data-delay="520"
+          aria-labelledby="analytics-title"
+        >
+          <header class="sah-scene__header">
+            <p class="sah-scene__index">01 · Analytics</p>
+            <h2 class="sah-scene__title" id="analytics-title">Export to inspection</h2>
+            <p class="sah-scene__copy">The export control becomes the route into the finished report.</p>
+          </header>
+          <div class="sah-well" data-result-well>
+            <p class="sah-result" data-result>Report output will appear here.</p>
+          </div>
+          <div class="sah-control-reserve">
+            <button class="sah-action" type="button" data-action aria-describedby="analytics-status">
+              <span class="sah-icon-stage" aria-hidden="true"><span class="sah-operation-mark"></span></span>
+              <span class="sah-label-stage" aria-hidden="true">
+                <span class="sah-label sah-label--operation" data-operation-label>Generate report</span>
+                <span class="sah-label sah-label--next" data-next-label>Open report</span>
+              </span>
+              <span class="sah-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="sah-status" id="analytics-status" data-status aria-live="polite" aria-atomic="true"></p>
+        </section>
+
+        <section
+          class="sah-scene"
+          data-status-action
+          data-state="idle"
+          data-idle-label="Send invitation"
+          data-pending-label="Sending invitation…"
+          data-next-label="View member"
+          data-idle-status="Ready to invite Maya to the launch workspace."
+          data-pending-status="Sending Maya’s workspace invitation…"
+          data-ready-status="Invitation sent. View member is now available."
+          data-repeat-status="Maya’s invitation is already being sent."
+          data-cancel-status="Invitation cancelled. Ready to try again."
+          data-opened-status="Maya’s member profile opened."
+          data-result="Maya Chen · Editor · Invitation sent just now"
+          data-delay="620"
+          aria-labelledby="member-title"
+        >
+          <header class="sah-scene__header">
+            <p class="sah-scene__index">02 · Team access</p>
+            <h2 class="sah-scene__title" id="member-title">Invite to member record</h2>
+            <p class="sah-scene__copy">The send action becomes the entry point to the invited member.</p>
+          </header>
+          <div class="sah-well" data-result-well>
+            <p class="sah-result" data-result>Member details will appear here.</p>
+          </div>
+          <div class="sah-control-reserve">
+            <button class="sah-action" type="button" data-action aria-describedby="member-status">
+              <span class="sah-icon-stage" aria-hidden="true"><span class="sah-operation-mark"></span></span>
+              <span class="sah-label-stage" aria-hidden="true">
+                <span class="sah-label sah-label--operation" data-operation-label>Send invitation</span>
+                <span class="sah-label sah-label--next" data-next-label>View member</span>
+              </span>
+              <span class="sah-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="sah-status" id="member-status" data-status aria-live="polite" aria-atomic="true"></p>
+        </section>
+
+        <section
+          class="sah-scene"
+          data-status-action
+          data-state="idle"
+          data-idle-label="Create backup"
+          data-pending-label="Creating backup…"
+          data-retry-label="Retry backup"
+          data-recovering-label="Retrying backup…"
+          data-next-label="Review backup"
+          data-idle-status="Ready to create a restore point before deployment."
+          data-pending-status="Creating a restore point…"
+          data-failure-status="Backup interrupted. Retry backup is available."
+          data-recovering-status="Retry accepted. Preparing a new backup request."
+          data-ready-status="Backup created. Review backup is now available."
+          data-repeat-status="Backup creation is already in progress."
+          data-cancel-status="Backup creation cancelled. Ready to try again."
+          data-opened-status="Backup restore point opened for review."
+          data-result="Restore point #1842 · Verified · 2.8 GB"
+          data-fail-first="true"
+          data-delay="540"
+          aria-labelledby="backup-title"
+        >
+          <header class="sah-scene__header">
+            <p class="sah-scene__index">03 · Infrastructure</p>
+            <h2 class="sah-scene__title" id="backup-title">Backup to review</h2>
+            <p class="sah-scene__copy">Failure stays recoverable; success hands the control to inspection.</p>
+          </header>
+          <div class="sah-well" data-result-well>
+            <p class="sah-result" data-result>Backup details will appear here.</p>
+          </div>
+          <div class="sah-control-reserve">
+            <button class="sah-action" type="button" data-action aria-describedby="backup-status">
+              <span class="sah-icon-stage" aria-hidden="true"><span class="sah-operation-mark"></span></span>
+              <span class="sah-label-stage" aria-hidden="true">
+                <span class="sah-label sah-label--operation" data-operation-label>Create backup</span>
+                <span class="sah-label sah-label--next" data-next-label>Review backup</span>
+              </span>
+              <span class="sah-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="sah-status" id="backup-status" data-status aria-live="polite" aria-atomic="true"></p>
+        </section>
+      </div>
+
+      <p class="sah-footnote">Focus stays on the persistent control. Press Escape while an operation is pending to cancel it.</p>
+    </main>
+    <script type="module" src="./status-action-handoff.js"></script>
+  </body>
+</html>

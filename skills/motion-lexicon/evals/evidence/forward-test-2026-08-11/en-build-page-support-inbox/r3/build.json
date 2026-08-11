@@ -1,0 +1,10 @@
+{
+  "command": "npm run build",
+  "exitCode": 0,
+  "startedAt": "2026-08-11T18:49:01.085Z",
+  "completedAt": "2026-08-11T18:49:02.777Z",
+  "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 build\n> tsc -b && vite build\n\nvite v7.1.7 building for production...\ntransforming...\n✓ 435 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.71 kB │ gzip:   0.45 kB\ndist/assets/index-Bmx6mkzk.css   32.45 kB │ gzip:   7.41 kB\ndist/assets/index-BbHXUpln.js   334.86 kB │ gzip: 107.43 kB\n✓ built in 710ms\n",
+  "stderr": "",
+  "sourceTreeSha256": "ab0434dbecedc6900dd62452f46cdab6177a7d9ea3567028b966ad1efe6f6910",
+  "distTreeSha256": "29558d1e5516a8c5a4fff36b5129bbca8c0e7e920ada540e728a17ac9aa7f129"
+}

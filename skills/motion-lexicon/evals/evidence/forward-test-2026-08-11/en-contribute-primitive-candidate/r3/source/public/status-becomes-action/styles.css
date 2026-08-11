@@ -1,0 +1,111 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: #efeeea;
+  color: #181715;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+button { font: inherit; }
+
+.demo-shell {
+  display: grid;
+  min-block-size: 100vh;
+  place-items: center;
+  padding: 24px;
+}
+
+.status-action {
+  --arrival: 240ms;
+  --leaving: 150ms;
+  --feedback: 150ms;
+  --ease-arrive: cubic-bezier(.23, 1, .32, 1);
+  --ease-leave: cubic-bezier(.23, 1, .32, 1);
+  --ease-feedback: cubic-bezier(.2, .8, .2, 1);
+  width: min(100%, 520px);
+  padding: clamp(24px, 6vw, 40px);
+  border: 1px solid #d8d6d1;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 22px 55px rgb(31 29 24 / 12%);
+}
+
+.status-action__eyebrow {
+  margin: 0 0 8px;
+  color: #5f5a50;
+  font: 700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.status-action h1 { margin: 0; font-size: clamp(28px, 6vw, 40px); letter-spacing: -.045em; }
+.status-action__copy > p:last-child { margin: 10px 0 0; color: #5f5a50; line-height: 1.5; }
+
+.status-action__well {
+  display: grid;
+  gap: 14px;
+  margin-top: 32px;
+  padding: 16px;
+  border: 1px solid #dfddd8;
+  border-radius: 14px;
+  background: #f6f5f2;
+}
+
+.status-action__record,
+.status-action__message { min-block-size: 1.5em; margin: 0; line-height: 1.45; }
+.status-action__record { color: #5f5a50; }
+.status-action__message { color: #3d3a34; font-size: .9375rem; }
+
+.status-action__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-inline-size: 100%;
+  min-block-size: 52px;
+  padding: 12px 18px;
+  border: 1px solid #25231f;
+  border-radius: 10px;
+  color: #fff;
+  background: #25231f;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform var(--feedback) var(--ease-feedback), background-color var(--feedback) var(--ease-feedback), color var(--feedback) var(--ease-feedback), border-color var(--feedback) var(--ease-feedback);
+}
+
+.status-action__button:hover { transform: translateY(-1px); }
+.status-action__button:active { transform: translateY(1px) scale(.985); }
+.status-action__button:focus-visible { outline: 3px solid #2e6fea; outline-offset: 3px; }
+.status-action__icon { display: grid; place-items: center; inline-size: 1.15em; transition: transform var(--arrival) var(--ease-arrive), opacity var(--arrival) var(--ease-arrive); }
+.status-action__label { display: inline-grid; min-inline-size: 14ch; text-align: center; transition: transform var(--arrival) var(--ease-arrive), opacity var(--arrival) var(--ease-arrive); }
+
+.status-action[data-state="pending"] .status-action__button { border-color: #766e61; background: #766e61; }
+.status-action[data-state="pending"] .status-action__icon { animation: status-action-spin 900ms linear infinite; }
+.status-action[data-state="ready"] .status-action__button,
+.status-action[data-state="terminal"] .status-action__button { border-color: #186b4a; background: #e8f7ee; color: #135238; }
+.status-action[data-state="ready"] .status-action__icon,
+.status-action[data-state="terminal"] .status-action__icon { transform: translateY(-1px); }
+.status-action[data-state="failure"] .status-action__button { border-color: #9f2f25; background: #fff1ef; color: #86251d; }
+.status-action[data-state="recovery"] .status-action__button { transform: scale(.99); }
+
+@keyframes status-action-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-color-scheme: dark) {
+  :root { background: #151411; color: #f6f4ef; }
+  .status-action { border-color: #3c3933; background: #211f1b; box-shadow: 0 22px 55px rgb(0 0 0 / 30%); }
+  .status-action__eyebrow, .status-action__copy > p:last-child, .status-action__record { color: #c8c2b7; }
+  .status-action__well { border-color: #3c3933; background: #181714; }
+  .status-action__message { color: #e4ded4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-action *, .status-action *::before, .status-action *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

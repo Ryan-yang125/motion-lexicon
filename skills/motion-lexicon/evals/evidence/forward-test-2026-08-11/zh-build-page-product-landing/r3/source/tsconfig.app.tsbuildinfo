@@ -1,0 +1,1 @@
+{"root":["./src/main.tsx","./src/router.tsx","./src/components/motion-lexicon/accordion.tsx","./src/components/motion-lexicon/loading-button.tsx","./src/components/motion-lexicon/tabs.tsx","./src/components/ui/button.tsx","./src/pages/homepage.tsx"],"version":"5.9.3"}

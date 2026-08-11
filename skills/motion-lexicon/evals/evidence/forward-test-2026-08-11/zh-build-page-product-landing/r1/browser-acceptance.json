@@ -1,0 +1,610 @@
+{
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-recorded-pr6ha4/zh-build-page-product-landing-r1/work / 43123",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 6 tests using 1 worker\n\n  ✓  1 tests/smoke.spec.ts:4:3 › layout and targets at 320px (435ms)\n  ✓  2 tests/smoke.spec.ts:4:3 › layout and targets at 390px (305ms)\n  ✓  3 tests/smoke.spec.ts:4:3 › layout and targets at 768px (328ms)\n  ✓  4 tests/smoke.spec.ts:4:3 › layout and targets at 1440px (363ms)\n  ✓  5 tests/smoke.spec.ts:23:1 › primary interaction, theme, FAQ, form and keyboard flows (2.1s)\n  ✓  6 tests/smoke.spec.ts:51:1 › reduced motion preserves scenario state (361ms)\n\n  6 passed (5.1s)\n",
+  "testStderr": "(node:44457) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:44457) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 20,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Relay AI 客服首页\"]",
+          "label": "Relay AI 客服首页",
+          "width": 71.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换浅色或深色主题\"]",
+          "label": "切换浅色或深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "免费开始 →",
+          "width": 71.25,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "创建免费工作区 →",
+          "width": 288,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实场景 ↓",
+          "width": 288,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "售前咨询",
+          "width": 82.656,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "订单进度",
+          "width": 82.672,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "异常处理",
+          "width": 82.656,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"发送回复\"]",
+          "label": "发送回复",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(10)",
+          "label": "开始试用",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "预约产品顾问 →",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(12)",
+          "label": "与我们沟通",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "联系产品团队",
+          "width": 76.5,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-header-security",
+          "label": "客户数据如何保护？安全",
+          "width": 286,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-handoff",
+          "label": "AI 无法解决时会发生什么？协同",
+          "width": 286,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-setup",
+          "label": "需要多久能上线？上线",
+          "width": 286,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-channels",
+          "label": "支持哪些客户触点？渠道",
+          "width": 286,
+          "height": 48
+        },
+        {
+          "selector": "#email",
+          "label": "email",
+          "width": 250,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(19)",
+          "label": "创建工作区",
+          "width": 250,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(20)",
+          "label": "回到顶部 ↑",
+          "width": 54.672,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused Relay AI 客服首页"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 20,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Relay AI 客服首页\"]",
+          "label": "Relay AI 客服首页",
+          "width": 71.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换浅色或深色主题\"]",
+          "label": "切换浅色或深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "免费开始 →",
+          "width": 71.25,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "创建免费工作区 →",
+          "width": 358,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实场景 ↓",
+          "width": 358,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "售前咨询",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "订单进度",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "异常处理",
+          "width": 106,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"发送回复\"]",
+          "label": "发送回复",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(10)",
+          "label": "开始试用",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "预约产品顾问 →",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(12)",
+          "label": "与我们沟通",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "联系产品团队",
+          "width": 76.5,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-header-security",
+          "label": "客户数据如何保护？安全",
+          "width": 356,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-handoff",
+          "label": "AI 无法解决时会发生什么？协同",
+          "width": 356,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-setup",
+          "label": "需要多久能上线？上线",
+          "width": 356,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-channels",
+          "label": "支持哪些客户触点？渠道",
+          "width": 356,
+          "height": 48
+        },
+        {
+          "selector": "#email",
+          "label": "email",
+          "width": 320,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(19)",
+          "label": "创建工作区",
+          "width": 320,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(20)",
+          "label": "回到顶部 ↑",
+          "width": 54.672,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused Relay AI 客服首页"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 20,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Relay AI 客服首页\"]",
+          "label": "Relay AI 客服首页",
+          "width": 71.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换浅色或深色主题\"]",
+          "label": "切换浅色或深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "免费开始 →",
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "创建免费工作区 →",
+          "width": 136.063,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实场景 ↓",
+          "width": 122.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "售前咨询",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "订单进度",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "异常处理",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"发送回复\"]",
+          "label": "发送回复",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(10)",
+          "label": "开始试用",
+          "width": 690,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "预约产品顾问 →",
+          "width": 690,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(12)",
+          "label": "与我们沟通",
+          "width": 690,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "联系产品团队",
+          "width": 76.5,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-header-security",
+          "label": "客户数据如何保护？安全",
+          "width": 734,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-handoff",
+          "label": "AI 无法解决时会发生什么？协同",
+          "width": 734,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-setup",
+          "label": "需要多久能上线？上线",
+          "width": 734,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-channels",
+          "label": "支持哪些客户触点？渠道",
+          "width": 734,
+          "height": 48
+        },
+        {
+          "selector": "#email",
+          "label": "email",
+          "width": 570.438,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(19)",
+          "label": "创建工作区",
+          "width": 91.563,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(20)",
+          "label": "回到顶部 ↑",
+          "width": 54.672,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused Relay AI 客服首页"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 23,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Relay AI 客服首页\"]",
+          "label": "Relay AI 客服首页",
+          "width": 71.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "场景演示",
+          "width": 51,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "价格",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "FAQ",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换浅色或深色主题\"]",
+          "label": "切换浅色或深色主题",
+          "width": 62.266,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(6)",
+          "label": "免费开始 →",
+          "width": 99.125,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "创建免费工作区 →",
+          "width": 136.063,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(8)",
+          "label": "查看真实场景 ↓",
+          "width": 122.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "售前咨询",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "订单进度",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "异常处理",
+          "width": 73.344,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"发送回复\"]",
+          "label": "发送回复",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "开始试用",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(14)",
+          "label": "预约产品顾问 →",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(15)",
+          "label": "与我们沟通",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "联系产品团队",
+          "width": 76.5,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-header-security",
+          "label": "客户数据如何保护？安全",
+          "width": 718.188,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-handoff",
+          "label": "AI 无法解决时会发生什么？协同",
+          "width": 718.188,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-setup",
+          "label": "需要多久能上线？上线",
+          "width": 718.188,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-header-channels",
+          "label": "支持哪些客户触点？渠道",
+          "width": 718.188,
+          "height": 48
+        },
+        {
+          "selector": "#email",
+          "label": "email",
+          "width": 326.578,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(22)",
+          "label": "创建工作区",
+          "width": 91.563,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(23)",
+          "label": "回到顶部 ↑",
+          "width": 54.672,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused Relay AI 客服首页"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked 切换浅色或深色主题",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "免费开始 →",
+    "focusReturn": "免费开始 →",
+    "result": "second focus: 创建免费工作区 →; Shift+Tab returned to 免费开始 →"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "default",
+      "selected proof",
+      "CTA pending",
+      "error/retry/success"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43123\n\n  ➜  Local:   http://127.0.0.1:43123/\n",
+    "stderr": ""
+  }
+}

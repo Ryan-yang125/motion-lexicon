@@ -1,0 +1,316 @@
+{
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-recorded-pr6ha4/en-build-page-analytics-dashboard-r1/work /analytics 43126",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 1 test using 1 worker\n\n  ✓  1 tests/smoke.spec.ts:3:1 › analytics route renders without horizontal overflow (336ms)\n\n  1 passed (1.6s)\n",
+  "testStderr": "(node:45371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:45371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Northstar Analytics home\"]",
+          "label": "Northstar Analytics home",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "↓ Export CSV",
+          "width": 98.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "7 days",
+          "width": 60.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "30 days",
+          "width": 68.813,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "90 days",
+          "width": 69.016,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "Explore activated teams →",
+          "width": 165.922,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Northstar Analytics home"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Northstar Analytics home\"]",
+          "label": "Northstar Analytics home",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "↓ Export CSV",
+          "width": 98.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "7 days",
+          "width": 60.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "30 days",
+          "width": 68.813,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "90 days",
+          "width": 69.016,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "Explore activated teams →",
+          "width": 165.922,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Northstar Analytics home"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 10,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Northstar Analytics home\"]",
+          "label": "Northstar Analytics home",
+          "width": 119.547,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "Analytics",
+          "width": 78.641,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "Customers",
+          "width": 85.625,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "Reports",
+          "width": 67.297,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "↓ Export CSV",
+          "width": 130.047,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "7 days",
+          "width": 60.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "30 days",
+          "width": 68.813,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "90 days",
+          "width": 69.016,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(10)",
+          "label": "Explore activated teams →",
+          "width": 165.922,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Northstar Analytics home"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 10,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Northstar Analytics home\"]",
+          "label": "Northstar Analytics home",
+          "width": 119.547,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "Analytics",
+          "width": 78.641,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "Customers",
+          "width": 85.625,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "Reports",
+          "width": 67.297,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "↓ Export CSV",
+          "width": 130.047,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "7 days",
+          "width": 60.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "30 days",
+          "width": 68.813,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "90 days",
+          "width": 69.016,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(10)",
+          "label": "Explore activated teams →",
+          "width": 165.922,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /analytics and focused Northstar Analytics home"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked Toggle color theme",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "↓ Export CSV",
+    "focusReturn": "↓ Export CSV",
+    "result": "second focus: 7 days; Shift+Tab returned to ↓ Export CSV"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "updating",
+      "latest range applied",
+      "export error/retry/success"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43126\n\n  ➜  Local:   http://127.0.0.1:43126/\n",
+    "stderr": ""
+  }
+}

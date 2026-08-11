@@ -16,7 +16,7 @@
 - [Animation vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/): 91 bilingual motion terms with definitions, distinctions, and canonical workspaces.
 - [Scenario guides](https://motion-lexicon.pages.dev/en/guides/): Long-form motion decisions and production examples.
 - [Method](https://motion-lexicon.pages.dev/en/method/): How the library is authored, verified, and maintained.
-- [Agent Skill](https://motion-lexicon.pages.dev/en/skill/): Recommend, compose, implement, review, and contribute motion.
+- [Agent Skill](https://motion-lexicon.pages.dev/en/skill/): Build complete React pages, recommend and compose motion, implement interactions, review code, and contribute candidates.
 
 ## 中文
 
@@ -25,7 +25,7 @@
 - [动画词汇表](https://motion-lexicon.pages.dev/zh/vocabulary/): 91 个中英双语动效术语，包含定义、辨析和对应工作区。
 - [场景指南](https://motion-lexicon.pages.dev/zh/guides/): 深度动效决策与生产示例。
 - [方法](https://motion-lexicon.pages.dev/zh/method/): 内容编写、验证与维护方式。
-- [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/): 推荐、编排、实现、审查和贡献动效。
+- [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/): 构建完整 React 页面，并推荐、编排、实现、审查和贡献动效。
 
 ## Optional
 
@@ -33,4 +33,4 @@
 - [Pricing](https://motion-lexicon.pages.dev/pricing.txt): Free and open-source availability in English and Chinese.
 - [Source](https://github.com/Ryan-yang125/motion-lexicon): MIT code, CC BY 4.0 original editorial content, notices, and contribution history.
 - [Agent Skill source](https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon): Install with `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`.
-- [Release 4.1.1](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.1.1, updated 2026-08-11.
+- [Release 4.2.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.2.0, updated 2026-08-11.

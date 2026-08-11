@@ -15,7 +15,7 @@ function assert(condition: unknown, message: string): asserts condition {
 const primitiveIds = new Set(canonicalMotionCatalog.map((entry) => entry.id));
 const componentIds = new Set<string>(registryComponents.map((component) => component.id));
 
-assert(motionGrammar.version === "4.1.1", "Motion Grammar must carry the V4.1.1 version");
+assert(motionGrammar.version === "4.2.0", "Motion Grammar must carry the V4.2.0 version");
 assert(motionGrammar.collections.primitives.count === canonicalMotionCatalog.length, "Motion Grammar primitive count is out of sync");
 assert(motionGrammar.collections.components.count === registryComponents.length, "Motion Grammar component count is out of sync");
 assert(motionGrammarDataPath === "/data/v4/motion-grammar.json", "Motion Grammar public data path changed unexpectedly");
@@ -29,7 +29,7 @@ assert(motionGrammar.timing.linear.curve === "linear", "Linear timing needs its 
 assert(motionGrammar.timing.spring.rangeMs[1] <= 360, "Spring timing must stay bounded");
 assert(motionGrammar.implementation.preferredDelivery[0] === "react", "React + Motion must be the preferred product delivery");
 
-const expectedModes = ["recommend", "compose", "implement", "review", "contribute"];
+const expectedModes = ["build-page", "recommend", "compose", "implement", "review", "contribute"];
 assert(
   JSON.stringify(motionSkillModes.map((mode) => mode.id)) === JSON.stringify(expectedModes),
   "Motion Lexicon modes must retain their stable order"

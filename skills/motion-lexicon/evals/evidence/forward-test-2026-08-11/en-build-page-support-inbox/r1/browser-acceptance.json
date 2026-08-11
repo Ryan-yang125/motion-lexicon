@@ -1,0 +1,352 @@
+{
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-support-last-VYcyty/en-build-page-support-inbox-r1/work /support 43120",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 7 tests using 1 worker\n\nAUDIT {\"width\":320,\"viewport\":320,\"document\":320,\"minimumWidth\":44,\"minimumHeight\":44,\"targetCount\":12,\"offenders\":[]}\n  ✓  1 tests/smoke.spec.ts:40:3 › 320px layout, overflow, and target audit (403ms)\nAUDIT {\"width\":390,\"viewport\":390,\"document\":390,\"minimumWidth\":44,\"minimumHeight\":44,\"targetCount\":14,\"offenders\":[]}\n  ✓  2 tests/smoke.spec.ts:40:3 › 390px layout, overflow, and target audit (302ms)\nAUDIT {\"width\":768,\"viewport\":768,\"document\":768,\"minimumWidth\":44,\"minimumHeight\":44,\"targetCount\":10,\"offenders\":[]}\n  ✓  3 tests/smoke.spec.ts:40:3 › 768px layout, overflow, and target audit (264ms)\nAUDIT {\"width\":1440,\"viewport\":1440,\"document\":1440,\"minimumWidth\":44,\"minimumHeight\":44,\"targetCount\":17,\"offenders\":[]}\n  ✓  4 tests/smoke.spec.ts:40:3 › 1440px layout, overflow, and target audit (254ms)\n  ✓  5 tests/smoke.spec.ts:79:1 › reply success survives an interrupted selection (1.4s)\n  ✓  6 tests/smoke.spec.ts:97:1 › reply error is recoverable and resolve is reversible (2.4s)\nACCESSIBILITY {\"focusReturn\":true,\"lightBackground\":\"rgb(239, 238, 234)\",\"darkBackground\":\"rgb(20, 19, 18)\",\"reducedMotionTransform\":\"none\"}\n  ✓  7 tests/smoke.spec.ts:118:1 › keyboard focus, themes, and reduced motion (529ms)\n\n  7 passed (7.0s)\n",
+  "testStderr": "(node:47840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:47840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 6,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Beacon support inbox\"]",
+          "label": "Beacon support inbox",
+          "width": 87.891,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(3)",
+          "label": "input",
+          "width": 215.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "MCMaya Chen2mUnable to invite new teammatesThe invite button spins, but nobody receives an email. Ur",
+          "width": 320,
+          "height": 117.078
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "OGOliver Grant18mInvoice shows an extra seatWe removed a contractor last week but the invoice still ",
+          "width": 320,
+          "height": 117.078
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "PRPriya Raman1hExport finished with missing rowsThe CSV has 814 records but the dashboard says 1,204",
+          "width": 320,
+          "height": 117.078
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Beacon support inbox"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 7,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Beacon support inbox\"]",
+          "label": "Beacon support inbox",
+          "width": 87.891,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open your profile\"]",
+          "label": "Open your profile",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(4)",
+          "label": "input",
+          "width": 284.359,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "MCMaya Chen2mUnable to invite new teammatesThe invite button spins, but nobody receives an email. Ur",
+          "width": 390,
+          "height": 117.078
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "OGOliver Grant18mInvoice shows an extra seatWe removed a contractor last week but the invoice still ",
+          "width": 390,
+          "height": 117.078
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "PRPriya Raman1hExport finished with missing rowsThe CSV has 814 records but the dashboard says 1,204",
+          "width": 390,
+          "height": 117.078
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Beacon support inbox"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 10,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Beacon support inbox\"]",
+          "label": "Beacon support inbox",
+          "width": 160.313,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open your profile\"]",
+          "label": "Open your profile",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(4)",
+          "label": "input",
+          "width": 214.109,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "MCMaya Chen2mUnable to invite new teammatesThe invite button spins, but nobody receives an email. Ur",
+          "width": 319,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "OGOliver Grant18mInvoice shows an extra seatWe removed a contractor last week but the invoice still ",
+          "width": 319,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "PRPriya Raman1hExport finished with missing rowsThe CSV has 814 records but the dashboard says 1,204",
+          "width": 319,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Resolve",
+          "width": 97.984,
+          "height": 44
+        },
+        {
+          "selector": "textarea:nth-interactive(9)",
+          "label": "textarea",
+          "width": 384,
+          "height": 86
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 112.453,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Beacon support inbox"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 17,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Beacon support inbox\"]",
+          "label": "Beacon support inbox",
+          "width": 160.313,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Toggle color theme\"]",
+          "label": "Toggle color theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open your profile\"]",
+          "label": "Open your profile",
+          "width": 126.609,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "All open3",
+          "width": 153,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "Unassigned1",
+          "width": 153,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "Waiting1",
+          "width": 153,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Priority1",
+          "width": 153,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Resolved1",
+          "width": 153,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(9)",
+          "label": "input",
+          "width": 243.766,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "MCMaya Chen2mUnable to invite new teammatesThe invite button spins, but nobody receives an email. Ur",
+          "width": 349,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "OGOliver Grant18mInvoice shows an extra seatWe removed a contractor last week but the invoice still ",
+          "width": 349,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "PRPriya Raman1hExport finished with missing rowsThe CSV has 814 records but the dashboard says 1,204",
+          "width": 349,
+          "height": 124
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "Resolve",
+          "width": 97.984,
+          "height": 44
+        },
+        {
+          "selector": "textarea:nth-interactive(14)",
+          "label": "textarea",
+          "width": 592,
+          "height": 86
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 112.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "maya@northstarlabs.co",
+          "width": 125.813,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Change assignee\"]",
+          "label": "Change assignee",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Beacon support inbox"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked Toggle color theme",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "Open your profile",
+    "focusReturn": "Open your profile",
+    "result": "second focus: All open3; Shift+Tab returned to Open your profile"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "sending",
+      "selection interruption",
+      "error/retry/sent/resolved"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43120\n\n  ➜  Local:   http://127.0.0.1:43120/\n",
+    "stderr": ""
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "motion-lexicon",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Copy-ready React motion components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS.",
   "license": "MIT",
   "repository": {
@@ -39,6 +39,7 @@
     "skill:bundle": "node scripts/build-motion-blueprint-validator.mjs",
     "skill:bundle:check": "node scripts/build-motion-blueprint-validator.mjs --check",
     "skill:check": "npm run skill:bundle:check && node scripts/check-motion-lexicon-skill.mjs",
+    "skill:release:check": "npm run skill:bundle:check && node scripts/check-motion-lexicon-skill.mjs --require-recorded",
     "seo:check": "tsx scripts/check-seo.ts",
     "motion:check": "tsx scripts/check-motion.ts",
     "assets:brand": "tsx scripts/generate-brand-assets.ts",

@@ -1,0 +1,1 @@
+Can you add a sortable revenue column to this CSV and calculate the monthly total?

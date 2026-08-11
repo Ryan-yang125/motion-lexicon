@@ -1,0 +1,256 @@
+{
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-project-dashboard-r2/work / 43121",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 2 tests using 1 worker\n\n  ✓  1 tests/smoke.spec.ts:3:1 › project overview renders without horizontal overflow (313ms)\n  ✓  2 tests/smoke.spec.ts:13:1 › creates a project and shows clear list feedback (1.4s)\n\n  2 passed (3.0s)\n",
+  "testStderr": "(node:44044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:44044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 6,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换为深色主题\"]",
+          "label": "切换为深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "＋ 新建项目",
+          "width": 108.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看全部 →",
+          "width": 73.016,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "风险台账",
+          "width": 56.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看数据口径风险\"]",
+          "label": "查看数据口径风险",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看测试环境风险\"]",
+          "label": "查看测试环境风险",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换为深色主题"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 6,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换为深色主题\"]",
+          "label": "切换为深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "＋ 新建项目",
+          "width": 108.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看全部 →",
+          "width": 73.016,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "风险台账",
+          "width": 56.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看数据口径风险\"]",
+          "label": "查看数据口径风险",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看测试环境风险\"]",
+          "label": "查看测试环境风险",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换为深色主题"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 6,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换为深色主题\"]",
+          "label": "切换为深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "＋ 新建项目",
+          "width": 114.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看全部 →",
+          "width": 73.016,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "风险台账",
+          "width": 56.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看数据口径风险\"]",
+          "label": "查看数据口径风险",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看测试环境风险\"]",
+          "label": "查看测试环境风险",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换为深色主题"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 6,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换为深色主题\"]",
+          "label": "切换为深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "＋ 新建项目",
+          "width": 114.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看全部 →",
+          "width": 73.016,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "风险台账",
+          "width": 56.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看数据口径风险\"]",
+          "label": "查看数据口径风险",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"查看测试环境风险\"]",
+          "label": "查看测试环境风险",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换为深色主题"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked 切换为浅色主题",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "＋ 新建项目",
+    "focusReturn": "＋ 新建项目",
+    "result": "second focus: 查看全部 →; Shift+Tab returned to ＋ 新建项目"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "pending",
+      "success/error",
+      "focus returned"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43121\n\n  ➜  Local:   http://127.0.0.1:43121/\n",
+    "stderr": ""
+  }
+}

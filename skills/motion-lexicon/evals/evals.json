@@ -1,6 +1,6 @@
 {
   "skill_name": "motion-lexicon",
-  "version": "2.0",
+  "version": "3.0",
   "evals": [
     {
       "id": "zh-recommend-card-arrival",
@@ -228,11 +228,97 @@
       "files": []
     },
     {
+      "id": "zh-build-page-project-dashboard",
+      "mode": "build-page",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "在现有 React 项目里做一个项目总览页：要有项目健康度、待处理风险、最近活动和“新建项目”主操作。请检查现有路由和组件系统，交付可运行的完整页面，并让新项目成功后在列表里有清晰反馈。",
+      "expected_output": "A complete React project dashboard route with a concise Page Plan, host-system reuse, and a stateful new-project success moment.",
+      "assertions": [
+        "Inspects the host route, component system, tokens, and installed dependencies before implementation",
+        "Provides a Page Plan with regions, exact published component IDs or none, and state boundaries",
+        "Implements the complete page with realistic dashboard content and a clear primary action",
+        "Verifies responsive layouts, themes, keyboard focus, reduced motion, target size, and console or hydration errors"
+      ],
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
+    },
+    {
+      "id": "zh-build-page-workspace-onboarding",
+      "mode": "build-page",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "给一个 B2B 协作产品做工作区创建后的引导页。用户要完成邀请同事、连接数据源、创建第一个看板三件事；页面要能处理加载、空状态、完成和某一步失败重试。请直接在项目中实现整页。",
+      "expected_output": "A runnable onboarding page that turns setup progress into one coherent product surface with loading, recovery, and completion states.",
+      "assertions": [
+        "Defines one dominant work surface and a primary setup-progress state change",
+        "Uses a compact Page Plan with exact registry composition where published components fit",
+        "Implements loading, empty, success, failure, and retry states appropriate to onboarding",
+        "Keeps focus, keyboard access, reduced motion, and responsive order coherent across the full page"
+      ],
+      "files": []
+    },
+    {
+      "id": "zh-build-page-product-landing",
+      "mode": "build-page",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "用 Motion Lexicon 的视觉语言在这个 React 项目里完成一页 AI 客服产品落地页。需要价值主张、真实场景演示、价格方案、FAQ 和注册入口；主交互是用户切换场景时演示区平稳更新。请交付完整页面和验证结果。",
+      "expected_output": "A complete responsive landing page that applies the requested visual language to a focused product narrative and scenario-switching work surface.",
+      "assertions": [
+        "Inspects the host route, component system, tokens, and installed dependencies before implementation",
+        "Provides a Page Plan with exact published component IDs or none and Registry integration details",
+        "Adapts the Motion Lexicon visual profile to the product content instead of presenting a component gallery",
+        "Builds every requested region with realistic content and a working registration path or clearly scoped handoff",
+        "Uses one primary scenario-switching motion moment with stable geometry and reduced-motion behavior",
+        "Reports route-level visual, accessibility, responsive, and runtime verification evidence"
+      ],
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
+    },
+    {
+      "id": "zh-build-page-billing-settings",
+      "mode": "build-page",
+      "locale": "zh",
+      "shouldUseSkill": true,
+      "prompt": "在我们的 SaaS 中实现“账单与用量”设置页：显示套餐、用量趋势、付款方式、发票和升级入口。付款方式更新会异步保存，失败后用户可以重试。请按现有设计系统完成这个页面。",
+      "expected_output": "A complete billing settings route that preserves the host system and handles an async payment-method update with recovery.",
+      "assertions": [
+        "Inspects and reuses the existing settings route, tokens, and dependencies",
+        "Plans exact page regions, state boundaries, and registry components before code",
+        "Implements a truthful pending, success, failure, and retry flow for payment-method updates",
+        "Verifies theme behavior, narrow layouts, focus order, reduced motion, and stable interactive geometry"
+      ],
+      "files": []
+    },
+    {
       "id": "zh-negative-copy-edit",
       "mode": "negative-trigger",
       "locale": "zh",
       "shouldUseSkill": false,
-      "prompt": "把这个按钮文案从“开始体验”改成“免费开始”。",
+      "prompt": "把这个按钮文案从“开始体验”改成“免费开始”，只回复修改后的文案。",
       "expected_output": "A concise copy-edit response without a motion-design workflow.",
       "assertions": [
         "Keeps shouldUseSkill false",
@@ -382,29 +468,55 @@
       "locale": "en",
       "shouldUseSkill": true,
       "prompt": "In React, implement a selectable project card that opens a side inspector. Preserve the selected card identity, support Escape, and keep motion interruption-safe.",
-      "expected_output": "A React implementation outline and core code for selection, inspector transition, focus, and interruption.",
+      "expected_output": "A runnable React implementation for selection, inspector transition, focus, interruption, and reduced motion that compiles in the bound fixture.",
       "assertions": [
         "Models selection and inspector state explicitly",
         "Preserves primary card continuity or a visual proxy",
         "Includes Escape and focus behavior",
-        "Includes an interruption and reduced-motion policy"
+        "Includes an interruption and reduced-motion policy",
+        "Delivers runnable React source that compiles with the bound fixture"
       ],
-      "files": []
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
     },
     {
       "id": "en-contribute-primitive-candidate",
       "mode": "contribute",
       "locale": "en",
       "shouldUseSkill": true,
-      "prompt": "I want to propose a reusable “status becomes action” primitive where a completed operation reveals the next step in the same control. What evidence does a candidate need?",
-      "expected_output": "A primitive candidate plan with three scenes, state evidence, and closest-library comparison.",
+      "prompt": "Create a complete Motion Lexicon primitive-candidate record for a reusable “status becomes action” behavior where a completed operation reveals the next step in the same control. Use English, include three independent product scenes, a complete Motion Blueprint, and a portable implementation, then validate the Blueprint and deliver the finished candidate files.",
+      "expected_output": "A finished English primitive-candidate record with three independent scenes, a complete validated Blueprint, and portable source.",
       "assertions": [
         "Classifies the proposal as a primitive candidate",
-        "Requests three independent product scenes",
-        "Requires a complete Blueprint and portable implementation",
-        "Keeps the proposal at candidate status"
+        "Provides three independent product scenes",
+        "Delivers a complete validated Blueprint and portable implementation",
+        "Keeps the finished record at candidate status with no template placeholders",
+        "Installs the portable implementation in the bound fixture and completes a successful build"
       ],
-      "files": []
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
     },
     {
       "id": "en-contribute-moment-promotion",
@@ -465,6 +577,90 @@
         "Preserves clear accessible status"
       ],
       "files": []
+    },
+    {
+      "id": "en-build-page-analytics-dashboard",
+      "mode": "build-page",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Build a complete analytics dashboard route in our existing React app. It needs a KPI summary, date-range control, retention chart, top segments, and an export action. Inspect the project first, preserve its system, and make the range change update the work surface clearly.",
+      "expected_output": "A runnable analytics dashboard route with a Page Plan, host-system reuse, and an accessible date-range update state.",
+      "assertions": [
+        "Inspects the target repository, route structure, tokens, and installed dependencies before choosing implementation details",
+        "Provides a Page Plan with the page job, regions, exact published component IDs or none, and responsive changes",
+        "Implements all requested dashboard regions with realistic data states and a clear date-range update",
+        "Verifies 320, 390, 768, and 1440 px layouts, themes, focus, reduced motion, and runtime errors"
+      ],
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
+    },
+    {
+      "id": "en-build-page-team-settings",
+      "mode": "build-page",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Implement a full team settings page in this React product: members, roles, pending invitations, SSO status, and an invite-member flow. The invite can succeed or fail, and the whole page needs to work on mobile and dark mode.",
+      "expected_output": "A complete team settings page with an invitation flow, recovery states, responsive behavior, and theme support.",
+      "assertions": [
+        "Uses one dominant settings work surface and a focused invite-member primary action",
+        "Creates a concise Page Plan with relevant registry composition and state boundaries",
+        "Implements realistic loading, empty, pending, success, failure, and retry behavior where relevant",
+        "Maintains keyboard flow, focus restoration, reduced motion, and 44 px interactive targets"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-build-page-product-launch",
+      "mode": "build-page",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "Create a complete product launch landing page for a developer observability tool in the Motion Lexicon visual language. Include the hero, interactive architecture demo, customer proof, pricing, FAQ, and a signup CTA. The architecture demo should update smoothly when a visitor selects a service.",
+      "expected_output": "A complete launch page that uses the requested visual language for a coherent developer-product story and an interactive architecture demo.",
+      "assertions": [
+        "Builds every requested page region as one coherent product surface",
+        "Uses the visual profile with product-specific hierarchy and realistic content",
+        "Implements one primary service-selection motion moment with stable layout, focus, and reduced-motion behavior",
+        "Reports observable responsive, accessibility, theme, and runtime verification results"
+      ],
+      "files": []
+    },
+    {
+      "id": "en-build-page-support-inbox",
+      "mode": "build-page",
+      "locale": "en",
+      "shouldUseSkill": true,
+      "prompt": "In our existing app, implement a complete support inbox page with ticket filters, a conversation list, active ticket details, reply composer, and resolved state. Sending a reply is asynchronous and a new selection can interrupt the current transition. Deliver the route with verification evidence.",
+      "expected_output": "A runnable support inbox route with stable master-detail selection, async reply states, and interruption-safe page behavior.",
+      "assertions": [
+        "Inspects the host project and reuses its routing, component system, and content language",
+        "Plans the list, detail, composer, and resolved states with exact registry components where applicable",
+        "Implements async reply pending, success, failure, and recovery without losing current ticket context",
+        "Verifies responsive ordering, keyboard navigation, focus, reduced motion, overflow, and console or hydration errors"
+      ],
+      "fixture": {
+        "id": "vite-react-ts-tailwind",
+        "path": "evals/fixtures/vite-react-ts-tailwind",
+        "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
+        "fileCount": 14,
+        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+      },
+      "files": [
+        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
+        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
+        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
+        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+      ]
     },
     {
       "id": "en-negative-data-table",

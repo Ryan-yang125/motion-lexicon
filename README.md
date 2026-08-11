@@ -39,7 +39,7 @@
 | --- | --- | --- |
 | [Components](https://motion-lexicon.pages.dev/en/components/) | A polished product interaction you can place into a React app | One self-contained TypeScript file through the shadcn registry |
 | [Primitives](https://motion-lexicon.pages.dev/en/primitives/) | A precise behavior, timing curve, or motion rule | Live React + Motion preview, tunable props, source, and registry install |
-| [Agent Skill](https://motion-lexicon.pages.dev/en/skill/) | Recommendation, composition, implementation, or review inside an agent workflow | A product-aware motion decision and production implementation |
+| [Agent Skill](https://motion-lexicon.pages.dev/en/skill/) | Complete page construction and motion decisions inside an agent workflow | A page plan, published component composition, production implementation, and acceptance evidence |
 
 Components and Primitives are parallel collections. A component can combine
 several primitives; each component page links back to the underlying motion
@@ -98,8 +98,9 @@ Verify project installs with `npx skills list` and user-scope installs with
 agent's project Skill directory; user-scope installs are available across
 projects for the selected agent.
 
-The Skill works in five modes:
+The Skill works in six modes:
 
+- **Build Page** from a product job, exact Registry components, and a compact page plan.
 - **Recommend** a fitting primitive or component for a product event.
 - **Compose** several behaviors into a complete product interaction.
 - **Implement** React, HTML, CSS, or JavaScript.
@@ -137,6 +138,9 @@ npm run typecheck
 npm run test
 npm run i18n:check
 npm run vocabulary:check
+npm run motion-grammar:check
+npm run skill:check
+npm run artifacts:check
 npm run seo:check
 npm run motion:check
 npm run a11y:check

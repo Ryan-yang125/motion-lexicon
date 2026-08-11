@@ -5,12 +5,11 @@ component relationship, a screen edge, or the triggering actor.
 
 | Primitive | Use when | Default | Reduced motion |
 | --- | --- | --- | --- |
-| Fade | Content already has an obvious place | 160–220 ms opacity | Apply the final state immediately |
-| Slide-in | Context comes from a known side or surface edge | 220–260 ms, 16–32 px | Short opacity crossfade |
-| Scale-in | A focal card or dialog arrives at its final location | 200–240 ms, `.97` → `1` | Apply final scale and opacity |
-| Pop-in | A compact acknowledgement appears near an action | 140–180 ms, `.94` → `1` | Apply final state with concise status |
-| Spring settle | A user moves, drops, or reorders an item | Gesture-driven, short settle | Snap to final position |
-| Reveal | The disclosed content has meaningful hidden extent | 180–260 ms clip or proxy transform | Expand directly with focus preserved |
+| `fade-in-fade-out` | Content already has an obvious place | 160–220 ms opacity | Apply the final state immediately |
+| `slide-in` | Context comes from a known side or surface edge | 220–260 ms, 16–32 px | Short opacity crossfade |
+| `scale-in` | A focal card or compact acknowledgement arrives at its final location | 140–240 ms, `.94`–`.97` → `1` | Apply final scale and opacity |
+| `spring` | A user moves, drops, or reorders an item | Gesture-driven, short settle | Snap to final position |
+| `reveal` | The disclosed content has meaningful hidden extent | 180–260 ms clip or proxy transform | Expand directly with focus preserved |
 
 ### Direction rule
 

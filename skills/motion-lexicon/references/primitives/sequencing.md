@@ -4,11 +4,16 @@ Use sequencing to reveal relationship and dependency within a bounded group.
 
 | Primitive | Use when | Default | Reduced motion |
 | --- | --- | --- | --- |
-| Stagger | Ordered items enter as one group | 30–70 ms between items | Show complete group immediately |
-| Delay | A step depends on a preceding event | 40–120 ms | Apply final state directly |
-| Orchestration | A primary actor leads supporting updates | 2–4 linked beats | Apply final state hierarchy |
-| Easing | Velocity should fit the event | Arrival, leaving, or linear | Keep final state |
-| Pause/resume | Playback or work can be controlled | Immediate state response | Preserve labels and control state |
+| `stagger` | Ordered items enter as one bounded group | 30–70 ms between items | Show the complete group immediately |
+| `duration` | Event meaning determines the active time | Use the documented event range | Preserve the final state immediately |
+| `easing` | Velocity should fit arrival, leaving, feedback, or direct manipulation | Choose one named curve | Keep the final state |
+| `keyframes` | A small number of intentional phases must share one timeline | 2–4 event-relative phases | Apply the final semantic phase |
+| `perceived-performance` | Real work needs continuous, truthful progress feedback | Follow measured work | Keep value and status visible |
+
+Delay, orchestration, and pause/resume are sequencing controls or product
+states. They are concept-only labels and cannot appear as a candidate ID or in
+`beats[].primitive`; express them through beat offsets, state transitions, and
+the exact published primitive that renders each beat.
 
 ### Sequence rule
 

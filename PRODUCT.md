@@ -1,4 +1,4 @@
-# Motion Lexicon V4.1 Product Strategy
+# Motion Lexicon V4.2 Product Strategy
 
 ## Product promise
 
@@ -7,8 +7,9 @@ Motion Lexicon gives builders production-ready motion at two useful levels:
 - **Components:** complete React interactions that can be previewed, copied, or installed through a shadcn registry.
 - **Primitives:** focused React + Motion behaviors that can be previewed, tuned, copied, or installed.
 
-The Agent Skill sits beside the website and recommends, composes, implements,
-reviews, and contributes motion from a real product event.
+The Agent Skill sits beside the website and builds complete product pages,
+recommends and composes motion, implements interactions, reviews code, and
+contributes candidates from a real product job.
 
 ```text
 Browse → Preview → Copy or install → Adapt → Review
@@ -28,7 +29,7 @@ Browse → Preview → Copy or install → Adapt → Review
 | Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
 | Components | Deliver complete product and website interactions | 48 React components across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
 | Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
-| Agent Skill | Design and implement from product context | Recommend, Compose, Implement, Review, Contribute |
+| Agent Skill | Build and refine from product context | Build Page, Recommend, Compose, Implement, Review, Contribute |
 | Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
 
 Components and Primitives are equal first-level directories. Search spans both
@@ -93,7 +94,7 @@ The build publishes 214 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V4.1 acceptance
+## V4.2 acceptance
 
 V4 is complete when:
 
@@ -106,7 +107,7 @@ V4 is complete when:
 - Primitive source views and Registry files read the implementation file directly; generated source strings are absent.
 - All 9 parameter tools drive the same typed props used by their live previews.
 - Global search, desktop sidebar, and mobile navigation cover both collections.
-- The Agent Skill uses the same component and primitive language.
+- The Agent Skill builds complete React pages with the same component, primitive, token, responsive, theme, and accessibility language.
 - Old Finder, Pack, Catalog, Director, Playground, and Lab routes are removed.
 - Desktop and mobile layouts have no page-level horizontal overflow.
 - Lint, typecheck, unit, i18n, SEO, motion, accessibility, build, bundle, crawl, browser, and official shadcn install checks pass.

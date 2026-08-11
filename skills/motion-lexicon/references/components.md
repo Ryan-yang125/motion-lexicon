@@ -1,6 +1,6 @@
 # Published component catalog
 
-Generated from `src/data/component-registry.ts` for Motion Lexicon 4.1.1.
+Generated from `src/data/component-registry.ts` for Motion Lexicon 4.2.0.
 Use only the 48 published IDs below. Treat any other ID as a candidate, not a published component.
 
 | ID | 名称 / Name | 产品用途 / Product use | Foundations | Runtime |

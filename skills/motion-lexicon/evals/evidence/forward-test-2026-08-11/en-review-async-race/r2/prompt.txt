@@ -1,0 +1,1 @@
+A person toggles a task complete, quickly toggles it back, then the first request resolves late and plays the success animation again. Review the interaction race.
