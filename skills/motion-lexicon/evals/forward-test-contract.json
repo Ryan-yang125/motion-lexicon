@@ -20,7 +20,7 @@
       "intended fixes",
       "outputs from earlier repetitions"
     ],
-    "artifactPolicy": "Use a unique fresh temporary directory for each run containing only the declared empty or case-specific starter fixture. Every case with a fixture binding in evals.json must copy that fixture and verify its committed manifest before launch. Preserve independently scored evidence under evals/evidence/forward-test-2026-08-11/<eval-id>/r<repetition>/: prompt.txt, events.jsonl, final.md, isolation-manifest.json, initial-fixture-manifest.json, and any mode-specific evidence. Build Page preserves source/, dist/, build.json, and browser-acceptance.json. Implement preserves source/, dist/, and build.json. Compose preserves blueprint.json and validator.json. Contribute preserves candidate.md, blueprint.json, validator.json, placeholder-scan.json, source/, dist/, and build.json; build.json portableArtifacts binds each portable HTML/CSS/JS sourcePath to a byte-identical distPath with sourceSha256 and distSha256. All result paths are repository-relative and remain available to skill:check."
+    "artifactPolicy": "Use a unique fresh temporary directory for each run containing only the declared empty or case-specific starter fixture. Every case with a fixture binding in evals.json must copy that fixture and verify its committed manifest before launch. Preserve independently scored evidence under evals/evidence/forward-test-2026-08-11/<eval-id>/r<repetition>/: prompt.txt, events.jsonl, final.md, isolation-manifest.json, initial-fixture-manifest.json, and any mode-specific evidence. Build Page preserves source/, dist/, build.json, and browser-acceptance.json; browser-acceptance.json binds evalId, repetition, sourceTreeSha256, and distTreeSha256 to the exact build it exercised. Implement preserves source/, dist/, and build.json. Compose preserves blueprint.json and validator.json. Contribute preserves candidate.md, blueprint.json, validator.json, placeholder-scan.json, source/, dist/, and build.json; build.json portableArtifacts binds each portable HTML/CSS/JS sourcePath to a byte-identical distPath with sourceSha256 and distSha256. All result paths are repository-relative and remain available to skill:check."
   },
   "cases": [
     { "evalId": "zh-recommend-card-arrival", "critical": ["correct-trigger", "published-id-only", "language-match"] },
@@ -47,7 +47,7 @@
     "suite": "motion-lexicon-fresh-context",
     "skillVersion": "string",
     "skillSha256": "lowercase SHA-256 digest of SKILL.md",
-    "skillTreeSha256": "SHA-256 over sorted path + NUL + bytes + NUL records for the installed Skill payload, excluding evals/",
+    "skillTreeSha256": "SHA-256 over sorted uint64be(path byte length) + path bytes + uint64be(content byte length) + content bytes records for the installed Skill payload, excluding evals/",
     "model": "string",
     "startedAt": "ISO-8601 string",
     "completedAt": "ISO-8601 string",

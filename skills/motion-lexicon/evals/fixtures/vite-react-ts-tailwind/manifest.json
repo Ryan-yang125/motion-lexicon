@@ -1,23 +1,65 @@
 {
   "schemaVersion": 1,
   "id": "vite-react-ts-tailwind",
-  "hashAlgorithm": "sorted path + NUL + bytes + NUL, excluding manifest.json",
+  "hashAlgorithm": "sorted uint64be(path byte length) + path bytes + uint64be(content byte length) + content bytes records, excluding manifest.json",
   "fileCount": 14,
-  "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9",
+  "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a",
   "files": [
-    { "path": "index.html", "sha256": "a646f311343e4b9622419a1c5a0d4d4c7cf73b44eb4c2464beb74cbddf7a1640" },
-    { "path": "package-lock.json", "sha256": "98a8d043651026f5c48e7e3401d17637af1d24b6d5fadfd723726df452789c5a" },
-    { "path": "package.json", "sha256": "6d205e233d6ee7ded5bba38b604b89719225466d9617c4de48117a467bd6d680" },
-    { "path": "playwright.config.ts", "sha256": "b881e7a5be27f387d58624ae3bb2ca67406f80ebcf39d4519fec9ecdfb9acc72" },
-    { "path": "src/components/ui/Button.tsx", "sha256": "bbb0794b0a5495b5edf6c5f71a655d7fab20b73fdaed6a85a46b8759c46ae0a9" },
-    { "path": "src/main.tsx", "sha256": "bc34017504dbebd26f6562843bb527369b879af386e52a7738821f00b2331643" },
-    { "path": "src/pages/HomePage.tsx", "sha256": "8cd08ea30d409a2a0f67f902b8d073662fea94057b4e3be6ba40e78b7b4cb3b9" },
-    { "path": "src/router.tsx", "sha256": "5cfd9af635b5f0b3170231b4674583558314aa57e9cd5136388945fa6030d680" },
-    { "path": "src/styles.css", "sha256": "888786020c3a73fafc14295007afb4bba47123649b5d8510a5524bdee6cd63e5" },
-    { "path": "tests/smoke.spec.ts", "sha256": "6e35b740cec465a499414ca06d508fe81eb19ca5451143b4e5fd9ac9d281d69e" },
-    { "path": "tsconfig.app.json", "sha256": "a7266d1c85fa6947c70073256d9a73e4c459e97b0b4ef24b5c48dcab498ef4c5" },
-    { "path": "tsconfig.json", "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808" },
-    { "path": "tsconfig.node.json", "sha256": "f167ec60e63b35e2fd1ba0b997fbff8152ddc4c6feeebe4436a5cfd31547d592" },
-    { "path": "vite.config.ts", "sha256": "17f7fff409cf4acde70741f4aed8b09d4d937f4189f468e4749a08f14c34d92d" }
+    {
+      "path": "index.html",
+      "sha256": "a646f311343e4b9622419a1c5a0d4d4c7cf73b44eb4c2464beb74cbddf7a1640"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "98a8d043651026f5c48e7e3401d17637af1d24b6d5fadfd723726df452789c5a"
+    },
+    {
+      "path": "package.json",
+      "sha256": "6d205e233d6ee7ded5bba38b604b89719225466d9617c4de48117a467bd6d680"
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "b881e7a5be27f387d58624ae3bb2ca67406f80ebcf39d4519fec9ecdfb9acc72"
+    },
+    {
+      "path": "src/components/ui/Button.tsx",
+      "sha256": "bbb0794b0a5495b5edf6c5f71a655d7fab20b73fdaed6a85a46b8759c46ae0a9"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "bc34017504dbebd26f6562843bb527369b879af386e52a7738821f00b2331643"
+    },
+    {
+      "path": "src/pages/HomePage.tsx",
+      "sha256": "8cd08ea30d409a2a0f67f902b8d073662fea94057b4e3be6ba40e78b7b4cb3b9"
+    },
+    {
+      "path": "src/router.tsx",
+      "sha256": "5cfd9af635b5f0b3170231b4674583558314aa57e9cd5136388945fa6030d680"
+    },
+    {
+      "path": "src/styles.css",
+      "sha256": "888786020c3a73fafc14295007afb4bba47123649b5d8510a5524bdee6cd63e5"
+    },
+    {
+      "path": "tests/smoke.spec.ts",
+      "sha256": "6e35b740cec465a499414ca06d508fe81eb19ca5451143b4e5fd9ac9d281d69e"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "sha256": "a7266d1c85fa6947c70073256d9a73e4c459e97b0b4ef24b5c48dcab498ef4c5"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "sha256": "f167ec60e63b35e2fd1ba0b997fbff8152ddc4c6feeebe4436a5cfd31547d592"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "17f7fff409cf4acde70741f4aed8b09d4d937f4189f468e4749a08f14c34d92d"
+    }
   ]
 }

@@ -1,4 +1,8 @@
 {
+  "evalId": "zh-build-page-project-dashboard",
+  "repetition": 3,
+  "sourceTreeSha256": "7ba9bebba7f1137dfb7e9c9bb383ee7e4691a2b19be0924acdc2c648fab7d58a",
+  "distTreeSha256": "d3fb2c556445217f77f0e3232e683268696754673f2e3bbf2e54a49d1eaa9372",
   "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-project-dashboard-r3/work / 43122",
   "exitCode": 0,
   "testCommand": "npm run test:browser",

@@ -5,6 +5,6 @@
   "completedAt": "2026-08-11T18:34:57.189Z",
   "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 build\n> tsc -b && vite build\n\nvite v7.1.7 building for production...\ntransforming...\n✓ 435 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.66 kB │ gzip:   0.43 kB\ndist/assets/index-UbSAMgeG.css   25.92 kB │ gzip:   6.27 kB\ndist/assets/index-CYEJyUS-.js   339.29 kB │ gzip: 109.25 kB\n✓ built in 716ms\n",
   "stderr": "",
-  "sourceTreeSha256": "e73c3dcc7356e70e7753e1c3ab3053861b2e69fb121ed3c89051d1ad20a59221",
-  "distTreeSha256": "c09c5890fcd9b41498db354c0ac3568fa5c81d5b4ad74e25f5a9eb3b22123cc0"
+  "sourceTreeSha256": "2dc939a2cc5b047d3b8f198b321d38e54ba11816b0bf32474707749efcdd4dea",
+  "distTreeSha256": "d3e44efb7cdcab9e62680ed29be21b3ee1bcee612aa635ee45a45390330e1c64"
 }

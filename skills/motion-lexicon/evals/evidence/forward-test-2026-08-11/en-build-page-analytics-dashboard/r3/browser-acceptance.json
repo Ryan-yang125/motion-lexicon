@@ -1,4 +1,8 @@
 {
+  "evalId": "en-build-page-analytics-dashboard",
+  "repetition": 3,
+  "sourceTreeSha256": "38a4375a85cb79c224e24a35f06327da4e660c513468052137536e01087e181c",
+  "distTreeSha256": "f404bbda99e7dc01f96a3197a809809ca6e0d59dbfff82113b114516115c1cfa",
   "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-final-WyIAsP/en-build-page-analytics-dashboard-r3/work /analytics 43128",
   "exitCode": 0,
   "testCommand": "npm run test:browser",

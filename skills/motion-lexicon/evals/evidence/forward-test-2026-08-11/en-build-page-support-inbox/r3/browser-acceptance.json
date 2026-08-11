@@ -1,4 +1,8 @@
 {
+  "evalId": "en-build-page-support-inbox",
+  "repetition": 3,
+  "sourceTreeSha256": "fedb9486090adeb2bc6c8e73ed7fe4aa984327b1f3d29c75a3bc2e2327c270e1",
+  "distTreeSha256": "75bc3258061ffcd3e62d9fdee9aed83e0ff29ac9ce4239275a604592004e7376",
   "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-support-r3-last-o5YkTZ/en-build-page-support-inbox-r3/work /support 43120",
   "exitCode": 0,
   "testCommand": "npm run test:browser",

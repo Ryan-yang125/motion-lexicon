@@ -5,8 +5,8 @@
   "completedAt": "2026-08-11T18:18:41.760Z",
   "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 build\n> tsc -b && vite build\n\nvite v7.1.7 building for production...\ntransforming...\n✓ 34 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                                              0.51 kB │ gzip:  0.31 kB\ndist/candidates/status-becomes-action/portable/index.html    9.22 kB │ gzip:  1.77 kB\ndist/assets/index-D2E4CeE1.css                               6.63 kB │ gzip:  2.19 kB\ndist/assets/index-D5W8QO5f.css                               7.41 kB │ gzip:  2.33 kB\ndist/assets/modulepreload-polyfill-B5Qt9EMX.js               0.71 kB │ gzip:  0.40 kB\ndist/assets/index-0d6oTJzL.js                                3.91 kB │ gzip:  1.36 kB\ndist/assets/index-CESYLT5Q.js                              187.23 kB │ gzip: 58.84 kB\n✓ built in 429ms\n",
   "stderr": "",
-  "sourceTreeSha256": "56102567e513b3d81fa872436e5324a9d7efc677018b14ea25df3d5a3440f663",
-  "distTreeSha256": "a55e2c21df654c5cf71e0792c20de0f3f092484fc81e0794d12a83b1ca876827",
+  "sourceTreeSha256": "37178e48407ed2300c741a25f41c8fe3501fb423a873dc0957fc7c3643bc0395",
+  "distTreeSha256": "fac717c7f4d303f390d14681ab40568467267aa872f7defa5a93b9327f559dbd",
   "postBuildEvidenceCommand": "copy referenced portable HTML/CSS/JS byte-for-byte into dist/portable-source",
   "portableArtifacts": [
     {

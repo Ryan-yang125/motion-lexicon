@@ -245,13 +245,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {
@@ -289,13 +299,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {
@@ -481,13 +501,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {
@@ -509,13 +539,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {
@@ -596,13 +636,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {
@@ -653,13 +703,23 @@
         "path": "evals/fixtures/vite-react-ts-tailwind",
         "manifestPath": "evals/fixtures/vite-react-ts-tailwind/manifest.json",
         "fileCount": 14,
-        "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9"
+        "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a"
       },
       "files": [
-        "index.html", "package-lock.json", "package.json", "playwright.config.ts",
-        "src/components/ui/Button.tsx", "src/main.tsx", "src/pages/HomePage.tsx",
-        "src/router.tsx", "src/styles.css", "tests/smoke.spec.ts", "tsconfig.app.json",
-        "tsconfig.json", "tsconfig.node.json", "vite.config.ts"
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "playwright.config.ts",
+        "src/components/ui/Button.tsx",
+        "src/main.tsx",
+        "src/pages/HomePage.tsx",
+        "src/router.tsx",
+        "src/styles.css",
+        "tests/smoke.spec.ts",
+        "tsconfig.app.json",
+        "tsconfig.json",
+        "tsconfig.node.json",
+        "vite.config.ts"
       ]
     },
     {

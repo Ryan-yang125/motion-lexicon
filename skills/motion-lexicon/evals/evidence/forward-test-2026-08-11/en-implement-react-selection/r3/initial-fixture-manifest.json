@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "vite-react-ts-tailwind",
-  "hashAlgorithm": "sorted path + NUL + bytes + NUL, excluding manifest.json",
+  "hashAlgorithm": "sorted uint64be(path byte length) + path bytes + uint64be(content byte length) + content bytes records",
   "fileCount": 14,
-  "treeSha256": "7ccd5d0129fe2575ab7d52344814c914b1afde9ab8a06e80195f10d9d9ea7cc9",
+  "treeSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a",
   "files": [
     {
       "path": "index.html",

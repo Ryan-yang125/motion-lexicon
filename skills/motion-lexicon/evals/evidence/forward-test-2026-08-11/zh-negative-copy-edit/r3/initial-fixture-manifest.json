@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "empty",
-  "hashAlgorithm": "sorted path + NUL + bytes + NUL",
+  "hashAlgorithm": "sorted uint64be(path byte length) + path bytes + uint64be(content byte length) + content bytes records",
   "fileCount": 0,
   "treeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "files": []

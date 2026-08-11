@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { Buffer } from "node:buffer";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -20,6 +21,11 @@ const sha256Pattern = /^[a-f0-9]{64}$/;
 const publicCatalog = JSON.parse(readText(path.join(repositoryRoot, "public", "data", "v4", "catalog.json")));
 const publishedPrimitiveIds = new Set((publicCatalog.primitives ?? []).map((primitive) => primitive.id));
 const requireRecordedForwardTest = process.argv.includes("--require-recorded");
+const uint64be = (value) => {
+  const buffer = Buffer.alloc(8);
+  buffer.writeBigUInt64BE(BigInt(value));
+  return buffer;
+};
 const sha256Tree = (rootDirectory, excludedTopLevel = new Set(), excludedPaths = new Set()) => {
   const files = [];
   const visit = (directory, relativeDirectory = "") => {
@@ -38,10 +44,12 @@ const sha256Tree = (rootDirectory, excludedTopLevel = new Set(), excludedPaths =
   files.sort(([left], [right]) => left.localeCompare(right));
   const hash = crypto.createHash("sha256");
   for (const [relativePath, absolutePath] of files) {
-    hash.update(relativePath);
-    hash.update("\0");
-    hash.update(fs.readFileSync(absolutePath));
-    hash.update("\0");
+    const pathBytes = Buffer.from(relativePath, "utf8");
+    const contentBytes = fs.readFileSync(absolutePath);
+    hash.update(uint64be(pathBytes.length));
+    hash.update(pathBytes);
+    hash.update(uint64be(contentBytes.length));
+    hash.update(contentBytes);
   }
   return hash.digest("hex");
 };
@@ -1004,6 +1012,12 @@ const validateForwardTestResult = (contract, taskFixtures) => {
       const browserEvidence = browserArtifact ? readJsonArtifact(browserArtifact, `${runPath}.browserAcceptancePath`) : null;
       if (!browserEvidence || browserEvidence.exitCode !== 0 || typeof browserEvidence.automationCommand !== "string" || browserEvidence.automationCommand.length === 0) {
         fail(`${runPath}.browserAcceptancePath must record browser automation and exit code 0.`);
+      }
+      if (browserEvidence?.evalId !== run.evalId || browserEvidence?.repetition !== run.repetition) {
+        fail(`${runPath}.browserAcceptancePath must bind the current eval ID and repetition.`);
+      }
+      if (browserEvidence?.sourceTreeSha256 !== sourceTreeSha256 || browserEvidence?.distTreeSha256 !== distTreeSha256) {
+        fail(`${runPath}.browserAcceptancePath must bind the preserved source and dist trees.`);
       }
       const viewports = browserEvidence?.viewports;
       if (!Array.isArray(viewports) || viewports.length !== 4 || JSON.stringify(viewports.map((item) => item.width).sort((a, b) => a - b)) !== JSON.stringify([320, 390, 768, 1440])) {
