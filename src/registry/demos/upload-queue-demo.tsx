@@ -19,6 +19,8 @@ export function UploadQueueDemo({ locale = "en" }: DemoLocaleProps = {}) {
         label={demoValue(locale, "上传文件", "Upload files")}
         copy={locale === "zh" ? {
           drop: (remaining) => `拖放到这里，最多选择 ${remaining} 个`, full: "队列已满", choose: "选择文件", queue: "上传队列",
+          unsupported: "不支持此文件类型",
+          limit: (remaining) => `只能再添加 ${remaining} 个文件`,
           complete: "已完成", failed: "上传失败", uploading: "上传中", queued: "等待上传", retry: "重试", remove: "移除",
           progress: "上传进度", summary: (complete, total) => `${total} 个文件中 ${complete} 个已上传`,
         } : undefined}

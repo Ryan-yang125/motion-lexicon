@@ -525,7 +525,7 @@ export function DitherRevealCard({
         if (event.pointerType === "mouse") setHovered(true);
       }}
       onPointerLeave={() => setHovered(false)}
-      className={`group relative isolate min-h-[220px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] text-left shadow-[0_1px_2px_rgba(41,41,41,0.06),0_18px_50px_-34px_rgba(41,41,41,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
+      className={`group relative isolate min-h-[220px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] text-left shadow-[0_4px_8px_-8px_rgba(41,41,41,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${className}`}
     >
       <canvas
         ref={canvasRef}

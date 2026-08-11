@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import type { ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NetworkGlobe as IntentNetworkGlobe } from "@/registry/components/network-globe";
@@ -40,8 +40,8 @@ vi.mock("three", async (importOriginal) => {
     compile() {
       return new Set();
     }
-    render() {
-      harness.render();
+    render(scene: unknown, camera: unknown) {
+      harness.render(scene, camera);
     }
     dispose() {
       harness.dispose();
@@ -314,6 +314,47 @@ describe("NetworkGlobe", () => {
     });
     expect(harness.dispose).toHaveBeenCalledOnce();
     expect(harness.forceContextLoss).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the current pointer active when an older pointer loses capture", async () => {
+    const { container } = render(
+      <NetworkGlobe
+        nodes={[{ id: "shanghai", label: "Shanghai", latitude: 31.23, longitude: 121.47 }]}
+      />,
+    );
+    const root = container.querySelector<HTMLElement>('[data-webgl-root="network-globe"]');
+    const canvas = await waitFor(() => {
+      const next = container.querySelector("canvas");
+      expect(next).toBeInTheDocument();
+      expect(root).toHaveAttribute("tabindex", "0");
+      return next as HTMLCanvasElement;
+    });
+    if (!root) throw new Error("Network globe root was not rendered");
+
+    const setPointerCapture = vi.fn();
+    Object.defineProperty(root, "setPointerCapture", {
+      configurable: true,
+      value: setPointerCapture,
+    });
+    fireEvent.pointerDown(canvas, { pointerId: 1, clientX: 10 });
+    fireEvent.pointerDown(canvas, { pointerId: 2, clientX: 20 });
+
+    const lostCapture = new Event("lostpointercapture", { bubbles: true });
+    Object.defineProperty(lostCapture, "pointerId", { value: 1 });
+    fireEvent(root, lostCapture);
+    fireEvent.pointerMove(root, { pointerId: 2, clientX: 40 });
+
+    const frame = vi.mocked(requestAnimationFrame).mock.calls[0]?.[0];
+    if (!frame) throw new Error("Network globe frame was not requested");
+    act(() => frame(100));
+
+    expect(setPointerCapture).toHaveBeenNthCalledWith(1, 1);
+    expect(setPointerCapture).toHaveBeenNthCalledWith(2, 2);
+    const scene = harness.render.mock.calls.at(-1)?.[0] as {
+      children?: Array<{ type?: string; rotation?: { y: number } }>;
+    } | undefined;
+    const globe = scene?.children?.find((child) => child.type === "Group");
+    expect(globe?.rotation?.y).toBeGreaterThan(-0.42);
   });
 
   it("shows the fallback on context loss and redraws after restore with reduced motion", async () => {

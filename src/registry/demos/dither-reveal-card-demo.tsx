@@ -11,7 +11,7 @@ export function DitherRevealCardDemo({ locale = "en" }: DemoLocaleProps = {}) {
         label={demoValue(locale, "显影发布简报", "Reveal the launch brief")}
         front={
           <>
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone-500">{demoValue(locale, "工作室笔记 · 04", "Studio note · 04")}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone-600">{demoValue(locale, "工作室笔记 · 04", "Studio note · 04")}</span>
             <span>
               <strong className="block max-w-[13ch] text-[22px] font-medium leading-[1.05] tracking-[-0.035em] text-[#292929]">{demoValue(locale, "一次周全的发布。", "A launch that feels considered.")}</strong>
               <span className="mt-2 block text-[12px] text-stone-600">{demoValue(locale, "显影最终方向", "Reveal the final direction")}</span>

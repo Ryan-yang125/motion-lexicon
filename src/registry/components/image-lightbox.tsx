@@ -30,6 +30,7 @@ export type ImageLightboxProps = {
 export type ImageLightboxCopy = {
   gallery: string;
   works: (count: number) => string;
+  empty: string;
   open: (title: string) => string;
   close: string;
   previous: string;
@@ -39,6 +40,7 @@ export type ImageLightboxCopy = {
 const DEFAULT_COPY: ImageLightboxCopy = {
   gallery: "Gallery",
   works: (count) => `${String(count).padStart(2, "0")} works`,
+  empty: "No works in this gallery",
   open: (title) => `Open ${title}`,
   close: "Close gallery",
   previous: "Previous image",
@@ -227,7 +229,7 @@ export function ImageLightbox({
     <LayoutGroup id={layoutGroupId}>
       <section aria-labelledby={titleId} className={`w-full ${className}`}>
         <header className="mb-2 flex min-h-11 items-end justify-between gap-4 px-1">
-          <div>
+          <div className="min-w-0">
             <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
               {copy.gallery}
             </span>
@@ -235,11 +237,15 @@ export function ImageLightbox({
               {label}
             </h3>
           </div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-stone-400 dark:text-stone-500">
+          <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-stone-600 dark:text-stone-400">
             {copy.works(items.length)}
           </span>
         </header>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {items.length === 0 ? (
+          <div role="status" className="grid min-h-28 place-items-center rounded-[13px] border border-black/[0.08] bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.12] dark:bg-[#1D1D1A] dark:text-stone-300">
+            {copy.empty}
+          </div>
+        ) : <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {items.map((item, index) => (
             <button
               key={item.id}
@@ -269,13 +275,13 @@ export function ImageLightbox({
                 <span className="truncate text-[11px] font-medium text-[#292929] dark:text-stone-100">
                   {item.title}
                 </span>
-                <span className="font-mono text-[8.5px] uppercase tracking-[0.1em] text-stone-400 dark:text-stone-500">
+                <span className="font-mono text-[8.5px] uppercase tracking-[0.1em] text-stone-600 dark:text-stone-400">
                   {item.meta ?? String(index + 1).padStart(2, "0")}
                 </span>
               </span>
             </button>
           ))}
-        </div>
+        </div>}
       </section>
 
       {portalNode
@@ -297,7 +303,7 @@ export function ImageLightbox({
                     }
                     backdropDownRef.current = false;
                   }}
-                  className="fixed inset-0 z-[100] grid place-items-center bg-[#171715]/88 p-3 backdrop-blur-[10px] sm:p-6"
+                  className="fixed inset-0 z-50 grid place-items-center bg-[#171715]/88 p-3 backdrop-blur-[10px] sm:p-6"
                 >
                   <motion.div
                     ref={dialogRef}
@@ -310,7 +316,7 @@ export function ImageLightbox({
                     animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
                     exit={instant ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px) scale(0.985)" }}
                     transition={{ duration: instant ? 0 : 0.24, ease: EASE_OUT }}
-                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] border border-white/[0.14] bg-[#EEECE5] shadow-[0_30px_100px_-30px_rgba(0,0,0,0.75)] outline-none dark:bg-[#1D1D1A] sm:max-h-[calc(100dvh-48px)]"
+                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] border border-black/[0.08] bg-[#EEECE5] outline-none dark:border-white/[0.14] dark:bg-[#1D1D1A] sm:max-h-[calc(100dvh-48px)]"
                   >
                     <header className="flex min-h-14 items-center justify-between gap-4 border-b border-black/[0.08] px-3 dark:border-white/[0.1]">
                       <div className="min-w-0">
@@ -346,7 +352,7 @@ export function ImageLightbox({
                           animate={{ opacity: 1, filter: "blur(0px)", transform: "scale(1)" }}
                           exit={instant ? { opacity: 0 } : { opacity: 0, filter: "blur(2px)", transform: "scale(0.99)" }}
                           transition={sharedTransition}
-                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-[13px] border border-black/[0.08] bg-stone-100 shadow-[0_24px_60px_-34px_rgba(41,41,41,0.65)] dark:border-white/[0.12] dark:bg-black/20"
+                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-[13px] border border-black/[0.08] bg-stone-100 shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.12] dark:bg-black/20"
                         >
                           {activeItem.art}
                         </motion.div>
@@ -365,7 +371,7 @@ export function ImageLightbox({
                       </button>
                       <p
                         id={`${layoutGroupId}-dialog-caption`}
-                        className="min-w-0 text-center text-[11px] leading-[1.45] text-stone-500 dark:text-stone-400"
+                        className="min-w-0 text-center text-[11px] leading-[1.45] text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400"
                       >
                         {activeItem.caption ?? activeItem.title}
                       </p>

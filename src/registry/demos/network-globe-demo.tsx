@@ -22,6 +22,7 @@ export function NetworkGlobeDemo({ locale = "en" }: DemoLocaleProps = {}) {
         liveLabel={demoValue(locale, "实时网络", "Live network")}
         staticLabel={demoValue(locale, "静态网络", "Static network")}
         onlineLabel={demoValue(locale, "在线", "Online")}
+        emptyLabel={demoValue(locale, "暂无网络节点", "No network nodes available.")}
       />
     </div>
   );

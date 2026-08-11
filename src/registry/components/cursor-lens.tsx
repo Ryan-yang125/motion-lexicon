@@ -24,6 +24,8 @@ export function CursorLens({
   zoom = 1.35,
   className = "",
 }: CursorLensProps) {
+  const resolvedSize = Number.isFinite(size) ? Math.max(44, size) : 132;
+  const resolvedZoom = Number.isFinite(zoom) ? Math.max(1, zoom) : 1.35;
   const root = useRef<HTMLDivElement>(null);
   const pointerFocus = useRef(false);
   const touchGesture = useRef<{
@@ -43,16 +45,16 @@ export function CursorLens({
   const x = useSpring(rawX, FOLLOW);
   const y = useSpring(rawY, FOLLOW);
   const springTransform = useTransform([x, y], ([latestX, latestY]) =>
-    `translate3d(${Number(latestX) - size / 2}px, ${Number(latestY) - size / 2}px, 0)`,
+    `translate3d(${Number(latestX) - resolvedSize / 2}px, ${Number(latestY) - resolvedSize / 2}px, 0)`,
   );
   const rawTransform = useTransform([rawX, rawY], ([latestX, latestY]) =>
-    `translate3d(${Number(latestX) - size / 2}px, ${Number(latestY) - size / 2}px, 0)`,
+    `translate3d(${Number(latestX) - resolvedSize / 2}px, ${Number(latestY) - resolvedSize / 2}px, 0)`,
   );
   const springDetailTransform = useTransform([x, y], ([latestX, latestY]) =>
-    `translate3d(${size / 2 - Number(latestX) * zoom}px, ${size / 2 - Number(latestY) * zoom}px, 0) scale(${zoom})`,
+    `translate3d(${resolvedSize / 2 - Number(latestX) * resolvedZoom}px, ${resolvedSize / 2 - Number(latestY) * resolvedZoom}px, 0) scale(${resolvedZoom})`,
   );
   const rawDetailTransform = useTransform([rawX, rawY], ([latestX, latestY]) =>
-    `translate3d(${size / 2 - Number(latestX) * zoom}px, ${size / 2 - Number(latestY) * zoom}px, 0) scale(${zoom})`,
+    `translate3d(${resolvedSize / 2 - Number(latestX) * resolvedZoom}px, ${resolvedSize / 2 - Number(latestY) * resolvedZoom}px, 0) scale(${resolvedZoom})`,
   );
   const transform = reduced ? rawTransform : springTransform;
   const detailTransform = reduced ? rawDetailTransform : springDetailTransform;
@@ -188,8 +190,8 @@ export function CursorLens({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={reduced ? { duration: 0 } : { duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_18px_38px_-18px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:border-white/25 dark:bg-[#22221F]"
-            style={{ width: size, height: size, transform }}
+            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_4px_8px_-6px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:border-white/25 dark:bg-[#22221F]"
+            style={{ width: resolvedSize, height: resolvedSize, transform }}
           >
             <motion.div
               data-cursor-lens-detail

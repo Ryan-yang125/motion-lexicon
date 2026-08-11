@@ -12,6 +12,7 @@ function ProceduralProductViewer(props: ComponentProps<typeof IntentProceduralPr
 const harness = vi.hoisted(() => ({
   reduced: false,
   createRenderer: vi.fn(),
+  render: vi.fn(),
   rendererOptions: [] as Array<{ antialias?: boolean }>,
 }));
 
@@ -38,7 +39,9 @@ vi.mock("three", async (importOriginal) => {
     compile() {
       return new Set();
     }
-    render() {}
+    render(scene: unknown, camera: unknown) {
+      harness.render(scene, camera);
+    }
     dispose() {}
     forceContextLoss() {}
   }
@@ -59,6 +62,7 @@ class IntersectionObserverStub {
 beforeEach(() => {
   harness.reduced = false;
   harness.createRenderer.mockClear();
+  harness.render.mockClear();
   harness.rendererOptions = [];
   vi.stubGlobal("ResizeObserver", ResizeObserverStub);
   vi.stubGlobal("IntersectionObserver", IntersectionObserverStub);
@@ -151,6 +155,52 @@ describe("ProceduralProductViewer reset motion", () => {
     await waitFor(() => {
       expect(reset).toHaveClass("transition-transform", "active:scale-[0.96]");
     });
+  });
+
+  it("preserves drag inertia when pointer capture is released normally", async () => {
+    const { container } = render(<ProceduralProductViewer />);
+    const root = container.querySelector<HTMLElement>('[data-webgl-root="procedural-product-viewer"]');
+    const canvas = await waitFor(() => {
+      const next = container.querySelector("canvas");
+      expect(next).toBeInTheDocument();
+      expect(root).toHaveAttribute("tabindex", "0");
+      return next as HTMLCanvasElement;
+    });
+    if (!root) throw new Error("Product viewer root was not rendered");
+
+    const setPointerCapture = vi.fn();
+    const releasePointerCapture = vi.fn();
+    Object.defineProperties(root, {
+      setPointerCapture: { configurable: true, value: setPointerCapture },
+      releasePointerCapture: { configurable: true, value: releasePointerCapture },
+    });
+
+    const animationFrame = vi.mocked(requestAnimationFrame);
+    const initialFrame = animationFrame.mock.calls[0]?.[0];
+    if (!initialFrame) throw new Error("Initial render frame was not requested");
+    act(() => initialFrame(0));
+    harness.render.mockClear();
+
+    vi.spyOn(performance, "now")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(16);
+    fireEvent.pointerDown(canvas, { pointerId: 7, clientX: 20, clientY: 20 });
+    fireEvent.pointerMove(root, { pointerId: 7, clientX: 30, clientY: 20 });
+    const inertiaFrame = animationFrame.mock.calls.at(-1)?.[0];
+    if (!inertiaFrame) throw new Error("Inertia frame was not requested");
+
+    fireEvent.pointerUp(root, { pointerId: 7 });
+    const lostCapture = new Event("lostpointercapture", { bubbles: true });
+    Object.defineProperty(lostCapture, "pointerId", { value: 7 });
+    fireEvent(root, lostCapture);
+    expect(releasePointerCapture).toHaveBeenCalledWith(7);
+
+    act(() => inertiaFrame(32));
+    const scene = harness.render.mock.calls.at(-1)?.[0] as {
+      children?: Array<{ type?: string; rotation?: { y: number } }>;
+    } | undefined;
+    const product = scene?.children?.find((child) => child.type === "Group");
+    expect(product?.rotation?.y).toBeGreaterThan(0.018);
   });
 });
 

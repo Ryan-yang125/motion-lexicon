@@ -55,6 +55,18 @@ describe("ImageLightbox", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Open Beta study" }));
     expect(screen.getByRole("dialog")).toHaveTextContent("Beta study");
+    expect(screen.getByRole("dialog")).toHaveClass(
+      "border",
+      "border-black/[0.08]",
+      "dark:border-white/[0.14]",
+    );
+    expect(screen.getByRole("dialog").className).not.toContain("shadow-");
+    expect(screen.getByRole("img", { name: "Beta study" })).toHaveClass(
+      "border",
+      "border-black/[0.08]",
+      "dark:border-white/[0.12]",
+      "shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)]",
+    );
     expect(screen.getByText("02 / 03")).toBeInTheDocument();
     expect(onChange).toHaveBeenCalledOnce();
     expect(onChange).toHaveBeenLastCalledWith(beta, 1);

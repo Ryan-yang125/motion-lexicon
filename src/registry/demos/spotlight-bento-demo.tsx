@@ -2,6 +2,7 @@
 
 import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
 
+import { useState } from "react";
 import { SpotlightBento, type SpotlightBentoItem } from "@/registry/components/spotlight-bento";
 
 const pulse = (
@@ -20,15 +21,25 @@ const nodes = (
 );
 
 export function SpotlightBentoDemo({ locale = "en" }: DemoLocaleProps = {}) {
+  const [selectedId, setSelectedId] = useState("latency");
   const items: readonly SpotlightBentoItem[] = [
     { id: "latency", label: demoValue(locale, "响应中位数", "Median response"), value: "34 ms", meta: demoValue(locale, "实时", "Live"), icon: pulse, tone: "blue" },
     { id: "regions", label: demoValue(locale, "活跃区域", "Active regions"), value: demoValue(locale, "12 个区域", "12 regions"), meta: "+2", icon: nodes, tone: "moss" },
     { id: "delivery", label: demoValue(locale, "成功送达", "Successful deliveries"), value: "99.98%", meta: demoValue(locale, "30 天", "30d"), icon: pulse, tone: "clay" },
     { id: "sessions", label: demoValue(locale, "当前会话", "Sessions now"), value: "8,492", meta: "+8%", icon: nodes, tone: "ink" },
   ];
+  const selected = items.find((item) => item.id === selectedId) ?? items[0];
   return (
     <div role="group" aria-label={demoText("spotlight-bento", locale)} className="mx-auto w-full max-w-[440px]">
-      <SpotlightBento items={items} label={demoValue(locale, "网络概览", "Network overview")} />
+      <SpotlightBento
+        items={items}
+        label={demoValue(locale, "网络概览", "Network overview")}
+        selectedId={selectedId}
+        onSelect={(item) => setSelectedId(item.id)}
+      />
+      <span className="sr-only" role="status" aria-live="polite">
+        {demoValue(locale, `已选择${selected.label}`, `${selected.label} selected`)}
+      </span>
     </div>
   );
 }

@@ -36,6 +36,7 @@ export function RadialActions({
   const [activeId, setActiveId] = useState<string | null>(null);
   const reduced = useReducedMotion() === true;
   const uid = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
   const activeIndexRef = useRef(0);
@@ -70,6 +71,16 @@ export function RadialActions({
     if (activeId !== effectiveActiveId) setActiveId(effectiveActiveId);
     buttons.current.get(effectiveActiveId)?.focus({ preventScroll: true });
   }, [actionOrder, actions.length, activeId, activeIndex, effectiveActiveId, open]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const dismissFromOutside = (event: globalThis.PointerEvent) => {
+      if (!(event.target instanceof Node) || rootRef.current?.contains(event.target)) return;
+      setOpen(false);
+    };
+    document.addEventListener("pointerdown", dismissFromOutside, true);
+    return () => document.removeEventListener("pointerdown", dismissFromOutside, true);
+  }, [menuOpen]);
 
   const openMenu = () => {
     if (actions.length === 0) return;
@@ -109,7 +120,13 @@ export function RadialActions({
   };
 
   return (
-    <div className={`relative grid size-[220px] place-items-center ${className}`}>
+    <div
+      ref={rootRef}
+      className={`relative grid size-[220px] place-items-center ${className}`}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+    >
       <AnimatePresence>
         {menuOpen ? (
           <motion.div
@@ -147,7 +164,7 @@ export function RadialActions({
                   }}
                   onKeyDown={(event) => keyDown(event, index)}
                   onClick={() => { action.onSelect(); close(); }}
-                  className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-[0_10px_24px_-16px_rgba(28,25,23,.65)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_10px_24px_-16px_rgba(28,25,23,.65)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200"
+                  className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-[0_4px_8px_-6px_rgba(28,25,23,.6)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_4px_8px_-6px_rgba(28,25,23,.6)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200"
                 >
                   {action.icon}
                 </motion.button>
@@ -159,6 +176,7 @@ export function RadialActions({
       <motion.button
         ref={triggerRef}
         type="button"
+        aria-haspopup="menu"
         aria-label={label}
         aria-expanded={menuOpen}
         aria-controls={menuOpen ? `${uid}-menu` : undefined}

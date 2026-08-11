@@ -22,6 +22,7 @@ export type KineticLogoExchangeProps = {
   eyebrow?: string;
   pauseLabel?: string;
   resumeLabel?: string;
+  emptyLabel?: string;
   interval?: number;
   columns?: 2 | 3 | 4;
   className?: string;
@@ -29,7 +30,7 @@ export type KineticLogoExchangeProps = {
 };
 
 const toneClass = {
-  blue: "bg-[#E6EBFF] text-[#4568FF] dark:bg-[#4568FF]/20 dark:text-[#B7C5FF]",
+  blue: "bg-[#E6EBFF] text-[#3D5FD7] dark:bg-[#4568FF]/20 dark:text-[#B7C5FF]",
   clay: "bg-[#F1E1DA] text-[#9B513B] dark:bg-[#B3654A]/20 dark:text-[#E5A791]",
   moss: "bg-[#E1E7DC] text-[#53624E] dark:bg-[#73806B]/20 dark:text-[#B7C5B0]",
   ink: "bg-[#292929] text-white dark:bg-stone-100 dark:text-[#292929]",
@@ -46,12 +47,14 @@ export function KineticLogoExchange({
   eyebrow = "Connections",
   pauseLabel = "Pause logo exchange",
   resumeLabel = "Resume logo exchange",
+  emptyLabel = "No connected tools",
   interval = 3600,
   columns = 3,
   className = "",
   onSelect,
 }: KineticLogoExchangeProps) {
   const reduced = useReducedMotion() === true;
+  const cadence = Number.isFinite(interval) ? Math.max(1800, interval) : 3600;
   const [order, setOrder] = useState(() => items.map((item) => item.id));
   const [paused, setPaused] = useState(false);
   const [pointerPaused, setPointerPaused] = useState(false);
@@ -102,9 +105,9 @@ export function KineticLogoExchange({
     const timer = window.setInterval(() => {
       setOrder((current) => rotate(current));
       setCycle((current) => current + 1);
-    }, Math.max(1800, interval));
+    }, cadence);
     return () => window.clearInterval(timer);
-  }, [focusPaused, interval, order.length, paused, pointerPaused, reduced, visible]);
+  }, [cadence, focusPaused, order.length, paused, pointerPaused, reduced, visible]);
 
   const pause = () => setPaused(true);
 
@@ -124,14 +127,14 @@ export function KineticLogoExchange({
         if (next && event.currentTarget.contains(next)) return;
         setFocusPaused(false);
       }}
-      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 shadow-[0_16px_44px_-36px_rgba(41,41,41,0.48)] dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
+      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
-        <div>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">{eyebrow}</span>
+        <div className="min-w-0">
+          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-400">{eyebrow}</span>
           <h3 className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{label}</h3>
         </div>
-        {reduced ? null : (
+        {reduced || items.length < 2 ? null : (
           <button
             type="button"
             aria-label={paused ? resumeLabel : pauseLabel}
@@ -152,7 +155,11 @@ export function KineticLogoExchange({
         )}
       </header>
 
-      <div
+      {items.length === 0 ? (
+        <div role="status" className="grid min-h-[72px] place-items-center rounded-[12px] border border-black/[0.07] bg-white/72 px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.09] dark:bg-white/[0.055] dark:text-stone-300">
+          {emptyLabel}
+        </div>
+      ) : <div
         className="grid gap-1.5"
         style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
       >
@@ -179,7 +186,7 @@ export function KineticLogoExchange({
               }
               className={`group relative min-h-[72px] min-w-0 overflow-hidden rounded-[12px] border bg-white/72 p-2 text-left outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:bg-white/[0.055] ${
                 active
-                  ? "border-[#4568FF]/40 shadow-[inset_0_0_0_1px_rgba(69,104,255,0.18),0_8px_20px_-16px_rgba(41,41,41,0.5)] dark:border-[#93B0FF]/50"
+                  ? "border-[#4568FF]/40 shadow-[inset_0_0_0_1px_rgba(69,104,255,0.18)] dark:border-[#93B0FF]/50"
                   : "border-black/[0.07] dark:border-white/[0.09]"
               }`}
             >
@@ -210,7 +217,7 @@ export function KineticLogoExchange({
             </motion.button>
           );
         })}
-      </div>
+      </div>}
     </section>
   );
 }

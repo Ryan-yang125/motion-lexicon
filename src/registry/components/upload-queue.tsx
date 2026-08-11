@@ -3,10 +3,12 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ChangeEvent,
   type DragEvent,
+  type MouseEvent as ReactMouseEvent,
 } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
@@ -42,6 +44,8 @@ export type UploadQueueProps = {
 export type UploadQueueCopy = {
   drop: (remaining: number) => string;
   full: string;
+  unsupported: string;
+  limit: (remaining: number) => string;
   choose: string;
   queue: string;
   complete: string;
@@ -54,9 +58,15 @@ export type UploadQueueCopy = {
   summary: (complete: number, total: number) => string;
 };
 
+type UploadRejection =
+  | { unsupported: boolean; capacity: number | null }
+  | null;
+
 const defaultCopy: UploadQueueCopy = {
   drop: (remaining) => `Drop here or choose up to ${remaining}`,
   full: "Queue is full",
+  unsupported: "This file type is not supported",
+  limit: (remaining) => `Only ${remaining} more ${remaining === 1 ? "file" : "files"} can be added`,
   choose: "Choose",
   queue: "Upload queue",
   complete: "Complete",
@@ -134,15 +144,82 @@ export function UploadQueue({
   const id = useId();
   const reduced = useReducedMotion() === true;
   const [dragging, setDragging] = useState(false);
+  const [rejection, setRejection] = useState<UploadRejection>(null);
   const { ref, active } = useAnimationActivity<HTMLDivElement>();
   const input = useRef<HTMLInputElement>(null);
+  const chooseButton = useRef<HTMLButtonElement>(null);
+  const rowRefs = useRef(new Map<string, HTMLLIElement>());
+  const pendingFocus = useRef<{
+    id: string;
+    index: number;
+    trigger: HTMLButtonElement;
+  } | null>(null);
   const remaining = Math.max(0, maxFiles - items.length);
+
+  useLayoutEffect(() => {
+    const pending = pendingFocus.current;
+    if (!pending) return;
+
+    const triggerStillPresent = pending.trigger.isConnected && ref.current?.contains(pending.trigger);
+    const itemStillPresent = items.some((item) => item.id === pending.id);
+    if (triggerStillPresent && itemStillPresent) {
+      if (document.activeElement !== pending.trigger) pendingFocus.current = null;
+      return;
+    }
+
+    pendingFocus.current = null;
+    const activeElement = document.activeElement;
+    if (
+      activeElement instanceof HTMLElement &&
+      activeElement !== document.body &&
+      activeElement !== document.documentElement &&
+      activeElement !== pending.trigger
+    ) {
+      return;
+    }
+
+    const candidateIds = [
+      items.some((item) => item.id === pending.id) ? pending.id : undefined,
+      items[pending.index]?.id,
+      items[pending.index - 1]?.id,
+    ].filter((id, index, values): id is string => Boolean(id) && values.indexOf(id) === index);
+
+    for (const id of candidateIds) {
+      const action = rowRefs.current.get(id)?.querySelector<HTMLButtonElement>("button:not([disabled])");
+      if (action) {
+        action.focus({ preventScroll: true });
+        return;
+      }
+    }
+    chooseButton.current?.focus({ preventScroll: true });
+  }, [items, ref]);
+
+  const requestRowAction = (
+    event: ReactMouseEvent<HTMLButtonElement>,
+    id: string,
+    index: number,
+    action: (id: string) => void,
+  ) => {
+    pendingFocus.current = document.activeElement === event.currentTarget
+      ? { id, index, trigger: event.currentTarget }
+      : null;
+    action(id);
+  };
 
   const submitFiles = (source: FileList | null) => {
     if (!source || remaining === 0) return;
-    const files = Array.from(source)
-      .filter((file) => accepts(file, accept))
-      .slice(0, multiple ? remaining : Math.min(1, remaining));
+    const sourceFiles = Array.from(source);
+    const acceptedFiles = sourceFiles.filter((file) => accepts(file, accept));
+    const capacity = multiple ? remaining : Math.min(1, remaining);
+    const unsupported = acceptedFiles.length < sourceFiles.length;
+    const exceedsCapacity = acceptedFiles.length > capacity;
+    setRejection(
+      unsupported || exceedsCapacity
+        ? { unsupported, capacity: exceedsCapacity ? capacity : null }
+        : null,
+    );
+    const files = acceptedFiles
+      .slice(0, capacity);
     if (files.length > 0) onFiles(files);
   };
 
@@ -183,8 +260,22 @@ export function UploadQueue({
         </span>
         <span className="min-w-0 flex-1">
           <strong className="block text-[13px] font-medium text-stone-800 dark:text-stone-100">{label}</strong>
-          <span className="mt-0.5 block text-[11.5px] text-stone-500 dark:text-stone-400">
-            {remaining > 0 ? copy.drop(remaining) : copy.full}
+          <span
+            role={rejection ? "alert" : undefined}
+            className={`mt-0.5 block text-[11.5px] ${
+              rejection
+                ? "text-[#8C4B35] dark:text-[#E2A38A]"
+                : "text-stone-500 dark:text-stone-300"
+            }`}
+          >
+            {rejection
+              ? [
+                  rejection.unsupported ? copy.unsupported : null,
+                  rejection.capacity !== null ? copy.limit(rejection.capacity) : null,
+                ].filter((message): message is string => message !== null).join(" ")
+              : remaining > 0
+                ? copy.drop(remaining)
+                : copy.full}
           </span>
         </span>
         <input
@@ -200,6 +291,7 @@ export function UploadQueue({
           className="sr-only"
         />
         <button
+          ref={chooseButton}
           type="button"
           disabled={remaining === 0}
           onClick={() => input.current?.click()}
@@ -211,12 +303,16 @@ export function UploadQueue({
 
       <ul aria-label={copy.queue} className="mt-2 space-y-1.5">
         <AnimatePresence initial={false}>
-          {items.map((item) => (
+          {items.map((item, index) => (
             <UploadRow
               key={item.id}
               item={item}
-              onRemove={onRemove}
-              onRetry={onRetry}
+              rowRef={(node) => {
+                if (node) rowRefs.current.set(item.id, node);
+                else rowRefs.current.delete(item.id);
+              }}
+              onRemove={onRemove ? (event) => requestRowAction(event, item.id, index, onRemove) : undefined}
+              onRetry={onRetry ? (event) => requestRowAction(event, item.id, index, onRetry) : undefined}
               reduced={reduced}
               animateIndeterminate={active}
               copy={copy}
@@ -233,6 +329,7 @@ export function UploadQueue({
 
 function UploadRow({
   item,
+  rowRef,
   onRemove,
   onRetry,
   reduced,
@@ -240,8 +337,9 @@ function UploadRow({
   copy,
 }: {
   item: UploadItem;
-  onRemove?: (id: string) => void;
-  onRetry?: (id: string) => void;
+  rowRef: (node: HTMLLIElement | null) => void;
+  onRemove?: (event: ReactMouseEvent<HTMLButtonElement>) => void;
+  onRetry?: (event: ReactMouseEvent<HTMLButtonElement>) => void;
   reduced: boolean;
   animateIndeterminate: boolean;
   copy: UploadQueueCopy;
@@ -255,6 +353,7 @@ function UploadRow({
 
   return (
     <motion.li
+      ref={rowRef}
       layout={!reduced}
       initial={reduced ? { opacity: 0 } : { opacity: 0, transform: "translate3d(0, 8px, 0)" }}
       animate={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
@@ -277,14 +376,14 @@ function UploadRow({
             <strong className="truncate text-[12.5px] font-medium text-stone-800 dark:text-stone-100">{item.name}</strong>
             <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-stone-500 dark:text-stone-400">{status}</span>
           </span>
-          {!complete ? <span className="mt-0.5 block text-[10.5px] text-stone-400 dark:text-stone-500">{formatBytes(item.size)}</span> : null}
+          {!complete ? <span className="mt-0.5 block text-[10.5px] text-stone-600 dark:text-stone-300">{formatBytes(item.size)}</span> : null}
         </span>
         {hasActions ? (
           <span className="flex shrink-0 items-center gap-0.5">
             {error && onRetry ? (
               <button
                 type="button"
-                onClick={() => onRetry(item.id)}
+                onClick={onRetry}
                 aria-label={`${copy.retry} ${item.name}`}
                 className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-stone-700 outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
@@ -294,7 +393,7 @@ function UploadRow({
             {onRemove ? (
               <button
                 type="button"
-                onClick={() => onRemove(item.id)}
+                onClick={onRemove}
                 aria-label={`${copy.remove} ${item.name}`}
                 className="grid size-11 shrink-0 place-items-center rounded-[8px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
