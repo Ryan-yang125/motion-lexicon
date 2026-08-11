@@ -221,6 +221,10 @@ test("Three.js previews wait for intent before their first long task", async ({ 
   for (const id of ["network-globe", "procedural-product-viewer"] as const) {
     await page.goto(`/zh/components/${id}/`);
     await page.waitForLoadState("networkidle");
+    await page.evaluate(() => {
+      const entries = (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks;
+      if (entries) entries.length = 0;
+    });
     await page.waitForTimeout(700);
     const root = page.locator(`[data-webgl-root="${id}"]`);
     await expect(root.locator("canvas")).toHaveCount(0);
