@@ -536,7 +536,9 @@ body {
 .landing-stage {
   min-width: 0;
   overflow: hidden;
+  border: 1px solid var(--hairline);
   border-radius: 20px;
+  box-shadow: 0 4px 8px -7px rgba(28, 25, 23, 0.5);
 }
 .landing-stage-bar {
   min-height: 46px;

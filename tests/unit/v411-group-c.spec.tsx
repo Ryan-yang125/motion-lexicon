@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 
 import { fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { CursorLens } from "@/registry/components/cursor-lens";
 import { SpotlightBento, type SpotlightBentoItem } from "@/registry/components/spotlight-bento";
 import { ToastStack, type ToastItem } from "@/registry/components/toast-stack";
 import { VoiceCapture } from "@/registry/components/voice-capture";
@@ -32,6 +34,34 @@ afterEach(() => {
 });
 
 describe("V4.1 group C interaction hardening", () => {
+  it("keeps the landing stage on a thin boundary and compact shadow", () => {
+    const css = readFileSync("src/v4.css", "utf8");
+    const rule = css.match(/\.landing-stage\s*\{([^}]+)\}/)?.[1];
+
+    expect(rule).toContain("border: 1px solid var(--hairline);");
+    expect(rule).toContain("box-shadow: 0 4px 8px -7px rgba(28, 25, 23, 0.5);");
+  });
+
+  it("keeps the cursor lens boundary without a wide shadow", () => {
+    const { container } = render(
+      <CursorLens
+        label="Inspect details"
+        base={<span>Base</span>}
+        detail={<span>Detail</span>}
+      />,
+    );
+
+    fireEvent.keyDown(screen.getByRole("group", { name: "Inspect details" }), {
+      key: "ArrowRight",
+    });
+    expect(container.querySelector("[data-cursor-lens]")).toHaveClass(
+      "border",
+      "border-white/70",
+      "dark:border-white/25",
+      "shadow-[0_4px_8px_-6px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)]",
+    );
+  });
+
   it("exposes the selected spotlight tile to pointer and keyboard users", () => {
     const items: readonly SpotlightBentoItem[] = [
       { id: "latency", label: "Median response", value: "34 ms" },

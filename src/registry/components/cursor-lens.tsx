@@ -190,7 +190,7 @@ export function CursorLens({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={reduced ? { duration: 0 } : { duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full bg-white shadow-[0_18px_38px_-18px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:bg-[#22221F]"
+            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_4px_8px_-6px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:border-white/25 dark:bg-[#22221F]"
             style={{ width: resolvedSize, height: resolvedSize, transform }}
           >
             <motion.div
