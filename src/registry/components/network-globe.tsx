@@ -436,9 +436,11 @@ export function NetworkGlobe({
         rotationRef.current.dragging = false;
         rotationRef.current.pointerId = -1;
       }}
-      onLostPointerCapture={() => {
-        rotationRef.current.dragging = false;
-        rotationRef.current.pointerId = -1;
+      onLostPointerCapture={(event) => {
+        const rotation = rotationRef.current;
+        if (rotation.pointerId !== event.pointerId) return;
+        rotation.dragging = false;
+        rotation.pointerId = -1;
       }}
       onKeyDown={
         rendererReady
