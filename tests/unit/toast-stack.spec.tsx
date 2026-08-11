@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import { createRef, useState, type RefObject } from "react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { createRef, useState, type ReactNode, type RefObject } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ToastStack, type ToastItem } from "@/registry/components/toast-stack";
 
 vi.mock("motion/react", async (importOriginal) => ({
   ...await importOriginal<typeof import("motion/react")>(),
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
   useReducedMotion: () => true,
 }));
 
@@ -89,7 +90,7 @@ describe("ToastStack dismissal focus", () => {
   it("focuses the toast that takes the dismissed toast's index", () => {
     render(<ControlledStack />);
     const close = screen.getByRole("button", { name: "Dismiss Existing notification" });
-    close.focus();
+    act(() => close.focus());
 
     fireEvent.keyDown(close, { key: "Enter" });
 
@@ -99,7 +100,7 @@ describe("ToastStack dismissal focus", () => {
   it("focuses the previous toast after deleting the last item", () => {
     render(<ControlledStack />);
     const toast = screen.getByRole("article", { name: last.title });
-    toast.focus();
+    act(() => toast.focus());
 
     fireEvent.keyDown(toast, { key: "Delete" });
 
@@ -115,7 +116,7 @@ describe("ToastStack dismissal focus", () => {
       </>,
     );
     const toast = screen.getByRole("article", { name: existing.title });
-    toast.focus();
+    act(() => toast.focus());
 
     fireEvent.keyDown(toast, { key: "Escape" });
 
@@ -125,7 +126,7 @@ describe("ToastStack dismissal focus", () => {
   it("does not steal focus when items are removed externally", () => {
     const outside = document.createElement("button");
     document.body.appendChild(outside);
-    outside.focus();
+    act(() => outside.focus());
     const { rerender } = render(<ToastStack items={[existing]} onDismiss={vi.fn()} />);
 
     rerender(<ToastStack items={[]} onDismiss={vi.fn()} />);

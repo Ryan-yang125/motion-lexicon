@@ -7,7 +7,18 @@ import * as THREE from "three";
 export type ProceduralProductViewerProps = {
   productName?: string;
   detailLabel?: string;
+  labels?: Partial<{
+    interactiveViewer: string;
+    staticPreview: string;
+    objectStudy: string;
+    dragToTurn: string;
+    staticBadge: string;
+    activateInteractive: string;
+    detailDescription: string;
+    resetView: string;
+  }>;
   accent?: string;
+  activation?: "intent" | "auto";
   className?: string;
 };
 
@@ -27,9 +38,44 @@ type RotationState = {
 
 const LIMIT_X = 0.32;
 const LIMIT_Y = 0.72;
+const INITIALIZE_TIMEOUT_MS = 400;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+const yieldToMain = () => new Promise<void>((resolve) => window.setTimeout(resolve, 0));
+
+async function precompileMaterialStages(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+  cancelled: () => boolean,
+) {
+  const renderables: Array<{ object: THREE.Object3D; visible: boolean; materialTypes: readonly string[] }> = [];
+  scene.traverse((object) => {
+    const material = "material" in object
+      ? (object as THREE.Mesh).material
+      : undefined;
+    if (!material) return;
+    const materials = Array.isArray(material) ? material : [material];
+    renderables.push({
+      object,
+      visible: object.visible,
+      materialTypes: materials.map((entry) => entry.type),
+    });
+  });
+  const materialTypes = [...new Set(renderables.flatMap((entry) => entry.materialTypes))];
+
+  for (const materialType of materialTypes) {
+    await yieldToMain();
+    if (cancelled()) return;
+    for (const entry of renderables) {
+      entry.object.visible = entry.visible && entry.materialTypes.includes(materialType);
+    }
+    renderer.compile(scene, camera);
+  }
+  for (const entry of renderables) entry.object.visible = entry.visible;
 }
 
 function makeProduct(
@@ -43,34 +89,25 @@ function makeProduct(
   };
 
   const shell = track(
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshLambertMaterial({
       color: 0xe8e5dd,
-      roughness: 0.52,
-      metalness: 0.08,
     }),
   );
   const dark = track(
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshLambertMaterial({
       color: 0x292929,
-      roughness: 0.38,
-      metalness: 0.25,
     }),
   );
   const accentMaterial = track(
-    new THREE.MeshStandardMaterial({
+    new THREE.MeshLambertMaterial({
       color: accent,
-      roughness: 0.32,
-      metalness: 0.22,
     }),
   );
   const glass = track(
-    new THREE.MeshPhysicalMaterial({
+    new THREE.MeshLambertMaterial({
       color: 0xdce4ef,
-      roughness: 0.12,
-      metalness: 0.05,
-      transmission: 0.12,
       transparent: true,
-      opacity: 0.92,
+      opacity: 0.84,
     }),
   );
 
@@ -93,10 +130,10 @@ function makeProduct(
     new THREE.ExtrudeGeometry(bodyShape, {
       depth: 0.38,
       bevelEnabled: true,
-      bevelSegments: 4,
+      bevelSegments: 2,
       bevelSize: 0.035,
       bevelThickness: 0.035,
-      curveSegments: 12,
+      curveSegments: 6,
       steps: 1,
     }),
   );
@@ -130,19 +167,19 @@ function makeProduct(
   shortBar.position.set(-0.21, 0.18, 0.286);
   group.add(shortBar);
 
-  const dialGeometry = track(new THREE.CylinderGeometry(0.145, 0.145, 0.09, 36));
+  const dialGeometry = track(new THREE.CylinderGeometry(0.145, 0.145, 0.09, 24));
   const dial = new THREE.Mesh(dialGeometry, dark);
   dial.rotation.x = Math.PI / 2;
   dial.position.set(0.3, -0.42, 0.27);
   dial.castShadow = true;
   group.add(dial);
 
-  const ringGeometry = track(new THREE.TorusGeometry(0.2, 0.025, 12, 48));
+  const ringGeometry = track(new THREE.TorusGeometry(0.2, 0.025, 8, 24));
   const ring = new THREE.Mesh(ringGeometry, accentMaterial);
   ring.position.set(-0.27, -0.41, 0.282);
   group.add(ring);
 
-  const footGeometry = track(new THREE.CylinderGeometry(0.44, 0.52, 0.09, 48));
+  const footGeometry = track(new THREE.CylinderGeometry(0.44, 0.52, 0.09, 24));
   const foot = new THREE.Mesh(footGeometry, dark);
   foot.position.y = -0.81;
   foot.castShadow = true;
@@ -161,9 +198,22 @@ function makeProduct(
 export function ProceduralProductViewer({
   productName = "Arc One",
   detailLabel = "Tactile dial",
+  labels,
   accent = "#4568FF",
+  activation = "intent",
   className = "",
 }: ProceduralProductViewerProps) {
+  const copy = {
+    interactiveViewer: "Interactive 3D viewer. Drag or use arrow keys to rotate.",
+    staticPreview: "Static product preview.",
+    objectStudy: "Object study",
+    dragToTurn: "DRAG TO TURN",
+    staticBadge: "STATIC PREVIEW",
+    activateInteractive: "Explore 3D",
+    detailDescription: "Machined control with a quiet detent.",
+    resetView: "Reset view",
+    ...labels,
+  };
   const mountRef = useRef<HTMLDivElement>(null);
   const groupRef = useRef<THREE.Group | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -171,6 +221,7 @@ export function ProceduralProductViewer({
   const sceneRef = useRef<THREE.Scene | null>(null);
   const frameRef = useRef<number | null>(null);
   const requestFrameRef = useRef<() => void>(() => undefined);
+  const focusAfterActivationRef = useRef(false);
   const visibleRef = useRef(true);
   const reduced = useReducedMotion() === true;
   const reducedRef = useRef(reduced);
@@ -189,7 +240,10 @@ export function ProceduralProductViewer({
     lastTime: 0,
   });
   const [detailOpen, setDetailOpen] = useState(false);
+  const [activationRequested, setActivationRequested] = useState(activation === "auto");
   const [rendererReady, setRendererReady] = useState(false);
+  const [renderRequest, setRenderRequest] = useState<{ accent: string; version: number } | null>(null);
+  const renderVersionRef = useRef(0);
 
   const draw = () => {
     const renderer = rendererRef.current;
@@ -241,8 +295,28 @@ export function ProceduralProductViewer({
   requestFrameRef.current = requestFrame;
 
   useEffect(() => {
+    if (activation === "auto") setActivationRequested(true);
+  }, [activation]);
+
+  useEffect(() => {
+    setRendererReady(false);
+    if (!activationRequested) return;
+    const initialize = () => {
+      renderVersionRef.current += 1;
+      setRenderRequest({ accent, version: renderVersionRef.current });
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      const idleId = window.requestIdleCallback(initialize, { timeout: INITIALIZE_TIMEOUT_MS });
+      return () => window.cancelIdleCallback?.(idleId);
+    }
+    const timeoutId = window.setTimeout(initialize, 16);
+    return () => window.clearTimeout(timeoutId);
+  }, [accent, activationRequested]);
+
+  useEffect(() => {
     const mount = mountRef.current;
-    if (!mount) return;
+    if (!mount || !renderRequest) return;
+    let cancelled = false;
     const resources = new Set<{ dispose: () => void }>();
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
@@ -252,16 +326,16 @@ export function ProceduralProductViewer({
     try {
       renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: false,
         powerPreference: "high-performance",
       });
     } catch {
       setRendererReady(false);
+      if (activation === "intent") setActivationRequested(false);
       return;
     }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.enabled = false;
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.setAttribute("aria-hidden", "true");
     renderer.domElement.style.width = "100%";
@@ -288,7 +362,6 @@ export function ProceduralProductViewer({
     };
     renderer.domElement.addEventListener("webglcontextlost", onContextLost);
     renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
-    setRendererReady(true);
 
     const ambient = new THREE.HemisphereLight(0xf8f5ed, 0x8b7f70, 2.4);
     const key = new THREE.DirectionalLight(0xffffff, 3.6);
@@ -298,10 +371,10 @@ export function ProceduralProductViewer({
     rim.position.set(-3.2, 1.2, -2.4);
     scene.add(ambient, key, rim);
 
-    const product = makeProduct(accent, resources);
+    const product = makeProduct(renderRequest.accent, resources);
     scene.add(product);
 
-    const groundGeometry = new THREE.CircleGeometry(1.12, 64);
+    const groundGeometry = new THREE.CircleGeometry(1.12, 32);
     const groundMaterial = new THREE.MeshBasicMaterial({
       color: 0x292929,
       transparent: true,
@@ -323,7 +396,7 @@ export function ProceduralProductViewer({
     const resize = new ResizeObserver(([entry]) => {
       const width = Math.max(1, entry.contentRect.width);
       const height = Math.max(1, entry.contentRect.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -340,9 +413,14 @@ export function ProceduralProductViewer({
       }
     });
     intersection.observe(mount);
-    requestFrameRef.current();
+    void precompileMaterialStages(renderer, scene, camera, () => cancelled).then(() => {
+      if (cancelled) return;
+      setRendererReady(true);
+      requestFrameRef.current();
+    });
 
     return () => {
+      cancelled = true;
       renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
       renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
@@ -358,11 +436,17 @@ export function ProceduralProductViewer({
       groupRef.current = null;
       frameRef.current = null;
     };
-  }, [accent]);
+  }, [activation, renderRequest]);
 
   useEffect(() => {
     requestFrameRef.current();
   }, [reduced]);
+
+  useEffect(() => {
+    if (!rendererReady || !focusAfterActivationRef.current) return;
+    focusAfterActivationRef.current = false;
+    mountRef.current?.focus({ preventScroll: true });
+  }, [rendererReady]);
 
   const reset = () => {
     const state = rotation.current;
@@ -381,8 +465,8 @@ export function ProceduralProductViewer({
       tabIndex={rendererReady ? 0 : undefined}
       aria-label={
         rendererReady
-          ? `${productName} interactive 3D viewer. Drag or use arrow keys to rotate.`
-          : `${productName}. Static product preview.`
+          ? `${productName}. ${copy.interactiveViewer}`
+          : `${productName}. ${copy.staticPreview}`
       }
       onPointerDown={(event) => {
         if (!rendererReady || !(event.target instanceof HTMLCanvasElement)) return;
@@ -462,13 +546,28 @@ export function ProceduralProductViewer({
         </div>
       </div>
 
+      {!rendererReady && activation === "intent" ? (
+        <button
+          type="button"
+          data-webgl-activation="procedural-product-viewer"
+          disabled={activationRequested}
+          onClick={() => {
+            focusAfterActivationRef.current = true;
+            setActivationRequested(true);
+          }}
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_10px_30px_-16px_rgba(41,41,41,.65)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
+        >
+          {copy.activateInteractive}
+        </button>
+      ) : null}
+
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">Object study</span>
+          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">{copy.objectStudy}</span>
           <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{productName}</strong>
         </span>
         <span className="rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1 font-mono text-[9px] text-stone-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-300">
-          {rendererReady ? "DRAG TO TURN" : "STATIC PREVIEW"}
+          {rendererReady ? copy.dragToTurn : copy.staticBadge}
         </span>
       </div>
 
@@ -493,7 +592,7 @@ export function ProceduralProductViewer({
         }}
       >
         <strong className="block text-[12px] font-medium text-[#292929]">{detailLabel}</strong>
-        <span className="mt-0.5 block text-[10px] leading-4 text-stone-500">Machined control with a quiet detent.</span>
+        <span className="mt-0.5 block text-[10px] leading-4 text-stone-500">{copy.detailDescription}</span>
       </div>
 
       {rendererReady ? (
@@ -505,7 +604,7 @@ export function ProceduralProductViewer({
           <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
             <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="sr-only">Reset view</span>
+          <span className="sr-only">{copy.resetView}</span>
         </button>
       ) : null}
     </div>

@@ -30,10 +30,10 @@ export function AccordionCollapsePrimitive({
         <motion.div
           className={className}
           style={{ overflow: "hidden", maxHeight }}
-          initial={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+          initial={reduceMotion ? false : { height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
-          exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-          transition={reduceMotion ? { duration: 0.12 } : { duration, ease: easing }}
+          exit={reduceMotion ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+          transition={reduceMotion ? { duration: 0 } : { duration, ease: easing }}
         >
           {children}
         </motion.div>

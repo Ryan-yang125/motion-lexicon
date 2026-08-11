@@ -80,8 +80,11 @@ export function PrimitivePreview({
   replayKey?: number;
 }) {
   const frameRef = useRef<HTMLDivElement>(null);
+  const [hydrated, setHydrated] = useState(false);
   const [active, setActive] = useState(!deferred);
   const Demo = lazyDemos[recipe.id];
+
+  useEffect(() => setHydrated(true), []);
 
   useEffect(() => {
     if (!deferred || !frameRef.current || typeof IntersectionObserver === "undefined") return;
@@ -94,7 +97,7 @@ export function PrimitivePreview({
     <div className="registry-preview primitive-registry-preview" ref={frameRef} data-primitive={recipe.id}>
       {recipe.surfaceType === "guide" ? (
         <PrimitiveGuidePreview locale={locale} recipe={recipe} compact={compact} />
-      ) : active && Demo ? (
+      ) : hydrated && active && Demo ? (
         <Suspense fallback={<PreviewFallback />}>
           <Demo key={`${recipe.id}:${replayKey}`} locale={locale} values={values} compact={compact} replayKey={replayKey} />
         </Suspense>

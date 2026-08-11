@@ -2,14 +2,35 @@
 
 > Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.
 
-- Components: https://motion-lexicon.pages.dev/en/components/
-- Motion primitives: https://motion-lexicon.pages.dev/en/primitives/
-- Scenario guides: https://motion-lexicon.pages.dev/en/guides/
-- Agent Skill: https://motion-lexicon.pages.dev/en/skill/
-- shadcn registry: https://motion-lexicon.pages.dev/r/registry.json
-- Machine-readable catalog: https://motion-lexicon.pages.dev/data/v4/catalog.json
-- Motion Grammar: https://motion-lexicon.pages.dev/data/v4/motion-grammar.json
-- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json
-- Source: https://github.com/Ryan-yang125/motion-lexicon
-- Skill install: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
-- License: MIT for code; CC BY 4.0 for original editorial content.
+## Core resources
+
+- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 48 components and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
+- [shadcn registry](https://motion-lexicon.pages.dev/r/registry.json): Installable React component and primitive index.
+- [Motion Grammar](https://motion-lexicon.pages.dev/data/v4/motion-grammar.json): Composition rules, timing tokens, and Skill modes.
+- [Motion Blueprint schema](https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json): JSON Schema for portable product-motion decisions.
+
+## English
+
+- [Components](https://motion-lexicon.pages.dev/en/components/): Copy-ready React product interactions.
+- [Motion primitives](https://motion-lexicon.pages.dev/en/primitives/): Precise behaviors, timing, and implementation guidance.
+- [Animation vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/): 91 bilingual motion terms with definitions, distinctions, and canonical workspaces.
+- [Scenario guides](https://motion-lexicon.pages.dev/en/guides/): Long-form motion decisions and production examples.
+- [Method](https://motion-lexicon.pages.dev/en/method/): How the library is authored, verified, and maintained.
+- [Agent Skill](https://motion-lexicon.pages.dev/en/skill/): Recommend, compose, implement, review, and contribute motion.
+
+## 中文
+
+- [组件](https://motion-lexicon.pages.dev/zh/components/): 可直接安装的 React 产品交互。
+- [原子动效](https://motion-lexicon.pages.dev/zh/primitives/): 精确的动效行为、节奏与实现规则。
+- [动画词汇表](https://motion-lexicon.pages.dev/zh/vocabulary/): 91 个中英双语动效术语，包含定义、辨析和对应工作区。
+- [场景指南](https://motion-lexicon.pages.dev/zh/guides/): 深度动效决策与生产示例。
+- [方法](https://motion-lexicon.pages.dev/zh/method/): 内容编写、验证与维护方式。
+- [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/): 推荐、编排、实现、审查和贡献动效。
+
+## Optional
+
+- [Full bilingual reference](https://motion-lexicon.pages.dev/llms-full.txt): Every published component, primitive, and scenario guide.
+- [Pricing](https://motion-lexicon.pages.dev/pricing.txt): Free and open-source availability in English and Chinese.
+- [Source](https://github.com/Ryan-yang125/motion-lexicon): MIT code, CC BY 4.0 original editorial content, notices, and contribution history.
+- [Agent Skill source](https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon): Install with `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`.
+- [Release 4.1.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.1.0, updated 2026-08-11.

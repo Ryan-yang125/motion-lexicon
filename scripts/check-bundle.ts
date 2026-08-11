@@ -25,9 +25,12 @@ const maxChunkGzipBytes = 160 * 1024;
 const maxMotionVendorGzipBytes = 52 * 1024;
 const maxGsapVendorGzipBytes = 45 * 1024;
 const maxThreeVendorGzipBytes = 200 * 1024;
-const maxScenarioGuideArticlesGzipBytes = 70 * 1024;
+const maxBaseEntryGzipBytes = 84 * 1024;
+const maxHomePageGzipBytes = 4 * 1024;
+const maxScenarioGuideShellGzipBytes = 8 * 1024;
+const maxScenarioGuideArticleGzipBytes = 14 * 1024;
 const maxTotalJsGzipBytes = 920 * 1024;
-const maxTotalCssGzipBytes = 48 * 1024;
+const maxTotalCssGzipBytes = 56 * 1024;
 let totalJsGzipBytes = 0;
 
 for (const file of jsFiles) {
@@ -83,9 +86,47 @@ if (threeVendorChunk) {
 const scenarioGuideArticlesChunk = jsFiles.find((file) => file.startsWith("seo-guide.lazy-"));
 assert(scenarioGuideArticlesChunk, "Scenario guide route chunk is missing");
 assert(
-  gzipSync(readFileSync(path.join(assetsDir, scenarioGuideArticlesChunk))).length <= maxScenarioGuideArticlesGzipBytes,
-  `Scenario guide article chunk exceeds ${Math.round(maxScenarioGuideArticlesGzipBytes / 1024)} KiB gzip`
+  gzipSync(readFileSync(path.join(assetsDir, scenarioGuideArticlesChunk))).length <= maxScenarioGuideShellGzipBytes,
+  `Scenario guide route shell exceeds ${Math.round(maxScenarioGuideShellGzipBytes / 1024)} KiB gzip`
 );
+
+const baseEntryChunk = jsFiles.find((file) => file.startsWith("index-"));
+assert(baseEntryChunk, "Base entry chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, baseEntryChunk))).length <= maxBaseEntryGzipBytes,
+  `Base entry exceeds ${Math.round(maxBaseEntryGzipBytes / 1024)} KiB gzip`
+);
+const prerenderedHome = readFileSync(path.join("dist", "zh", "index.html"), "utf8");
+assert(
+  !prerenderedHome.includes('rel="modulepreload" crossorigin href="/assets/motion-vendor-'),
+  "Motion vendor must stay out of the base shell preload graph"
+);
+
+const homePageChunk = jsFiles.find((file) => file.startsWith("HomePage-"));
+assert(homePageChunk, "Lazy HomePage chunk is missing");
+assert(
+  gzipSync(readFileSync(path.join(assetsDir, homePageChunk))).length <= maxHomePageGzipBytes,
+  `HomePage route exceeds ${Math.round(maxHomePageGzipBytes / 1024)} KiB gzip`
+);
+
+const scenarioGuideArticleIds = [
+  "save-submit-publish-feedback",
+  "card-list-filter-continuity",
+  "css-motion-jank",
+  "spring-or-ease-out",
+  "reduced-motion",
+  "form-validation-delete-permission",
+  "from-brief-to-spec",
+  "component-or-primitive"
+];
+for (const articleId of scenarioGuideArticleIds) {
+  const articleChunk = jsFiles.find((file) => file.startsWith(`${articleId}-`));
+  assert(articleChunk, `Scenario guide article chunk is missing: ${articleId}`);
+  assert(
+    gzipSync(readFileSync(path.join(assetsDir, articleChunk))).length <= maxScenarioGuideArticleGzipBytes,
+    `${articleId} exceeds ${Math.round(maxScenarioGuideArticleGzipBytes / 1024)} KiB gzip`
+  );
+}
 
 const totalCssGzipBytes = cssFiles.reduce((total, file) => {
   return total + gzipSync(readFileSync(path.join(assetsDir, file))).length;

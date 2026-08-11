@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const INSERT = { type: "spring", stiffness: 420, damping: 38, mass: 0.72 } as const;
-const LEAVE = { duration: 0.14, ease: [0.4, 0, 1, 1] } as const;
+const LEAVE = { duration: 0.14, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
 
 export type ActivityTone = "neutral" | "success" | "warning" | "error";
@@ -23,6 +23,8 @@ export type ActivityFeedProps = {
   items: readonly ActivityItem[];
   label?: string;
   emptyLabel?: string;
+  unreadLabel?: string;
+  unreadStartLabel?: string;
   onItemClick?: (item: ActivityItem) => void;
   className?: string;
 };
@@ -38,6 +40,8 @@ export function ActivityFeed({
   items,
   label = "Activity",
   emptyLabel = "No activity yet",
+  unreadLabel = "Unread",
+  unreadStartLabel = "Unread activity starts here",
   onItemClick,
   className = "",
 }: ActivityFeedProps) {
@@ -102,9 +106,9 @@ export function ActivityFeed({
                   <div className="pb-1 pt-2 text-[10.5px] font-medium text-stone-400 dark:text-stone-500">{item.group}</div>
                 ) : null}
                 {showUnread ? (
-                  <div className="flex items-center gap-2 py-1" aria-label="Unread activity starts here">
+                  <div className="flex items-center gap-2 py-1" aria-label={unreadStartLabel}>
                     <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
-                    <span className="text-[9.5px] font-medium text-[#4568FF] dark:text-[#93B0FF]">Unread</span>
+                    <span className="text-[9.5px] font-medium text-[#4568FF] dark:text-[#93B0FF]">{unreadLabel}</span>
                     <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
                   </div>
                 ) : null}

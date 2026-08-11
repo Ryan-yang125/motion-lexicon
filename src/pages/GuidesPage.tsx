@@ -55,12 +55,10 @@ export function GuidesPage({ locale }: { locale: Locale }) {
         <header className="seo-guides-hero">
           <span>{labels.eyebrow}</span>
           <h1>{labels.title}</h1>
-          <p>{labels.copy}</p>
         </header>
         <div className="seo-guide-grid">
           {seoGuides.map((guide) => (
             <article key={guide.id}>
-              <span>{guide.eyebrow[locale]}</span>
               <h2>{guide.title[locale]}</h2>
               <p>{guide.description[locale]}</p>
               <small>{labels.format}</small>

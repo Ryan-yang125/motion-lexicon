@@ -23,9 +23,30 @@ export type MediaCarouselItem = {
 export type MediaCarouselProps = {
   items: readonly MediaCarouselItem[];
   label?: string;
+  copy?: Partial<MediaCarouselCopy>;
   initialIndex?: number;
   className?: string;
   onSelect?: (item: MediaCarouselItem, index: number) => void;
+};
+
+export type MediaCarouselCopy = {
+  collection: string;
+  previousSlide: string;
+  nextSlide: string;
+  carouselRole: string;
+  slideRole: string;
+  position: (index: number, total: number) => string;
+  instructions: string;
+};
+
+const DEFAULT_COPY: MediaCarouselCopy = {
+  collection: "Collection",
+  previousSlide: "Previous slide",
+  nextSlide: "Next slide",
+  carouselRole: "carousel",
+  slideRole: "slide",
+  position: (index, total) => `${index} of ${total}`,
+  instructions: "Swipe or scroll through the slides. Use Left and Right Arrow, Home, or End from the carousel to move between slides.",
 };
 
 const clampIndex = (value: number, length: number) =>
@@ -61,10 +82,12 @@ const NEXT_ICON = (
 export function MediaCarousel({
   items,
   label = "Featured stories",
+  copy: copyOverrides,
   initialIndex = 0,
   className = "",
   onSelect,
 }: MediaCarouselProps) {
+  const copy = { ...DEFAULT_COPY, ...copyOverrides };
   const reduced = useReducedMotion() === true;
   const titleId = useId();
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -232,7 +255,7 @@ export function MediaCarousel({
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
         <div className="min-w-0">
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
-            Collection
+            {copy.collection}
           </span>
           <h3
             id={titleId}
@@ -250,7 +273,7 @@ export function MediaCarousel({
           </span>
           <button
             type="button"
-            aria-label="Previous slide"
+            aria-label={copy.previousSlide}
             disabled={!hasPrevious}
             onClick={() => goTo(activeIndex - 1, true)}
             className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
@@ -259,7 +282,7 @@ export function MediaCarousel({
           </button>
           <button
             type="button"
-            aria-label="Next slide"
+            aria-label={copy.nextSlide}
             disabled={!hasNext}
             onClick={() => goTo(activeIndex + 1, true)}
             className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
@@ -272,7 +295,7 @@ export function MediaCarousel({
       <div
         ref={viewportRef}
         role="region"
-        aria-roledescription="carousel"
+        aria-roledescription={copy.carouselRole}
         aria-label={label}
         tabIndex={items.length === 0 ? -1 : 0}
         onKeyDown={onKeyDown}
@@ -286,8 +309,8 @@ export function MediaCarousel({
             <article
               key={item.id}
               role="group"
-              aria-roledescription="slide"
-              aria-label={`${index + 1} of ${items.length}`}
+              aria-roledescription={copy.slideRole}
+              aria-label={copy.position(index + 1, items.length)}
               className="w-[88%] min-w-[88%] snap-center first:snap-start last:snap-end sm:w-[72%] sm:min-w-[72%]"
             >
               <button
@@ -337,7 +360,7 @@ export function MediaCarousel({
         })}
       </div>
       <p className="sr-only">
-        Swipe or scroll through the slides. Use Left and Right Arrow, Home, or End from the carousel to move between slides.
+        {copy.instructions}
       </p>
     </section>
   );

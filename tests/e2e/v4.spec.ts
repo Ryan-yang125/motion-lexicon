@@ -13,7 +13,7 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 
 test("landing page presents live components, primitives, and the Skill entry", async ({ page }, testInfo) => {
   await page.goto("/zh/");
-  await expect(page.getByRole("heading", { level: 1, name: "把成熟动效，直接带进产品。" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "把好动效，直接带进产品。" })).toBeVisible();
   await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
   const firstTab = page.getByRole("tab", { name: "拖拽排序列表" });
   for (const tab of await page.getByRole("tab").all()) {
@@ -83,6 +83,41 @@ test("component directory exposes all live registry components", async ({ page }
   await expectNoHorizontalOverflow(page);
 });
 
+test("all Chinese component routes stay localized, stable, and within the viewport", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "The full 48-route scan runs once; mobile contracts have focused coverage.");
+  test.setTimeout(120_000);
+  const runtimeErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") runtimeErrors.push(message.text());
+  });
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+  const englishUiLeak = /Drag to reorder|character \d+ of|\d+ of \d+ shown|step \d+ of|connections highlighted|Static network|Live network|Run complete|Run failed|\bchest\b|\blength\b|Use (?:dark|light) theme|Open commands|Command palette|Workspace sections|Inspect restored image detail/i;
+
+  for (const component of registryComponents) {
+    runtimeErrors.length = 0;
+    await page.goto(`/zh/components/${component.id}/`);
+    const preview = page.locator(`[data-component="${component.id}"]`);
+    await expect(preview, component.id).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+    expect(await preview.ariaSnapshot(), component.id).not.toMatch(englishUiLeak);
+    expect(runtimeErrors, component.id).toEqual([]);
+  }
+});
+
+test("mobile component controls keep 44px targets", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.includes("mobile"), "Mobile target sizing runs once.");
+  for (const id of ["expanding-search", "inline-validation", "otp-input", "slider-detents", "tag-input", "reorder-list"] as const) {
+    await page.goto(`/zh/components/${id}/`);
+    const controls = page.locator(`[data-component="${id}"]`).locator('button, a, input:not([type="file"]), select, textarea, [role="button"], [role="slider"]');
+    for (const control of await controls.all()) {
+      if (!await control.isVisible()) continue;
+      const box = await control.boundingBox();
+      expect(box?.width, `${id}: ${await control.getAttribute("aria-label") ?? await control.textContent()}`).toBeGreaterThanOrEqual(44);
+      expect(box?.height, `${id}: ${await control.getAttribute("aria-label") ?? await control.textContent()}`).toBeGreaterThanOrEqual(44);
+    }
+  }
+});
+
 test("component detail keeps preview, source, install, and related primitives together", async ({ page }) => {
   await page.goto("/zh/components/copy-button/");
   await expect(page.getByRole("heading", { level: 1, name: "复制按钮" })).toBeVisible();
@@ -90,7 +125,7 @@ test("component detail keeps preview, source, install, and related primitives to
   await page.getByRole("radio", { name: "代码" }).click();
   await expect(page.locator(".component-source")).toContainText("export function CopyButton");
   await expect(page.locator(".component-install-panel code")).toContainText("/r/copy-button.json");
-  await expect(page.getByRole("heading", { level: 2, name: "相关原子动效" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "基础动效" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -125,8 +160,14 @@ test("Three.js components retain a static preview without WebGL", async ({ page 
   const globe = page.locator('[data-webgl-root="network-globe"]');
   await expect(globe).toHaveCSS("touch-action", "pan-y");
   await expect(globe).not.toHaveAttribute("tabindex");
-  await expect(globe).toHaveAttribute("aria-label", /Static network preview/);
-  await expect(globe.getByText("Static network")).toBeVisible();
+  await expect(globe).toHaveAttribute("aria-label", /静态网络预览|Static network preview/);
+  await expect(globe.getByText("静态网络")).toBeVisible();
+  const globeActivation = globe.locator('[data-webgl-activation="network-globe"]');
+  await expect(globeActivation).toBeVisible();
+  expect((await globeActivation.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  await globeActivation.click();
+  await expect(globeActivation).toBeEnabled();
+  await expect(globe.locator("canvas")).toHaveCount(0);
   expect(
     await globe.evaluate((element) =>
       element.dispatchEvent(
@@ -144,9 +185,15 @@ test("Three.js components retain a static preview without WebGL", async ({ page 
   const product = page.locator('[data-webgl-root="procedural-product-viewer"]');
   await expect(product).toHaveCSS("touch-action", "pan-y");
   await expect(product).not.toHaveAttribute("tabindex");
-  await expect(product).toHaveAttribute("aria-label", /Static product preview/);
-  await expect(product.getByText("STATIC PREVIEW")).toBeVisible();
-  await expect(product.getByRole("button", { name: "Reset view" })).toHaveCount(0);
+  await expect(product).toHaveAttribute("aria-label", /静态产品预览|Static product preview/);
+  await expect(product.getByText(/静态预览|STATIC PREVIEW/)).toBeVisible();
+  const productActivation = product.locator('[data-webgl-activation="procedural-product-viewer"]');
+  await expect(productActivation).toBeVisible();
+  expect((await productActivation.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  await productActivation.click();
+  await expect(productActivation).toBeEnabled();
+  await expect(product.locator("canvas")).toHaveCount(0);
+  await expect(product.getByRole("button", { name: "重置视角" })).toHaveCount(0);
   expect(
     await product.evaluate((element) =>
       element.dispatchEvent(
@@ -158,6 +205,46 @@ test("Three.js components retain a static preview without WebGL", async ({ page 
       ),
     ),
   ).toBe(true);
+});
+
+test("Three.js previews wait for intent before their first long task", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.includes("mobile"), "Production long-task smoke runs once.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.addInitScript(() => {
+    const values: number[] = [];
+    (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks = values;
+    new PerformanceObserver((list) => {
+      values.push(...list.getEntries().map((entry) => entry.duration));
+    }).observe({ type: "longtask", buffered: true });
+  });
+
+  for (const id of ["network-globe", "procedural-product-viewer"] as const) {
+    await page.goto(`/zh/components/${id}/`);
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => {
+      const entries = (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks;
+      if (entries) entries.length = 0;
+    });
+    await page.waitForTimeout(700);
+    const root = page.locator(`[data-webgl-root="${id}"]`);
+    await expect(root.locator("canvas")).toHaveCount(0);
+    expect(await page.evaluate(() => (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks ?? [])).toEqual([]);
+
+    const activation = root.locator(`[data-webgl-activation="${id}"]`);
+    const activationStart = await page.evaluate(() => performance.now());
+    await activation.focus();
+    await page.keyboard.press("Enter");
+    await expect(root.locator("canvas")).toHaveCount(1, { timeout: 10_000 });
+    await expect(root).toBeFocused();
+    await expect(activation).toHaveCount(0);
+    await expect(root.locator("canvas")).toHaveCount(1);
+    const activationResult = await page.evaluate((start) => ({
+      elapsed: performance.now() - start,
+      longTasks: (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks ?? [],
+    }), activationStart);
+    expect(activationResult.elapsed).toBeLessThan(1_000);
+    expect(Math.max(0, ...activationResult.longTasks)).toBeLessThanOrEqual(250);
+  }
 });
 
 test("theme snapshots and dropped files honor their component contracts", async ({ page }, testInfo) => {
@@ -174,7 +261,7 @@ test("theme snapshots and dropped files honor their component contracts", async 
     });
   });
   await page.goto("/zh/components/theme-reveal/");
-  await page.getByRole("button", { name: "Use dark theme" }).click();
+  await page.getByRole("button", { name: "使用深色主题" }).click();
   await expect.poll(() => page.evaluate(() => (window as typeof window & { __snapshotTheme?: string | null }).__snapshotTheme)).toBe("dark");
 
   await page.goto("/zh/components/upload-queue/");
@@ -201,20 +288,65 @@ test("primitive directory and workbench use the direct V4 routes", async ({ page
   await page.getByRole("radio", { name: "代码" }).click();
   await expect(page.locator(".primitive-source")).toContainText("export function SlideInPrimitive");
   await expect(page.locator(".component-install-panel code")).toContainText("/r/primitive-slide-in.json");
+  for (const trigger of await page.locator(".primitive-reference-panel button").all()) {
+    expect(await trigger.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  }
   await expectNoHorizontalOverflow(page);
 });
 
+test("all Chinese primitive routes stay localized, stable, and within the viewport", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "The full 44-route scan runs once; focused projects cover mobile and WebKit.");
+  test.setTimeout(120_000);
+  const runtimeErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error" || (message.type() === "warning" && /hydrat|did not match/i.test(message.text()))) {
+      runtimeErrors.push(message.text());
+    }
+  });
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+  const englishUiLeak = /Design system|\d+ files|\d+ min ago|Motion review|Create new|\bFrame\b|\bPage\b|\bFlow\b|independent React motion interactions|\bTrigger\b|\bMove\b|\bSettle\b|\bWorkspace\b|\bFREE\b|\bPRO\b|\bDetails\b|\bAccess\b|\bReview\b|\bIntroduction\b|\bInteraction\b|\bAccessibility\b|\bShipping\b|\bOverview\b|\bActivity\b|\bFiles\b|PROJECT \/ 04|Quiet product motion|Updated \d+ min ago|\bLive\b|Tool \d+|Research motion|Prototype states|Ship registry|Motion review complete|Swipe to archive|PASSWORD|Motion studies|collaborators|\bActive\b|● online|devices · \d+ changes|Operational|ASSET 04|Product update|pages · \d+ registry items|REGISTRY INSTALLS|\d+ steps|COMPOSITE|LAYOUT/i;
+
+  for (const primitive of canonicalMotionCatalog) {
+    runtimeErrors.length = 0;
+    await page.goto(`/zh/primitives/${primitive.id}/`);
+    const preview = page.locator(`[data-primitive="${primitive.id}"]`);
+    await expect(preview, primitive.id).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+    expect(await preview.ariaSnapshot(), primitive.id).not.toMatch(englishUiLeak);
+    expect(runtimeErrors, primitive.id).toEqual([]);
+  }
+});
+
+test("mobile guide links keep full touch targets", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.includes("mobile"), "Mobile touch-target contract runs once.");
+  await page.goto("/zh/guides/");
+  for (const link of await page.locator(".seo-guide-grid a").all()) {
+    expect(await link.evaluate((node) => node.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test("global search opens immediately and navigates by keyboard", async ({ page }) => {
+  let paletteRequests = 0;
+  page.on("request", (request) => {
+    if (/\/(?:assets\/command-palette-|src\/registry\/components\/command-palette\.tsx)/.test(request.url())) {
+      paletteRequests += 1;
+    }
+  });
   await page.goto("/zh/components/");
-  await page.locator(".shell-search-trigger").click();
+  await page.waitForFunction(() => document.documentElement.dataset.clientReady === "true");
+  const trigger = page.locator(".shell-search-trigger");
+  await trigger.focus();
+  await expect.poll(() => paletteRequests).toBe(1);
+  await trigger.click();
   const search = page.getByRole("combobox", { name: "搜索 Motion Lexicon" });
   await expect(search).toBeFocused();
+  expect(paletteRequests).toBe(1);
   await page.keyboard.press("Tab");
   await expect(search).toBeFocused();
   await page.locator(".fixed.inset-0.z-50 > .absolute.inset-0").click({ position: { x: 4, y: 4 } });
   await expect(search).toBeHidden();
   await expect(page.locator(".shell-search-trigger")).toBeFocused();
-  await page.locator(".shell-search-trigger").click();
+  await trigger.click();
   await expect(search).toBeFocused();
   await search.fill("drawer");
   await expect(page.getByRole("option", { name: /抽屉/ })).toBeVisible();
@@ -226,23 +358,23 @@ test("global search opens immediately and navigates by keyboard", async ({ page 
 test("component keyboard and reduced-motion contracts remain intact", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Component keyboard contract runs once.");
   await page.goto("/zh/components/command-palette/");
-  await page.getByRole("button", { name: "Open commands" }).click();
-  await expect(page.getByRole("combobox", { name: "Command palette" })).toBeFocused();
+  await page.getByRole("button", { name: "打开命令" }).click();
+  await expect(page.getByRole("combobox", { name: "命令面板" })).toBeFocused();
 
   await page.goto("/zh/components/tabs/");
-  const tabs = page.getByRole("tablist", { name: "Workspace sections" });
-  const overview = tabs.getByRole("tab", { name: "Overview" });
-  const activity = tabs.getByRole("tab", { name: "Activity" });
+  const tabs = page.getByRole("tablist", { name: "工作区栏目" });
+  const overview = tabs.getByRole("tab", { name: "概览" });
+  const activity = tabs.getByRole("tab", { name: "动态" });
   await overview.focus();
   await page.keyboard.press("ArrowRight");
   await expect(activity).toBeFocused();
   await expect(activity).toHaveAttribute("aria-selected", "true");
 
   await page.goto("/zh/components/mega-menu/");
-  const productMenu = page.getByRole("button", { name: "Product" });
+  const productMenu = page.getByRole("button", { name: "产品" });
   await productMenu.hover();
   await expect(productMenu).toHaveAttribute("aria-expanded", "true");
-  const menu = page.getByRole("menu", { name: "Product" });
+  const menu = page.getByRole("menu", { name: "产品" });
   await expect(menu).toBeVisible();
   const productBox = await productMenu.boundingBox();
   const menuBox = await menu.boundingBox();
@@ -274,7 +406,7 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/components/hold-to-confirm/");
-  const hold = page.getByRole("button", { name: /Hold to delete workspace/ });
+  const hold = page.getByRole("button", { name: /按住删除工作区/ });
   await hold.focus();
   await page.keyboard.down("Space");
   await page.waitForTimeout(80);
@@ -287,7 +419,7 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await page.keyboard.up("Space");
 
   await page.goto("/zh/components/cursor-lens/");
-  const lensRoot = page.getByRole("group", { name: "Inspect restored image detail" });
+  const lensRoot = page.getByRole("group", { name: "查看修复后的图像细节" });
   await lensRoot.evaluate((root) => { root.style.height = "320px"; });
   await lensRoot.focus();
   await page.keyboard.press("ArrowRight");
@@ -353,6 +485,14 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await page.goto("/zh/components/");
   await page.getByRole("button", { name: "打开导航" }).click();
   const dialog = page.getByRole("dialog", { name: "站点导航" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "关闭导航" })).toBeFocused();
+  await expect(page.locator("#main-content")).toHaveAttribute("aria-hidden", "true");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(page.getByRole("button", { name: "打开导航" })).toBeFocused();
+
+  await page.getByRole("button", { name: "打开导航" }).click();
   await expect(dialog).toBeVisible();
   await dialog.getByRole("link", { name: "Agent Skill" }).click();
   await expect(page).toHaveURL(/\/zh\/skill\//);

@@ -5,13 +5,13 @@ import { Seo } from "../components/Seo";
 import { registryComponents } from "../data/component-registry";
 import { getCatalogRecipe } from "../data/recipes";
 import { getSeoGuide } from "../data/seo-guides";
-import { getSeoGuideArticle } from "../data/seo-guide-articles";
+import type { SeoGuideLongArticle } from "../data/seo-guide-article-types";
 import { pathFor, siteUrl } from "../data/site";
 import type { Locale } from "../data/types";
 import { breadcrumbStructuredData, publisherStructuredData } from "../lib/structured-data";
 import { release } from "../data/release";
 
-export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: string }) {
+export function SeoGuidePage({ locale, guideId, longArticle }: { locale: Locale; guideId: string; longArticle?: SeoGuideLongArticle }) {
   const guide = getSeoGuide(guideId);
   const labels = locale === "zh"
     ? {
@@ -20,7 +20,8 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
         steps: "实施路径",
         foundations: "关联动效基础",
         components: "相关组件",
-        related: "继续阅读"
+        related: "继续阅读",
+        author: "作者"
       }
     : {
         back: "Back to scenario guides",
@@ -28,7 +29,8 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
         steps: "Implementation path",
         foundations: "Related motion primitives",
         components: "Related components",
-        related: "Continue reading"
+        related: "Continue reading",
+        author: "By"
       };
 
   if (!guide) {
@@ -54,7 +56,13 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
     return relatedGuide ? [relatedGuide] : [];
   });
   const routePath = pathFor(locale, ["guides", guide.id]);
-  const longArticle = getSeoGuideArticle(guide.id);
+  const methodPath = pathFor(locale, ["method"]);
+  const articleAuthor = {
+    "@type": "Organization",
+    "@id": `${siteUrl}${methodPath}#author`,
+    name: locale === "zh" ? "Motion Lexicon 方法" : "Motion Lexicon Method",
+    url: `${siteUrl}${methodPath}`
+  };
   const wordCount = longArticle
     ? longArticle.sections
       .flatMap((section) => section.paragraphs)
@@ -74,6 +82,7 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
         description={guide.description[locale]}
         path={routePath}
         image={`/og-guides-${locale}.png`}
+        ogType="article"
         structuredData={[
           breadcrumbStructuredData(locale, [
             { name: "Motion Lexicon", path: [] },
@@ -94,7 +103,7 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
             isAccessibleForFree: true,
             ...(wordCount ? { wordCount } : {}),
             license: "https://creativecommons.org/licenses/by/4.0/",
-            author: publisherStructuredData,
+            author: articleAuthor,
             publisher: publisherStructuredData
           },
           {
@@ -121,6 +130,11 @@ export function SeoGuidePage({ locale, guideId }: { locale: Locale; guideId: str
           <h1>{guide.title[locale]}</h1>
           <p>{guide.intro[locale]}</p>
           {longArticle ? <p className="seo-guide-standfirst">{longArticle.standfirst[locale]}</p> : null}
+          <p className="seo-guide-byline">
+            <span>{labels.author}</span>{" "}
+            <Link to="/$locale/method/" params={{ locale }}>{articleAuthor.name}</Link>{" · "}
+            <time dateTime={release.updatedAt}>{release.updatedDate}</time>
+          </p>
         </header>
         <section className="seo-guide-decision" aria-labelledby="guide-decision-title">
           <span>{labels.decision}</span>

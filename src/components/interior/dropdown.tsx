@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const EASE = [0.23, 1, 0.32, 1] as const;
 
-const EXIT = [0.4, 0, 1, 1] as const;
+const EXIT = [0.23, 1, 0.32, 1] as const;
 const CELL = { type: "spring", stiffness: 520, damping: 34, mass: 0.45 } as const;
 
 const NUDGE = { type: "spring", stiffness: 700, damping: 46, mass: 0.5 } as const;

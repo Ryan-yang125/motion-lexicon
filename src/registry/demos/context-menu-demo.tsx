@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useState } from "react";
 import {
   ContextMenu,
@@ -12,30 +14,31 @@ const initial = [
   { id: "c", name: "desk-shot-0912.jpg", meta: "JPG · 2.4 MB" },
 ];
 
-export function ContextMenuDemo() {
+export function ContextMenuDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [files, setFiles] = useState(initial);
 
   const actions = (id: string): ContextMenuItem[] => [
-    { id: "open", label: "Open", shortcut: "↵" },
-    { id: "rename", label: "Rename", shortcut: "F2" },
-    { id: "copy", label: "Copy link", shortcut: "⌘L" },
+    { id: "open", label: demoValue(locale, "打开", "Open"), shortcut: "↵" },
+    { id: "rename", label: demoValue(locale, "重命名", "Rename"), shortcut: "F2" },
+    { id: "copy", label: demoValue(locale, "复制链接", "Copy link"), shortcut: "⌘L" },
     { id: "sep", type: "separator" },
     {
       id: "trash",
-      label: "Move to trash",
+      label: demoValue(locale, "移到废纸篓", "Move to trash"),
       shortcut: "⌫",
       onSelect: () => setFiles((prev) => prev.filter((file) => file.id !== id)),
     },
   ];
 
   return (
-    <div className="mx-auto w-full max-w-[380px]">
+    <div role="group" aria-label={demoText("context-menu", locale)} className="mx-auto w-full max-w-[380px]">
       {files.length > 0 ? (
         <ul className="space-y-1">
           {files.map((file) => (
             <li key={file.id}>
               <ContextMenu
-                label={`Actions for ${file.name}`}
+                label={demoValue(locale, `${file.name} 的操作`, `Actions for ${file.name}`)}
+                hint={locale === "zh" ? "右键点击，或按 Shift 加 F10 打开操作菜单" : undefined}
                 items={actions(file.id)}
                 className="flex h-[50px] items-center rounded-[9px] bg-sub px-3"
               >
@@ -58,7 +61,7 @@ export function ContextMenuDemo() {
             onClick={() => setFiles(initial)}
             className="mat-cap press h-9 rounded-[9px] px-3.5 text-[13px] font-medium text-ink"
           >
-            Put them back
+            {demoValue(locale, "恢复文件", "Put them back")}
           </button>
         </div>
       )}

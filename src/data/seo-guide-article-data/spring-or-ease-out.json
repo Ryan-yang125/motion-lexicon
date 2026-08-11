@@ -1,0 +1,504 @@
+{
+  "guideId": "spring-or-ease-out",
+  "standfirst": {
+    "zh": "Spring 与 ease-out 的选择从动作语义开始：直接操控、可中断的对象需要连续速度与受力感；明确的确认、进入和结果交接需要可预测的抵达。用同一状态比较两种节奏，界面会更容易读懂。",
+    "en": "The choice between spring and ease-out begins with the action’s meaning. Directly manipulated, interruptible objects benefit from continuous velocity and a sense of force. Clear confirmation, entrance, and result handoff benefit from a predictable arrival. Compare both rhythms on the same state and the interface becomes easier to read."
+  },
+  "sections": [
+    {
+      "id": "start-with-meaning",
+      "title": {
+        "zh": "先判断动作在解释什么",
+        "en": "Decide what the action is explaining"
+      },
+      "paragraphs": [
+        {
+          "zh": "曲线名称很容易把讨论带到审美偏好，用户真正感受到的是对象怎样回应自己的输入。先给动作写一句职责：侧栏跟随拖拽后回到停靠位，卡片被选中后表达当前焦点，保存按钮确认请求已收到，菜单在触发按钮附近抵达可读位置。职责不同，速度曲线承担的意义也不同。持续受手势影响、可能被再次抓住、方向可能反转的对象，需要保留当前位置和速度之间的连续关系；一次性确认、短暂进入、需要马上让出注意力的结果，则需要清晰而克制的终点。这个判断比先问“用哪条贝塞尔曲线”更可靠。",
+          "en": "Curve names can pull discussion toward visual preference, while people actually feel how an object answers their input. Write one responsibility for the action first: a sidebar returns to its dock after following a drag, a card communicates current focus after selection, a Save button confirms that work was received, or a menu arrives near its trigger in a readable position. Different responsibilities give speed curves different meaning. An object continuously affected by a gesture, likely to be grabbed again, or likely to reverse direction benefits from continuity between current position and velocity. A one-time confirmation, brief entrance, or result that should quickly release attention benefits from a clear restrained endpoint. This judgment is more reliable than asking for a Bézier curve first."
+        },
+        {
+          "zh": "状态身份是第二个判断点。同一个抽屉从关闭到打开，用户能追踪到同一块内容在移动，因此可以使用带有重量感的收束。保存前后的按钮虽然占据同一位置，语义已经从“可执行”变成“处理中”再变成“完成”，重点是读清文字和结果，过冲会分散注意力。列表排序中的卡片既有身份连续性，也有大量信息需要阅读，适合让真实位置先稳定，再给很小的强调。把对象身份、用户输入和最终阅读目标列在设计说明里，设计、产品和工程就能用同一份理由选择曲线。",
+          "en": "State identity is a second decision point. The same drawer moves from closed to open, so people can track one piece of content in space and it can settle with a sense of weight. A button before and after Save occupies the same place, yet its meaning changes from available to working to complete. Reading its copy and outcome is the priority, and overshoot can compete for attention. Cards in a reordered list retain identity while a large amount of information needs reading, so let real position stabilize first and add only a very small emphasis. Put object identity, user input, and final reading goal in the design note. Design, product, and engineering can then choose a curve from the same reasons."
+        }
+      ]
+    },
+    {
+      "id": "use-spring-for-continuity",
+      "title": {
+        "zh": "弹簧为连续输入保留速度",
+        "en": "Use springs to retain velocity across continuous input"
+      },
+      "paragraphs": [
+        {
+          "zh": "弹簧适合把对象看作正在被推动的实体。拖拽卡片、拉开抽屉、调整底部面板、拖动媒体进度和移动画布元素时，用户的手势已经提供了方向、距离和速度。松手后，弹簧可以把这些信息带入目标位置，让对象自然收束；下一次触摸或鼠标输入到来时，又可以从当前速度接手。这个连续性让人感觉界面持续响应自己，每次输入都从当前状态自然延续。弹簧需要服务操控感，因此目标位置、速度传递和取消机制应与手势状态放在同一个组件契约里。",
+          "en": "A spring works well when an object is understood as something being pushed. Dragging a card, pulling open a drawer, adjusting a bottom panel, scrubbing media, and moving a canvas element already provide direction, distance, and velocity through the person’s gesture. After release, a spring can carry that information toward a target so the object settles naturally. When the next touch or pointer input arrives, it can take over from the current velocity. That continuity makes the interface feel responsive to the person instead of restarting from a prerecorded segment on every interaction. A spring serves control, so target position, velocity transfer, and cancellation belong in the same component contract as gesture state."
+        },
+        {
+          "zh": "调参可以从三项关系开始理解。刚度决定目标拉回对象的力度，数值提高时抵达更快；阻尼决定速度如何被吸收，数值提高时回弹更快收束；质量影响同一外力下的响应节奏。先固定位移和目标，再一次只改一个维度，观察对象是否仍然显得可控。导航抽屉通常需要较高阻尼和紧凑收束，避免遮挡内容时反复摆动；可拖拽卡片可以允许一小段柔和回弹，用来确认落点。参数的好坏取决于动作的后果、出现频率和屏幕密度，每个组件都应保存自己的合理区间，供团队以动作语义为依据维护。",
+          "en": "Parameter tuning can begin with three relationships. Stiffness decides how strongly the target pulls the object back, so a higher value reaches the destination faster. Damping decides how velocity is absorbed, so a higher value settles rebound sooner. Mass shapes response rhythm under the same force. Fix travel and target first, then change one dimension at a time and observe whether the object still feels controllable. A navigation drawer usually needs higher damping and a compact settle so it does not keep moving while covering content. A draggable card can allow one soft small rebound to confirm the drop. Good parameters depend on consequence, frequency, and screen density, so each component should keep a reasonable range instead of copying one global set of numbers."
+        }
+      ]
+    },
+    {
+      "id": "use-ease-out-for-arrival",
+      "title": {
+        "zh": "Ease-out 让明确结果迅速抵达",
+        "en": "Use ease-out for a quick, clear arrival"
+      },
+      "paragraphs": [
+        {
+          "zh": "ease-out 的价值在于开始阶段有足够速度，抵达前逐渐放慢，让用户先看到变化已经发生，再有时间读清最终状态。它适合菜单、提示、轻量卡片进入、复制确认、保存结果和按钮按压恢复。这些动作通常有清楚的起点与终点，也很少需要继承上一段手势速度。把持续时间控制在内容与任务需要的范围内，视觉就会显得果断：按钮反馈常在 100 到 180ms 内收住，局部状态交接可以略长，复杂层级的进入再根据阅读量增加。每一段时间都应帮助用户读到结果或找到下一步。",
+          "en": "The value of ease-out is useful speed at the beginning followed by a gradual slowdown before arrival. People first see that change has happened, then have time to read the final state. It suits menus, notices, light card entrances, copy confirmation, save outcomes, and a button recovering from press. These actions usually have a clear start and end and rarely need to inherit velocity from a previous gesture. Keep duration within the needs of content and task and the visual response feels decisive. Button feedback often settles within 100 to 180 ms, local state handoff can run a little longer, and a complex layer entrance can grow with reading load. Every part of the time should help someone read a result or find the next step."
+        },
+        {
+          "zh": "一段 ease-out 动画也需要保护空间关系。菜单从触发按钮附近出现时，起始透明度、很小的位移和稳定的最终边界足以说明来源；成功提示在保存按钮旁边淡入时，文字、状态色和图标共同表达完成。过大的缩放、旋转和多次弹跳会让一个简单结果变得比内容本身更醒目。将曲线应用到 opacity 与 transform 上，可以保持布局稳定，也让减弱动效模式容易缩短或直接交接。ease-out 在这里是一种信息排序工具：先确认动作，再呈现结果，最后让用户回到下一次操作。",
+          "en": "An ease-out animation also needs to protect spatial relationship. When a menu appears near its trigger, starting opacity, very small travel, and a stable final boundary are enough to explain origin. When a success notice fades beside Save, copy, state color, and icon express completion together. Large scale, rotation, and repeated bouncing can make a simple result more prominent than the content itself. Applying the curve to opacity and transform keeps layout stable and makes reduced-motion mode easy to shorten or hand off directly. Ease-out acts as an information-ordering tool here: acknowledge the action, present the outcome, then return the person to the next operation."
+        }
+      ]
+    },
+    {
+      "id": "design-for-interruption",
+      "title": {
+        "zh": "中断、反向与连点决定实现方式",
+        "en": "Interruption, reversal, and repeated input determine implementation"
+      },
+      "paragraphs": [
+        {
+          "zh": "曲线选择离不开中断策略。用户可能在抽屉打开到一半时再次拖回去，在排序动画尚未结束时移动另一张卡片，或在保存结果出现前再次编辑字段。组件需要知道新输入到来后保留什么：当前视觉位置、当前速度、目标状态、焦点和可访问性文案。直接操控的 spring 应立即取消旧目标并接住当前值；一次性 ease-out 反馈可以被新状态替换，让旧结果淡出或直接结束。无论采用哪条路径，状态源都应优先于计时器，避免过期回调在用户已经改变意图后重新覆盖界面。",
+          "en": "Curve choice depends on interruption strategy. A person may pull a drawer back while it is halfway open, move another card while reorder motion is still settling, or edit a field again before a save outcome appears. The component needs to know what remains when new input arrives: current visual position, current velocity, target state, focus, and accessibility copy. A directly manipulated spring should cancel its old target immediately and take over from the current value. A one-time ease-out response can yield to new state so the old outcome fades or finishes directly. In every path, state source should lead timers, preventing a stale callback from repainting an interface after intent has changed."
+        },
+        {
+          "zh": "浏览器与动画库的 API 也会影响交接质量。CSS transition 很适合简洁、可预期的 ease-out 状态变化；Web Animations API 能提供取消、完成和播放状态，适合需要由状态机统一管理的短动作；物理 spring 则常需要每帧积分或库提供的速度模型。选择实现时，先检查组件是否要接收拖拽速度、是否需要在任何时刻反向、是否有多个对象共享同一状态。把取消函数、目标值和完成条件显式保留，测试才能覆盖快速连点、方向反转和路由切换。实现清楚后，曲线才会在真实使用中保持它原本的语义。",
+          "en": "Browser and animation-library APIs also shape handoff quality. CSS transition suits concise, predictable ease-out state changes. The Web Animations API provides cancellation, completion, and play state for short actions managed by a state machine. A physical spring commonly needs per-frame integration or a library velocity model. When choosing implementation, check whether the component receives drag velocity, reverses at any moment, or has multiple objects sharing one state. Keep cancellation functions, target values, and completion conditions explicit so tests can cover fast repeat presses, direction reversal, and route change. With implementation made clear, the curve retains its intended meaning in real use."
+        }
+      ]
+    },
+    {
+      "id": "compare-and-review",
+      "title": {
+        "zh": "在同一状态上比较并完成验收",
+        "en": "Compare on the same state and complete review"
+      },
+      "paragraphs": [
+        {
+          "zh": "比较 spring 与 ease-out 时，应先锁定位移、对象尺寸、触发位置和最终状态，只改变速度模型。这样团队能观察到真正的差异：弹簧是否让连续操控更自然，ease-out 是否让结果更容易阅读。若同时改了距离、颜色、阴影和时长，讨论很快会失去因果关系。建议在组件文档中保留一个可切换的对照演示，并展示完整产品交互，例如拖开抽屉后选择导航项、保存后看到确认并继续编辑。原子动效的手感在流程里接受检验，才能判断它是否帮助用户理解当前动作。",
+          "en": "When comparing spring and ease-out, lock travel, object size, trigger position, and final state, then change only the velocity model. The team can then observe the real difference: does the spring make continuous control feel more natural, and does ease-out make the outcome easier to read? If distance, color, shadow, and duration change at the same time, discussion quickly loses causal connection. Keep a switchable comparison in Component documentation and show a complete product interaction, such as pulling open a drawer before selecting navigation or saving before seeing confirmation and continuing to edit. The Primitive earns its place when the full flow tests whether it helps someone understand the current action."
+        },
+        {
+          "zh": "验收还要覆盖减弱动效和可访问性。系统偏好开启后，侧栏仍然到达正确位置，焦点仍然进入可操作区域，保存状态仍然从“保存中”变成“已保存”；只需减少大幅位移、反复回弹和装饰性旋转。检查键盘触发、触摸拖拽、屏幕较窄时的遮挡、连续输入和页面离开时的取消。最后记录每个组件的选择理由：动作服务什么意义、允许几次回弹、最大时长、如何中断、低动态路径保留什么。这样的记录会让后续设计保持一致，也让用户在不同页面遇到可预测的动效语言。",
+          "en": "Review also covers reduced motion and accessibility. With the system preference enabled, a sidebar still reaches the correct position, focus still enters an operable region, and save state still moves from Saving to Saved. Reduce broad travel, repeated rebound, and decorative rotation. Check keyboard triggering, touch drag, overlap on narrow screens, continuous input, and cancellation during page exit. Finally record why each component chose its curve: what meaning the action serves, how much rebound it allows, its maximum duration, how it interrupts, and what the low-motion path retains. This record keeps future design consistent and gives people a predictable motion language across pages."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "Spring 与 ease-out 选择清单",
+    "en": "Spring and ease-out selection checklist"
+  },
+  "checklist": [
+    {
+      "id": "meaning",
+      "label": {
+        "zh": "先写清动作要解释的意义",
+        "en": "Write the meaning the action must explain"
+      },
+      "detail": {
+        "zh": "明确对象身份、用户输入、最终阅读目标和下一步操作。",
+        "en": "State object identity, user input, final reading goal, and the next action."
+      }
+    },
+    {
+      "id": "continuity",
+      "label": {
+        "zh": "直接操控保留位置与速度连续性",
+        "en": "Direct manipulation retains position and velocity continuity"
+      },
+      "detail": {
+        "zh": "拖拽、抽屉和画布对象拥有目标、取消和接管新输入的策略。",
+        "en": "Drags, drawers, and canvas objects have a strategy for target, cancellation, and new input takeover."
+      }
+    },
+    {
+      "id": "arrival",
+      "label": {
+        "zh": "明确结果使用紧凑抵达",
+        "en": "Clear outcomes use a compact arrival"
+      },
+      "detail": {
+        "zh": "菜单、保存和复制确认以短时 ease-out 支持阅读与继续操作。",
+        "en": "Menus, save, and copy confirmation use short ease-out to support reading and continued work."
+      }
+    },
+    {
+      "id": "comparison",
+      "label": {
+        "zh": "比较时只改变速度模型",
+        "en": "Change only the velocity model during comparison"
+      },
+      "detail": {
+        "zh": "锁定位移、尺寸、最终状态和触发位置，让差异可被直接观察。",
+        "en": "Lock travel, size, final state, and trigger position so the difference can be observed directly."
+      }
+    },
+    {
+      "id": "review",
+      "label": {
+        "zh": "中断与低动态路径已经验收",
+        "en": "Interruption and the low-motion path have been reviewed"
+      },
+      "detail": {
+        "zh": "覆盖快速连点、反向、键盘、触摸、路由离开与系统偏好切换。",
+        "en": "Cover repeat presses, reversal, keyboard, touch, route exit, and system-preference changes."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：抽屉用 spring 接住拖拽，保存提示用 ease-out 交接",
+      "en": "Case: a drawer uses spring after drag while save feedback uses ease-out"
+    },
+    "context": {
+      "zh": "抽屉在拖拽松手后延续当前速度并收束到开合位置；保存提示在原操作附近快速抵达完成状态。",
+      "en": "After drag release, a drawer retains velocity and settles open or closed; save feedback reaches a clear completed state near the original action."
+    },
+    "code": "<section class=\"curve-demo\">\n  <label>\n    Drawer position\n    <input type=\"range\" min=\"-240\" max=\"0\" value=\"-240\" data-drawer-range>\n  </label>\n  <button type=\"button\" data-drawer-toggle>Open drawer</button>\n  <div class=\"drawer-stage\">\n    <aside class=\"drawer\" data-drawer aria-label=\"Settings drawer\">Settings stay attached to the drag position.</aside>\n  </div>\n  <button type=\"button\" data-save>Save settings</button>\n  <p class=\"save-status\" data-save-status data-state=\"idle\" role=\"status\" aria-live=\"polite\">Ready to save.</p>\n</section>\n\n<style>\n.curve-demo { display: grid; gap: 12px; max-width: 32rem; }\n.drawer-stage { overflow: hidden; min-height: 4rem; border: 1px solid currentColor; }\n.drawer { width: 14rem; min-height: 4rem; padding: 12px; background: Canvas; }\n.save-status { opacity: 0; transform: translateY(6px); transition: opacity 160ms ease-out, transform 160ms ease-out; }\n.save-status[data-state=\"saving\"], .save-status[data-state=\"saved\"] { opacity: 1; transform: translateY(0); }\n@media (prefers-reduced-motion: reduce) {\n  .save-status { transition-duration: 1ms; }\n}\n</style>\n\n<script>\nconst reducedMotionQuery = window.matchMedia(\"(prefers-reduced-motion: reduce)\");\nconst drawer = document.querySelector(\"[data-drawer]\");\nconst drawerRange = document.querySelector(\"[data-drawer-range]\");\nconst drawerToggle = document.querySelector(\"[data-drawer-toggle]\");\nconst saveButton = document.querySelector(\"[data-save]\");\nconst saveStatus = document.querySelector(\"[data-save-status]\");\nlet drawerPosition = -240;\nlet drawerVelocity = 0;\nlet drawerTarget = -240;\nlet lastInputTime = performance.now();\nlet cancelDrawerSpring = () => {};\n\nfunction springTo(element, from, target, releaseVelocity = 0, onUpdate = () => {}) {\n  let position = from;\n  let velocity = releaseVelocity;\n  let previous = performance.now();\n  let frame = 0;\n  let finished = false;\n  const stiffness = 340;\n  const damping = 34;\n  const update = (nextPosition, nextVelocity) => {\n    position = nextPosition;\n    velocity = nextVelocity;\n    element.style.transform = \"translateX(\" + position + \"px)\";\n    onUpdate(position, velocity);\n  };\n  const cleanup = () => {\n    reducedMotionQuery.removeEventListener(\"change\", onReducedMotionChange);\n  };\n  function onReducedMotionChange(event) {\n    if (event.matches) finish();\n  }\n  const finish = () => {\n    if (finished) return;\n    finished = true;\n    window.cancelAnimationFrame(frame);\n    update(target, 0);\n    cleanup();\n  };\n  const cancel = () => {\n    if (finished) return;\n    finished = true;\n    window.cancelAnimationFrame(frame);\n    onUpdate(position, velocity);\n    cleanup();\n  };\n\n  if (reducedMotionQuery.matches) {\n    finish();\n    return () => {};\n  }\n\n  reducedMotionQuery.addEventListener(\"change\", onReducedMotionChange);\n  const tick = (now) => {\n    if (finished) return;\n    const dt = Math.min((now - previous) / 1000, 0.032);\n    previous = now;\n    velocity += (-stiffness * (position - target) - damping * velocity) * dt;\n    position += velocity * dt;\n    update(position, velocity);\n    if (Math.abs(velocity) < 0.1 && Math.abs(position - target) < 0.1) {\n      finish();\n      return;\n    }\n    frame = window.requestAnimationFrame(tick);\n  };\n\n  frame = window.requestAnimationFrame(tick);\n  return cancel;\n}\n\nfunction setDrawerPosition(position, velocity = 0) {\n  drawerPosition = Math.max(-240, Math.min(0, position));\n  drawerVelocity = velocity;\n  drawer.style.transform = \"translateX(\" + drawerPosition + \"px)\";\n  drawerRange.value = String(Math.round(drawerPosition));\n}\n\nfunction settleDrawer(target = drawerPosition > -120 ? 0 : -240) {\n  cancelDrawerSpring();\n  drawerTarget = target;\n  drawerToggle.textContent = target === 0 ? \"Close drawer\" : \"Open drawer\";\n  cancelDrawerSpring = springTo(drawer, drawerPosition, target, drawerVelocity, (position, velocity) => {\n    drawerPosition = position;\n    drawerVelocity = velocity;\n    drawerRange.value = String(Math.round(Math.max(-240, Math.min(0, position))));\n  });\n}\n\ndrawerRange.addEventListener(\"input\", () => {\n  cancelDrawerSpring();\n  const now = performance.now();\n  const nextPosition = Number(drawerRange.value);\n  const nextVelocity = (nextPosition - drawerPosition) / Math.max((now - lastInputTime) / 1000, 0.016);\n  lastInputTime = now;\n  drawerTarget = nextPosition > -120 ? 0 : -240;\n  drawerToggle.textContent = drawerTarget === 0 ? \"Close drawer\" : \"Open drawer\";\n  setDrawerPosition(nextPosition, nextVelocity);\n});\ndrawerRange.addEventListener(\"pointerdown\", () => {\n  cancelDrawerSpring();\n  lastInputTime = performance.now();\n});\ndrawerRange.addEventListener(\"change\", () => settleDrawer());\ndrawerToggle.addEventListener(\"click\", () => {\n  settleDrawer(drawerTarget === 0 ? -240 : 0);\n});\n\nasync function saveSettings() {\n  if (saveButton.disabled) return;\n  saveButton.disabled = true;\n  saveStatus.dataset.state = \"saving\";\n  saveStatus.textContent = \"Saving settings.\";\n  await new Promise((resolve) => window.setTimeout(resolve, 160));\n  saveStatus.dataset.state = \"saved\";\n  saveStatus.textContent = \"Settings saved.\";\n  saveButton.disabled = false;\n}\n\nsaveButton.addEventListener(\"click\", saveSettings);\nsetDrawerPosition(drawerPosition);\n</script>",
+    "explanation": {
+      "zh": "`springTo` 接收松手瞬间的 releaseVelocity，并把它作为积分器初始速度，因此新的拖拽、反向操作或路由离开都能立即接管旧动画。系统减弱动效偏好通过 change 事件立即落在目标位置，并在完成与取消时清理监听；保存提示使用短时 ease-out，文案和状态仍由同一业务状态驱动，方便用户读到完成结果后继续操作。",
+      "en": "`springTo` receives releaseVelocity from the instant of release and uses it as the integrator’s initial velocity, so a new drag, reversal, or route exit can take over immediately. A reduced-motion preference change lands at the target through its change event, with listeners cleaned up on completion and cancellation; save feedback uses a short ease-out while copy and state remain driven by the same business state, letting people read completion and continue their work."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "semantic-choice",
+      "title": {
+        "zh": "图解一：从动作语义选择速度模型",
+        "en": "Diagram 1: choose a velocity model from action meaning"
+      },
+      "alt": {
+        "zh": "直接操控与一次性确认从动作语义分支，分别连接 spring 和 ease-out，并标出连续性与清晰抵达。",
+        "en": "Direct manipulation and one-time confirmation branch from action meaning to spring and ease-out, labeled with continuity and clear arrival."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "meaning",
+          "label": {
+            "zh": "动作语义",
+            "en": "Action meaning"
+          },
+          "detail": {
+            "zh": "对象、输入、结果",
+            "en": "Object, input, outcome"
+          },
+          "x": 375,
+          "y": 55,
+          "width": 210,
+          "height": 95,
+          "tone": "ink"
+        },
+        {
+          "id": "direct",
+          "label": {
+            "zh": "直接操控",
+            "en": "Direct manipulation"
+          },
+          "detail": {
+            "zh": "拖拽、拉开、移动",
+            "en": "Drag, pull, move"
+          },
+          "x": 95,
+          "y": 250,
+          "width": 210,
+          "height": 105,
+          "tone": "accent"
+        },
+        {
+          "id": "spring",
+          "label": {
+            "zh": "Spring",
+            "en": "Spring"
+          },
+          "detail": {
+            "zh": "保留速度与可中断性",
+            "en": "Retain velocity and interruption"
+          },
+          "x": 95,
+          "y": 405,
+          "width": 210,
+          "height": 90,
+          "tone": "success"
+        },
+        {
+          "id": "confirm",
+          "label": {
+            "zh": "一次性确认",
+            "en": "One-time confirmation"
+          },
+          "detail": {
+            "zh": "保存、复制、菜单",
+            "en": "Save, copy, menu"
+          },
+          "x": 655,
+          "y": 250,
+          "width": 210,
+          "height": 105,
+          "tone": "surface"
+        },
+        {
+          "id": "ease",
+          "label": {
+            "zh": "Ease-out",
+            "en": "Ease-out"
+          },
+          "detail": {
+            "zh": "迅速清晰地抵达",
+            "en": "Arrive quickly and clearly"
+          },
+          "x": 655,
+          "y": 405,
+          "width": 210,
+          "height": 90,
+          "tone": "warning"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "meaning",
+          "to": "direct",
+          "label": {
+            "zh": "持续输入",
+            "en": "Continuous input"
+          }
+        },
+        {
+          "from": "direct",
+          "to": "spring"
+        },
+        {
+          "from": "meaning",
+          "to": "confirm",
+          "label": {
+            "zh": "明确结果",
+            "en": "Clear outcome"
+          }
+        },
+        {
+          "from": "confirm",
+          "to": "ease"
+        }
+      ]
+    },
+    {
+      "id": "spring-parameters",
+      "title": {
+        "zh": "图解二：弹簧参数如何影响收束",
+        "en": "Diagram 2: how spring parameters shape settling"
+      },
+      "alt": {
+        "zh": "刚度、阻尼和质量连接到抵达速度、回弹收束和响应节奏，最终汇入可控的落点。",
+        "en": "Stiffness, damping, and mass connect to arrival speed, rebound settling, and response rhythm, then converge on a controllable landing."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "stiffness",
+          "label": {
+            "zh": "刚度",
+            "en": "Stiffness"
+          },
+          "detail": {
+            "zh": "影响抵达速度",
+            "en": "Shapes arrival speed"
+          },
+          "x": 55,
+          "y": 115,
+          "width": 205,
+          "height": 95,
+          "tone": "accent"
+        },
+        {
+          "id": "damping",
+          "label": {
+            "zh": "阻尼",
+            "en": "Damping"
+          },
+          "detail": {
+            "zh": "影响回弹收束",
+            "en": "Shapes rebound settling"
+          },
+          "x": 375,
+          "y": 115,
+          "width": 205,
+          "height": 95,
+          "tone": "warning"
+        },
+        {
+          "id": "mass",
+          "label": {
+            "zh": "质量",
+            "en": "Mass"
+          },
+          "detail": {
+            "zh": "影响响应节奏",
+            "en": "Shapes response rhythm"
+          },
+          "x": 695,
+          "y": 115,
+          "width": 205,
+          "height": 95,
+          "tone": "surface"
+        },
+        {
+          "id": "landing",
+          "label": {
+            "zh": "可控落点",
+            "en": "Controllable landing"
+          },
+          "detail": {
+            "zh": "组件自己的合理范围",
+            "en": "A component-specific reasonable range"
+          },
+          "x": 375,
+          "y": 345,
+          "width": 210,
+          "height": 105,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "stiffness",
+          "to": "landing"
+        },
+        {
+          "from": "damping",
+          "to": "landing"
+        },
+        {
+          "from": "mass",
+          "to": "landing"
+        }
+      ]
+    },
+    {
+      "id": "interruption-contract",
+      "title": {
+        "zh": "图解三：中断时保持同一状态契约",
+        "en": "Diagram 3: retain one state contract through interruption"
+      },
+      "alt": {
+        "zh": "手势输入、当前视觉值、目标状态和完成结果形成闭环；新输入会回到手势输入并取消旧目标。",
+        "en": "Gesture input, current visual value, target state, and completed outcome form a loop; new input returns to gesture input and cancels the old target."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "gesture",
+          "label": {
+            "zh": "手势输入",
+            "en": "Gesture input"
+          },
+          "detail": {
+            "zh": "方向与速度",
+            "en": "Direction and velocity"
+          },
+          "x": 385,
+          "y": 45,
+          "width": 190,
+          "height": 90,
+          "tone": "accent"
+        },
+        {
+          "id": "current",
+          "label": {
+            "zh": "当前视觉值",
+            "en": "Current visual value"
+          },
+          "detail": {
+            "zh": "位置与焦点",
+            "en": "Position and focus"
+          },
+          "x": 650,
+          "y": 205,
+          "width": 190,
+          "height": 90,
+          "tone": "surface"
+        },
+        {
+          "id": "target",
+          "label": {
+            "zh": "目标状态",
+            "en": "Target state"
+          },
+          "detail": {
+            "zh": "打开、关闭、已保存",
+            "en": "Open, closed, saved"
+          },
+          "x": 520,
+          "y": 385,
+          "width": 190,
+          "height": 90,
+          "tone": "ink"
+        },
+        {
+          "id": "complete",
+          "label": {
+            "zh": "完成结果",
+            "en": "Completed outcome"
+          },
+          "detail": {
+            "zh": "可读与可继续操作",
+            "en": "Readable and actionable"
+          },
+          "x": 250,
+          "y": 385,
+          "width": 190,
+          "height": 90,
+          "tone": "success"
+        },
+        {
+          "id": "cancel",
+          "label": {
+            "zh": "取消旧目标",
+            "en": "Cancel old target"
+          },
+          "detail": {
+            "zh": "新意图即时接管",
+            "en": "New intent takes over"
+          },
+          "x": 120,
+          "y": 205,
+          "width": 190,
+          "height": 90,
+          "tone": "warning"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "gesture",
+          "to": "current"
+        },
+        {
+          "from": "current",
+          "to": "target"
+        },
+        {
+          "from": "target",
+          "to": "complete"
+        },
+        {
+          "from": "complete",
+          "to": "cancel",
+          "label": {
+            "zh": "新输入",
+            "en": "New input"
+          }
+        },
+        {
+          "from": "cancel",
+          "to": "gesture"
+        }
+      ]
+    }
+  ]
+}

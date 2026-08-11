@@ -476,7 +476,7 @@
       },
       "primitiveIds": [
         "stagger",
-        "progress-bar"
+        "crossfade"
       ],
       "dependencies": [
         "motion"
@@ -731,7 +731,7 @@
         "en": "Preserves spatial continuity as filtered results rearrange."
       },
       "primitiveIds": [
-        "layout-animation",
+        "morph",
         "stagger"
       ],
       "dependencies": [
@@ -795,7 +795,7 @@
         "en": "Explains sorting through row position while keeping data readable."
       },
       "primitiveIds": [
-        "layout-animation",
+        "morph",
         "crossfade"
       ],
       "dependencies": [
@@ -1145,7 +1145,7 @@
         "en": "Turns file intake, per-item progress, retry, and completion into one compact flow."
       },
       "primitiveIds": [
-        "progress-bar",
+        "perceived-performance",
         "stagger"
       ],
       "dependencies": [

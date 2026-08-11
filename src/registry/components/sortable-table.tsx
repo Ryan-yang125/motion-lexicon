@@ -8,7 +8,7 @@ const CELL = { type: "spring", stiffness: 520, damping: 34, mass: 0.45 } as cons
 const SMALL = { type: "spring", stiffness: 700, damping: 46, mass: 0.5 } as const;
 
 const EASE = [0.23, 1, 0.32, 1] as const;
-const LEAVE = [0.4, 0, 1, 1] as const;
+const LEAVE = [0.23, 1, 0.32, 1] as const;
 const HIDE = { duration: 0.12, ease: LEAVE } as const;
 const SHOW = { duration: 0.25, ease: EASE } as const;
 
@@ -130,6 +130,9 @@ export type SortableTableProps<T> = {
   markable?: boolean;
   onMarkChange?: (id: string | null) => void;
   getRowLabel?: (row: T) => string;
+  markLabel?: string;
+  markRowLabel?: (name: string) => string;
+  sortStatus?: (header: string | null, direction: SortDirection | null, rows: number) => string;
   className?: string;
 };
 
@@ -146,6 +149,11 @@ export function SortableTable<T>({
   markable = false,
   onMarkChange,
   getRowLabel,
+  markLabel = "Follow",
+  markRowLabel = (name) => `Follow ${name}`,
+  sortStatus = (header, direction, count) => header && direction
+    ? `Sorted by ${header}, ${direction === "asc" ? "ascending" : "descending"}. ${count} rows.`
+    : `Original order restored. ${count} rows.`,
   className = "",
 }: SortableTableProps<T>) {
   const reduced = useReducedMotion();
@@ -180,7 +188,7 @@ export function SortableTable<T>({
 
   const template = useMemo(
     () =>
-      (markable ? "28px " : "") +
+      (markable ? "44px " : "") +
       columns.map((c) => c.width ?? "minmax(0, 1fr)").join(" "),
     [columns, markable],
   );
@@ -205,13 +213,7 @@ export function SortableTable<T>({
 
   const activeHeader = columns.find((c) => c.id === current?.columnId)?.header;
 
-  const message = !touched
-    ? ""
-    : current && activeHeader
-      ? `Sorted by ${activeHeader}, ${
-          current.direction === "asc" ? "ascending" : "descending"
-        }. ${rows.length} rows.`
-      : `Original order restored. ${rows.length} rows.`;
+  const message = !touched ? "" : sortStatus(activeHeader ?? null, current?.direction ?? null, rows.length);
 
   return (
     <div
@@ -227,12 +229,12 @@ export function SortableTable<T>({
           <div
             role="row"
             aria-rowindex={1}
-            className="grid h-9 items-center gap-x-2 border-b border-stone-200 px-2 dark:border-white/[0.16]"
+            className="grid h-11 items-center gap-x-2 border-b border-stone-200 px-2 dark:border-white/[0.16]"
             style={{ gridTemplateColumns: template }}
           >
             {markable && (
               <div role="columnheader" className="min-w-0">
-                <span className="sr-only">Follow</span>
+                <span className="sr-only">{markLabel}</span>
               </div>
             )}
 
@@ -260,7 +262,7 @@ export function SortableTable<T>({
                     <button
                       type="button"
                       onClick={() => onToggle(column.id)}
-                      className={`group flex h-7 w-full items-center gap-1.5 rounded-[6px] px-1.5 outline-none focus-visible:bg-[#4568FF]/[0.06] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:bg-[#93B0FF]/[0.06] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF] ${
+                      className={`group flex h-11 w-full items-center gap-1.5 rounded-[6px] px-1.5 outline-none focus-visible:bg-[#4568FF]/[0.06] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:bg-[#93B0FF]/[0.06] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF] ${
                         end ? "flex-row-reverse" : ""
                       }`}
                     >
@@ -336,7 +338,7 @@ export function SortableTable<T>({
                 aria-rowindex={index + 2}
                 aria-current={isMarked ? true : undefined}
                 initial={false}
-                animate={{ y: index * rowHeight }}
+                animate={{ transform: `translate3d(0, ${index * rowHeight}px, 0)` }}
                 transition={
                   reduced
                     ? { duration: 0 }
@@ -353,13 +355,13 @@ export function SortableTable<T>({
                       type="button"
                       aria-pressed={marked === id}
                       onClick={() => onMark(id)}
-                      className={`flex size-[18px] items-center justify-center rounded-[5px] border outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_1px_3px_rgba(28,25,23,0.18)] dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[0_1px_3px_rgba(0,0,0,0.5)] ${
+                      className={`flex size-11 items-center justify-center rounded-[7px] border outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_1px_3px_rgba(28,25,23,0.18)] dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[0_1px_3px_rgba(0,0,0,0.5)] ${
                         marked === id
                           ? "border-[#4568FF] bg-[#4568FF] text-white dark:border-[#93B0FF] dark:bg-[#93B0FF] dark:text-stone-900"
                           : "border-stone-200 text-transparent dark:border-white/15"
                       }`}
                     >
-                      <span className="sr-only">Follow {nameOf(row)}</span>
+                      <span className="sr-only">{markRowLabel(nameOf(row))}</span>
                       <motion.svg
                         aria-hidden
                         width="11"

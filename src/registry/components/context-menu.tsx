@@ -18,7 +18,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const EASE = [0.23, 1, 0.32, 1] as const;
 
-const EXIT = [0.4, 0, 1, 1] as const;
+const EXIT = [0.23, 1, 0.32, 1] as const;
 
 const ITEM_H = 32;
 const SEP_H = 9;
@@ -382,6 +382,7 @@ export type ContextMenuProps = {
   children: ReactNode;
   onSelect?: (id: string) => void;
   label?: string;
+  hint?: string;
   width?: number;
   disabled?: boolean;
   className?: string;
@@ -392,6 +393,7 @@ export function ContextMenu({
   children,
   onSelect,
   label = "Context menu",
+  hint = "Right-click, or press Shift plus F10, for options",
   width = 224,
   disabled = false,
   className = "",
@@ -428,7 +430,7 @@ export function ContextMenu({
       >
         {children}
         <span id={`${uid}-hint`} className="sr-only">
-          Right-click, or press Shift plus F10, for options
+          {hint}
         </span>
       </div>
       <Portal host={host}>

@@ -129,6 +129,10 @@ export type PaginationProps = {
   onPageChange?: (page: number) => void;
   label?: string;
   className?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+  pageLabel?: (page: number) => string;
+  statusLabel?: (page: number, count: number) => string;
 };
 
 function Chevron({ flip = false }: { flip?: boolean }) {
@@ -162,6 +166,10 @@ export function Pagination({
   onPageChange,
   label = "Pagination",
   className = "",
+  previousLabel = "Previous page",
+  nextLabel = "Next page",
+  pageLabel = (item) => `Page ${item}`,
+  statusLabel = (item, total) => `Page ${item} of ${total}`,
 }: PaginationProps) {
   const pagination = usePagination({
     count,
@@ -181,18 +189,18 @@ export function Pagination({
   const [spoken, setSpoken] = useState("");
   useEffect(() => {
     const t = setTimeout(
-      () => setSpoken(`Page ${current} of ${Math.max(1, count)}`),
+      () => setSpoken(statusLabel(current, Math.max(1, count))),
       500,
     );
     return () => clearTimeout(t);
-  }, [current, count]);
+  }, [count, current, statusLabel]);
 
   return (
     <nav aria-label={label} className={`inline-block ${className}`}>
       <div className="flex items-center" style={{ gap: GAP }}>
         <button
           type="button"
-          aria-label="Previous page"
+          aria-label={previousLabel}
           aria-disabled={!canPrev}
           onClick={() => canPrev && pagination.prev()}
           className={arrow(canPrev)}
@@ -228,7 +236,7 @@ export function Pagination({
                 <li key={`slot-${item}`} style={{ width: slot }}>
                   <button
                     type="button"
-                    aria-label={`Page ${item}`}
+                    aria-label={pageLabel(item)}
                     aria-current={selected ? "page" : undefined}
                     onClick={() => pagination.goTo(item)}
                     className={`flex h-8 w-full items-center justify-center rounded-[9px] text-[12.5px] tabular-nums outline-none transition-colors duration-150 focus-visible:bg-[#4568FF]/[0.06] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:focus-visible:bg-[#93B0FF]/[0.1] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF] ${
@@ -255,7 +263,7 @@ export function Pagination({
         </div>
         <button
           type="button"
-          aria-label="Next page"
+          aria-label={nextLabel}
           aria-disabled={!canNext}
           onClick={() => canNext && pagination.next()}
           className={arrow(canNext)}

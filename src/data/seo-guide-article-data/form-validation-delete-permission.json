@@ -1,0 +1,432 @@
+{
+  "guideId": "form-validation-delete-permission",
+  "standfirst": {
+    "zh": "表单校验、删除确认和权限变更都在处理边界。动效要把风险、影响范围、进行中状态和恢复路径安排在用户做决定的位置，让人能看见后果，也能继续完成任务。",
+    "en": "Form validation, deletion confirmation, and permission changes all handle boundaries. Motion should place risk, scope, progress, and recovery where people make the decision, so consequences remain visible and work can continue."
+  },
+  "sections": [
+    {
+      "id": "risk-map",
+      "title": {
+        "zh": "先画出风险和可恢复性的地图",
+        "en": "Map risk and reversibility first"
+      },
+      "paragraphs": [
+        {
+          "zh": "把高风险交互都做成同一种弹窗，往往会让重要程度变得模糊。表单中的邮箱格式错误需要快速、贴近输入的帮助；移除团队成员需要说明对象、影响和是否可以恢复；把链接从“受邀成员”改为“任何人可访问”需要让人看见范围扩大到了哪里。先按后果而不是控件类型分组：可立即修正、可撤销、需要明确承诺、会影响他人的设置。每一组决定反馈的位置、速度和文字强度。",
+          "en": "Making every high-risk interaction the same modal often blurs importance. An invalid email needs fast help beside the field; removing a team member needs the object, impact, and recovery option; changing a link from invited members to anyone needs to show where access expands. Group by consequence rather than control type: immediately correctable, reversible, explicitly committed, and settings that affect other people. Each group determines the location, pace, and language of feedback."
+        },
+        {
+          "zh": "风险地图也能阻止过度表演。轻微的输入错误不需要整张页面震动，真正的删除确认也不该只靠红色和一次闪烁。界面应把注意力导向下一步：字段错误让焦点和帮助文本回到具体输入；删除确认让目标名称、影响数量和撤销策略同时可读；权限变更让旧规则、新规则和受影响对象并列出现。动效的节奏随风险提高而更有停顿，信息的证据也随风险提高而更完整。",
+          "en": "A risk map also prevents over-performance. A small input error does not need the whole page to shake, and a genuine deletion confirmation should not rely on red alone and one flash. Direct attention to the next step: field errors return focus and help text to the input; deletion confirmation makes the target name, impact count, and undo policy readable together; permission changes place old rule, new rule, and affected objects side by side. As risk rises, motion earns a clearer pause and information earns fuller evidence."
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "title": {
+        "zh": "表单校验贴着输入发生",
+        "en": "Make validation happen beside the input"
+      },
+      "paragraphs": [
+        {
+          "zh": "好的行内校验从用户行为开始，而不是从错误状态开始。用户输入、离开字段、点击提交，三个时机需要不同策略。输入过程中优先给格式和要求的前瞻提示；离开字段时可以确认完整性；提交时再集中处理遗漏项，并把焦点带到第一个需要处理的地方。这样用户不会在每敲一个字符时被打断，也不会在提交后面对一串没有顺序的红字。每条提示都应说明问题、修正方式和修正后的预期。",
+          "en": "Good inline validation begins with user behavior rather than the error state. Typing, leaving a field, and submitting require different strategies. While typing, offer anticipatory format and requirement guidance; on blur, confirm completeness; on submit, gather missing items and move focus to the first one that needs action. People are then neither interrupted on every character nor left with an unordered wall of red copy after submission. Each message should state the problem, the correction, and the expected result."
+        },
+        {
+          "zh": "动效只需帮助定位。字段边界可以在 120 到 180 毫秒内改变，错误图标和说明可在原位置显现，输入光标保持可编辑。一次极短的横向提醒适合提交后的单个错误，连续晃动会让错误本身变得比修正方案更抢眼。多个错误同时出现时，用清晰的文档顺序、错误摘要和逐项焦点导航代替逐个动画。低动态路径保留边界、说明和焦点，把额外位移移除。",
+          "en": "Motion only needs to help locate the issue. A field boundary can change over 120 to 180 milliseconds, an error icon and explanation can appear in place, and the input remains editable. One very short horizontal cue can suit a single post-submit error; repeated shaking makes the error more prominent than the correction. When several errors appear together, use clear document order, an error summary, and stepwise focus navigation instead of animating every field. The low-motion path keeps boundary, explanation, and focus while removing extra travel."
+        }
+      ]
+    },
+    {
+      "id": "deletion",
+      "title": {
+        "zh": "删除需要对象、承诺和恢复",
+        "en": "Deletion needs object, commitment, and recovery"
+      },
+      "paragraphs": [
+        {
+          "zh": "删除流程的第一责任是确认对象。确认层里应出现项目名称、相关数量、不可恢复的内容和保留内容；当对象的名称相近时，还可补充头像、缩略图或路径。用户按下删除后，原列表里的项目可以进入处理中状态，避免看起来像点击无效。服务器确认后，再让项目离开列表，并在原位置或邻近位置留下撤销入口。整个过程讲的是同一件事，不同区域的状态要同步，而不是各自播放一段漂亮动画。",
+          "en": "The first responsibility of a deletion flow is confirming the object. The confirmation layer should show the item name, related count, irreversible content, and content that remains; similar names can be disambiguated with an avatar, thumbnail, or path. After Delete is pressed, the original list item can enter a processing state so the click never looks ignored. After the server confirms, let the item leave the list and retain an Undo action in or near the original position. The flow describes one event, so states across regions should stay synchronized rather than each playing an attractive animation."
+        },
+        {
+          "zh": "按住确认适合代价高、误触概率高的操作，因为它把承诺变成一段可见的时间。进度填充要始终贴着手指或指针的来源，松开后立即取消，不要留下模糊的半完成状态。它不能取代文本说明：用户仍要知道删掉的是谁、能否恢复、多久后彻底清除。对于可撤销的归档或移除，撤销窗口应该稳定地停留足够久，并在窗口关闭前让用户完成其他任务；不要用短暂浮层逼迫用户立刻做决定。",
+          "en": "Hold-to-confirm suits actions with high cost and a high chance of accidental activation because it turns commitment into visible time. Progress fill should stay attached to the finger or pointer origin and cancel immediately on release, leaving no ambiguous half-complete state. It does not replace textual explanation: people still need to know what is removed, whether recovery is possible, and when permanent removal happens. For reversible archive or remove actions, the undo window should remain stable long enough for people to continue other work; a fleeting overlay should not force an immediate decision."
+        }
+      ]
+    },
+    {
+      "id": "permissions",
+      "title": {
+        "zh": "权限变化要展示范围，而非只更新标签",
+        "en": "Show permission scope instead of updating one label"
+      },
+      "paragraphs": [
+        {
+          "zh": "权限设置的困难来自不可见的受影响对象。把“仅受邀成员”改为“拥有链接的任何人”时，界面需要同时说明访问者、可见内容、链接行为和保存后的结果。选择控件附近可以立即更新解释文案，确认保存时则把最终规则放到页面状态区，并更新成员或共享列表中的相关标记。用户看到的是一条可追踪的规则变化，而不是一个孤立的下拉框选择。",
+          "en": "Permission settings are difficult because affected objects are often invisible. When a rule changes from invited members only to anyone with the link, the interface needs to explain visitors, visible content, link behavior, and the result after saving. Copy near the choice can update immediately; on confirmation, place the final rule in the page status area and update related markers in members or sharing lists. People see a traceable rule change rather than an isolated dropdown choice."
+        },
+        {
+          "zh": "权限的视觉层级应当和影响范围一致。只影响当前文档的角色调整可以在原处确认；影响整个工作区、公开链接或外部邀请的选择，应当获得更明确的总结和可回退路径。颜色可以帮助区分状态，完整句子负责说明谁会受到影响。对于实时协作产品，还要处理并发：当其他管理员同时修改规则时，页面需要说明本地选择是否仍有效、保存会覆盖什么、以及怎样重新载入最新状态。动效在这里负责让冲突和更新被看见，绝不掩盖它们。",
+          "en": "Permission hierarchy should match scope. A role adjustment that affects one document can confirm in place; a choice affecting a workspace, public link, or external invitations deserves a clearer summary and a route back. Color helps distinguish states while complete sentences explain who is affected. Collaborative products must also handle concurrency: if another administrator changes the rule, explain whether the local choice remains valid, what saving would overwrite, and how to reload the latest state. Motion makes conflict and update visible; it should never hide either one."
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "title": {
+        "zh": "用失败路径验收边界交互",
+        "en": "Review boundary interactions through failure paths"
+      },
+      "paragraphs": [
+        {
+          "zh": "真正的验收从失败开始。让校验接口返回延迟和错误，观察用户是否知道当前字段仍可编辑；让删除请求失败，确认对象没有提前消失且错误落在原操作附近；让权限保存发生冲突，检查页面是否保留了用户选择并给出明确下一步。再加入网络离线、键盘操作、窄屏和低动态偏好。每一种异常都验证同一个原则：风险越高，界面越要把原因、当前状态和恢复动作留在同一上下文里。",
+          "en": "Real review begins with failure. Return delay and error from validation services and observe whether people know the field is still editable; fail a deletion request and confirm the object has not vanished early and the error lands near the original action; create a permission-save conflict and check that the page retains the person’s choice and offers a clear next step. Add offline networking, keyboard operation, narrow screens, and low-motion preference. Every exception tests one principle: as risk rises, the interface keeps cause, current state, and recovery action in the same context."
+        },
+        {
+          "zh": "团队也应记录哪些反馈是“承诺前”、哪些是“承诺中”、哪些是“承诺后”。承诺前的提示帮助理解后果；承诺中的反馈防止重复操作；承诺后的结果负责恢复任务节奏。这个分层能让设计、产品和工程对同一个交互使用相同语言，并减少把警告、加载和成功信息堆在一个组件里的冲动。当一个页面的边界操作都能被这样描述，动效规范就已经接近可复用的产品规则。",
+          "en": "Teams should record which feedback happens before commitment, during commitment, and after commitment. Before-commitment guidance explains consequences; during-commitment feedback prevents duplicate work; after-commitment result restores task rhythm. This framing gives design, product, and engineering a shared language and reduces the urge to pile warning, loading, and success into one component. When every boundary interaction on a page can be described this way, the motion spec is close to a reusable product rule."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "高风险交互发布清单",
+    "en": "High-risk interaction shipping checklist"
+  },
+  "checklist": [
+    {
+      "id": "object",
+      "label": {
+        "zh": "确认层明确对象与影响",
+        "en": "Confirmation names the object and impact"
+      },
+      "detail": {
+        "zh": "名称、数量、范围和可恢复性同时可读。",
+        "en": "Name, count, scope, and recoverability are readable together."
+      }
+    },
+    {
+      "id": "field",
+      "label": {
+        "zh": "错误贴着字段并保留编辑焦点",
+        "en": "Errors stay beside the field and retain editing focus"
+      },
+      "detail": {
+        "zh": "提示解释问题、修正方式和预期结果。",
+        "en": "The message explains the issue, correction, and expected result."
+      }
+    },
+    {
+      "id": "pending",
+      "label": {
+        "zh": "处理中状态阻止重复承诺",
+        "en": "Processing state prevents duplicate commitment"
+      },
+      "detail": {
+        "zh": "按钮、原对象和状态区同步说明进行中。",
+        "en": "Button, original object, and status region communicate progress together."
+      }
+    },
+    {
+      "id": "recovery",
+      "label": {
+        "zh": "失败和撤销入口留在原上下文",
+        "en": "Failure and undo stay in the original context"
+      },
+      "detail": {
+        "zh": "用户无需重新寻找对象或回忆刚才做了什么。",
+        "en": "People do not have to relocate the object or remember what they just did."
+      }
+    },
+    {
+      "id": "scope",
+      "label": {
+        "zh": "权限变化展示受影响范围",
+        "en": "Permission changes show affected scope"
+      },
+      "detail": {
+        "zh": "旧规则、新规则和受影响成员或内容可被比较。",
+        "en": "Old rule, new rule, and affected people or content can be compared."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：删除项目后保留可恢复的任务节奏",
+      "en": "Case: preserve task rhythm after deleting a project"
+    },
+    "context": {
+      "zh": "项目列表中的删除动作需要确认对象、等待服务器、更新列表并给出撤销机会。",
+      "en": "A project-list deletion must confirm the object, await the server, update the list, and offer an undo opportunity."
+    },
+    "code": "<section class=\"delete-demo\">\n  <ul data-project-list>\n    <li class=\"project-row\" data-project-row data-project-id=\"alpha\" data-state=\"ready\">\n      <span>Project Alpha</span>\n      <button type=\"button\" data-delete>Delete</button>\n    </li>\n  </ul>\n  <div data-project-undo hidden>\n    <span>Project deleted.</span>\n    <button type=\"button\" data-undo>Undo</button>\n  </div>\n  <p role=\"status\" aria-live=\"polite\" data-delete-status>Project Alpha is available.</p>\n</section>\n\n<style>\n.delete-demo { display: grid; gap: 12px; max-width: 28rem; }\n.project-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }\n@media (prefers-reduced-motion: no-preference) {\n  .project-row { transition: opacity 180ms ease, transform 180ms ease; }\n  .project-row[data-state=\"leaving\"] { opacity: 0; transform: translateX(8px); }\n}\n</style>\n\n<script>\nconst row = document.querySelector(\"[data-project-row]\");\nconst list = document.querySelector(\"[data-project-list]\");\nconst deleteButton = row.querySelector(\"[data-delete]\");\nconst undoRegion = document.querySelector(\"[data-project-undo]\");\nconst undoButton = undoRegion.querySelector(\"[data-undo]\");\nconst status = document.querySelector(\"[data-delete-status]\");\nconst projectId = row.dataset.projectId;\nconst reducedMotion = window.matchMedia(\"(prefers-reduced-motion: reduce)\");\nlet leaveTimer = 0;\nlet onLeaveEnd = null;\n\nfunction waitForServer() {\n  return new Promise((resolve) => window.setTimeout(resolve, 160));\n}\n\nasync function deleteProject(id) {\n  await waitForServer();\n}\n\nasync function restoreProject(id) {\n  await waitForServer();\n}\n\nfunction clearLeaving() {\n  window.clearTimeout(leaveTimer);\n  leaveTimer = 0;\n  if (onLeaveEnd) row.removeEventListener(\"transitionend\", onLeaveEnd);\n  onLeaveEnd = null;\n}\n\nfunction removeAfterExit() {\n  const finishRemoval = () => {\n    clearLeaving();\n    if (row.isConnected) row.remove();\n  };\n\n  if (reducedMotion.matches) {\n    finishRemoval();\n    return;\n  }\n\n  onLeaveEnd = (event) => {\n    if (event.target !== row || event.propertyName !== \"opacity\") return;\n    finishRemoval();\n  };\n  row.addEventListener(\"transitionend\", onLeaveEnd);\n  leaveTimer = window.setTimeout(finishRemoval, 220);\n}\n\nasync function removeProject() {\n  if (deleteButton.disabled) return;\n\n  row.dataset.state = \"deleting\";\n  deleteButton.disabled = true;\n  status.textContent = \"Deleting Project Alpha.\";\n\n  try {\n    await deleteProject(projectId);\n    row.dataset.state = \"leaving\";\n    undoRegion.hidden = false;\n    undoButton.disabled = false;\n    status.textContent = \"Project deleted. Undo is available.\";\n    undoButton.focus();\n    removeAfterExit();\n  } catch {\n    row.dataset.state = \"ready\";\n    deleteButton.disabled = false;\n    status.textContent = \"Project deletion failed. Try again.\";\n    deleteButton.focus();\n  }\n}\n\nasync function restoreProjectRow() {\n  if (undoButton.disabled) return;\n\n  clearLeaving();\n  undoButton.disabled = true;\n  status.textContent = \"Restoring Project Alpha.\";\n\n  try {\n    await restoreProject(projectId);\n    if (!row.isConnected) list.append(row);\n    row.dataset.state = \"ready\";\n    deleteButton.disabled = false;\n    undoButton.disabled = false;\n    undoRegion.hidden = true;\n    status.textContent = \"Project restored.\";\n    deleteButton.focus();\n  } catch {\n    undoButton.disabled = false;\n    status.textContent = \"Project restoration failed. Try again.\";\n    undoButton.focus();\n  }\n}\n\ndeleteButton.addEventListener(\"click\", removeProject);\nundoButton.addEventListener(\"click\", restoreProjectRow);\n</script>",
+    "explanation": {
+      "zh": "列表项只有在服务端确认后才离开。两条路径都保留状态文字和撤销入口；默认路径额外加入极短的离开反馈，低动态路径直接更新结果。",
+      "en": "The list row leaves only after server confirmation. Both paths retain status copy and Undo; the default path adds a very short exit cue while the low-motion path updates the result directly."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "risk-map",
+      "title": {
+        "zh": "图解一：按后果安排反馈",
+        "en": "Diagram 1: assign feedback by consequence"
+      },
+      "alt": {
+        "zh": "四种后果从可立即修正到影响他人，分别对应字段提示、撤销、明确确认和范围摘要。",
+        "en": "Four consequences range from immediate correction to affecting others, mapping to field help, undo, explicit confirmation, and scope summary."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "correct",
+          "label": {
+            "zh": "可立即修正",
+            "en": "Immediately correctable"
+          },
+          "detail": {
+            "zh": "字段提示",
+            "en": "Field help"
+          },
+          "x": 55,
+          "y": 220,
+          "width": 190,
+          "height": 100,
+          "tone": "surface"
+        },
+        {
+          "id": "undo",
+          "label": {
+            "zh": "可撤销",
+            "en": "Reversible"
+          },
+          "detail": {
+            "zh": "原位撤销",
+            "en": "Undo in place"
+          },
+          "x": 275,
+          "y": 220,
+          "width": 190,
+          "height": 100,
+          "tone": "accent"
+        },
+        {
+          "id": "commit",
+          "label": {
+            "zh": "需要承诺",
+            "en": "Requires commitment"
+          },
+          "detail": {
+            "zh": "对象 + 后果",
+            "en": "Object + consequence"
+          },
+          "x": 495,
+          "y": 220,
+          "width": 190,
+          "height": 100,
+          "tone": "warning"
+        },
+        {
+          "id": "others",
+          "label": {
+            "zh": "影响他人",
+            "en": "Affects others"
+          },
+          "detail": {
+            "zh": "范围摘要",
+            "en": "Scope summary"
+          },
+          "x": 715,
+          "y": 220,
+          "width": 190,
+          "height": 100,
+          "tone": "ink"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "correct",
+          "to": "undo",
+          "label": {
+            "zh": "风险上升",
+            "en": "Risk rises"
+          }
+        },
+        {
+          "from": "undo",
+          "to": "commit"
+        },
+        {
+          "from": "commit",
+          "to": "others"
+        }
+      ]
+    },
+    {
+      "id": "commitment-timeline",
+      "title": {
+        "zh": "图解二：承诺前、中、后的反馈",
+        "en": "Diagram 2: feedback before, during, and after commitment"
+      },
+      "alt": {
+        "zh": "删除动作依次展示后果说明、处理中状态和删除结果与撤销入口。",
+        "en": "A deletion shows consequence guidance, processing state, then result and undo."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "before",
+          "label": {
+            "zh": "承诺前",
+            "en": "Before commitment"
+          },
+          "detail": {
+            "zh": "名称、影响、选择",
+            "en": "Name, impact, choice"
+          },
+          "x": 80,
+          "y": 205,
+          "width": 210,
+          "height": 110,
+          "tone": "warning"
+        },
+        {
+          "id": "during",
+          "label": {
+            "zh": "承诺中",
+            "en": "During commitment"
+          },
+          "detail": {
+            "zh": "处理中、防重复",
+            "en": "Processing, prevent repeats"
+          },
+          "x": 375,
+          "y": 205,
+          "width": 210,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "after",
+          "label": {
+            "zh": "承诺后",
+            "en": "After commitment"
+          },
+          "detail": {
+            "zh": "结果、撤销、继续",
+            "en": "Result, undo, continue"
+          },
+          "x": 670,
+          "y": 205,
+          "width": 210,
+          "height": 110,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "before",
+          "to": "during"
+        },
+        {
+          "from": "during",
+          "to": "after"
+        }
+      ]
+    },
+    {
+      "id": "permission-scope",
+      "title": {
+        "zh": "图解三：权限变化的范围证据",
+        "en": "Diagram 3: evidence for a permission scope change"
+      },
+      "alt": {
+        "zh": "旧规则、新规则、受影响对象和保存结果组成可比较的权限变化说明。",
+        "en": "Old rule, new rule, affected objects, and saved result create a comparable permission-change explanation."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "old",
+          "label": {
+            "zh": "旧规则",
+            "en": "Old rule"
+          },
+          "detail": {
+            "zh": "仅受邀成员",
+            "en": "Invited members only"
+          },
+          "x": 80,
+          "y": 90,
+          "width": 300,
+          "height": 105,
+          "tone": "surface"
+        },
+        {
+          "id": "new",
+          "label": {
+            "zh": "新规则",
+            "en": "New rule"
+          },
+          "detail": {
+            "zh": "拥有链接的任何人",
+            "en": "Anyone with the link"
+          },
+          "x": 580,
+          "y": 90,
+          "width": 300,
+          "height": 105,
+          "tone": "warning"
+        },
+        {
+          "id": "affected",
+          "label": {
+            "zh": "受影响对象",
+            "en": "Affected objects"
+          },
+          "detail": {
+            "zh": "成员、链接、可见内容",
+            "en": "Members, links, visible content"
+          },
+          "x": 330,
+          "y": 250,
+          "width": 300,
+          "height": 105,
+          "tone": "ink"
+        },
+        {
+          "id": "saved",
+          "label": {
+            "zh": "保存结果",
+            "en": "Saved result"
+          },
+          "detail": {
+            "zh": "状态区中的最终规则",
+            "en": "Final rule in status area"
+          },
+          "x": 330,
+          "y": 400,
+          "width": 300,
+          "height": 80,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "old",
+          "to": "affected"
+        },
+        {
+          "from": "new",
+          "to": "affected"
+        },
+        {
+          "from": "affected",
+          "to": "saved"
+        }
+      ]
+    }
+  ]
+}

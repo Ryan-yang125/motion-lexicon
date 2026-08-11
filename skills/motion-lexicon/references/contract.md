@@ -1,11 +1,16 @@
 # Motion Grammar contract
 
-Motion Director and the public website share the Motion Blueprint contract.
+The Motion Lexicon Skill and the public website share the Motion Blueprint
+contract.
 Use the public data when the task needs the current published vocabulary or a
 machine-readable handoff:
 
 - Grammar data: `https://motion-lexicon.pages.dev/data/v4/motion-grammar.json`
+- Component and primitive catalog: `https://motion-lexicon.pages.dev/data/v4/catalog.json`
 - Blueprint schema: `https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json`
+
+For offline component selection, use the generated
+[published component catalog](components.md).
 
 The bundled references explain selection and implementation. The public
 contract keeps reusable artifacts consistent across the website, candidate
@@ -23,6 +28,12 @@ review, and installed Skill.
 | `accessibility` | Reduced motion, focus, ARIA, and keyboard behavior |
 | `delivery` | Requested source formats and integration notes |
 | `provenance` | Publication stage, related foundations, moments, and confidence |
+
+For a normal Compose or Implement response, `beats[].primitive` and
+`provenance.foundations[]` use exact published primitive IDs from the public
+catalog, such as `press-tap-feedback`, `text-morph`, and `crossfade`. A new ID
+is valid only when `provenance.status` is `candidate` and the response clearly
+identifies it as the proposed primitive.
 
 ## Use with the website
 

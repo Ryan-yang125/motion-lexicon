@@ -71,7 +71,7 @@ npm run crawl:dist
 npm run test:visual
 ```
 
-For UI or routing changes, also inspect `/zh/`, `/zh/catalog/?surface=components`, `/zh/entrances/slide-in/`, and one category route such as `/zh/sequencing/` in a browser.
+For UI or routing changes, also inspect `/zh/`, `/zh/components/`, `/zh/primitives/slide-in/`, and `/zh/guides/` in a browser.
 
 ## Implementation Notes
 

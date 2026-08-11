@@ -30,7 +30,7 @@ model to the requested framework without changing its behavior.
   --motion-leave: 150ms;
   --motion-feedback: 150ms;
   --ease-arrive: cubic-bezier(.23, 1, .32, 1);
-  --ease-leave: cubic-bezier(.4, 0, 1, 1);
+  --ease-leave: cubic-bezier(.23, 1, .32, 1);
   --ease-feedback: cubic-bezier(.2, .8, .2, 1);
 }
 ```

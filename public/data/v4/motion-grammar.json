@@ -60,7 +60,7 @@
       }
     },
     "leave": {
-      "curve": "cubic-bezier(0.4, 0, 1, 1)",
+      "curve": "cubic-bezier(0.23, 1, 0.32, 1)",
       "rangeMs": [
         110,
         180

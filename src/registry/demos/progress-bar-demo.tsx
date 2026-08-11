@@ -1,9 +1,11 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useEffect, useState } from "react";
 import { ProgressBar } from "@/registry/components/progress-bar";
 
-export function ProgressBarDemo() {
+export function ProgressBarDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [value, setValue] = useState<number | null>(null);
 
   useEffect(() => {
@@ -20,12 +22,12 @@ export function ProgressBarDemo() {
   }, [value]);
 
   return (
-    <div className="mx-auto w-full max-w-[360px]">
+    <div role="group" aria-label={demoText("progress-bar", locale)} className="mx-auto w-full max-w-[360px]">
       <ProgressBar
         value={value}
         label="roadmap.pdf"
-        pendingLabel="Sizing"
-        completeLabel="Upload complete"
+        pendingLabel={demoValue(locale, "计算大小", "Sizing")}
+        completeLabel={demoValue(locale, "上传完成", "Upload complete")}
       />
     </div>
   );

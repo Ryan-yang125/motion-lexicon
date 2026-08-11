@@ -13,8 +13,8 @@ const LIFT = { type: "spring", stiffness: 380, damping: 26, mass: 0.7 } as const
 
 const SETTLE = { type: "spring", stiffness: 260, damping: 34, mass: 0.8 } as const;
 
-const CLEAR = { duration: 0.16, ease: [0.4, 0, 1, 1] } as const;
-const DROP = { duration: 0.14, ease: [0.4, 0, 1, 1] } as const;
+const CLEAR = { duration: 0.16, ease: [0.23, 1, 0.32, 1] } as const;
+const DROP = { duration: 0.14, ease: [0.23, 1, 0.32, 1] } as const;
 const STILL = { duration: 0 } as const;
 
 const GLYPH: Record<"up" | "down", ReactNode> = {

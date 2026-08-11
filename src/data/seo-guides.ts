@@ -1,4 +1,3 @@
-import type { MotionPackKind } from "./motion-packs";
 import type { LocalizedText } from "./types";
 import type { SeoGuideId } from "./seo-guide-ids";
 
@@ -39,7 +38,6 @@ export type SeoGuide = {
   decision: LocalizedText;
   steps: readonly [SeoGuideStep, SeoGuideStep, SeoGuideStep];
   foundations: readonly SeoGuideFoundationId[];
-  packs: readonly MotionPackKind[];
   relatedGuideIds: readonly [SeoGuideId, SeoGuideId];
 };
 
@@ -84,7 +82,6 @@ export const seoGuides = [
       }
     ],
     foundations: ["press-tap-feedback", "crossfade", "duration"],
-    packs: ["save-confirmation", "publish-release", "upload-complete"],
     relatedGuideIds: ["form-validation-delete-permission", "from-brief-to-spec"]
   },
   {
@@ -127,8 +124,7 @@ export const seoGuides = [
       }
     ],
     foundations: ["morph", "stagger", "crossfade"],
-    packs: ["card-selection", "filter-results", "kanban-move"],
-    relatedGuideIds: ["pack-or-primitive", "css-motion-jank"]
+    relatedGuideIds: ["component-or-primitive", "css-motion-jank"]
   },
   {
     id: "css-motion-jank",
@@ -170,7 +166,6 @@ export const seoGuides = [
       }
     ],
     foundations: ["frame-rate", "compositing", "duration"],
-    packs: ["media-scrub", "filter-results", "upload-complete"],
     relatedGuideIds: ["reduced-motion", "spring-or-ease-out"]
   },
   {
@@ -213,7 +208,6 @@ export const seoGuides = [
       }
     ],
     foundations: ["spring", "easing", "scale-in"],
-    packs: ["card-selection", "save-confirmation", "approval-request"],
     relatedGuideIds: ["from-brief-to-spec", "card-list-filter-continuity"]
   },
   {
@@ -256,7 +250,6 @@ export const seoGuides = [
       }
     ],
     foundations: ["reduced-motion", "fade-in-fade-out", "crossfade"],
-    packs: ["details-disclosure", "notification-triage", "progress-steps"],
     relatedGuideIds: ["css-motion-jank", "form-validation-delete-permission"]
   },
   {
@@ -299,7 +292,6 @@ export const seoGuides = [
       }
     ],
     foundations: ["shake-wiggle", "hold-to-confirm", "direction-aware-transition"],
-    packs: ["inline-validation", "delete-confirmation", "permission-change"],
     relatedGuideIds: ["save-submit-publish-feedback", "reduced-motion"]
   },
   {
@@ -342,50 +334,48 @@ export const seoGuides = [
       }
     ],
     foundations: ["purposeful-animation", "duration", "easing"],
-    packs: ["publish-release", "workspace-switch", "approval-request"],
-    relatedGuideIds: ["spring-or-ease-out", "pack-or-primitive"]
+    relatedGuideIds: ["spring-or-ease-out", "component-or-primitive"]
   },
   {
-    id: "pack-or-primitive",
+    id: "component-or-primitive",
     eyebrow: text("场景指南 08", "Scenario guide 08"),
-    title: text("Pack 与基础动效：从哪里开始", "Choose a Pack or a motion primitive"),
+    title: text("组件还是原子动效：从合适层级开始", "Choose a component or a motion primitive"),
     description: text(
-      "按场景完整度和定制深度选择 Pack 或基础动效，既能快速落地，也能保留设计控制力。",
-      "Choose a Pack or a motion primitive by scenario completeness and customization depth, balancing speed with design control."
+      "按交互完整度、现有结构和改造范围选择组件或原子动效，让交付层级与真实需求匹配。",
+      "Choose a component or motion primitive from interaction completeness, existing structure, and adaptation scope."
     ),
     intro: text(
-      "基础动效解决一个行为，Pack 把多个行为组织成真实产品瞬间。两者都可独立使用，也能互相拆解和组合。",
-      "A primitive solves one behaviour. A Pack organizes several behaviours into a real product moment. Each can stand alone or be combined."
+      "组件交付完整 React 交互，原子动效聚焦一个可复用行为。两条入口共享真实预览、源码、安装路径和减弱动效要求。",
+      "A component delivers a complete React interaction. A primitive focuses on one reusable behavior. Both include real previews, source, installation, and reduced motion."
     ),
     decision: text(
-      "当界面已经有清楚的状态流程时，从 Pack 开始；当你只需要解决一个局部行为时，从基础动效开始。",
-      "Start with a Pack when the UI already has a clear state flow. Start with a primitive when you need to solve one local behaviour."
+      "需求包含控件结构、多个状态、焦点和恢复时选择组件；现有界面只需补充一个动效规则时选择原子动效。",
+      "Choose a component when the request owns controls, states, focus, and recovery. Choose a primitive for one motion rule inside an established interface."
     ),
     steps: [
       {
-        title: text("先看场景是否完整", "Check whether the scenario is complete"),
+        title: text("列出对象与状态", "List objects and states"),
         copy: text(
-          "保存、发布、删除这类含有多段状态的流程，可以直接借用 Pack 的结构。",
-          "Flows such as saving, publishing, and deleting contain several states and can borrow a Pack’s structure."
+          "控件、等待、结果、错误和焦点形成完整边界时，从组件开始。",
+          "Start from a component when controls, pending, outcome, errors, and focus form a complete boundary."
         )
       },
       {
-        title: text("再看需要改到多深", "Then assess customization depth"),
+        title: text("检查现有结构", "Inspect existing structure"),
         copy: text(
-          "只改进入方式或曲线时，直接打开对应基础动效会更轻。",
-          "When only the entrance or curve changes, working from the relevant primitive stays lighter."
+          "现有组件已经拥有状态与无障碍路径时，直接接入对应原子动效。",
+          "Use the relevant primitive when the existing component already owns state and accessibility paths."
         )
       },
       {
-        title: text("回到基础规则校验", "Validate against the underlying rules"),
+        title: text("在真实任务中验收", "Validate in the real task"),
         copy: text(
-          "采用 Pack 后，仍检查时长、空间连续性和减弱动效，确保它适配你的界面。",
-          "After adopting a Pack, still check timing, spatial continuity, and reduced motion so it fits your interface."
+          "安装后检查默认、失败、重复操作、中断、键盘和减弱动效路径。",
+          "After installation, check default, failure, repeat action, interruption, keyboard, and reduced-motion paths."
         )
       }
     ],
-    foundations: ["purposeful-animation", "stagger", "morph"],
-    packs: ["save-confirmation", "card-selection", "filter-results"],
+    foundations: ["press-tap-feedback", "crossfade", "stagger"],
     relatedGuideIds: ["card-list-filter-continuity", "from-brief-to-spec"]
   }
 ] as const satisfies readonly SeoGuide[];

@@ -110,20 +110,6 @@ function glyph(
   return Glyph;
 }
 
-export const MotionDirectorGlyph = glyph(() => <>
-  <path d="M4 17.5C6.7 9.2 10.1 7 19.5 6.5" />
-  <circle cx="4" cy="17.5" r="1.75" fill="currentColor" stroke="none" />
-  <circle cx="12" cy="9.5" r="1.5" fill="var(--interior-panel, #fff)" />
-  <circle cx="19.5" cy="6.5" r="2" fill="currentColor" stroke="none" />
-</>, "MotionDirectorGlyph");
-
-export const ProductMomentGlyph = glyph(() => <>
-  <rect x="3.5" y="5" width="5" height="5" rx="1.25" />
-  <rect x="15.5" y="14" width="5" height="5" rx="1.25" />
-  <path d="M8.5 7.5H12.5C15 7.5 15.5 10.3 15.5 14" />
-  <path d="M13.5 12.5L15.5 14.5L17.5 12.5" />
-</>, "ProductMomentGlyph");
-
 export const ComponentLibraryGlyph = glyph(() => <>
   <rect x="3.5" y="4" width="7" height="6.5" rx="1.75" />
   <rect x="13.5" y="4" width="7" height="6.5" rx="1.75" />

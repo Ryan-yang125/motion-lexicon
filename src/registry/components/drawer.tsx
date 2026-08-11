@@ -281,6 +281,7 @@ export type DrawerProps = {
   width?: number;
   container?: "viewport" | "parent";
   closeLabel?: string;
+  hint?: string;
   dismissOnScrimClick?: boolean;
   className?: string;
 };
@@ -296,6 +297,7 @@ export function Drawer({
   width = 320,
   container = "viewport",
   closeLabel = "Close panel",
+  hint = "Press Escape to close this panel, or drag its handle toward the edge.",
   dismissOnScrimClick = true,
   className = "",
 }: DrawerProps) {
@@ -383,7 +385,7 @@ export function Drawer({
         ) : null}
 
         <span id={hintId} className="sr-only">
-          Press Escape to close this panel, or drag its handle toward the edge.
+          {hint}
         </span>
       </motion.div>
     </div>

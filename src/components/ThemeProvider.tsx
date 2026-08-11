@@ -36,6 +36,10 @@ function applyTheme(theme: ThemeMode) {
   document.documentElement.classList.toggle("dark", resolved === "dark");
   document.documentElement.dataset.theme = resolved;
   document.documentElement.dataset.themeMode = theme;
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute(
+    "content",
+    resolved === "dark" ? "#141312" : "#efeeea"
+  );
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

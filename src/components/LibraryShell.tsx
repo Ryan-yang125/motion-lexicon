@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { BrandMark } from "./BrandMark";
 import {
   BookOpenIcon,
@@ -11,7 +11,7 @@ import {
   MotionSkillGlyph,
   SearchIcon
 } from "./icons";
-import { CommandPalette, type CommandItem } from "../registry/components/command-palette";
+import type { CommandItem } from "../registry/components/command-palette";
 import { categories } from "../data/categories";
 import { registryComponents, componentCategories } from "../data/component-registry";
 import { catalogRecipes } from "../data/recipes";
@@ -20,12 +20,22 @@ import type { Locale } from "../data/types";
 import { useTheme } from "./ThemeProvider";
 
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
+function createCommandPalettePromise() {
+  return (
+  import("../registry/components/command-palette").then((module) => ({
+    default: module.CommandPalette
+  })));
+}
+let commandPalettePromise: ReturnType<typeof createCommandPalettePromise> | undefined;
+const loadCommandPalette = () => commandPalettePromise ??= createCommandPalettePromise();
+const CommandPalette = lazy(loadCommandPalette);
 
-function ThemeGlyph({ dark }: { dark: boolean }) {
-  return dark ? (
-    <svg aria-hidden="true" viewBox="0 0 16 16"><path d="M12.8 10.6A5.8 5.8 0 0 1 5.4 3.2 5.2 5.2 0 1 0 12.8 10.6Z" /></svg>
-  ) : (
-    <svg aria-hidden="true" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.7" /><path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M12.6 3.4l-.9.9M4.3 11.7l-.9.9" /></svg>
+function ThemeGlyph() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 16 16">
+      <g className="shell-theme-sun"><circle cx="8" cy="8" r="2.7" /><path d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.9.9M11.7 11.7l.9.9M12.6 3.4l-.9.9M4.3 11.7l-.9.9" /></g>
+      <path className="shell-theme-moon" d="M12.8 10.6A5.8 5.8 0 0 1 5.4 3.2 5.2 5.2 0 1 0 12.8 10.6Z" />
+    </svg>
   );
 }
 
@@ -118,6 +128,10 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
 
         <section className="shell-nav-section">
           <span className="shell-nav-section-title">{resourceLabel}</span>
+          <ShellLink href={pathFor(locale, ["vocabulary"])} current={pathname.includes("/vocabulary/")}>
+            <MotionPrimitiveGlyph size={14} aria-hidden="true" />
+            <span>{locale === "zh" ? "动效词汇" : "Vocabulary"}</span>
+          </ShellLink>
           <ShellLink href={pathFor(locale, ["guides"])} current={pathname.includes("/guides/")}>
             <BookOpenIcon size={14} aria-hidden="true" />
             <span>{locale === "zh" ? "场景指南" : "Guides"}</span>
@@ -139,11 +153,16 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
 export function LibraryShell({ locale }: { locale: Locale }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const mobileTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const mobileDialogRef = useRef<HTMLDivElement>(null);
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
   const landing = location.pathname === pathFor(locale) || location.pathname === "/";
-  const dark = theme === "dark" || (theme === "system" && typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const otherLocale: Locale = locale === "zh" ? "en" : "zh";
   const languageHref = `${switchLocalePath(location.pathname, otherLocale)}${location.searchStr}${location.hash}`;
 
@@ -156,12 +175,87 @@ export function LibraryShell({ locale }: { locale: Locale }) {
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
+        void loadCommandPalette();
         setSearchOpen(true);
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const returnFocus = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : mobileTriggerRef.current;
+    const background = [desktopRef.current, headerRef.current, mainRef.current].filter(
+      (node): node is HTMLElement => Boolean(node)
+    );
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    const previousPaddingRight = root.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - root.clientWidth;
+
+    for (const node of background) {
+      node.inert = true;
+      node.setAttribute("aria-hidden", "true");
+    }
+    root.style.overflow = "hidden";
+    if (scrollbarWidth > 0) root.style.paddingRight = `${scrollbarWidth}px`;
+
+    const focusableSelector = [
+      "button:not([disabled])",
+      "[href]",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(",");
+    mobileDialogRef.current?.querySelector<HTMLElement>(focusableSelector)?.focus({ preventScroll: true });
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        setMobileOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusable = Array.from(
+        mobileDialogRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? []
+      ).filter((node) => !node.hasAttribute("disabled") && node.getAttribute("aria-hidden") !== "true");
+      if (focusable.length === 0) {
+        event.preventDefault();
+        mobileDialogRef.current?.focus({ preventScroll: true });
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !mobileDialogRef.current?.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !mobileDialogRef.current?.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true);
+      for (const node of background) {
+        node.inert = false;
+        node.removeAttribute("aria-hidden");
+      }
+      root.style.overflow = previousOverflow;
+      root.style.paddingRight = previousPaddingRight;
+      requestAnimationFrame(() => returnFocus?.focus({ preventScroll: true }));
+    };
+  }, [mobileOpen]);
 
   const searchItems = useMemo<CommandItem[]>(() => [
     ...registryComponents.map((entry) => ({
@@ -185,19 +279,26 @@ export function LibraryShell({ locale }: { locale: Locale }) {
     void navigate({ href });
   }
 
+  function dismissSearch() {
+    setSearchOpen(false);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => searchTriggerRef.current?.focus({ preventScroll: true }));
+    });
+  }
+
   return (
     <div className={`library-shell${landing ? " is-landing" : ""}`}>
       {!landing ? (
-        <div className="library-shell-desktop">
+        <div className="library-shell-desktop" ref={desktopRef}>
           <LibrarySidebar locale={locale} pathname={location.pathname} />
         </div>
       ) : null}
 
-      <header className={`library-shell-header${landing ? " is-landing" : ""}`}>
+      <header className={`library-shell-header${landing ? " is-landing" : ""}`} ref={headerRef}>
         {landing ? (
           <>
             <div className="shell-landing-start">
-              <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
+              <button ref={mobileTriggerRef} className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-haspopup="dialog" aria-expanded={mobileOpen} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
                 <MenuIcon size={16} aria-hidden="true" />
               </button>
               <Link to="/$locale/" params={{ locale }} className="shell-brand" aria-label="Motion Lexicon">
@@ -208,15 +309,26 @@ export function LibraryShell({ locale }: { locale: Locale }) {
             <nav className="shell-landing-nav" aria-label={locale === "zh" ? "主要导航" : "Primary navigation"}>
               <Link to="/$locale/components/" params={{ locale }}>{locale === "zh" ? "组件" : "Components"}</Link>
               <Link to="/$locale/primitives/" params={{ locale }}>{locale === "zh" ? "原子动效" : "Primitives"}</Link>
+              <Link to="/$locale/vocabulary/" params={{ locale }}>{locale === "zh" ? "动效词汇" : "Vocabulary"}</Link>
               <Link to="/$locale/guides/" params={{ locale }}>{locale === "zh" ? "指南" : "Guides"}</Link>
             </nav>
           </>
         ) : (
           <>
-            <button className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
+            <button ref={mobileTriggerRef} className="shell-icon-button shell-mobile-menu" type="button" onClick={() => setMobileOpen(true)} aria-haspopup="dialog" aria-expanded={mobileOpen} aria-label={locale === "zh" ? "打开导航" : "Open navigation"}>
               <MenuIcon size={16} aria-hidden="true" />
             </button>
-            <button className="shell-search-trigger" type="button" onClick={() => setSearchOpen(true)}>
+            <button
+              ref={searchTriggerRef}
+              className="shell-search-trigger"
+              type="button"
+              onClick={() => {
+                void loadCommandPalette();
+                setSearchOpen(true);
+              }}
+              onFocus={() => void loadCommandPalette()}
+              onMouseEnter={() => void loadCommandPalette()}
+            >
               <SearchIcon size={14} aria-hidden="true" />
               <span>{locale === "zh" ? "搜索组件与动效" : "Search components and motion"}</span>
               <kbd>⌘ K</kbd>
@@ -227,8 +339,8 @@ export function LibraryShell({ locale }: { locale: Locale }) {
           <a className="shell-icon-button" href={languageHref} aria-label={locale === "zh" ? "Switch to English" : "切换到中文"}>
             <LanguagesIcon size={15} aria-hidden="true" />
           </a>
-          <button className="shell-icon-button shell-theme-button" type="button" onClick={() => setTheme(dark ? "light" : "dark")} aria-label={dark ? (locale === "zh" ? "切换浅色" : "Use light theme") : (locale === "zh" ? "切换深色" : "Use dark theme")}>
-            <ThemeGlyph dark={dark} />
+          <button className="shell-icon-button shell-theme-button" type="button" onClick={() => setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark")} aria-label={locale === "zh" ? "切换明暗主题" : "Toggle color theme"}>
+            <ThemeGlyph />
           </button>
           <Link className="shell-header-link" to="/$locale/skill/" params={{ locale }} aria-label="Skill">
             <MotionSkillGlyph size={15} aria-hidden="true" />
@@ -241,13 +353,13 @@ export function LibraryShell({ locale }: { locale: Locale }) {
         </div>
       </header>
 
-      <main className={`library-shell-main${landing ? " is-landing" : ""}`} id="main-content" tabIndex={-1}>
+      <main className={`library-shell-main${landing ? " is-landing" : ""}`} id="main-content" tabIndex={-1} ref={mainRef}>
         <Outlet />
       </main>
 
       {mobileOpen ? (
         <div className="shell-mobile-layer" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setMobileOpen(false)}>
-          <div className="shell-mobile-panel" role="dialog" aria-modal="true" aria-label={locale === "zh" ? "站点导航" : "Site navigation"}>
+          <div ref={mobileDialogRef} className="shell-mobile-panel" role="dialog" aria-modal="true" aria-label={locale === "zh" ? "站点导航" : "Site navigation"} tabIndex={-1}>
             <button className="shell-icon-button shell-mobile-close" type="button" onClick={() => setMobileOpen(false)} aria-label={locale === "zh" ? "关闭导航" : "Close navigation"}>
               <CloseGlyph />
             </button>
@@ -256,16 +368,20 @@ export function LibraryShell({ locale }: { locale: Locale }) {
         </div>
       ) : null}
 
-      <CommandPalette
-        open={searchOpen}
-        items={searchItems}
-        onDismiss={() => setSearchOpen(false)}
-        onSelect={selectSearch}
-        label={locale === "zh" ? "搜索 Motion Lexicon" : "Search Motion Lexicon"}
-        placeholder={locale === "zh" ? "搜索组件或原子动效" : "Search components or primitives"}
-        emptyLabel={locale === "zh" ? "没有匹配结果" : "No matching result"}
-        maxRows={8}
-      />
+      {searchOpen ? (
+        <Suspense fallback={null}>
+          <CommandPalette
+            open
+            items={searchItems}
+            onDismiss={dismissSearch}
+            onSelect={selectSearch}
+            label={locale === "zh" ? "搜索 Motion Lexicon" : "Search Motion Lexicon"}
+            placeholder={locale === "zh" ? "搜索组件或原子动效" : "Search components or primitives"}
+            emptyLabel={locale === "zh" ? "没有匹配结果" : "No matching result"}
+            maxRows={8}
+          />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

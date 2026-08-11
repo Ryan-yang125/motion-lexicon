@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta id="theme-color" name="theme-color" content="#efeeea" />
     <script>
       (() => {
         try {
@@ -15,6 +15,7 @@
           document.documentElement.classList.toggle("dark", resolved === "dark");
           document.documentElement.dataset.theme = resolved;
           document.documentElement.dataset.themeMode = mode;
+          document.querySelector("#theme-color")?.setAttribute("content", resolved === "dark" ? "#141312" : "#efeeea");
         } catch {
           document.documentElement.dataset.theme = "light";
           document.documentElement.dataset.themeMode = "system";

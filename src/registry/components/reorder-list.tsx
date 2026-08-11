@@ -1,10 +1,26 @@
 "use client";
 
-import { useCallback, useId, useRef, useState } from "react";
+import { useCallback, useId, useMemo, useRef, useState } from "react";
 import { Reorder, useReducedMotion } from "motion/react";
 
 const CELL = { type: "spring", stiffness: 520, damping: 34, mass: 0.45 } as const;
 const INSTANT = { duration: 0 } as const;
+
+export type ReorderListCopy = {
+  instructions: string;
+  grabbed: (label: string, position: number, total: number) => string;
+  dropped: (label: string, position: number) => string;
+  moved: (label: string, position: number, total: number) => string;
+  cancelled: string;
+};
+
+const DEFAULT_COPY: ReorderListCopy = {
+  instructions: "Drag to reorder. With the keyboard, Space grabs the row, the arrow keys move it, Space drops it, and Escape puts everything back.",
+  grabbed: (label, position, total) => `${label} grabbed, position ${position} of ${total}.`,
+  dropped: (label, position) => `${label} dropped at position ${position}.`,
+  moved: (label, position, total) => `${label}, position ${position} of ${total}.`,
+  cancelled: "Reorder cancelled, original order restored.",
+};
 
 const moveItem = <T,>(list: readonly T[], from: number, to: number): T[] => {
   const next = [...list];
@@ -20,6 +36,7 @@ export type UseReorderListOptions<T> = {
   onReorder: (next: T[]) => void;
   onCommit?: (next: T[]) => void;
   disabled?: boolean;
+  copy?: Partial<ReorderListCopy>;
 };
 
 export function useReorderList<T>({
@@ -29,7 +46,9 @@ export function useReorderList<T>({
   onReorder,
   onCommit,
   disabled = false,
+  copy: copyOverrides,
 }: UseReorderListOptions<T>) {
+  const copy = useMemo(() => ({ ...DEFAULT_COPY, ...copyOverrides }), [copyOverrides]);
   const [grabbed, setGrabbed] = useState<string | null>(null);
   const [dragging, setDragging] = useState<string | null>(null);
   const [spoken, setSpoken] = useState("");
@@ -53,11 +72,9 @@ export function useReorderList<T>({
       setGrabbed(id);
       const at = indexOf(id);
       const item = live.current[at];
-      setSpoken(
-        `${getLabel(item)} grabbed, position ${at + 1} of ${live.current.length}.`,
-      );
+      setSpoken(copy.grabbed(getLabel(item), at + 1, live.current.length));
     },
-    [getLabel, indexOf],
+    [copy, getLabel, indexOf],
   );
 
   const drop = useCallback(
@@ -66,18 +83,18 @@ export function useReorderList<T>({
       setGrabbed(null);
       const at = indexOf(id);
       const item = live.current[at];
-      setSpoken(`${getLabel(item)} dropped at position ${at + 1}.`);
+      setSpoken(copy.dropped(getLabel(item), at + 1));
       settle.current?.([...live.current]);
     },
-    [getLabel, indexOf],
+    [copy, getLabel, indexOf],
   );
 
   const cancel = useCallback(() => {
     if (snapshot.current) emit.current([...snapshot.current]);
     snapshot.current = null;
     setGrabbed(null);
-    setSpoken("Reorder cancelled, original order restored.");
-  }, []);
+    setSpoken(copy.cancelled);
+  }, [copy]);
 
   const step = useCallback(
     (id: string, delta: -1 | 1) => {
@@ -87,12 +104,10 @@ export function useReorderList<T>({
       const next = moveItem(live.current, from, to);
       emit.current(next);
       const item = next[to];
-      setSpoken(
-        `${getLabel(item)}, position ${to + 1} of ${next.length}.`,
-      );
+      setSpoken(copy.moved(getLabel(item), to + 1, next.length));
       if (snapshot.current === null) settle.current?.(next);
     },
-    [getLabel, indexOf],
+    [copy, getLabel, indexOf],
   );
 
   const rowKeyDown = useCallback(
@@ -132,10 +147,10 @@ export function useReorderList<T>({
       setDragging(null);
       const at = indexOf(id);
       const item = live.current[at];
-      setSpoken(`${getLabel(item)} dropped at position ${at + 1}.`);
+      setSpoken(copy.dropped(getLabel(item), at + 1));
       settle.current?.([...live.current]);
     },
-    [getLabel, indexOf],
+    [copy, getLabel, indexOf],
   );
 
   return {
@@ -176,6 +191,7 @@ export function ReorderList<T>({
   ...options
 }: ReorderListProps<T>) {
   const { items, getId, getLabel, onReorder, disabled = false } = options;
+  const copy = { ...DEFAULT_COPY, ...options.copy };
   const list = useReorderList(options);
   const reduced = useReducedMotion() === true;
   const hintId = useId();
@@ -210,7 +226,7 @@ export function ReorderList<T>({
               transition={reduced ? INSTANT : CELL}
               whileDrag={reduced ? undefined : { scale: 1.02 }}
               style={{ touchAction: "pan-x" }}
-              className={`relative flex items-center gap-2.5 rounded-[9px] border bg-white px-3 py-2.5 outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:outline-none dark:bg-[#1D1D1A] ${
+              className={`relative flex min-h-11 items-center gap-2.5 rounded-[9px] border bg-white px-3 py-2.5 outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:outline-none dark:bg-[#1D1D1A] ${
                 lifted
                   ? "z-10 cursor-grabbing border-stone-200 shadow-[0_1px_2px_rgba(28,25,23,0.08),0_14px_28px_-16px_rgba(28,25,23,0.5)] dark:border-white/[0.16] dark:shadow-[0_2px_14px_rgba(0,0,0,0.55)]"
                   : "cursor-grab border-stone-200 shadow-[0_1px_2px_rgba(28,25,23,0.06)] dark:border-white/[0.16] dark:shadow-[0_1px_6px_rgba(0,0,0,0.45)]"
@@ -239,8 +255,7 @@ export function ReorderList<T>({
         })}
       </Reorder.Group>
       <span id={hintId} className="sr-only">
-        Drag to reorder. With the keyboard, Space grabs the row, the arrow keys
-        move it, Space drops it, and Escape puts everything back.
+        {copy.instructions}
       </span>
       <span role="status" aria-live="polite" className="sr-only">
         {list.spoken}

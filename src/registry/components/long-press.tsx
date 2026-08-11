@@ -163,6 +163,7 @@ export function useLongPress({
 export type LongPressButtonProps = {
   onLongPress: () => void;
   children: React.ReactNode;
+  hint?: string;
   duration?: number;
   steps?: number;
   disabled?: boolean;
@@ -172,6 +173,7 @@ export type LongPressButtonProps = {
 export function LongPressButton({
   onLongPress,
   children,
+  hint,
   duration = 550,
   steps = 12,
   disabled = false,
@@ -223,7 +225,7 @@ export function LongPressButton({
         </motion.span>
       </span>
       <span id={hintId} className="sr-only">
-        Press and hold for {Math.round(duration / 100) / 10} seconds to confirm
+        {hint ?? `Press and hold for ${Math.round(duration / 100) / 10} seconds to confirm`}
       </span>
     </motion.button>
   );

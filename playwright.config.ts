@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const performanceSmoke = /Three\.js previews wait for intent before their first long task/;
+const crossBrowserSmoke = /landing page presents live components|component detail keeps preview|primitive directory and workbench|global search opens immediately|English routes and the shadcn registry/;
+
 export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 30_000,
@@ -22,11 +25,25 @@ export default defineConfig({
   projects: [
     {
       name: "desktop-chromium",
+      grepInvert: performanceSmoke,
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1100 } }
     },
     {
       name: "mobile-chromium",
+      grepInvert: performanceSmoke,
       use: { ...devices["Pixel 5"], viewport: { width: 390, height: 900 } }
+    },
+    {
+      name: "performance-chromium",
+      dependencies: ["desktop-chromium", "mobile-chromium"],
+      grep: performanceSmoke,
+      fullyParallel: false,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 1100 } }
+    },
+    {
+      name: "webkit-smoke",
+      grep: crossBrowserSmoke,
+      use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 1100 } }
     }
   ]
 });

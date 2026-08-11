@@ -32,14 +32,10 @@ return a revised Blueprint when the current interaction needs a larger change.
    for English requests.
 2. Identify the product event, the user-visible state before and after it, the
    primary actor, and the user's intended feeling.
-3. Read [motion-language.md](references/motion-language.md),
-   [interior-principles.md](references/interior-principles.md), and the
-   [Motion Grammar contract](references/contract.md). Load one focused reference
-   for the task: [composition](references/composition.md), [CSS implementation](references/implementation-css.md),
-   [review rubric](references/review-rubric.md), or [contribution](references/contribution.md).
-4. For a product moment, also read the relevant file in
-   [references/moments](references/moments/). For a single behavior, read the
-   relevant file in [references/primitives](references/primitives/).
+3. Use the mode × reference table below. Load only the files selected for the
+   current task.
+4. Load [interior-principles.md](references/interior-principles.md) when the
+   request needs material depth, physicality, or the Interior visual profile.
 5. State assumptions briefly when the request leaves product context open. Ask
    one focused question only when a missing constraint changes the design.
 6. Keep one primary visual actor and at most two supporting actors in a beat.
@@ -48,6 +44,17 @@ return a revised Blueprint when the current interaction needs a larger change.
    continuity, reveal, or recover.
 7. Include a reduced-motion plan and keyboard/focus behavior in every composed,
    implemented, or reviewed interaction.
+
+## Mode × reference routing
+
+| Mode or task | Read | Add only when relevant |
+| --- | --- | --- |
+| Recommend a published component | [components.md](references/components.md) | One primitive family below when the user asks how the motion works |
+| Recommend one behavior | [motion-language.md](references/motion-language.md) | [entrances](references/primitives/entrances.md), [feedback](references/primitives/feedback.md), [transitions](references/primitives/transitions.md), or [sequencing](references/primitives/sequencing.md) |
+| Compose a Product Moment | [composition.md](references/composition.md) and [contract.md](references/contract.md) | [feedback moment](references/moments/feedback.md), [choice moment](references/moments/choice.md), [change moment](references/moments/change.md), or [workflow moment](references/moments/workflow.md) |
+| Implement | [implementation-css.md](references/implementation-css.md) | [contract.md](references/contract.md) when consuming or producing a Blueprint; [components.md](references/components.md) for an exact published component |
+| Review | [review-rubric.md](references/review-rubric.md) | The one primitive or moment reference that matches the observed behavior |
+| Contribute | [contribution.md](references/contribution.md) and [candidate-template.md](assets/candidate-template.md) | [contract.md](references/contract.md) for the required Blueprint and [components.md](references/components.md) to rule out an existing component |
 
 ## Motion language
 
@@ -61,7 +68,7 @@ Use the Interior-informed profile throughout the skill:
   geometry.
 - Use arrival motion for new context: `cubic-bezier(.23, 1, .32, 1)` over
   roughly 200–280 ms. Use leaving motion for removed context:
-  `cubic-bezier(.4, 0, 1, 1)` over roughly 110–180 ms.
+  `cubic-bezier(.23, 1, .32, 1)` over roughly 110–180 ms.
 - Use transform and opacity for the moving work. Use short color or focus
   transitions when feedback needs an immediate response.
 - Let a second user action interrupt, reverse, or settle the first action.
@@ -74,8 +81,9 @@ Read the detailed rules in [interior-principles.md](references/interior-principl
 
 Return a compact decision that the user can apply immediately.
 
-1. Map the request to up to three candidates from the primitive and moment
-   references.
+1. Map the request to up to three published candidates from
+   [components.md](references/components.md), or from the one relevant primitive
+   or moment reference selected above.
 2. Explain the visual difference in product terms: spatial continuity, weight,
    pacing, attention, or status confidence.
 3. Choose one candidate and state the default timing, easing, trigger, and
@@ -102,8 +110,10 @@ Use this format:
 
 Create a Motion Blueprint before expanding into implementation details. Use
 [assets/motion-blueprint.schema.json](assets/motion-blueprint.schema.json) as
-the contract. Keep it compact in chat; write a JSON file when the user asks for
-a reusable artifact.
+the contract. Every Compose response includes one schema-valid fenced JSON
+object; do not substitute a prose table or text diagram for the Blueprint.
+Keep string values compact in chat, then write the same JSON to a file when the
+user asks for a reusable artifact.
 
 The Blueprint includes:
 

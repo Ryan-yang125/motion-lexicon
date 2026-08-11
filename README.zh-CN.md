@@ -70,8 +70,19 @@ Registry 包含 48 个完整产品与网站组件，覆盖 Motion、GSAP、Three
 ## Agent Skill
 
 ```bash
+# 安装到当前项目
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
+
+# 安装到用户级
+npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --global
+
+# 只安装到 Codex；需要时把 codex 替换为其他受支持的 Agent ID
+npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --agent codex
 ```
+
+使用 `npx skills list` 检查项目安装，使用 `npx skills list --global`
+检查用户级安装。项目安装会链接到所选 Agent 的项目 Skill 目录，用户级安装可供
+该 Agent 在多个项目中使用。
 
 Skill 支持五种工作模式：
 

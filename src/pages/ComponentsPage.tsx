@@ -53,7 +53,7 @@ export function ComponentsPage({ locale }: { locale: Locale }) {
                 {entries.map((entry) => (
                   <article className="component-card" key={entry.id}>
                     <div className="component-card-stage">
-                      <RegistryPreview id={entry.id} deferred />
+                      <RegistryPreview id={entry.id} locale={locale} deferred />
                     </div>
                     <Link
                       className="component-card-footer"

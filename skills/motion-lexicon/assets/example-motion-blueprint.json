@@ -36,7 +36,7 @@
       "at": 0,
       "actor": "save-button",
       "purpose": "confirm",
-      "primitive": "status-transition",
+      "primitive": "text-morph",
       "from": "idle",
       "to": "pending",
       "durationMs": 150,
@@ -48,7 +48,7 @@
       "at": "after:resolved",
       "actor": "save-status",
       "purpose": "confirm",
-      "primitive": "pop-in",
+      "primitive": "scale-in",
       "from": "hidden",
       "to": "visible",
       "durationMs": 220,
@@ -68,7 +68,7 @@
   },
   "provenance": {
     "status": "draft",
-    "foundations": ["status-transition", "pop-in"],
+    "foundations": ["text-morph", "scale-in"],
     "moments": ["save-confirmation"],
     "confidence": "high",
     "evidence": "A local save operation needs immediate acknowledgement, a clear outcome, and a retry path."

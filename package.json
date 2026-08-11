@@ -16,7 +16,7 @@
     "animation",
     "css-animation",
     "motion",
-    "motion-director",
+    "react-components",
     "agent-skill",
     "reduced-motion",
     "ui"
@@ -38,7 +38,7 @@
     "motion-grammar:check": "tsx scripts/check-motion-grammar.ts",
     "skill:bundle": "node scripts/build-motion-blueprint-validator.mjs",
     "skill:bundle:check": "node scripts/build-motion-blueprint-validator.mjs --check",
-    "skill:check": "npm run skill:bundle:check && node scripts/check-motion-director-skill.mjs",
+    "skill:check": "npm run skill:bundle:check && node scripts/check-motion-lexicon-skill.mjs",
     "seo:check": "tsx scripts/check-seo.ts",
     "motion:check": "tsx scripts/check-motion.ts",
     "assets:brand": "tsx scripts/generate-brand-assets.ts",

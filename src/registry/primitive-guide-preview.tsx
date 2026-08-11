@@ -27,7 +27,7 @@ export function PrimitiveGuidePreview({ locale, recipe, compact = false }: { loc
     <PrimitiveDemoSurface label={text(recipe.name, locale)} meta={textFor(locale, "指南", "guide")} compact={compact}>
       <div className="grid h-full place-items-center">
         <ProductPanel className="w-full max-w-[340px] p-3">
-          <div className="mb-3 flex items-center justify-between"><strong className="text-[11px]">{textFor(locale, "评审路径", "Review path")}</strong><StatusPill>{steps.length} steps</StatusPill></div>
+          <div className="mb-3 flex items-center justify-between"><strong className="text-[11px]">{textFor(locale, "评审路径", "Review path")}</strong><StatusPill>{textFor(locale, `${steps.length} 步`, `${steps.length} steps`)}</StatusPill></div>
           <ol className="m-0 grid list-none gap-1.5 p-0">
             {steps.map((step, index) => <li className="flex min-h-9 items-center gap-2.5 rounded-[8px] bg-stone-50 px-2.5 dark:bg-white/[0.04]" key={step}><span className="grid size-5 place-items-center rounded-[6px] bg-white text-[9px] text-stone-400 shadow-sm dark:bg-white/[0.07]">{index + 1}</span><strong className="text-[10.5px] font-medium">{step}</strong></li>)}
           </ol>

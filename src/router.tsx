@@ -10,9 +10,9 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { LibraryShell } from "./components/LibraryShell";
 import { defaultLocale, pathFor } from "./data/site";
+import { loadSeoGuideArticle } from "./data/load-seo-guide-article";
 import type { Locale } from "./data/types";
 import { setI18nLanguage } from "./i18n";
-import { HomePage } from "./pages/HomePage";
 import { useRouteLocale } from "./routes/route-locale";
 
 function LocaleSync({ locale }: { locale: Locale }) {
@@ -40,15 +40,6 @@ function AppShell() {
   );
 }
 
-function RootIndex() {
-  return <HomePage locale={defaultLocale} />;
-}
-
-function LocaleIndex() {
-  const locale = useRouteLocale();
-  return <HomePage locale={locale} />;
-}
-
 const rootRoute = createRootRoute({
   component: AppShell
 });
@@ -56,14 +47,12 @@ const rootRoute = createRootRoute({
 const rootIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: RootIndex
-});
+}).lazy(() => import("./routes/home-root.lazy").then((module) => module.Route));
 
 const localeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "$locale",
-  component: LocaleIndex
-});
+}).lazy(() => import("./routes/home-locale.lazy").then((module) => module.Route));
 
 const componentsRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -92,7 +81,8 @@ const guidesRoute = createRoute({
 
 const seoGuideRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "$locale/guides/$guideId"
+  path: "$locale/guides/$guideId",
+  loader: ({ params }) => loadSeoGuideArticle(params.guideId)
 }).lazy(() => import("./routes/seo-guide.lazy").then((module) => module.Route));
 
 const methodRoute = createRoute({

@@ -56,32 +56,52 @@ const formatSchemaError = (error) => {
   return `${instancePath} ${error.message ?? "is invalid"}.`;
 };
 
-const validateStateGraphReferences = (blueprint) => {
+const validateUniqueIds = (items, pathLabel) => {
+  if (!Array.isArray(items)) return new Set();
+
+  const ids = new Set();
+  for (const [index, item] of items.entries()) {
+    const id = item?.id;
+    if (typeof id !== "string") continue;
+    if (ids.has(id)) addIssue(`${pathLabel}[${index}].id must be unique; "${id}" is already declared.`);
+    ids.add(id);
+  }
+  return ids;
+};
+
+const validateBlueprintReferences = (blueprint) => {
   if (!blueprint || typeof blueprint !== "object" || Array.isArray(blueprint)) return;
 
   const stateGraph = blueprint.stateGraph;
-  if (!stateGraph || typeof stateGraph !== "object" || Array.isArray(stateGraph)) return;
-  if (!Array.isArray(stateGraph.states) || !Array.isArray(stateGraph.transitions)) return;
+  if (stateGraph && typeof stateGraph === "object" && !Array.isArray(stateGraph)) {
+    const stateIds = validateUniqueIds(stateGraph.states, "blueprint.stateGraph.states");
+    if (Array.isArray(stateGraph.states) && Array.isArray(stateGraph.transitions)) {
+      if (!stateIds.has(stateGraph.initial)) {
+        addIssue("blueprint.stateGraph.initial must reference a declared state.");
+      }
 
-  const stateIds = new Set(
-    stateGraph.states
-      .map((state) => state?.id)
-      .filter((stateId) => typeof stateId === "string")
-  );
+      for (const [index, transition] of stateGraph.transitions.entries()) {
+        if (!transition || typeof transition !== "object" || Array.isArray(transition)) continue;
 
-  if (!stateIds.has(stateGraph.initial)) {
-    addIssue("blueprint.stateGraph.initial must reference a declared state.");
+        if (!stateIds.has(transition.from)) {
+          addIssue(`blueprint.stateGraph.transitions[${index}].from must reference a declared state.`);
+        }
+
+        if (!stateIds.has(transition.to)) {
+          addIssue(`blueprint.stateGraph.transitions[${index}].to must reference a declared state.`);
+        }
+      }
+    }
   }
 
-  for (const [index, transition] of stateGraph.transitions.entries()) {
-    if (!transition || typeof transition !== "object" || Array.isArray(transition)) continue;
-
-    if (!stateIds.has(transition.from)) {
-      addIssue(`blueprint.stateGraph.transitions[${index}].from must reference a declared state.`);
-    }
-
-    if (!stateIds.has(transition.to)) {
-      addIssue(`blueprint.stateGraph.transitions[${index}].to must reference a declared state.`);
+  const actorIds = validateUniqueIds(blueprint.actors, "blueprint.actors");
+  validateUniqueIds(blueprint.beats, "blueprint.beats");
+  if (Array.isArray(blueprint.beats)) {
+    for (const [index, beat] of blueprint.beats.entries()) {
+      if (!beat || typeof beat !== "object" || Array.isArray(beat)) continue;
+      if (!actorIds.has(beat.actor)) {
+        addIssue(`blueprint.beats[${index}].actor must reference a declared actor.`);
+      }
     }
   }
 };
@@ -99,7 +119,7 @@ if (schemaResult.ok && blueprintResult.ok) {
         addIssue(formatSchemaError(error));
       }
     } else {
-      validateStateGraphReferences(blueprintResult.value);
+      validateBlueprintReferences(blueprintResult.value);
     }
   } catch (error) {
     addIssue(`Motion Blueprint schema could not be compiled: ${error.message}`);

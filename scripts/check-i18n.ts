@@ -6,6 +6,7 @@ import { aliasMetadata, canonicalMotionCatalog } from "../src/data/motion-catalo
 import { entries } from "../src/data/recipes";
 import { locales, type LocalizedText } from "../src/data/types";
 import { resources } from "../src/i18n/resources";
+import { demoIds, demoLabels } from "../src/registry/demo-locale";
 import { getStaticPaths, pathFor } from "../src/data/site";
 
 function flattenKeys(value: unknown, prefix = ""): string[] {
@@ -109,11 +110,27 @@ for (const component of registryComponents) {
   }
 }
 
+assert(demoIds.length === 48, `Expected 48 localized demos, found ${demoIds.length}`);
+assert(
+  JSON.stringify([...demoIds].sort()) === JSON.stringify(registryComponents.map(({ id }) => id).sort()),
+  "Localized demo IDs differ from the component registry"
+);
+
+for (const id of demoIds) {
+  assertLocalized(demoLabels[id], `demo.${id}`);
+  assert(demoLabels[id].zh !== demoLabels[id].en, `demo.${id} uses identical zh and en labels`);
+
+  const source = await readFile(path.resolve(`src/registry/demos/${id}-demo.tsx`), "utf8");
+  assert(/\blocale\s*=\s*["']en["']/.test(source), `Demo ${id} does not accept a locale prop`);
+  assert(source.includes(`demoText("${id}", locale)`), `Demo ${id} lacks its localized accessible name`);
+  assert(source.includes("demoValue(locale"), `Demo ${id} lacks localized visible or state text`);
+}
+
 for (const alias of aliasMetadata) {
   assert(entries.some((entry) => entry.id === alias.entryId), `Alias ${alias.entryId} has no localized glossary source`);
 }
 
 console.log(
-  `i18n check passed: ${registryComponents.length} components, ${entries.length} localized terms, ` +
+  `i18n check passed: ${registryComponents.length} components and ${demoIds.length} bilingual demos, ${entries.length} localized terms, ` +
     `${canonicalMotionCatalog.length} primitives, ${aliasMetadata.length} aliases, ${categories.length} categories, and ${zhKeys.length} UI keys.`
 );

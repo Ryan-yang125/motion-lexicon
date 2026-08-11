@@ -17,7 +17,7 @@ export function SlideInDemo({ locale, values, compact, replayKey }: PrimitiveDem
           >
             <ProductPanel className="flex items-center gap-3 p-3">
               <Avatar initials="MS" tone="clay" />
-              <div className="min-w-0 flex-1"><strong className="block truncate text-[12px]">Mira {textFor(locale, "更新了首页动效", "updated the landing motion")}</strong><span className="text-[10px] text-stone-400">2 min ago · Motion review</span></div>
+              <div className="min-w-0 flex-1"><strong className="block truncate text-[12px]">Mira {textFor(locale, "更新了首页动效", "updated the landing motion")}</strong><span className="text-[10px] text-stone-400">{textFor(locale, "2 分钟前 · 动效评审", "2 min ago · Motion review")}</span></div>
             </ProductPanel>
           </SlideInPrimitive>
           {!compact ? <ProductButton className="w-full" onClick={() => setOpen((value) => !value)}>{open ? textFor(locale, "移出动态", "Remove activity") : textFor(locale, "加入动态", "Add activity")}</ProductButton> : null}

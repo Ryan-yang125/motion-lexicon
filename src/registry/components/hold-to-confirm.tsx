@@ -197,6 +197,7 @@ export type HoldToConfirmProps = {
   children: React.ReactNode;
   onAbort?: () => void;
   confirmLabel?: string;
+  hint?: string;
   duration?: number;
   resetAfter?: number;
   steps?: number;
@@ -210,6 +211,7 @@ export function HoldToConfirm({
   children,
   onAbort,
   confirmLabel = "Confirmed",
+  hint,
   duration = 1800,
   resetAfter = 1600,
   steps = 20,
@@ -299,8 +301,7 @@ export function HoldToConfirm({
       </motion.span>
 
       <span id={hintId} className="sr-only">
-        Press and hold for {seconds} seconds to confirm. Releasing early cancels
-        and nothing happens.
+        {hint ?? `Press and hold for ${seconds} seconds to confirm. Releasing early cancels and nothing happens.`}
       </span>
 
       <span role="status" aria-live="polite" className="sr-only">

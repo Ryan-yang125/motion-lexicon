@@ -22,8 +22,27 @@ export type ImageLightboxItem = {
 export type ImageLightboxProps = {
   items: readonly ImageLightboxItem[];
   label?: string;
+  copy?: Partial<ImageLightboxCopy>;
   className?: string;
   onChange?: (item: ImageLightboxItem, index: number) => void;
+};
+
+export type ImageLightboxCopy = {
+  gallery: string;
+  works: (count: number) => string;
+  open: (title: string) => string;
+  close: string;
+  previous: string;
+  next: string;
+};
+
+const DEFAULT_COPY: ImageLightboxCopy = {
+  gallery: "Gallery",
+  works: (count) => `${String(count).padStart(2, "0")} works`,
+  open: (title) => `Open ${title}`,
+  close: "Close gallery",
+  previous: "Previous image",
+  next: "Next image",
 };
 
 type NavigationSource = "keyboard" | "pointer";
@@ -61,9 +80,11 @@ function focusableWithin(root: HTMLElement) {
 export function ImageLightbox({
   items,
   label = "Image collection",
+  copy: copyOverrides,
   className = "",
   onChange,
 }: ImageLightboxProps) {
+  const copy = { ...DEFAULT_COPY, ...copyOverrides };
   const reduced = useReducedMotion() === true;
   const layoutGroupId = useId();
   const titleId = useId();
@@ -208,14 +229,14 @@ export function ImageLightbox({
         <header className="mb-2 flex min-h-11 items-end justify-between gap-4 px-1">
           <div>
             <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
-              Gallery
+              {copy.gallery}
             </span>
             <h3 id={titleId} className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">
               {label}
             </h3>
           </div>
           <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-stone-400 dark:text-stone-500">
-            {String(items.length).padStart(2, "0")} works
+            {copy.works(items.length)}
           </span>
         </header>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -227,7 +248,7 @@ export function ImageLightbox({
                 else triggerRefs.current.delete(item.id);
               }}
               type="button"
-              aria-label={`Open ${item.title}`}
+              aria-label={copy.open(item.title)}
               onClick={(event) =>
                 openImage(
                   index,
@@ -306,7 +327,7 @@ export function ImageLightbox({
                       <button
                         ref={closeRef}
                         type="button"
-                        aria-label="Close gallery"
+                        aria-label={copy.close}
                         onClick={() => close("pointer")}
                         className={`grid size-11 shrink-0 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
                       >
@@ -335,7 +356,7 @@ export function ImageLightbox({
                     <footer className="grid min-h-[68px] grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-3 border-t border-black/[0.08] px-3 dark:border-white/[0.1]">
                       <button
                         type="button"
-                        aria-label="Previous image"
+                        aria-label={copy.previous}
                         onClick={() => move(-1, "pointer")}
                         disabled={items.length < 2}
                         className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
@@ -350,7 +371,7 @@ export function ImageLightbox({
                       </p>
                       <button
                         type="button"
-                        aria-label="Next image"
+                        aria-label={copy.next}
                         onClick={() => move(1, "pointer")}
                         disabled={items.length < 2}
                         className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}

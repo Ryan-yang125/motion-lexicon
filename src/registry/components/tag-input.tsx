@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-const LEAVE = [0.4, 0, 1, 1] as const;
+const LEAVE = [0.23, 1, 0.32, 1] as const;
 const CROSSFADE = { type: "spring", stiffness: 260, damping: 34, mass: 0.8 } as const;
 const CHIP = { type: "spring", stiffness: 700, damping: 46, mass: 0.5 } as const;
 const EXIT = { duration: 0.18, ease: LEAVE } as const;
@@ -16,6 +16,24 @@ const splitter = (separators: string[]) =>
 
 export type TagRejection = "duplicate" | "limit" | "invalid";
 
+export type TagInputCopy = {
+  duplicate: (tag: string) => string;
+  limit: (max?: number) => string;
+  invalid: (tag: string) => string;
+  added: (added: number, latest: string, total: number) => string;
+  removed: (tag: string, remaining: number) => string;
+  selected: (tag: string) => string;
+};
+
+const DEFAULT_COPY: TagInputCopy = {
+  duplicate: (tag) => `${tag} is already in the list.`,
+  limit: (max) => `That is the limit of ${max} tags.`,
+  invalid: (tag) => `${tag} is not allowed here.`,
+  added: (added, latest, total) => `${added === 1 ? latest : `${added} tags`} added, ${total} total.`,
+  removed: (tag, remaining) => `${tag} removed, ${remaining} left.`,
+  selected: (tag) => `${tag} selected, press Backspace again to remove it.`,
+};
+
 export type UseTagInputOptions = {
   value?: string[];
   defaultValue?: string[];
@@ -24,6 +42,7 @@ export type UseTagInputOptions = {
   separators?: string[];
   allowDuplicates?: boolean;
   validate?: (candidate: string, tags: string[]) => boolean;
+  copy?: Partial<TagInputCopy>;
 };
 
 type Rejection = { reason: TagRejection; tag: string; visible: boolean };
@@ -36,7 +55,9 @@ export function useTagInput({
   separators = [","],
   allowDuplicates = false,
   validate,
+  copy: copyOverrides,
 }: UseTagInputOptions = {}) {
+  const copy = useMemo(() => ({ ...DEFAULT_COPY, ...copyOverrides }), [copyOverrides]);
   const [internal, setInternal] = useState<string[]>(() => defaultValue ?? []);
   const [draft, setDraft] = useState("");
   const [armed, setArmed] = useState(-1);
@@ -78,20 +99,14 @@ export function useTagInput({
         setRejection((prev) => (prev ? { ...prev, visible: false } : prev));
       }, 2400);
 
-      setAnnouncement(
-        reason === "duplicate"
-          ? `${tag} is already in the list.`
-          : reason === "limit"
-            ? `That is the limit of ${max} tags.`
-            : `${tag} is not allowed here.`,
-      );
+      setAnnouncement(reason === "duplicate" ? copy.duplicate(tag) : reason === "limit" ? copy.limit(max) : copy.invalid(tag));
 
       if (reason !== "duplicate") return;
       if (flashTimer.current) clearTimeout(flashTimer.current);
       setFlashed(tag);
       flashTimer.current = setTimeout(() => setFlashed(null), 460);
     },
-    [max],
+    [copy, max],
   );
 
   const apply = useCallback(
@@ -139,15 +154,13 @@ export function useTagInput({
         setDraft("");
         setArmed(-1);
         dismiss();
-        setAnnouncement(
-          `${added === 1 ? next[next.length - 1] : `${added} tags`} added, ${next.length} total.`,
-        );
+        setAnnouncement(copy.added(added, next[next.length - 1], next.length));
       }
 
       if (failure) refuse(failure.reason, failure.tag);
       return added > 0;
     },
-    [tags, max, allowDuplicates, apply, dismiss, refuse],
+    [tags, max, allowDuplicates, apply, copy, dismiss, refuse],
   );
 
   const removeAt = useCallback(
@@ -158,17 +171,17 @@ export function useTagInput({
       apply(next);
       setArmed(-1);
       dismiss();
-      setAnnouncement(`${gone} removed, ${next.length} left.`);
+      setAnnouncement(copy.removed(gone, next.length));
     },
-    [tags, apply, dismiss],
+    [tags, apply, copy, dismiss],
   );
 
   const arm = useCallback(
     (index: number) => {
       setArmed(index);
-      setAnnouncement(`${tags[index]} selected, press Backspace again to remove it.`);
+      setAnnouncement(copy.selected(tags[index]));
     },
-    [tags],
+    [copy, tags],
   );
 
   const inputProps = {
@@ -253,6 +266,7 @@ export type TagInputProps = UseTagInputOptions & {
   placeholder?: string;
   hint?: string;
   className?: string;
+  removeLabel?: (tag: string) => string;
 };
 
 function CloseGlyph() {
@@ -276,6 +290,7 @@ export function TagInput({
   placeholder = "Add a tag",
   hint = "Enter adds · Backspace removes",
   className = "",
+  removeLabel = (tag) => `Remove ${tag}`,
   ...options
 }: TagInputProps) {
   const { tags, draft, armedIndex, flashed, rejection, announcement, inputProps, removeAt, max } =
@@ -296,13 +311,14 @@ export function TagInput({
     });
   }, [tags]);
 
+  const copy = { ...DEFAULT_COPY, ...options.copy };
   const message = !rejection
     ? ""
     : rejection.reason === "duplicate"
-      ? `${rejection.tag} is already in the list`
+      ? copy.duplicate(rejection.tag)
       : rejection.reason === "limit"
-        ? `That is the limit of ${max} tags`
-        : `${rejection.tag} is not allowed here`;
+        ? copy.limit(max)
+        : copy.invalid(rejection.tag);
 
   const showMessage = rejection?.visible === true;
 
@@ -351,7 +367,7 @@ export function TagInput({
                 <button
                   type="button"
                   tabIndex={-1}
-                  aria-label={`Remove ${tag}`}
+                  aria-label={removeLabel(tag)}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     removeAt(index);

@@ -1,0 +1,456 @@
+{
+  "guideId": "save-submit-publish-feedback",
+  "standfirst": {
+    "zh": "保存、提交和发布表面上都像一个按钮，实际承载着用户对结果、风险和等待的判断。完整反馈会让人清楚地知道：输入已经收到，系统正在处理，结果落在何处，出错时还能怎样继续。",
+    "en": "Save, submit, and publish can look like one button, yet each carries a judgment about result, risk, and waiting. Complete feedback makes four things clear: input was received, the system is working, the result lands somewhere visible, and there is a path forward when work fails."
+  },
+  "sections": [
+    {
+      "id": "waiting",
+      "title": {
+        "zh": "先分清三种等待",
+        "en": "Classify the three kinds of waiting"
+      },
+      "paragraphs": [
+        {
+          "zh": "一次保存可能在 150ms 内完成，用户只需要知道按下已经被接收；一次提交可能需要校验和网络往返；发布、上传和支付则常常跨过数秒。三种等待的界面语言不同。瞬时操作适合短促的按下反馈和状态替换；短等待需要把按钮从“可点”转成“进行中”；长等待要给出进度、可离开页面的说明，或至少告诉用户结果会在何处出现。把所有操作都处理成旋转图标，会把这些差异抹平。",
+          "en": "A save can finish in 150 ms, where acknowledgement is enough. A submit can include validation and a network round trip. Publish, upload, and payment often last several seconds. Each duration needs its own interface language. Instant work benefits from a brief press response and state swap; short waits need a button that clearly enters progress; long waits need progress, permission to leave, or a clear place where the result will appear. One generic spinner flattens important differences."
+        },
+        {
+          "zh": "动效时长应当跟着系统事实走。按钮的按压反馈可以在 80–140ms 内结束，让输入与画面贴在一起；真正开始请求后，再把文案切成“保存中”或“正在发布”。如果请求已经结束，成功状态不必额外停留太久，通常 600–1200ms 足够让人确认，然后让界面回到可继续工作的状态。等待的核心是节奏：用户需要一条连续、可追踪的因果链。",
+          "en": "Motion duration should follow system facts. A button press can settle in 80–140 ms so input and response feel connected; when the request begins, switch the label to Saving or Publishing. Once work finishes, success usually needs only 600–1200 ms for confirmation before the interface returns to useful work. Waiting is a matter of rhythm: people need one continuous causal chain rather than a series of unrelated effects."
+        }
+      ]
+    },
+    {
+      "id": "proximity",
+      "title": {
+        "zh": "让状态留在动作发生处",
+        "en": "Resolve the state where the action happened"
+      },
+      "paragraphs": [
+        {
+          "zh": "用户点击“保存”后，最自然的视线仍停在编辑器底部、表单末尾或工具栏里。成功提示优先在这一带出现：按钮文案变为“已保存”、旁边出现简短的状态、字段边界回到稳定颜色。全局 Toast 适合补充信息，例如“所有更改已同步”，却不应承担唯一的确认职责。提示离得越远，用户越要在页面上重新寻找刚刚发生的事。",
+          "en": "After someone clicks Save, attention remains near the editor footer, the end of a form, or the toolbar. Resolve success there first: change the button to Saved, add a short adjacent status, and return the field boundary to a settled color. A global toast can add context, such as All changes synced, yet should not be the only confirmation. The farther feedback sits from the action, the more people must search for what just happened."
+        },
+        {
+          "zh": "原位置反馈也让失败更容易理解。网络错误可以让按钮恢复可点，同时保留“重试”入口；字段校验可以把焦点带回具体输入，用户可直接在原处修正；发布失败则应保留草稿和失败原因。这里的连续性比华丽更重要：同一个对象从可用、进行中到结果的变化，能让用户看见系统在处理自己的请求。crossfade、轻微透明度变化和稳定的布局足以承载这一层意义。",
+          "en": "In-place feedback also makes failure easier to understand. A network error can restore the button while keeping Retry nearby; field validation can return focus to the exact input instead of sending someone to the top of the page; a failed publish should retain the draft and expose the reason. Continuity matters more than spectacle: one object moving from available to working to resolved lets people see the system handling their request. A crossfade, slight opacity change, and stable layout are enough to carry that meaning."
+        }
+      ]
+    },
+    {
+      "id": "failure",
+      "title": {
+        "zh": "把失败和重复操作纳入流程",
+        "en": "Include failure and duplicate actions in the flow"
+      },
+      "paragraphs": [
+        {
+          "zh": "反馈流程从来不只有成功路径。用户可能连续点击、请求超时、权限在提交时变化，或者离线后恢复网络。每一种情况都需要一个可预期的界面落点。进行中的主按钮应禁用重复提交，旁边保留取消或返回的路径；超时不要无声地把按钮变回原样，应该说明请求是否仍在处理；权限变化要提示新状态，并避免用户误以为内容已经成功发布。把这些边缘状态列在设计稿里，开发时就更容易写出一致的状态机。",
+          "en": "A feedback flow never has only a success path. People may click repeatedly, hit a timeout, lose permission during submission, or recover from offline work. Each case needs a predictable landing place in the UI. Disable duplicate submission on the primary action while keeping a path to cancel or return; do not silently restore a button after a timeout—explain whether work may still be running; surface a permission change so people do not assume content was published. Listing these edge states in the design makes a consistent state machine much easier to build."
+        },
+        {
+          "zh": "可撤销操作值得单独安排。删除、归档和取消邀请常常会先从列表中离开，再在原位置附近给出“撤销”。这个动作可以有一小段离开动效，却要保留稳定的占位或计数变化，避免列表突然塌陷让用户以为点错了别处。撤销窗口结束后再完成最终移除。这样既能给人回头的机会，也能让列表的空间关系保持清楚。",
+          "en": "Reversible actions deserve their own treatment. Delete, archive, and cancel invite can leave a list first, then expose Undo near the original location. The exit can have a short motion, while a stable placeholder or count change prevents the list from collapsing so abruptly that people doubt what they clicked. Final removal happens after the undo window. This gives people a way back while keeping the list’s spatial relationship clear."
+        }
+      ]
+    },
+    {
+      "id": "next-step",
+      "title": {
+        "zh": "发布后的页面也要接住用户",
+        "en": "Let the page receive the user after publish"
+      },
+      "paragraphs": [
+        {
+          "zh": "发布结束后，界面常常只显示“成功”，然后把用户留在一个已经失去下一步的页面。更完整的设计会明确接下来能做什么：打开已发布页面、复制链接、继续编辑、查看审核状态，或回到内容列表。动效可以帮助把注意力从发布按钮带到下一步入口，例如让结果卡片在原区域出现，让复制链接按钮随后可见。动作顺序要短，目标要近，用户才能顺着流程走下去。",
+          "en": "After publishing, interfaces often stop at Success and leave people on a page with no obvious next move. A complete design shows what follows: open the published page, copy the link, continue editing, check review status, or return to the content list. Motion can shift attention from the Publish button to that next action: reveal a result card in the same region, then make Copy link available. Keep the sequence short and the destination close so people can continue without reorienting."
+        },
+        {
+          "zh": "完整组件能把发布成功所需的按下反馈、按钮状态、进度、结果卡片和下一步入口放进同一套节奏与层级。先运行完整状态流，再沿关联的按压反馈、交叉淡入淡出和时长调整局部细节，团队可以同时保留业务因果、焦点路径和恢复方式。动效在这里服务信任感：用户能看懂结果，也能继续行动。",
+          "en": "A complete Component can place press feedback, button state, progress, a result card, and the next action for publish success inside one rhythm and hierarchy. Run the full state flow first, then tune local details through related press feedback, crossfade, and duration Primitives. This keeps business causality, focus paths, and recovery together. Motion serves trust here: people can understand the outcome and continue."
+        }
+      ]
+    },
+    {
+      "id": "contract",
+      "title": {
+        "zh": "把反馈写成可验收的状态契约",
+        "en": "Write feedback as a testable state contract"
+      },
+      "paragraphs": [
+        {
+          "zh": "每个流程都值得拥有一张状态表：idle、working、complete、failed、undoable 分别显示什么文字、哪些控件可用、焦点在哪里、是否允许离开页面。动效附着在状态转换上，而不替代状态本身。这样做能让产品、设计和开发讨论同一件事，也让测试能够检查成功、失败、重试和撤销是否真实成立。数据状态是事实，动画只是让事实更容易被看见。",
+          "en": "Every flow benefits from a state table: what idle, working, complete, failed, and undoable show; which controls are available; where focus sits; and whether leaving the page is allowed. Motion attaches to state transitions rather than replacing state itself. This keeps product, design, and engineering discussing the same thing and lets tests check whether success, failure, retry, and undo truly work. Data state is the fact; animation simply makes the fact easier to see."
+        },
+        {
+          "zh": "这份契约也需要覆盖减弱动效。默认路径可以让按钮轻微缩放、结果卡片淡入；低动态路径保留同样的“保存中”“已保存”、同样的按钮禁用和同样的下一步入口，只缩短或取消装饰性位移。无论用户使用键盘、触屏，还是开启系统减少动效偏好，核心反馈链都应该完整。把这一点作为发布前检查，动效才会真正成为产品可靠性的一部分。",
+          "en": "The contract also needs reduced motion. The default path can give a button slight scale and fade in a result card; the low-motion path keeps the same Saving and Saved copy, disabled button, and next action while shortening or removing decorative travel. Whether people use keyboard, touch, or a system reduced-motion preference, the core feedback chain should remain complete. Treat this as a pre-release check and motion becomes part of product reliability."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "保存、提交与发布验收清单",
+    "en": "Save, submit, and publish checklist"
+  },
+  "checklist": [
+    {
+      "id": "acknowledge",
+      "label": {
+        "zh": "点击后立刻有输入已被接收的信号",
+        "en": "Acknowledge input immediately after click"
+      },
+      "detail": {
+        "zh": "按压、文案或状态色应在约 140ms 内发生变化。",
+        "en": "Press, copy, or state color changes within roughly 140 ms."
+      }
+    },
+    {
+      "id": "working",
+      "label": {
+        "zh": "进行中状态阻止重复提交",
+        "en": "Working state prevents duplicate submission"
+      },
+      "detail": {
+        "zh": "保留必要的取消、返回或说明路径。",
+        "en": "Keep any necessary cancel, return, or explanatory path."
+      }
+    },
+    {
+      "id": "proximity",
+      "label": {
+        "zh": "结果和失败靠近原动作",
+        "en": "Results and failures remain close to the action"
+      },
+      "detail": {
+        "zh": "按钮、局部状态和全局通知各自承担清楚职责。",
+        "en": "Button, local state, and global notice each carry a clear responsibility."
+      }
+    },
+    {
+      "id": "recovery",
+      "label": {
+        "zh": "超时、失败和撤销都有明确落点",
+        "en": "Timeout, failure, and undo each have a clear landing place"
+      },
+      "detail": {
+        "zh": "草稿、错误原因和重试入口可被用户找到。",
+        "en": "Draft, error reason, and retry path remain findable."
+      }
+    },
+    {
+      "id": "next",
+      "label": {
+        "zh": "完成后能继续下一步",
+        "en": "Completion leads to a next step"
+      },
+      "detail": {
+        "zh": "发布后提供打开、复制、继续编辑或返回列表等路径。",
+        "en": "After publish, offer open, copy, continue editing, or return-to-list paths."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：文章发布在同一块界面内完成交接",
+      "en": "Case: article publishing hands off within one region"
+    },
+    "context": {
+      "zh": "发布按钮先进入进行中状态，成功后替换为结果卡片和打开文章入口。",
+      "en": "The publish button first enters progress, then resolves into a result card with an Open article action."
+    },
+    "code": "<section class=\"publish-action\" data-state=\"ready\">\n  <button class=\"publish-button\" type=\"button\" data-publish aria-describedby=\"publish-status\">Publish article</button>\n  <p id=\"publish-status\" role=\"status\" aria-live=\"polite\" data-publish-status>Ready to publish.</p>\n  <p>Requests sent: <output data-publish-submissions>0</output></p>\n  <div class=\"publish-result\" data-publish-result aria-hidden=\"true\" inert>\n    <strong>Article published.</strong>\n    <a href=\"#published-article\">Open published article</a>\n  </div>\n</section>\n\n<style>\n.publish-action { display: grid; gap: 12px; max-width: 28rem; }\n.publish-button, .publish-result { transition: opacity 180ms ease-out, transform 180ms ease-out; }\n.publish-result { opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none; }\n.publish-action[data-state=\"working\"] .publish-button { opacity: .72; cursor: progress; }\n.publish-action[data-state=\"complete\"] .publish-button { opacity: 0; visibility: hidden; transform: scale(.98); pointer-events: none; }\n.publish-action[data-state=\"complete\"] .publish-result { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }\n@media (prefers-reduced-motion: reduce) {\n  .publish-button, .publish-result { transition-duration: 1ms; }\n}\n</style>\n\n<script>\nconst action = document.querySelector(\".publish-action\");\nconst publishButton = action.querySelector(\"[data-publish]\");\nconst status = action.querySelector(\"[data-publish-status]\");\nconst publishResult = action.querySelector(\"[data-publish-result]\");\nconst publishedLink = publishResult.querySelector(\"a\");\nconst requestCount = action.querySelector(\"[data-publish-submissions]\");\nlet submissions = 0;\n\nfunction publishRequest() {\n  return new Promise((resolve) => window.setTimeout(resolve, 160));\n}\n\nasync function publishArticle() {\n  if (action.dataset.state !== \"ready\") return;\n\n  action.dataset.state = \"working\";\n  publishButton.disabled = true;\n  status.textContent = \"Publishing article.\";\n  submissions += 1;\n  requestCount.textContent = String(submissions);\n\n  try {\n    await publishRequest();\n    action.dataset.state = \"complete\";\n    publishResult.inert = false;\n    publishResult.setAttribute(\"aria-hidden\", \"false\");\n    status.textContent = \"Article published. You can open it now.\";\n    publishedLink.focus();\n  } catch {\n    action.dataset.state = \"ready\";\n    publishButton.disabled = false;\n    status.textContent = \"Publishing failed. Try again.\";\n  }\n}\n\npublishButton.addEventListener(\"click\", publishArticle);\n</script>",
+    "explanation": {
+      "zh": "状态写在父元素的 data-state 上，按钮和结果卡片共享同一个事实，不需要依赖延时器猜测请求何时结束。结果出现前和旧按钮完成后都用 visibility 退出焦点顺序，完成状态只暴露可继续操作的结果；透明度和轻微位移负责交接，减弱动效偏好下立即完成交接。",
+      "en": "State lives on the parent data-state, so button and result card share one fact instead of using a timer to guess when the request ends. Visibility keeps both the pending result and the completed action out of the focus order, exposing only the next usable result; opacity and short travel handle the handoff, and reduced motion resolves it immediately."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "publish-state-flow",
+      "title": {
+        "zh": "图解一：一次发布的状态流",
+        "en": "Diagram 1: a publish state flow"
+      },
+      "alt": {
+        "zh": "可发布、发布中、已发布和需要处理四个状态，其中发布中分别通向成功和失败。",
+        "en": "Ready, publishing, published, and needs-attention states, with publishing branching to success and failure."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "idle",
+          "label": {
+            "zh": "可发布",
+            "en": "Ready"
+          },
+          "detail": {
+            "zh": "按钮可用，说明风险",
+            "en": "Action available with risk context"
+          },
+          "x": 50,
+          "y": 205,
+          "width": 175,
+          "height": 110,
+          "tone": "surface"
+        },
+        {
+          "id": "working",
+          "label": {
+            "zh": "发布中",
+            "en": "Publishing"
+          },
+          "detail": {
+            "zh": "禁用重复提交，显示进度",
+            "en": "Prevent duplicates and show progress"
+          },
+          "x": 285,
+          "y": 205,
+          "width": 175,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "success",
+          "label": {
+            "zh": "已发布",
+            "en": "Published"
+          },
+          "detail": {
+            "zh": "展示链接与下一步",
+            "en": "Expose link and next action"
+          },
+          "x": 610,
+          "y": 95,
+          "width": 175,
+          "height": 110,
+          "tone": "success"
+        },
+        {
+          "id": "failure",
+          "label": {
+            "zh": "需要处理",
+            "en": "Needs attention"
+          },
+          "detail": {
+            "zh": "保留草稿与重试入口",
+            "en": "Keep draft and retry path"
+          },
+          "x": 610,
+          "y": 335,
+          "width": 175,
+          "height": 110,
+          "tone": "warning"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "idle",
+          "to": "working",
+          "label": {
+            "zh": "点击",
+            "en": "Click"
+          }
+        },
+        {
+          "from": "working",
+          "to": "success",
+          "label": {
+            "zh": "请求完成",
+            "en": "Request resolves"
+          }
+        },
+        {
+          "from": "working",
+          "to": "failure",
+          "label": {
+            "zh": "请求失败",
+            "en": "Request fails"
+          }
+        },
+        {
+          "from": "failure",
+          "to": "idle",
+          "label": {
+            "zh": "修改或重试",
+            "en": "Edit or retry"
+          }
+        }
+      ]
+    },
+    {
+      "id": "feedback-proximity-map",
+      "title": {
+        "zh": "图解二：反馈离操作多近",
+        "en": "Diagram 2: feedback proximity"
+      },
+      "alt": {
+        "zh": "发布按钮、同一区域的结果卡片和全局通知三层从近到远排列。",
+        "en": "Publish button, local result card, and global notice arranged from nearest to farthest."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "button",
+          "label": {
+            "zh": "按钮状态",
+            "en": "Button state"
+          },
+          "detail": {
+            "zh": "第一确认层",
+            "en": "First confirmation layer"
+          },
+          "x": 80,
+          "y": 215,
+          "width": 200,
+          "height": 110,
+          "tone": "ink"
+        },
+        {
+          "id": "local",
+          "label": {
+            "zh": "结果卡片",
+            "en": "Result card"
+          },
+          "detail": {
+            "zh": "链接、撤销、失败原因",
+            "en": "Link, undo, or failure reason"
+          },
+          "x": 380,
+          "y": 215,
+          "width": 200,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "global",
+          "label": {
+            "zh": "全局通知",
+            "en": "Global notice"
+          },
+          "detail": {
+            "zh": "同步、跨页面提示",
+            "en": "Sync or cross-page context"
+          },
+          "x": 680,
+          "y": 215,
+          "width": 200,
+          "height": 110,
+          "tone": "surface"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "button",
+          "to": "local",
+          "label": {
+            "zh": "同一视线",
+            "en": "Same line of sight"
+          }
+        },
+        {
+          "from": "local",
+          "to": "global",
+          "label": {
+            "zh": "补充上下文",
+            "en": "Add context"
+          }
+        }
+      ]
+    },
+    {
+      "id": "feedback-timeline",
+      "title": {
+        "zh": "图解三：从按下到结果的节奏",
+        "en": "Diagram 3: rhythm from press to result"
+      },
+      "alt": {
+        "zh": "时间线从按下、输入已接收、请求期间到完成后的下一步。",
+        "en": "A timeline from press and acknowledgement through request duration to the next action after completion."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "zero",
+          "label": {
+            "zh": "0ms",
+            "en": "0 ms"
+          },
+          "detail": {
+            "zh": "按下",
+            "en": "Pressed"
+          },
+          "x": 45,
+          "y": 205,
+          "width": 170,
+          "height": 110,
+          "tone": "ink"
+        },
+        {
+          "id": "ack",
+          "label": {
+            "zh": "120ms",
+            "en": "120 ms"
+          },
+          "detail": {
+            "zh": "输入已接收",
+            "en": "Input acknowledged"
+          },
+          "x": 265,
+          "y": 205,
+          "width": 170,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "wait",
+          "label": {
+            "zh": "请求期间",
+            "en": "During request"
+          },
+          "detail": {
+            "zh": "发布中或进度",
+            "en": "Publishing or progress"
+          },
+          "x": 485,
+          "y": 205,
+          "width": 170,
+          "height": 110,
+          "tone": "surface"
+        },
+        {
+          "id": "settle",
+          "label": {
+            "zh": "完成后 800ms",
+            "en": "800 ms after result"
+          },
+          "detail": {
+            "zh": "结果与下一步",
+            "en": "Result and next action"
+          },
+          "x": 705,
+          "y": 205,
+          "width": 170,
+          "height": 110,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "zero",
+          "to": "ack"
+        },
+        {
+          "from": "ack",
+          "to": "wait"
+        },
+        {
+          "from": "wait",
+          "to": "settle"
+        }
+      ]
+    }
+  ]
+}

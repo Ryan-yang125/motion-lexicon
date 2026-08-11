@@ -1,0 +1,456 @@
+{
+  "guideId": "card-list-filter-continuity",
+  "standfirst": {
+    "zh": "卡片、列表和筛选里的变化经常同时发生：项目进入、离开、重排、刷新和收缩。用户需要一条能追踪的因果链，知道自己操作的是谁、它去了哪里，以及为什么周围内容也随之变化。",
+    "en": "Cards, lists, and filters often change at once: items arrive, leave, reorder, refresh, and contract. People need a trackable causal chain that tells them what they acted on, where it went, and why surrounding content changed too."
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": {
+        "zh": "先让用户认得出同一个对象",
+        "en": "Let people recognise the same object first"
+      },
+      "paragraphs": [
+        {
+          "zh": "连续性的起点是对象身份。一个卡片被选择、拖拽或筛选后，它的标题、缩略图、边界和相对位置应该尽量延续。即使尺寸要变化，也要让关键识别线索留在画面里。比如任务卡从看板进入详情页时，标题和主色块可以在新布局中继续出现；筛选后只剩三条结果时，保留激活的筛选条件和数量，用户便能把收缩后的列表与刚才的选择联系起来。",
+          "en": "Continuity starts with object identity. When a card is selected, dragged, or filtered, its title, thumbnail, boundary, and relative position should persist where possible. Even when size changes, keep main recognition cues on screen. When a task card opens into detail, its title and primary color can continue in the new layout; when filtering leaves three results, keep the active filter and count visible so people can connect the reduced list to the choice they just made."
+        },
+        {
+          "zh": "身份线索也能帮助处理内容更新。来自实时协作、轮询刷新或后台同步的新项目，不要和用户刚操作的项目混成一团。新项目可以从列表边缘轻量进入，并用短暂的“新增”标记说明来源；被更新的项目可以只变化相关字段，避免整张卡片反复闪动。用户会把每一次变化归因到自己的动作、别人的动作或系统刷新，界面提供的线索越清楚，认知负担越低。",
+          "en": "Identity cues also help with updates. New items from collaboration, polling, or background sync should not blend into the item a person just touched. A new item can enter lightly from the list edge with a brief New marker that explains its source; an updated item can change only the relevant field instead of flashing the whole card. People attribute every change to their own action, someone else’s action, or a system refresh. Clearer cues reduce that burden."
+        }
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": {
+        "zh": "进入、移动和离开共用一条时间线",
+        "en": "Let entrance, movement, and exit share one timeline"
+      },
+      "paragraphs": [
+        {
+          "zh": "列表变化很容易显得乱，因为进入、离开和位置移动同时发生。处理的关键在于给它们一个共同的节奏。先让要离开的项目降低存在感，再让保留项目平移到新位置，最后让新增项目出现。它们并不需要逐帧串行，只要开始和结束有清楚的先后关系即可。对于十条以内的列表，120–220ms 往往能完成一次干净的重排；项目更多时，优先缩短单项延迟，避免最后一个项目很久以后才落位。",
+          "en": "List changes can feel chaotic because entrance, exit, and movement happen together. The key is a shared rhythm. Let departing items reduce their presence, move retained items to their new places, then reveal incoming items. They do not need frame-by-frame serialization; their starts and ends simply need a clear order. For lists under ten items, 120–220 ms often completes a clean reorder. With more items, shorten per-item delay so the final item does not settle much later than the first."
+        },
+        {
+          "zh": "视觉上的移动应当真实反映数据变化。排序后卡片最好沿着它们实际要去的位置移动；如果采用 crossfade，保留旧位置和新位置的重叠时间，让眼睛有机会建立对应关系。列表容器本身保持稳定高度也很重要。大面积的高度跳动会让用户以为页面重新加载了，而非理解为内容发生了筛选。对小屏幕来说，连续性还意味着滚动位置可控：用户刚刚触碰的区域应尽可能留在视口附近。",
+          "en": "Visual movement should reflect the data change. After sorting, cards should travel toward the places they truly occupy; if using crossfade, overlap old and new positions long enough for the eye to establish correspondence. Keeping the container’s height stable matters too. Large height jumps can look like a page reload rather than a filtered result. On small screens, continuity also means controlling scroll position: keep the area a person just touched near the viewport whenever possible."
+        }
+      ]
+    },
+    {
+      "id": "filters",
+      "title": {
+        "zh": "筛选要保留条件、数量和空状态",
+        "en": "Keep criteria, counts, and empty states through filtering"
+      },
+      "paragraphs": [
+        {
+          "zh": "筛选的动效承担解释责任。用户选择“已完成”或输入关键词后，列表会减少、排序会变化、统计数字也会更新。激活的筛选 chip、搜索词和结果数量应该先于或同时于列表变化出现，这样用户先知道规则，再看到结果。若只让卡片瞬间消失，页面会像发生了故障；若条件、数量和卡片同步更新，用户能理解这是一次受控的收缩。",
+          "en": "Filter motion carries an explanatory responsibility. When someone chooses Completed or enters a query, the list shrinks, ordering can change, and counts update. Show the active filter chip, query, and result count before or alongside the list change, so people see the rule before the result. If cards simply vanish, the page can resemble a fault; when criteria, count, and cards update together, the contraction reads as controlled."
+        },
+        {
+          "zh": "空状态同样属于连续性。零结果也是列表的一种结果，它应接住刚才的筛选条件：显示“没有匹配‘预算’的项目”，提供清除筛选或换一个条件的入口。空状态进入时，一次淡入加上稳定的占位就足够。若筛选结果很快来回变化，避免每次都播放完整出入场；在输入框连续输入时，可以用更短的过渡，等用户停止输入后再让最终结果稳定下来。",
+          "en": "An empty state belongs to continuity as well. Zero results are not the end of the list; the state should receive the active criteria: say No projects match budget and offer Clear filters or another path. Its entrance does not need a large bounce—one fade with a stable placeholder is enough. When results change rapidly, avoid replaying a full entrance and exit every time. During continuous typing, use shorter transitions and let the final result settle once input pauses."
+        }
+      ]
+    },
+    {
+      "id": "source",
+      "title": {
+        "zh": "刷新、排序和拖拽各自有不同信号",
+        "en": "Give refresh, sorting, and dragging distinct signals"
+      },
+      "paragraphs": [
+        {
+          "zh": "三种变化看起来都在移动卡片，实际含义完全不同。刷新告诉用户系统得到了新数据；排序表达一个新的比较规则；拖拽确认用户亲手改变了顺序。刷新适合轻量提示和局部更新，排序适合展示当前排序规则与整体重排，拖拽则需要拾取态、占位和落点。把它们做成同一种“卡片飞来飞去”，会让用户失去对原因的判断。",
+          "en": "Refresh, sorting, and dragging all move cards, yet they mean different things. Refresh says the system received new data; sorting expresses a new comparison rule; dragging confirms that a person directly changed order. Refresh benefits from a light cue and local update, sorting from showing the active rule and a whole-list reorder, and dragging from pickup, placeholder, and drop states. Treating all three as cards flying around removes the user’s ability to understand why change occurred."
+        },
+        {
+          "zh": "实现时可以把“变化来源”作为状态的一部分。列表容器记录当前是 filter、sort、refresh 还是 drag；每种状态只触发自己需要的视觉规则。这样也利于测试：筛选时检查结果数量和焦点，排序时检查对象的最终顺序，拖拽时检查键盘与触屏路径。动效不再是覆盖在数据之上的装饰层，它成为状态变化的可见输出，和业务逻辑一起被验收。",
+          "en": "In implementation, make the source of change part of state. Let the list container know whether the current change is filter, sort, refresh, or drag, and let each mode trigger only its necessary visual rule. This also improves testing: verify result count and focus during filtering, final order during sorting, and keyboard and touch paths during dragging. Motion becomes visible output of state change, validated alongside business logic rather than treated as decoration floating above it."
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "title": {
+        "zh": "把连续性写进列表组件的验收",
+        "en": "Make continuity part of list-component acceptance"
+      },
+      "paragraphs": [
+        {
+          "zh": "列表组件可以把连续性写成一组明确规则：对象身份如何保留、容器高度在何种条件下变化、筛选条件和数量何时更新、移动距离和总时长的上限是多少、空状态承接哪些动作。这样新页面引用组件时，不会每次重新猜测动画该怎么做。设计评审关注的是用户是否能追踪，工程评审关注的是最终数据顺序和焦点，两个角度围绕的是同一份契约。",
+          "en": "A list component can turn continuity into explicit rules: how object identity persists, when container height may change, when criteria and counts update, the limit for travel and total duration, and which actions an empty state receives. New pages can then use the component without repeatedly guessing how animation should work. Design review asks whether people can track the change; engineering review checks final data order and focus. Both perspectives revolve around the same contract."
+        },
+        {
+          "zh": "验收时要用真实规模的数据。三张卡片的漂亮位移，放到五十条搜索结果上可能变成拖延。测试一次连续输入、一次多条件筛选、一次排序和一次移动端滚动中的更新；同时开启减少动效偏好，确认规则、数量和焦点仍然清楚。好的连续性并不要求每个对象都演一段完整动画，它要求每次变化都有来处、有结果、有可以继续操作的空间。",
+          "en": "Review with realistic data scale. A beautiful move across three cards can turn into delay across fifty search results. Test continuous typing, multi-condition filtering, sorting, and an update while mobile scrolling; then enable reduced motion and confirm that rules, counts, and focus remain clear. Good continuity does not require every object to perform a full animation. It requires every change to have an origin, a result, and room for the next action."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "列表连续性验收清单",
+    "en": "List continuity checklist"
+  },
+  "checklist": [
+    {
+      "id": "identity",
+      "label": {
+        "zh": "被操作对象保留可辨认线索",
+        "en": "The acted-on object retains recognisable cues"
+      },
+      "detail": {
+        "zh": "标题、缩略图、色块或相对位置在新状态中继续出现。",
+        "en": "Title, thumbnail, color block, or relative position continues in the new state."
+      }
+    },
+    {
+      "id": "rule",
+      "label": {
+        "zh": "筛选规则和结果数量同步可见",
+        "en": "Filter rule and result count are visible together"
+      },
+      "detail": {
+        "zh": "先让人知道规则，再让列表收缩或重排。",
+        "en": "Show the rule before the list contracts or reorders."
+      }
+    },
+    {
+      "id": "timing",
+      "label": {
+        "zh": "离开、移动和进入共享短节奏",
+        "en": "Exit, movement, and entrance share a short rhythm"
+      },
+      "detail": {
+        "zh": "项目多时控制总时长，避免延迟排队。",
+        "en": "Cap total duration for larger sets and avoid delay queues."
+      }
+    },
+    {
+      "id": "empty",
+      "label": {
+        "zh": "空状态解释条件并给出下一步",
+        "en": "Empty state explains criteria and offers a next step"
+      },
+      "detail": {
+        "zh": "保留搜索词或筛选条件，并提供清除或替换入口。",
+        "en": "Retain query or criteria and offer clear or replacement actions."
+      }
+    },
+    {
+      "id": "source",
+      "label": {
+        "zh": "刷新、排序与拖拽可被区分",
+        "en": "Refresh, sort, and drag are distinguishable"
+      },
+      "detail": {
+        "zh": "每种来源使用自己的状态与验收路径。",
+        "en": "Each source uses its own state and acceptance path."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：项目筛选先更新数量，再收缩卡片",
+      "en": "Case: project filtering updates count before cards contract"
+    },
+    "context": {
+      "zh": "筛选条件和命中数量放在列表上方，保留项平移，离开项只降低透明度。",
+      "en": "Active criteria and match count sit above the list; retained items move while departing items only fade."
+    },
+    "code": ".result-list { display: grid; gap: 12px; }\n.result-card { transition: transform 180ms ease-out, opacity 140ms ease-out; }\n.result-card[data-visibility=\"leaving\"] { opacity: 0; transform: scale(.985); pointer-events: none; }\n.result-meta[data-updating=\"true\"] { color: var(--motion-ink); }\n.result-empty { min-height: 160px; opacity: 0; visibility: hidden; transition: opacity 140ms ease-out; }\n.result-list[data-empty=\"true\"] + .result-empty { opacity: 1; visibility: visible; }\n@media (prefers-reduced-motion: reduce) { .result-card, .result-empty { transition-duration: 1ms; } }",
+    "explanation": {
+      "zh": "离开项目不使用大位移，保留项目的真实位置移动更容易被看清。命中数量通过 data-updating 先变化，建立“规则已经生效”的线索；空状态预留高度，列表收缩后页面不会突然塌陷。",
+      "en": "Departing items avoid large travel so the real movement of retained items is easier to read. The match count changes first through data-updating, establishing that the rule has taken effect; the empty state reserves height so the page does not suddenly collapse."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "card-identity-map",
+      "title": {
+        "zh": "图解一：卡片身份在状态间延续",
+        "en": "Diagram 1: card identity persists across states"
+      },
+      "alt": {
+        "zh": "同一张带标题和色块的卡片经历默认、选中、筛选后和详情四个位置。",
+        "en": "One card with a title and color block appears in default, selected, filtered, and detail positions."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "default",
+          "label": {
+            "zh": "默认卡片",
+            "en": "Default card"
+          },
+          "detail": {
+            "zh": "标题、缩略图、位置",
+            "en": "Title, thumbnail, position"
+          },
+          "x": 55,
+          "y": 215,
+          "width": 185,
+          "height": 105,
+          "tone": "surface"
+        },
+        {
+          "id": "selected",
+          "label": {
+            "zh": "已选中",
+            "en": "Selected"
+          },
+          "detail": {
+            "zh": "边界与焦点增强",
+            "en": "Boundary and focus strengthen"
+          },
+          "x": 285,
+          "y": 215,
+          "width": 185,
+          "height": 105,
+          "tone": "accent"
+        },
+        {
+          "id": "filtered",
+          "label": {
+            "zh": "筛选后",
+            "en": "After filter"
+          },
+          "detail": {
+            "zh": "保留身份与新顺序",
+            "en": "Identity remains in new order"
+          },
+          "x": 515,
+          "y": 215,
+          "width": 185,
+          "height": 105,
+          "tone": "ink"
+        },
+        {
+          "id": "detail",
+          "label": {
+            "zh": "详情状态",
+            "en": "Detail state"
+          },
+          "detail": {
+            "zh": "同一标题继续出现",
+            "en": "The same title continues"
+          },
+          "x": 745,
+          "y": 215,
+          "width": 185,
+          "height": 105,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "default",
+          "to": "selected",
+          "label": {
+            "zh": "选择",
+            "en": "Select"
+          }
+        },
+        {
+          "from": "selected",
+          "to": "filtered",
+          "label": {
+            "zh": "筛选",
+            "en": "Filter"
+          }
+        },
+        {
+          "from": "selected",
+          "to": "detail",
+          "label": {
+            "zh": "打开",
+            "en": "Open"
+          }
+        }
+      ]
+    },
+    {
+      "id": "list-change-timeline",
+      "title": {
+        "zh": "图解二：列表更新的三段节奏",
+        "en": "Diagram 2: three beats of a list update"
+      },
+      "alt": {
+        "zh": "从 0 到 220 毫秒依次展示离开、重排和进入，三段有部分重叠。",
+        "en": "From 0 to 220 milliseconds, exit, reorder, and entrance appear in partially overlapping beats."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "exit",
+          "label": {
+            "zh": "0–100ms",
+            "en": "0–100 ms"
+          },
+          "detail": {
+            "zh": "离开项降低存在感",
+            "en": "Departing items reduce presence"
+          },
+          "x": 70,
+          "y": 205,
+          "width": 230,
+          "height": 110,
+          "tone": "warning"
+        },
+        {
+          "id": "move",
+          "label": {
+            "zh": "60–180ms",
+            "en": "60–180 ms"
+          },
+          "detail": {
+            "zh": "保留项移向真实位置",
+            "en": "Retained items travel to real positions"
+          },
+          "x": 365,
+          "y": 205,
+          "width": 230,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "enter",
+          "label": {
+            "zh": "120–220ms",
+            "en": "120–220 ms"
+          },
+          "detail": {
+            "zh": "新增项轻量进入",
+            "en": "New items enter lightly"
+          },
+          "x": 660,
+          "y": 205,
+          "width": 230,
+          "height": 110,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "exit",
+          "to": "move"
+        },
+        {
+          "from": "move",
+          "to": "enter"
+        }
+      ]
+    },
+    {
+      "id": "filter-explanation-flow",
+      "title": {
+        "zh": "图解三：筛选如何解释结果",
+        "en": "Diagram 3: how a filter explains its result"
+      },
+      "alt": {
+        "zh": "筛选条件先影响结果数量，再分支到保留卡片或空状态，空状态提供清除入口。",
+        "en": "Criteria first affects result count, then branches to retained cards or empty state; the empty state offers Clear."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "criteria",
+          "label": {
+            "zh": "筛选条件",
+            "en": "Criteria"
+          },
+          "detail": {
+            "zh": "已完成 · 本周",
+            "en": "Completed · This week"
+          },
+          "x": 60,
+          "y": 215,
+          "width": 180,
+          "height": 105,
+          "tone": "accent"
+        },
+        {
+          "id": "count",
+          "label": {
+            "zh": "结果数量",
+            "en": "Result count"
+          },
+          "detail": {
+            "zh": "规则已生效",
+            "en": "Rule has taken effect"
+          },
+          "x": 305,
+          "y": 215,
+          "width": 180,
+          "height": 105,
+          "tone": "ink"
+        },
+        {
+          "id": "results",
+          "label": {
+            "zh": "保留卡片",
+            "en": "Retained cards"
+          },
+          "detail": {
+            "zh": "移动到新位置",
+            "en": "Move to new positions"
+          },
+          "x": 610,
+          "y": 100,
+          "width": 180,
+          "height": 105,
+          "tone": "success"
+        },
+        {
+          "id": "empty",
+          "label": {
+            "zh": "空状态",
+            "en": "Empty state"
+          },
+          "detail": {
+            "zh": "解释条件与下一步",
+            "en": "Explain criteria and next step"
+          },
+          "x": 610,
+          "y": 340,
+          "width": 180,
+          "height": 105,
+          "tone": "surface"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "criteria",
+          "to": "count"
+        },
+        {
+          "from": "count",
+          "to": "results",
+          "label": {
+            "zh": "有结果",
+            "en": "Matches"
+          }
+        },
+        {
+          "from": "count",
+          "to": "empty",
+          "label": {
+            "zh": "零结果",
+            "en": "Zero matches"
+          }
+        },
+        {
+          "from": "empty",
+          "to": "criteria",
+          "label": {
+            "zh": "清除",
+            "en": "Clear"
+          }
+        }
+      ]
+    }
+  ]
+}

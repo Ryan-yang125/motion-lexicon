@@ -14,7 +14,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const EASE = [0.23, 1, 0.32, 1] as const;
 
-const LEAVE = [0.4, 0, 1, 1] as const;
+const LEAVE = [0.23, 1, 0.32, 1] as const;
 
 const SURFACE = { type: "spring", stiffness: 420, damping: 36, mass: 0.9 } as const;
 

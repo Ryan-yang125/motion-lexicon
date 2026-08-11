@@ -241,6 +241,8 @@ export type ExpandingSearchProps = UseExpandingSearchOptions & {
   resultCount?: number;
   align?: "left" | "right";
   className?: string;
+  clearLabel?: string;
+  formatResults?: (count: number, query: string) => string;
 };
 
 export function ExpandingSearch({
@@ -249,6 +251,8 @@ export function ExpandingSearch({
   resultCount,
   align = "right",
   className = "",
+  clearLabel = "Clear search",
+  formatResults = (count, query) => `${count} ${count === 1 ? "result" : "results"} for ${query}`,
   ...options
 }: ExpandingSearchProps) {
   const reduced = useReducedMotion();
@@ -290,12 +294,10 @@ export function ExpandingSearch({
         setAnnounced("");
         return;
       }
-      setAnnounced(
-        `${resultCount} ${resultCount === 1 ? "result" : "results"} for ${query}`,
-      );
+      setAnnounced(formatResults(resultCount, query));
     }, ANNOUNCE_DELAY);
     return () => clearTimeout(id);
-  }, [open, query, resultCount]);
+  }, [formatResults, open, query, resultCount]);
 
   const expanded = Math.max(COLLAPSED, track);
   const rightInset = CLEAR_SLOT + (resultCount === undefined ? 0 : COUNT_SLOT);
@@ -314,8 +316,17 @@ export function ExpandingSearch({
     >
       <motion.div
         initial={false}
-        animate={{ width: open ? expanded : COLLAPSED }}
+        animate={{
+          clipPath: open
+            ? "inset(0 0 0 0 round 10px)"
+            : align === "right"
+              ? `inset(0 0 0 calc(100% - ${COLLAPSED}px) round 10px)`
+              : `inset(0 calc(100% - ${COLLAPSED}px) 0 0 round 10px)`,
+        }}
         transition={shellMotion}
+        style={{
+          width: expanded,
+        }}
         onMouseDown={(event) => {
           if (event.target !== event.currentTarget) return;
           event.preventDefault();
@@ -367,10 +378,10 @@ export function ExpandingSearch({
             type="button"
             onClick={clear}
             tabIndex={open && filled ? 0 : -1}
-            aria-label="Clear search"
+            aria-label={clearLabel}
             aria-controls={inputId}
             initial={false}
-            animate={{ opacity: filled ? 1 : 0, scale: filled ? 1 : 0.86 }}
+            animate={{ opacity: filled ? 1 : 0 }}
             transition={cellMotion}
             className={`grid size-[22px] place-items-center rounded-[6px] text-stone-500 outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#4568FF] dark:text-stone-400 dark:focus-visible:outline-[#93B0FF] ${
               open && filled ? "pointer-events-auto" : ""
@@ -395,7 +406,7 @@ export function ExpandingSearch({
         aria-controls={inputId}
         initial={false}
         animate={{
-          x: align === "right" && open ? -(expanded - COLLAPSED) : 0,
+          transform: `translate3d(${align === "right" && open ? -(expanded - COLLAPSED) : 0}px, 0, 0)`,
         }}
         transition={shellMotion}
         className={`absolute inset-y-0 z-10 grid w-10 place-items-center rounded-[8px] text-stone-500 outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#4568FF] disabled:opacity-50 dark:text-stone-400 dark:focus-visible:outline-[#93B0FF] ${
