@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Status becomes action</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="demo-shell">
+      <section class="status-action" data-status-action data-state="idle" aria-labelledby="demo-title">
+        <div class="status-action__copy">
+          <p class="status-action__eyebrow">Primitive candidate</p>
+          <h1 id="demo-title">Status becomes action</h1>
+          <p>Generate an export, then continue from the same control.</p>
+        </div>
+        <div class="status-action__well">
+          <p class="status-action__record" data-record>Export will include 24 selected orders.</p>
+          <button class="status-action__button" data-action type="button" aria-describedby="status-action-message">
+            <span class="status-action__icon" data-icon aria-hidden="true">↑</span>
+            <span class="status-action__label" data-label>Generate export</span>
+          </button>
+          <p class="status-action__message" id="status-action-message" data-message aria-live="polite" aria-atomic="true">Ready to create an export.</p>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./status-becomes-action.js"></script>
+  </body>
+</html>

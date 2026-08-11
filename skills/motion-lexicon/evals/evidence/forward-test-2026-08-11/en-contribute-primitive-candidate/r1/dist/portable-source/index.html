@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portable Motion Lexicon candidate demo for status becomes action."
+    />
+    <title>Status becomes action — Motion Lexicon candidate</title>
+    <link rel="stylesheet" href="./status-becomes-action.css" />
+  </head>
+  <body>
+    <main class="demo-shell">
+      <header class="demo-header">
+        <div>
+          <p class="demo-kicker">Motion Lexicon · Primitive candidate</p>
+          <h1>Status becomes action</h1>
+        </div>
+        <p class="demo-intro">
+          A completed operation confirms its result, then the same control
+          becomes the most useful next step.
+        </p>
+      </header>
+
+      <section class="scene-grid" aria-label="Independent product scenes">
+        <article
+          class="status-action"
+          data-status-action
+          data-state="idle"
+          data-operation-ms="420"
+          data-confirmation-ms="650"
+          data-failures-before-success="0"
+          data-idle-label="Publish draft"
+          data-pending-label="Publishing…"
+          data-success-label="Published"
+          data-action-label="View live"
+          data-failure-label="Try publishing again"
+          data-terminal-label="Live page opened"
+          data-pending-status="Publishing the draft."
+          data-success-status="Draft published."
+          data-ready-status="Draft published. View live is ready."
+          data-failure-status="The draft could not be published. Try again."
+          data-terminal-status="The live page was opened."
+          aria-labelledby="publish-title"
+        >
+          <div class="status-action__well" aria-hidden="true">
+            <span>PUBLICATION</span>
+            <span>Draft 08</span>
+          </div>
+          <div class="status-action__content">
+            <p class="status-action__eyebrow">Content</p>
+            <h2 id="publish-title">Quarterly field notes</h2>
+            <p class="status-action__description">
+              Move a reviewed draft to its public URL, then open it.
+            </p>
+          </div>
+          <button
+            class="status-action__control"
+            type="button"
+            aria-describedby="publish-status"
+          >
+            <span class="status-action__face" data-face="idle">Publish draft</span>
+            <span class="status-action__face" data-face="pending">
+              <span class="status-action__spinner" aria-hidden="true"></span>
+              Publishing…
+            </span>
+            <span class="status-action__face" data-face="complete">
+              <span aria-hidden="true">✓</span>
+              Published
+            </span>
+            <span class="status-action__face" data-face="action-ready">
+              View live
+              <span aria-hidden="true">↗</span>
+            </span>
+            <span class="status-action__face" data-face="failure">Try publishing again</span>
+            <span class="status-action__face" data-face="recovery">Retrying…</span>
+            <span class="status-action__face" data-face="next">
+              <span aria-hidden="true">✓</span>
+              Live page opened
+            </span>
+          </button>
+          <p class="status-action__live sr-only" id="publish-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </article>
+
+        <article
+          class="status-action"
+          data-status-action
+          data-state="idle"
+          data-operation-ms="360"
+          data-confirmation-ms="650"
+          data-failures-before-success="0"
+          data-idle-label="Send invitation"
+          data-pending-label="Sending…"
+          data-success-label="Invitation sent"
+          data-action-label="Open member profile"
+          data-failure-label="Try sending again"
+          data-terminal-label="Member profile opened"
+          data-pending-status="Sending the member invitation."
+          data-success-status="Member invitation sent."
+          data-ready-status="Invitation sent. Open member profile is ready."
+          data-failure-status="The invitation could not be sent. Try again."
+          data-terminal-status="The member profile was opened."
+          aria-labelledby="invite-title"
+        >
+          <div class="status-action__well status-action__well--person" aria-hidden="true">
+            <span class="status-action__avatar">AM</span>
+            <span>Editor access</span>
+          </div>
+          <div class="status-action__content">
+            <p class="status-action__eyebrow">Team</p>
+            <h2 id="invite-title">Invite Amina Mensah</h2>
+            <p class="status-action__description">
+              Add a collaborator, then continue into their access profile.
+            </p>
+          </div>
+          <button
+            class="status-action__control"
+            type="button"
+            aria-describedby="invite-status"
+          >
+            <span class="status-action__face" data-face="idle">Send invitation</span>
+            <span class="status-action__face" data-face="pending">
+              <span class="status-action__spinner" aria-hidden="true"></span>
+              Sending…
+            </span>
+            <span class="status-action__face" data-face="complete">
+              <span aria-hidden="true">✓</span>
+              Invitation sent
+            </span>
+            <span class="status-action__face" data-face="action-ready">
+              Open member profile
+              <span aria-hidden="true">→</span>
+            </span>
+            <span class="status-action__face" data-face="failure">Try sending again</span>
+            <span class="status-action__face" data-face="recovery">Retrying…</span>
+            <span class="status-action__face" data-face="next">
+              <span aria-hidden="true">✓</span>
+              Member profile opened
+            </span>
+          </button>
+          <p class="status-action__live sr-only" id="invite-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </article>
+
+        <article
+          class="status-action"
+          data-status-action
+          data-state="idle"
+          data-operation-ms="460"
+          data-confirmation-ms="650"
+          data-failures-before-success="1"
+          data-idle-label="Generate export"
+          data-pending-label="Generating…"
+          data-success-label="Export ready"
+          data-action-label="Download CSV"
+          data-failure-label="Retry export"
+          data-terminal-label="CSV downloaded"
+          data-pending-status="Generating the transaction export."
+          data-success-status="Transaction export ready."
+          data-ready-status="Export ready. Download CSV is available."
+          data-failure-status="The export failed. Retry export."
+          data-terminal-status="The CSV download started."
+          aria-labelledby="export-title"
+        >
+          <div class="status-action__well status-action__well--metric" aria-hidden="true">
+            <span>JUL 01–31</span>
+            <strong>2,481 rows</strong>
+          </div>
+          <div class="status-action__content">
+            <p class="status-action__eyebrow">Data</p>
+            <h2 id="export-title">Transaction export</h2>
+            <p class="status-action__description">
+              Generate a fresh report, recover from failure, then download it.
+            </p>
+          </div>
+          <button
+            class="status-action__control"
+            type="button"
+            aria-describedby="export-status"
+          >
+            <span class="status-action__face" data-face="idle">Generate export</span>
+            <span class="status-action__face" data-face="pending">
+              <span class="status-action__spinner" aria-hidden="true"></span>
+              Generating…
+            </span>
+            <span class="status-action__face" data-face="complete">
+              <span aria-hidden="true">✓</span>
+              Export ready
+            </span>
+            <span class="status-action__face" data-face="action-ready">
+              Download CSV
+              <span aria-hidden="true">↓</span>
+            </span>
+            <span class="status-action__face" data-face="failure">Retry export</span>
+            <span class="status-action__face" data-face="recovery">Retrying…</span>
+            <span class="status-action__face" data-face="next">
+              <span aria-hidden="true">✓</span>
+              CSV downloaded
+            </span>
+          </button>
+          <p class="status-action__live sr-only" id="export-status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </article>
+      </section>
+
+      <p class="demo-note">
+        Keyboard: Tab to a control, Enter or Space to act, and Escape to cancel
+        pending work. The data export intentionally fails once to show recovery.
+      </p>
+    </main>
+
+    <script type="module" src="./status-becomes-action.js"></script>
+  </body>
+</html>
