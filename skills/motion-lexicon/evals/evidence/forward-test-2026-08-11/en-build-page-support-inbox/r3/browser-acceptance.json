@@ -1,0 +1,555 @@
+{
+  "evalId": "en-build-page-support-inbox",
+  "repetition": 3,
+  "sourceTreeSha256": "fedb9486090adeb2bc6c8e73ed7fe4aa984327b1f3d29c75a3bc2e2327c270e1",
+  "distTreeSha256": "75bc3258061ffcd3e62d9fdee9aed83e0ff29ac9ce4239275a604592004e7376",
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-support-r3-last-o5YkTZ/en-build-page-support-inbox-r3/work /support 43120",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 7 tests using 2 workers\n\n  ✓  1 tests/smoke.spec.ts:3:1 › starter route renders without horizontal overflow (429ms)\n  ✓  2 tests/support.spec.ts:3:1 › support inbox completes send, recovery, interruption, and resolved workflows (8.0s)\nAUDIT 320: {\"viewport\":320,\"document\":320,\"count\":25,\"minWidth\":44,\"minHeight\":44,\"offenders\":[],\"states\":2}\n  ✓  3 tests/support.spec.ts:64:3 › 320px has no overflow and all visible controls meet 44px (304ms)\nAUDIT 390: {\"viewport\":390,\"document\":390,\"count\":26,\"minWidth\":44,\"minHeight\":44,\"offenders\":[],\"states\":2}\n  ✓  4 tests/support.spec.ts:64:3 › 390px has no overflow and all visible controls meet 44px (293ms)\nAUDIT 768: {\"viewport\":768,\"document\":768,\"count\":23,\"minWidth\":44,\"minHeight\":44,\"offenders\":[],\"states\":1}\n  ✓  5 tests/support.spec.ts:64:3 › 768px has no overflow and all visible controls meet 44px (259ms)\nAUDIT 1440: {\"viewport\":1440,\"document\":1440,\"count\":26,\"minWidth\":44,\"minHeight\":44,\"offenders\":[],\"states\":1}\n  ✓  6 tests/support.spec.ts:64:3 › 1440px has no overflow and all visible controls meet 44px (223ms)\n  ✓  7 tests/support.spec.ts:107:1 › theme, keyboard focus, mobile return, and reduced motion preserve the workflow (292ms)\n\n  7 passed (11.1s)\n",
+  "testStderr": "(node:49774) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:49773) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:49774) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:49773) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 12,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"Toggle dark theme\"]",
+          "label": "Toggle dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open profile menu\"]",
+          "label": "Open profile menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "All4",
+          "width": 71.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "Open2",
+          "width": 71.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "Waiting1",
+          "width": 71.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "Resolved1",
+          "width": 71.5,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(7)",
+          "label": "input",
+          "width": 300,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Conversation list options\"]",
+          "label": "Conversation list options",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "OMOlivia Martin4 minRefund not showing on cardThe refund was approved last week, but I still can’t s",
+          "width": 308,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "MCMarcus Chen18 minUnable to invite a teammateThe invite link expires as soon as they open it.waitin",
+          "width": 308,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "SRSofia Rossi42 minInvoice needs a VAT numberCan you reissue the April invoice with our VAT ID?openT",
+          "width": 308,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "NWNoah WilliamsYesterdayExport completed successfullyGot it — the CSV looks perfect now. Thank you!r",
+          "width": 308,
+          "height": 126
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Toggle dark theme"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 12,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"Toggle dark theme\"]",
+          "label": "Toggle dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open profile menu\"]",
+          "label": "Open profile menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "All4",
+          "width": 89,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "Open2",
+          "width": 89,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "Waiting1",
+          "width": 89,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "Resolved1",
+          "width": 89,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(7)",
+          "label": "input",
+          "width": 370,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Conversation list options\"]",
+          "label": "Conversation list options",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "OMOlivia Martin4 minRefund not showing on cardThe refund was approved last week, but I still can’t s",
+          "width": 378,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "MCMarcus Chen18 minUnable to invite a teammateThe invite link expires as soon as they open it.waitin",
+          "width": 378,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "SRSofia Rossi42 minInvoice needs a VAT numberCan you reissue the April invoice with our VAT ID?openT",
+          "width": 378,
+          "height": 126
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "NWNoah WilliamsYesterdayExport completed successfullyGot it — the CSV looks perfect now. Thank you!r",
+          "width": 378,
+          "height": 126
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Toggle dark theme"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 23,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Mercury support\"]",
+          "label": "Mercury support",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a[aria-label=\"Inbox\"]",
+          "label": "Inbox",
+          "width": 52,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Customers\"]",
+          "label": "Customers",
+          "width": 52,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Reports\"]",
+          "label": "Reports",
+          "width": 52,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Settings\"]",
+          "label": "Settings",
+          "width": 52,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Toggle dark theme\"]",
+          "label": "Toggle dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open profile menu\"]",
+          "label": "Open profile menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "All4",
+          "width": 159,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "Open2",
+          "width": 159,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "Waiting1",
+          "width": 159,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "Resolved1",
+          "width": 159,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(12)",
+          "label": "input",
+          "width": 650,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Conversation list options\"]",
+          "label": "Conversation list options",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "OMOlivia Martin4 minRefund not showing on cardThe refund was approved last week, but I still can’t s",
+          "width": 247,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "MCMarcus Chen18 minUnable to invite a teammateThe invite link expires as soon as they open it.waitin",
+          "width": 247,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(16)",
+          "label": "SRSofia Rossi42 minInvoice needs a VAT numberCan you reissue the April invoice with our VAT ID?openT",
+          "width": 247,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(17)",
+          "label": "NWNoah WilliamsYesterdayExport completed successfullyGot it — the CSV looks perfect now. Thank you!r",
+          "width": 247,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(18)",
+          "label": "Resolve",
+          "width": 98.344,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"More ticket actions\"]",
+          "label": "More ticket actions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "#reply-message",
+          "label": "textarea",
+          "width": 450.922,
+          "height": 79
+        },
+        {
+          "selector": "button[aria-label=\"Attach file\"]",
+          "label": "Attach file",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Insert emoji\"]",
+          "label": "Insert emoji",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 112,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Mercury support"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 26,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Mercury support\"]",
+          "label": "Mercury support",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a[aria-label=\"Inbox\"]",
+          "label": "Inbox",
+          "width": 54,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Customers\"]",
+          "label": "Customers",
+          "width": 54,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Reports\"]",
+          "label": "Reports",
+          "width": 54,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Settings\"]",
+          "label": "Settings",
+          "width": 54,
+          "height": 52
+        },
+        {
+          "selector": "button[aria-label=\"Toggle dark theme\"]",
+          "label": "Toggle dark theme",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open profile menu\"]",
+          "label": "Open profile menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "All4",
+          "width": 57.156,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "Open2",
+          "width": 73.453,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "Waiting1",
+          "width": 85.266,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "Resolved1",
+          "width": 94.422,
+          "height": 44
+        },
+        {
+          "selector": "input:nth-interactive(12)",
+          "label": "input",
+          "width": 244,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Conversation list options\"]",
+          "label": "Conversation list options",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "OMOlivia Martin4 minRefund not showing on cardThe refund was approved last week, but I still can’t s",
+          "width": 307,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "MCMarcus Chen18 minUnable to invite a teammateThe invite link expires as soon as they open it.waitin",
+          "width": 307,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(16)",
+          "label": "SRSofia Rossi42 minInvoice needs a VAT numberCan you reissue the April invoice with our VAT ID?openT",
+          "width": 307,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(17)",
+          "label": "NWNoah WilliamsYesterdayExport completed successfullyGot it — the CSV looks perfect now. Thank you!r",
+          "width": 307,
+          "height": 138
+        },
+        {
+          "selector": "button:nth-interactive(18)",
+          "label": "Resolve",
+          "width": 98.344,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"More ticket actions\"]",
+          "label": "More ticket actions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "#reply-message",
+          "label": "textarea",
+          "width": 732,
+          "height": 79
+        },
+        {
+          "selector": "button[aria-label=\"Attach file\"]",
+          "label": "Attach file",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Insert emoji\"]",
+          "label": "Insert emoji",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 112,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(24)",
+          "label": "olivia@northstar.co",
+          "width": 100.719,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(25)",
+          "label": "Payment method update Mar 18",
+          "width": 219,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(26)",
+          "label": "Plan renewal question Jan 04",
+          "width": 219,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Mercury support"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked Toggle dark theme",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "Open profile menu",
+    "focusReturn": "Open profile menu",
+    "result": "second focus: All4; Shift+Tab returned to Open profile menu"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "sending",
+      "selection interruption",
+      "error/retry/sent/resolved"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43120\n\n  ➜  Local:   http://127.0.0.1:43120/\n",
+    "stderr": ""
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
+}

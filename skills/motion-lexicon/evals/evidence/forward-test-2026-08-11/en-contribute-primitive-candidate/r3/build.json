@@ -1,0 +1,31 @@
+{
+  "command": "npm run build",
+  "exitCode": 0,
+  "startedAt": "2026-08-11T18:18:43.170Z",
+  "completedAt": "2026-08-11T18:18:44.365Z",
+  "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 build\n> tsc -b && vite build\n\nvite v7.1.7 building for production...\ntransforming...\n✓ 31 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.41 kB │ gzip:  0.28 kB\ndist/assets/index-CKMwkMPL.css    7.32 kB │ gzip:  2.28 kB\ndist/assets/index-CSLxApyO.js   188.12 kB │ gzip: 59.21 kB\n✓ built in 409ms\n",
+  "stderr": "",
+  "sourceTreeSha256": "6ae15934874a2d3985ed18a40c065da1d3efabb24d2f74bcc35e515947fbc506",
+  "distTreeSha256": "abf8e6c9d1ccc288aa00660fe57562f36bfd1a4c16fd8936595c368d6c9b415e",
+  "postBuildEvidenceCommand": "copy referenced portable HTML/CSS/JS byte-for-byte into dist/portable-source",
+  "portableArtifacts": [
+    {
+      "sourcePath": "public/status-becomes-action/index.html",
+      "distPath": "portable-source/index.html",
+      "sourceSha256": "cbdb5e58786439d293d84d7b0f07a2da74873480576a39e6117bb207194981be",
+      "distSha256": "cbdb5e58786439d293d84d7b0f07a2da74873480576a39e6117bb207194981be"
+    },
+    {
+      "sourcePath": "public/status-becomes-action/styles.css",
+      "distPath": "portable-source/styles.css",
+      "sourceSha256": "964f71e9f1a02093c4d346dd19cbfc4341b9956c59fa9932b925b676b46355ee",
+      "distSha256": "964f71e9f1a02093c4d346dd19cbfc4341b9956c59fa9932b925b676b46355ee"
+    },
+    {
+      "sourcePath": "public/status-becomes-action/status-becomes-action.js",
+      "distPath": "portable-source/status-becomes-action.js",
+      "sourceSha256": "c5692072b9c7bde1159ea20ee5823656f3060056661afe9f72d764413b568f3d",
+      "distSha256": "c5692072b9c7bde1159ea20ee5823656f3060056661afe9f72d764413b568f3d"
+    }
+  ]
+}

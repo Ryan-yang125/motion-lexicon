@@ -1,0 +1,242 @@
+{
+  "version": "2.0",
+  "locale": "en",
+  "intent": {
+    "productGoal": "Carry a completed operation directly into its most useful follow-up without adding another control.",
+    "userIntent": "Confirm that the operation finished, then continue from the same place.",
+    "feeling": "Continuous, decisive, and calm"
+  },
+  "scope": {
+    "surface": "Inline action control in a product work surface",
+    "framework": "Semantic HTML, CSS, and JavaScript",
+    "input": [
+      "pointer",
+      "keyboard",
+      "touch",
+      "programmatic"
+    ]
+  },
+  "stateGraph": {
+    "initial": "idle",
+    "states": [
+      {
+        "id": "idle",
+        "label": "The operation is available.",
+        "role": "initial"
+      },
+      {
+        "id": "pending",
+        "label": "The operation is running in the same control.",
+        "role": "pending"
+      },
+      {
+        "id": "complete",
+        "label": "Completion is confirmed in the control.",
+        "role": "success"
+      },
+      {
+        "id": "action-ready",
+        "label": "The same control now offers the next step.",
+        "role": "engaged"
+      },
+      {
+        "id": "failure",
+        "label": "The operation failed and the control offers retry.",
+        "role": "failure"
+      },
+      {
+        "id": "recovery",
+        "label": "Retry has been acknowledged before work resumes.",
+        "role": "recovery"
+      },
+      {
+        "id": "next",
+        "label": "The revealed next action has been invoked.",
+        "role": "terminal"
+      }
+    ],
+    "transitions": [
+      {
+        "event": "activate",
+        "from": "idle",
+        "to": "pending",
+        "interrupt": "replace"
+      },
+      {
+        "event": "repeat-activate",
+        "from": "pending",
+        "to": "pending",
+        "interrupt": "settle"
+      },
+      {
+        "event": "operation-succeeds",
+        "from": "pending",
+        "to": "complete",
+        "interrupt": "settle"
+      },
+      {
+        "event": "confirmation-seen",
+        "from": "complete",
+        "to": "action-ready",
+        "interrupt": "replace"
+      },
+      {
+        "event": "operation-fails",
+        "from": "pending",
+        "to": "failure",
+        "interrupt": "settle"
+      },
+      {
+        "event": "retry",
+        "from": "failure",
+        "to": "recovery",
+        "interrupt": "replace"
+      },
+      {
+        "event": "retry-starts",
+        "from": "recovery",
+        "to": "pending",
+        "interrupt": "settle"
+      },
+      {
+        "event": "cancel",
+        "from": "pending",
+        "to": "idle",
+        "interrupt": "replace"
+      },
+      {
+        "event": "activate-next",
+        "from": "action-ready",
+        "to": "next",
+        "interrupt": "settle"
+      }
+    ]
+  },
+  "actors": [
+    {
+      "id": "continuing-control",
+      "role": "primary",
+      "kind": "hero",
+      "element": "A stable native button whose operation changes after confirmation"
+    },
+    {
+      "id": "control-face",
+      "role": "supporting",
+      "kind": "status",
+      "element": "Reserved label and icon layers inside the button"
+    },
+    {
+      "id": "live-status",
+      "role": "supporting",
+      "kind": "status",
+      "element": "Polite atomic status region associated with the button"
+    }
+  ],
+  "beats": [
+    {
+      "id": "acknowledge-operation",
+      "at": 0,
+      "actor": "continuing-control",
+      "purpose": "confirm",
+      "primitive": "press-tap-feedback",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": [
+        "transform",
+        "color"
+      ]
+    },
+    {
+      "id": "confirm-completion",
+      "at": "operation-succeeds",
+      "actor": "control-face",
+      "purpose": "confirm",
+      "primitive": "text-morph",
+      "from": "pending",
+      "to": "complete",
+      "durationMs": 160,
+      "easing": "feedback",
+      "properties": [
+        "transform",
+        "opacity"
+      ]
+    },
+    {
+      "id": "reveal-next-action",
+      "at": "after a 650 ms confirmation hold",
+      "actor": "continuing-control",
+      "purpose": "reveal",
+      "primitive": "status-becomes-action",
+      "from": "complete",
+      "to": "action-ready",
+      "durationMs": 240,
+      "easing": "arrive",
+      "properties": [
+        "transform",
+        "opacity",
+        "color"
+      ]
+    },
+    {
+      "id": "reveal-failure",
+      "at": "operation-fails",
+      "actor": "control-face",
+      "purpose": "recover",
+      "primitive": "crossfade",
+      "from": "pending",
+      "to": "failure",
+      "durationMs": 180,
+      "easing": "feedback",
+      "properties": [
+        "opacity",
+        "color"
+      ]
+    },
+    {
+      "id": "resume-from-retry",
+      "at": "retry",
+      "actor": "continuing-control",
+      "purpose": "recover",
+      "primitive": "press-tap-feedback",
+      "from": "failure",
+      "to": "recovery",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": [
+        "transform",
+        "color"
+      ]
+    }
+  ],
+  "accessibility": {
+    "reducedMotion": "Remove travel and finish each face replacement in 1 ms; retain the 650 ms completion hold, live announcement, retry, and next action.",
+    "focus": "Focus remains on the same native button through pending, completion, retry, and action-ready states; the integrator moves focus only if the next action navigates.",
+    "aria": "A polite atomic status announces pending, success, failure, cancellation, action readiness, and next-action invocation; aria-label and aria-busy track the current product state.",
+    "keyboard": "Tab reaches the control; Enter or Space starts, retries, or invokes the next action; Escape cancels pending work and restores idle without moving focus."
+  },
+  "delivery": {
+    "formats": [
+      "html",
+      "css",
+      "js"
+    ],
+    "integration": "Configure each data-status-action root with operation and next-action copy, connect the operation and navigation callbacks, and keep data-state as the visual mirror of the product state."
+  },
+  "provenance": {
+    "status": "candidate",
+    "foundations": [
+      "press-tap-feedback",
+      "text-morph",
+      "crossfade"
+    ],
+    "moments": [
+      "publish-release",
+      "member-invite",
+      "progress-steps"
+    ],
+    "confidence": "exploratory",
+    "evidence": "The same status-to-next-action handoff is demonstrated in publishing, member invitation, and data export while the control identity, focus target, reserved geometry, timing profile, and interruption rules remain invariant."
+  }
+}

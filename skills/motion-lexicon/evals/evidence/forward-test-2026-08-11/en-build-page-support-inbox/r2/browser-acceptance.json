@@ -1,0 +1,519 @@
+{
+  "evalId": "en-build-page-support-inbox",
+  "repetition": 2,
+  "sourceTreeSha256": "2dc939a2cc5b047d3b8f198b321d38e54ba11816b0bf32474707749efcdd4dea",
+  "distTreeSha256": "d3e44efb7cdcab9e62680ed29be21b3ee1bcee612aa635ee45a45390330e1c64",
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-recorded-pr6ha4/en-build-page-support-inbox-r2/work /support 43121",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 2 tests using 1 worker\n\n  ✓  1 tests/smoke.spec.ts:3:1 › support inbox supports async reply, interruption, error retry, and resolution (5.1s)\nSUPPORT_AUDIT [{\"width\":320,\"documentWidth\":320,\"minimum\":{\"width\":44,\"height\":44},\"offenders\":[]},{\"width\":390,\"documentWidth\":390,\"minimum\":{\"width\":44,\"height\":44},\"offenders\":[]},{\"width\":768,\"documentWidth\":768,\"minimum\":{\"width\":44,\"height\":44},\"offenders\":[]},{\"width\":1440,\"documentWidth\":1440,\"minimum\":{\"width\":44,\"height\":44},\"offenders\":[]}]\n  ✓  2 tests/smoke.spec.ts:32:1 › support inbox meets layout, theme, keyboard, motion, and runtime checks (1.0s)\n\n  2 passed (7.2s)\n",
+  "testStderr": "(node:48046) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:48046) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 15,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Inbox home\"]",
+          "label": "Inbox home",
+          "width": 125.781,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "Theme",
+          "width": 58.828,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open account menu\"]",
+          "label": "Open account menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 241.375,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "All",
+          "width": 70.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "Open",
+          "width": 70.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Waiting",
+          "width": 70.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Resolved",
+          "width": 70.5,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "MCMaya Chen2mExport is missing the last two rowsThe CSV we downloaded has 38 records, but the dashbo",
+          "width": 249.594,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "OWOwen Wright18mInvoice needs our PO numberCould you add PO-99214 before we process payment?",
+          "width": 249.594,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "LPLina Park41mCan I invite a contractor?They only need access through the end of the project.",
+          "width": 249.594,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "NWNoah Williams1hSSO setup completeThat fixed it — thank you for the quick turnaround.",
+          "width": 249.594,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "Resolve ticket",
+          "width": 110.516,
+          "height": 44
+        },
+        {
+          "selector": "#reply",
+          "label": "textarea",
+          "width": 286,
+          "height": 92
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 116,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Inbox home"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 15,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Inbox home\"]",
+          "label": "Inbox home",
+          "width": 125.781,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "Theme",
+          "width": 58.828,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open account menu\"]",
+          "label": "Open account menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 311.094,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "All",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "Open",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Waiting",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Resolved",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "MCMaya Chen2mExport is missing the last two rowsThe CSV we downloaded has 38 records, but the dashbo",
+          "width": 270,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "OWOwen Wright18mInvoice needs our PO numberCould you add PO-99214 before we process payment?",
+          "width": 270,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "LPLina Park41mCan I invite a contractor?They only need access through the end of the project.",
+          "width": 270,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "NWNoah Williams1hSSO setup completeThat fixed it — thank you for the quick turnaround.",
+          "width": 270,
+          "height": 90
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "Resolve ticket",
+          "width": 110.516,
+          "height": 44
+        },
+        {
+          "selector": "#reply",
+          "label": "textarea",
+          "width": 356,
+          "height": 92
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 116,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Inbox home"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 17,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Inbox home\"]",
+          "label": "Inbox home",
+          "width": 131.984,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "Theme",
+          "width": 61.688,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open account menu\"]",
+          "label": "Open account menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 232.422,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "All",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Open",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Waiting",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "Resolved",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "MCMaya Chen2mExport is missing the last two rowsThe CSV we downloaded has 38 records, but the dashbo",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "OWOwen Wright18mInvoice needs our PO numberCould you add PO-99214 before we process payment?",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "LPLina Park41mCan I invite a contractor?They only need access through the end of the project.",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "NWNoah Williams1hSSO setup completeThat fixed it — thank you for the quick turnaround.",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button[aria-label=\"More ticket actions\"]",
+          "label": "More ticket actions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "Resolve ticket",
+          "width": 77.359,
+          "height": 44
+        },
+        {
+          "selector": "#reply",
+          "label": "textarea",
+          "width": 372,
+          "height": 92
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 116,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Inbox home"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 20,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"Inbox home\"]",
+          "label": "Inbox home",
+          "width": 131.984,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "Theme",
+          "width": 61.688,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"Open account menu\"]",
+          "label": "Open account menu",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "input[aria-label=\"Search tickets\"]",
+          "label": "Search tickets",
+          "width": 232.422,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "All",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "Open",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "Waiting",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "Resolved",
+          "width": 68.25,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "MCMaya Chen2mExport is missing the last two rowsThe CSV we downloaded has 38 records, but the dashbo",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "OWOwen Wright18mInvoice needs our PO numberCould you add PO-99214 before we process payment?",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "LPLina Park41mCan I invite a contractor?They only need access through the end of the project.",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "NWNoah Williams1hSSO setup completeThat fixed it — thank you for the quick turnaround.",
+          "width": 311,
+          "height": 94
+        },
+        {
+          "selector": "button[aria-label=\"More ticket actions\"]",
+          "label": "More ticket actions",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "Resolve ticket",
+          "width": 116.516,
+          "height": 44
+        },
+        {
+          "selector": "#reply",
+          "label": "textarea",
+          "width": 796,
+          "height": 92
+        },
+        {
+          "selector": "button[aria-label=\"Send reply\"]",
+          "label": "Send reply",
+          "width": 116,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(18)",
+          "label": "maya.chen@example.com",
+          "width": 146.484,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(19)",
+          "label": "Attach help article →",
+          "width": 215,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(20)",
+          "label": "View customer timeline →",
+          "width": 215,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded /support and focused Inbox home"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked theme control",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "Open account menu",
+    "focusReturn": "Open account menu",
+    "result": "second focus: Search tickets; Shift+Tab returned to Open account menu"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "sending",
+      "selection interruption",
+      "error/retry/sent/resolved"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43121\n\n  ➜  Local:   http://127.0.0.1:43121/\n",
+    "stderr": ""
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
+}

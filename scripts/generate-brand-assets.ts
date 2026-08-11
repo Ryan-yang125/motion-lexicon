@@ -59,8 +59,8 @@ const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: strin
     en: { title: "Method, sources, and<br>open maintenance.", copy: "See how Motion Lexicon authors, verifies, and maintains public content.", preview: "Method and sources", meta: "OPEN SOURCE · BILINGUAL · VERIFIED" }
   },
   skill: {
-    zh: { title: "让 Agent 设计、<br>实现并审查动效。", copy: "从产品场景选择原子动效，组合完整交互，并输出可用代码。", preview: "Agent Skill", meta: "RECOMMEND · COMPOSE · IMPLEMENT · REVIEW" },
-    en: { title: "Let your agent design,<br>build, and review motion.", copy: "Choose primitives from product context, compose interactions, and deliver working code.", preview: "Agent Skill", meta: "RECOMMEND · COMPOSE · IMPLEMENT · REVIEW" }
+    zh: { title: "让 Agent 构建<br>完整产品页面。", copy: "从页面计划、已发布组件到响应式实现和验收，一次完成。", preview: "Agent Skill", meta: "BUILD PAGE · COMPOSE · IMPLEMENT · REVIEW" },
+    en: { title: "Let your agent build<br>complete product pages.", copy: "Move from a page plan and published components to responsive code and acceptance evidence.", preview: "Agent Skill", meta: "BUILD PAGE · COMPOSE · IMPLEMENT · REVIEW" }
   },
   vocabulary: {
     zh: { title: "91 个中英双语，<br>界面动效术语。", copy: "定义、辨析和对应工作区，帮助团队说清同一段动效。", preview: "Animation vocabulary", meta: "91 MOTION TERMS · BILINGUAL · FREE" },

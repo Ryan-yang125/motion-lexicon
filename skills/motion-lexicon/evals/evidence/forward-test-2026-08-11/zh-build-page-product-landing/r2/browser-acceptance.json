@@ -1,0 +1,585 @@
+{
+  "evalId": "zh-build-page-product-landing",
+  "repetition": 2,
+  "sourceTreeSha256": "88d48e0617534c7b5d5b6dc9813182c1ca311485f06f580dd5c69d71f7bdc3bc",
+  "distTreeSha256": "f808e86b0cdcf0e910eb0c6a1e0bf99f8267d6311c24fd81f600c66058631c62",
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-product-landing-r2/work / 43124",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 1 test using 1 worker\n\nAUDIT 320: {\"viewport\":320,\"document\":320,\"minWidth\":44,\"minHeight\":44}\nAUDIT 390: {\"viewport\":390,\"document\":390,\"minWidth\":44,\"minHeight\":44}\nAUDIT 768: {\"viewport\":768,\"document\":768,\"minWidth\":44,\"minHeight\":44}\nAUDIT 1440: {\"viewport\":1440,\"document\":1440,\"minWidth\":44,\"minHeight\":44}\n  ✓  1 tests/smoke.spec.ts:3:1 › AI customer service landing page works across layouts (3.1s)\n\n  1 passed (4.3s)\n",
+  "testStderr": "(node:44656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:44656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 18,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"星桥首页\"]",
+          "label": "星桥首页",
+          "width": 65.75,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换深色模式\"]",
+          "label": "切换深色模式",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "开始免费试用",
+          "width": 88.563,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "免费创建工作区",
+          "width": 154.922,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实演示 ↓",
+          "width": 95.719,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "电商售后",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "即时配送",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "SaaS 支持",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "#scene-panel",
+          "label": "RA陈若安10:42我的包裹显示已签收，但门口没有收到，可以帮我查一下吗？物流异常 · 高优先级已识别星桥 AI正在回复我已为你核对物流记录。包裹由顺丰在今天 10:08 签收，我正在为你发起快递核查",
+          "width": 286,
+          "height": 618.828
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "开始使用",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "预约产品顾问",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "联系我们",
+          "width": 242,
+          "height": 44
+        },
+        {
+          "selector": "#email",
+          "label": "input",
+          "width": 238,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "免费创建工作区",
+          "width": 238,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(15)",
+          "label": "星桥",
+          "width": 58.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "隐私",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(17)",
+          "label": "条款",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(18)",
+          "label": "产品更新",
+          "width": 44.375,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 星桥首页"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 18,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"星桥首页\"]",
+          "label": "星桥首页",
+          "width": 65.75,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换深色模式\"]",
+          "label": "切换深色模式",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "开始免费试用",
+          "width": 94.625,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "免费创建工作区",
+          "width": 154.922,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实演示 ↓",
+          "width": 95.719,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "电商售后",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "即时配送",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "SaaS 支持",
+          "width": 128,
+          "height": 44
+        },
+        {
+          "selector": "#scene-panel",
+          "label": "RA陈若安10:42我的包裹显示已签收，但门口没有收到，可以帮我查一下吗？物流异常 · 高优先级已识别星桥 AI正在回复我已为你核对物流记录。包裹由顺丰在今天 10:08 签收，我正在为你发起快递核查",
+          "width": 356,
+          "height": 485.234
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "开始使用",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "预约产品顾问",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(12)",
+          "label": "联系我们",
+          "width": 312,
+          "height": 44
+        },
+        {
+          "selector": "#email",
+          "label": "input",
+          "width": 308,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "免费创建工作区",
+          "width": 308,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(15)",
+          "label": "星桥",
+          "width": 58.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "隐私",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(17)",
+          "label": "条款",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(18)",
+          "label": "产品更新",
+          "width": 44.375,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 星桥首页"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 21,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"星桥首页\"]",
+          "label": "星桥首页",
+          "width": 167.766,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "产品演示",
+          "width": 52.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "价格",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "常见问题",
+          "width": 52.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换深色模式\"]",
+          "label": "切换深色模式",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "开始免费试用",
+          "width": 128.625,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "免费创建工作区",
+          "width": 154.922,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(8)",
+          "label": "查看真实演示 ↓",
+          "width": 95.719,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "电商售后",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "即时配送",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "SaaS 支持",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "#scene-panel",
+          "label": "RA陈若安10:42我的包裹显示已签收，但门口没有收到，可以帮我查一下吗？物流异常 · 高优先级已识别星桥 AI正在回复我已为你核对物流记录。包裹由顺丰在今天 10:08 签收，我正在为你发起快递核查",
+          "width": 718,
+          "height": 377
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "开始使用",
+          "width": 184.656,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "预约产品顾问",
+          "width": 184.672,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "联系我们",
+          "width": 184.672,
+          "height": 44
+        },
+        {
+          "selector": "#email",
+          "label": "input",
+          "width": 254,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(17)",
+          "label": "免费创建工作区",
+          "width": 254,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(18)",
+          "label": "星桥",
+          "width": 58.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(19)",
+          "label": "隐私",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(20)",
+          "label": "条款",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(21)",
+          "label": "产品更新",
+          "width": 44.375,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 星桥首页"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 21,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"星桥首页\"]",
+          "label": "星桥首页",
+          "width": 167.766,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "产品演示",
+          "width": 52.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "价格",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "常见问题",
+          "width": 52.453,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换深色模式\"]",
+          "label": "切换深色模式",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(6)",
+          "label": "开始免费试用",
+          "width": 128.625,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "免费创建工作区",
+          "width": 154.922,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(8)",
+          "label": "查看真实演示 ↓",
+          "width": 95.719,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(9)",
+          "label": "电商售后",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "即时配送",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(11)",
+          "label": "SaaS 支持",
+          "width": 132,
+          "height": 44
+        },
+        {
+          "selector": "#scene-panel",
+          "label": "RA陈若安10:42我的包裹显示已签收，但门口没有收到，可以帮我查一下吗？物流异常 · 高优先级已识别星桥 AI正在回复我已为你核对物流记录。包裹由顺丰在今天 10:08 签收，我正在为你发起快递核查",
+          "width": 1178,
+          "height": 377
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "开始使用",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(14)",
+          "label": "预约产品顾问",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(15)",
+          "label": "联系我们",
+          "width": 338,
+          "height": 44
+        },
+        {
+          "selector": "#email",
+          "label": "input",
+          "width": 484,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(17)",
+          "label": "免费创建工作区",
+          "width": 484,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(18)",
+          "label": "星桥",
+          "width": 58.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(19)",
+          "label": "隐私",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(20)",
+          "label": "条款",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(21)",
+          "label": "产品更新",
+          "width": 44.375,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 星桥首页"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked 切换深色模式",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "开始免费试用",
+    "focusReturn": "开始免费试用",
+    "result": "second focus: 免费创建工作区; Shift+Tab returned to 开始免费试用"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "default",
+      "selected proof",
+      "CTA pending",
+      "error/retry/success"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43124\n\n  ➜  Local:   http://127.0.0.1:43124/\n",
+    "stderr": ""
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
+}

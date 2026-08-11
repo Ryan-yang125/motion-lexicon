@@ -1,0 +1,9 @@
+{
+  "command": "node /private/tmp/motion-lexicon-v420-skill.v9Q4Ox/skills/motion-lexicon/scripts/validate-motion-blueprint.mjs skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-contribute-primitive-candidate/r3/source/candidates/status-becomes-action/status-becomes-action.blueprint.json",
+  "startedAt": "2026-08-11T18:18:44.374Z",
+  "completedAt": "2026-08-11T18:18:44.444Z",
+  "exitCode": 0,
+  "stdout": "Motion Blueprint validation passed: /private/tmp/motion-lexicon-v420-skill.v9Q4Ox/skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-contribute-primitive-candidate/r3/source/candidates/status-becomes-action/status-becomes-action.blueprint.json\n",
+  "stderr": "",
+  "blueprintSha256": "05dd5f8087fab2d168b64c685eabc5d12df1f0a9027e631efd043d0b6829485f"
+}

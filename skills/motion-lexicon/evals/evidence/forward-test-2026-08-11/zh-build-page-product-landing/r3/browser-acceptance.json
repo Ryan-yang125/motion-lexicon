@@ -1,0 +1,729 @@
+{
+  "evalId": "zh-build-page-product-landing",
+  "repetition": 3,
+  "sourceTreeSha256": "1730b2e7ed9a7d7ca53226c5a5eff0c21d60c8473b9fefd131f28e12e7deed77",
+  "distTreeSha256": "b35b7c577c56a9f20e6d11483533865d9d9c6919c2b77c44073f65951aee1a8b",
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-last-Nfc9CK/zh-build-page-product-landing-r3/work / 43125",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 8 tests using 1 worker\n\nAUDIT 320: {\"viewport\":320,\"document\":320,\"count\":24,\"minWidth\":44,\"minHeight\":44,\"offenders\":[]}\n  ✓  1 tests/smoke.spec.ts:42:3 › 320px layout and target audit (353ms)\nAUDIT 390: {\"viewport\":390,\"document\":390,\"count\":24,\"minWidth\":44,\"minHeight\":44,\"offenders\":[]}\n  ✓  2 tests/smoke.spec.ts:42:3 › 390px layout and target audit (247ms)\nAUDIT 768: {\"viewport\":768,\"document\":768,\"count\":27,\"minWidth\":44,\"minHeight\":44,\"offenders\":[]}\n  ✓  3 tests/smoke.spec.ts:42:3 › 768px layout and target audit (250ms)\nAUDIT 1440: {\"viewport\":1440,\"document\":1440,\"count\":27,\"minWidth\":44,\"minHeight\":44,\"offenders\":[]}\n  ✓  4 tests/smoke.spec.ts:42:3 › 1440px layout and target audit (248ms)\n  ✓  5 tests/smoke.spec.ts:53:1 › scenario switching is directional, interruptible, and keyboard accessible (1.6s)\n  ✓  6 tests/smoke.spec.ts:72:1 › registration exposes error, retry, pending, and success states (6.1s)\n  ✓  7 tests/smoke.spec.ts:86:1 › theme and reduced motion preserve the active state (391ms)\nRUNTIME {\"consoleAndPageErrors\":0,\"requestErrors\":0,\"hydrationErrors\":0}\n  ✓  8 tests/smoke.spec.ts:107:1 › runtime stays free of console and page errors (1.2s)\n\n  8 passed (11.7s)\n",
+  "testStderr": "(node:44855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:44855) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 24,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"织答首页\"]",
+          "label": "织答首页",
+          "width": 65.313,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换到深色主题\"]",
+          "label": "切换到深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "免费试用",
+          "width": 76,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "创建免费工作区",
+          "width": 288,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实场景",
+          "width": 288,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-tab-retail",
+          "label": "零售电商零售电商",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-saas",
+          "label": "SaaS 服务SaaS 服务",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-logistics",
+          "label": "物流履约物流履约",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-panel-retail",
+          "label": "织林林晓雨来自微信小程序 · 14:32AI 接待中周末去杭州，预算 800 左右，想要一件不容易皱的通勤外套。M 码还有吗？织 织答 AI推荐「轻旅防皱风衣」岩灰色。杭州周末 16–22°C，单穿合",
+          "width": 286,
+          "height": 903.156
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "发送",
+          "width": 58,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "免费试用",
+          "width": 246,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(12)",
+          "label": "选择专业版",
+          "width": 246,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "联系顾问",
+          "width": 246,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(14)",
+          "label": "和产品顾问聊聊",
+          "width": 106.719,
+          "height": 44
+        },
+        {
+          "selector": "#«r1»-header-launch",
+          "label": "上线需要多久？部署",
+          "width": 286,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-handoff",
+          "label": "什么时候会转给人工客服？协同",
+          "width": 286,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-data",
+          "label": "企业数据会被用来训练公共模型吗？安全",
+          "width": 286,
+          "height": 63
+        },
+        {
+          "selector": "#«r1»-header-channels",
+          "label": "支持哪些客服渠道？渠道",
+          "width": 286,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-billing",
+          "label": "对话量如何计费？计费",
+          "width": 286,
+          "height": 58
+        },
+        {
+          "selector": "#work-email",
+          "label": "input",
+          "width": 246,
+          "height": 48
+        },
+        {
+          "selector": "button[aria-label=\"免费开始\"]",
+          "label": "免费开始",
+          "width": 246,
+          "height": 48
+        },
+        {
+          "selector": "a:nth-interactive(22)",
+          "label": "织织答",
+          "width": 65.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(23)",
+          "label": "联系我们",
+          "width": 76.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(24)",
+          "label": "服务条款",
+          "width": 76.453,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 织答首页"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 24,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"织答首页\"]",
+          "label": "织答首页",
+          "width": 65.313,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换到深色主题\"]",
+          "label": "切换到深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "免费试用",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "创建免费工作区",
+          "width": 358,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(5)",
+          "label": "查看真实场景",
+          "width": 358,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-tab-retail",
+          "label": "零售电商零售电商",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-saas",
+          "label": "SaaS 服务SaaS 服务",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-logistics",
+          "label": "物流履约物流履约",
+          "width": 96,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-panel-retail",
+          "label": "织林林晓雨来自微信小程序 · 14:32AI 接待中周末去杭州，预算 800 左右，想要一件不容易皱的通勤外套。M 码还有吗？织 织答 AI推荐「轻旅防皱风衣」岩灰色。杭州周末 16–22°C，单穿合",
+          "width": 356,
+          "height": 880.219
+        },
+        {
+          "selector": "button:nth-interactive(10)",
+          "label": "发送",
+          "width": 58,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(11)",
+          "label": "免费试用",
+          "width": 316,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(12)",
+          "label": "选择专业版",
+          "width": 316,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(13)",
+          "label": "联系顾问",
+          "width": 316,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(14)",
+          "label": "和产品顾问聊聊",
+          "width": 106.719,
+          "height": 44
+        },
+        {
+          "selector": "#«r1»-header-launch",
+          "label": "上线需要多久？部署",
+          "width": 356,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-handoff",
+          "label": "什么时候会转给人工客服？协同",
+          "width": 356,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-data",
+          "label": "企业数据会被用来训练公共模型吗？安全",
+          "width": 356,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-channels",
+          "label": "支持哪些客服渠道？渠道",
+          "width": 356,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-billing",
+          "label": "对话量如何计费？计费",
+          "width": 356,
+          "height": 58
+        },
+        {
+          "selector": "#work-email",
+          "label": "input",
+          "width": 316,
+          "height": 48
+        },
+        {
+          "selector": "button[aria-label=\"免费开始\"]",
+          "label": "免费开始",
+          "width": 316,
+          "height": 48
+        },
+        {
+          "selector": "a:nth-interactive(22)",
+          "label": "织织答",
+          "width": 65.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(23)",
+          "label": "联系我们",
+          "width": 76.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(24)",
+          "label": "服务条款",
+          "width": 76.453,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 织答首页"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 27,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"织答首页\"]",
+          "label": "织答首页",
+          "width": 69.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "场景",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "价格",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "问答",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换到深色主题\"]",
+          "label": "切换到深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(6)",
+          "label": "免费试用",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "创建免费工作区",
+          "width": 149.781,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(8)",
+          "label": "查看真实场景",
+          "width": 112.672,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-tab-retail",
+          "label": "零售电商零售电商",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-saas",
+          "label": "SaaS 服务SaaS 服务",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-logistics",
+          "label": "物流履约物流履约",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-panel-retail",
+          "label": "织林林晓雨来自微信小程序 · 14:32AI 接待中周末去杭州，预算 800 左右，想要一件不容易皱的通勤外套。M 码还有吗？织 织答 AI推荐「轻旅防皱风衣」岩灰色。杭州周末 16–22°C，单穿合",
+          "width": 718,
+          "height": 520
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "发送",
+          "width": 58,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(14)",
+          "label": "免费试用",
+          "width": 180.656,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(15)",
+          "label": "选择专业版",
+          "width": 180.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "联系顾问",
+          "width": 180.672,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(17)",
+          "label": "和产品顾问聊聊",
+          "width": 106.719,
+          "height": 44
+        },
+        {
+          "selector": "#«r1»-header-launch",
+          "label": "上线需要多久？部署",
+          "width": 410,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-handoff",
+          "label": "什么时候会转给人工客服？协同",
+          "width": 410,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-data",
+          "label": "企业数据会被用来训练公共模型吗？安全",
+          "width": 410,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-channels",
+          "label": "支持哪些客服渠道？渠道",
+          "width": 410,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-billing",
+          "label": "对话量如何计费？计费",
+          "width": 410,
+          "height": 58
+        },
+        {
+          "selector": "#work-email",
+          "label": "input",
+          "width": 177.219,
+          "height": 48
+        },
+        {
+          "selector": "button[aria-label=\"免费开始\"]",
+          "label": "免费开始",
+          "width": 132.781,
+          "height": 48
+        },
+        {
+          "selector": "a:nth-interactive(25)",
+          "label": "织织答",
+          "width": 69.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(26)",
+          "label": "联系我们",
+          "width": 76.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(27)",
+          "label": "服务条款",
+          "width": 76.453,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 织答首页"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 27,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "a[aria-label=\"织答首页\"]",
+          "label": "织答首页",
+          "width": 69.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(2)",
+          "label": "场景",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(3)",
+          "label": "价格",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(4)",
+          "label": "问答",
+          "width": 50.234,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"切换到深色主题\"]",
+          "label": "切换到深色主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(6)",
+          "label": "免费试用",
+          "width": 88,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(7)",
+          "label": "创建免费工作区",
+          "width": 149.781,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(8)",
+          "label": "查看真实场景",
+          "width": 112.672,
+          "height": 44
+        },
+        {
+          "selector": "#«r0»-tab-retail",
+          "label": "零售电商零售电商",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-saas",
+          "label": "SaaS 服务SaaS 服务",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-tab-logistics",
+          "label": "物流履约物流履约",
+          "width": 112,
+          "height": 48
+        },
+        {
+          "selector": "#«r0»-panel-retail",
+          "label": "织林林晓雨来自微信小程序 · 14:32AI 接待中周末去杭州，预算 800 左右，想要一件不容易皱的通勤外套。M 码还有吗？织 织答 AI推荐「轻旅防皱风衣」岩灰色。杭州周末 16–22°C，单穿合",
+          "width": 1178,
+          "height": 520
+        },
+        {
+          "selector": "button:nth-interactive(13)",
+          "label": "发送",
+          "width": 58,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(14)",
+          "label": "免费试用",
+          "width": 334,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(15)",
+          "label": "选择专业版",
+          "width": 334,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(16)",
+          "label": "联系顾问",
+          "width": 334,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(17)",
+          "label": "和产品顾问聊聊",
+          "width": 106.719,
+          "height": 44
+        },
+        {
+          "selector": "#«r1»-header-launch",
+          "label": "上线需要多久？部署",
+          "width": 702.609,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-handoff",
+          "label": "什么时候会转给人工客服？协同",
+          "width": 702.609,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-data",
+          "label": "企业数据会被用来训练公共模型吗？安全",
+          "width": 702.609,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-channels",
+          "label": "支持哪些客服渠道？渠道",
+          "width": 702.609,
+          "height": 58
+        },
+        {
+          "selector": "#«r1»-header-billing",
+          "label": "对话量如何计费？计费",
+          "width": 702.609,
+          "height": 58
+        },
+        {
+          "selector": "#work-email",
+          "label": "input",
+          "width": 249.219,
+          "height": 48
+        },
+        {
+          "selector": "button[aria-label=\"免费开始\"]",
+          "label": "免费开始",
+          "width": 132.781,
+          "height": 48
+        },
+        {
+          "selector": "a:nth-interactive(25)",
+          "label": "织织答",
+          "width": 69.313,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(26)",
+          "label": "联系我们",
+          "width": 76.453,
+          "height": 44
+        },
+        {
+          "selector": "a:nth-interactive(27)",
+          "label": "服务条款",
+          "width": 76.453,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 织答首页"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked 切换到浅色主题",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "免费试用",
+    "focusReturn": "免费试用",
+    "result": "second focus: 创建免费工作区; Shift+Tab returned to 免费试用"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"1e-05s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "default",
+      "selected proof",
+      "CTA pending",
+      "error/retry/success"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43125\n\n  ➜  Local:   http://127.0.0.1:43125/\n",
+    "stderr": ""
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
+}

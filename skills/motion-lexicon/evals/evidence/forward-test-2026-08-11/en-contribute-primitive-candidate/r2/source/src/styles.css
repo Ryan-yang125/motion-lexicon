@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.focus-target {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.focus-target:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}

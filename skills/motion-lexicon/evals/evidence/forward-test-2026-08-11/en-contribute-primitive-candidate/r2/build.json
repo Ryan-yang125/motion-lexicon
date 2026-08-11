@@ -1,0 +1,31 @@
+{
+  "command": "npm run build",
+  "exitCode": 0,
+  "startedAt": "2026-08-11T18:18:41.845Z",
+  "completedAt": "2026-08-11T18:18:43.087Z",
+  "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 build\n> tsc -b && vite build\n\nvite v7.1.7 building for production...\ntransforming...\n✓ 30 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.57 kB │ gzip:  0.34 kB\ndist/assets/index-DGwh__Xm.css    6.66 kB │ gzip:  2.05 kB\ndist/assets/index-BuZMnUxW.js   192.67 kB │ gzip: 60.64 kB\n✓ built in 428ms\n",
+  "stderr": "",
+  "sourceTreeSha256": "7fde1fadb78367e9f193416afa6ddc77b33207e6ad4752041e745eef302a5c3c",
+  "distTreeSha256": "2dedf9eb10125b701098573a1089f5684308aae21405a26081cfc2af5c28a9ab",
+  "postBuildEvidenceCommand": "copy referenced portable HTML/CSS/JS byte-for-byte into dist/portable-source",
+  "portableArtifacts": [
+    {
+      "sourcePath": "public/candidates/status-action-handoff/index.html",
+      "distPath": "portable-source/index.html",
+      "sourceSha256": "ca2790842e4b33db67c4bed8505cd02d9cc406b1b0abfdc93f586b65e64ad26f",
+      "distSha256": "ca2790842e4b33db67c4bed8505cd02d9cc406b1b0abfdc93f586b65e64ad26f"
+    },
+    {
+      "sourcePath": "public/candidates/status-action-handoff/styles.css",
+      "distPath": "portable-source/styles.css",
+      "sourceSha256": "1fbd4f7f2808a027e7b95d4122f29b9bc6b4b745a066dd6e5a5f72053e1c65c2",
+      "distSha256": "1fbd4f7f2808a027e7b95d4122f29b9bc6b4b745a066dd6e5a5f72053e1c65c2"
+    },
+    {
+      "sourcePath": "public/candidates/status-action-handoff/status-action-handoff.js",
+      "distPath": "portable-source/status-action-handoff.js",
+      "sourceSha256": "d0120673a9cf4f67afcf7d45379a53a51432aff90a0e5b2915f43db47a1dd13b",
+      "distSha256": "d0120673a9cf4f67afcf7d45379a53a51432aff90a0e5b2915f43db47a1dd13b"
+    }
+  ]
+}

@@ -187,7 +187,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           </div>
           <Link className="landing-skill-card" to="/$locale/skill/" params={{ locale }}>
             <MotionSkillGlyph size={24} aria-hidden="true" />
-            <span><strong>Agent Skill</strong><small>{zh ? "推荐、组合、实现、审查" : "Recommend, compose, build, review"}</small></span>
+            <span><strong>Agent Skill</strong><small>{zh ? "构建页面、推荐、编排、审查" : "Build pages, recommend, compose, review"}</small></span>
             <ArrowRightIcon size={15} aria-hidden="true" />
           </Link>
         </section>

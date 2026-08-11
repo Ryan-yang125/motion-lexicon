@@ -4,12 +4,14 @@ Use feedback to connect a user's action to a visible product result.
 
 | Primitive | Use when | Default | Reduced motion |
 | --- | --- | --- | --- |
-| Status transition | Save, publish, copy, approval, and success changes | 140–180 ms | Text and semantic icon update immediately |
-| Inline validation | A field needs a reason and recovery path | 160–200 ms | Reveal final field state and message |
-| Progress | Work has meaningful duration | Measured progress | Keep value and status visible |
-| Highlight | A record changed in place | 140–180 ms | Brief color state or final emphasis |
-| Undo | A reversible action requires agency | 180 ms entrance, stable window | Present undo action directly |
-| Sync recovery | A temporary failure returns to health | Status plus local record update | Preserve final status and retry path |
+| `press-tap-feedback` | A control needs immediate acknowledgement before async work settles | 120–180 ms | Keep the pressed and pending states explicit |
+| `text-morph` | A short stable-width label changes from pending to success or failure | 140–180 ms | Update text and semantic icon immediately |
+| `crossfade` | Similarly sized status content replaces content in place | 160–220 ms | Swap immediately or use compact opacity |
+| `shake-wiggle` | Invalid input needs one restrained local rejection cue | 160–200 ms | Reveal the field state and reason without displacement |
+| `perceived-performance` | Work has meaningful duration and needs truthful continuous feedback | Measured progress | Keep value, status, and recovery visible |
+
+Undo, retry, and sync recovery are product-scene concepts assembled from
+published primitives. They are concept-only labels and cannot appear as a candidate ID or in `beats[].primitive`.
 
 ### Feedback sequence
 

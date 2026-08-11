@@ -1,0 +1,1 @@
+In our existing app, implement a complete support inbox page with ticket filters, a conversation list, active ticket details, reply composer, and resolved state. Sending a reply is asynchronous and a new selection can interrupt the current transition. Deliver the route with verification evidence.

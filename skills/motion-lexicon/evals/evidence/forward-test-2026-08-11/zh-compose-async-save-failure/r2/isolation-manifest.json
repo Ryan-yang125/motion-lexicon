@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "evalId": "zh-compose-async-save-failure",
+  "repetition": 2,
+  "startedAt": "2026-08-11T15:07:40.298Z",
+  "completedAt": "2026-08-11T15:09:47.843Z",
+  "promptSha256": "df828feb42a376cba0f909db931100400ac2ea439d09b0e7e52c5d21f0531d1e",
+  "skillSha256": "b5ea0f0b1b93e7f5cae7460ed46a94e9ba4fa7d5b24a8cea92e7470e7ea3183d",
+  "skillTreeSha256": "652de76f2b6dc2577025fc047a25bad63a513ee8c0d5d169ebc332bb45dd63f6",
+  "evalsPresent": false,
+  "home": "/private/tmp/ml-v420-recorded-pr6ha4/zh-compose-async-save-failure-r2/home",
+  "codexHome": "/private/tmp/ml-v420-recorded-pr6ha4/zh-compose-async-save-failure-r2/codex-home",
+  "workdir": "/private/tmp/ml-v420-recorded-pr6ha4/zh-compose-async-save-failure-r2/work",
+  "skillPath": "/private/tmp/ml-v420-recorded-pr6ha4/zh-compose-async-save-failure-r2/codex-home/skills/motion-lexicon",
+  "isolation": {
+    "freshHome": true,
+    "freshCodexHome": true,
+    "freshProject": true,
+    "declaredFixtureOnly": true,
+    "initialFixturePath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-compose-async-save-failure/r2/initial-fixture-manifest.json",
+    "initialFixtureFileCount": 0,
+    "initialFixtureSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "skillEvalsExcluded": true,
+    "neighborRunHits": 0,
+    "sourceRepositoryHits": 0,
+    "expectedAnswerExposure": false
+  }
+}

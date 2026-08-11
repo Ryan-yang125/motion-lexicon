@@ -1,0 +1,1 @@
+Build a complete analytics dashboard route in our existing React app. It needs a KPI summary, date-range control, retention chart, top segments, and an export action. Inspect the project first, preserve its system, and make the range change update the work surface clearly.

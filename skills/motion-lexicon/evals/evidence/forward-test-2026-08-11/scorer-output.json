@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "identity": "Codex zero-context independent scorer /root/v420_independent_forward_scorer",
+  "independent": true,
+  "promptSha256": "d41de07d80bbc758a38a7ee3ffa8ad639dccdb0381121308b3caed52ca643076",
+  "scoringInputSha256": "3651b0e795cb434eaa6f37372e2e43047b321f863ed190f540f7472ec062f4cb",
+  "contractSha256": "31b5875eb7a51b2aa40c281bc4f5d7c153e6cace92ecbe863a4537b7da8376a9",
+  "taskFixturesSha256": "18378d2d18d2daf58cef55f2bad53d683b9309cfbdf78f87ffab62753943cac1",
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c",
+  "completedAt": "2026-08-11T18:49:03.000Z",
+  "verdict": "APPROVE",
+  "summary": {
+    "cleanRuns": 36,
+    "criticalPassed": 144,
+    "criticalTotal": 144,
+    "assertionsPassed": 294,
+    "assertionsTotal": 294,
+    "overallPassRate": 1,
+    "casesPassingAllThreeRepetitions": 12,
+    "casesTotal": 12,
+    "passed": true
+  },
+  "cases": [
+    {
+      "evalId": "zh-recommend-card-arrival",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 9,
+      "criticalTotal": 9,
+      "assertionsPassed": 21,
+      "assertionsTotal": 21,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "zh-compose-async-save-failure",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 12,
+      "criticalTotal": 12,
+      "assertionsPassed": 24,
+      "assertionsTotal": 24,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "zh-review-layout-jank",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 9,
+      "criticalTotal": 9,
+      "assertionsPassed": 21,
+      "assertionsTotal": 21,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "zh-build-page-project-dashboard",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 15,
+      "criticalTotal": 15,
+      "assertionsPassed": 27,
+      "assertionsTotal": 27,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "zh-build-page-product-landing",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 21,
+      "criticalTotal": 21,
+      "assertionsPassed": 39,
+      "assertionsTotal": 39,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "zh-negative-copy-edit",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 3,
+      "criticalTotal": 3,
+      "assertionsPassed": 12,
+      "assertionsTotal": 12,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-implement-react-selection",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 15,
+      "criticalTotal": 15,
+      "assertionsPassed": 30,
+      "assertionsTotal": 30,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-build-page-analytics-dashboard",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 15,
+      "criticalTotal": 15,
+      "assertionsPassed": 27,
+      "assertionsTotal": 27,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-build-page-support-inbox",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 15,
+      "criticalTotal": 15,
+      "assertionsPassed": 27,
+      "assertionsTotal": 27,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-contribute-primitive-candidate",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 18,
+      "criticalTotal": 18,
+      "assertionsPassed": 33,
+      "assertionsTotal": 33,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-review-async-race",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 9,
+      "criticalTotal": 9,
+      "assertionsPassed": 21,
+      "assertionsTotal": 21,
+      "passedRepetitions": 3
+    },
+    {
+      "evalId": "en-negative-data-table",
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "criticalPassed": 3,
+      "criticalTotal": 3,
+      "assertionsPassed": 12,
+      "assertionsTotal": 12,
+      "passedRepetitions": 3
+    }
+  ]
+}

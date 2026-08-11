@@ -56,5 +56,5 @@ Every candidate includes:
 Use the root validation command before sharing a JSON Blueprint:
 
 ```bash
-node skills/motion-lexicon/scripts/validate-motion-blueprint.mjs path/to/blueprint.json
+node "$CODEX_HOME/skills/motion-lexicon/scripts/validate-motion-blueprint.mjs" path/to/blueprint.json
 ```

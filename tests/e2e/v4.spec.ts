@@ -519,6 +519,17 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await expectNoHorizontalOverflow(page);
 });
 
+test("Agent Skill publishes the complete bilingual six-mode workflow", async ({ page }) => {
+  await page.goto("/zh/skill/");
+  await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "构建页面" })).toBeVisible();
+  await expect(page.locator(".skill-modes article")).toHaveCount(6);
+
+  await page.goto("/en/skill/");
+  await expect(page.getByRole("heading", { level: 2, name: "Build Page" })).toBeVisible();
+  await expect(page.locator(".skill-modes article")).toHaveCount(6);
+});
+
 test("reduced motion stops non-essential task progress rotation", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion runtime contract runs once.");
   await page.emulateMedia({ reducedMotion: "reduce" });

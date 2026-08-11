@@ -1,0 +1,1 @@
+Create a complete Motion Lexicon primitive-candidate record for a reusable “status becomes action” behavior where a completed operation reveals the next step in the same control. Use English, include three independent product scenes, a complete Motion Blueprint, and a portable implementation, then validate the Blueprint and deliver the finished candidate files.

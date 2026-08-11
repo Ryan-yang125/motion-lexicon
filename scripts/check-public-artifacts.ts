@@ -3,7 +3,7 @@ import { registryComponents } from "../src/data/component-registry";
 import { catalogRecipes } from "../src/data/recipes";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
-import { renderSkillComponentReference } from "./generate-public-artifacts";
+import { renderSkillComponentReference, renderSkillPageCss } from "./generate-public-artifacts";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -34,6 +34,8 @@ assert(
 
 const skillComponentReference = readFileSync("skills/motion-lexicon/references/components.md", "utf8");
 assert(skillComponentReference === renderSkillComponentReference(), "Generated Skill component reference is stale");
+const skillPageCss = readFileSync("skills/motion-lexicon/assets/motion-lexicon-page.css", "utf8");
+assert(skillPageCss === renderSkillPageCss(), "Generated Skill page CSS is stale");
 
 const llms = readFileSync("public/llms.txt", "utf8");
 for (const value of ["## Core resources", "## English", "## 中文", "## Optional", "/en/components/", "/zh/components/", "/en/primitives/", "/zh/primitives/", "/en/vocabulary/", "/zh/vocabulary/", "/en/guides/", "/zh/guides/", "/en/method/", "/zh/method/", "/en/skill/", "/zh/skill/", "/r/registry.json", "/data/v4/catalog.json", "/llms-full.txt", "/pricing.txt"]) {
@@ -62,4 +64,4 @@ for (const value of ["# Pricing / 定价", "## English", "## 中文", "free and 
   assert(pricing.includes(value), `pricing.txt is missing ${value}`);
 }
 
-console.log(`Public artifact check passed: V4.1 catalog, bilingual llms files, pricing, registry, and the generated Skill reference expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);
+console.log(`Public artifact check passed: V4.2 catalog, bilingual llms files, pricing, registry, generated Skill references, and page tokens expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);

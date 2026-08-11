@@ -98,5 +98,45 @@
     "id": "en-no-trigger-static-layout",
     "should_trigger": false,
     "query": "Make the pricing table fit on a 390px viewport with two columns and consistent spacing."
+  },
+  {
+    "id": "zh-trigger-build-page-dashboard",
+    "should_trigger": true,
+    "query": "在现有 React 项目里完整实现一个项目总览 Dashboard，包含指标、风险列表、最近活动和新建项目流程，并按现有设计系统做好移动端和深色模式。"
+  },
+  {
+    "id": "zh-trigger-build-page-settings",
+    "should_trigger": true,
+    "query": "请做一个完整的团队设置页：成员、角色、待邀请用户和 SSO 状态都要有，邀请成员的成功和失败状态也要实现。"
+  },
+  {
+    "id": "zh-no-trigger-single-static-section",
+    "should_trigger": false,
+    "query": "把现有账单页的用量卡片标题改成“本月用量”，只调整这行文案，不改页面结构和交互。"
+  },
+  {
+    "id": "zh-no-trigger-breakpoint-tweak",
+    "should_trigger": false,
+    "query": "把现有仪表盘左侧栏在 768px 以下隐藏，其他页面内容、样式和交互都保持原样。"
+  },
+  {
+    "id": "en-trigger-build-page-landing",
+    "should_trigger": true,
+    "query": "Build a complete React landing page for our developer tool with a hero, interactive product demo, pricing, FAQ, and signup path. Preserve the project system and verify responsive, dark-mode, keyboard, and reduced-motion behavior."
+  },
+  {
+    "id": "en-trigger-build-page-inbox",
+    "should_trigger": true,
+    "query": "Implement the full support inbox route in our app: filters, conversation list, ticket detail, reply composer, and resolved state. Inspect the existing codebase before choosing the components."
+  },
+  {
+    "id": "en-no-trigger-single-copy-change",
+    "should_trigger": false,
+    "query": "Change the heading on the existing onboarding page from 'Get started' to 'Set up your workspace'; leave layout, components, and behavior untouched."
+  },
+  {
+    "id": "en-no-trigger-static-token-change",
+    "should_trigger": false,
+    "query": "Update the existing dashboard's muted text color token to meet contrast requirements. Do not change routes, page structure, or interactions."
   }
 ]

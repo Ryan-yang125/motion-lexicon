@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,6 +22,8 @@ const publicDir = path.join(root, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const installSkill = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
 const skillComponentReferencePath = path.join(root, "skills", "motion-lexicon", "references", "components.md");
+const skillPageCssPath = path.join(root, "skills", "motion-lexicon", "assets", "motion-lexicon-page.css");
+const v4CssPath = path.join(root, "src", "v4.css");
 
 function absolute(route: string) {
   return `${siteUrl}${route}`;
@@ -89,7 +92,7 @@ const llmsIndex = [
   `- [Animation vocabulary](${absolute(pathFor("en", ["vocabulary"]))}): 91 bilingual motion terms with definitions, distinctions, and canonical workspaces.`,
   `- [Scenario guides](${absolute(pathFor("en", ["guides"]))}): Long-form motion decisions and production examples.`,
   `- [Method](${absolute(pathFor("en", ["method"]))}): How the library is authored, verified, and maintained.`,
-  `- [Agent Skill](${absolute(pathFor("en", ["skill"]))}): Recommend, compose, implement, review, and contribute motion.`,
+  `- [Agent Skill](${absolute(pathFor("en", ["skill"]))}): Build complete React pages, recommend and compose motion, implement interactions, review code, and contribute candidates.`,
   "",
   "## 中文",
   "",
@@ -98,7 +101,7 @@ const llmsIndex = [
   `- [动画词汇表](${absolute(pathFor("zh", ["vocabulary"]))}): 91 个中英双语动效术语，包含定义、辨析和对应工作区。`,
   `- [场景指南](${absolute(pathFor("zh", ["guides"]))}): 深度动效决策与生产示例。`,
   `- [方法](${absolute(pathFor("zh", ["method"]))}): 内容编写、验证与维护方式。`,
-  `- [Agent Skill](${absolute(pathFor("zh", ["skill"]))}): 推荐、编排、实现、审查和贡献动效。`,
+  `- [Agent Skill](${absolute(pathFor("zh", ["skill"]))}): 构建完整 React 页面，并推荐、编排、实现、审查和贡献动效。`,
   "",
   "## Optional",
   "",
@@ -199,6 +202,132 @@ export function renderSkillComponentReference() {
   ].join("\n");
 }
 
+function extractTokenBlock(source: string, selector: string) {
+  const start = source.indexOf(`${selector} {`);
+  if (start < 0) throw new Error(`Missing ${selector} token block in src/v4.css`);
+  const end = source.indexOf("\n}", start);
+  if (end < 0) throw new Error(`Unclosed ${selector} token block in src/v4.css`);
+  return source.slice(start, end + 2);
+}
+
+export function renderSkillPageCss(source = readFileSync(v4CssPath, "utf8")) {
+  const lightTokens = extractTokenBlock(source, ":root");
+  const darkTokens = extractTokenBlock(source, ":root.dark");
+  const transferableRules = String.raw`*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: clip;
+}
+
+body {
+  color: var(--ink);
+  background: var(--bezel);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.15px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ml-page {
+  width: min(calc(100% - 48px), 1180px);
+  margin-inline: auto;
+  padding-block: 24px 48px;
+  line-height: 1.5;
+}
+
+.ml-panel {
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: var(--panel);
+  box-shadow: var(--shadow-lift);
+}
+
+.ml-well {
+  border-radius: 12px;
+  background: var(--well);
+  box-shadow: var(--shadow-well);
+}
+
+.ml-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ml-control {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--panel);
+  transition: transform 120ms var(--ease-out), background-color 150ms ease, border-color 150ms ease;
+}
+
+.ml-control:active {
+  transform: translateY(1px);
+}
+
+.ml-meta {
+  color: var(--ink-3);
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 767px) {
+  .ml-page {
+    width: min(calc(100% - 32px), 1180px);
+    padding-block: 16px 32px;
+  }
+
+  .ml-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  .ml-control:active {
+    transform: none;
+  }
+}`;
+  return `${lightTokens}\n\n${darkTokens}\n\n${transferableRules}\n`;
+}
+
 export async function generatePublicArtifacts(outputDir = publicDir) {
   await rm(path.join(outputDir, "data", "v1"), { recursive: true, force: true });
   await rm(path.join(outputDir, "data", "v2"), { recursive: true, force: true });
@@ -220,6 +349,7 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
   await writeFile(path.join(outputDir, "pricing.txt"), pricing);
   if (path.resolve(outputDir) === publicDir) {
     await writeFile(skillComponentReferencePath, renderSkillComponentReference());
+    await writeFile(skillPageCssPath, renderSkillPageCss());
   }
 }
 

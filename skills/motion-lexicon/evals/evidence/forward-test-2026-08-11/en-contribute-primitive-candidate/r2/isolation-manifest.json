@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "evalId": "en-contribute-primitive-candidate",
+  "repetition": 2,
+  "startedAt": "2026-08-11T17:44:42.452Z",
+  "completedAt": "2026-08-11T17:55:14.954Z",
+  "promptSha256": "90ae189210e60535fb5dd97e139eeec90165085ede47d9e0e75c2e45b30dd28d",
+  "skillSha256": "b5ea0f0b1b93e7f5cae7460ed46a94e9ba4fa7d5b24a8cea92e7470e7ea3183d",
+  "skillTreeSha256": "652de76f2b6dc2577025fc047a25bad63a513ee8c0d5d169ebc332bb45dd63f6",
+  "evalsPresent": false,
+  "home": "/private/tmp/ml-v420-final-WyIAsP/en-contribute-primitive-candidate-r2/home",
+  "codexHome": "/private/tmp/ml-v420-final-WyIAsP/en-contribute-primitive-candidate-r2/codex-home",
+  "workdir": "/private/tmp/ml-v420-final-WyIAsP/en-contribute-primitive-candidate-r2/work",
+  "skillPath": "/private/tmp/ml-v420-final-WyIAsP/en-contribute-primitive-candidate-r2/codex-home/skills/motion-lexicon",
+  "isolation": {
+    "freshHome": true,
+    "freshCodexHome": true,
+    "freshProject": true,
+    "declaredFixtureOnly": true,
+    "initialFixturePath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-contribute-primitive-candidate/r2/initial-fixture-manifest.json",
+    "initialFixtureFileCount": 14,
+    "initialFixtureSha256": "5ba655244a1e7d116afdb2334f4e83bdba05b505c50c8306d1bd8e2190e1c42a",
+    "skillEvalsExcluded": true,
+    "neighborRunHits": 0,
+    "sourceRepositoryHits": 0,
+    "expectedAnswerExposure": false
+  }
+}

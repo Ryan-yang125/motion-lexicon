@@ -1,4 +1,4 @@
 interface:
   display_name: "Motion Lexicon"
-  short_description: "Compose polished product motion"
-  default_prompt: "Use $motion-lexicon to turn this product event into a concise Motion Blueprint, recommend the right primitive or Product Moment, and provide accessible implementation guidance."
+  short_description: "Build polished product pages and motion"
+  default_prompt: "Use $motion-lexicon to plan and build this complete product page with published components, accessible motion, production-ready code, and acceptance evidence."

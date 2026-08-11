@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "release": "4.1.1",
+  "release": "4.2.0",
   "name": "Motion Lexicon",
   "description": "Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",

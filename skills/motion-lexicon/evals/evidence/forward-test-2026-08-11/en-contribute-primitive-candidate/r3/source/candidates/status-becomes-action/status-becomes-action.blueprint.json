@@ -1,0 +1,134 @@
+{
+  "version": "2.0",
+  "locale": "en",
+  "intent": {
+    "productGoal": "Turn a completed operation into its most useful next step without moving the user's attention.",
+    "userIntent": "Finish work, understand the result, and continue from the same control.",
+    "feeling": "Assured momentum"
+  },
+  "scope": {
+    "surface": "An inline operation control in a product workflow",
+    "framework": "Portable HTML, CSS, and JavaScript",
+    "input": ["pointer", "keyboard", "touch", "programmatic"]
+  },
+  "stateGraph": {
+    "initial": "idle",
+    "states": [
+      { "id": "idle", "label": "Start operation", "role": "initial" },
+      { "id": "pending", "label": "Operation in progress", "role": "pending" },
+      { "id": "ready", "label": "Completed result offers next action", "role": "success" },
+      { "id": "failure", "label": "Operation failed; retry is available", "role": "failure" },
+      { "id": "recovery", "label": "Retry is being prepared", "role": "recovery" },
+      { "id": "terminal", "label": "Next action has been handed off", "role": "terminal" }
+    ],
+    "transitions": [
+      { "event": "activate", "from": "idle", "to": "pending", "interrupt": "replace" },
+      { "event": "complete", "from": "pending", "to": "ready", "interrupt": "settle" },
+      { "event": "fail", "from": "pending", "to": "failure", "interrupt": "settle" },
+      { "event": "retry", "from": "failure", "to": "recovery", "interrupt": "replace" },
+      { "event": "restart", "from": "pending", "to": "pending", "interrupt": "replace" },
+      { "event": "resume", "from": "recovery", "to": "pending", "interrupt": "replace" },
+      { "event": "take-next-step", "from": "ready", "to": "terminal", "interrupt": "settle" },
+      { "event": "reset", "from": "terminal", "to": "idle", "interrupt": "replace" }
+    ]
+  },
+  "actors": [
+    {
+      "id": "operation-control",
+      "role": "primary",
+      "kind": "trigger",
+      "element": "native button"
+    },
+    {
+      "id": "operation-status",
+      "role": "supporting",
+      "kind": "status",
+      "element": "polite live status"
+    },
+    {
+      "id": "result-record",
+      "role": "supporting",
+      "kind": "record",
+      "element": "stable result summary"
+    }
+  ],
+  "beats": [
+    {
+      "id": "press-acknowledgement",
+      "at": 0,
+      "actor": "operation-control",
+      "purpose": "confirm",
+      "primitive": "press-tap-feedback",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 150,
+      "easing": "feedback",
+      "properties": ["transform", "opacity", "color"]
+    },
+    {
+      "id": "pending-label",
+      "at": 0,
+      "actor": "operation-control",
+      "purpose": "orient",
+      "primitive": "text-morph",
+      "from": "idle",
+      "to": "pending",
+      "durationMs": 160,
+      "easing": "feedback",
+      "properties": ["opacity", "transform"]
+    },
+    {
+      "id": "completion-to-next-step",
+      "at": "operation-complete",
+      "actor": "operation-control",
+      "purpose": "reveal",
+      "primitive": "status-becomes-action",
+      "from": "pending",
+      "to": "ready",
+      "durationMs": 240,
+      "easing": "arrive",
+      "properties": ["transform", "opacity", "color"]
+    },
+    {
+      "id": "result-context",
+      "at": "operation-complete+40",
+      "actor": "result-record",
+      "purpose": "preserve-continuity",
+      "primitive": "crossfade",
+      "from": "pending",
+      "to": "ready",
+      "durationMs": 180,
+      "easing": "arrive",
+      "properties": ["opacity", "transform"]
+    },
+    {
+      "id": "failure-retry",
+      "at": "operation-failed",
+      "actor": "operation-control",
+      "purpose": "recover",
+      "primitive": "text-morph",
+      "from": "pending",
+      "to": "failure",
+      "durationMs": 160,
+      "easing": "leave",
+      "properties": ["opacity", "transform", "color"]
+    }
+  ],
+  "accessibility": {
+    "reducedMotion": "Use immediate text, icon, and status replacement; retain the result, retry, and next action without movement.",
+    "focus": "Keep focus on the persistent native button through pending, completion, failure, and retry; hand focus to the next surface only after its action opens it.",
+    "aria": "A polite live region announces pending, completion, failure, retry, and next-step handoff once per current request version.",
+    "keyboard": "Tab reaches the button; Enter and Space activate it; Escape cancels pending work and restores the idle action."
+  },
+  "delivery": {
+    "formats": ["html", "css", "js"],
+    "integration": "Mount one data-status-action section, provide operation and nextAction callbacks, and retain the named data-state values for tests."
+  },
+  "provenance": {
+    "status": "candidate",
+    "foundations": ["press-tap-feedback", "text-morph", "crossfade"],
+    "moments": ["none"],
+    "confidence": "exploratory",
+    "evidence": "Three independent workflows share one invariant: completion changes the control's semantic action in place while a stable result record explains why that next action is available."
+  }
+}

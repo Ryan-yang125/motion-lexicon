@@ -12,12 +12,12 @@ Motion Lexicon keeps two connected vocabularies:
 
 | Product job | Useful primitives | Product signal |
 | --- | --- | --- |
-| Introduce new context | fade, slide-in, scale-in, reveal | Arrival and orientation |
+| Introduce new context | `fade-in-fade-out`, `slide-in`, `scale-in`, `reveal` | Arrival and orientation |
 | Keep identity through a view change | `morph` with shared mode, `crossfade` | Continuity in space |
-| Confirm a completed action | status change, checkmark draw, highlight, count update | Confidence and closure |
-| Guide a grouped sequence | stagger, delay, orchestration, progress | Order and pacing |
-| Change a local selection | selection emphasis, layout transition, height match | Focus and causality |
-| Recover from error or interruption | inline validation, undo, retry, sync recovery | Agency and next action |
+| Confirm a completed action | `press-tap-feedback`, `text-morph`, `crossfade`, `number-ticker` | Confidence and closure |
+| Guide a grouped sequence | `stagger`, `duration`, `keyframes`, `perceived-performance` | Order and pacing |
+| Change a local selection | `morph`, `accordion-collapse`, `direction-aware-transition` | Focus and causality |
+| Recover from error or interruption | `shake-wiggle`, `crossfade`, `text-morph` | Agency and next action |
 
 ## Primitive families
 
@@ -27,46 +27,51 @@ Use an entrance when a user needs to locate new content. Start from the closest
 edge or from the prior element's position. Keep the destination stable from the
 first rendered frame.
 
-- **Fade:** low-distraction appearance for content with an established place.
-- **Slide-in:** directional arrival that explains where content came from.
-- **Scale-in:** restrained emphasis for a focal object already centered in the
+- **`fade-in-fade-out`:** low-distraction appearance for content with an established place.
+- **`slide-in`:** directional arrival that explains where content came from.
+- **`scale-in`:** restrained emphasis for a focal object already centered in the
   user's attention.
-- **Pop-in:** compact scale plus opacity for a brief acknowledgement.
-- **Spring:** responsive direct manipulation when a user moves or drops an
+- **Compact `scale-in`:** short scale plus opacity for a brief acknowledgement.
+- **`spring`:** responsive direct manipulation when a user moves or drops an
   object.
-- **Reveal:** exposes content through a mask, clip, or measured height where
+- **`reveal`:** exposes content through a mask, clip, or measured height where
   the reveal itself carries meaning.
 
 ### Transitions
 
 Use a transition when identity should persist across state or surface changes.
 
-- **Shared element (`morph` with shared mode):** one object changes place or
+- **`morph` with shared mode:** one object changes place or
   size while retaining identity.
-- **Morph:** a component changes shape or structure in the same interaction.
-- **Crossfade:** a fast replacement when spatial continuity carries less value.
-- **Height match:** a container adapts while surrounding layout remains stable.
-- **Layout transition:** local geometry settles after a choice or reordering.
+- **`morph`:** a component changes shape or structure in the same interaction.
+- **`crossfade`:** a fast replacement when spatial continuity carries less value.
+- **`accordion-collapse`:** a container adapts while surrounding layout remains stable.
+- **`drag-to-reorder`:** ordered local geometry settles after direct manipulation.
 
 ### Feedback
 
 Use feedback to confirm a consequential action and point toward the next state.
 
-- **Inline validation:** connects a field, reason, and recovery path.
-- **Status transition:** changes a label, icon, and semantic state together.
-- **Progress:** communicates an ongoing process with truthful duration.
-- **Highlight:** draws attention to a changed record while preserving its place.
-- **Undo:** keeps the former state recoverable for a short, clear window.
+- **`shake-wiggle`:** connects invalid input to a visible field and reason.
+- **`text-morph`:** changes a short label and semantic state together.
+- **`perceived-performance`:** communicates an ongoing process with truthful feedback.
+- **`crossfade`:** updates local status while preserving its place.
+
+Undo, retry, sync recovery, status transition, and highlight are product-scene
+concepts. They cannot appear as published candidate IDs.
 
 ### Sequencing and timing
 
 Use sequencing for related items that benefit from order.
 
-- **Stagger:** reveals a bounded group in a readable order.
-- **Delay:** aligns one dependent step with a preceding event.
-- **Orchestration:** coordinates several actors around one primary state change.
-- **Easing:** describes the velocity profile; choose it by event rather than
+- **`stagger`:** reveals a bounded group in a readable order.
+- **`duration`:** gives a truthful event an intentional active time.
+- **`keyframes`:** coordinates a small number of phases around one state change.
+- **`easing`:** describes the velocity profile; choose it by event rather than
   decoration.
+
+Delay, orchestration, and pause/resume are concept-only sequencing controls.
+They cannot appear as published candidate IDs.
 
 ## Timing profile
 
@@ -81,15 +86,16 @@ Use sequencing for related items that benefit from order.
 
 ## Default recommendation logic
 
-1. A new surface from a directional edge favors slide-in or reveal.
+1. A new surface from a directional edge favors `slide-in` or `reveal`.
 2. A card, thumbnail, or row that keeps identity through a view change favors
-   shared element or morph.
-3. A saved, copied, approved, or completed state favors a status transition
+   shared mode on `morph`.
+3. A saved, copied, approved, or completed state favors `text-morph` or
+   `crossfade`
    with a brief local emphasis.
-4. A list with meaningful order favors stagger; a single dependent action
-   favors delay.
-5. A user-controlled drag, drop, scrub, or reorder favors an interruptible
-   spring or direct transform.
+4. A list with meaningful order favors `stagger`; encode a dependent action in
+   the beat offset and use its exact rendering primitive.
+5. A user-controlled drag, drop, scrub, or reorder favors `spring`,
+   `drag-to-reorder`, or direct transform.
 
 Use [composition.md](composition.md) when more than one state changes.
 

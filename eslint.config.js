@@ -13,6 +13,7 @@ export default tseslint.config(
       "coverage",
       "playwright-report",
       ".wrangler",
+      "skills/motion-lexicon/evals/evidence/**",
       "skills/motion-lexicon/scripts/validate-motion-blueprint.mjs"
     ]
   },

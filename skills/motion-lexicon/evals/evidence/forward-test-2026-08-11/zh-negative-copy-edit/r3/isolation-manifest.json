@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "evalId": "zh-negative-copy-edit",
+  "repetition": 3,
+  "startedAt": "2026-08-11T16:12:15.335Z",
+  "completedAt": "2026-08-11T16:12:24.885Z",
+  "promptSha256": "f6f8ffb984c80e3d89b51f163851820c50a52e56764f23493ddb8c59001a7424",
+  "skillSha256": "b5ea0f0b1b93e7f5cae7460ed46a94e9ba4fa7d5b24a8cea92e7470e7ea3183d",
+  "skillTreeSha256": "652de76f2b6dc2577025fc047a25bad63a513ee8c0d5d169ebc332bb45dd63f6",
+  "evalsPresent": false,
+  "home": "/private/tmp/ml-v420-rerun-qwcVrD/zh-negative-copy-edit-r3/home",
+  "codexHome": "/private/tmp/ml-v420-rerun-qwcVrD/zh-negative-copy-edit-r3/codex-home",
+  "workdir": "/private/tmp/ml-v420-rerun-qwcVrD/zh-negative-copy-edit-r3/work",
+  "skillPath": "/private/tmp/ml-v420-rerun-qwcVrD/zh-negative-copy-edit-r3/codex-home/skills/motion-lexicon",
+  "isolation": {
+    "freshHome": true,
+    "freshCodexHome": true,
+    "freshProject": true,
+    "declaredFixtureOnly": true,
+    "initialFixturePath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-negative-copy-edit/r3/initial-fixture-manifest.json",
+    "initialFixtureFileCount": 0,
+    "initialFixtureSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "skillEvalsExcluded": true,
+    "neighborRunHits": 0,
+    "sourceRepositoryHits": 0,
+    "expectedAnswerExposure": false
+  }
+}

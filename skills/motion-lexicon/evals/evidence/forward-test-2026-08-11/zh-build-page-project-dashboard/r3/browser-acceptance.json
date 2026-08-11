@@ -1,0 +1,273 @@
+{
+  "evalId": "zh-build-page-project-dashboard",
+  "repetition": 3,
+  "sourceTreeSha256": "7ba9bebba7f1137dfb7e9c9bb383ee7e4691a2b19be0924acdc2c648fab7d58a",
+  "distTreeSha256": "d3fb2c556445217f77f0e3232e683268696754673f2e3bbf2e54a49d1eaa9372",
+  "automationCommand": "npm run test:browser; node /private/tmp/ml-v420-browser-evidence.mjs /private/tmp/ml-v420-rerun-qwcVrD/zh-build-page-project-dashboard-r3/work / 43122",
+  "exitCode": 0,
+  "testCommand": "npm run test:browser",
+  "testExitCode": 0,
+  "testStdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 test:browser\n> playwright test\n\n\nRunning 2 tests using 1 worker\n\n  ✓  1 tests/smoke.spec.ts:3:1 › project overview renders without horizontal overflow (370ms)\n  ✓  2 tests/smoke.spec.ts:13:1 › a new project receives clear list feedback (1.5s)\n\n  2 passed (3.0s)\n",
+  "testStderr": "(node:44266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:44266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n",
+  "viewports": [
+    {
+      "width": 320,
+      "documentWidth": 320,
+      "interactiveNodeCount": 5,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换亮暗主题\"]",
+          "label": "切换亮暗主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "+ 新建项目",
+          "width": 83.703,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看报告",
+          "width": 65.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "查看全部风险 →",
+          "width": 254,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "全部",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换亮暗主题"
+      ]
+    },
+    {
+      "width": 390,
+      "documentWidth": 390,
+      "interactiveNodeCount": 5,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换亮暗主题\"]",
+          "label": "切换亮暗主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "+ 新建项目",
+          "width": 83.703,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看报告",
+          "width": 65.859,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(4)",
+          "label": "查看全部风险 →",
+          "width": 324,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(5)",
+          "label": "全部",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换亮暗主题"
+      ]
+    },
+    {
+      "width": 768,
+      "documentWidth": 768,
+      "interactiveNodeCount": 8,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换亮暗主题\"]",
+          "label": "切换亮暗主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "+ 新建项目",
+          "width": 91.703,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看报告",
+          "width": 65.859,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 Atlas 重构\"]",
+          "label": "打开 Atlas 重构",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 客户门户 2.0\"]",
+          "label": "打开 客户门户 2.0",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 数据治理一期\"]",
+          "label": "打开 数据治理一期",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "查看全部风险 →",
+          "width": 258,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "全部",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换亮暗主题"
+      ]
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440,
+      "interactiveNodeCount": 8,
+      "minimumTargetWidth": 44,
+      "minimumTargetHeight": 44,
+      "nodes": [
+        {
+          "selector": "button[aria-label=\"切换亮暗主题\"]",
+          "label": "切换亮暗主题",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(2)",
+          "label": "+ 新建项目",
+          "width": 91.703,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(3)",
+          "label": "查看报告",
+          "width": 65.859,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 Atlas 重构\"]",
+          "label": "打开 Atlas 重构",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 客户门户 2.0\"]",
+          "label": "打开 客户门户 2.0",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button[aria-label=\"打开 数据治理一期\"]",
+          "label": "打开 数据治理一期",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(7)",
+          "label": "查看全部风险 →",
+          "width": 354.828,
+          "height": 44
+        },
+        {
+          "selector": "button:nth-interactive(8)",
+          "label": "全部",
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "offenders": [],
+      "interactions": [
+        "loaded / and focused 切换亮暗主题"
+      ]
+    }
+  ],
+  "themes": {
+    "light": {
+      "observed": true,
+      "activation": "loaded the rendered route with the host default",
+      "result": "{\"colorScheme\":\"light\",\"darkClass\":false}"
+    },
+    "dark": {
+      "observed": true,
+      "activation": "clicked 切换亮暗主题",
+      "result": "{\"colorScheme\":\"dark\",\"darkClass\":true}"
+    }
+  },
+  "keyboard": {
+    "observed": true,
+    "path": "Tab, Tab, Shift+Tab",
+    "focusEntry": "+ 新建项目",
+    "focusReturn": "+ 新建项目",
+    "result": "second focus: 查看报告; Shift+Tab returned to + 新建项目"
+  },
+  "reducedMotion": {
+    "observed": true,
+    "preference": "reduce",
+    "result": "{\"matches\":true,\"transitionDuration\":\"0.001s\"}"
+  },
+  "primaryState": {
+    "observed": true,
+    "states": [
+      "idle",
+      "pending",
+      "success/error",
+      "focus returned"
+    ],
+    "result": "independent passing project browser suite exercised the requested state flow"
+  },
+  "runtime": {
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "hydrationErrors": 0
+  },
+  "runtimeDetails": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "requestFailures": [],
+    "hydrationErrors": []
+  },
+  "preview": {
+    "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43122\n\n  ➜  Local:   http://127.0.0.1:43122/\n",
+    "stderr": ""
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
+}

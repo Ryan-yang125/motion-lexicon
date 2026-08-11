@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"019ff198-4b5d-7ae0-8dd2-b901566b5a48"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"免费开始"}}
+{"type":"turn.completed","usage":{"input_tokens":13225,"cached_input_tokens":9984,"cache_write_input_tokens":0,"output_tokens":6,"reasoning_output_tokens":0}}

@@ -23,7 +23,7 @@ describe("V4 public machine-readable artifacts", () => {
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(4);
-    expect(catalog.release).toBe("4.1.1");
+    expect(catalog.release).toBe("4.2.0");
     expect(catalog.counts).toEqual({ components: 48, primitives: 44 });
     expect(catalog.components).toHaveLength(registryComponents.length);
     expect(catalog.primitives).toHaveLength(catalogRecipes.length);
@@ -45,7 +45,7 @@ describe("V4 public machine-readable artifacts", () => {
     };
     const publicSchema = await parse("data/v4/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("4.1.1");
+    expect(grammar.version).toBe("4.2.0");
     expect(grammar.collections.components.count).toBe(48);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({
@@ -80,5 +80,12 @@ describe("V4 public machine-readable artifacts", () => {
     expect(llmsFull).toContain("## 中文场景指南");
     expect(pricing).toContain("free and open source");
     expect(pricing).toContain("免费开源");
+  });
+
+  it("keeps the transferable Skill page system synchronized with the website tokens", async () => {
+    const pageCss = await readFile(path.resolve("skills/motion-lexicon/assets/motion-lexicon-page.css"), "utf8");
+    expect(pageCss).toContain("--bezel: #efeeea");
+    expect(pageCss).toContain("--bezel: #141312");
+    expect(pageCss).toContain("@media (prefers-reduced-motion: reduce)");
   });
 });

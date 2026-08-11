@@ -32,7 +32,7 @@
 | --- | --- | --- |
 | [组件](https://motion-lexicon.pages.dev/zh/components/) | 想把一个精致的产品交互直接放进 React 项目 | 通过 shadcn Registry 安装的单文件 TypeScript 组件 |
 | [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 需要精确的行为、节奏或动效规则 | React + Motion 实时预览、Props 调节、源码与 Registry 安装 |
-| [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/) | 在 Agent 工作流中推荐、组合、实现或审查动效 | 贴合产品场景的动效决策与生产实现 |
+| [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/) | 在 Agent 工作流中构建完整页面并完成动效决策 | 页面计划、已发布组件组合、生产实现与验收记录 |
 
 组件与原子动效是并列内容。一个组件可以组合多个原子动效，组件详情页会标出对应的底层动效。
 
@@ -84,8 +84,9 @@ npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --agent codex
 检查用户级安装。项目安装会链接到所选 Agent 的项目 Skill 目录，用户级安装可供
 该 Agent 在多个项目中使用。
 
-Skill 支持五种工作模式：
+Skill 支持六种工作模式：
 
+- **构建页面**：从产品任务、精确 Registry 组件与页面计划产出完整页面。
 - **推荐**：根据产品事件选择合适的原子动效或组件。
 - **编排**：把多个行为组合成完整的产品交互。
 - **实现**：输出 React、HTML、CSS 或 JavaScript。
@@ -111,6 +112,26 @@ scripts/                        Registry、预渲染与质量检查
 npm ci
 npm run dev
 npm run build
+```
+
+## 质量门禁
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run i18n:check
+npm run vocabulary:check
+npm run motion-grammar:check
+npm run skill:check
+npm run artifacts:check
+npm run seo:check
+npm run motion:check
+npm run a11y:check
+npm run build
+npm run bundle:check
+npm run crawl:dist
+npm run test:visual
 ```
 
 ## 许可与来源
