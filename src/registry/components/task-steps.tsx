@@ -16,15 +16,33 @@ export type TaskStep = {
 
 export type TaskStepStatus = "pending" | "active" | "done" | "error";
 
+export type TaskStepsCopy = {
+  failedAt: (label: string) => string;
+  complete: (count: number) => string;
+  progress: (label: string, position: number, total: number) => string;
+  runComplete: string;
+  runFailed: string;
+};
+
+const DEFAULT_COPY: TaskStepsCopy = {
+  failedAt: (label) => `Failed at ${label}`,
+  complete: (count) => `All ${count} steps complete`,
+  progress: (label, position, total) => `${label}, step ${position} of ${total}`,
+  runComplete: "Run complete",
+  runFailed: "Run failed",
+};
+
 export type UseTaskStepsOptions = {
   steps: TaskStep[];
 
   current: number;
 
   failed?: boolean;
+  copy?: Partial<TaskStepsCopy>;
 };
 
-export function useTaskSteps({ steps, current, failed = false }: UseTaskStepsOptions) {
+export function useTaskSteps({ steps, current, failed = false, copy: copyOverrides }: UseTaskStepsOptions) {
+  const copy = { ...DEFAULT_COPY, ...copyOverrides };
   const complete = !failed && current >= steps.length;
 
   const rows = steps.map((step, i) => ({
@@ -40,11 +58,11 @@ export function useTaskSteps({ steps, current, failed = false }: UseTaskStepsOpt
 
   const active = rows.find((r) => r.status === "active");
   const sentence = failed
-    ? `Failed at ${steps[Math.min(current, steps.length - 1)]?.label ?? "step"}`
+    ? copy.failedAt(steps[Math.min(current, steps.length - 1)]?.label ?? "step")
     : complete
-      ? `All ${steps.length} steps complete`
+      ? copy.complete(steps.length)
       : active
-        ? `${active.label}, step ${current + 1} of ${steps.length}`
+        ? copy.progress(active.label, current + 1, steps.length)
         : "";
 
   return { rows, complete, failed, sentence };
@@ -110,9 +128,11 @@ export function TaskSteps({
   current,
   failed = false,
   label = "Task progress",
+  copy: copyOverrides,
   className = "",
 }: TaskStepsProps) {
-  const { rows, complete, sentence } = useTaskSteps({ steps, current, failed });
+  const copy = { ...DEFAULT_COPY, ...copyOverrides };
+  const { rows, complete, sentence } = useTaskSteps({ steps, current, failed, copy });
   const reduced = useReducedMotion() === true;
 
   const [spoken, setSpoken] = useState("");
@@ -147,7 +167,7 @@ export function TaskSteps({
                     <motion.span
                       key="done"
                       className="col-start-1 row-start-1 grid size-4 place-items-center rounded-[5px] bg-emerald-500/[0.14] text-emerald-600 dark:bg-emerald-400/[0.16] dark:text-emerald-400"
-                      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.4 }}
+                      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, transition: STILL }}
                       transition={reduced ? STILL : POP}
@@ -158,7 +178,7 @@ export function TaskSteps({
                     <motion.span
                       key="error"
                       className="col-start-1 row-start-1 grid size-4 place-items-center rounded-[5px] bg-red-500/[0.12] text-red-600 dark:bg-red-400/[0.14] dark:text-red-400"
-                      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.4 }}
+                      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, transition: STILL }}
                       transition={reduced ? STILL : POP}
@@ -189,21 +209,11 @@ export function TaskSteps({
                 </AnimatePresence>
               </span>
 
-              {row.status === "active" && !reduced ? (
-                <motion.span
-                  className="min-w-0 flex-1 truncate bg-[linear-gradient(90deg,#78716c_38%,#1c1917_50%,#78716c_62%)] bg-clip-text text-[12.5px] font-medium text-transparent [background-size:220%_100%] dark:bg-[linear-gradient(90deg,#a8a29e_38%,#fafaf9_50%,#a8a29e_62%)]"
-                  animate={{ backgroundPosition: ["120% 0", "-120% 0"] }}
-                  transition={{ duration: 1.6, ease: "linear", repeat: Infinity }}
-                >
-                  {row.label}
-                </motion.span>
-              ) : (
-                <span
-                  className={`min-w-0 flex-1 truncate text-[12.5px] transition-colors duration-200 ${tone}`}
-                >
-                  {row.label}
-                </span>
-              )}
+              <span
+                className={`min-w-0 flex-1 truncate text-[12.5px] transition-colors duration-200 ${tone}`}
+              >
+                {row.label}
+              </span>
 
               {row.meta ? (
                 <span
@@ -225,7 +235,7 @@ export function TaskSteps({
         {spoken}
       </span>
       <span className="sr-only" aria-live={complete || failed ? "polite" : "off"}>
-        {complete ? "Run complete" : failed ? "Run failed" : ""}
+        {complete ? copy.runComplete : failed ? copy.runFailed : ""}
       </span>
     </div>
   );

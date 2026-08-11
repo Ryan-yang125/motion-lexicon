@@ -58,10 +58,27 @@ describe("V4 public machine-readable artifacts", () => {
 
   it("publishes current agent discovery files", async () => {
     const llms = await readFile(path.join(publicDir, "llms.txt"), "utf8");
+    const llmsFull = await readFile(path.join(publicDir, "llms-full.txt"), "utf8");
+    const pricing = await readFile(path.join(publicDir, "pricing.txt"), "utf8");
+    expect(llms).toContain("## Core resources");
+    expect(llms).toContain("## English");
+    expect(llms).toContain("## 中文");
+    expect(llms).toContain("## Optional");
     expect(llms).toContain("/en/components/");
+    expect(llms).toContain("/zh/components/");
     expect(llms).toContain("/en/primitives/");
+    expect(llms).toContain("/zh/primitives/");
+    expect(llms).toContain("/en/guides/");
+    expect(llms).toContain("/zh/guides/");
     expect(llms).toContain("/data/v4/catalog.json");
     expect(llms).toContain("/data/v4/motion-grammar.json");
+    expect(llms).toMatch(/- \[[^\]]+\]\(https:\/\/[^)]+\):/);
     expect(llms).not.toMatch(/\/(?:packs|catalog|finder|director)\//);
+    expect(llmsFull).toContain("## English components");
+    expect(llmsFull).toContain("## 中文组件");
+    expect(llmsFull).toContain("## English scenario guides");
+    expect(llmsFull).toContain("## 中文场景指南");
+    expect(pricing).toContain("free and open source");
+    expect(pricing).toContain("免费开源");
   });
 });

@@ -4,13 +4,13 @@ Use these moments when a user chooses an object, context, role, or command.
 
 | Moment | Core scene | Primary actor | Useful primitives |
 | --- | --- | --- | --- |
-| Card selection | A card becomes active and reveals detail | Selected card | selection emphasis, shared element |
-| Workspace switch | The active workspace changes | Workspace control | status transition, crossfade |
-| Template choice | A template becomes the working starting point | Template card | scale-in, layout transition |
-| Command menu | A command surface opens from a trigger | Command trigger | pop-in, reveal, focus move |
-| Assignee picker | A person is selected for a task | Assignee row | highlight, status transition |
-| Permission change | A role changes with a consequential state | Role control | pending, status transition, undo |
-| Search suggestions | Typed input reveals matching options | Search field and list | reveal, stagger, keyboard focus |
+| Card selection | A card becomes active and reveals detail | Selected card | `press-tap-feedback`, `morph` |
+| Workspace switch | The active workspace changes | Workspace control | `text-morph`, `crossfade` |
+| Template choice | A template becomes the working starting point | Template card | `scale-in`, `morph` |
+| Command menu | A command surface opens from a trigger | Command trigger | `scale-in`, `reveal` |
+| Assignee picker | A person is selected for a task | Assignee row | `crossfade`, `text-morph` |
+| Permission change | A role changes with a consequential state | Role control | `perceived-performance`, `text-morph`, `crossfade` |
+| Search suggestions | Typed input reveals matching options | Search field and list | `reveal`, `stagger` |
 
 ## Scene recipe
 
@@ -31,5 +31,6 @@ idle → selected → detail-open → detail-closed
 180 ms: supporting metadata arrives after the primary card settles.
 ```
 
-Use a shared element for direct spatial continuity. Use a compact crossfade
-when the card remains a local selection and detail has a separate context.
+Use `morph` in shared mode for direct spatial continuity. Use a compact
+`crossfade` when the card remains a local selection and detail has a separate
+context.

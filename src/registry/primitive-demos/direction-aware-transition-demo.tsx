@@ -2,7 +2,6 @@ import { useState } from "react";
 import { DirectionAwareTransitionPrimitive, type NavigationDirection } from "@/registry/primitives/direction-aware-transition";
 import { PrimitiveDemoSurface, ProductButton, ProductPanel, easingValue, numberValue, stringValue, textFor, type PrimitiveDemoProps } from "./_shared";
 
-const steps = ["Details", "Access", "Review"];
 const opposite: Record<NavigationDirection, NavigationDirection> = {
   left: "right",
   right: "left",
@@ -11,6 +10,7 @@ const opposite: Record<NavigationDirection, NavigationDirection> = {
 };
 
 export function DirectionAwareTransitionDemo({ locale, values, compact }: PrimitiveDemoProps) {
+  const steps = locale === "zh" ? ["详情", "权限", "确认"] : ["Details", "Access", "Review"];
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState<NavigationDirection>("left");
   const preferredDirection = stringValue(values, "direction", "left") as NavigationDirection;

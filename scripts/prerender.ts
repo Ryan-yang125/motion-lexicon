@@ -97,7 +97,27 @@ async function writeSitemap() {
 async function writeRobots() {
   await writeFile(
     path.join(distDir, "robots.txt"),
-    `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`,
+    [
+      "# Search and user-triggered AI retrieval are explicitly allowed.",
+      "User-agent: OAI-SearchBot",
+      "Allow: /",
+      "",
+      "User-agent: ChatGPT-User",
+      "Allow: /",
+      "",
+      "User-agent: Claude-SearchBot",
+      "Allow: /",
+      "",
+      "User-agent: Claude-User",
+      "Allow: /",
+      "",
+      "# All other crawlers inherit the public-site policy. No training-specific rule is declared.",
+      "User-agent: *",
+      "Allow: /",
+      "",
+      `Sitemap: ${siteUrl}/sitemap.xml`,
+      ""
+    ].join("\n"),
     "utf8"
   );
 }

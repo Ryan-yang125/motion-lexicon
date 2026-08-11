@@ -2,19 +2,40 @@
 
 > Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.
 
-- Components: https://motion-lexicon.pages.dev/en/components/
-- Motion primitives: https://motion-lexicon.pages.dev/en/primitives/
-- Scenario guides: https://motion-lexicon.pages.dev/en/guides/
-- Agent Skill: https://motion-lexicon.pages.dev/en/skill/
-- shadcn registry: https://motion-lexicon.pages.dev/r/registry.json
-- Machine-readable catalog: https://motion-lexicon.pages.dev/data/v4/catalog.json
-- Motion Grammar: https://motion-lexicon.pages.dev/data/v4/motion-grammar.json
-- Motion Blueprint schema: https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json
-- Source: https://github.com/Ryan-yang125/motion-lexicon
-- Skill install: `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`
-- License: MIT for code; CC BY 4.0 for original editorial content.
+## Core resources
 
-## Components
+- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 48 components and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
+- [shadcn registry](https://motion-lexicon.pages.dev/r/registry.json): Installable React component and primitive index.
+- [Motion Grammar](https://motion-lexicon.pages.dev/data/v4/motion-grammar.json): Composition rules, timing tokens, and Skill modes.
+- [Motion Blueprint schema](https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json): JSON Schema for portable product-motion decisions.
+
+## English
+
+- [Components](https://motion-lexicon.pages.dev/en/components/): Copy-ready React product interactions.
+- [Motion primitives](https://motion-lexicon.pages.dev/en/primitives/): Precise behaviors, timing, and implementation guidance.
+- [Animation vocabulary](https://motion-lexicon.pages.dev/en/vocabulary/): 91 bilingual motion terms with definitions, distinctions, and canonical workspaces.
+- [Scenario guides](https://motion-lexicon.pages.dev/en/guides/): Long-form motion decisions and production examples.
+- [Method](https://motion-lexicon.pages.dev/en/method/): How the library is authored, verified, and maintained.
+- [Agent Skill](https://motion-lexicon.pages.dev/en/skill/): Recommend, compose, implement, review, and contribute motion.
+
+## 中文
+
+- [组件](https://motion-lexicon.pages.dev/zh/components/): 可直接安装的 React 产品交互。
+- [原子动效](https://motion-lexicon.pages.dev/zh/primitives/): 精确的动效行为、节奏与实现规则。
+- [动画词汇表](https://motion-lexicon.pages.dev/zh/vocabulary/): 91 个中英双语动效术语，包含定义、辨析和对应工作区。
+- [场景指南](https://motion-lexicon.pages.dev/zh/guides/): 深度动效决策与生产示例。
+- [方法](https://motion-lexicon.pages.dev/zh/method/): 内容编写、验证与维护方式。
+- [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/): 推荐、编排、实现、审查和贡献动效。
+
+## Optional
+
+- [Full bilingual reference](https://motion-lexicon.pages.dev/llms-full.txt): Every published component, primitive, and scenario guide.
+- [Pricing](https://motion-lexicon.pages.dev/pricing.txt): Free and open-source availability in English and Chinese.
+- [Source](https://github.com/Ryan-yang125/motion-lexicon): MIT code, CC BY 4.0 original editorial content, notices, and contribution history.
+- [Agent Skill source](https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon): Install with `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`.
+- [Release 4.1.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.1.0, updated 2026-08-11.
+
+## English components
 
 - [Copy button](https://motion-lexicon.pages.dev/en/components/copy-button/): Reports clipboard state in place without shifting nearby content. [Registry](https://motion-lexicon.pages.dev/r/copy-button.json)
 - [Loading button](https://motion-lexicon.pages.dev/en/components/loading-button/): Keeps pending, success, and error feedback inside one action. [Registry](https://motion-lexicon.pages.dev/r/loading-button.json)
@@ -65,7 +86,58 @@
 - [Kinetic logo exchange](https://motion-lexicon.pages.dev/en/components/kinetic-logo-exchange/): Reorders and reveals brand marks in a kinetic queue that yields to user selection. [Registry](https://motion-lexicon.pages.dev/r/kinetic-logo-exchange.json)
 - [Spotlight bento](https://motion-lexicon.pages.dev/en/components/spotlight-bento/): Carries one continuous spotlight across multiple tiles to unify the bento surface. [Registry](https://motion-lexicon.pages.dev/r/spotlight-bento.json)
 
-## Motion primitives
+## 中文组件
+
+- [复制按钮](https://motion-lexicon.pages.dev/zh/components/copy-button/): 复制完成后原位切换状态，宽度保持稳定。 [Registry](https://motion-lexicon.pages.dev/r/copy-button.json)
+- [加载按钮](https://motion-lexicon.pages.dev/zh/components/loading-button/): 把等待、成功与失败收进同一个操作位置。 [Registry](https://motion-lexicon.pages.dev/r/loading-button.json)
+- [长按确认](https://motion-lexicon.pages.dev/zh/components/hold-to-confirm/): 用可取消进度保护高风险操作。 [Registry](https://motion-lexicon.pages.dev/r/hold-to-confirm.json)
+- [长按操作](https://motion-lexicon.pages.dev/zh/components/long-press/): 兼顾触控、指针和键盘的长按手势。 [Registry](https://motion-lexicon.pages.dev/r/long-press.json)
+- [命令面板](https://motion-lexicon.pages.dev/zh/components/command-palette/): 搜索、键盘导航与焦点管理完整配合。 [Registry](https://motion-lexicon.pages.dev/r/command-palette.json)
+- [上下文菜单](https://motion-lexicon.pages.dev/zh/components/context-menu/): 从触发坐标展开，并自动避开视口边缘。 [Registry](https://motion-lexicon.pages.dev/r/context-menu.json)
+- [抽屉](https://motion-lexicon.pages.dev/zh/components/drawer/): 支持焦点锁定、拖拽关闭与可中断弹簧。 [Registry](https://motion-lexicon.pages.dev/r/drawer.json)
+- [下拉选择](https://motion-lexicon.pages.dev/zh/components/dropdown/): 选项高亮连续移动，键盘操作完整。 [Registry](https://motion-lexicon.pages.dev/r/dropdown.json)
+- [模态框](https://motion-lexicon.pages.dev/zh/components/modal/): 稳定处理焦点、遮罩、退出与异步确认。 [Registry](https://motion-lexicon.pages.dev/r/modal.json)
+- [气泡浮层](https://motion-lexicon.pages.dev/zh/components/popover/): 根据触发点与空间方向确定展开原点。 [Registry](https://motion-lexicon.pages.dev/r/popover.json)
+- [展开搜索](https://motion-lexicon.pages.dev/zh/components/expanding-search/): 从工具栏动作自然展开为完整搜索框。 [Registry](https://motion-lexicon.pages.dev/r/expanding-search.json)
+- [浮动标签输入框](https://motion-lexicon.pages.dev/zh/components/floating-label/): 输入内容时保留字段标签与上下文。 [Registry](https://motion-lexicon.pages.dev/r/floating-label.json)
+- [行内校验](https://motion-lexicon.pages.dev/zh/components/inline-validation/): 把等待、错误和通过状态放在输入旁边。 [Registry](https://motion-lexicon.pages.dev/r/inline-validation.json)
+- [验证码输入](https://motion-lexicon.pages.dev/zh/components/otp-input/): 输入、粘贴、错误与成功反馈连续发生。 [Registry](https://motion-lexicon.pages.dev/r/otp-input.json)
+- [密码强度](https://motion-lexicon.pages.dev/zh/components/password-strength/): 规则检查与强度变化保持清晰节奏。 [Registry](https://motion-lexicon.pages.dev/r/password-strength.json)
+- [刻度滑块](https://motion-lexicon.pages.dev/zh/components/slider-detents/): 拖动时吸附语义刻度，并保留连续值。 [Registry](https://motion-lexicon.pages.dev/r/slider-detents.json)
+- [标签输入](https://motion-lexicon.pages.dev/zh/components/tag-input/): 新增、删除和拒绝状态都有明确反馈。 [Registry](https://motion-lexicon.pages.dev/r/tag-input.json)
+- [折叠面板](https://motion-lexicon.pages.dev/zh/components/accordion/): 内容高度与开合状态保持连续。 [Registry](https://motion-lexicon.pages.dev/r/accordion.json)
+- [滚动隐藏栏](https://motion-lexicon.pages.dev/zh/components/hide-on-scroll/): 跟随滚动方向收起与恢复工具栏。 [Registry](https://motion-lexicon.pages.dev/r/hide-on-scroll.json)
+- [分页](https://motion-lexicon.pages.dev/zh/components/pagination/): 页码范围切换时保持当前页位置清楚。 [Registry](https://motion-lexicon.pages.dev/r/pagination.json)
+- [分段控制](https://motion-lexicon.pages.dev/zh/components/segmented-control/): 共享高亮在选项之间连续移动。 [Registry](https://motion-lexicon.pages.dev/r/segmented-control.json)
+- [标签页](https://motion-lexicon.pages.dev/zh/components/tabs/): 指示器、方向与内容切换保持一致。 [Registry](https://motion-lexicon.pages.dev/r/tabs.json)
+- [筛选网格](https://motion-lexicon.pages.dev/zh/components/filter-grid/): 筛选结果重新排列时维持空间连续性。 [Registry](https://motion-lexicon.pages.dev/r/filter-grid.json)
+- [拖拽排序列表](https://motion-lexicon.pages.dev/zh/components/reorder-list/): 指针拖拽与键盘排序共享清晰落点。 [Registry](https://motion-lexicon.pages.dev/r/reorder-list.json)
+- [可排序表格](https://motion-lexicon.pages.dev/zh/components/sortable-table/): 排序变化通过行位置表达，数据保持可读。 [Registry](https://motion-lexicon.pages.dev/r/sortable-table.json)
+- [进度条](https://motion-lexicon.pages.dev/zh/components/progress-bar/): 支持等待、确定进度与完成三个阶段。 [Registry](https://motion-lexicon.pages.dev/r/progress-bar.json)
+- [任务步骤](https://motion-lexicon.pages.dev/zh/components/task-steps/): 让排队、执行、完成与失败状态连成一条流程。 [Registry](https://motion-lexicon.pages.dev/r/task-steps.json)
+- [数值变化](https://motion-lexicon.pages.dev/zh/components/value-flash/): 用方向与短暂颜色反馈解释数值变化。 [Registry](https://motion-lexicon.pages.dev/r/value-flash.json)
+- [磁吸主按钮](https://motion-lexicon.pages.dev/zh/components/magnetic-action/): 指针靠近时按钮轻量迎向触点，离开后自然回正。 [Registry](https://motion-lexicon.pages.dev/r/magnetic-action.json)
+- [放射快捷操作](https://motion-lexicon.pages.dev/zh/components/radial-actions/): 围绕主操作展开一组方向清楚的快捷入口。 [Registry](https://motion-lexicon.pages.dev/r/radial-actions.json)
+- [主题揭幕](https://motion-lexicon.pages.dev/zh/components/theme-reveal/): 从切换触点扩散新主题，保持页面内容连续。 [Registry](https://motion-lexicon.pages.dev/r/theme-reveal.json)
+- [大型导航菜单](https://motion-lexicon.pages.dev/zh/components/mega-menu/): 高亮、面板和焦点路径共同维持导航上下文。 [Registry](https://motion-lexicon.pages.dev/r/mega-menu.json)
+- [浮动程序坞](https://motion-lexicon.pages.dev/zh/components/floating-dock/): 图标随指针距离获得克制的弹性放大。 [Registry](https://motion-lexicon.pages.dev/r/floating-dock.json)
+- [语音输入器](https://motion-lexicon.pages.dev/zh/components/voice-capture/): 录制、声级、暂停和完成在同一输入器中连续切换。 [Registry](https://motion-lexicon.pages.dev/r/voice-capture.json)
+- [通知堆栈](https://motion-lexicon.pages.dev/zh/components/toast-stack/): 通知按层级进入、展开，并支持滑动或键盘关闭。 [Registry](https://motion-lexicon.pages.dev/r/toast-stack.json)
+- [文件上传队列](https://motion-lexicon.pages.dev/zh/components/upload-queue/): 把文件接收、逐项进度、重试和完成收拢成一个流程。 [Registry](https://motion-lexicon.pages.dev/r/upload-queue.json)
+- [内容成形加载](https://motion-lexicon.pages.dev/zh/components/skeleton-reveal/): 骨架与真实内容共用稳定几何，载入后进行双层交接。 [Registry](https://motion-lexicon.pages.dev/r/skeleton-reveal.json)
+- [实时动态流](https://motion-lexicon.pages.dev/zh/components/activity-feed/): 新动态插入、日期分组和未读位置保持连续。 [Registry](https://motion-lexicon.pages.dev/r/activity-feed.json)
+- [集成关系图](https://motion-lexicon.pages.dev/zh/components/integration-map/): 节点、连接路径与流动信号共同解释系统关系。 [Registry](https://motion-lexicon.pages.dev/r/integration-map.json)
+- [局部对比镜](https://motion-lexicon.pages.dev/zh/components/cursor-lens/): 通过可移动镜片局部比较同一媒体的两个状态。 [Registry](https://motion-lexicon.pages.dev/r/cursor-lens.json)
+- [惯性媒体轮播](https://motion-lexicon.pages.dev/zh/components/media-carousel/): 媒体卡片保留原生拖动惯性、吸附位置与键盘导航。 [Registry](https://motion-lexicon.pages.dev/r/media-carousel.json)
+- [连续画廊灯箱](https://motion-lexicon.pages.dev/zh/components/image-lightbox/): 缩略图连续扩展为沉浸画面，并完整管理焦点与键盘浏览。 [Registry](https://motion-lexicon.pages.dev/r/image-lightbox.json)
+- [滚动产品叙事](https://motion-lexicon.pages.dev/zh/components/scroll-story/): 将章节进度绑定到局部滚动，逐步改写产品画面。 [Registry](https://motion-lexicon.pages.dev/r/scroll-story.json)
+- [三维产品查看器](https://motion-lexicon.pages.dev/zh/components/procedural-product-viewer/): 程序化三维产品支持拖拽观察、惯性和回正。 [Registry](https://motion-lexicon.pages.dev/r/procedural-product-viewer.json)
+- [抖动显影卡](https://motion-lexicon.pages.dev/zh/components/dither-reveal-card/): 像素抖动阈值随交互推进，让图像以材质感逐步显现。 [Registry](https://motion-lexicon.pages.dev/r/dither-reveal-card.json)
+- [交互网络地球](https://motion-lexicon.pages.dev/zh/components/network-globe/): 三维地球用节点、弧线和焦点切换展示全球连接。 [Registry](https://motion-lexicon.pages.dev/r/network-globe.json)
+- [动态品牌墙](https://motion-lexicon.pages.dev/zh/components/kinetic-logo-exchange/): 品牌标记在队列中换位、显影并自动停在当前选择。 [Registry](https://motion-lexicon.pages.dev/r/kinetic-logo-exchange.json)
+- [联动聚光矩阵](https://motion-lexicon.pages.dev/zh/components/spotlight-bento/): 一个连续光场跨越多张卡片，强化矩阵之间的整体关系。 [Registry](https://motion-lexicon.pages.dev/r/spotlight-bento.json)
+
+## English motion primitives
 
 - [Fade in / Fade out](https://motion-lexicon.pages.dev/en/primitives/fade-in-fade-out/): Introduce or remove an element with opacity for low-distraction state changes. [Registry](https://motion-lexicon.pages.dev/r/primitive-fade-in-fade-out.json)
 - [Slide in](https://motion-lexicon.pages.dev/en/primitives/slide-in/): Bring content in from a clear direction so its spatial relationship stays legible. [Registry](https://motion-lexicon.pages.dev/r/primitive-slide-in.json)
@@ -111,3 +183,72 @@
 - [Anticipation](https://motion-lexicon.pages.dev/en/primitives/anticipation/): Tune anticipation, follow-through, and deformation to understand physical feedback. [Registry](https://motion-lexicon.pages.dev/r/primitive-anticipation.json)
 - [Perceived performance](https://motion-lexicon.pages.dev/en/primitives/perceived-performance/): Reduce perceived waiting with immediate state changes, skeletons, and continuous feedback.
 - [Reduced motion](https://motion-lexicon.pages.dev/en/primitives/reduced-motion/): Provide equivalent low-motion treatments for travel, scaling, loops, and parallax.
+
+## 中文原子动效
+
+- [淡入 / 淡出](https://motion-lexicon.pages.dev/zh/primitives/fade-in-fade-out/): 用透明度建立或移除元素，适合低干扰的内容出现与消失。 [Registry](https://motion-lexicon.pages.dev/r/primitive-fade-in-fade-out.json)
+- [滑入](https://motion-lexicon.pages.dev/zh/primitives/slide-in/): 沿明确方向引入内容，让新元素与界面空间关系保持清楚。 [Registry](https://motion-lexicon.pages.dev/r/primitive-slide-in.json)
+- [缩放入场](https://motion-lexicon.pages.dev/zh/primitives/scale-in/): 从接近最终尺寸的位置放大元素，并可切换为带轻微过冲的 Pop in。 [Registry](https://motion-lexicon.pages.dev/r/primitive-scale-in.json)
+- [揭示](https://motion-lexicon.pages.dev/zh/primitives/reveal/): 通过裁切与轻微位移逐步展示内容，适合标题、媒体和分段内容。 [Registry](https://motion-lexicon.pages.dev/r/primitive-reveal.json)
+- [交错动画](https://motion-lexicon.pages.dev/zh/primitives/stagger/): 让列表项按短间隔依次进入，表达顺序并保持整体节奏。 [Registry](https://motion-lexicon.pages.dev/r/primitive-stagger.json)
+- [关键帧](https://motion-lexicon.pages.dev/zh/primitives/keyframes/): 编排多阶段关键帧、插值、步进与结束状态。 [Registry](https://motion-lexicon.pages.dev/r/primitive-keyframes.json)
+- [时长](https://motion-lexicon.pages.dev/zh/primitives/duration/): 比较时长与延迟对响应速度、节奏和可感知等待的影响。 [Registry](https://motion-lexicon.pages.dev/r/primitive-duration.json)
+- [位移](https://motion-lexicon.pages.dev/zh/primitives/translate/): 组合位移、缩放、旋转、倾斜、透视和变换原点。 [Registry](https://motion-lexicon.pages.dev/r/primitive-translate.json)
+- [3D 倾斜 / 翻转](https://motion-lexicon.pages.dev/zh/primitives/3d-tilt-flip/): 用受控透视和旋转展示卡片正反面或悬停深度。 [Registry](https://motion-lexicon.pages.dev/r/primitive-3d-tilt-flip.json)
+- [基于触发源的动画](https://motion-lexicon.pages.dev/zh/primitives/origin-aware-animation/): 让展开或缩放从触发点发生，保持动作来源的空间连续性。 [Registry](https://motion-lexicon.pages.dev/r/primitive-origin-aware-animation.json)
+- [交叉淡入淡出](https://motion-lexicon.pages.dev/zh/primitives/crossfade/): 用重叠淡入淡出切换等尺寸状态，减少视觉跳变。 [Registry](https://motion-lexicon.pages.dev/r/primitive-crossfade.json)
+- [形变](https://motion-lexicon.pages.dev/zh/primitives/morph/): 在共享元素的前后布局之间建立连续形变。 [Registry](https://motion-lexicon.pages.dev/r/primitive-morph.json)
+- [手风琴 / 折叠](https://motion-lexicon.pages.dev/zh/primitives/accordion-collapse/): 同步高度、透明度与图标状态，清晰表达内容展开和收起。 [Registry](https://motion-lexicon.pages.dev/r/primitive-accordion-collapse.json)
+- [方向感过渡](https://motion-lexicon.pages.dev/zh/primitives/direction-aware-transition/): 根据导航方向匹配进入和离开方向，维持前后关系。 [Registry](https://motion-lexicon.pages.dev/r/primitive-direction-aware-transition.json)
+- [滚动揭示](https://motion-lexicon.pages.dev/zh/primitives/scroll-reveal/): 内容进入视口时触发一次轻量展示，并支持减少动态偏好。 [Registry](https://motion-lexicon.pages.dev/r/primitive-scroll-reveal.json)
+- [滚动驱动动画](https://motion-lexicon.pages.dev/zh/primitives/scroll-driven-animation/): 把动画进度绑定到滚动区间，调节起止位置与运动幅度。 [Registry](https://motion-lexicon.pages.dev/r/primitive-scroll-driven-animation.json)
+- [视差](https://motion-lexicon.pages.dev/zh/primitives/parallax/): 让前后景以克制的速度差移动，建立轻量层次感。 [Registry](https://motion-lexicon.pages.dev/r/primitive-parallax.json)
+- [页面过渡](https://motion-lexicon.pages.dev/zh/primitives/page-transition/): 在页面或视图切换时保持内容连续，并为旧浏览器提供降级。 [Registry](https://motion-lexicon.pages.dev/r/primitive-page-transition.json)
+- [悬停效果](https://motion-lexicon.pages.dev/zh/primitives/hover-effect/): 在指针悬停时强化可交互性，同时保持布局稳定。 [Registry](https://motion-lexicon.pages.dev/r/primitive-hover-effect.json)
+- [按压 / 轻触反馈](https://motion-lexicon.pages.dev/zh/primitives/press-tap-feedback/): 在按下瞬间提供短促缩放和明暗反馈，确认输入已被接收。 [Registry](https://motion-lexicon.pages.dev/r/primitive-press-tap-feedback.json)
+- [长按确认](https://motion-lexicon.pages.dev/zh/primitives/hold-to-confirm/): 用可取消的进度反馈表达长按确认，降低误触风险。 [Registry](https://motion-lexicon.pages.dev/r/primitive-hold-to-confirm.json)
+- [拖拽排序](https://motion-lexicon.pages.dev/zh/primitives/drag-to-reorder/): 在拖拽排序时保持拾取、占位和落点状态清楚。 [Registry](https://motion-lexicon.pages.dev/r/primitive-drag-to-reorder.json)
+- [滑动关闭](https://motion-lexicon.pages.dev/zh/primitives/swipe-to-dismiss/): 让滑动距离映射到位移与透明度，并在阈值前提供阻尼。 [Registry](https://motion-lexicon.pages.dev/r/primitive-swipe-to-dismiss.json)
+- [摇晃 / 抖动](https://motion-lexicon.pages.dev/zh/primitives/shake-wiggle/): 用一次短促横向摆动提示错误或需要关注的输入。 [Registry](https://motion-lexicon.pages.dev/r/primitive-shake-wiggle.json)
+- [涟漪](https://motion-lexicon.pages.dev/zh/primitives/ripple/): 从输入坐标扩散轻量波纹，提供明确的触点反馈。 [Registry](https://motion-lexicon.pages.dev/r/primitive-ripple.json)
+- [缓动](https://motion-lexicon.pages.dev/zh/primitives/easing/): 比较常用缓动曲线和自定义贝塞尔曲线的速度变化。 [Registry](https://motion-lexicon.pages.dev/r/primitive-easing.json)
+- [弹簧](https://motion-lexicon.pages.dev/zh/primitives/spring/): 通过刚度、阻尼、质量和初速度调节真实的弹簧响应。 [Registry](https://motion-lexicon.pages.dev/r/primitive-spring.json)
+- [循环](https://motion-lexicon.pages.dev/zh/primitives/loop/): 比较循环方向、次数、暂停和节奏，避免持续动态干扰阅读。 [Registry](https://motion-lexicon.pages.dev/r/primitive-loop.json)
+- [跑马灯](https://motion-lexicon.pages.dev/zh/primitives/marquee/): 让超出容器的信息连续滚动，并在悬停或聚焦时暂停。 [Registry](https://motion-lexicon.pages.dev/r/primitive-marquee.json)
+- [环绕](https://motion-lexicon.pages.dev/zh/primitives/orbit/): 让装饰节点围绕中心缓慢运行，适合低频状态展示。 [Registry](https://motion-lexicon.pages.dev/r/primitive-orbit.json)
+- [空闲动效](https://motion-lexicon.pages.dev/zh/primitives/idle-animation/): 用低幅度呼吸或漂浮提示元素仍处于可用、等待或活跃状态。 [Registry](https://motion-lexicon.pages.dev/r/primitive-idle-animation.json)
+- [模糊](https://motion-lexicon.pages.dev/zh/primitives/blur/): 结合模糊、透明度与遮罩柔和地揭示媒体或内容层。 [Registry](https://motion-lexicon.pages.dev/r/primitive-blur.json)
+- [前后对比滑杆](https://motion-lexicon.pages.dev/zh/primitives/before-after-slider/): 用可拖动分割线比较同一画面的前后状态。 [Registry](https://motion-lexicon.pages.dev/r/primitive-before-after-slider.json)
+- [线条绘制](https://motion-lexicon.pages.dev/zh/primitives/line-drawing/): 通过描边偏移逐步绘制图标、路径或解释性连线。 [Registry](https://motion-lexicon.pages.dev/r/primitive-line-drawing.json)
+- [文字形变](https://motion-lexicon.pages.dev/zh/primitives/text-morph/): 在长度接近的短文本之间进行平滑替换，保留阅读位置。 [Registry](https://motion-lexicon.pages.dev/r/primitive-text-morph.json)
+- [骨架屏 / 微光](https://motion-lexicon.pages.dev/zh/primitives/skeleton-shimmer/): 在内容加载期间用低对比扫光表达进行中状态。 [Registry](https://motion-lexicon.pages.dev/r/primitive-skeleton-shimmer.json)
+- [数字滚动](https://motion-lexicon.pages.dev/zh/primitives/number-ticker/): 使用等宽数字与垂直滚动稳定展示数值变化。 [Registry](https://motion-lexicon.pages.dev/r/primitive-number-ticker.json)
+- [打字机](https://motion-lexicon.pages.dev/zh/primitives/typewriter/): 按字符逐步显示短文本，并为辅助技术保留完整内容。 [Registry](https://motion-lexicon.pages.dev/r/primitive-typewriter.json)
+- [帧率（FPS）](https://motion-lexicon.pages.dev/zh/primitives/frame-rate/): 检查帧率、主线程长任务和掉帧，定位动态卡顿。
+- [合成](https://motion-lexicon.pages.dev/zh/primitives/compositing/): 比较合成友好属性、硬件加速提示与布局触发属性的渲染成本。 [Registry](https://motion-lexicon.pages.dev/r/primitive-compositing.json)
+- [有目的的动效](https://motion-lexicon.pages.dev/zh/primitives/purposeful-animation/): 审核每段动效的目的、出现频率和空间规则，保持一致体验。
+- [预备动作](https://motion-lexicon.pages.dev/zh/primitives/anticipation/): 调节预备、跟随与形变幅度，理解物理感对反馈的影响。 [Registry](https://motion-lexicon.pages.dev/r/primitive-anticipation.json)
+- [感知性能](https://motion-lexicon.pages.dev/zh/primitives/perceived-performance/): 通过即时状态、骨架和连续反馈缩短用户感受到的等待。
+- [减弱动效](https://motion-lexicon.pages.dev/zh/primitives/reduced-motion/): 为移动、缩放、循环和视差提供等价的低动态表达。
+
+## English scenario guides
+
+- [Save, submit, and publish feedback](https://motion-lexicon.pages.dev/en/guides/save-submit-publish-feedback/): Design save, submit, and publish feedback so every action has a clear start, progress, and result.
+- [Keep context through cards, lists, and filters](https://motion-lexicon.pages.dev/en/guides/card-list-filter-continuity/): Keep cards, lists, and filters legible as content changes, so people can follow what moved, stayed, or left.
+- [Diagnose CSS motion jank](https://motion-lexicon.pages.dev/en/guides/css-motion-jank/): Find CSS motion jank by checking frame work, layout cost, paint, and the actual duration of the interaction.
+- [Choose spring or ease-out by meaning](https://motion-lexicon.pages.dev/en/guides/spring-or-ease-out/): Choose spring or ease-out from the interaction’s meaning, interruption pattern, and need for a settled ending.
+- [Reduced motion without losing meaning](https://motion-lexicon.pages.dev/en/guides/reduced-motion/): Offer low-motion treatments for travel, scale, and loops while keeping hierarchy and action outcomes clear.
+- [Validation, deletion, and permission boundaries](https://motion-lexicon.pages.dev/en/guides/form-validation-delete-permission/): Give validation, deletion, and permission changes the right feedback so risk, next steps, and recovery stay clear.
+- [Turn a vague motion brief into a spec](https://motion-lexicon.pages.dev/en/guides/from-brief-to-spec/): Turn a vague motion brief into a buildable spec with trigger, object, states, timing, and reduced-motion rules.
+- [Choose a component or a motion primitive](https://motion-lexicon.pages.dev/en/guides/component-or-primitive/): Choose a component or motion primitive from interaction completeness, existing structure, and adaptation scope.
+
+## 中文场景指南
+
+- [保存、提交和发布：让结果立刻可见](https://motion-lexicon.pages.dev/zh/guides/save-submit-publish-feedback/): 把点击后的等待、成功与失败编成清晰状态，让用户知道动作已经生效。
+- [卡片、列表与筛选：保住上下文](https://motion-lexicon.pages.dev/zh/guides/card-list-filter-continuity/): 内容改变时保留空间关系，让用户看得出哪些项目移动、保留或离开。
+- [CSS 动效卡顿：从帧到属性逐项排查](https://motion-lexicon.pages.dev/zh/guides/css-motion-jank/): 从帧耗时、布局、绘制和交互时长逐项检查，定位 CSS 动效为什么拖慢页面。
+- [Spring 还是 Ease-out：按动作的语义选](https://motion-lexicon.pages.dev/zh/guides/spring-or-ease-out/): 按动作语义、中断方式和收尾要求选择 spring 或 ease-out，让速度变化服务于界面含义。
+- [减弱动效：保留结果，减少位移](https://motion-lexicon.pages.dev/zh/guides/reduced-motion/): 为位移、缩放和循环提供低动态表达，信息层级和操作结果仍然清楚。
+- [表单、删除与权限：把边界讲清楚](https://motion-lexicon.pages.dev/zh/guides/form-validation-delete-permission/): 为校验、删除和权限变化安排恰当反馈，让风险、下一步和可恢复性都清楚。
+- [从模糊需求到动效规格](https://motion-lexicon.pages.dev/zh/guides/from-brief-to-spec/): 把“自然一点”这类感受拆成触发、对象、状态、时长和减弱动效规则，形成可实现的规格。
+- [组件还是原子动效：从合适层级开始](https://motion-lexicon.pages.dev/zh/guides/component-or-primitive/): 按交互完整度、现有结构和改造范围选择组件或原子动效，让交付层级与真实需求匹配。

@@ -1,0 +1,427 @@
+{
+  "guideId": "reduced-motion",
+  "standfirst": {
+    "zh": "减弱动效的目标是让用户更容易读懂界面：保留因果、焦点和完成结果，再把大幅移动、持续循环和意外跳动降到合适强度。它是一条完整交互路径，需要和默认路径一起设计、一起验收。",
+    "en": "Reduced motion makes an interface easier to read: retain cause, focus, and completed outcomes, then lower large travel, continuous loops, and surprising movement to an appropriate intensity. It is a complete interaction path that deserves the same design and review as the default path."
+  },
+  "sections": [
+    {
+      "id": "meaning",
+      "title": {
+        "zh": "先定义必须保留的意义",
+        "en": "Define the meaning that must remain"
+      },
+      "paragraphs": [
+        {
+          "zh": "很多团队把减弱动效理解成把所有 transition 设为零。这样虽然减少了移动，却常常顺带拿走了界面的解释能力：用户点击保存后，不再知道请求是否已经收到；切换工作区后，焦点突然换了位置；删除一项后，列表少了一行，却没有告诉人发生了什么。减弱动效真正要保护的是信息，而不是某一段 CSS 的时长。先写下每个动作需要传递的答案：是谁触发的、系统正在处理什么、结果落在哪里、接下来还能做什么。",
+          "en": "Many teams treat reduced motion as setting every transition to zero. That lowers movement, yet it can also remove the interface’s explanation: after Save, people no longer know whether the request was received; after switching workspaces, focus appears somewhere new; after deletion, a row disappears without explaining the change. Reduced motion protects information rather than the duration of one CSS rule. Start by writing the answers every action must communicate: who triggered it, what the system is processing, where the result lands, and what can happen next."
+        },
+        {
+          "zh": "把这份答案转成状态表，会比从动画属性开始更可靠。以文件上传为例，默认路径可以有进度填充、短暂旋转和新文件行的进入；低动态路径仍要有“上传中”“已完成”、文件名、可用状态和失败后的重试入口。用户得到的是同一份结果，只是路径不再依赖大范围位移。状态文字、颜色、边框、图标、焦点和层级都能承担信号，其中至少两个应在每个关键状态同时出现，避免只依赖一种感官线索。",
+          "en": "Turn those answers into a state table before choosing properties. A file upload can use progress fill, a short spinner, and an entering file row on the default path; the low-motion path still needs Uploading, Complete, the filename, availability, and a retry action after failure. The outcome stays the same while the route no longer depends on broad travel. State copy, color, boundaries, icons, focus, and hierarchy can all carry the signal. Use at least two of them at each critical state so no single sensory cue bears the whole meaning."
+        }
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": {
+        "zh": "盘点移动，再选择替代表达",
+        "en": "Inventory movement, then choose replacements"
+      },
+      "paragraphs": [
+        {
+          "zh": "审查页面时，把动作按感知负担分成四类：跨屏或跨容器的位移、尺寸快速变化、持续循环、由滚动或手势驱动的跟随。第一类最容易造成空间失衡，适合缩短距离、改为原位淡化或用稳定边界标出变化；第二类可以保留极小的缩放，但应避免从很小尺寸突然放大；第三类常可停在一个可读的静态状态；第四类要保留用户手势和内容位置，让控制感一直在用户手里。分类让方案具有一致性，页面也更容易维护。",
+          "en": "During review, group movement by perceptual load: travel across a screen or container, rapid size changes, continuous loops, and movement driven by scroll or direct manipulation. The first category can lose spatial balance, so shorten distance, fade in place, or use a stable boundary to mark the change. The second can retain very small scale changes while avoiding a sudden expansion from a tiny size. The third often settles into a readable static state. The fourth should preserve the person’s gesture and content position so control remains in their hands. Grouping creates consistency and makes the page easier to maintain."
+        },
+        {
+          "zh": "替代方案需要匹配原动作的职责。一个抽屉原先从右侧滑入，是为了说明它来自哪里并暂时覆盖主内容；低动态版本可以直接显示抽屉、保持触发按钮的 pressed 状态，并把键盘焦点移到抽屉标题。一个成功 toast 原先从底部升起，是为了让结果被看见；低动态版本可在触发按钮附近更新“已保存”，再在状态区保留一条静态确认。这样做不会让低动态界面变得沉默，它只是把解释从移动转移到更稳定的视觉和语义线索上。",
+          "en": "A replacement should match the job of the original motion. A drawer may slide in from the right to explain its origin and its temporary coverage of main content; the low-motion version can reveal it directly, preserve the trigger’s pressed state, and move keyboard focus to the drawer title. A success toast may rise from the bottom to make a result noticeable; the low-motion version can update Saved beside the trigger and retain a static confirmation in the status area. The interface remains expressive because explanation moves from travel to stable visual and semantic cues."
+        }
+      ]
+    },
+    {
+      "id": "implementation",
+      "title": {
+        "zh": "把偏好写进组件契约",
+        "en": "Put the preference into the component contract"
+      },
+      "paragraphs": [
+        {
+          "zh": "`prefers-reduced-motion` 应该在组件层定义，组件契约要说明默认状态、低动态状态、两条路径共同保留的文案和 aria 状态，以及用户在运行时修改系统偏好时如何更新。可重复使用的组件还应明确哪些值允许主题或产品覆盖，例如入口距离、装饰性旋转是否出现、成功状态停留多久。把规则放在数据与组件附近，可以让新页面持续保留结果、层级和操作含义。",
+          "en": "Define `prefers-reduced-motion` at the component level. The component contract should state the default state, the low-motion state, the copy and aria states shared by both paths, and the response when a person changes the system preference at runtime. A reusable Component should also identify values a theme or product may override: entrance distance, decorative rotation, and how long a success state stays visible. Keeping rules close to data and Components helps every new page retain outcome, hierarchy, and action meaning."
+        },
+        {
+          "zh": "实现时优先使用同一个状态源。按钮从“保存”变为“保存中”再变为“已保存”，默认版本可以在状态变化周围加入 transform 和 opacity；低动态版本沿用相同的 `data-state`、相同的文字和相同的可访问性通知，只替换视觉过渡。这样测试覆盖的是一个业务流程，而不是两套互不相干的组件。也要尊重手动设置：如果产品提供“减少动效”开关，它的优先级、存储方式和与系统偏好的关系应被写清楚，避免用户每次访问都要重新选择。",
+          "en": "Use one state source in implementation. A button moves from Save to Saving to Saved; the default version can add transform and opacity around those state changes, while the low-motion version keeps the same `data-state`, copy, and accessibility announcement and replaces only the visual transition. Tests then cover one business flow rather than two unrelated components. Respect manual settings as well: if the product offers a Reduce motion control, document its priority, storage, and relationship to the system preference so people do not have to choose again on every visit."
+        }
+      ]
+    },
+    {
+      "id": "interaction",
+      "title": {
+        "zh": "让焦点、滚动和输入保持连续",
+        "en": "Keep focus, scroll, and input continuous"
+      },
+      "paragraphs": [
+        {
+          "zh": "低动态模式常常暴露出默认路径里被动画掩盖的问题。弹窗出现得更直接时，焦点是否已经进入弹窗？列表不再滑动时，新增项是否仍然在阅读位置附近？筛选结果立刻替换时，屏幕阅读器能否知道结果数量发生了变化？这些问题决定交互是否完整。每当移除一段视觉运动，都要补查焦点管理、滚动位置、状态区域和键盘返回路径。减弱动效能够成为一面镜子，帮助团队发现原先依赖视觉缓冲掩盖的断点。",
+          "en": "Low-motion mode often exposes issues that the default path hides with animation. When a dialog appears directly, has focus already entered it? When a list no longer slides, does a new item still appear near the reading position? When filtered results replace immediately, can a screen reader learn that the count changed? These questions determine whether the interaction is complete. Whenever visual movement is removed, recheck focus management, scroll position, status regions, and the keyboard return path. Reduced motion becomes a useful mirror for breaks previously hidden by visual buffering."
+        },
+        {
+          "zh": "同样的原则适用于触摸和拖拽。减少动效并不意味着禁用直接操控；用户拖动滑块、排序任务或拖拽时间线时，内容仍应跟随手势，只是惯性、回弹和装饰性残影可以更克制。要确保松手后的结果在同一位置被确认，并让撤销或恢复入口稳定可见。对于自动播放的轮播、背景浮动和闪烁加载骨架，默认关闭或改为手动触发通常更合适，因为这些动作没有用户输入作为锚点。",
+          "en": "The same principle applies to touch and drag. Reducing motion does not disable direct manipulation; when someone drags a slider, sorts tasks, or scrubs a timeline, content should still follow the gesture while inertia, bounce, and decorative trails become more restrained. Confirm the result in the same place after release and keep undo or recovery actions steadily visible. Autoplay carousels, background floating, and flashing loading skeletons are usually better disabled by default or changed to manual replay because they lack a user action as an anchor."
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "title": {
+        "zh": "把减弱动效作为发布标准验收",
+        "en": "Review reduced motion as a shipping criterion"
+      },
+      "paragraphs": [
+        {
+          "zh": "验收不应只在浏览器开发工具里勾选一次偏好。把系统偏好切换、产品内开关、键盘操作、触屏操作和窄屏布局放在同一张测试清单中。测试者需要能够回答：我是否看得出提交已经开始？我是否知道失败发生在哪里？我是否还能撤销？我是否能在没有连续运动的情况下理解列表、工作区和层级变化？把回答记录下来，下一次同类组件就能直接复用。",
+          "en": "Review should go beyond toggling a browser preference once. Put system-preference changes, an in-product control, keyboard operation, touch operation, and narrow layouts on the same test checklist. A reviewer should be able to answer: Can I tell that submission started? Do I know where failure happened? Can I still undo? Can I understand list, workspace, and hierarchy changes without continuous movement? Record the answers so the next component of the same class can reuse them."
+        },
+        {
+          "zh": "最后再衡量节奏。减弱动效不等于所有东西同时瞬移：一组信息仍可按语义顺序出现，状态仍可在极短时间内交接，焦点仍可被引导。关键是任何时间差都服务于阅读顺序，而不是制造戏剧性。把装饰性时间归零或降到极短，把任务完成、错误定位和内容更新的时间保留在可感知范围。这样无论用户选择哪条路径，产品都保持同一套逻辑和同一份尊重。",
+          "en": "Measure rhythm last. Reduced motion does not require every element to appear at the exact same instant: information can still arrive in semantic order, states can hand off over a very short interval, and focus can still be guided. Each delay should serve reading order rather than drama. Reduce decorative time to zero or near zero while keeping task completion, error location, and content updates perceptible. Both paths then preserve the same logic and the same respect for the person using the product."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "减弱动效发布清单",
+    "en": "Reduced-motion shipping checklist"
+  },
+  "checklist": [
+    {
+      "id": "signals",
+      "label": {
+        "zh": "每个关键状态至少保留两种信号",
+        "en": "Retain at least two signals for every critical state"
+      },
+      "detail": {
+        "zh": "组合文案、图标、边界、颜色和焦点，不把结果交给单一动画。",
+        "en": "Combine copy, icon, boundary, color, and focus instead of assigning the result to one animation."
+      }
+    },
+    {
+      "id": "preference",
+      "label": {
+        "zh": "系统偏好与产品开关都能即时生效",
+        "en": "System preference and product control update immediately"
+      },
+      "detail": {
+        "zh": "运行时修改偏好后，当前组件应切换到对应状态。",
+        "en": "When the preference changes at runtime, the current component should switch to the matching treatment."
+      }
+    },
+    {
+      "id": "focus",
+      "label": {
+        "zh": "直接出现的层级仍有正确焦点",
+        "en": "Directly appearing layers still receive correct focus"
+      },
+      "detail": {
+        "zh": "抽屉、弹窗和展开内容需要可预测的键盘路径。",
+        "en": "Drawers, dialogs, and disclosure content need a predictable keyboard path."
+      }
+    },
+    {
+      "id": "input",
+      "label": {
+        "zh": "直接操控仍然跟随手势",
+        "en": "Direct manipulation still follows the gesture"
+      },
+      "detail": {
+        "zh": "保留拖拽、滑动和排序的因果关系，收敛惯性与装饰性轨迹。",
+        "en": "Keep the causal link in drag, swipe, and reorder while reducing inertia and decorative trails."
+      }
+    },
+    {
+      "id": "review",
+      "label": {
+        "zh": "默认路径与低动态路径都通过同一业务验收",
+        "en": "Default and low-motion paths pass the same business review"
+      },
+      "detail": {
+        "zh": "成功、失败、撤销和恢复都要被独立检查。",
+        "en": "Success, failure, undo, and recovery all receive independent checks."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：保存确认在两条路径中保持同一结果",
+      "en": "Case: one save confirmation, two paths, one outcome"
+    },
+    "context": {
+      "zh": "编辑器点击保存后，需要立刻确认输入、展示进行中状态，并在完成后更新页面状态。",
+      "en": "An editor needs to acknowledge Save immediately, show progress, and update page state on completion."
+    },
+    "code": "[data-save-state=\"saving\"] { opacity: .72; }\n[data-save-state=\"saved\"] { color: var(--success); }\n\n@keyframes settle-in {\n  from { opacity: 0; transform: scale(.88); }\n  70% { transform: scale(1.04); }\n  to { opacity: 1; transform: scale(1); }\n}\n\n@media (prefers-reduced-motion: no-preference) {\n  [data-save-state] { transition: transform 120ms ease, opacity 160ms ease; }\n  [data-save-state=\"saving\"] { transform: scale(.98); }\n  [data-save-state=\"saved\"] .save-icon { animation: settle-in 180ms cubic-bezier(.23, 1, .32, 1); }\n}",
+    "explanation": {
+      "zh": "业务状态、按钮文案和 status 区域在两条路径中完全一致。媒体查询只增加默认路径的缩放与图标进入，因此低动态版本仍能表达“收到、处理中、已完成”。",
+      "en": "Business state, button copy, and the status region stay identical on both paths. The media query adds scale and icon entrance only to the default path, so the low-motion version still communicates received, processing, and complete."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "signal-preservation",
+      "title": {
+        "zh": "图解一：从移动信号转为稳定信号",
+        "en": "Diagram 1: move from travel signals to stable signals"
+      },
+      "alt": {
+        "zh": "保存动作从点击、处理中到已保存，低动态路径保留文案、图标和状态色。",
+        "en": "A save action moves from press to processing to saved; the low-motion path retains copy, icon, and status color."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "press",
+          "label": {
+            "zh": "点击保存",
+            "en": "Press Save"
+          },
+          "detail": {
+            "zh": "输入已收到",
+            "en": "Input received"
+          },
+          "x": 70,
+          "y": 205,
+          "width": 190,
+          "height": 110,
+          "tone": "ink"
+        },
+        {
+          "id": "processing",
+          "label": {
+            "zh": "保存中",
+            "en": "Saving"
+          },
+          "detail": {
+            "zh": "文案 + 状态图标",
+            "en": "Copy + status icon"
+          },
+          "x": 385,
+          "y": 205,
+          "width": 190,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "saved",
+          "label": {
+            "zh": "已保存",
+            "en": "Saved"
+          },
+          "detail": {
+            "zh": "结果 + 时间标记",
+            "en": "Result + time marker"
+          },
+          "x": 700,
+          "y": 205,
+          "width": 190,
+          "height": 110,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "press",
+          "to": "processing",
+          "label": {
+            "zh": "保留状态变化",
+            "en": "Retain state change"
+          }
+        },
+        {
+          "from": "processing",
+          "to": "saved",
+          "label": {
+            "zh": "减少装饰性位移",
+            "en": "Reduce decorative travel"
+          }
+        }
+      ]
+    },
+    {
+      "id": "motion-inventory",
+      "title": {
+        "zh": "图解二：动作盘点与替代策略",
+        "en": "Diagram 2: motion inventory and replacement strategy"
+      },
+      "alt": {
+        "zh": "四类动作分别对应短距离、稳定边界、静态状态和保留手势的替代策略。",
+        "en": "Four motion classes map to short travel, stable boundaries, static states, and preserved gestures."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "travel",
+          "label": {
+            "zh": "跨容器位移",
+            "en": "Cross-container travel"
+          },
+          "detail": {
+            "zh": "缩短距离",
+            "en": "Shorten distance"
+          },
+          "x": 70,
+          "y": 100,
+          "width": 290,
+          "height": 95,
+          "tone": "warning"
+        },
+        {
+          "id": "scale",
+          "label": {
+            "zh": "快速缩放",
+            "en": "Rapid scale"
+          },
+          "detail": {
+            "zh": "保留边界",
+            "en": "Keep boundary"
+          },
+          "x": 600,
+          "y": 100,
+          "width": 290,
+          "height": 95,
+          "tone": "surface"
+        },
+        {
+          "id": "loop",
+          "label": {
+            "zh": "持续循环",
+            "en": "Continuous loop"
+          },
+          "detail": {
+            "zh": "停在静态状态",
+            "en": "Settle to static state"
+          },
+          "x": 70,
+          "y": 345,
+          "width": 290,
+          "height": 95,
+          "tone": "surface"
+        },
+        {
+          "id": "gesture",
+          "label": {
+            "zh": "手势跟随",
+            "en": "Gesture following"
+          },
+          "detail": {
+            "zh": "保留直接操控",
+            "en": "Preserve manipulation"
+          },
+          "x": 600,
+          "y": 345,
+          "width": 290,
+          "height": 95,
+          "tone": "accent"
+        }
+      ],
+      "connectors": []
+    },
+    {
+      "id": "review-loop",
+      "title": {
+        "zh": "图解三：低动态验收循环",
+        "en": "Diagram 3: low-motion review loop"
+      },
+      "alt": {
+        "zh": "状态表、默认路径、低动态路径、键盘和触屏验收形成循环。",
+        "en": "A state table, default path, low-motion path, keyboard, and touch review form a loop."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "states",
+          "label": {
+            "zh": "状态表",
+            "en": "State table"
+          },
+          "detail": {
+            "zh": "必须保留的信息",
+            "en": "Meaning to retain"
+          },
+          "x": 385,
+          "y": 55,
+          "width": 190,
+          "height": 90,
+          "tone": "ink"
+        },
+        {
+          "id": "default",
+          "label": {
+            "zh": "默认路径",
+            "en": "Default path"
+          },
+          "detail": {
+            "zh": "视觉节奏",
+            "en": "Visual rhythm"
+          },
+          "x": 650,
+          "y": 220,
+          "width": 190,
+          "height": 90,
+          "tone": "accent"
+        },
+        {
+          "id": "reduced",
+          "label": {
+            "zh": "低动态路径",
+            "en": "Low-motion path"
+          },
+          "detail": {
+            "zh": "稳定线索",
+            "en": "Stable cues"
+          },
+          "x": 385,
+          "y": 385,
+          "width": 190,
+          "height": 90,
+          "tone": "success"
+        },
+        {
+          "id": "input",
+          "label": {
+            "zh": "键盘与触屏",
+            "en": "Keyboard and touch"
+          },
+          "detail": {
+            "zh": "焦点与手势",
+            "en": "Focus and gesture"
+          },
+          "x": 120,
+          "y": 220,
+          "width": 190,
+          "height": 90,
+          "tone": "surface"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "states",
+          "to": "default"
+        },
+        {
+          "from": "default",
+          "to": "reduced"
+        },
+        {
+          "from": "reduced",
+          "to": "input"
+        },
+        {
+          "from": "input",
+          "to": "states"
+        }
+      ]
+    }
+  ]
+}

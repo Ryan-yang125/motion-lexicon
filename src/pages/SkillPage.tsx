@@ -29,7 +29,7 @@ export function SkillPage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <Seo locale={locale} title={`Motion Lexicon Agent Skill — Motion Lexicon`} description={description} path={pathFor(locale, ["skill"])} image={`/og-skill-${locale}.png`} />
+      <Seo locale={locale} title={zh ? "Motion Lexicon 智能体技能 — Motion Lexicon" : "Motion Lexicon Agent Skill — Motion Lexicon"} description={description} path={pathFor(locale, ["skill"])} image={`/og-skill-${locale}.png`} />
       <article className="skill-page">
         <header className="skill-hero">
           <MotionSkillGlyph size={28} aria-hidden="true" />

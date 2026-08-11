@@ -4,7 +4,7 @@ import { registryComponents } from "../../src/data/component-registry";
 import {
   motionBlueprintExample,
   motionBlueprintContract,
-  motionDirectorModes,
+  motionSkillModes,
   motionGrammar,
   motionGrammarDataPath
 } from "../../src/data/motion-grammar";
@@ -24,14 +24,14 @@ describe("Motion Grammar", () => {
     expect(motionGrammar.invariants.map((item) => item.en).join(" ")).toContain("reserves space");
     expect(motionGrammar.invariants.map((item) => item.en).join(" ")).toContain("interrupted");
     expect(motionGrammar.timing.arrive.curve).toBe("cubic-bezier(0.23, 1, 0.32, 1)");
-    expect(motionGrammar.timing.leave.curve).toBe("cubic-bezier(0.4, 0, 1, 1)");
+    expect(motionGrammar.timing.leave.curve).toBe("cubic-bezier(0.23, 1, 0.32, 1)");
     expect(motionGrammar.timing.linear.curve).toBe("linear");
     expect(motionGrammar.timing.spring.rangeMs[1]).toBeLessThanOrEqual(360);
     expect(motionGrammar.implementation.preferredDelivery[0]).toBe("react");
   });
 
-  it("exposes a stable five-mode director workflow", () => {
-    expect(motionDirectorModes.map((mode) => mode.id)).toEqual([
+  it("exposes a stable five-mode Agent Skill workflow", () => {
+    expect(motionSkillModes.map((mode) => mode.id)).toEqual([
       "recommend",
       "compose",
       "implement",
@@ -46,7 +46,7 @@ describe("Motion Grammar", () => {
     expect(motionBlueprintExample.stateGraph).toHaveLength(3);
     expect(motionBlueprintExample.beats.every((beat) => beat.durationMs >= 100 && beat.durationMs <= 300)).toBe(true);
     expect(motionBlueprintExample.beats.every((beat) => primitiveIds.has(beat.primitiveIds[0]))).toBe(true);
-    expect(motionBlueprintExample.provenance.relatedPacks.length).toBeGreaterThan(0);
+    expect(motionBlueprintExample.provenance.relatedMoments.length).toBeGreaterThan(0);
   });
 
   it("keeps the portable contract aligned with the display blueprint", () => {
@@ -59,6 +59,6 @@ describe("Motion Grammar", () => {
     );
     expect(motionBlueprintContract.beats.every((beat) => primitiveIds.has(beat.primitive))).toBe(true);
     expect(motionBlueprintContract.beats.every((beat) => beat.easing in motionGrammar.timing)).toBe(true);
-    expect(motionBlueprintContract.provenance.moments).toEqual(motionBlueprintExample.provenance.relatedPacks);
+    expect(motionBlueprintContract.provenance.moments).toEqual(motionBlueprintExample.provenance.relatedMoments);
   });
 });

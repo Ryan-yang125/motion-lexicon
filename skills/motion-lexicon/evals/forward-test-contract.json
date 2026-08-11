@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "suite": "motion-lexicon-fresh-context",
+  "status": "contract-only",
+  "description": "A repeatable scoring contract for future model runs. Presence of this file does not mean a forward-test has run or passed.",
+  "runRequirements": {
+    "freshContextPerRun": true,
+    "repetitionsPerCase": 3,
+    "allowedContext": [
+      "the installed motion-lexicon Skill",
+      "one raw user prompt",
+      "raw code or artifacts explicitly named by that prompt"
+    ],
+    "forbiddenContext": [
+      "expected answers",
+      "audit findings",
+      "suspected defects",
+      "intended fixes",
+      "outputs from earlier repetitions"
+    ],
+    "artifactPolicy": "Use an empty temporary directory for each run and remove it after scoring."
+  },
+  "cases": [
+    { "evalId": "zh-recommend-card-arrival", "critical": ["correct-trigger", "published-id-only", "language-match"] },
+    { "evalId": "zh-compose-async-save-failure", "critical": ["correct-trigger", "blueprint-valid", "failure-retry-race", "accessibility"] },
+    { "evalId": "zh-review-layout-jank", "critical": ["correct-trigger", "evidence-based-review", "prioritized-findings"] },
+    { "evalId": "zh-negative-copy-edit", "critical": ["correct-skip"] },
+    { "evalId": "en-implement-react-selection", "critical": ["correct-trigger", "requested-format", "keyboard-focus", "reduced-motion"] },
+    { "evalId": "en-contribute-primitive-candidate", "critical": ["correct-trigger", "candidate-status", "three-scene-proof"] },
+    { "evalId": "en-review-async-race", "critical": ["correct-trigger", "race-diagnosis", "coherent-final-state"] },
+    { "evalId": "en-negative-data-table", "critical": ["correct-skip"] }
+  ],
+  "scoring": {
+    "assertionValues": [0, 1],
+    "criticalPassRate": 1,
+    "overallPassRate": 0.9,
+    "runPassRule": "Every critical assertion passes and at least 90 percent of all assertions pass.",
+    "suitePassRule": "Every case passes all three independent repetitions."
+  },
+  "resultFormat": {
+    "suite": "motion-lexicon-fresh-context",
+    "skillVersion": "string",
+    "model": "string",
+    "startedAt": "ISO-8601 string",
+    "completedAt": "ISO-8601 string",
+    "runs": [
+      {
+        "evalId": "string",
+        "repetition": "integer from 1 through 3",
+        "triggered": "boolean",
+        "outputPath": "path to captured raw output",
+        "artifactPaths": ["path"],
+        "validatorExitCode": "integer or null",
+        "assertions": [
+          { "id": "string", "critical": "boolean", "score": "0 or 1", "evidence": "string" }
+        ],
+        "passed": "boolean"
+      }
+    ],
+    "summary": {
+      "criticalPassed": "integer",
+      "criticalTotal": "integer",
+      "assertionsPassed": "integer",
+      "assertionsTotal": "integer",
+      "overallPassRate": "number",
+      "passed": "boolean"
+    }
+  }
+}

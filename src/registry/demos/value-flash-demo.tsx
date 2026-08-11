@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useState } from "react";
 import { ValueFlash } from "@/registry/components/value-flash";
 
@@ -8,15 +10,15 @@ const STEPS = [-120, -17, +25, +140] as const;
 const label = (step: number) =>
   `${step > 0 ? "+" : "−"}${Math.abs(step).toLocaleString("en-US")}`;
 
-export function ValueFlashDemo() {
+export function ValueFlashDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [value, setValue] = useState(1284);
 
   return (
-    <div className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-5">
+    <div role="group" aria-label={demoText("value-flash", locale)} className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-5">
       <ValueFlash
         value={value}
-        format={(n) => n.toLocaleString("en-US")}
-        label="Requests per second"
+        format={(n) => n.toLocaleString(locale === "zh" ? "zh-CN" : "en-US")}
+        label={demoValue(locale, "每秒请求数", "Requests per second")}
         className="text-[24px]"
       />
       <div className="flex gap-1.5">

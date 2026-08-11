@@ -67,7 +67,7 @@ export function PrimitivesPage({ locale }: { locale: Locale }) {
           <label className="primitive-search">
             <SearchIcon size={14} aria-hidden="true" />
             <span className="sr-only">{copy.search}</span>
-            <input value={query} onChange={(event) => update(event.target.value, categoryId)} placeholder={copy.search} />
+            <input name="q" autoComplete="off" value={query} onChange={(event) => update(event.target.value, categoryId)} placeholder={copy.search} />
           </label>
           <div className="primitive-filters" aria-label={locale === "zh" ? "动效分类" : "Motion categories"}>
             <button className={!categoryId ? "is-active" : ""} type="button" onClick={() => update(query)}>{copy.all}</button>

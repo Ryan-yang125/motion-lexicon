@@ -1,23 +1,23 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useState } from "react";
 import { SegmentedControl } from "@/registry/components/segmented-control";
 
-const RANGES = [
-  { value: "day", label: "Day" },
-  { value: "week", label: "Week" },
-  { value: "month", label: "Month" },
-  { value: "quarter", label: "Quarter" },
-];
-
-export function SegmentedControlDemo() {
+export function SegmentedControlDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [range, setRange] = useState("day");
 
   return (
-    <div className="flex w-full justify-center">
+    <div role="group" aria-label={demoText("segmented-control", locale)} className="flex w-full justify-center">
       <SegmentedControl
-        label="Report range"
-        options={RANGES}
+        label={demoValue(locale, "报告周期", "Report range")}
+        options={[
+          { value: "day", label: demoValue(locale, "日", "Day") },
+          { value: "week", label: demoValue(locale, "周", "Week") },
+          { value: "month", label: demoValue(locale, "月", "Month") },
+          { value: "quarter", label: demoValue(locale, "季度", "Quarter") },
+        ]}
         value={range}
         onValueChange={setRange}
       />

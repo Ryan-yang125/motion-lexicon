@@ -1,14 +1,20 @@
 // @vitest-environment jsdom
 
 import { fireEvent, render, waitFor } from "@testing-library/react";
+import type { ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { NetworkGlobe } from "@/registry/components/network-globe";
+import { NetworkGlobe as IntentNetworkGlobe } from "@/registry/components/network-globe";
+
+function NetworkGlobe(props: ComponentProps<typeof IntentNetworkGlobe>) {
+  return <IntentNetworkGlobe activation="auto" {...props} />;
+}
 
 const harness = vi.hoisted(() => ({
   createRenderer: vi.fn(),
   dispose: vi.fn(),
   forceContextLoss: vi.fn(),
-  nodeMaterials: [] as Array<{ emissiveIntensity: number }>,
+  render: vi.fn(),
+  nodeMaterials: [] as Array<{ opacity: number }>,
   arcMaterials: [] as Array<{ opacity: number }>,
   reduced: false,
 }));
@@ -31,7 +37,12 @@ vi.mock("three", async (importOriginal) => {
     setClearColor() {}
     setPixelRatio() {}
     setSize() {}
-    render() {}
+    compile() {
+      return new Set();
+    }
+    render() {
+      harness.render();
+    }
     dispose() {
       harness.dispose();
     }
@@ -40,10 +51,10 @@ vi.mock("three", async (importOriginal) => {
     }
   }
 
-  class MeshStandardMaterialStub extends actual.MeshStandardMaterial {
-    constructor(parameters?: ConstructorParameters<typeof actual.MeshStandardMaterial>[0]) {
+  class MeshBasicMaterialStub extends actual.MeshBasicMaterial {
+    constructor(parameters?: ConstructorParameters<typeof actual.MeshBasicMaterial>[0]) {
       super(parameters);
-      harness.nodeMaterials.push(this);
+      if (parameters?.opacity === 0.72) harness.nodeMaterials.push(this);
     }
   }
 
@@ -57,7 +68,7 @@ vi.mock("three", async (importOriginal) => {
   return {
     ...actual,
     WebGLRenderer: WebGLRendererStub,
-    MeshStandardMaterial: MeshStandardMaterialStub,
+    MeshBasicMaterial: MeshBasicMaterialStub,
     LineBasicMaterial: LineBasicMaterialStub,
   };
 });
@@ -76,6 +87,7 @@ beforeEach(() => {
   harness.createRenderer.mockClear();
   harness.dispose.mockClear();
   harness.forceContextLoss.mockClear();
+  harness.render.mockClear();
   harness.nodeMaterials = [];
   harness.arcMaterials = [];
   harness.reduced = false;
@@ -87,9 +99,63 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("NetworkGlobe", () => {
+  it("keeps the static fallback until explicit intent and creates one renderer", async () => {
+    const nodes = [{ id: "shanghai", label: "Shanghai", latitude: 31.23, longitude: 121.47 }];
+    const { container, rerender } = render(
+      <IntentNetworkGlobe nodes={nodes} activateLabel="Explore 3D" />,
+    );
+
+    expect(harness.createRenderer).not.toHaveBeenCalled();
+    expect(container.querySelector("canvas")).not.toBeInTheDocument();
+    const activation = container.querySelector<HTMLButtonElement>('[data-webgl-activation="network-globe"]');
+    expect(activation).toHaveTextContent("Explore 3D");
+
+    fireEvent.click(activation as HTMLButtonElement);
+    await waitFor(() => expect(harness.createRenderer).toHaveBeenCalledOnce());
+    expect(container.querySelectorAll("canvas")).toHaveLength(1);
+    expect(container.querySelector('[data-webgl-activation="network-globe"]')).not.toBeInTheDocument();
+
+    rerender(<IntentNetworkGlobe nodes={nodes.map((node) => ({ ...node }))} activateLabel="Explore 3D" />);
+    expect(harness.createRenderer).toHaveBeenCalledOnce();
+  });
+
+  it("caps rendering at 30fps and stops scheduling after the opening rotation settles", async () => {
+    const frames: FrameRequestCallback[] = [];
+    vi.spyOn(performance, "now").mockReturnValue(0);
+    vi.stubGlobal("requestAnimationFrame", vi.fn((callback: FrameRequestCallback) => {
+      frames.push(callback);
+      return frames.length;
+    }));
+
+    const { container } = render(
+      <NetworkGlobe nodes={[{ id: "shanghai", label: "Shanghai", latitude: 31.23, longitude: 121.47 }]} />,
+    );
+    await waitFor(() => expect(container.querySelector("canvas")).toBeInTheDocument());
+
+    const first = frames.shift();
+    first?.(100);
+    const rendersAfterFirstFrame = harness.render.mock.calls.length;
+    const throttled = frames.shift();
+    throttled?.(110);
+    expect(harness.render).toHaveBeenCalledTimes(rendersAfterFirstFrame);
+
+    let timestamp = 144;
+    let frameCount = 0;
+    while (frames.length > 0 && frameCount < 240) {
+      const frame = frames.shift();
+      frame?.(timestamp);
+      timestamp += 34;
+      frameCount += 1;
+    }
+
+    expect(frameCount).toBeLessThan(240);
+    expect(frames).toHaveLength(0);
+  });
+
   it("reapplies the active node styles when scene data rebuilds the runtime", async () => {
     const shanghai = {
       id: "shanghai",
@@ -113,7 +179,7 @@ describe("NetworkGlobe", () => {
     });
 
     fireEvent.click(londonButton);
-    expect(harness.nodeMaterials[1]?.emissiveIntensity).toBe(0.72);
+    expect(harness.nodeMaterials[1]?.opacity).toBe(1);
     expect(harness.arcMaterials[0]?.opacity).toBe(0.92);
 
     rerender(
@@ -126,7 +192,7 @@ describe("NetworkGlobe", () => {
     );
 
     await waitFor(() => expect(harness.createRenderer).toHaveBeenCalledTimes(2));
-    expect(harness.nodeMaterials[3]?.emissiveIntensity).toBe(0.72);
+    expect(harness.nodeMaterials[3]?.opacity).toBe(1);
     expect(harness.arcMaterials[1]?.opacity).toBe(0.92);
     expect(document.querySelectorAll("button")[1]).toHaveAttribute("aria-pressed", "true");
   });
@@ -171,6 +237,7 @@ describe("NetworkGlobe", () => {
     await waitFor(() => {
       expect(harness.createRenderer).toHaveBeenCalledTimes(2);
       expect(container.querySelector("canvas")).not.toBe(firstCanvas);
+      expect(container.querySelector('[data-webgl-root="network-globe"]')).toHaveAttribute("tabindex", "0");
     });
     expect(harness.dispose).toHaveBeenCalledOnce();
     expect(harness.forceContextLoss).toHaveBeenCalledOnce();

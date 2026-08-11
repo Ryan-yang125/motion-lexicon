@@ -30,6 +30,7 @@ export type IntegrationMapProps = {
   label?: string;
   width?: number;
   height?: number;
+  formatStatus?: (label: string) => string;
   className?: string;
 };
 
@@ -91,6 +92,7 @@ export function IntegrationMap({
   label = "Integration map",
   width = 440,
   height = 230,
+  formatStatus = (name) => `${name} connections highlighted`,
   className = "",
 }: IntegrationMapProps) {
   const reduced = useReducedMotion() === true;
@@ -247,7 +249,7 @@ export function IntegrationMap({
         </div>
       </div>
       <span className="sr-only" role="status" aria-live="polite">
-        {activeNode ? `${nodeById.get(activeNode)?.label ?? activeNode} connections highlighted` : ""}
+        {activeNode ? formatStatus(nodeById.get(activeNode)?.label ?? activeNode) : ""}
       </span>
     </div>
   );

@@ -5,7 +5,8 @@ import { useRouteLocale } from "./route-locale";
 function SeoGuideRoute() {
   const locale = useRouteLocale();
   const params = useParams({ strict: false }) as { guideId?: string };
-  return <SeoGuidePage locale={locale} guideId={params.guideId ?? ""} />;
+  const longArticle = Route.useLoaderData();
+  return <SeoGuidePage locale={locale} guideId={params.guideId ?? ""} longArticle={longArticle} />;
 }
 
 export const Route = createLazyRoute("/$locale/guides/$guideId")({

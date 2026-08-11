@@ -2,7 +2,7 @@
 :root {
   --ml-ink: #292929;
   --ml-secondary: #5d5d5d;
-  --ml-muted: #9e9e9e;
+  --ml-muted: #686862;
   --ml-focus: #3656df;
   --ml-success: #32745c;
   --ml-warning: #9b6a24;
@@ -16,7 +16,7 @@
   --apple-surface-soft: #f6f6f4;
   --apple-ink: #292929;
   --apple-secondary: #5d5d5d;
-  --apple-tertiary: #9e9e9e;
+  --apple-tertiary: #686862;
   --apple-line: rgba(41, 41, 41, 0.1);
   --apple-line-strong: rgba(41, 41, 41, 0.18);
   --apple-control-line: color-mix(in srgb, var(--apple-secondary) 70%, transparent);
@@ -162,7 +162,6 @@ summary {
 
 .library-button,
 .ml-button,
-.apple-hero-finder button,
 .apple-hero-examples button {
   transition:
     transform 120ms var(--apple-ease-out),
@@ -173,13 +172,10 @@ summary {
 
 .library-button:active,
 .ml-button:active,
-.apple-hero-finder button:active,
 .apple-hero-examples button:active {
   transform: scale(0.97);
   transition-duration: 80ms;
 }
-
-/* Home / Finder entry */
 .apple-hero.library-hero {
   min-height: calc(100dvh - var(--library-header-height));
   grid-template-columns: minmax(0, 1.05fr) minmax(480px, 0.95fr);
@@ -222,38 +218,6 @@ summary {
   color: var(--apple-secondary);
   font-size: 1.08rem;
   line-height: 1.62;
-}
-
-.apple-hero-finder {
-  margin-top: 2.2rem;
-}
-
-.apple-hero-finder > .interior-hero-search {
-  width: 100%;
-  min-height: 44px;
-  display: block;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.apple-hero-finder svg {
-  color: var(--apple-tertiary);
-}
-
-.apple-hero-finder input {
-  min-width: 0;
-  height: 52px;
-  border: 0;
-  outline: 0;
-  color: var(--apple-ink);
-  background: transparent;
-  font-size: 1rem;
-}
-
-.apple-hero-finder input::placeholder {
-  color: var(--apple-secondary);
 }
 
 .apple-hero-examples {
@@ -674,8 +638,7 @@ summary {
   }
 
   .apple-hero-preview,
-  .apple-motion-card,
-  .apple-hero-finder > div {
+.apple-motion-card {
     transition: opacity 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
     transform: none;
   }
@@ -693,9 +656,8 @@ summary {
 }
 
 @media (prefers-contrast: more) {
-  .apple-hero-finder .interior-hero-search > div,
   .apple-hero-preview.library-hero-preview,
-  .apple-motion-card.library-card {
+.apple-motion-card.library-card {
     border: 1px solid currentColor;
     box-shadow: none;
   }
@@ -768,31 +730,6 @@ summary {
 
 .library-header-compact .library-header-actions {
   gap: 0.35rem;
-}
-
-.library-header-compact .library-director-link {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: var(--ui-radius-nav);
-  padding: 0 0.65rem;
-  color: var(--apple-secondary);
-  font-size: var(--type-xs);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.library-header-compact .library-director-link:hover,
-.library-header-compact .library-director-link.is-active {
-  color: var(--apple-ink);
-  background: color-mix(in srgb, var(--apple-ink) 6%, transparent);
-}
-
-@media (max-width: 1280px) {
-  .library-header-compact .library-director-link {
-    display: none;
-  }
 }
 
 .library-header-compact .library-github-link,
@@ -902,234 +839,11 @@ summary {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Motion Finder workspace */
-.apple-finder-intake.finder-hero {
-  min-height: min(720px, calc(100dvh - var(--library-header-height)));
-  display: grid;
-  align-content: center;
-  border: 0;
-  padding: 5.5rem 0;
-}
-
-.apple-finder-intake .finder-hero-copy {
-  max-width: 780px;
-}
-
-.apple-finder-intake .finder-hero-copy h1 {
-  max-width: 8.8em;
-  margin: 0 0 1.15rem;
-  font-size: clamp(3.8rem, 6vw, 5.7rem);
-  font-weight: 640;
-  line-height: 0.98;
-  letter-spacing: -0.057em;
-}
-
-.apple-finder-intake .finder-hero-copy p {
-  max-width: 44em;
-  color: var(--apple-secondary);
-  font-size: 1.05rem;
-  line-height: 1.62;
-}
-
-.apple-search-pill.finder-search {
-  max-width: 980px;
-  margin-top: 2.5rem;
-}
-
-.apple-search-pill .finder-search-field {
-  min-height: 68px;
-  grid-template-columns: auto 1fr auto;
-  border: 1px solid var(--apple-control-line);
-  border-radius: var(--ui-radius-card);
-  padding: 0.45rem 0.45rem 0.45rem 1rem;
-  background: var(--apple-surface);
-  box-shadow: none;
-}
-
-.apple-search-pill .finder-search-field:focus-within {
-  border-color: var(--apple-blue);
-  outline: 2px solid var(--apple-blue);
-  outline-offset: 2px;
-  box-shadow: none;
-}
-
-.apple-search-pill .finder-search-field input {
-  font-size: 1rem;
-}
-
-.apple-search-pill .finder-search-field button {
-  min-width: 96px;
-  min-height: 50px;
-  border: 0;
-  border-radius: var(--ui-radius-cta);
-  padding: 0 1.15rem;
-  color: var(--apple-action-fg);
-  background: var(--apple-action-bg);
-  white-space: nowrap;
-}
-
-.apple-search-pill .finder-search-field button:hover {
-  background: var(--apple-action-hover);
-}
-
-.apple-finder-intake .finder-examples > span,
 .apple-search-pill > label,
 .apple-search-pill > small {
   color: var(--apple-secondary);
   font-family: var(--sans);
   font-size: 0.7rem;
-}
-
-.apple-finder-intake .finder-examples button {
-  min-height: 44px;
-  border: 0;
-  border-radius: 999px;
-  padding: 0 0.9rem;
-  color: var(--apple-secondary);
-  background: color-mix(in srgb, var(--apple-surface) 74%, transparent);
-}
-
-.apple-finder-intake.has-result {
-  min-height: auto;
-  grid-template-columns: minmax(280px, 0.62fr) minmax(460px, 1.38fr);
-  align-items: end;
-  gap: clamp(2rem, 5vw, 5rem);
-  padding: 3.25rem 0 2.4rem;
-}
-
-.apple-finder-intake.has-result .finder-hero-copy h1 {
-  max-width: 9em;
-  margin: 0;
-  font-size: clamp(2.3rem, 3.8vw, 3.4rem);
-  line-height: 1;
-}
-
-.apple-finder-intake.has-result .finder-hero-copy p,
-.apple-finder-intake.has-result .finder-examples {
-  display: none;
-}
-
-.apple-finder-intake.has-result .apple-search-pill {
-  margin: 0;
-}
-
-.apple-finder-workspace.finder-results {
-  border: 0;
-  padding: 2.5rem 0 7rem;
-}
-
-.finder-workspace-heading {
-  align-items: start;
-  margin-bottom: 1.35rem;
-}
-
-.finder-workspace-heading h2 {
-  margin: 0;
-  font-size: clamp(2rem, 3vw, 3rem);
-  font-weight: 630;
-  letter-spacing: -0.04em;
-}
-
-.finder-match-summary {
-  max-width: 480px;
-  color: var(--apple-secondary);
-}
-
-.finder-match-summary strong {
-  border: 0;
-  color: var(--apple-blue);
-  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
-}
-
-.apple-workspace-shell.finder-workspace-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
-  align-items: start;
-  gap: 1rem;
-}
-
-.finder-workspace-stage {
-  min-width: 0;
-}
-
-.apple-inspector.finder-inspector {
-  position: sticky;
-  inset-block-start: calc(var(--library-header-height) + 16px);
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--apple-line-strong) 75%, transparent);
-  border-radius: var(--ui-radius-card);
-  padding: 1rem;
-  background: color-mix(in srgb, var(--apple-surface-raised) 88%, transparent);
-  box-shadow: none;
-  backdrop-filter: blur(26px) saturate(150%);
-  -webkit-backdrop-filter: blur(26px) saturate(150%);
-}
-
-.finder-inspector-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.8rem;
-}
-
-.finder-inspector-heading h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 640;
-  letter-spacing: -0.03em;
-}
-
-.finder-inspector-heading > svg {
-  box-sizing: content-box;
-  border-radius: var(--ui-radius-nav);
-  padding: 0.55rem;
-  color: var(--apple-blue);
-  background: color-mix(in srgb, var(--apple-blue) 10%, transparent);
-}
-
-.finder-inspector-controls {
-  max-height: min(52dvh, 570px);
-  overflow-x: hidden;
-  overflow-y: auto;
-  margin: 0.9rem -0.35rem 0;
-  padding: 0 0.35rem;
-  overscroll-behavior: contain;
-}
-
-.finder-inspector-controls .controls-head {
-  padding-block: 0.4rem 0.75rem;
-}
-
-.finder-inspector-controls .control {
-  padding: 0.9rem 0;
-}
-
-.finder-inspector-controls .control-description {
-  display: none;
-}
-
-.finder-inspector-controls .control-number {
-  border: 1px solid var(--apple-control-line);
-  border-radius: var(--ui-radius-nav);
-  background: var(--apple-surface-soft);
-}
-
-.finder-primary-copy.apple-primary-action {
-  width: 100%;
-  min-height: 50px;
-  margin-top: 0.9rem;
-  border: 0;
-  border-radius: var(--ui-radius-cta);
-  color: var(--apple-action-fg);
-  background: var(--apple-action-bg);
-}
-
-.finder-primary-copy.apple-primary-action:hover {
-  background: var(--apple-action-hover);
-}
-
-.finder-workspace-output {
-  margin-top: 1rem;
 }
 
 .apple-export-disclosure {
@@ -1479,23 +1193,6 @@ summary {
 }
 
 @media (max-width: 1040px) {
-  .apple-finder-intake.has-result {
-    grid-template-columns: minmax(220px, 0.62fr) minmax(0, 1.38fr);
-    gap: clamp(1rem, 3vw, 2rem);
-  }
-
-  .apple-workspace-shell.finder-workspace-shell {
-    grid-template-columns: 1fr;
-  }
-
-  .apple-inspector.finder-inspector {
-    position: relative;
-    inset-block-start: auto;
-  }
-
-  .finder-inspector-controls {
-    max-height: none;
-  }
 
   .library-catalog-toolbar-primary {
     grid-template-columns: 1fr;
@@ -1521,12 +1218,7 @@ summary {
     background: transparent;
   }
 
-  .library-header-compact .library-primary-nav .is-finder {
-    display: none;
-  }
-
-  .library-header-compact .library-primary-nav .is-primitives,
-  .library-header-compact .library-primary-nav .is-director {
+  .library-header-compact .library-primary-nav .is-primitives {
     display: none;
   }
 
@@ -1551,93 +1243,6 @@ summary {
   }
 
   .library-utility-menu > summary span { display: none; }
-
-  .apple-finder-intake.finder-hero {
-    min-height: auto;
-    padding: 4.25rem 0 3.5rem;
-  }
-
-  .apple-finder-intake .finder-hero-copy h1 {
-    max-width: 8em;
-    font-size: clamp(2.75rem, 13vw, 3.8rem);
-  }
-
-  .apple-finder-intake .finder-hero-copy p {
-    font-size: 0.96rem;
-  }
-
-  .apple-finder-intake.has-result {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: 1rem 0 0.75rem;
-  }
-
-  .apple-finder-intake.has-result .finder-hero-copy {
-    display: none;
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill > label,
-  .apple-finder-intake.has-result .apple-search-pill > small {
-    display: none;
-  }
-
-  .apple-search-pill .finder-search-field {
-    grid-template-columns: auto 1fr;
-    padding: 0.5rem 0.55rem 0.55rem 0.9rem;
-  }
-
-  .apple-search-pill .finder-search-field button {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill .finder-search-field {
-    min-height: 58px;
-    grid-template-columns: auto 1fr auto;
-    padding: 0.25rem 0.3rem 0.25rem 0.85rem;
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill .finder-search-field button {
-    width: 48px;
-    min-height: 48px;
-    grid-column: auto;
-    padding: 0;
-    font-size: 0;
-  }
-
-  .apple-finder-workspace.finder-results {
-    padding: 1.8rem 0 5rem;
-  }
-
-  .finder-workspace-heading {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-    margin-bottom: 0.8rem;
-  }
-
-  .finder-workspace-heading h2 {
-    margin: 0;
-    font-size: 1.65rem;
-  }
-
-  .finder-match-summary { max-width: none; }
-
-  .finder-match-summary > p {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .finder-match-summary > div {
-    display: none;
-  }
-
-  .apple-inspector.finder-inspector {
-    border-radius: var(--ui-radius-card);
-  }
 
   .apple-export-disclosure > summary {
     min-height: 78px;
@@ -1829,7 +1434,7 @@ summary {
 .method-actions > a,
 .method-actions > a:not([href]) {
   width: fit-content;
-  min-height: 32px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2332,9 +1937,8 @@ summary {
 
 @media (prefers-reduced-transparency: reduce) {
   .library-header.library-header-compact,
-  .library-utility-popover,
-  .library-catalog-toolbar,
-  .apple-inspector.finder-inspector {
+.library-utility-popover,
+.library-catalog-toolbar {
     background: var(--apple-surface);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -2346,9 +1950,8 @@ summary {
     animation: apple-fade-in 180ms ease both;
   }
 
-  .apple-motion-card.finder-candidate,
   .library-catalog-layout.is-unified .library-card,
-  .apple-export-disclosure > summary svg {
+.apple-export-disclosure > summary svg {
     transition: opacity 180ms ease, color 180ms ease, background-color 180ms ease;
     transform: none;
   }
@@ -2596,7 +2199,6 @@ summary {
   background: var(--apple-surface-soft);
 }
 
-.finder-inspector-controls .control-number:focus-within,
 .library-parameter-panel.apple-inspector .control-number:focus-within {
   border-color: var(--apple-blue);
   outline: 2px solid var(--apple-blue);
@@ -3334,9 +2936,6 @@ summary {
 
 .apple-hero.library-hero h1,
 .apple-home-library-heading h2,
-.finder-hero-copy h1,
-.finder-results-heading h2,
-.finder-empty h2,
 .library-catalog-hero-unified h1,
 .library-catalog-layout.is-unified .library-section-heading h2,
 .apple-category-page .library-category-header h1,
@@ -3358,8 +2957,6 @@ summary {
 }
 
 .library-card-body h3,
-.finder-active-preview-header h3,
-.finder-inspector-heading h2,
 .apple-disclosure-summary strong,
 .apple-reference-topic-heading h3,
 .apple-reference-topic-heading h4,
@@ -3378,8 +2975,6 @@ summary {
 .library-code-status,
 .library-code-filebar,
 .library-code-file > header,
-.finder-candidate-choice > span,
-.finder-candidate-choice > small,
 .library-card-body small,
 .library-category-filter-heading,
 .library-section-heading > div > span {
@@ -3397,14 +2992,10 @@ summary {
 .library-card-body small,
 .library-code-status,
 .library-code-filebar,
-.library-code-file > header,
-.finder-candidate-choice > span,
-.finder-candidate-choice > small {
+.library-code-file > header {
   color: var(--apple-secondary);
 }
 
-.apple-hero-finder input::placeholder,
-.finder-search-field input::placeholder,
 .library-directory-search input::placeholder,
 .library-catalog-search input::placeholder,
 .library-sidebar-search input::placeholder,
@@ -3428,8 +3019,6 @@ summary {
 }
 
 .library-card,
-.finder-active-preview,
-.finder-candidate-choice,
 .apple-disclosure,
 .apple-export-disclosure,
 .apple-inspector,
@@ -3439,10 +3028,7 @@ summary {
 
 .ml-button-accent,
 .library-button.is-primary,
-.finder-primary-copy.apple-primary-action,
-.finder-active-preview-copy > a,
-.library-code-filebar .ml-button,
-.finder-search-field > button {
+.library-code-filebar .ml-button {
   border-radius: var(--ui-radius-cta);
 }
 
@@ -3463,7 +3049,6 @@ summary {
 
 .library-guide-art > svg,
 .library-card svg,
-.finder-candidate-choice > svg,
 .library-accessibility-note > svg {
   width: 20px;
   height: 20px;
@@ -3472,7 +3057,6 @@ summary {
 /* Solid product surfaces avoid expensive backdrop rerasterization while scrolling. */
 .library-header.library-header-compact,
 .library-utility-popover,
-.apple-inspector.finder-inspector,
 .library-catalog-toolbar,
 .apple-workbench-stage .apple-preview-toolbar.library-preview-toolbar,
 .apple-preview-stage .preview-toolbar .ml-button,
@@ -3490,191 +3074,13 @@ summary {
   background: var(--apple-surface);
 }
 
-.apple-inspector.finder-inspector,
 .library-utility-popover,
 .apple-preview-stage .preview-toolbar .ml-button {
   background: var(--apple-surface-raised);
 }
 
-/* Finder: one active motion and three static choices. */
-.apple-motion-chooser.finder-compare {
-  display: grid;
-  gap: 12px;
-  overflow: visible;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.finder-active-preview {
-  overflow: hidden;
-  border: 1px solid var(--apple-line);
-  background: var(--apple-surface);
-  box-shadow: none;
-}
-
-.finder-active-preview-header {
-  min-height: 96px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-}
-
-.finder-active-preview-header > div {
-  min-width: 0;
-}
-
-.finder-active-preview-header > div > span {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--apple-secondary);
-}
-
-.finder-active-preview-header h3 {
-  margin: 0;
-  color: var(--apple-ink);
-  font-size: var(--type-title);
-  line-height: 1.2;
-}
-
-.finder-active-preview-header p {
-  max-width: 52em;
-  margin: 6px 0 0;
-  color: var(--apple-secondary);
-  line-height: 1.55;
-}
-
-.finder-active-preview-header .ml-button {
-  flex: 0 0 auto;
-  min-height: 44px;
-  border: 0;
-  border-radius: var(--ui-radius-cta);
-  background: var(--apple-surface-soft);
-}
-
-.finder-active-preview .finder-candidate-stage {
-  min-height: 360px;
-  display: grid;
-  place-items: center;
-  border-block: 1px solid var(--apple-line);
-  background: var(--apple-surface-soft);
-  background-image: none;
-}
-
-.finder-active-preview-copy {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px 16px;
-  padding: 16px;
-}
-
-.finder-active-preview-copy > p {
-  margin: 0;
-  color: var(--apple-secondary);
-  line-height: 1.6;
-}
-
-.finder-active-preview-copy .finder-distinction {
-  grid-column: 1 / -1;
-  margin: 0;
-  border: 0;
-  border-top: 1px solid var(--apple-line);
-  border-radius: 0;
-  padding: 12px 0 0;
-  background: transparent;
-}
-
-.finder-active-preview-copy .finder-distinction > span {
-  color: var(--apple-secondary);
-}
-
-.finder-active-preview-copy .finder-distinction p {
-  margin: 4px 0 0;
-  color: var(--apple-secondary);
-}
-
-.finder-active-preview-copy > a {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 14px;
-  color: var(--apple-blue);
-  background: color-mix(in srgb, var(--apple-blue) 9%, transparent);
-  white-space: nowrap;
-}
-
-.finder-candidate-switcher {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.finder-candidate-choice {
-  position: relative;
-  min-width: 0;
-  min-height: 112px;
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  border: 1px solid var(--apple-line);
-  padding: 14px 42px 14px 14px;
-  color: var(--apple-ink);
-  background: var(--apple-surface);
-  text-align: start;
-  transition:
-    color 160ms ease,
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 180ms var(--apple-ease-out);
-}
-
-.finder-candidate-choice:hover {
-  border-color: var(--apple-line-strong);
-  background: color-mix(in srgb, var(--apple-surface) 88%, var(--apple-surface-soft));
-}
-
-.finder-candidate-choice.is-selected {
-  border-color: color-mix(in srgb, var(--apple-blue) 48%, var(--apple-line));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--apple-blue) 18%, transparent);
-}
-
-.finder-candidate-choice > span,
-.finder-candidate-choice > small {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  color: var(--apple-secondary);
-}
-
-.finder-candidate-choice > strong {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  color: var(--apple-ink);
-}
-
-.finder-candidate-choice > svg {
-  position: absolute;
-  inset-block-start: 14px;
-  inset-inline-end: 14px;
-  color: var(--apple-blue);
-}
-
-.finder-match-summary > p {
-  margin-top: 0;
-}
-
-.apple-inspector.finder-inspector,
 .library-parameter-panel.apple-inspector {
   border-radius: var(--ui-radius-card);
-}
-
-.finder-primary-copy.apple-primary-action {
-  border-radius: var(--ui-radius-cta);
 }
 
 /* Output: one prompt view and one complete-code view. */
@@ -3829,31 +3235,6 @@ summary {
 }
 
 @media (max-width: 760px) {
-  .finder-active-preview-header,
-  .finder-active-preview-copy {
-    grid-template-columns: 1fr;
-  }
-
-  .finder-active-preview-header {
-    display: grid;
-  }
-
-  .finder-active-preview-header .ml-button,
-  .finder-active-preview-copy > a {
-    width: 100%;
-  }
-
-  .finder-active-preview .finder-candidate-stage {
-    min-height: 300px;
-  }
-
-  .finder-candidate-switcher {
-    grid-template-columns: 1fr;
-  }
-
-  .finder-candidate-choice {
-    min-height: 88px;
-  }
 
   .apple-code-output .library-code-toolbar {
     align-items: stretch;
@@ -3873,10 +3254,6 @@ summary {
 
   .apple-related-motion .library-related-links {
     grid-template-columns: 1fr;
-  }
-
-  .apple-hero-finder > small {
-    display: none;
   }
 
   .library-category-filter-options {
@@ -3964,349 +3341,5 @@ summary {
   .apple-disclosure-body,
   .library-utility-popover {
     animation: none;
-  }
-
-  .finder-candidate-choice {
-    transition: none;
-  }
-}
-
-/* Editorial content layers keep the catalog useful to readers and search
-   engines while staying inside the existing quiet product system. */
-.library-category-editorial {
-  display: grid;
-  gap: 20px;
-  margin: 0 0 28px;
-  padding: 20px 0 28px;
-  border-bottom: 1px solid var(--apple-line);
-}
-
-.library-category-hub-index {
-  max-width: var(--library-content);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 0 auto 16px;
-}
-
-.library-category-hub-index a {
-  min-height: 30px;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--apple-line);
-  border-radius: 999px;
-  padding: 0 10px;
-  color: var(--apple-secondary);
-  background: var(--apple-surface);
-  font-size: var(--type-xs);
-  text-decoration: none;
-}
-
-.library-category-hub-index a:hover {
-  color: var(--apple-ink);
-  border-color: var(--apple-line-strong);
-}
-
-.library-category-intro {
-  max-width: 70ch;
-  margin: 0;
-  color: var(--apple-secondary);
-  font-size: var(--type-sm);
-  line-height: 1.7;
-}
-
-.library-category-editorial h2,
-.finder-starter-guide h2 {
-  margin: 0;
-  color: var(--apple-ink);
-  font-size: var(--type-lg);
-  font-weight: 600;
-  letter-spacing: var(--apple-tracking);
-}
-
-.library-category-editorial-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(220px, .8fr);
-  gap: 16px;
-}
-
-.library-category-editorial-grid > section,
-.library-category-faq {
-  min-width: 0;
-}
-
-.library-category-editorial-grid > section > h2,
-.library-category-faq > h2 {
-  margin-bottom: 12px;
-  font-size: var(--type-md);
-}
-
-.library-category-framework,
-.library-category-pitfalls {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.library-category-framework {
-  counter-reset: category-step;
-}
-
-.library-category-framework li,
-.library-category-pitfalls li {
-  position: relative;
-  min-width: 0;
-  border: 1px solid var(--apple-line);
-  border-radius: var(--ui-radius-nav);
-  padding: 12px 14px;
-  background: color-mix(in srgb, var(--apple-surface) 78%, transparent);
-}
-
-.library-category-framework li {
-  padding-left: 42px;
-}
-
-.library-category-framework li::before {
-  counter-increment: category-step;
-  content: counter(category-step, decimal-leading-zero);
-  position: absolute;
-  top: 13px;
-  left: 14px;
-  color: var(--apple-tertiary);
-  font-family: var(--mono);
-  font-size: 10px;
-}
-
-.library-category-framework strong {
-  display: block;
-  color: var(--apple-ink);
-  font-size: var(--type-sm);
-  font-weight: 600;
-}
-
-.library-category-framework p,
-.library-category-pitfalls li {
-  margin: 4px 0 0;
-  color: var(--apple-secondary);
-  font-size: var(--type-xs);
-  line-height: 1.6;
-}
-
-.library-category-pitfalls li {
-  padding-left: 28px;
-}
-
-.library-category-pitfalls li::before {
-  content: "·";
-  position: absolute;
-  top: 7px;
-  left: 13px;
-  color: var(--apple-ink);
-  font-size: 22px;
-  line-height: 1;
-}
-
-.library-category-packs {
-  display: grid;
-  gap: 10px;
-}
-
-.library-category-pack-links {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.library-category-pack-links > a {
-  min-width: 0;
-  min-height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border: 1px solid var(--apple-line);
-  border-radius: var(--ui-radius-nav);
-  padding: 12px;
-  color: var(--apple-ink);
-  background: var(--apple-surface);
-  text-decoration: none;
-}
-
-.library-category-pack-links > a:hover {
-  border-color: color-mix(in srgb, var(--apple-ink) 30%, var(--apple-line));
-}
-
-.library-category-pack-links span {
-  min-width: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.library-category-pack-links strong {
-  overflow: hidden;
-  font-size: var(--type-sm);
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.library-category-pack-links small {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--apple-secondary);
-  font-size: var(--type-xs);
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.library-category-faq > div {
-  display: grid;
-  gap: 8px;
-}
-
-.library-category-faq details {
-  border-top: 1px solid var(--apple-line);
-  padding: 12px 0;
-}
-
-.library-category-faq details:last-child {
-  border-bottom: 1px solid var(--apple-line);
-}
-
-.library-category-faq summary {
-  cursor: pointer;
-  color: var(--apple-ink);
-  font-size: var(--type-sm);
-  font-weight: 500;
-}
-
-.library-category-faq p {
-  max-width: 72ch;
-  margin: 9px 0 0;
-  color: var(--apple-secondary);
-  font-size: var(--type-sm);
-  line-height: 1.65;
-}
-
-.finder-starter-guide {
-  display: grid;
-  gap: 18px;
-  max-width: var(--library-content);
-  margin: 42px auto 0;
-  padding: 30px 0 0;
-  border-top: 1px solid var(--apple-line);
-}
-
-.finder-starter-guide > header {
-  display: grid;
-  gap: 8px;
-  max-width: 62ch;
-}
-
-.finder-starter-guide > header p {
-  margin: 0;
-  color: var(--apple-secondary);
-  font-size: var(--type-sm);
-  line-height: 1.65;
-}
-
-.finder-guide-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.finder-guide-steps article,
-.finder-starter-card {
-  min-width: 0;
-  border: 1px solid var(--apple-line);
-  border-radius: var(--ui-radius-card);
-  background: var(--apple-surface);
-}
-
-.finder-guide-steps article {
-  padding: 16px;
-}
-
-.finder-guide-steps span {
-  color: var(--apple-tertiary);
-  font-family: var(--mono);
-  font-size: 10px;
-}
-
-.finder-guide-steps h3,
-.finder-starter-card h3 {
-  margin: 8px 0 0;
-  color: var(--apple-ink);
-  font-size: var(--type-sm);
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-.finder-guide-steps p {
-  margin: 6px 0 0;
-  color: var(--apple-secondary);
-  font-size: var(--type-xs);
-  line-height: 1.6;
-}
-
-.finder-starter-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.finder-starter-card {
-  display: grid;
-  gap: 14px;
-  padding: 16px;
-}
-
-.finder-starter-action {
-  width: fit-content;
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--apple-ink);
-  font-size: var(--type-xs);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.finder-starter-card > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.finder-starter-card > div a {
-  min-height: 26px;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 0 9px;
-  color: var(--apple-secondary);
-  background: var(--apple-surface-soft);
-  font-size: 11px;
-  text-decoration: none;
-}
-
-.finder-starter-card > div a:hover {
-  color: var(--apple-ink);
-}
-
-@media (max-width: 760px) {
-  .library-category-editorial-grid,
-  .finder-guide-steps,
-  .finder-starter-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .library-category-pack-links {
-    grid-template-columns: minmax(0, 1fr);
   }
 }

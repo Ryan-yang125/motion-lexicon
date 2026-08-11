@@ -8,6 +8,7 @@ type Blueprint = Record<string, unknown>;
 
 const repositoryRoot = process.cwd();
 const validatorPath = path.join(repositoryRoot, "skills/motion-lexicon/scripts/validate-motion-blueprint.mjs");
+const repositoryCheckerPath = path.join(repositoryRoot, "scripts/check-motion-lexicon-skill.mjs");
 const examplePath = path.join(repositoryRoot, "skills/motion-lexicon/assets/example-motion-blueprint.json");
 const skillDirectory = path.join(repositoryRoot, "skills/motion-lexicon");
 const exampleBlueprint = JSON.parse(readFileSync(examplePath, "utf8")) as Blueprint;
@@ -21,6 +22,21 @@ const validate = (blueprint: unknown) => {
 
   try {
     return spawnSync(process.execPath, [validatorPath, blueprintPath], {
+      cwd: repositoryRoot,
+      encoding: "utf8"
+    });
+  } finally {
+    rmSync(temporaryDirectory, { force: true, recursive: true });
+  }
+};
+
+const validateWithRepositoryChecker = (blueprint: unknown) => {
+  const temporaryDirectory = mkdtempSync(path.join(os.tmpdir(), "motion-blueprint-repository-check-"));
+  const blueprintPath = path.join(temporaryDirectory, "blueprint.json");
+  writeFileSync(blueprintPath, JSON.stringify(blueprint));
+
+  try {
+    return spawnSync(process.execPath, [repositoryCheckerPath, `--blueprint=${blueprintPath}`], {
       cwd: repositoryRoot,
       encoding: "utf8"
     });
@@ -135,6 +151,38 @@ describe("Motion Blueprint schema validator", () => {
         ((blueprint.stateGraph as Blueprint).transitions as Blueprint[])[0].to = "missing";
       },
       "blueprint.stateGraph.transitions[0].to must reference a declared state."
+    ],
+    [
+      "a duplicate state ID",
+      (blueprint: Blueprint) => {
+        const stateGraph = blueprint.stateGraph as Blueprint;
+        const states = stateGraph.states as Blueprint[];
+        states.push({ ...states[0] });
+      },
+      'blueprint.stateGraph.states[4].id must be unique; "idle" is already declared.'
+    ],
+    [
+      "a duplicate actor ID",
+      (blueprint: Blueprint) => {
+        const actors = blueprint.actors as Blueprint[];
+        actors.push({ ...actors[1] });
+      },
+      'blueprint.actors[2].id must be unique; "save-status" is already declared.'
+    ],
+    [
+      "a beat actor that is absent from the actor list",
+      (blueprint: Blueprint) => {
+        ((blueprint.beats as Blueprint[])[0]).actor = "missing";
+      },
+      "blueprint.beats[0].actor must reference a declared actor."
+    ],
+    [
+      "a duplicate beat ID",
+      (blueprint: Blueprint) => {
+        const beats = blueprint.beats as Blueprint[];
+        beats.push({ ...beats[0] });
+      },
+      'blueprint.beats[2].id must be unique; "pending-feedback" is already declared.'
     ]
   ])("rejects %s", (_description, makeInvalid, expectedIssue) => {
     const blueprint = cloneBlueprint();
@@ -144,6 +192,49 @@ describe("Motion Blueprint schema validator", () => {
 
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Motion Blueprint validation failed:");
+    expect(result.stderr).toContain(expectedIssue);
+  });
+
+  it.each([
+    [
+      "duplicate state IDs",
+      (blueprint: Blueprint) => {
+        const states = ((blueprint.stateGraph as Blueprint).states as Blueprint[]);
+        states.push({ ...states[0] });
+      },
+      '.stateGraph.states[4].id must be unique; "idle" is already declared.'
+    ],
+    [
+      "duplicate actor IDs",
+      (blueprint: Blueprint) => {
+        const actors = blueprint.actors as Blueprint[];
+        actors.push({ ...actors[1] });
+      },
+      '.actors[2].id must be unique; "save-status" is already declared.'
+    ],
+    [
+      "unknown beat actors",
+      (blueprint: Blueprint) => {
+        ((blueprint.beats as Blueprint[])[0]).actor = "missing";
+      },
+      ".beats[0].actor must reference a declared actor."
+    ],
+    [
+      "duplicate beat IDs",
+      (blueprint: Blueprint) => {
+        const beats = blueprint.beats as Blueprint[];
+        beats.push({ ...beats[0] });
+      },
+      '.beats[2].id must be unique; "pending-feedback" is already declared.'
+    ]
+  ])("keeps the repository checker aligned for %s", (_description, makeInvalid, expectedIssue) => {
+    const blueprint = cloneBlueprint();
+    makeInvalid(blueprint);
+
+    const result = validateWithRepositoryChecker(blueprint);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Motion Lexicon skill validation failed:");
     expect(result.stderr).toContain(expectedIssue);
   });
 });

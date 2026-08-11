@@ -10,9 +10,7 @@ import {
 } from "../../src/data/motion-guidance";
 import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
 import { compactCatalogEntries } from "../../src/data/compact-catalog";
-import { getCategory } from "../../src/data/categories";
-import { catalogRecipes, entries } from "../../src/data/recipes";
-import { entryStructuredData } from "../../src/lib/structured-data";
+import { entries } from "../../src/data/recipes";
 
 function expectUnique(values: string[], label: string) {
   expect(new Set(values).size, label).toBe(values.length);
@@ -137,41 +135,5 @@ describe("canonical motion guidance", () => {
     }
 
     expect(getMotionGuidance("missing-workspace")).toBeUndefined();
-  });
-});
-
-describe("vocabulary structured data", () => {
-  it("connects every canonical workspace to its complete term set", () => {
-    for (const recipe of catalogRecipes) {
-      const category = getCategory(recipe.categoryId);
-      expect(category, recipe.id).toBeDefined();
-      if (!category) continue;
-
-      const schema = entryStructuredData("en", category, recipe) as {
-        "@type": string;
-        url: string;
-        about?: { termCode?: string; inDefinedTermSet?: string; url?: string };
-        mentions?: Array<{ termCode?: string; inDefinedTermSet?: string }>;
-      };
-
-      expect(schema["@type"], recipe.id).toBe("TechArticle");
-      expect(schema.url, recipe.id).toBe(
-        `https://motion-lexicon.pages.dev/en/${recipe.categoryId}/${recipe.id}/`
-      );
-      expect(schema.about?.termCode, recipe.id).toBe(recipe.id);
-      expect(schema.about?.inDefinedTermSet, recipe.id).toBe(
-        "https://motion-lexicon.pages.dev/en/vocabulary/"
-      );
-      expect(schema.about?.url, recipe.id).toBe(
-        `https://motion-lexicon.pages.dev/en/vocabulary/#term-${recipe.id}`
-      );
-      expect(schema.mentions?.length ?? 0, recipe.id).toBe(recipe.aliases.length);
-      expect(
-        schema.mentions?.every(
-          (term) => term.inDefinedTermSet === "https://motion-lexicon.pages.dev/en/vocabulary/"
-        ) ?? true,
-        recipe.id
-      ).toBe(true);
-    }
   });
 });

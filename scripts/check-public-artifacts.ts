@@ -3,6 +3,7 @@ import { registryComponents } from "../src/data/component-registry";
 import { catalogRecipes } from "../src/data/recipes";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
+import { renderSkillComponentReference } from "./generate-public-artifacts";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -26,13 +27,39 @@ assert(catalog.counts?.primitives === catalogRecipes.length, "Public primitive c
 assert(catalog.components?.length === registryComponents.length, "Public component list is incomplete");
 assert(catalog.primitives?.length === catalogRecipes.length, "Public primitive list is incomplete");
 assert(catalog.primitives?.filter((item) => item.urls?.registry).length === installablePrimitiveEntries.length, "Public primitive registry links are incomplete");
+assert(
+  JSON.stringify(catalog.components?.map((item) => item.id)) === JSON.stringify(registryComponents.map((item) => item.id)),
+  "Public component IDs are out of sync with the registry source"
+);
+
+const skillComponentReference = readFileSync("skills/motion-lexicon/references/components.md", "utf8");
+assert(skillComponentReference === renderSkillComponentReference(), "Generated Skill component reference is stale");
 
 const llms = readFileSync("public/llms.txt", "utf8");
-for (const value of ["/en/components/", "/en/primitives/", "/en/skill/", "/r/registry.json", "/data/v4/catalog.json"]) {
+for (const value of ["## Core resources", "## English", "## 中文", "## Optional", "/en/components/", "/zh/components/", "/en/primitives/", "/zh/primitives/", "/en/vocabulary/", "/zh/vocabulary/", "/en/guides/", "/zh/guides/", "/en/method/", "/zh/method/", "/en/skill/", "/zh/skill/", "/r/registry.json", "/data/v4/catalog.json", "/llms-full.txt", "/pricing.txt"]) {
   assert(llms.includes(value), `llms.txt is missing ${value}`);
 }
+assert(/- \[[^\]]+\]\(https:\/\/[^)]+\):/.test(llms), "llms.txt resources must use Markdown links with descriptions");
 for (const obsolete of ["/packs/", "/catalog/", "/finder/", "/director/"]) {
   assert(!llms.includes(obsolete), `llms.txt contains obsolete route ${obsolete}`);
 }
 
-console.log(`Public artifact check passed: V4.1 catalog, llms files, pricing, and registry expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);
+const llmsFull = readFileSync("public/llms-full.txt", "utf8");
+for (const component of registryComponents) {
+  assert(llmsFull.includes(`/en/components/${component.id}/`), `llms-full.txt is missing the English ${component.id} component`);
+  assert(llmsFull.includes(`/zh/components/${component.id}/`), `llms-full.txt is missing the Chinese ${component.id} component`);
+}
+assert((llmsFull.match(/\/en\/guides\//g) ?? []).length >= 8, "llms-full.txt is missing English scenario guides");
+assert((llmsFull.match(/\/zh\/guides\//g) ?? []).length >= 8, "llms-full.txt is missing Chinese scenario guides");
+for (const obsolete of ["pack-or-primitive", "Product Moment", "Choose a Pack", "Pack 与"]) {
+  assert(!llmsFull.includes(obsolete), `llms-full.txt contains obsolete public concept ${obsolete}`);
+}
+assert(llmsFull.includes("/en/guides/component-or-primitive/"), "llms-full.txt is missing the English component selection guide");
+assert(llmsFull.includes("/zh/guides/component-or-primitive/"), "llms-full.txt is missing the Chinese component selection guide");
+
+const pricing = readFileSync("public/pricing.txt", "utf8");
+for (const value of ["# Pricing / 定价", "## English", "## 中文", "free and open source", "免费开源"]) {
+  assert(pricing.includes(value), `pricing.txt is missing ${value}`);
+}
+
+console.log(`Public artifact check passed: V4.1 catalog, bilingual llms files, pricing, registry, and the generated Skill reference expose ${registryComponents.length} components and ${installablePrimitiveEntries.length} installable primitives.`);

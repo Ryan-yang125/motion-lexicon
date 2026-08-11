@@ -14,7 +14,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 const CELL = { type: "spring", stiffness: 520, damping: 34, mass: 0.45 } as const;
 const MOVE = { type: "spring", stiffness: 260, damping: 34, mass: 0.8 } as const;
 const EASE = [0.23, 1, 0.32, 1] as const;
-const LEAVE = { duration: 0.14, ease: [0.4, 0, 1, 1] } as const;
+const LEAVE = { duration: 0.14, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
 
 export type FilterDefinition<T> = {
@@ -105,6 +105,8 @@ export type FilterGridProps<T> = {
   maxRows?: number;
   gap?: number;
   emptyLabel?: string;
+  formatFilterCount?: (label: string, count: number, total: number) => string;
+  formatResultCount?: (label: string, count: number, total: number) => string;
   className?: string;
 };
 
@@ -122,6 +124,8 @@ export function FilterGrid<T>({
   maxRows = 4,
   gap = 8,
   emptyLabel = "Nothing matches this filter",
+  formatFilterCount = (name, count, itemCount) => `${name}, ${count} of ${itemCount}`,
+  formatResultCount = (name, count, itemCount) => `${name}: ${count} of ${itemCount} shown`,
   className = "",
 }: FilterGridProps<T>) {
   const uid = useId();
@@ -264,7 +268,7 @@ export function FilterGrid<T>({
                   </span>
                 </motion.span>
                 <span className="sr-only">
-                  {filter.label}, {counts[filter.id]} of {total}
+                  {formatFilterCount(filter.label, counts[filter.id], total)}
                 </span>
               </span>
             </button>
@@ -321,7 +325,7 @@ export function FilterGrid<T>({
         </AnimatePresence>
       </div>
       <p aria-live="polite" className="sr-only">
-        {activeLabel}: {visible.length} of {total} shown
+        {formatResultCount(activeLabel, visible.length, total)}
       </p>
     </div>
   );

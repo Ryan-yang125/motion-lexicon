@@ -13,7 +13,7 @@ body:
         - Add a canonical workspace
         - Propose a Product Moment
         - Improve a Motion Primitive
-        - Prepare a Motion Director candidate
+        - Prepare a Motion Lexicon candidate
     validations:
       required: true
   - type: textarea
@@ -34,7 +34,7 @@ body:
     id: mapping
     attributes:
       label: Canonical mapping
-      description: Name related Packs or Primitives, or explain the need for a stable new canonical unit.
+      description: Name related Components or Primitives, or explain the need for a stable new canonical unit.
     validations:
       required: true
   - type: textarea

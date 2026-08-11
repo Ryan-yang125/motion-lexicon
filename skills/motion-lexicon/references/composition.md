@@ -5,6 +5,10 @@ that joins several primitives.
 
 ## Motion Blueprint workflow
 
+Return the Blueprint as one fenced JSON object that validates against
+`../assets/motion-blueprint.schema.json`. A prose state diagram or beat table
+can follow the JSON as explanation; it does not replace the Blueprint.
+
 1. **Name the event.** Write one plain-language sentence: who acts, what
    changes, and why it matters.
 2. **Map state.** Capture `idle`, `engaged`, `pending`, `success`, `failure`,
@@ -28,7 +32,7 @@ that joins several primitives.
 | `at` | Event-relative offset | `0`, `80`, `after:save` |
 | `actor` | Element that changes | `primary-card`, `status`, `undo-action` |
 | `purpose` | Product reason | `confirm`, `orient`, `preserve-continuity` |
-| `primitive` | Reusable behavior | `status-transition`, `shared-element` |
+| `primitive` | Reusable behavior | `text-morph`, `morph` |
 | `from` / `to` | Visible states | `selected` → `saved` |
 | `durationMs` | Active motion time in milliseconds | `180` |
 | `easing` | Velocity profile | `arrive`, `leave`, `feedback`, `linear`, `spring` |
@@ -83,6 +87,6 @@ Use for undo, retry, sync recovery, deletion, errors, and permission changes.
 - Keep a normal moment within three to five perceptible beats.
 - Add a delay only when it reveals dependency, sequence, or a truthful process.
 - Reserve stagger for a bounded group with a shared origin or order.
-- Use shared-element continuity when a user follows a recognizable object from
-  one context to another.
+- Use `morph` in shared mode when a user follows a recognizable object from one
+  context to another.
 - Keep terminal states calm and readable.

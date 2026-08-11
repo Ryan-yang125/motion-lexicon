@@ -83,8 +83,20 @@ item includes TypeScript types, real dependencies, and a reduced-motion path.
 ## Agent Skill
 
 ```bash
+# Install for the current project
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon
+
+# Install at user scope
+npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --global
+
+# Install only for Codex; replace codex with another supported agent ID when needed
+npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --agent codex
 ```
+
+Verify project installs with `npx skills list` and user-scope installs with
+`npx skills list --global`. Project installs are linked under the selected
+agent's project Skill directory; user-scope installs are available across
+projects for the selected agent.
 
 The Skill works in five modes:
 

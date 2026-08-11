@@ -13,7 +13,7 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const SETTLE = { type: "spring", stiffness: 460, damping: 38, mass: 0.7 } as const;
-const LEAVE = { duration: 0.16, ease: [0.4, 0, 1, 1] } as const;
+const LEAVE = { duration: 0.16, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
 
 export type ToastTone = "neutral" | "success" | "warning" | "error";
@@ -32,6 +32,8 @@ export type ToastStackProps = {
   items: readonly ToastItem[];
   onDismiss: (id: string, reason: ToastDismissReason) => void;
   label?: string;
+  dismissLabel?: (title: string) => string;
+  depthLabel?: (depth: number) => string;
   maxVisible?: number;
   returnFocusRef?: RefObject<HTMLElement | null>;
   className?: string;
@@ -63,6 +65,8 @@ export function ToastStack({
   items,
   onDismiss,
   label = "Notifications",
+  dismissLabel = (title) => `Dismiss ${title}`,
+  depthLabel = (depth) => `Stack depth ${depth}`,
   maxVisible = 4,
   returnFocusRef,
   className = "",
@@ -223,7 +227,7 @@ export function ToastStack({
                   {item.action ? <span className="shrink-0">{item.action}</span> : null}
                   <button
                     type="button"
-                    aria-label={`Dismiss ${item.title}`}
+                    aria-label={dismissLabel(item.title)}
                     onKeyDown={(event) => {
                       if (!["Enter", "Escape", "Delete", "Backspace"].includes(event.key)) return;
                       event.preventDefault();
@@ -231,14 +235,14 @@ export function ToastStack({
                       requestDismiss(item.id, index, "keyboard");
                     }}
                     onClick={() => requestDismiss(item.id, index, "button")}
-                    className="grid size-11 shrink-0 place-items-center rounded-[9px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+                    className="grid size-12 shrink-0 place-items-center rounded-[9px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
                   >
                     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
                       <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </button>
                 </motion.article>
-                <span className="sr-only">Stack depth {depth + 1}</span>
+                <span className="sr-only">{depthLabel(depth + 1)}</span>
               </motion.li>
             );
           })}

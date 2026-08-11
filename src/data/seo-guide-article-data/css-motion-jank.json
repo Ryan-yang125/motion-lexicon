@@ -1,0 +1,500 @@
+{
+  "guideId": "css-motion-jank",
+  "standfirst": {
+    "zh": "CSS 动效卡顿需要回到用户正在完成的任务：找出哪一次输入、哪一帧和哪一段渲染工作打断了反馈链，再用可复现的证据收窄属性、脚本和视觉层的成本。",
+    "en": "CSS motion jank becomes tractable when it returns to the task a person is trying to complete: identify the input, frame, and rendering work that breaks the feedback chain, then use repeatable evidence to narrow the cost of properties, scripting, and visual layers."
+  },
+  "sections": [
+    {
+      "id": "reproduce-the-moment",
+      "title": {
+        "zh": "从一个真实瞬间建立复现",
+        "en": "Build a reproduction around one real moment"
+      },
+      "paragraphs": [
+        {
+          "zh": "“页面有点卡”很难直接变成修复任务。先把它缩成一个用户能重复完成的动作：在 300 条结果里输入筛选词、滚动到第六屏后展开详情、拖动时间线上的手柄，或在网络较慢时点击保存。记录起点、可见结果、设备尺寸、数据量、网络状态和连续操作次数。随后让同一位测试者连续做三到五轮，分别标出输入后迟迟没有响应、运动途中突然停顿、还是结束后内容才跳到新位置。每一种现象都对应不同的调查入口，因此这份记录应成为性能讨论的共同起点。",
+          "en": "A report that the page feels slow is difficult to turn into a repair task. Shrink it into one action a person can repeat: type a filter into a list of 300 results, open detail after scrolling to the sixth viewport, drag a timeline handle, or press Save on a slower connection. Record the starting state, visible result, viewport, data volume, network condition, and number of consecutive actions. Ask the same reviewer to repeat the action three to five times, then mark whether input receives a late response, travel pauses in the middle, or content jumps only after motion ends. Each symptom opens a different investigation, so this record becomes the shared starting point for performance work."
+        },
+        {
+          "zh": "复现还要保护上下文。许多问题只会在字体刚加载、图片尺寸尚未稳定、搜索结果持续变化、后台标签页切回前台或低电量模式出现。把这些条件写进步骤，才能区分偶然抖动和稳定回归。对于高频路径，准备一个固定种子数据集和一个小型录像尤其有价值：录像告诉团队用户在哪一刻失去节奏，数据集让开发者每次都在相同压力下检查。性能工作由此有了可比较的前后状态，修复可通过实际操作验证，桌面机器上的主观感觉只作补充。",
+          "en": "A reproduction also needs to preserve context. Many issues appear only while fonts are arriving, image dimensions are still settling, search results keep changing, a background tab returns to the foreground, or a device enters a lower-power condition. Put those conditions in the steps so an occasional hitch can be separated from a stable regression. For high-frequency paths, keep a fixed seeded data set and a small visual capture. The capture shows the instant where rhythm is lost, while the data set gives engineering the same pressure on every check. Performance work then has comparable before-and-after states, and a repair can be verified through the actual interaction instead of a subjective impression on one desktop machine."
+        }
+      ]
+    },
+    {
+      "id": "read-the-frame",
+      "title": {
+        "zh": "用一帧的渲染路径定位成本",
+        "en": "Locate cost through a frame’s rendering path"
+      },
+      "paragraphs": [
+        {
+          "zh": "浏览器把一帧画出来时，通常要经过事件处理和脚本、样式计算、布局、绘制与合成。性能录制的第一步是把视觉录像和时间线对齐：卡片停止的那一帧，主线程上是否出现很长的脚本块？样式和布局是否连续重复？是否有大面积绘制、图片解码或第三方脚本占住了时间？先读总览里的掉帧区间和长任务，再钻进对应调用栈，效率高于从火焰图开头逐行猜测。团队需要的结论应当具体到“这次滚动在同一帧读了十次尺寸并写了十次位置”，这样下一步才有明确的改动目标。",
+          "en": "When a browser draws a frame, it commonly moves through event handling and scripting, style calculation, layout, paint, and compositing. Start a performance recording by aligning the visual capture with the timeline. On the frame where a card pauses, is there a long script block on the main thread? Are style and layout repeating? Is a broad paint, image decode, or third-party script holding time? Read dropped-frame spans and long tasks in the overview before entering the matching call stack; this is faster than guessing line by line from the start of a flame chart. The useful conclusion is concrete: for example, this scroll reads ten sizes and writes ten positions in one frame. That gives the next change a clear target."
+        },
+        {
+          "zh": "帧预算需要根据屏幕刷新率和设备余量理解。60Hz 显示器约每 16.7ms 交付一帧，120Hz 的间隔更短；手机的温度、电量、后台活动和 GPU 能力还会压缩可用时间。预算并不要求把每个动作做得完全相同，它要求关键输入始终能得到及时回应。滚动、拖拽、连续输入和媒体拖动属于持续输入，应该优先保护；列表首次进入、装饰性光晕和大面积背景变化可以让出资源。用普通笔记本与常用手机各录一次，再加上较大数据量的场景，能够让“高性能桌面上看起来顺畅”的结论接受现实检验。",
+          "en": "Frame budget must be understood through refresh rate and device margin. A 60 Hz display delivers a frame about every 16.7 ms, a 120 Hz display leaves less time, and a phone’s temperature, battery, background activity, and GPU capacity can narrow the room further. A budget does not require every action to look identical. It protects prompt response for important input. Scrolling, dragging, continuous typing, and media scrubbing involve ongoing input and deserve priority. Initial list entrance, decorative glows, and broad background changes can yield resources. Record once on an ordinary laptop, once on a common phone, and once with a larger data set; that lets a smooth-on-desktop conclusion meet real operating conditions."
+        }
+      ]
+    },
+    {
+      "id": "choose-properties",
+      "title": {
+        "zh": "让属性选择服务于视觉职责",
+        "en": "Let property choice serve the visual job"
+      },
+      "paragraphs": [
+        {
+          "zh": "属性选择决定每一帧需要重新计算到哪里。按钮按下、提示进入、卡片轻微移动和淡入淡出通常只是在表达反馈、方向或层级，`transform` 与 `opacity` 能很好地承担这些任务，并且常常便于浏览器在合成阶段处理。内容展开、真实文本换行、网格列数变化和图片比例变化则表达了真实布局，尺寸与布局的更新具有业务意义。两类任务都值得实现，只需要明确边界：把轻反馈放到合成友好的属性上，把真实结构变化限制在尽可能小的容器里，并避免把每一帧都变成一次全页重算。",
+          "en": "Property choice determines how far the browser must recalculate on each frame. A button press, an entering notice, a small card move, and a fade usually express feedback, direction, or hierarchy. `transform` and `opacity` serve those jobs well and often allow the browser to handle them in compositing. Expanding content, real text wrapping, changing grid columns, and changing image ratio express actual layout, so size and layout updates carry product meaning. Both categories deserve implementation. The useful boundary is clear: put light feedback on compositor-friendly properties, constrain real structural change to the smallest practical container, and avoid turning every frame into a whole-page recalculation."
+        },
+        {
+          "zh": "布局抖动常来自读写交错。代码先读取元素的 `offsetHeight`，立刻写入 `style.height`，又读取另一个元素的位置，会迫使浏览器提前结算尚未完成的工作。把读取集中在一个阶段，把写入集中到下一帧，或把计算后的值交给 CSS 自定义属性，都能降低这种往返。`will-change` 也应只在即将发生的少量动效上短暂使用；给长列表的每个卡片长期提升图层会增加内存、合成和滚动压力。性能优化的质量取决于取舍是否贴合任务，样式表也应保持简洁、明确的规则。",
+          "en": "Layout thrash often comes from alternating reads and writes. Code reads an element’s `offsetHeight`, writes `style.height` immediately, then reads another element’s position; that can force the browser to settle unfinished work early. Gather reads in one phase, gather writes in the next frame, or hand a calculated value to a CSS custom property to reduce the back-and-forth. `will-change` also belongs on the small number of motions about to occur and for a short time. Permanently promoting every card in a long list adds memory, compositing, and scrolling pressure. The quality of a performance repair comes from tradeoffs that fit the task, not from filling a style sheet with a fixed recipe."
+        }
+      ]
+    },
+    {
+      "id": "protect-continuous-input",
+      "title": {
+        "zh": "连续输入优先保持因果关系",
+        "en": "Keep continuous input causally connected"
+      },
+      "paragraphs": [
+        {
+          "zh": "用户连续输入筛选词时，每个键盘事件都可能触发状态更新、搜索、列表重排和进入离开动效。如果每次更新都等待上一段 400ms 动画结束，界面会形成视觉队列，输入与结果逐渐脱节。更合适的策略是保留当前最新意图：新查询到来时取消旧的装饰性过渡，立即更新结果数量与活跃条件，再让少量新增项以短促方式出现。对于滚动和拖拽，位置跟随用户手势本身是核心反馈，惯性、阴影、模糊和尾迹属于次级效果，可以按设备能力与偏好收敛。这样用户始终看得出自己的输入正在控制什么。",
+          "en": "When someone types a filter continuously, every key event may trigger state change, search, list reorder, and entrance or exit motion. If each update waits for a previous 400 ms animation to finish, the interface builds a visual queue and input gradually loses its connection to results. A better strategy keeps the latest intent. When a new query arrives, cancel the old decorative transition, update the result count and active criteria immediately, then let only a small number of new items appear briefly. During scrolling and dragging, position following the hand is core feedback. Inertia, shadows, blur, and trails are secondary effects that can narrow with device capability and preference. People can then see what their input is controlling at every moment."
+        },
+        {
+          "zh": "把昂贵工作移出高频回调同样重要。滚动监听中可以收集可见范围和方向，再用 `requestAnimationFrame` 在下一帧写入视觉状态；搜索可以防抖真正昂贵的远程或本地计算，同时让输入框和结果计数立即回应；拖拽可以把数据提交放在松手后，把显示位置保持在轻量状态里。这里的目标是形成一条稳定的优先级：手势和文字输入先得到确认，关键内容随后更新，装饰性细节在还有余量时才加入。性能和体验在这一点上是同一件事，因为两者都在保护用户的控制感。",
+          "en": "Moving expensive work out of high-frequency callbacks matters as well. A scroll listener can collect visible range and direction, then write visual state on the next frame with `requestAnimationFrame`. Search can debounce truly expensive local or remote computation while the input and result count respond immediately. Dragging can commit data after release while keeping display position in a lightweight state. The goal is a stable priority order: gesture and typed input receive acknowledgement first, important content updates next, and decorative detail joins only when margin remains. Performance and experience are the same concern here because both protect the person’s sense of control."
+        }
+      ]
+    },
+    {
+      "id": "ship-a-baseline",
+      "title": {
+        "zh": "用基线和验收守住下一次改动",
+        "en": "Use baselines and acceptance to protect the next change"
+      },
+      "paragraphs": [
+        {
+          "zh": "一次修复只有在下一次功能迭代后仍然成立，才真正提升了产品。为高频组件保留一份轻量基线：固定数据集、复现步骤、设备和屏幕尺寸、十到二十秒的录像，以及一次性能录制中值得关注的区间。基线可以覆盖移动端筛选、桌面拖拽、打开大型详情和网络较慢的保存。它无需成为昂贵的实验室体系，却能让代码评审和回归测试有共同参照。新增动画、图片资源或第三方组件时，团队可以快速问出它影响的是哪条基线、是否占用了连续输入的余量。",
+          "en": "A repair improves the product only when it still holds after the next feature iteration. Keep a lightweight baseline for high-frequency components: a fixed data set, reproduction steps, device and viewport, a ten-to-twenty-second capture, and the noteworthy span in one performance recording. A baseline can cover mobile filtering, desktop dragging, opening a large detail view, and saving on a slower connection. It does not need to become an expensive lab system. It gives code review and regression work a shared reference. When a new animation, image asset, or third-party component arrives, the team can quickly ask which baseline it affects and whether it consumes margin reserved for continuous input."
+        },
+        {
+          "zh": "验收语言也应描述用户能完成什么。与其只写“保持 60fps”，可以写成：输入筛选词后结果数量立即改变；在指定数量的卡片中滚动时，主操作始终可点击；抽屉打开期间焦点与内容稳定；开启减弱动效后，状态仍完整可读。再为这些目标补充技术证据，例如长任务阈值、录制中的连续掉帧区间、布局读写次数或可接受的视觉层数。产品目标和技术指标并列，能避免为了数字牺牲反馈，也能避免为了效果忽略成本。每次发布前做一次短复查，性能便会从偶发救火变成组件契约的一部分。",
+          "en": "Acceptance language should also describe what a person can accomplish. Instead of writing only keep 60 fps, write that the result count changes immediately after typing a filter, the primary action remains usable while scrolling a specified number of cards, focus and content remain stable during drawer opening, and state stays fully legible with reduced motion enabled. Then add technical evidence for those goals: a long-task threshold, a dropped-frame span in recording, number of layout reads and writes, or an acceptable number of visual layers. Product goals beside technical signals prevent a metric from sacrificing feedback and prevent a visual effect from ignoring cost. A short review before each release makes performance part of the component contract."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "CSS 动效性能发布清单",
+    "en": "CSS motion performance shipping checklist"
+  },
+  "checklist": [
+    {
+      "id": "reproduction",
+      "label": {
+        "zh": "固定条件下可以稳定复现",
+        "en": "The issue reproduces under fixed conditions"
+      },
+      "detail": {
+        "zh": "记录设备、视口、数据量、网络、起点和连续操作次数。",
+        "en": "Record device, viewport, data volume, network, starting state, and repeated actions."
+      }
+    },
+    {
+      "id": "evidence",
+      "label": {
+        "zh": "录像与性能时间线对齐",
+        "en": "Visual capture aligns with the performance timeline"
+      },
+      "detail": {
+        "zh": "将可见停顿对应到长脚本、布局、绘制或资源解码的证据。",
+        "en": "Match the visible pause to evidence from scripting, layout, paint, or resource decoding."
+      }
+    },
+    {
+      "id": "properties",
+      "label": {
+        "zh": "轻反馈使用合适的渲染路径",
+        "en": "Light feedback uses an appropriate rendering path"
+      },
+      "detail": {
+        "zh": "将位移和淡化放在 transform 与 opacity，把真实结构变化限制在局部容器。",
+        "en": "Use transform and opacity for travel and fades, then constrain real structural change to a local container."
+      }
+    },
+    {
+      "id": "input",
+      "label": {
+        "zh": "最新输入始终拥有优先级",
+        "en": "The latest input always has priority"
+      },
+      "detail": {
+        "zh": "连续搜索、滚动和拖拽会取消过期装饰性过渡，并及时更新关键状态。",
+        "en": "Continuous search, scrolling, and dragging cancel stale decorative transitions and update essential state promptly."
+      }
+    },
+    {
+      "id": "baseline",
+      "label": {
+        "zh": "常用设备和减弱动效路径已回归",
+        "en": "Common devices and the reduced-motion path have regressed"
+      },
+      "detail": {
+        "zh": "用固定数据集检查普通笔记本、手机、大列表和系统偏好切换。",
+        "en": "Use a fixed data set to check an ordinary laptop, phone, large list, and system-preference change."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：筛选卡片在连续输入中保持轻量",
+      "en": "Case: filter cards stay lightweight during continuous input"
+    },
+    "context": {
+      "zh": "结果列表会在用户持续输入时更新。卡片只承担短促的进入与离开反馈，真实排序由数据更新完成，旧过渡可以被最新查询中断。",
+      "en": "A result list updates while someone keeps typing. Cards carry only short entrance and exit feedback, real order comes from data updates, and an old transition can yield to the latest query."
+    },
+    "code": "<section class=\"filter-demo\">\n  <label>\n    Filter projects\n    <input type=\"search\" data-filter-input placeholder=\"Type a project name\">\n  </label>\n  <p role=\"status\" aria-live=\"polite\" data-result-count></p>\n  <ul class=\"result-list\" data-result-list></ul>\n</section>\n\n<style>\n.filter-demo { display: grid; gap: 12px; max-width: 32rem; }\n.result-list { display: grid; gap: 8px; padding: 0; list-style: none; }\n.result-card { opacity: 1; transform: translateY(0); transition: opacity 160ms ease-out, transform 160ms ease-out; }\n.result-card[data-motion=\"enter\"] { opacity: 0; transform: translateY(8px); }\n.result-card[data-motion=\"leave\"] { opacity: 0; pointer-events: none; transform: scale(.985); }\n@media (prefers-reduced-motion: reduce) {\n  .result-card { transition-duration: 1ms; }\n}\n</style>\n\n<script>\nconst input = document.querySelector(\"[data-filter-input]\");\nconst resultList = document.querySelector(\"[data-result-list]\");\nconst resultCount = document.querySelector(\"[data-result-count]\");\nconst reducedMotion = window.matchMedia(\"(prefers-reduced-motion: reduce)\");\nconst projects = [\"Alpha dashboard\", \"Beta settings\", \"Gamma archive\", \"Delta reports\"];\nlet renderFrame = 0;\nlet leaveTimer = 0;\n\nfunction matchingProjects(query) {\n  const normalizedQuery = query.trim().toLowerCase();\n  return projects.filter((project) => project.toLowerCase().includes(normalizedQuery));\n}\n\nfunction updateResultCount(results) {\n  resultCount.textContent = results.length + \" project\" + (results.length === 1 ? \"\" : \"s\") + \" shown.\";\n}\n\nfunction createResultCard(project) {\n  const item = document.createElement(\"li\");\n  item.className = \"result-card\";\n  item.dataset.motion = \"enter\";\n  item.textContent = project;\n  return item;\n}\n\nfunction commitResults(results) {\n  resultList.replaceChildren(...results.map(createResultCard));\n  renderFrame = window.requestAnimationFrame(() => {\n    resultList.querySelectorAll(\"[data-motion='enter']\").forEach((card) => {\n      card.removeAttribute(\"data-motion\");\n    });\n  });\n}\n\nfunction applyLatestQuery(query) {\n  window.cancelAnimationFrame(renderFrame);\n  window.clearTimeout(leaveTimer);\n  const results = matchingProjects(query);\n  updateResultCount(results);\n  const currentCards = Array.from(resultList.children);\n\n  if (reducedMotion.matches || currentCards.length === 0) {\n    commitResults(results);\n    return;\n  }\n\n  currentCards.forEach((card) => {\n    card.dataset.motion = \"leave\";\n  });\n  leaveTimer = window.setTimeout(() => commitResults(results), 160);\n}\n\ninput.addEventListener(\"input\", () => applyLatestQuery(input.value));\napplyLatestQuery(\"\");\n</script>",
+    "explanation": {
+      "zh": "代码先取消过期的装饰性过渡，再同步更新数量和结果。进入与离开只改动透明度和 transform，列表的真实顺序仍由数据和布局决定；减弱动效路径沿用同一状态，只将过渡收敛到极短时间。",
+      "en": "The code first cancels stale decorative transitions, then updates count and results together. Entrance and exit change only opacity and transform while data and layout retain ownership of real order. The reduced-motion path uses the same state and compresses the transition to a very short interval."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "frame-work-path",
+      "title": {
+        "zh": "图解一：一帧中的工作路径",
+        "en": "Diagram 1: work across one frame"
+      },
+      "alt": {
+        "zh": "输入、脚本、样式与布局、绘制和合成依次连接，布局与绘制以警示色提示需要缩小范围。",
+        "en": "Input, script, style and layout, paint, and compositing connect in sequence; layout and paint use warning color to show work that needs a narrower scope."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "input",
+          "label": {
+            "zh": "输入",
+            "en": "Input"
+          },
+          "detail": {
+            "zh": "手势与键盘事件",
+            "en": "Gesture and keyboard event"
+          },
+          "x": 35,
+          "y": 205,
+          "width": 145,
+          "height": 110,
+          "tone": "surface"
+        },
+        {
+          "id": "script",
+          "label": {
+            "zh": "脚本",
+            "en": "Script"
+          },
+          "detail": {
+            "zh": "状态与计算",
+            "en": "State and computation"
+          },
+          "x": 215,
+          "y": 205,
+          "width": 145,
+          "height": 110,
+          "tone": "accent"
+        },
+        {
+          "id": "layout",
+          "label": {
+            "zh": "样式与布局",
+            "en": "Style and layout"
+          },
+          "detail": {
+            "zh": "控制读写往返",
+            "en": "Control read/write thrash"
+          },
+          "x": 395,
+          "y": 205,
+          "width": 145,
+          "height": 110,
+          "tone": "warning"
+        },
+        {
+          "id": "paint",
+          "label": {
+            "zh": "绘制",
+            "en": "Paint"
+          },
+          "detail": {
+            "zh": "限制大面积效果",
+            "en": "Limit broad effects"
+          },
+          "x": 575,
+          "y": 205,
+          "width": 145,
+          "height": 110,
+          "tone": "warning"
+        },
+        {
+          "id": "composite",
+          "label": {
+            "zh": "合成",
+            "en": "Composite"
+          },
+          "detail": {
+            "zh": "轻反馈优先落点",
+            "en": "Preferred home for light feedback"
+          },
+          "x": 755,
+          "y": 205,
+          "width": 145,
+          "height": 110,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "input",
+          "to": "script"
+        },
+        {
+          "from": "script",
+          "to": "layout"
+        },
+        {
+          "from": "layout",
+          "to": "paint"
+        },
+        {
+          "from": "paint",
+          "to": "composite"
+        }
+      ]
+    },
+    {
+      "id": "property-decision",
+      "title": {
+        "zh": "图解二：按视觉职责选择属性",
+        "en": "Diagram 2: choose properties by visual job"
+      },
+      "alt": {
+        "zh": "轻反馈和真实结构变化从视觉职责出发，分别连接到合成友好属性和局部布局更新。",
+        "en": "Light feedback and real structural change begin with visual jobs, then connect to compositor-friendly properties and localized layout updates."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "feedback",
+          "label": {
+            "zh": "轻反馈",
+            "en": "Light feedback"
+          },
+          "detail": {
+            "zh": "按下、提示、微移",
+            "en": "Press, notice, small travel"
+          },
+          "x": 80,
+          "y": 115,
+          "width": 255,
+          "height": 105,
+          "tone": "success"
+        },
+        {
+          "id": "compositor",
+          "label": {
+            "zh": "合成属性",
+            "en": "Compositor properties"
+          },
+          "detail": {
+            "zh": "transform · opacity",
+            "en": "transform · opacity"
+          },
+          "x": 80,
+          "y": 325,
+          "width": 255,
+          "height": 105,
+          "tone": "accent"
+        },
+        {
+          "id": "structure",
+          "label": {
+            "zh": "真实结构",
+            "en": "Real structure"
+          },
+          "detail": {
+            "zh": "展开、文本、网格",
+            "en": "Disclosure, text, grid"
+          },
+          "x": 625,
+          "y": 115,
+          "width": 255,
+          "height": 105,
+          "tone": "surface"
+        },
+        {
+          "id": "localized",
+          "label": {
+            "zh": "局部布局",
+            "en": "Localized layout"
+          },
+          "detail": {
+            "zh": "限制影响范围",
+            "en": "Constrain affected scope"
+          },
+          "x": 625,
+          "y": 325,
+          "width": 255,
+          "height": 105,
+          "tone": "warning"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "feedback",
+          "to": "compositor",
+          "label": {
+            "zh": "短促反馈",
+            "en": "Short feedback"
+          }
+        },
+        {
+          "from": "structure",
+          "to": "localized",
+          "label": {
+            "zh": "真实变化",
+            "en": "Real change"
+          }
+        }
+      ]
+    },
+    {
+      "id": "jank-review-loop",
+      "title": {
+        "zh": "图解三：卡顿排查与回归闭环",
+        "en": "Diagram 3: jank diagnosis and regression loop"
+      },
+      "alt": {
+        "zh": "复现、录制、定位、修改、回归形成循环；回归发现问题时回到复现步骤。",
+        "en": "Reproduce, record, locate, change, and regress form a loop; a regression issue returns to reproduction."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "reproduce",
+          "label": {
+            "zh": "复现",
+            "en": "Reproduce"
+          },
+          "detail": {
+            "zh": "固定真实操作",
+            "en": "Fix a real interaction"
+          },
+          "x": 385,
+          "y": 45,
+          "width": 190,
+          "height": 90,
+          "tone": "ink"
+        },
+        {
+          "id": "record",
+          "label": {
+            "zh": "录制",
+            "en": "Record"
+          },
+          "detail": {
+            "zh": "对齐录像与时间线",
+            "en": "Align capture and timeline"
+          },
+          "x": 650,
+          "y": 205,
+          "width": 190,
+          "height": 90,
+          "tone": "accent"
+        },
+        {
+          "id": "locate",
+          "label": {
+            "zh": "定位",
+            "en": "Locate"
+          },
+          "detail": {
+            "zh": "识别工作与属性",
+            "en": "Identify work and properties"
+          },
+          "x": 520,
+          "y": 385,
+          "width": 190,
+          "height": 90,
+          "tone": "warning"
+        },
+        {
+          "id": "change",
+          "label": {
+            "zh": "修改",
+            "en": "Change"
+          },
+          "detail": {
+            "zh": "缩小成本或时长",
+            "en": "Narrow cost or duration"
+          },
+          "x": 250,
+          "y": 385,
+          "width": 190,
+          "height": 90,
+          "tone": "success"
+        },
+        {
+          "id": "regress",
+          "label": {
+            "zh": "回归",
+            "en": "Regress"
+          },
+          "detail": {
+            "zh": "检查基线设备",
+            "en": "Check baseline devices"
+          },
+          "x": 120,
+          "y": 205,
+          "width": 190,
+          "height": 90,
+          "tone": "surface"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "reproduce",
+          "to": "record"
+        },
+        {
+          "from": "record",
+          "to": "locate"
+        },
+        {
+          "from": "locate",
+          "to": "change"
+        },
+        {
+          "from": "change",
+          "to": "regress"
+        },
+        {
+          "from": "regress",
+          "to": "reproduce",
+          "label": {
+            "zh": "继续验证",
+            "en": "Verify again"
+          }
+        }
+      ]
+    }
+  ]
+}

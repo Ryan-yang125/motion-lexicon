@@ -13,7 +13,7 @@ import {
 } from "../data/primitive-registry";
 import { catalogRecipes } from "../data/recipes";
 import { registryComponents } from "../data/component-registry";
-import { pathFor, text } from "../data/site";
+import { pathFor, siteUrl, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { useRecipeParams } from "../lib/useRecipeParams";
 import { PrimitivePreview } from "../registry/primitive-preview-map";
@@ -35,6 +35,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
   const [replayKey, setReplayKey] = useState(0);
   const sourceState = useRegistrySource(registryEntry.installable ? registryEntry.registryId : null);
   const install = registryEntry.installable ? primitiveInstallCommand(recipe.id) : "";
+  const registryUrl = `${siteUrl}/r/${registryEntry.registryId}.json`;
   const glossaryTerms = getGlossaryTermsForCanonical(recipe.canonicalId);
   const guidance = getMotionGuidance(recipe.canonicalId);
   const relatedComponents = registryComponents.filter((entry) =>
@@ -43,6 +44,13 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
   const relatedPrimitives = recipe.relatedEntries
     .map((id) => catalogRecipes.find((entry) => entry.id === id))
     .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
+  const requestSource = () => {
+    void sourceState.ensureLoaded().catch(() => undefined);
+  };
+  const selectView = (nextView: string) => {
+    setView(nextView);
+    if (nextView === "code") requestSource();
+  };
 
   const copy = locale === "zh"
     ? {
@@ -86,21 +94,24 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
     <>
       <Seo
         locale={locale}
-        title={`${text(recipe.name, locale)} — Motion Lexicon`}
+        title={locale === "zh"
+          ? `${text(recipe.name, locale)} 原子动效 | Motion Lexicon`
+          : `${text(recipe.name, locale)} Motion Primitive | Motion Lexicon`}
         description={text(recipe.shortDescription, locale)}
         path={pathFor(locale, ["primitives", recipe.id])}
-        image={`/og-primitives-${locale}.png`}
-        structuredData={[{
-          "@context": "https://schema.org",
-          "@type": registryEntry.installable ? "SoftwareSourceCode" : "TechArticle",
-          name: text(recipe.name, locale),
-          description: text(recipe.shortDescription, locale),
-          ...(registryEntry.installable ? {
+        image={`/og/primitives/${recipe.id}-${locale}.png`}
+        structuredData={registryEntry.installable ? [{
+            "@context": "https://schema.org",
+            "@type": "SoftwareSourceCode",
+            name: text(recipe.name, locale),
+            description: text(recipe.shortDescription, locale),
+            url: registryUrl,
+            inLanguage: locale === "zh" ? "zh-CN" : "en",
             codeRepository: "https://github.com/Ryan-yang125/motion-lexicon",
             programmingLanguage: ["TypeScript", "React"],
+            runtimePlatform: "Web browser",
             license: "https://opensource.org/license/mit"
-          } : {})
-        }]}
+          }] : []}
       />
 
       <article className="primitive-detail-page component-detail-page">
@@ -116,7 +127,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
               <p>{text(recipe.shortDescription, locale)}</p>
             </div>
             {registryEntry.installable ? (
-              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} className="component-primary-copy" />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} className="component-primary-copy" />
             ) : null}
           </div>
           <ul className="component-quality-list" aria-label={locale === "zh" ? "原子动效能力" : "Primitive capabilities"}>
@@ -129,7 +140,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
           <div className="component-workbench-toolbar">
             <SegmentedControl
               value={view}
-              onValueChange={setView}
+              onValueChange={selectView}
               label={locale === "zh" ? "原子动效视图" : "Primitive view"}
               options={registryEntry.installable ? [
                 { value: "preview", label: copy.preview },
@@ -141,7 +152,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
                 <RotateCcwIcon size={14} aria-hidden="true" />{copy.replay}
               </button>
             ) : (
-              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} />
             )}
           </div>
           {view === "preview" ? (

@@ -11,7 +11,7 @@ import {
 import { motion, useReducedMotion } from "motion/react";
 
 const EASE = [0.23, 1, 0.32, 1] as const;
-const EXIT_EASE = [0.4, 0, 1, 1] as const;
+const EXIT_EASE = [0.23, 1, 0.32, 1] as const;
 
 const CHEVRON = {
   type: "spring",

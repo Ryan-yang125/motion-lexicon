@@ -107,6 +107,18 @@ assert(primitiveSource("before-after-slider").includes('type="range"'), "Before-
 assert(primitiveSource("typewriter").includes("window.setInterval"), "Typewriter must reveal discrete characters");
 assert(!primitiveSource("marquee").includes('<motion.div aria-hidden="true"'), "Looping content must remain available to assistive technology");
 
+const expandingSearch = readFileSync("src/registry/components/expanding-search.tsx", "utf8");
+assert(!/animate=\{\{\s*width:/.test(expandingSearch), "Expanding search must not animate width");
+assert(!/animate=\{\{[\s\S]{0,120}scaleX/.test(expandingSearch), "Expanding search must not scale its text and border");
+assert(expandingSearch.includes("clipPath:"), "Expanding search must reveal its fixed shell without layout work");
+
+// Disclosure is the single bounded layout-animation exception: the panel has a
+// finite maxHeight, and reduced motion commits the open/closed layout instantly.
+const accordionCollapse = primitiveSource("accordion-collapse");
+assert(accordionCollapse.includes('animate={{ height: "auto", opacity: 1 }}'), "Accordion disclosure must preserve continuous space");
+assert(accordionCollapse.includes("maxHeight"), "Accordion disclosure needs a finite height boundary");
+assert(accordionCollapse.includes("reduceMotion ? { duration: 0 }"), "Accordion disclosure must be instant under reduced motion");
+
 const longForm = new Set(["hold-to-confirm", "marquee", "orbit", "idle-animation", "line-drawing", "skeleton-shimmer", "typewriter"]);
 for (const recipe of catalogRecipes) {
   const duration = recipe.params.find((param) => param.id === "duration");

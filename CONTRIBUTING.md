@@ -8,7 +8,7 @@ Motion Lexicon welcomes focused contributions to Motion Grammar, Product Moments
 - Propose a vocabulary correction with technical evidence and a concrete replacement.
 - Request a Product Moment, Motion Primitive, or related term with its user task, interaction trigger, and reduced-motion expectation.
 - Improve accessibility, performance, examples, tests, or bilingual copy through a pull request.
-- Prepare a Motion Director candidate with its product context, state graph, and evidence for review.
+- Prepare a Motion Lexicon candidate with its product context, state graph, and evidence for review.
 - Discuss a new canonical workspace in an issue before implementation.
 
 ## Preserve the public contract
@@ -49,7 +49,7 @@ npm run crawl:dist
 npm run test:visual
 ```
 
-UI and routing contributions should also inspect `/zh/`, `/zh/catalog/?surface=components`, `/zh/entrances/slide-in/`, and one category route such as `/zh/sequencing/`.
+UI and routing contributions should also inspect `/zh/`, `/zh/components/`, `/zh/primitives/slide-in/`, and `/zh/guides/`.
 
 ## Pull request checklist
 

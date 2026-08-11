@@ -5,13 +5,13 @@ with real duration.
 
 | Moment | Core scene | Primary actor | Useful primitives |
 | --- | --- | --- | --- |
-| Notification triage | A notification enters, is read, then resolves | Notification row | stagger, highlight, leaving |
-| Progress steps | A multi-step task advances | Current step | progress, status transition |
-| Member invite | An invite moves from entry to sent state | Invite form | validation, status transition |
-| Media scrub | Playback position follows direct input | Media playhead | direct manipulation, progress |
-| Approval request | A review moves toward approval or return | Approval state | pending, status transition, recovery |
-| Checkout payment | A payment validates and completes | Payment step | validation, progress, confirmation |
-| Scheduled publish | A draft gains a future release state | Schedule control | status transition, calendar reveal |
+| Notification triage | A notification enters, is read, then resolves | Notification row | `stagger`, `fade-in-fade-out` |
+| Progress steps | A multi-step task advances | Current step | `perceived-performance`, `text-morph` |
+| Member invite | An invite moves from entry to sent state | Invite form | `shake-wiggle`, `text-morph` |
+| Media scrub | Playback position follows direct input | Media playhead | `translate`, `press-tap-feedback` |
+| Approval request | A review moves toward approval or return | Approval state | `perceived-performance`, `text-morph`, `crossfade` |
+| Checkout payment | A payment validates and completes | Payment step | `shake-wiggle`, `perceived-performance`, `text-morph` |
+| Scheduled publish | A draft gains a future release state | Schedule control | `text-morph`, `reveal` |
 
 ## Scene recipe
 

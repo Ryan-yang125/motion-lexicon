@@ -2,7 +2,7 @@ import type { Locale, LocalizedText } from "./types";
 
 const text = (zh: string, en: string): LocalizedText => ({ zh, en });
 
-export type MotionDirectorModeId = "recommend" | "compose" | "implement" | "review" | "contribute";
+export type MotionSkillModeId = "recommend" | "compose" | "implement" | "review" | "contribute";
 
 export type MotionBlueprintActor = {
   id: string;
@@ -110,13 +110,13 @@ export type MotionBlueprint = {
   };
   provenance: {
     source: LocalizedText;
-    relatedPacks: readonly string[];
+    relatedMoments: readonly string[];
     relatedPrimitives: readonly string[];
   };
   contract: MotionBlueprintContract;
 };
 
-export const motionDirectorModes = [
+export const motionSkillModes = [
   {
     id: "recommend" as const,
     title: text("推荐", "Recommend"),
@@ -181,7 +181,7 @@ export const motionGrammar = {
       guidance: text("内容抵达时保持短促、方向明确的位移与淡入。", "Arriving content uses short, directional travel with an opacity cue.")
     },
     leave: {
-      curve: "cubic-bezier(0.4, 0, 1, 1)",
+      curve: "cubic-bezier(0.23, 1, 0.32, 1)",
       rangeMs: [110, 180] as const,
       guidance: text("离场节奏略快，让焦点尽快回到下一状态。", "Leaving motion resolves slightly faster so focus returns to the next state quickly.")
     },
@@ -221,7 +221,7 @@ export const motionGrammar = {
 } as const;
 
 /**
- * The portable contract shared with Motion Director's public JSON Schema.
+ * The portable contract shared with the Motion Lexicon Agent Skill's public JSON Schema.
  * The localized presentation model below makes this same decision readable on
  * the website without changing the underlying product state or motion plan.
  */
@@ -377,7 +377,7 @@ export const motionBlueprintExample: MotionBlueprint = {
   },
   provenance: {
     source: text("已发布产品瞬间：审批请求。", "Published product moment: Approval request."),
-    relatedPacks: ["approval-request"],
+    relatedMoments: ["approval-request"],
     relatedPrimitives: ["press-tap-feedback", "fade-in-fade-out", "crossfade", "stagger"]
   },
   contract: motionBlueprintContract

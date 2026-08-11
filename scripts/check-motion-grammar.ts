@@ -3,7 +3,7 @@ import { registryComponents } from "../src/data/component-registry";
 import {
   motionBlueprintExample,
   motionBlueprintContract,
-  motionDirectorModes,
+  motionSkillModes,
   motionGrammar,
   motionGrammarDataPath
 } from "../src/data/motion-grammar";
@@ -24,14 +24,15 @@ assert(motionGrammar.composition.primaryActorLimit === 1, "A Motion Blueprint ne
 assert(motionGrammar.composition.auxiliaryActorLimit === 2, "A Motion Blueprint permits at most two auxiliary actors");
 assert(motionGrammar.timing.arrive.rangeMs[0] >= 160 && motionGrammar.timing.arrive.rangeMs[1] <= 300, "Arrival timing must stay compact");
 assert(motionGrammar.timing.leave.rangeMs[0] >= 100 && motionGrammar.timing.leave.rangeMs[1] <= 200, "Departure timing must stay compact");
+assert(motionGrammar.timing.leave.curve === "cubic-bezier(0.23, 1, 0.32, 1)", "Departure timing must use the shared strong ease-out curve");
 assert(motionGrammar.timing.linear.curve === "linear", "Linear timing needs its explicit curve");
 assert(motionGrammar.timing.spring.rangeMs[1] <= 360, "Spring timing must stay bounded");
 assert(motionGrammar.implementation.preferredDelivery[0] === "react", "React + Motion must be the preferred product delivery");
 
 const expectedModes = ["recommend", "compose", "implement", "review", "contribute"];
 assert(
-  JSON.stringify(motionDirectorModes.map((mode) => mode.id)) === JSON.stringify(expectedModes),
-  "Motion Director modes must retain their stable order"
+  JSON.stringify(motionSkillModes.map((mode) => mode.id)) === JSON.stringify(expectedModes),
+  "Motion Lexicon modes must retain their stable order"
 );
 
 const actorIds = new Set(motionBlueprintExample.actors.map((actor) => actor.id));
@@ -50,7 +51,7 @@ for (const beat of motionBlueprintExample.beats) {
   }
 }
 
-assert(motionBlueprintExample.provenance.relatedPacks.length > 0, "Motion Blueprint needs a composed-interaction reference");
+assert(motionBlueprintExample.provenance.relatedMoments.length > 0, "Motion Blueprint needs a composed-interaction reference");
 
 for (const primitiveId of motionBlueprintExample.provenance.relatedPrimitives) {
   assert(primitiveIds.has(primitiveId), `Motion Blueprint provenance refers to unknown primitive ${primitiveId}`);
@@ -87,5 +88,5 @@ assert(componentIds.size === registryComponents.length, "Registry component IDs 
 
 console.log(
   `Motion Grammar check passed: ${canonicalMotionCatalog.length} primitives, ${registryComponents.length} components, ` +
-    `${motionDirectorModes.length} director modes, and ${motionBlueprintExample.beats.length} validated beats.`
+    `${motionSkillModes.length} Motion Lexicon modes, and ${motionBlueprintExample.beats.length} validated beats.`
 );

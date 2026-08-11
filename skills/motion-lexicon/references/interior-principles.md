@@ -52,7 +52,7 @@ content calm.
 | Press or focus | Local color, border, or scale response | 120–180 ms |
 | Arrival | Opacity from 0, `scale(.97)`, translate 8–10 px, optional 4–6 px blur | 200–280 ms, `cubic-bezier(.23, 1, .32, 1)` |
 | Local change | Transform or size proxy settles into an existing location | 180–260 ms |
-| Leaving | Opacity decreases with a compact translate or scale | 110–180 ms, `cubic-bezier(.4, 0, 1, 1)` |
+| Leaving | Opacity decreases with a compact translate or scale | 110–180 ms, `cubic-bezier(.23, 1, .32, 1)` |
 | Direct manipulation | Pointer-following transform with a tight settle | Gesture-driven, then a short settle |
 
 Use a spring only where the user's action implies physical response. Use the

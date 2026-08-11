@@ -296,6 +296,7 @@ export type OtpInputProps = {
   disabled?: boolean;
   autoFocus?: boolean;
   focusOnError?: boolean;
+  formatCellLabel?: (label: string, index: number, length: number) => string;
   className?: string;
 };
 
@@ -314,6 +315,7 @@ export const OtpInput = forwardRef<OtpInputHandle, OtpInputProps>(function OtpIn
   disabled = false,
   autoFocus = false,
   focusOnError = true,
+  formatCellLabel = (name, index, count) => `${name}, character ${index} of ${count}`,
   className = "",
 }, ref) {
   const reduced = useReducedMotion();
@@ -384,14 +386,14 @@ export const OtpInput = forwardRef<OtpInputHandle, OtpInputProps>(function OtpIn
           return (
             <div
               key={i}
-              className={`relative h-12 w-10 ${gap ? "ml-3" : ""}`}
+              className={`relative h-12 w-11 ${gap ? "ml-3" : ""}`}
             >
               <input
                 {...getCellProps(i)}
-                aria-label={`${label}, character ${i + 1} of ${length}`}
+                aria-label={formatCellLabel(label, i + 1, length)}
                 aria-invalid={error || undefined}
                 aria-describedby={hasStatus ? statusId : undefined}
-                className={`h-12 w-10 rounded-[10px] border-2 text-center text-[15px] text-transparent caret-transparent outline-none transition-[background-color,border-color,box-shadow] duration-150 selection:bg-transparent focus-visible:outline-none disabled:opacity-50 ${
+                className={`h-12 w-11 rounded-[10px] border-2 text-center text-[15px] text-transparent caret-transparent outline-none transition-[background-color,border-color,box-shadow] duration-150 selection:bg-transparent focus-visible:outline-none disabled:opacity-50 ${
                   error
                     ? "border-red-500 bg-white dark:border-red-400 dark:bg-[#252522]"
                     : success

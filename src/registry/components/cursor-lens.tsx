@@ -9,6 +9,7 @@ export type CursorLensProps = {
   base: ReactNode;
   detail: ReactNode;
   label: string;
+  instructions?: string;
   size?: number;
   zoom?: number;
   className?: string;
@@ -18,6 +19,7 @@ export function CursorLens({
   base,
   detail,
   label,
+  instructions = "Use the arrow keys to move the lens. Press Escape to hide it.",
   size = 132,
   zoom = 1.35,
   className = "",
@@ -204,7 +206,7 @@ export function CursorLens({
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <span className="sr-only">Use the arrow keys to move the lens. Press Escape to hide it.</span>
+      <span className="sr-only">{instructions}</span>
     </div>
   );
 }

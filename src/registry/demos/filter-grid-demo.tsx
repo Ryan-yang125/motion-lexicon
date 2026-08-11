@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import {
   FilterGrid,
   type FilterDefinition,
@@ -24,20 +26,22 @@ const ASSETS: Asset[] = [
   { id: "a9", name: "still-frame", kind: "image", size: "3.0 MB" },
 ];
 
-const FILTERS: FilterDefinition<Asset>[] = [
-  { id: "all", label: "All", match: () => true },
-  { id: "image", label: "Images", match: (a) => a.kind === "image" },
-  { id: "clip", label: "Clips", match: (a) => a.kind === "clip" },
-  { id: "doc", label: "Docs", match: (a) => a.kind === "doc" },
-];
-
-export function FilterGridDemo() {
+export function FilterGridDemo({ locale = "en" }: DemoLocaleProps = {}) {
+  const filters: FilterDefinition<Asset>[] = [
+    { id: "all", label: demoValue(locale, "全部", "All"), match: () => true },
+    { id: "image", label: demoValue(locale, "图片", "Images"), match: (asset) => asset.kind === "image" },
+    { id: "clip", label: demoValue(locale, "视频", "Clips"), match: (asset) => asset.kind === "clip" },
+    { id: "doc", label: demoValue(locale, "文档", "Docs"), match: (asset) => asset.kind === "doc" },
+  ];
   return (
-    <div className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("filter-grid", locale)} className="mx-auto w-full max-w-[440px]">
       <FilterGrid
-        label="Asset type"
+        label={demoValue(locale, "素材类型", "Asset type")}
         items={ASSETS}
-        filters={FILTERS}
+        filters={filters}
+        emptyLabel={demoValue(locale, "没有符合条件的素材", "Nothing matches this filter")}
+        formatFilterCount={locale === "zh" ? (label, count, total) => `${label}，${count} / ${total}` : undefined}
+        formatResultCount={locale === "zh" ? (label, count, total) => `${label}：显示 ${count} / ${total}` : undefined}
         getKey={(a) => a.id}
         columns={3}
         rowHeight={64}

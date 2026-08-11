@@ -1,0 +1,484 @@
+{
+  "guideId": "from-brief-to-spec",
+  "standfirst": {
+    "zh": "一句“自然一点”可以成为讨论的起点，不能成为交付标准。可实现的动效规格把感觉翻译为对象、状态、触发、空间、时间、可打断性和低动态规则，让设计判断能被开发、测试和后续迭代共同使用。",
+    "en": "A line such as “make it feel more natural” can start a conversation; it cannot be a delivery standard. A buildable motion spec translates feeling into object, state, trigger, space, time, interruptibility, and low-motion rules so design judgment can be shared by implementation, testing, and later iteration."
+  },
+  "sections": [
+    {
+      "id": "brief",
+      "title": {
+        "zh": "把形容词变成可观察的事件",
+        "en": "Turn adjectives into observable events"
+      },
+      "paragraphs": [
+        {
+          "zh": "“高级”“有重量”“丝滑”描述的是感受，却没有说明界面里发生了什么。规格工作的第一步是追问可观察的事件：谁触发了变化，哪个对象改变，用户在变化前后分别能看见什么，结果需要被理解多久。比如“卡片出来时有一个动作再慢慢停下来”，可以拆成卡片从触发器附近进入、先快速到达、末段减速、最终边界与标题保持清晰。这样团队讨论的是状态和节奏，不会停留在每个人心里不同的审美词。",
+          "en": "Words such as polished, weighty, and smooth describe feeling without describing what happens in an interface. The first step of a spec is to ask for observable events: who triggers the change, which object changes, what people can see before and after, and how long the result needs to be understood. “A card arrives with an action and gradually stops” can become a card entering near its trigger, arriving quickly, decelerating near the end, and retaining a clear boundary and title. The team then discusses states and rhythm instead of private interpretations of aesthetic words."
+        },
+        {
+          "zh": "用前后状态命名也能识别缺失信息。一个发布按钮常常至少有草稿、发布中、已发布、发布失败四种状态；如果需求只写“点击后播一个成功动画”，它遗漏了等待、失败和重复点击。把状态列成表后，每一行都有可见文案、允许操作、无障碍通知和视觉线索。规格因此从一个效果说明变成一份小型行为契约，开发可以据此搭建状态机，测试也能据此设计断言。",
+          "en": "Naming before and after states also reveals missing information. A publish button commonly has at least Draft, Publishing, Published, and Publish failed; a request that says only “play a success animation after click” misses waiting, failure, and repeat activation. Once states sit in a table, each row has visible copy, allowed actions, accessibility announcement, and visual cue. The spec becomes a compact behavior contract: engineering can build a state machine from it and testing can write assertions from it."
+        }
+      ]
+    },
+    {
+      "id": "state",
+      "title": {
+        "zh": "先写状态图，再写关键节拍",
+        "en": "Write the state graph before key beats"
+      },
+      "paragraphs": [
+        {
+          "zh": "状态图回答“允许从哪里到哪里”，节拍表回答“在什么时间让什么被看见”。两者分开能避免一个常见问题：看起来很顺的时间线无法处理用户中途点击、网络变慢或请求失败。先画出合法转换，例如 Draft → Publishing → Published，Publishing 也可以回到 Failed；再为每条转换写关键节拍，例如 0ms 锁定按钮并确认输入、80ms 显示处理中、服务端返回后切换最终状态。节拍只描述需要被感知的节点，避免把每一帧都写进文档。",
+          "en": "A state graph answers which transitions are allowed; a beat plan answers what becomes visible when. Keeping them separate prevents a common failure: a lovely timeline that cannot handle a second click, a slow network, or a failed request. Draw legal transitions first, such as Draft to Publishing to Published, with Publishing also able to move to Failed. Then write key beats for each transition: at 0ms lock the button and acknowledge input, at 80ms show processing, and after the server returns switch the final state. Beats describe perceptible nodes rather than documenting every frame."
+        },
+        {
+          "zh": "节拍的数量应随信息复杂度增加，而非随装饰欲增加。保存确认可能只需要“按下—处理中—已保存”三个节点；审批请求需要额外展示审批人队列，因为用户要理解系统正在等待谁。对于多个元素，明确谁先变化、谁跟随、谁保持静止。静止经常是重要的设计选择：它给用户提供锚点，让新增内容、结果数字或状态标签有地方可以被比较。一个好的规格会写出应当保持不动的内容。",
+          "en": "The number of beats should increase with information complexity, not decorative ambition. Save confirmation may need only Pressed, Saving, and Saved; an approval request needs the approver queue because people must understand whom the system is awaiting. For several elements, state who changes first, who follows, and who stays still. Stillness is often an important design choice: it gives an anchor against which a new row, result number, or status label can be compared. A good spec explicitly names what should remain still."
+        }
+      ]
+    },
+    {
+      "id": "space-time",
+      "title": {
+        "zh": "用空间和时间描述感觉",
+        "en": "Describe feeling through space and time"
+      },
+      "paragraphs": [
+        {
+          "zh": "空间规格至少包括来源、目的地、距离和层级。来源告诉用户变化为何发生在这里；目的地告诉用户结果属于哪里；距离决定动作是否会抢走注意力；层级决定覆盖、推开还是并列。把“从左边滑进来”换成“从当前筛选器下方进入结果区域，位移不超过 16px，结果计数保持原位”，开发就能判断使用 transform、插入新行还是替换现有内容，设计也能判断动作是否仍遵循界面结构。",
+          "en": "A spatial spec includes origin, destination, distance, and hierarchy. Origin tells people why change occurs here; destination tells them where the result belongs; distance determines whether motion steals attention; hierarchy decides whether content overlays, pushes, or sits beside other content. Replace “slide in from the left” with “enter the result region beneath the active filter, travel no more than 16px, and keep the result count in place.” Engineering can then choose transform, inserting a row, or replacing existing content, while design can judge whether the action still follows interface structure."
+        },
+        {
+          "zh": "时间规格要同时写时长和关系。单个数值如 240ms 只能说明一段变化有多长，不能说明按钮和状态标签是否同步、列表是否在结果落定后再出现、失败是否应打断进行中提示。写成“按钮反馈 120ms；状态文案在 80ms 后出现；成功结果在请求完成时切换；后续记录延迟 60ms”会更清晰。再补上曲线的职责：ease-out 用于明确落点，spring 用于连续输入或可中断对象。曲线名称只是实现选择，用户感知到的是抵达、停顿和衔接。",
+          "en": "A time spec needs both duration and relationships. A lone value such as 240ms says how long one change lasts, while saying nothing about whether a button and status label synchronize, whether a list appears after the result settles, or whether failure interrupts processing. “Button feedback: 120ms; status copy appears after 80ms; success switches when the request completes; follow-up record delays 60ms” is clearer. Add the job of the curve: ease-out supports a definite arrival, while spring supports continuous input or interruptible objects. Curve names are implementation choices; people perceive arrival, pause, and continuity."
+        }
+      ]
+    },
+    {
+      "id": "failure",
+      "title": {
+        "zh": "把中断、失败和低动态写进同一份规格",
+        "en": "Put interruption, failure, and low motion in the same spec"
+      },
+      "paragraphs": [
+        {
+          "zh": "动效规格常在成功路径结束，这会让真正上线后的边界情况临时拼凑。每个进行中状态都要回答：用户再次点击会怎样，离开页面会怎样，网络超时会怎样，返回的数据过期会怎样。对于可取消请求，取消后的视觉状态应回到一个明确起点；对于不可取消请求，按钮和文案要说明正在完成什么。失败状态必须保留原始输入或可恢复上下文，避免用户既看见失败又失去之前填的内容。",
+          "en": "Motion specs often end at the success path, forcing edge cases to be improvised after launch. Every in-progress state should answer: What happens on another click? On leaving the page? On timeout? When returned data is stale? For cancelable work, the visual state should return to a clear starting point; for noncancelable work, button and copy should explain what is completing. A failure state must retain the original input or recoverable context so people do not see failure and lose their previous work at the same time."
+        },
+        {
+          "zh": "低动态规则同样属于状态定义。写“减少动效”不够，需要说明哪些信号保留、哪些位移缩短、哪些循环停止、焦点如何管理。对发布流程而言，低动态版本仍然保留按钮状态、发布结果和记录插入，只移除沿路径移动和装饰性旋转。把这条规则写进每个关键转换，研发就不会把它视为发布前的附加修补。它也会让默认路径更清楚，因为团队被迫说明每一段动画实际在传递什么。",
+          "en": "Low-motion rules also belong in state definitions. “Reduce motion” is too vague; state which signals remain, which travel shortens, which loops stop, and how focus is managed. In a publishing flow, the low-motion version still retains button state, publishing result, and record insertion while removing travel along a path and decorative rotation. Put that rule on every key transition so it never becomes a last-minute patch. It also clarifies the default path because the team must state what every animation actually communicates."
+        }
+      ]
+    },
+    {
+      "id": "handoff",
+      "title": {
+        "zh": "让规格成为可交接、可测试的资产",
+        "en": "Make the spec an asset for handoff and testing"
+      },
+      "paragraphs": [
+        {
+          "zh": "一份可交接的规格应让没有参与讨论的人也能复现判断。开头写场景、目标用户和成功标准；中间给出状态图、节拍、空间关系和参数范围；结尾列出失败、撤销、低动态和验收方法。附上一个静态图或可交互原型会帮助沟通，但图本身无法替代文字，因为测试需要知道何时断言、开发需要知道数据何时更新、内容设计需要知道文案如何变化。文字、图解和代码片段共同构成一个可追溯的决定。",
+          "en": "A handoff-ready spec lets someone who missed the conversation reproduce the judgment. Start with scenario, audience, and success criteria; give state graph, beats, spatial relationships, and parameter ranges in the middle; close with failure, undo, low-motion behavior, and review methods. A static diagram or interactive prototype helps communication, yet an image cannot replace words: tests need to know when to assert, engineering needs to know when data updates, and content design needs to know how copy changes. Text, diagram, and code fragment together create a traceable decision."
+        },
+        {
+          "zh": "验收语句要可观察。例如：“点击发布后 120ms 内出现进行中状态；完成后按钮、状态标记和时间线记录在同一轮状态更新中变为已发布；低动态模式没有超过 1px 的装饰性位移；失败时标题、正文和重试入口仍保留”。这样的标准既允许设计保有判断空间，也能让自动化测试和人工评审围绕同一组事实工作。规格因此会反哺内容库：每一份经过验证的完整交互都可能形成新的组件候选。",
+          "en": "Acceptance statements should be observable. For example: “Within 120ms of Publish, show an in-progress state; when complete, button, status marker, and timeline record become Published in the same state update; low-motion mode uses no decorative travel over 1px; on failure, title, body copy, and retry remain.” Such standards preserve room for design judgment while giving automation and human review the same facts. The spec then feeds the content library: every verified complete interaction can become a future Component candidate."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "动效规格交接清单",
+    "en": "Motion-spec handoff checklist"
+  },
+  "checklist": [
+    {
+      "id": "goal",
+      "label": {
+        "zh": "写清场景、用户与要理解的结果",
+        "en": "State scenario, audience, and result to understand"
+      },
+      "detail": {
+        "zh": "先让动效服务任务，再讨论视觉性格。",
+        "en": "Let motion serve the task before discussing visual character."
+      }
+    },
+    {
+      "id": "states",
+      "label": {
+        "zh": "列出前后状态与合法转换",
+        "en": "List before/after states and legal transitions"
+      },
+      "detail": {
+        "zh": "包含等待、失败、撤销和重复输入。",
+        "en": "Include waiting, failure, undo, and repeat input."
+      }
+    },
+    {
+      "id": "beats",
+      "label": {
+        "zh": "写出关键节拍与同步关系",
+        "en": "Write key beats and synchronization"
+      },
+      "detail": {
+        "zh": "说明谁先变化、谁保持静止、何时更新数据。",
+        "en": "State who changes first, who stays still, and when data updates."
+      }
+    },
+    {
+      "id": "space",
+      "label": {
+        "zh": "标注来源、目的地、距离与层级",
+        "en": "Mark origin, destination, distance, and hierarchy"
+      },
+      "detail": {
+        "zh": "让空间关系能直接映射到实现方式。",
+        "en": "Make spatial relationships map directly to implementation."
+      }
+    },
+    {
+      "id": "review",
+      "label": {
+        "zh": "给出低动态和可观察验收语句",
+        "en": "Provide low-motion rules and observable acceptance"
+      },
+      "detail": {
+        "zh": "交接后任何人都能验证结果。",
+        "en": "Anyone can verify the result after handoff."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：把“卡片出来再慢慢停下来”写成规格",
+      "en": "Case: turn “the card arrives and gradually stops” into a spec"
+    },
+    "context": {
+      "zh": "筛选结果出现时，产品希望新卡片有进入感，同时不抢走用户对结果数量的阅读。",
+      "en": "When filtered results appear, the product wants the new card to feel introduced without stealing attention from the result count."
+    },
+    "code": "Trigger: filter value changes after input settles\nStates: previous results → updating → filtered results\nSpace: new cards enter from the result region, translateY(12px) maximum\nBeats: 0ms update count; 40ms reveal first visible row; 60ms stagger only the next two rows\nCurve: cubic-bezier(.23, 1, .32, 1)\nReduced motion: update count and rows in place; no travel; preserve live-region announcement",
+    "explanation": {
+      "zh": "规格把“慢慢停下来”落实为 12px 上限、明确曲线、有限的三行节拍和原位低动态路径。结果数量保持原位，因此用户始终有稳定锚点。",
+      "en": "The spec turns “gradually stops” into a 12px cap, named curve, limited three-row beat plan, and in-place low-motion path. The result count stays fixed, giving people a stable anchor throughout."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "brief-to-event",
+      "title": {
+        "zh": "图解一：从感受词到可观察事件",
+        "en": "Diagram 1: from feeling words to observable events"
+      },
+      "alt": {
+        "zh": "“自然一点”经过对象、状态、空间和时间四个问题，形成可实现的规格。",
+        "en": "“Make it feel natural” passes through object, state, space, and time questions to become a buildable spec."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "brief",
+          "label": {
+            "zh": "自然一点",
+            "en": "Make it natural"
+          },
+          "detail": {
+            "zh": "感受词",
+            "en": "Feeling word"
+          },
+          "x": 55,
+          "y": 215,
+          "width": 180,
+          "height": 100,
+          "tone": "warning"
+        },
+        {
+          "id": "object",
+          "label": {
+            "zh": "哪个对象",
+            "en": "Which object"
+          },
+          "detail": {
+            "zh": "卡片、按钮、记录",
+            "en": "Card, button, record"
+          },
+          "x": 285,
+          "y": 215,
+          "width": 180,
+          "height": 100,
+          "tone": "surface"
+        },
+        {
+          "id": "states",
+          "label": {
+            "zh": "哪些状态",
+            "en": "Which states"
+          },
+          "detail": {
+            "zh": "前后与失败",
+            "en": "Before, after, failure"
+          },
+          "x": 515,
+          "y": 215,
+          "width": 180,
+          "height": 100,
+          "tone": "accent"
+        },
+        {
+          "id": "spec",
+          "label": {
+            "zh": "动效规格",
+            "en": "Motion spec"
+          },
+          "detail": {
+            "zh": "空间、时间、低动态",
+            "en": "Space, time, low motion"
+          },
+          "x": 745,
+          "y": 215,
+          "width": 180,
+          "height": 100,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "brief",
+          "to": "object"
+        },
+        {
+          "from": "object",
+          "to": "states"
+        },
+        {
+          "from": "states",
+          "to": "spec"
+        }
+      ]
+    },
+    {
+      "id": "state-and-beats",
+      "title": {
+        "zh": "图解二：状态图与节拍表分工",
+        "en": "Diagram 2: state graph and beat plan have distinct jobs"
+      },
+      "alt": {
+        "zh": "状态图显示草稿、发布中、已发布和失败；节拍表显示输入确认、进行中和结果出现的时间。",
+        "en": "A state graph shows draft, publishing, published, and failed; a beat plan shows input acknowledgement, processing, and result timing."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "draft",
+          "label": {
+            "zh": "草稿",
+            "en": "Draft"
+          },
+          "detail": {
+            "zh": "可编辑",
+            "en": "Editable"
+          },
+          "x": 90,
+          "y": 210,
+          "width": 150,
+          "height": 90,
+          "tone": "surface"
+        },
+        {
+          "id": "publishing",
+          "label": {
+            "zh": "发布中",
+            "en": "Publishing"
+          },
+          "detail": {
+            "zh": "锁定重复提交",
+            "en": "Prevent repeats"
+          },
+          "x": 335,
+          "y": 210,
+          "width": 170,
+          "height": 90,
+          "tone": "accent"
+        },
+        {
+          "id": "published",
+          "label": {
+            "zh": "已发布",
+            "en": "Published"
+          },
+          "detail": {
+            "zh": "结果落定",
+            "en": "Result settled"
+          },
+          "x": 690,
+          "y": 110,
+          "width": 170,
+          "height": 90,
+          "tone": "success"
+        },
+        {
+          "id": "failed",
+          "label": {
+            "zh": "发布失败",
+            "en": "Publish failed"
+          },
+          "detail": {
+            "zh": "保留重试",
+            "en": "Keep retry"
+          },
+          "x": 690,
+          "y": 330,
+          "width": 170,
+          "height": 90,
+          "tone": "warning"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "draft",
+          "to": "publishing",
+          "label": {
+            "zh": "0ms",
+            "en": "0ms"
+          }
+        },
+        {
+          "from": "publishing",
+          "to": "published",
+          "label": {
+            "zh": "请求完成",
+            "en": "Request complete"
+          }
+        },
+        {
+          "from": "publishing",
+          "to": "failed",
+          "label": {
+            "zh": "失败",
+            "en": "Failure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "handoff-asset",
+      "title": {
+        "zh": "图解三：可交接规格的组成",
+        "en": "Diagram 3: parts of a handoff-ready spec"
+      },
+      "alt": {
+        "zh": "场景、状态、空间与时间、失败与低动态、验收五部分组成可交接的动效规格。",
+        "en": "Scenario, states, space and time, failure and low motion, and review form a handoff-ready motion spec."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "scenario",
+          "label": {
+            "zh": "场景与目标",
+            "en": "Scenario and goal"
+          },
+          "detail": {
+            "zh": "为什么需要变化",
+            "en": "Why change is needed"
+          },
+          "x": 375,
+          "y": 60,
+          "width": 210,
+          "height": 85,
+          "tone": "ink"
+        },
+        {
+          "id": "behavior",
+          "label": {
+            "zh": "状态与节拍",
+            "en": "States and beats"
+          },
+          "detail": {
+            "zh": "允许的转换",
+            "en": "Allowed transitions"
+          },
+          "x": 665,
+          "y": 190,
+          "width": 210,
+          "height": 85,
+          "tone": "accent"
+        },
+        {
+          "id": "space",
+          "label": {
+            "zh": "空间与时间",
+            "en": "Space and time"
+          },
+          "detail": {
+            "zh": "来源、距离、关系",
+            "en": "Origin, distance, relation"
+          },
+          "x": 555,
+          "y": 375,
+          "width": 210,
+          "height": 85,
+          "tone": "surface"
+        },
+        {
+          "id": "edges",
+          "label": {
+            "zh": "失败与低动态",
+            "en": "Failure and low motion"
+          },
+          "detail": {
+            "zh": "中断与恢复",
+            "en": "Interrupt and recover"
+          },
+          "x": 195,
+          "y": 375,
+          "width": 210,
+          "height": 85,
+          "tone": "warning"
+        },
+        {
+          "id": "review",
+          "label": {
+            "zh": "验收",
+            "en": "Review"
+          },
+          "detail": {
+            "zh": "可观察断言",
+            "en": "Observable assertions"
+          },
+          "x": 85,
+          "y": 190,
+          "width": 210,
+          "height": 85,
+          "tone": "success"
+        }
+      ],
+      "connectors": [
+        {
+          "from": "scenario",
+          "to": "behavior"
+        },
+        {
+          "from": "behavior",
+          "to": "space"
+        },
+        {
+          "from": "space",
+          "to": "edges"
+        },
+        {
+          "from": "edges",
+          "to": "review"
+        },
+        {
+          "from": "review",
+          "to": "scenario"
+        }
+      ]
+    }
+  ]
+}

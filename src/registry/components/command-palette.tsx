@@ -456,13 +456,17 @@ function PaletteLayer({
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           onPointerDown={(event) => {
             if (event.target !== event.currentTarget) return;
+            event.preventDefault();
             leave.current?.();
           }}
         >
           <div
             aria-hidden
             className="absolute inset-0 bg-stone-900/40 dark:bg-black/65"
-            onPointerDown={() => leave.current?.()}
+            onPointerDown={(event) => {
+              event.preventDefault();
+              leave.current?.();
+            }}
           />
           <div className="relative flex w-full justify-center">
             {children}

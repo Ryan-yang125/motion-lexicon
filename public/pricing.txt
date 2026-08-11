@@ -1,1 +1,9 @@
-Motion Lexicon is free and open source. No paid plan, account, API key, or usage limit is required.
+# Pricing / 定价
+
+## English
+
+Motion Lexicon is free and open source. The website, registry, machine-readable catalog, and Agent Skill require no paid plan, account, API key, or usage fee.
+
+## 中文
+
+Motion Lexicon 免费开源。网站、Registry、机器可读目录和 Agent Skill 均无需付费方案、账户、API Key 或使用费。

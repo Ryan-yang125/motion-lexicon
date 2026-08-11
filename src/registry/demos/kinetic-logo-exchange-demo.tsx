@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { KineticLogoExchange, type KineticLogoItem } from "@/registry/components/kinetic-logo-exchange";
 
 const diamond = (
@@ -30,10 +32,10 @@ const logos: readonly KineticLogoItem[] = [
   { id: "signal", label: "Signal", mark: wave, tone: "ink" },
 ];
 
-export function KineticLogoExchangeDemo() {
+export function KineticLogoExchangeDemo({ locale = "en" }: DemoLocaleProps = {}) {
   return (
-    <div className="mx-auto w-full max-w-[440px]">
-      <KineticLogoExchange items={logos} label="Connected workspace" />
+    <div role="group" aria-label={demoText("kinetic-logo-exchange", locale)} className="mx-auto w-full max-w-[440px]">
+      <KineticLogoExchange items={logos} label={demoValue(locale, "已连接的工作区", "Connected workspace")} eyebrow={demoValue(locale, "连接", "Connections")} pauseLabel={demoValue(locale, "暂停标志轮换", "Pause logo exchange")} resumeLabel={demoValue(locale, "继续标志轮换", "Resume logo exchange")} />
     </div>
   );
 }

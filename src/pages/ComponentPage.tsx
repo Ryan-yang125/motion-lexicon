@@ -4,9 +4,16 @@ import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
 import { RegistryPreview } from "../registry/preview-map";
 import { useRegistrySource } from "../registry/use-registry-source";
-import { getRegistryComponent, registryInstallCommand } from "../data/component-registry";
+import {
+  getRegistryComponent,
+  registryComponentDependencies,
+  registryComponentEngines,
+  registryComponentRuntimeCost,
+  registryComponentSignature,
+  registryInstallCommand
+} from "../data/component-registry";
 import { getCanonicalRecipe } from "../data/recipes";
-import { pathFor, text } from "../data/site";
+import { pathFor, siteUrl, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { Seo } from "../components/Seo";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "../components/icons";
@@ -33,7 +40,25 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         retry: "重试",
         install: "安装",
         access: ["键盘可用", "支持减弱动效", "TypeScript"],
-        foundations: "相关原子动效"
+        behavior: "组件行为",
+        events: "适用事件",
+        foundations: "基础动效",
+        runtime: "运行信息",
+        engine: "动效引擎",
+        runtimeCost: "运行成本",
+        dependencies: "依赖",
+        registrySource: "打开公开 Registry JSON",
+        eventCopy: {
+          actions: "适合点击、提交、复制与高风险确认等直接操作。",
+          overlays: "适合打开、定位和关闭浮层，以及键盘焦点切换。",
+          inputs: "适合输入、校验、选择与字段状态变化。",
+          navigation: "适合视图切换、分页、层级导航与当前位置变化。",
+          data: "适合排序、筛选、更新与数据状态变化。",
+          feedback: "适合等待、成功、失败与进度反馈。",
+          media: "适合浏览、聚焦、滚动与拖拽媒体内容。",
+          visual: "适合品牌展示、空间探索与高信息量视觉叙事。"
+        },
+        cost: { light: "轻量", medium: "中等", heavy: "较高" }
       }
     : {
         back: "All components",
@@ -47,26 +72,62 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         retry: "Retry",
         install: "Install",
         access: ["Keyboard ready", "Reduced motion", "TypeScript"],
-        foundations: "Related primitives"
+        behavior: "Component behavior",
+        events: "Suitable events",
+        foundations: "Motion foundations",
+        runtime: "Runtime information",
+        engine: "Motion engine",
+        runtimeCost: "Runtime cost",
+        dependencies: "Dependencies",
+        registrySource: "Open public Registry JSON",
+        eventCopy: {
+          actions: "Use for direct actions such as clicks, submissions, copying, and high-risk confirmation.",
+          overlays: "Use for opening, positioning, and closing overlays, including keyboard focus transitions.",
+          inputs: "Use for input, validation, selection, and field-state changes.",
+          navigation: "Use for view changes, pagination, hierarchy navigation, and current-location updates.",
+          data: "Use for sorting, filtering, updates, and data-state changes.",
+          feedback: "Use for pending, success, failure, and progress feedback.",
+          media: "Use for browsing, focusing, scrolling, and dragging media.",
+          visual: "Use for brand presentation, spatial exploration, and information-rich visual storytelling."
+        },
+        cost: { light: "Light", medium: "Medium", heavy: "Heavy" }
       };
 
   const related = entry.primitiveIds
     .map((id) => getCanonicalRecipe(id))
     .filter((recipe): recipe is NonNullable<typeof recipe> => Boolean(recipe));
   const install = registryInstallCommand(entry.id);
+  const description = text(entry.description, locale);
+  const signature = text(registryComponentSignature(entry), locale);
+  const engines = registryComponentEngines(entry);
+  const runtimeCost = registryComponentRuntimeCost(entry);
+  const dependencies = registryComponentDependencies(entry);
+  const registryUrl = `${siteUrl}/r/${entry.id}.json`;
+  const requestSource = () => {
+    void sourceState.ensureLoaded().catch(() => undefined);
+  };
+  const selectView = (nextView: string) => {
+    setView(nextView);
+    if (nextView === "code") requestSource();
+  };
 
   return (
     <>
       <Seo
         locale={locale}
-        title={`${text(entry.name, locale)} — Motion Lexicon`}
-        description={text(entry.description, locale)}
+        title={locale === "zh"
+          ? `${text(entry.name, locale)} React 组件 | Motion Lexicon`
+          : `${text(entry.name, locale)} React Motion Component | Motion Lexicon`}
+        description={description}
         path={pathFor(locale, ["components", entry.id])}
-        image={`/og-components-${locale}.png`}
+        image={`/og/components/${entry.id}-${locale}.png`}
         structuredData={[{
           "@context": "https://schema.org",
           "@type": "SoftwareSourceCode",
           name: text(entry.name, locale),
+          description,
+          url: registryUrl,
+          inLanguage: locale === "zh" ? "zh-CN" : "en",
           codeRepository: "https://github.com/Ryan-yang125/motion-lexicon",
           programmingLanguage: ["TypeScript", "React"],
           runtimePlatform: "Web browser",
@@ -84,14 +145,15 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
             <div>
               <code>{entry.id}</code>
               <h1>{text(entry.name, locale)}</h1>
-              <p>{text(entry.description, locale)}</p>
+              <p>{description}</p>
             </div>
             <CopyButton
               value={sourceState.source}
               label={copy.copyCode}
               copiedLabel={copy.copied}
               errorLabel={copy.failed}
-              disabled={sourceState.status !== "ready"}
+              onIntent={requestSource}
+              resolveValue={sourceState.ensureLoaded}
               className="component-primary-copy"
             />
           </div>
@@ -104,7 +166,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
           <div className="component-workbench-toolbar">
             <SegmentedControl
               value={view}
-              onValueChange={setView}
+              onValueChange={selectView}
               label={locale === "zh" ? "组件视图" : "Component view"}
               options={[
                 { value: "preview", label: copy.preview },
@@ -112,12 +174,12 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
               ]}
             />
             {view === "code" ? (
-              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} disabled={sourceState.status !== "ready"} />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} />
             ) : null}
           </div>
           {view === "preview" ? (
             <div className="component-detail-stage">
-              <RegistryPreview id={entry.id} />
+              <RegistryPreview id={entry.id} locale={locale} />
             </div>
           ) : sourceState.status === "ready" ? (
             <pre className="component-source"><code>{sourceState.source}</code></pre>
@@ -139,8 +201,18 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
           <CopyButton value={install} label={locale === "zh" ? "复制命令" : "Copy command"} copiedLabel={copy.copied} errorLabel={copy.failed} />
         </section>
 
+        <section className="component-related" data-seo-section="behavior" aria-labelledby="component-behavior-title">
+          <h2 id="component-behavior-title">{copy.behavior}</h2>
+          <p>{signature === description ? description : `${signature} ${description}`}</p>
+        </section>
+
+        <section className="component-related" data-seo-section="events" aria-labelledby="component-events-title">
+          <h2 id="component-events-title">{copy.events}</h2>
+          <p>{copy.eventCopy[entry.category]}</p>
+        </section>
+
         {related.length > 0 ? (
-          <section className="component-related" aria-labelledby="component-related-title">
+          <section className="component-related" data-seo-section="foundations" aria-labelledby="component-related-title">
             <h2 id="component-related-title">{copy.foundations}</h2>
             <div>
               {related.map((recipe) => (
@@ -152,6 +224,16 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
             </div>
           </section>
         ) : null}
+
+        <section className="component-related" data-seo-section="runtime" aria-labelledby="component-runtime-title">
+          <h2 id="component-runtime-title">{copy.runtime}</h2>
+          <dl className="primitive-guidance-list">
+            <div><dt>{copy.engine}</dt><dd>{engines.join(", ")}</dd></div>
+            <div><dt>{copy.runtimeCost}</dt><dd>{copy.cost[runtimeCost]}</dd></div>
+            <div><dt>{copy.dependencies}</dt><dd>{dependencies.length > 0 ? dependencies.join(", ") : locale === "zh" ? "无" : "None"}</dd></div>
+          </dl>
+          <a href={`/r/${entry.id}.json`}>{copy.registrySource}</a>
+        </section>
       </article>
     </>
   );

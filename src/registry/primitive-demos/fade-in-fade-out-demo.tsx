@@ -16,7 +16,7 @@ export function FadeInFadeOutDemo({ locale, values, compact, replayKey }: Primit
           >
             <ProductPanel className="flex items-center gap-3 p-3">
               <span className="size-8 rounded-[9px] bg-[#55745D]" />
-              <div className="min-w-0 flex-1"><strong className="block text-[12px]">{textFor(locale, "同步完成", "Sync complete")}</strong><span className="text-[10px] text-stone-400">Design system · 12 files</span></div>
+              <div className="min-w-0 flex-1"><strong className="block text-[12px]">{textFor(locale, "同步完成", "Sync complete")}</strong><span className="text-[10px] text-stone-400">{textFor(locale, "设计系统 · 12 个文件", "Design system · 12 files")}</span></div>
               <StatusPill tone="success">{textFor(locale, "完成", "Done")}</StatusPill>
             </ProductPanel>
           </FadeInFadeOutPrimitive>

@@ -1,4 +1,4 @@
-import type { SeoGuideArticleDiagram } from "../data/seo-guide-articles-b";
+import type { SeoGuideArticleDiagram } from "../data/seo-guide-article-types";
 import type { Locale } from "../data/types";
 
 function textLength(value: string, locale: Locale) {

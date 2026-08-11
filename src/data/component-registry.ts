@@ -89,7 +89,7 @@ export const registryComponents: readonly RegistryComponent[] = [
   component("floating-label", "FloatingLabelInput", "inputs", "浮动标签输入框", "Floating label", "输入内容时保留字段标签与上下文。", "Keeps the field label and context visible while typing.", ["translate", "crossfade"]),
   component("inline-validation", "InlineValidation", "inputs", "行内校验", "Inline validation", "把等待、错误和通过状态放在输入旁边。", "Places pending, error, and success states next to the input.", ["crossfade", "shake-wiggle"], true),
   component("otp-input", "OtpInput", "inputs", "验证码输入", "OTP input", "输入、粘贴、错误与成功反馈连续发生。", "Coordinates typing, paste, error, and success feedback.", ["shake-wiggle", "crossfade"]),
-  component("password-strength", "PasswordStrength", "inputs", "密码强度", "Password strength", "规则检查与强度变化保持清晰节奏。", "Makes rule checks and strength changes legible as one response.", ["stagger", "progress-bar"]),
+  component("password-strength", "PasswordStrength", "inputs", "密码强度", "Password strength", "规则检查与强度变化保持清晰节奏。", "Makes rule checks and strength changes legible as one response.", ["stagger", "crossfade"]),
   component("slider-detents", "SliderDetents", "inputs", "刻度滑块", "Slider detents", "拖动时吸附语义刻度，并保留连续值。", "Snaps to meaningful detents while preserving continuous input.", ["spring", "drag-to-reorder"]),
   component("tag-input", "TagInput", "inputs", "标签输入", "Tag input", "新增、删除和拒绝状态都有明确反馈。", "Gives clear feedback for adding, removing, and rejecting tags.", ["scale-in", "shake-wiggle"]),
 
@@ -99,9 +99,9 @@ export const registryComponents: readonly RegistryComponent[] = [
   component("segmented-control", "SegmentedControl", "navigation", "分段控制", "Segmented control", "共享高亮在选项之间连续移动。", "Carries one shared highlight between options.", ["morph", "press-tap-feedback"]),
   component("tabs", "Tabs", "navigation", "标签页", "Tabs", "指示器、方向与内容切换保持一致。", "Coordinates the indicator, direction, and panel change.", ["direction-aware-transition", "morph"], true),
 
-  component("filter-grid", "FilterGrid", "data", "筛选网格", "Filter grid", "筛选结果重新排列时维持空间连续性。", "Preserves spatial continuity as filtered results rearrange.", ["layout-animation", "stagger"]),
+  component("filter-grid", "FilterGrid", "data", "筛选网格", "Filter grid", "筛选结果重新排列时维持空间连续性。", "Preserves spatial continuity as filtered results rearrange.", ["morph", "stagger"]),
   component("reorder-list", "ReorderList", "data", "拖拽排序列表", "Reorder list", "指针拖拽与键盘排序共享清晰落点。", "Provides clear drop position for pointer and keyboard reordering.", ["drag-to-reorder", "spring"], true),
-  component("sortable-table", "SortableTable", "data", "可排序表格", "Sortable table", "排序变化通过行位置表达，数据保持可读。", "Explains sorting through row position while keeping data readable.", ["layout-animation", "crossfade"]),
+  component("sortable-table", "SortableTable", "data", "可排序表格", "Sortable table", "排序变化通过行位置表达，数据保持可读。", "Explains sorting through row position while keeping data readable.", ["morph", "crossfade"]),
 
   component("progress-bar", "ProgressBar", "feedback", "进度条", "Progress bar", "支持等待、确定进度与完成三个阶段。", "Covers pending, determinate, and complete progress states.", ["perceived-performance", "crossfade"]),
   component("task-steps", "TaskSteps", "feedback", "任务步骤", "Task steps", "让排队、执行、完成与失败状态连成一条流程。", "Connects queued, active, complete, and failed states into one flow.", ["stagger", "line-drawing"]),
@@ -116,7 +116,7 @@ export const registryComponents: readonly RegistryComponent[] = [
   component("voice-capture", "VoiceCapture", "inputs", "语音输入器", "Voice capture", "录制、声级、暂停和完成在同一输入器中连续切换。", "Coordinates recording, levels, pause, and completion inside one input surface.", ["idle-animation", "morph"], true, ["motion"], ["motion"], "light", { zh: "响应声级的语音采集流程", en: "Voice capture flow with responsive levels" }),
 
   component("toast-stack", "ToastStack", "feedback", "通知堆栈", "Toast stack", "通知按层级进入、展开，并支持滑动或键盘关闭。", "Layers incoming notices into a stack that expands and dismisses by swipe or keyboard.", ["stagger", "swipe-to-dismiss"], true, ["motion"], ["motion"], "light", { zh: "可展开并滑动关闭的通知队列", en: "Expandable notification queue with swipe dismissal" }),
-  component("upload-queue", "UploadQueue", "feedback", "文件上传队列", "Upload queue", "把文件接收、逐项进度、重试和完成收拢成一个流程。", "Turns file intake, per-item progress, retry, and completion into one compact flow.", ["progress-bar", "stagger"], true, ["motion"], ["motion"], "light", { zh: "逐项推进并自动收拢的上传流程", en: "Per-file upload flow that resolves into completion" }),
+  component("upload-queue", "UploadQueue", "feedback", "文件上传队列", "Upload queue", "把文件接收、逐项进度、重试和完成收拢成一个流程。", "Turns file intake, per-item progress, retry, and completion into one compact flow.", ["perceived-performance", "stagger"], true, ["motion"], ["motion"], "light", { zh: "逐项推进并自动收拢的上传流程", en: "Per-file upload flow that resolves into completion" }),
   component("skeleton-reveal", "SkeletonReveal", "feedback", "内容成形加载", "Skeleton reveal", "骨架与真实内容共用稳定几何，载入后进行双层交接。", "Shares stable geometry between skeleton and content for a composed handoff.", ["skeleton-shimmer", "crossfade"], false, ["motion"], ["motion"], "light", { zh: "稳定几何上的骨架内容交接", en: "Skeleton-to-content handoff on stable geometry" }),
 
   component("activity-feed", "ActivityFeed", "data", "实时动态流", "Activity feed", "新动态插入、日期分组和未读位置保持连续。", "Preserves date groups and the unread boundary as live activity arrives.", ["stagger", "morph"], false, ["motion"], ["motion"], "light", { zh: "带未读边界的实时插入列表", en: "Live insertion feed with an unread boundary" }),

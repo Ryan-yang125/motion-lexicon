@@ -1,9 +1,11 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useState } from "react";
 import { HideOnScroll } from "@/registry/components/hide-on-scroll";
 
-const article = [
+const articleEn = [
   "A ship at sea can read its latitude off the sun. Longitude is a question about time: how far local noon has drifted from noon at a port whose position is already known.",
   "The pendulum clocks of the seventeenth century kept excellent time on land and none at all on a deck that pitched, rolled, and changed temperature twice a day.",
   "John Harrison spent thirty-one years on it. The first three machines were large, ingenious, and impractical. The fourth was the size of a pocket watch.",
@@ -11,26 +13,35 @@ const article = [
   "The Board of Longitude paid him in instalments, over fourteen years, and never in full.",
   "Within a generation the chronometer was ordinary. Ships carried three, because two that disagree tell you nothing at all.",
 ];
+const articleZh = [
+  "海上的船只可以通过太阳判断纬度。经度关乎时间：当地正午与已知港口正午相差多少。",
+  "十七世纪的摆钟在陆地上很准，到了颠簸、摇晃且昼夜温差巨大的甲板上便无法工作。",
+  "约翰·哈里森为此花了三十一年。前三台机器庞大、精巧，却不实用；第四台只有怀表大小。",
+  "1761 年前往牙买加的航程中，H4 只慢了五秒，远低于奖金要求的误差。",
+  "经度委员会分期十四年支付奖金，最终仍未付清全部款项。",
+  "一代人之后，航海钟已很常见。船上通常带三只，因为两只读数不一致时无法判断谁更准。",
+];
 
 const BOOKMARK = "M184,224l-56-40L72,224V48a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8Z";
 
-export function HideOnScrollDemo() {
+export function HideOnScrollDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [saved, setSaved] = useState(false);
+  const article = locale === "zh" ? articleZh : articleEn;
 
   return (
-    <div className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("hide-on-scroll", locale)} className="mx-auto w-full max-w-[440px]">
       <HideOnScroll
         maxHeight={268}
-        label="Longitude"
+        label={demoValue(locale, "经度", "Longitude")}
         bar={
           <>
             <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-ink">
-              Longitude
+              {demoValue(locale, "经度", "Longitude")}
             </span>
             <button
               type="button"
               aria-pressed={saved}
-              aria-label={saved ? "Remove bookmark" : "Bookmark"}
+              aria-label={saved ? demoValue(locale, "移除书签", "Remove bookmark") : demoValue(locale, "添加书签", "Bookmark")}
               onClick={() => setSaved((v) => !v)}
               className={`mat-cap press flex size-7 items-center justify-center rounded-[6px] transition-colors duration-150 ${
                 saved ? "text-[#4568FF] dark:text-[#93B0FF]" : "text-ink-2"

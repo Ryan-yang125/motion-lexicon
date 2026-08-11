@@ -1,6 +1,8 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { registryComponents } from "../src/data/component-registry";
+import { canonicalMotionCatalog } from "../src/data/motion-catalog";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { defaultLocale, getStaticPaths, isLocale, pathFor, sitemapPaths, siteUrl, staticRedirects } from "../src/data/site";
 
@@ -29,6 +31,17 @@ function listFiles(directory: string): string[] {
   });
 }
 
+function pngDimensions(file: string) {
+  const image = readFileSync(file);
+  assert(image.toString("hex", 0, 8) === "89504e470d0a1a0a", `${file} must be a PNG image`);
+  return {
+    width: image.readUInt32BE(16),
+    height: image.readUInt32BE(20),
+    bytes: image.byteLength,
+    hash: createHash("sha256").update(image).digest("hex")
+  };
+}
+
 const requiredAssets = [
   "favicon.ico", "favicon.svg", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
   "site.webmanifest", "og-default.png", "og-zh.png", "og-en.png",
@@ -38,6 +51,25 @@ const requiredAssets = [
   "robots.txt", "sitemap.xml", "_headers", "_redirects", "404.html", "r/registry.json"
 ];
 for (const asset of requiredAssets) assert(existsSync(path.join("dist", asset)), `Missing dist asset: ${asset}`);
+
+const detailOgFiles = [
+  ...registryComponents.flatMap((component) => ["zh", "en"].map((locale) => `og/components/${component.id}-${locale}.png`)),
+  ...canonicalMotionCatalog.flatMap((primitive) => ["zh", "en"].map((locale) => `og/primitives/${primitive.id}-${locale}.png`))
+];
+assert(detailOgFiles.length === 184, `Expected 184 detail Open Graph images, found ${detailOgFiles.length}`);
+let detailOgBytes = 0;
+const detailOgHashes = new Set<string>();
+for (const asset of detailOgFiles) {
+  const file = path.join("dist", asset);
+  assert(existsSync(file), `Missing detail Open Graph image: ${asset}`);
+  const dimensions = pngDimensions(file);
+  assert(dimensions.width === 1200 && dimensions.height === 630, `${asset} must be 1200x630`);
+  assert(dimensions.bytes <= 300 * 1024, `${asset} exceeds the 300 KiB per-image budget`);
+  detailOgBytes += dimensions.bytes;
+  detailOgHashes.add(dimensions.hash);
+}
+assert(detailOgBytes <= 32 * 1024 * 1024, "Detail Open Graph images exceed the 32 MiB total budget");
+assert(detailOgHashes.size === detailOgFiles.length, "Every detail page must have a visually distinct Open Graph image");
 
 const routes = sitemapPaths();
 const staticRoutes = getStaticPaths();
@@ -50,7 +82,15 @@ const sitemapXml = readFileSync("dist/sitemap.xml", "utf8");
 assert((sitemapXml.match(/<loc>/g) ?? []).length === routes.length, "Sitemap XML route count is inconsistent");
 assert((sitemapXml.match(/hreflang=/g) ?? []).length === routes.length * 3, "Sitemap hreflang clusters are incomplete");
 
+const robots = readFileSync("dist/robots.txt", "utf8");
+for (const userAgent of ["OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User"]) {
+  assert(robots.includes(`User-agent: ${userAgent}\nAllow: /`), `robots.txt does not explicitly allow ${userAgent}`);
+}
+assert(robots.includes("No training-specific rule is declared."), "robots.txt must document its training-neutral policy");
+assert(robots.includes(`Sitemap: ${siteUrl}/sitemap.xml`), "robots.txt sitemap URL is missing");
+
 const internalLinks = new Set<string>();
+const titlesByLocale = new Map<string, Map<string, string>>();
 for (const routePath of routes) {
   assert(existsSync(routeFile(routePath)), `Missing prerendered HTML: ${routePath}`);
   const html = readFileSync(routeFile(routePath), "utf8");
@@ -59,16 +99,60 @@ for (const routePath of routes) {
   assert(tags(html, "h1").length === 1, `${routePath} must contain exactly one H1`);
   assert(/<div id="root">[\s\S]+<\/div>/.test(html), `${routePath} has no prerendered app content`);
   const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
-  assert(tags(head, "title").length === 1, `${routePath} must contain exactly one title`);
+  const titleTags = tags(head, "title");
+  assert(titleTags.length === 1, `${routePath} must contain exactly one title`);
+  const pageTitle = head.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim();
+  assert(pageTitle, `${routePath} title is empty`);
+  if (locale === "zh") assert(/\p{Script=Han}/u.test(pageTitle), `${routePath} Chinese title needs Han characters: ${pageTitle}`);
+  if (/^\/zh\/components\/[^/]+\/$/.test(routePath)) {
+    assert(pageTitle.endsWith(" React 组件 | Motion Lexicon"), `${routePath} must use the canonical Chinese component title`);
+    assert(!pageTitle.includes("React 动效组件"), `${routePath} contains obsolete Chinese component terminology`);
+  }
+  if (/^\/zh\/primitives\/[^/]+\/$/.test(routePath)) {
+    assert(pageTitle.endsWith(" 原子动效 | Motion Lexicon"), `${routePath} must use the canonical Chinese primitive title`);
+    assert(!pageTitle.includes("动效原语"), `${routePath} contains obsolete Chinese primitive terminology`);
+  }
+  const localeTitles = titlesByLocale.get(locale) ?? new Map<string, string>();
+  const duplicateRoute = localeTitles.get(pageTitle);
+  assert(!duplicateRoute, `${routePath} duplicates the ${locale} title from ${duplicateRoute}: ${pageTitle}`);
+  localeTitles.set(pageTitle, routePath);
+  titlesByLocale.set(locale, localeTitles);
   const canonical = tags(head, "link").map(attributes).filter((tag) => tag.get("rel") === "canonical");
   assert(canonical.length === 1 && canonical[0].get("href") === `${siteUrl}${routePath}`, `${routePath} canonical is inconsistent`);
   const alternates = tags(head, "link").map(attributes).filter((tag) => tag.get("rel") === "alternate" && tag.has("hreflang"));
   assert(alternates.length === 3, `${routePath} needs zh-CN, en, and x-default alternates`);
   const schemas = Array.from(html.matchAll(/<script\b(?=[^>]*type="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/g), (match) => JSON.parse(match[1]) as Record<string, unknown>);
-  assert(schemas.some((schema) => schema["@type"] === "WebPage" && schema.url === `${siteUrl}${routePath}`), `${routePath} WebPage JSON-LD is missing`);
+  const webPageSchema = schemas.find((schema) => schema["@type"] === "WebPage" && schema.url === `${siteUrl}${routePath}`);
+  assert(webPageSchema, `${routePath} WebPage JSON-LD is missing`);
+  const publisher = webPageSchema.publisher as Record<string, unknown> | undefined;
+  const website = webPageSchema.isPartOf as Record<string, unknown> | undefined;
+  assert(publisher?.["@id"] === `${siteUrl}/#organization`, `${routePath} publisher entity ID is inconsistent`);
+  assert(website?.["@id"] === `${siteUrl}/#website`, `${routePath} WebSite entity ID is inconsistent`);
+  if (routePath === pathFor(locale)) {
+    assert(website?.["@type"] === "WebSite" && website.url === siteUrl, `${routePath} must define the canonical root WebSite entity`);
+    assert(publisher?.["@type"] === "Organization" && publisher.url === siteUrl, `${routePath} must define the publisher Organization entity`);
+  }
   const ogImage = tags(head, "meta").map(attributes).find((tag) => tag.get("property") === "og:image")?.get("content");
   assert(ogImage?.startsWith(siteUrl), `${routePath} has no first-party Open Graph image`);
   assert(existsSync(path.join("dist", (ogImage ?? "").replace(siteUrl, ""))), `${routePath} Open Graph image is missing`);
+  const ogImageAlt = tags(head, "meta").map(attributes).find((tag) => tag.get("property") === "og:image:alt")?.get("content");
+  const twitterImageAlt = tags(head, "meta").map(attributes).find((tag) => tag.get("name") === "twitter:image:alt")?.get("content");
+  assert(ogImageAlt === pageTitle, `${routePath} Open Graph image alt must match its concise page title`);
+  assert(twitterImageAlt === pageTitle, `${routePath} Twitter image alt must match its concise page title`);
+
+  const componentMatch = routePath.match(/^\/(zh|en)\/components\/([^/]+)\/$/);
+  if (componentMatch) {
+    assert(ogImage === `${siteUrl}/og/components/${componentMatch[2]}-${locale}.png`, `${routePath} must use its page-specific Open Graph image`);
+    const componentId = componentMatch[2];
+    for (const section of ["behavior", "events", "foundations", "runtime"]) {
+      assert(html.includes(`data-seo-section="${section}"`), `${routePath} is missing the static ${section} section`);
+    }
+    assert(html.includes(`href="/r/${componentId}.json"`), `${routePath} is missing its public Registry JSON link`);
+  }
+  const primitiveMatch = routePath.match(/^\/(zh|en)\/primitives\/([^/]+)\/$/);
+  if (primitiveMatch) {
+    assert(ogImage === `${siteUrl}/og/primitives/${primitiveMatch[2]}-${locale}.png`, `${routePath} must use its page-specific Open Graph image`);
+  }
 
   for (const tagName of ["a", "link", "script", "img"]) {
     for (const tag of tags(html, tagName)) {
@@ -83,6 +167,10 @@ for (const routePath of routes) {
       }
     }
   }
+}
+
+for (const [locale, titles] of titlesByLocale) {
+  assert(titles.size === routes.filter((routePath) => routePath.startsWith(`/${locale}/`)).length, `${locale} titles are not unique across all localized routes`);
 }
 
 for (const href of internalLinks) assert(routeSet.has(href), `Internal link has no static target: ${href}`);
@@ -106,8 +194,11 @@ assert(redirects.includes(`/ ${pathFor(defaultLocale)} 301`), "Root redirect mus
 for (const redirect of staticRedirects()) {
   assert(redirects.includes(`${redirect.source} ${redirect.destination} ${redirect.status}`), `Missing redirect ${redirect.source}`);
 }
-for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playground"]) {
+for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playground", "/guides/pack-or-primitive"]) {
   assert(!redirects.includes(obsolete), `Obsolete redirect remains: ${obsolete}`);
+}
+for (const locale of ["zh", "en"]) {
+  assert(!existsSync(path.join("dist", locale, "guides", "pack-or-primitive", "index.html")), `Obsolete guide artifact remains for ${locale}`);
 }
 
 const headers = readFileSync("dist/_headers", "utf8");
@@ -116,4 +207,4 @@ for (const header of ["Content-Security-Policy:", "Strict-Transport-Security:", 
 }
 assert(!listFiles("dist").some((file) => file.endsWith(".map")), "Production output contains source maps");
 
-console.log(`Dist crawl passed: ${routes.length} canonical pages, ${internalLinks.size} internal links, ${registryItemCount} registry items, and ${requiredAssets.length} required assets.`);
+console.log(`Dist crawl passed: ${routes.length} canonical pages, ${internalLinks.size} internal links, ${registryItemCount} registry items, ${detailOgFiles.length} detail OG images (${Math.round(detailOgBytes / 1024)} KiB), and ${requiredAssets.length} required assets.`);

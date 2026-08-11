@@ -1,0 +1,1527 @@
+{
+  "suite": "motion-lexicon-fresh-context",
+  "skillVersion": "4.1.0",
+  "skillSha256": "e3d25ac66baadfd297561b8f15152d23c4636797420df0a80532dc8bfba9954d",
+  "catalogRelease": "4.1.0",
+  "model": "gpt-5.6-sol",
+  "startedAt": "2026-08-10T23:29:18.836Z",
+  "completedAt": "2026-08-10T23:33:47.943Z",
+  "isolation": {
+    "freshContextPerRun": true,
+    "method": "Each run used a new temporary HOME, CODEX_HOME, empty work directory, ephemeral Codex session, and a Skill copy that excluded evals.",
+    "globalPathHits": 0,
+    "expectedAnswerExposure": false,
+    "rawArtifactLocation": "excluded from repository; hashes recorded"
+  },
+  "excludedEvidence": {
+    "homeLeak": {
+      "status": "contaminated",
+      "files": 41,
+      "reason": "Initial HOME exposed global skills; some runs read review-animations, humanizer-zh, or vercel-react-best-practices."
+    },
+    "forcedTrigger": {
+      "status": "contaminated",
+      "files": 12,
+      "reason": "An early isolation guard forced Skill use for negative-trigger cases."
+    },
+    "preFix": {
+      "status": "superseded",
+      "files": 48,
+      "reason": "Compose produced prose Blueprints without validator-ready JSON and outputs repeated the retired leave curve."
+    }
+  },
+  "runs": [
+    {
+      "evalId": "zh-recommend-card-arrival",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-recommend-card-arrival-r1.md",
+      "artifactPaths": [
+        "zh-recommend-card-arrival-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "fff6eb9a2225718ef84960d7543f00c84057c5b4535c86408c2c28018bb9b131",
+        "transcript": "81b91ef3da7580bf5a5195c58fe091cbf39f9594b88cc69468367f54664ca2c1"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Recommend references."
+        },
+        {
+          "id": "published-id-only",
+          "critical": true,
+          "score": 1,
+          "evidence": "Selected exact published ID slide-in; catalog membership verified."
+        },
+        {
+          "id": "language-match",
+          "critical": true,
+          "score": 1,
+          "evidence": "Response remained Chinese."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three candidates have product-facing distinctions."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "One pick includes trigger, timing, and easing."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Arrival duration is 240 ms, within the documented range."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Reduced motion removes travel and keeps the final state."
+        }
+      ],
+      "excerpt": "## 建议 假设任务卡出现在项目内容区内，位置预先保留，不推动周围布局。 | 选择 | 动效 | 感受 | | --- | --- | --- | | 侧向切入 | 从内容区最近一侧平移 `24px → 0`，透明度同步进入 | 方向明确，切入感最强，落点利落 | | 轻微上浮 | 从下方 `16px → 0`，透明度同步进入 | 更温和，像内容自然到位 | | 克制缩放 | 原位从 `0.97 → 1`，透明度同步进入 | 更聚焦，但",
+      "passed": true
+    },
+    {
+      "evalId": "zh-recommend-card-arrival",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-recommend-card-arrival-r2.md",
+      "artifactPaths": [
+        "zh-recommend-card-arrival-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "1512f2a48f023488280906692fed6b0d571383bb944ff7d39b57949f0be2d493",
+        "transcript": "172b5cfc5593dbac73e6f4a64eeefbc81ebf01d275de650bd5573076e205adc0"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Recommend references."
+        },
+        {
+          "id": "published-id-only",
+          "critical": true,
+          "score": 1,
+          "evidence": "Selected exact published ID slide-in; catalog membership verified."
+        },
+        {
+          "id": "language-match",
+          "critical": true,
+          "score": 1,
+          "evidence": "Response remained Chinese."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three candidates have product-facing distinctions."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "One pick includes trigger, timing, and easing."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Arrival duration is 240 ms, within the documented range."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Reduced motion removes travel and keeps the final state."
+        }
+      ],
+      "excerpt": "## 建议 | 选择 | 动效 | 感受 | | --- | --- | --- | | 1. 侧向切入 | 卡片从最近的内容边缘平移 `20px → 0`，同时淡入 | 方向明确，收尾利落 | | 2. 轻微放大 | `scale(.97) → 1`，同时淡入 | 更聚焦，但切入感较弱 | | 3. 裁切揭示 | 卡片沿项目内容方向展开 | 更有结构感，视觉存在感较强 | **推荐：侧向切入（`slide-in`）。** 最符合“有一",
+      "passed": true
+    },
+    {
+      "evalId": "zh-recommend-card-arrival",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-recommend-card-arrival-r3.md",
+      "artifactPaths": [
+        "zh-recommend-card-arrival-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "891781b6b5cd219d1764d96000b6f1e17ebae4f13cdbcd9ba89395e063fafb8a",
+        "transcript": "0a30bb977efd6fa95fcbda128b19e477343c5a6bd2dda3d8ba3f5daa8d6eaa62"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Recommend references."
+        },
+        {
+          "id": "published-id-only",
+          "critical": true,
+          "score": 1,
+          "evidence": "Selected exact published ID slide-in; catalog membership verified."
+        },
+        {
+          "id": "language-match",
+          "critical": true,
+          "score": 1,
+          "evidence": "Response remained Chinese."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three candidates have product-facing distinctions."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "One pick includes trigger, timing, and easing."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Arrival duration is 240 ms, within the documented range."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Reduced motion removes travel and keeps the final state."
+        }
+      ],
+      "excerpt": "## 建议 假设任务卡出现在项目内容区内，而不是全屏弹窗。 | 候选 | 动效方式 | 观感 | | --- | --- | --- | | 侧向切入 | 从靠近项目导航的一侧平移 `24px → 0`，同时淡入 | 切入感最明确，来源关系清楚 | | 轻微上推 | 从下方平移 `16px → 0`，同时淡入 | 更柔和，像内容自然就位 | | 克制缩放 | `scale(.97) → 1`，同时淡入 | 聚焦最强，但更像弹窗 | **",
+      "passed": true
+    },
+    {
+      "evalId": "zh-compose-async-save-failure",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-compose-async-save-failure-r1.md",
+      "artifactPaths": [
+        "zh-compose-async-save-failure-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "660792e45e99625d7e40e160b26e97f94e878c92669206612262591dba18744e",
+        "transcript": "1b48490f60600ad03f2ac38e948d1d3e7ca439f5cf203861598a5050787f7e00"
+      },
+      "validatorExitCode": 0,
+      "usedPrimitiveIds": [
+        "crossfade",
+        "press-tap-feedback",
+        "text-morph"
+      ],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Compose references."
+        },
+        {
+          "id": "blueprint-valid",
+          "critical": true,
+          "score": 1,
+          "evidence": "Fenced JSON passed the bundled validator with exit 0."
+        },
+        {
+          "id": "failure-retry-race",
+          "critical": true,
+          "score": 1,
+          "evidence": "States include pending, success, failure, recovery, retry, and latest-intent handling."
+        },
+        {
+          "id": "accessibility",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes reduced motion, focus, aria-live, and keyboard plans."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "State graph includes pending, success, failure, and recovery roles."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Repeat input is coalesced and stale work cannot win."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Status stays beside the save control or record."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "aria-live and focus guidance are present."
+        }
+      ],
+      "excerpt": "假设是带“保存”按钮的网页编辑器。建议采用“单请求在途 + 合并一次后续保存”：连续点击不会并发发请求，也不会丢掉在途期间的新修改；当前请求结束后，只为最新版本再保存一次。 [code] 交互落地要点： - 首次点击：按钮立即产生约 100ms 按压反馈，文案变为“正在保存”。按钮保持原位置和宽度，避免跳动。 - 快速重复点击：每次仍给轻微按压反馈，但不创建并发请求。状态变成“将保存最新修改”，让用户知道操作已被接收。 - 成功：只有服",
+      "passed": true
+    },
+    {
+      "evalId": "zh-compose-async-save-failure",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-compose-async-save-failure-r2.md",
+      "artifactPaths": [
+        "zh-compose-async-save-failure-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "3aea72c3ee0c5c9d9050a15f2a9c48d7e5da19dc299ce2b0e9f3d69e0c23bbf5",
+        "transcript": "62f8b78b9e382e9c78de9cd4bc2c87c5b1da76b442f85d68a903008a39f1d20c"
+      },
+      "validatorExitCode": 0,
+      "usedPrimitiveIds": [
+        "crossfade",
+        "press-tap-feedback",
+        "text-morph"
+      ],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Compose references."
+        },
+        {
+          "id": "blueprint-valid",
+          "critical": true,
+          "score": 1,
+          "evidence": "Fenced JSON passed the bundled validator with exit 0."
+        },
+        {
+          "id": "failure-retry-race",
+          "critical": true,
+          "score": 1,
+          "evidence": "States include pending, success, failure, recovery, retry, and latest-intent handling."
+        },
+        {
+          "id": "accessibility",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes reduced motion, focus, aria-live, and keyboard plans."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "State graph includes pending, success, failure, and recovery roles."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Repeat input is coalesced and stale work cannot win."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Status stays beside the save control or record."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "aria-live and focus guidance are present."
+        }
+      ],
+      "excerpt": "假设编辑器有明确的“保存”按钮，保存期间仍允许继续编辑。核心策略是：按文档版本合并请求，连续点击不并发发送重复保存；若内容发生变化，只保留一次“保存最新版”的尾随任务。 [code] 交互落地规则： - 点击保存后，按钮立即给出 90ms 按压反馈，文案切为“正在保存…”。保持按钮宽度不变，避免文字切换造成跳动。 - 保存期间不要彻底禁用按钮；否则用户无法确认点击是否生效。重复点击仍给轻微按压反馈，但相同文档版本不再发请求。 - 如果保",
+      "passed": true
+    },
+    {
+      "evalId": "zh-compose-async-save-failure",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-compose-async-save-failure-r3.md",
+      "artifactPaths": [
+        "zh-compose-async-save-failure-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "dbe9b1f36a07fba8fcc3c267d5e1035656e24296ddbc6dcb72f18ac0fb1052ea",
+        "transcript": "fd036a2f43a347d4d9fe565ef60bb11b9f2587178a27ea52caff7e751008c7ad"
+      },
+      "validatorExitCode": 0,
+      "usedPrimitiveIds": [
+        "crossfade",
+        "press-tap-feedback",
+        "text-morph"
+      ],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Compose references."
+        },
+        {
+          "id": "blueprint-valid",
+          "critical": true,
+          "score": 1,
+          "evidence": "Fenced JSON passed the bundled validator with exit 0."
+        },
+        {
+          "id": "failure-retry-race",
+          "critical": true,
+          "score": 1,
+          "evidence": "States include pending, success, failure, recovery, retry, and latest-intent handling."
+        },
+        {
+          "id": "accessibility",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes reduced motion, focus, aria-live, and keyboard plans."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "State graph includes pending, success, failure, and recovery roles."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Repeat input is coalesced and stale work cannot win."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Status stays beside the save control or record."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "aria-live and focus guidance are present."
+        }
+      ],
+      "excerpt": "假设是桌面/网页编辑器，主操作是“保存”按钮。核心策略：**同一时间只允许一个保存请求；连续点击合并为一次“保存最新版本”**，避免旧请求覆盖新内容。 [code] 交互节奏： 1. 点击后立即给按钮约 100ms 的按压反馈，按钮和状态区宽度保持固定，避免文字变化引起跳动。 2. 请求中显示“正在保存…”。可以继续编辑，也可以再次点击保存。 3. 快速重复点击仍给轻微按压反馈，但不并发发送请求： - 内容没有变化：不新增请求。 - 内",
+      "passed": true
+    },
+    {
+      "evalId": "zh-review-layout-jank",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-review-layout-jank-r1.md",
+      "artifactPaths": [
+        "zh-review-layout-jank-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "1a8ad0852c312710eefe4aae4401d4a38a641d31195c5f6e8f17db8392442581",
+        "transcript": "eb4f9509ff24f810c5b29a495e36a022467acd0d094667b7f1c6546bf9f3af14"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "evidence-based-review",
+          "critical": true,
+          "score": 1,
+          "evidence": "Diagnosis cites the reported width reflow and transition all 0.5s."
+        },
+        {
+          "id": "prioritized-findings",
+          "critical": true,
+          "score": 1,
+          "evidence": "Findings are grouped as Critical, Important, and Polish."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Layout instability is Critical."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A fixed or reserved width is prescribed."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "transition all is replaced by explicit properties."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Feedback timing is shortened from 500 ms."
+        }
+      ],
+      "excerpt": "## Motion review ### Critical - **现象：** “保存”切到“已保存”时按钮变宽，挤动右侧操作。 - **原因：** 文案长度改变触发布局重排；`transition: all 0.5s` 又把宽度变化动画化，抖动被拉长到 500ms。 - **修复：** 按较长文案预留固定宽度，不要动画 `width`。 [code] ### Important - **现象：** 保存反馈显得迟钝。 - **原因：*",
+      "passed": true
+    },
+    {
+      "evalId": "zh-review-layout-jank",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-review-layout-jank-r2.md",
+      "artifactPaths": [
+        "zh-review-layout-jank-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "84ccc3795dd28c87dfcf9287f763827396c171764131690d75e2a2d105419070",
+        "transcript": "714a5e741b8f16ec59e5ec9845f05f77e224ef983b20ad1c2340e9a543f28475"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "evidence-based-review",
+          "critical": true,
+          "score": 1,
+          "evidence": "Diagnosis cites the reported width reflow and transition all 0.5s."
+        },
+        {
+          "id": "prioritized-findings",
+          "critical": true,
+          "score": 1,
+          "evidence": "Findings are grouped as Critical, Important, and Polish."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Layout instability is Critical."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A fixed or reserved width is prescribed."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "transition all is replaced by explicit properties."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Feedback timing is shortened from 500 ms."
+        }
+      ],
+      "excerpt": "## 交互 Review ### Critical - **现象：**“保存”切换为“已保存”时按钮变宽，挤动右侧操作。 - **原因：**按钮宽度由文案撑开，状态切换触发整行重新布局；`transition: all` 又把宽度变化动画化，使抖动更明显。 - **修复：**提前为最长文案预留宽度，切换状态时保持按钮几何尺寸不变。不要动画 `width`。 ### Important - **现象：**保存反馈显得拖沓。 - **原因：",
+      "passed": true
+    },
+    {
+      "evalId": "zh-review-layout-jank",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "zh-review-layout-jank-r3.md",
+      "artifactPaths": [
+        "zh-review-layout-jank-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "88759790ebbe31bf46da443141cddfad0ac2f6e084afee2195d775e58f2975e1",
+        "transcript": "024b8cad8d1de0ec695fc9985e1e8895f816b941d7b8fc6135dee6eef3604290"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "evidence-based-review",
+          "critical": true,
+          "score": 1,
+          "evidence": "Diagnosis cites the reported width reflow and transition all 0.5s."
+        },
+        {
+          "id": "prioritized-findings",
+          "critical": true,
+          "score": 1,
+          "evidence": "Findings are grouped as Critical, Important, and Polish."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Layout instability is Critical."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A fixed or reserved width is prescribed."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "transition all is replaced by explicit properties."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Feedback timing is shortened from 500 ms."
+        }
+      ],
+      "excerpt": "## Motion review ### Critical - **现象：** “保存”切换为“已保存”时按钮变宽，右侧操作被重新排版，因此产生横向抖动。 - **原因：** 状态文案长度不同，但按钮没有预留稳定宽度。 - **修复：** 给按钮设置能容纳“已保存”的固定宽度或 `min-width`，让按钮成为稳定锚点。 [code] ### Important - **现象：** 反馈拖沓，且可能意外动画化宽度、间距、位置等属性。 ",
+      "passed": true
+    },
+    {
+      "evalId": "zh-negative-copy-edit",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "zh-negative-copy-edit-r1.md",
+      "artifactPaths": [
+        "zh-negative-copy-edit-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "546d9d8e31181fd490ca5240a61bb6315714dbfc20735c6f7e7deb342e40b93e",
+        "transcript": "05132a91c1ffb8b24921cb70d0a3663fd4eb24943a76b5b7d0fb97528b563c35"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response only changed the copy."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Only the requested copy revision was returned."
+        }
+      ],
+      "excerpt": "按钮文案改为：“免费开始”。",
+      "passed": true
+    },
+    {
+      "evalId": "zh-negative-copy-edit",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "zh-negative-copy-edit-r2.md",
+      "artifactPaths": [
+        "zh-negative-copy-edit-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "50d386fb6fafc3d7e7ee84eeb008852ee303795fbe005a50dc87ff36401875f4",
+        "transcript": "442f7596cb5a3696ed5f2ddb64993813476b25e7c064befacf428f1b4f904b18"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response only changed the copy."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Only the requested copy revision was returned."
+        }
+      ],
+      "excerpt": "按钮文案已改为“免费开始”。",
+      "passed": true
+    },
+    {
+      "evalId": "zh-negative-copy-edit",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "zh-negative-copy-edit-r3.md",
+      "artifactPaths": [
+        "zh-negative-copy-edit-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "546d9d8e31181fd490ca5240a61bb6315714dbfc20735c6f7e7deb342e40b93e",
+        "transcript": "c6feeecc43a003ab948779cffea1b0b38d05bab07996bb7e16bb02a071a2b028"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response only changed the copy."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Only the requested copy revision was returned."
+        }
+      ],
+      "excerpt": "按钮文案改为：“免费开始”。",
+      "passed": true
+    },
+    {
+      "evalId": "en-implement-react-selection",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-implement-react-selection-r1.md",
+      "artifactPaths": [
+        "en-implement-react-selection-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "0941cdb0a6793a0df9063d928362de998a3ffc9fdd5296b96b6b72c8bd6a972f",
+        "transcript": "46cfc9a3d59dfa2d3eac0eecf517f102f3a5cf6433a8986b59ea937863ec4963"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Implement references."
+        },
+        {
+          "id": "requested-format",
+          "critical": true,
+          "score": 1,
+          "evidence": "Delivered React JSX or TSX with the CSS required by the component."
+        },
+        {
+          "id": "keyboard-focus",
+          "critical": true,
+          "score": 1,
+          "evidence": "Escape, focus entry, and focus restoration are explicit."
+        },
+        {
+          "id": "reduced-motion",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes a prefers-reduced-motion branch."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Selection and inspector state are explicit."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stable project IDs preserve card identity."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Escape and focus behavior are implemented."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Interruption and reduced motion are explicit."
+        }
+      ],
+      "excerpt": "Below is a self-contained React implementation. It stores the stable project ID—not an array index—keeps the inspector mounted so transitions can reverse cleanly, restores focus on Escape, and handles reduced motion. [co",
+      "passed": true
+    },
+    {
+      "evalId": "en-implement-react-selection",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-implement-react-selection-r2.md",
+      "artifactPaths": [
+        "en-implement-react-selection-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "906926a55f1eb0a676d76f08b88ff6f9df23962c736e30a85be38f3bf4bdb77e",
+        "transcript": "9b1ac7dd3a24a90942461d04ab75d03fb57fc209702468db9cf22728e2a30264"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Implement references."
+        },
+        {
+          "id": "requested-format",
+          "critical": true,
+          "score": 1,
+          "evidence": "Delivered React JSX or TSX with the CSS required by the component."
+        },
+        {
+          "id": "keyboard-focus",
+          "critical": true,
+          "score": 1,
+          "evidence": "Escape, focus entry, and focus restoration are explicit."
+        },
+        {
+          "id": "reduced-motion",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes a prefers-reduced-motion branch."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Selection and inspector state are explicit."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stable project IDs preserve card identity."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Escape and focus behavior are implemented."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Interruption and reduced motion are explicit."
+        }
+      ],
+      "excerpt": "Below is a self-contained React implementation. The project ID—not the array index or animated element—owns selection identity. CSS transitions interpolate from their current position when interrupted, so rapidly selecti",
+      "passed": true
+    },
+    {
+      "evalId": "en-implement-react-selection",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-implement-react-selection-r3.md",
+      "artifactPaths": [
+        "en-implement-react-selection-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "a20a3805c721325adcc00699a77eb6133092f5a807186e9301c5c584c9608bd1",
+        "transcript": "7b75c3d1c7439f0c0945f50ffb8fbb778800c19cbc262a58a34c2588ba5ae48e"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Implement references."
+        },
+        {
+          "id": "requested-format",
+          "critical": true,
+          "score": 1,
+          "evidence": "Delivered React JSX or TSX with the CSS required by the component."
+        },
+        {
+          "id": "keyboard-focus",
+          "critical": true,
+          "score": 1,
+          "evidence": "Escape, focus entry, and focus restoration are explicit."
+        },
+        {
+          "id": "reduced-motion",
+          "critical": true,
+          "score": 1,
+          "evidence": "Includes a prefers-reduced-motion branch."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Selection and inspector state are explicit."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stable project IDs preserve card identity."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Escape and focus behavior are implemented."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Interruption and reduced motion are explicit."
+        }
+      ],
+      "excerpt": "A persistent inspector keeps transitions interruption-safe: rapid selection changes update its contents without restarting the slide animation, while closing reverses naturally from its current position. [code] [code] Se",
+      "passed": true
+    },
+    {
+      "evalId": "en-contribute-primitive-candidate",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-contribute-primitive-candidate-r1.md",
+      "artifactPaths": [
+        "en-contribute-primitive-candidate-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "a7973e7e2589492cc3ec0137a3c108bb673459cd860209e187987dceffbc097b",
+        "transcript": "ae9b4ec50c2d698351da4ba9aa8ec3d146ac55f425238782429ac48c4c38edea"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Contribute references."
+        },
+        {
+          "id": "candidate-status",
+          "critical": true,
+          "score": 1,
+          "evidence": "Classified as primitive-candidate with status candidate."
+        },
+        {
+          "id": "three-scene-proof",
+          "critical": true,
+          "score": 1,
+          "evidence": "Requires and illustrates three independent product scenes."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Proposal is classified as a primitive candidate."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three independent scenes are required."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "A complete Blueprint and portable implementation are required."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "The proposal remains at candidate status."
+        }
+      ],
+      "excerpt": "This should be proposed as a `primitive-candidate`. Its evidence package needs: - **Three independent product scenes** showing the same invariant behavior—for example: 1. Upload completes → control becomes “View file” 2.",
+      "passed": true
+    },
+    {
+      "evalId": "en-contribute-primitive-candidate",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-contribute-primitive-candidate-r2.md",
+      "artifactPaths": [
+        "en-contribute-primitive-candidate-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "ba95650b309bc7e16dd61903d257cdcd45318507db1a88c6ceaea13e3fbc83c4",
+        "transcript": "089672b3ebf5a44dfa94b1ba4e3b2b6c1987e122958477f22ff18a9f45e87613"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Contribute references."
+        },
+        {
+          "id": "candidate-status",
+          "critical": true,
+          "score": 1,
+          "evidence": "Classified as primitive-candidate with status candidate."
+        },
+        {
+          "id": "three-scene-proof",
+          "critical": true,
+          "score": 1,
+          "evidence": "Requires and illustrates three independent product scenes."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Proposal is classified as a primitive candidate."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three independent scenes are required."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "A complete Blueprint and portable implementation are required."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "The proposal remains at candidate status."
+        }
+      ],
+      "excerpt": "This should be proposed as a `primitive-candidate` only if the same “completed status → next action” handoff works across three independent product scenes. The candidate record needs: - Three-scene proof, for example: - ",
+      "passed": true
+    },
+    {
+      "evalId": "en-contribute-primitive-candidate",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-contribute-primitive-candidate-r3.md",
+      "artifactPaths": [
+        "en-contribute-primitive-candidate-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "3505087def693fef11d58e41df15640ae5ec4f9605bf08c96ae4c71608adc128",
+        "transcript": "1d42837425932321fe4aba7f5a41004b0e7f0710c4afa2089bbc765f9eb396e3"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Contribute references."
+        },
+        {
+          "id": "candidate-status",
+          "critical": true,
+          "score": 1,
+          "evidence": "Classified as primitive-candidate with status candidate."
+        },
+        {
+          "id": "three-scene-proof",
+          "critical": true,
+          "score": 1,
+          "evidence": "Requires and illustrates three independent product scenes."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Proposal is classified as a primitive candidate."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "Three independent scenes are required."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "A complete Blueprint and portable implementation are required."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "The proposal remains at candidate status."
+        }
+      ],
+      "excerpt": "A primitive candidate needs evidence that “status becomes action” is a reusable behavior—not merely a variant of the published `copy-button` or `loading-button`. Required evidence: - Three independent product scenes, suc",
+      "passed": true
+    },
+    {
+      "evalId": "en-review-async-race",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-review-async-race-r1.md",
+      "artifactPaths": [
+        "en-review-async-race-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "c358ad18bb3463e1b5f888aadcd8c20293248f343a713fcaef834d1586950adf",
+        "transcript": "80e87e5c0265681c2b286d9f1a88d6de8a6986be85ded98da33ed0d2955e78bf"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "race-diagnosis",
+          "critical": true,
+          "score": 1,
+          "evidence": "Identifies stale completion and prescribes intent or revision ownership."
+        },
+        {
+          "id": "coherent-final-state",
+          "critical": true,
+          "score": 1,
+          "evidence": "Obsolete motion is canceled or ignored and the latest user intent remains visible."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stale async completion is identified."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A current-intent or request-version policy is defined."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Obsolete animation is canceled, reversed, or ignored."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Focus, keyboard, reduced motion, and current local status remain coherent."
+        }
+      ],
+      "excerpt": "## Motion review ### Critical - **Observed:** The late “complete” response replays success after the task has been returned to incomplete, visually contradicting the current state. - **Cause:** Motion is triggered by req",
+      "passed": true
+    },
+    {
+      "evalId": "en-review-async-race",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-review-async-race-r2.md",
+      "artifactPaths": [
+        "en-review-async-race-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "b5ea0222f9ed447c23a3f33b22175ef80cc6198ead4e7e0e5ffcac33633323e6",
+        "transcript": "8363295a8e0fac03eb4242f166a4e3ab9ea082051e691c6175abcde378a80ccc"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "race-diagnosis",
+          "critical": true,
+          "score": 1,
+          "evidence": "Identifies stale completion and prescribes intent or revision ownership."
+        },
+        {
+          "id": "coherent-final-state",
+          "critical": true,
+          "score": 1,
+          "evidence": "Obsolete motion is canceled or ignored and the latest user intent remains visible."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stale async completion is identified."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A current-intent or request-version policy is defined."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Obsolete animation is canceled, reversed, or ignored."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Focus, keyboard, reduced motion, and current local status remain coherent."
+        }
+      ],
+      "excerpt": "## Motion review ### Critical - **Observed:** The task is currently incomplete, but a late “complete” response replays success feedback. The interface contradicts the user’s latest intent. - **Cause:** Animation and visi",
+      "passed": true
+    },
+    {
+      "evalId": "en-review-async-race",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": true,
+      "outputPath": "en-review-async-race-r3.md",
+      "artifactPaths": [
+        "en-review-async-race-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "ea3d25fef9fd6d7e6a1c0fe20c942a7c9b870b29b9452eba806cc8632c929e29",
+        "transcript": "f8e77efc4d3cc151edc5ac977ee3691e81bf6e5774a54a531ab39e549e0756d9"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-trigger",
+          "critical": true,
+          "score": 1,
+          "evidence": "Read the installed Skill and Review references."
+        },
+        {
+          "id": "race-diagnosis",
+          "critical": true,
+          "score": 1,
+          "evidence": "Identifies stale completion and prescribes intent or revision ownership."
+        },
+        {
+          "id": "coherent-final-state",
+          "critical": true,
+          "score": 1,
+          "evidence": "Obsolete motion is canceled or ignored and the latest user intent remains visible."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Stale async completion is identified."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "A current-intent or request-version policy is defined."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Obsolete animation is canceled, reversed, or ignored."
+        },
+        {
+          "id": "eval-4",
+          "critical": false,
+          "score": 1,
+          "evidence": "Focus, keyboard, reduced motion, and current local status remain coherent."
+        }
+      ],
+      "excerpt": "## Motion review ### Critical - **Observed:** The task is visibly incomplete, then the late first response replays the completion animation. This contradicts the user’s latest action. - **Cause:** Animation is triggered ",
+      "passed": true
+    },
+    {
+      "evalId": "en-negative-data-table",
+      "repetition": 1,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "en-negative-data-table-r1.md",
+      "artifactPaths": [
+        "en-negative-data-table-r1.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "f8406423e34b5b05917b43ce3ce7c162b5984867caaa0fc067dde14773355355",
+        "transcript": "37cdc91b9f7415cbfb456fce0218730dda771f70fc41bc9dd53cee3c95db18d5"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response stayed on the CSV task."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Response focused on the requested data task."
+        }
+      ],
+      "excerpt": "Please attach or paste the CSV. I’ll add a numeric, sortable revenue column and calculate the total revenue for each month.",
+      "passed": true
+    },
+    {
+      "evalId": "en-negative-data-table",
+      "repetition": 2,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "en-negative-data-table-r2.md",
+      "artifactPaths": [
+        "en-negative-data-table-r2.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "4741b02962c2d5a797419aef48a34da449fc80bc1b436e1cac1a51e595158853",
+        "transcript": "ad1cf780aa1165407f325a600063a90d3dda3a5dd56cbf18feefee71fe166fb0"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response stayed on the CSV task."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Response focused on the requested data task."
+        }
+      ],
+      "excerpt": "Please attach or paste the CSV. Also tell me which existing column contains the revenue values—or how revenue should be calculated. I’ll add the column and compute totals grouped by month.",
+      "passed": true
+    },
+    {
+      "evalId": "en-negative-data-table",
+      "repetition": 3,
+      "isolation": "clean",
+      "triggered": false,
+      "outputPath": "en-negative-data-table-r3.md",
+      "artifactPaths": [
+        "en-negative-data-table-r3.events.jsonl"
+      ],
+      "artifactSha256": {
+        "output": "762d7c5485a82e27116e4ce15fc311bb10f1f56872fd99a76adc18b3969eb68d",
+        "transcript": "2f4f817600e0e9a1cb9fae2b05e3567f43e97d14cd8edb89ae4988d35ec25376"
+      },
+      "validatorExitCode": null,
+      "usedPrimitiveIds": [],
+      "assertions": [
+        {
+          "id": "correct-skip",
+          "critical": true,
+          "score": 1,
+          "evidence": "No Skill or file was read; response stayed on the CSV task."
+        },
+        {
+          "id": "eval-1",
+          "critical": false,
+          "score": 1,
+          "evidence": "Skill use remained false."
+        },
+        {
+          "id": "eval-2",
+          "critical": false,
+          "score": 1,
+          "evidence": "No Motion Blueprint was produced."
+        },
+        {
+          "id": "eval-3",
+          "critical": false,
+          "score": 1,
+          "evidence": "Response focused on the requested data task."
+        }
+      ],
+      "excerpt": "Please upload the CSV or paste its contents. I’ll add a numeric, sortable `revenue` column and calculate totals grouped by month.",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "cleanRuns": 24,
+    "contaminatedRunsScored": 0,
+    "criticalPassed": 66,
+    "criticalTotal": 66,
+    "assertionsPassed": 156,
+    "assertionsTotal": 156,
+    "overallPassRate": 1,
+    "casesPassingAllThreeRepetitions": 8,
+    "casesTotal": 8,
+    "passed": true
+  },
+  "verification": {
+    "skillCheck": "passed",
+    "targetedVitest": "20 passed",
+    "officialQuickValidate": "passed",
+    "standaloneValidBlueprint": "exit 0 without package.json, node_modules, or NODE_PATH",
+    "standaloneInvalidAdditionalProperty": "exit 1; blueprint.unexpected is not allowed",
+    "standaloneInvalidActorReference": "exit 1; beat actor must reference a declared actor",
+    "publicGrammarLeave": "cubic-bezier(0.23, 1, 0.32, 1)",
+    "unknownPublishedFoundationIds": 0
+  },
+  "issues": [
+    {
+      "priority": "P0",
+      "status": "none",
+      "summary": "No unresolved P0 issue."
+    },
+    {
+      "priority": "P1",
+      "status": "fixed",
+      "summary": "Compose responses could replace the schema contract with prose; Compose now requires fenced schema-valid JSON."
+    },
+    {
+      "priority": "P1",
+      "status": "fixed",
+      "summary": "Leaving motion used an ease-in curve; Skill sources now use the component-aligned short strong ease-out curve."
+    },
+    {
+      "priority": "P1",
+      "status": "fixed",
+      "summary": "References and the example Blueprint used unpublished pseudo primitive IDs; Product Moment tables and fixtures now use published IDs."
+    },
+    {
+      "priority": "P1",
+      "status": "fixed-by-integration",
+      "summary": "Public motion-grammar uses the strong ease-out leave curve and all component foundation IDs resolve to published primitives."
+    },
+    {
+      "priority": "P2",
+      "status": "fixed",
+      "summary": "Initial fresh-run isolation leaked global skills through HOME; final runs isolate HOME and CODEX_HOME."
+    },
+    {
+      "priority": "P2",
+      "status": "fixed",
+      "summary": "The first negative-trigger guard forced Skill use; the final guard preserves natural trigger selection."
+    },
+    {
+      "priority": "P3",
+      "status": "fixed",
+      "summary": "Motion Director naming was removed from Skill metadata, contract, validation messages, and script paths."
+    }
+  ]
+}

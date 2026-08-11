@@ -6,7 +6,7 @@ export const seoGuideIds = [
   "reduced-motion",
   "form-validation-delete-permission",
   "from-brief-to-spec",
-  "pack-or-primitive"
+  "component-or-primitive"
 ] as const;
 
 export type SeoGuideId = (typeof seoGuideIds)[number];

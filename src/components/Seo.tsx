@@ -11,6 +11,7 @@ type SeoProps = {
   path: string;
   noindex?: boolean;
   image?: string;
+  ogType?: "website" | "article";
   structuredData?: Array<Record<string, unknown>>;
 };
 
@@ -24,6 +25,7 @@ export function Seo({
   path,
   noindex = false,
   image,
+  ogType = "website",
   structuredData = []
 }: SeoProps) {
   const canonical = `${siteUrl}${path}`;
@@ -33,6 +35,31 @@ export function Seo({
   const alternateZh = `${siteUrl}${pathFor("zh", pathWithoutLocale)}`;
   const alternateEn = `${siteUrl}${pathFor("en", pathWithoutLocale)}`;
   const defaultAlternate = defaultLocale === "zh" ? alternateZh : alternateEn;
+  const organizationId = `${siteUrl}/#organization`;
+  const websiteId = `${siteUrl}/#website`;
+  const isLocalizedHome = pathWithoutLocale.length === 0;
+  const publisher = {
+    "@type": "Organization",
+    "@id": organizationId,
+    name: "Motion Lexicon",
+    url: siteUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: `${siteUrl}/icon-512.png`,
+      width: 512,
+      height: 512
+    },
+    sameAs: ["https://github.com/Ryan-yang125/motion-lexicon"]
+  };
+  const website = isLocalizedHome ? {
+    "@type": "WebSite",
+    "@id": websiteId,
+    name: "Motion Lexicon",
+    url: siteUrl,
+    publisher: { "@id": organizationId },
+    inLanguage: ["zh-CN", "en"],
+    isAccessibleForFree: true
+  } : { "@id": websiteId };
   const pageStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -49,24 +76,8 @@ export function Seo({
       width: 1200,
       height: 630
     },
-    publisher: {
-      "@type": "Organization",
-      name: "Motion Lexicon",
-      url: siteUrl,
-      logo: {
-        "@type": "ImageObject",
-        url: `${siteUrl}/icon-512.png`,
-        width: 512,
-        height: 512
-      },
-      sameAs: ["https://github.com/Ryan-yang125/motion-lexicon"]
-    },
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Motion Lexicon",
-      url: `${siteUrl}${pathFor(defaultLocale)}`,
-      isAccessibleForFree: true
-    }
+    publisher,
+    isPartOf: website
   };
   const serializedStructuredData = [pageStructuredData, ...structuredData].map((item) =>
     JSON.stringify(item).replace(/</g, "\\u003c")
@@ -90,7 +101,7 @@ export function Seo({
       <link rel="alternate" type="application/json" href={`${siteUrl}/r/registry.json`} title="Motion Lexicon component registry" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content="Motion Lexicon" />
       <meta property="og:locale" content={locale === "zh" ? "zh_CN" : "en_US"} />
       <meta property="og:locale:alternate" content={locale === "zh" ? "en_US" : "zh_CN"} />
@@ -98,12 +109,12 @@ export function Seo({
       <meta property="og:image" content={imageUrl} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:image:alt" content={`${title} — Motion Lexicon`} />
+      <meta property="og:image:alt" content={title} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
-      <meta name="twitter:image:alt" content={`${title} — Motion Lexicon`} />
+      <meta name="twitter:image:alt" content={title} />
       {serializedStructuredData.map((item, index) => (
         <script key={`${path}-schema-${index}`} type="application/ld+json">
           {item}

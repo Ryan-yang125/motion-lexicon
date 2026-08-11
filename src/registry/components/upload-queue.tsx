@@ -12,7 +12,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const ROW = { type: "spring", stiffness: 420, damping: 38, mass: 0.7 } as const;
 const FILL = { type: "spring", stiffness: 240, damping: 34, mass: 0.85 } as const;
-const LEAVE = { duration: 0.15, ease: [0.4, 0, 1, 1] } as const;
+const LEAVE = { duration: 0.15, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
 
 export type UploadStatus = "queued" | "uploading" | "complete" | "error";
@@ -35,7 +35,38 @@ export type UploadQueueProps = {
   accept?: string;
   multiple?: boolean;
   maxFiles?: number;
+  copy?: Partial<UploadQueueCopy>;
   className?: string;
+};
+
+export type UploadQueueCopy = {
+  drop: (remaining: number) => string;
+  full: string;
+  choose: string;
+  queue: string;
+  complete: string;
+  failed: string;
+  uploading: string;
+  queued: string;
+  retry: string;
+  remove: string;
+  progress: string;
+  summary: (complete: number, total: number) => string;
+};
+
+const defaultCopy: UploadQueueCopy = {
+  drop: (remaining) => `Drop here or choose up to ${remaining}`,
+  full: "Queue is full",
+  choose: "Choose",
+  queue: "Upload queue",
+  complete: "Complete",
+  failed: "Upload failed",
+  uploading: "Uploading",
+  queued: "Queued",
+  retry: "Retry",
+  remove: "Remove",
+  progress: "Upload progress for",
+  summary: (complete, total) => `${complete} of ${total} uploads complete`,
 };
 
 function formatBytes(value?: number) {
@@ -96,8 +127,10 @@ export function UploadQueue({
   accept,
   multiple = true,
   maxFiles = 8,
+  copy: copyOverrides,
   className = "",
 }: UploadQueueProps) {
+  const copy = { ...defaultCopy, ...copyOverrides };
   const id = useId();
   const reduced = useReducedMotion() === true;
   const [dragging, setDragging] = useState(false);
@@ -151,7 +184,7 @@ export function UploadQueue({
         <span className="min-w-0 flex-1">
           <strong className="block text-[13px] font-medium text-stone-800 dark:text-stone-100">{label}</strong>
           <span className="mt-0.5 block text-[11.5px] text-stone-500 dark:text-stone-400">
-            {remaining > 0 ? `Drop here or choose up to ${remaining}` : "Queue is full"}
+            {remaining > 0 ? copy.drop(remaining) : copy.full}
           </span>
         </span>
         <input
@@ -172,11 +205,11 @@ export function UploadQueue({
           onClick={() => input.current?.click()}
           className="h-11 shrink-0 rounded-[9px] border border-stone-200 bg-white px-3 text-[12.5px] font-medium text-stone-700 outline-none transition-[background-color,border-color] duration-150 hover:bg-stone-100 focus-visible:border-[#4568FF] disabled:cursor-not-allowed disabled:opacity-45 dark:border-white/[0.16] dark:bg-[#252522] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:border-[#93B0FF]"
         >
-          Choose
+          {copy.choose}
         </button>
       </div>
 
-      <ul aria-label="Upload queue" className="mt-2 space-y-1.5">
+      <ul aria-label={copy.queue} className="mt-2 space-y-1.5">
         <AnimatePresence initial={false}>
           {items.map((item) => (
             <UploadRow
@@ -186,12 +219,13 @@ export function UploadQueue({
               onRetry={onRetry}
               reduced={reduced}
               animateIndeterminate={active}
+              copy={copy}
             />
           ))}
         </AnimatePresence>
       </ul>
       <span className="sr-only" role="status" aria-live="polite">
-        {items.filter((item) => item.status === "complete").length} of {items.length} uploads complete
+        {copy.summary(items.filter((item) => item.status === "complete").length, items.length)}
       </span>
     </div>
   );
@@ -203,19 +237,21 @@ function UploadRow({
   onRetry,
   reduced,
   animateIndeterminate,
+  copy,
 }: {
   item: UploadItem;
   onRemove?: (id: string) => void;
   onRetry?: (id: string) => void;
   reduced: boolean;
   animateIndeterminate: boolean;
+  copy: UploadQueueCopy;
 }) {
   const progress = Math.min(100, Math.max(0, item.progress ?? 0));
   const complete = item.status === "complete";
   const error = item.status === "error";
   const unknown = item.status === "uploading" && item.progress === undefined;
   const hasActions = (error && Boolean(onRetry)) || Boolean(onRemove);
-  const status = complete ? "Complete" : error ? item.error ?? "Upload failed" : item.status === "uploading" ? item.progress === undefined ? "Uploading" : `${Math.round(progress)}%` : "Queued";
+  const status = complete ? copy.complete : error ? item.error ?? copy.failed : item.status === "uploading" ? item.progress === undefined ? copy.uploading : `${Math.round(progress)}%` : copy.queued;
 
   return (
     <motion.li
@@ -249,17 +285,17 @@ function UploadRow({
               <button
                 type="button"
                 onClick={() => onRetry(item.id)}
-                aria-label={`Retry ${item.name}`}
+                aria-label={`${copy.retry} ${item.name}`}
                 className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-stone-700 outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
-                Retry
+                {copy.retry}
               </button>
             ) : null}
             {onRemove ? (
               <button
                 type="button"
                 onClick={() => onRemove(item.id)}
-                aria-label={`Remove ${item.name}`}
+                aria-label={`${copy.remove} ${item.name}`}
                 className="grid size-11 shrink-0 place-items-center rounded-[8px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
@@ -271,11 +307,11 @@ function UploadRow({
       {!complete && !error ? (
         <div
           role="progressbar"
-          aria-label={`Upload progress for ${item.name}`}
+          aria-label={`${copy.progress} ${item.name}`}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={unknown ? undefined : Math.round(progress)}
-          aria-valuetext={unknown ? "Uploading" : `${Math.round(progress)}%`}
+          aria-valuetext={unknown ? copy.uploading : `${Math.round(progress)}%`}
           className="absolute inset-x-3 bottom-0 h-[2px] overflow-hidden rounded-full bg-stone-100 dark:bg-white/10"
         >
           {unknown ? (

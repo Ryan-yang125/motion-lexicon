@@ -16,6 +16,13 @@ export type NetworkGlobeNode = {
 export type NetworkGlobeProps = {
   nodes: readonly NetworkGlobeNode[];
   label?: string;
+  interactiveHint?: string;
+  staticHint?: string;
+  activateLabel?: string;
+  liveLabel?: string;
+  staticLabel?: string;
+  onlineLabel?: string;
+  activation?: "intent" | "auto";
   className?: string;
   onFocusNode?: (node: NetworkGlobeNode) => void;
 };
@@ -25,15 +32,51 @@ type GlobeRuntime = {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   globe: THREE.Group;
-  nodeMeshes: Map<string, THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>>;
+  nodeMeshes: Map<string, THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>>;
   arcMaterials: Map<string, THREE.LineBasicMaterial>;
 };
+
+const FRAME_INTERVAL_MS = 1000 / 30;
+const AUTO_ROTATE_DURATION_MS = 2400;
+const yieldToMain = () => new Promise<void>((resolve) => window.setTimeout(resolve, 0));
+
+async function precompileMaterialStages(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+  cancelled: () => boolean,
+) {
+  const renderables: Array<{ object: THREE.Object3D; visible: boolean; materialTypes: readonly string[] }> = [];
+  scene.traverse((object) => {
+    const material = "material" in object
+      ? (object as THREE.Mesh).material
+      : undefined;
+    if (!material) return;
+    const materials = Array.isArray(material) ? material : [material];
+    renderables.push({
+      object,
+      visible: object.visible,
+      materialTypes: materials.map((entry) => entry.type),
+    });
+  });
+  const materialTypes = [...new Set(renderables.flatMap((entry) => entry.materialTypes))];
+
+  for (const materialType of materialTypes) {
+    await yieldToMain();
+    if (cancelled()) return;
+    for (const entry of renderables) {
+      entry.object.visible = entry.visible && entry.materialTypes.includes(materialType);
+    }
+    renderer.compile(scene, camera);
+  }
+  for (const entry of renderables) entry.object.visible = entry.visible;
+}
 
 function applyFocusStyles(runtime: GlobeRuntime, focusedId: string | undefined) {
   runtime.nodeMeshes.forEach((mesh, id) => {
     const selected = id === focusedId;
     mesh.scale.setScalar(selected ? 1.42 : 1);
-    mesh.material.emissiveIntensity = selected ? 0.72 : 0.18;
+    mesh.material.opacity = selected ? 1 : 0.72;
   });
   runtime.arcMaterials.forEach((material, id) => {
     material.opacity = id === focusedId ? 0.92 : 0.24;
@@ -64,13 +107,23 @@ function arcBetween(start: THREE.Vector3, end: THREE.Vector3) {
 export function NetworkGlobe({
   nodes,
   label = "Global network",
+  interactiveHint = "Drag or use arrow keys to rotate.",
+  staticHint = "Static network preview.",
+  activateLabel = "Explore 3D",
+  liveLabel = "Live network",
+  staticLabel = "Static network",
+  onlineLabel = "Online",
+  activation = "intent",
   className = "",
   onFocusNode,
 }: NetworkGlobeProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const runtimeRef = useRef<GlobeRuntime | null>(null);
   const frameRef = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef(0);
+  const autoRotateUntilRef = useRef(0);
   const requestFrameRef = useRef<() => void>(() => undefined);
+  const focusAfterActivationRef = useRef(false);
   const visibleRef = useRef(true);
   const rotationRef = useRef({ y: -0.42, targetY: -0.42, dragging: false, pointerId: -1, x: 0 });
   const sceneNodesRef = useRef(nodes);
@@ -78,6 +131,7 @@ export function NetworkGlobe({
   const reduced = useReducedMotion() === true;
   const reducedRef = useRef(reduced);
   reducedRef.current = reduced;
+  const [activationRequested, setActivationRequested] = useState(activation === "auto");
   const firstId = nodes[0]?.id ?? "";
   const [focusedId, setFocusedId] = useState(firstId);
   const [rendererReady, setRendererReady] = useState(false);
@@ -99,22 +153,36 @@ export function NetworkGlobe({
     if (focusedId !== effectiveFocusedId) setFocusedId(effectiveFocusedId);
   }, [effectiveFocusedId, focusedId]);
 
+  useEffect(() => {
+    if (activation === "auto") setActivationRequested(true);
+  }, [activation]);
+
   const draw = () => {
     const runtime = runtimeRef.current;
     if (runtime) runtime.renderer.render(runtime.scene, runtime.camera);
   };
 
-  const animate = () => {
+  const animate = (timestamp: number) => {
     frameRef.current = null;
     const runtime = runtimeRef.current;
     if (!runtime || !visibleRef.current) return;
+    const elapsed = lastFrameTimeRef.current > 0
+      ? timestamp - lastFrameTimeRef.current
+      : FRAME_INTERVAL_MS;
+    if (lastFrameTimeRef.current > 0 && elapsed < FRAME_INTERVAL_MS) {
+      frameRef.current = requestAnimationFrame(animate);
+      return;
+    }
+    lastFrameTimeRef.current = timestamp;
     const rotation = rotationRef.current;
     if (!reducedRef.current) {
-      if (!rotation.dragging) rotation.targetY += 0.0011;
+      const autoRotating = !rotation.dragging && timestamp < autoRotateUntilRef.current;
+      if (autoRotating) rotation.targetY += 0.0011 * Math.min(2, Math.max(1, elapsed / 16.67));
       rotation.y += (rotation.targetY - rotation.y) * 0.14;
       runtime.globe.rotation.y = rotation.y;
       draw();
-      frameRef.current = requestAnimationFrame(animate);
+      const moving = rotation.dragging || autoRotating || Math.abs(rotation.targetY - rotation.y) > 0.0005;
+      if (moving) frameRef.current = requestAnimationFrame(animate);
     } else {
       runtime.globe.rotation.y = rotation.targetY;
       draw();
@@ -129,12 +197,14 @@ export function NetworkGlobe({
   requestFrameRef.current = requestFrame;
 
   useEffect(() => {
+    if (!activationRequested) return;
     const mount = mountRef.current;
     const sceneNodes = sceneNodesRef.current;
     if (!mount || sceneNodes.length === 0) {
       setRendererReady(false);
       return;
     }
+    let cancelled = false;
     const resources = new Set<{ dispose: () => void }>();
     const track = <T extends { dispose: () => void }>(resource: T) => {
       resources.add(resource);
@@ -146,9 +216,10 @@ export function NetworkGlobe({
     camera.position.set(0, 0.12, 5.15);
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: "high-performance" });
     } catch {
       setRendererReady(false);
+      if (activation === "intent") setActivationRequested(false);
       return;
     }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -176,7 +247,6 @@ export function NetworkGlobe({
     };
     renderer.domElement.addEventListener("webglcontextlost", onContextLost);
     renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
-    setRendererReady(true);
 
     const globe = new THREE.Group();
     globe.rotation.set(-0.12, rotationRef.current.y, 0.02);
@@ -195,32 +265,25 @@ export function NetworkGlobe({
 
     const innerGeometry = track(new THREE.SphereGeometry(1.515, 40, 28));
     const innerMaterial = track(
-      new THREE.MeshPhongMaterial({
+      new THREE.MeshBasicMaterial({
         color: 0xe8e5dd,
         transparent: true,
         opacity: 0.82,
-        shininess: 12,
       }),
     );
     globe.add(new THREE.Mesh(innerGeometry, innerMaterial));
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x80786b, 2.5));
-    const key = new THREE.DirectionalLight(0xffffff, 2.8);
-    key.position.set(3, 3, 4);
-    scene.add(key);
-
-    const nodeMeshes = new Map<string, THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>>();
+    const nodeMeshes = new Map<string, THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>>();
     const arcMaterials = new Map<string, THREE.LineBasicMaterial>();
     const hub = pointOnGlobe(sceneNodes[0].latitude, sceneNodes[0].longitude, 1.58);
 
     sceneNodes.forEach((node, index) => {
       const geometry = track(new THREE.SphereGeometry(index === 0 ? 0.075 : 0.055, 18, 12));
       const material = track(
-        new THREE.MeshStandardMaterial({
+        new THREE.MeshBasicMaterial({
           color: node.color ?? (index === 0 ? "#4568FF" : "#B3654A"),
-          emissive: node.color ?? (index === 0 ? "#4568FF" : "#B3654A"),
-          emissiveIntensity: 0.18,
-          roughness: 0.42,
+          transparent: true,
+          opacity: 0.72,
         }),
       );
       const mesh = new THREE.Mesh(geometry, material);
@@ -281,9 +344,16 @@ export function NetworkGlobe({
     };
     intersection.observe(mount);
     document.addEventListener("visibilitychange", onVisibility);
-    requestFrameRef.current();
+    void precompileMaterialStages(renderer, scene, camera, () => cancelled).then(() => {
+      if (cancelled) return;
+      lastFrameTimeRef.current = 0;
+      autoRotateUntilRef.current = performance.now() + AUTO_ROTATE_DURATION_MS;
+      setRendererReady(true);
+      requestFrameRef.current();
+    });
 
     return () => {
+      cancelled = true;
       renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
       renderer.domElement.removeEventListener("webglcontextrestored", onContextRestored);
       resize.disconnect();
@@ -296,8 +366,9 @@ export function NetworkGlobe({
       renderer.domElement.remove();
       runtimeRef.current = null;
       frameRef.current = null;
+      lastFrameTimeRef.current = 0;
     };
-  }, [sceneSignature]);
+  }, [activation, activationRequested, sceneSignature]);
 
   useEffect(() => {
     const runtime = runtimeRef.current;
@@ -309,6 +380,12 @@ export function NetworkGlobe({
   useEffect(() => {
     requestFrameRef.current();
   }, [reduced]);
+
+  useEffect(() => {
+    if (!rendererReady || !focusAfterActivationRef.current) return;
+    focusAfterActivationRef.current = false;
+    mountRef.current?.focus({ preventScroll: true });
+  }, [rendererReady]);
 
   const focusNode = (node: NetworkGlobeNode) => {
     setFocusedId(node.id);
@@ -323,12 +400,13 @@ export function NetworkGlobe({
       tabIndex={rendererReady ? 0 : undefined}
       aria-label={
         rendererReady
-          ? `${label}. Drag or use arrow keys to rotate.`
-          : `${label}. Static network preview.`
+          ? `${label}. ${interactiveHint}`
+          : `${label}. ${staticHint}`
       }
       onPointerDown={(event) => {
         if (!rendererReady || !(event.target instanceof HTMLCanvasElement)) return;
         const rotation = rotationRef.current;
+        autoRotateUntilRef.current = 0;
         rotation.dragging = true;
         rotation.pointerId = event.pointerId;
         rotation.x = event.clientX;
@@ -360,6 +438,7 @@ export function NetworkGlobe({
         rendererReady
           ? (event) => {
               if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+              autoRotateUntilRef.current = 0;
               rotationRef.current.targetY += event.key === "ArrowLeft" ? -0.16 : 0.16;
               event.preventDefault();
               requestFrame();
@@ -391,15 +470,30 @@ export function NetworkGlobe({
         </div>
       </div>
 
+      {!rendererReady && activation === "intent" ? (
+        <button
+          type="button"
+          data-webgl-activation="network-globe"
+          disabled={activationRequested}
+          onClick={() => {
+            focusAfterActivationRef.current = true;
+            setActivationRequested(true);
+          }}
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_10px_30px_-16px_rgba(41,41,41,.65)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
+        >
+          {activateLabel}
+        </button>
+      ) : null}
+
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-4">
         <span>
           <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500">
-            {rendererReady ? "Live network" : "Static network"}
+            {rendererReady ? liveLabel : staticLabel}
           </span>
           <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{label}</strong>
         </span>
         <span className="text-right">
-          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#292929] dark:text-stone-100">{focused?.value ?? "Online"}</strong>
+          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#292929] dark:text-stone-100">{focused?.value ?? onlineLabel}</strong>
           <span className="mt-0.5 block text-[10px] text-stone-500">{focused?.label}</span>
         </span>
       </div>

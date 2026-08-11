@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import {
   SortableTable,
   type SortableColumn,
@@ -22,36 +24,24 @@ const REVIEWERS: Reviewer[] = [
   { id: "r6", name: "Noah Kim", open: 1, seen: "9h ago", ago: 540 },
 ];
 
-const COLUMNS: SortableColumn<Reviewer>[] = [
-  { id: "name", header: "Reviewer", value: (r) => r.name },
-  {
-    id: "open",
-    header: "Open",
-    width: "72px",
-    align: "end",
-    numeric: true,
-    value: (r) => r.open,
-  },
-  {
-    id: "seen",
-    header: "Last seen",
-    width: "96px",
-    align: "end",
-    value: (r) => r.ago,
-    cell: (r) => r.seen,
-  },
-];
-
-export function SortableTableDemo() {
+export function SortableTableDemo({ locale = "en" }: DemoLocaleProps = {}) {
+  const columns: SortableColumn<Reviewer>[] = [
+    { id: "name", header: demoValue(locale, "评审者", "Reviewer"), value: (row) => row.name },
+    { id: "open", header: demoValue(locale, "待处理", "Open"), width: "72px", align: "end", numeric: true, value: (row) => row.open },
+    { id: "seen", header: demoValue(locale, "最近在线", "Last seen"), width: "96px", align: "end", value: (row) => row.ago, cell: (row) => locale === "zh" ? row.seen.replace(" ago", "前").replace("h", "小时").replace("d", "天").replace("m", "分钟") : row.seen },
+  ];
   return (
-    <div className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("sortable-table", locale)} className="mx-auto w-full max-w-[440px]">
       <SortableTable
-        label="Reviewers"
+        label={demoValue(locale, "评审者", "Reviewers")}
         rows={REVIEWERS}
         getRowId={(r) => r.id}
         getRowLabel={(r) => r.name}
         markable
-        columns={COLUMNS}
+        markLabel={demoValue(locale, "关注", "Follow")}
+        markRowLabel={locale === "zh" ? (name) => `关注 ${name}` : undefined}
+        sortStatus={locale === "zh" ? (header, direction, count) => header && direction ? `已按${header}${direction === "asc" ? "升序" : "降序"}排列，共 ${count} 行。` : `已恢复原始顺序，共 ${count} 行。` : undefined}
+        columns={columns}
       />
     </div>
   );

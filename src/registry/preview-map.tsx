@@ -8,8 +8,10 @@ import {
   type ReactNode,
 } from "react";
 import { getRegistryComponent, registryComponentRuntimeCost } from "../data/component-registry";
+import type { Locale } from "../data/types";
+import type { DemoLocaleProps } from "./demo-locale";
 
-type DemoModule = Record<string, ComponentType>;
+type DemoModule = Record<string, ComponentType<DemoLocaleProps>>;
 
 const demoModules = typeof import.meta.env === "undefined"
   ? {}
@@ -35,6 +37,13 @@ const lazyDemos = Object.fromEntries(
 
 function PreviewFallback() {
   return <div className="registry-preview-loading" aria-hidden="true" />;
+}
+
+function useHydrated() {
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => setHydrated(true), []);
+  return hydrated;
 }
 
 type DeferredPreviewProps = {
@@ -74,16 +83,17 @@ export function DeferredPreview({ id, deferred, heavy, children }: DeferredPrevi
   );
 }
 
-export function RegistryPreview({ id, deferred = false }: { id: string; deferred?: boolean }) {
+export function RegistryPreview({ id, locale, deferred = false }: { id: string; locale: Locale; deferred?: boolean }) {
+  const hydrated = useHydrated();
   const Demo = lazyDemos[id];
   const entry = getRegistryComponent(id);
   const heavy = entry ? registryComponentRuntimeCost(entry) === "heavy" : false;
 
   return (
     <DeferredPreview id={id} deferred={deferred} heavy={heavy}>
-      {Demo ? (
+      {hydrated && Demo ? (
         <Suspense fallback={<PreviewFallback />}>
-          <Demo />
+          <Demo locale={locale} />
         </Suspense>
       ) : (
         <PreviewFallback />

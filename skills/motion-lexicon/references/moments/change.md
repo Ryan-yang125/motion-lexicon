@@ -5,13 +5,13 @@ their place in the surrounding interface.
 
 | Moment | Core scene | Primary actor | Useful primitives |
 | --- | --- | --- | --- |
-| Layer insertion | A new layer joins a stack | Inserted layer | reveal, layout transition |
-| Archive undo | A record leaves and can return | Archived row | leaving, undo, height match |
-| Filter results | Result content changes around retained controls | Result group | crossfade, stagger, filter transition |
-| Details disclosure | More information opens below a summary | Disclosure panel | reveal, height match |
-| Kanban move | A card changes column or order | Moved card | direct manipulation, spring settle |
-| Cart update | Quantity or subtotal changes locally | Cart row | status transition, layout transition |
-| Comment reply | A reply appears in a conversation thread | Reply composer and new comment | reveal, highlight, focus move |
+| Layer insertion | A new layer joins a stack | Inserted layer | `reveal`, `morph` |
+| Archive undo | A record leaves and can return | Archived row | `fade-in-fade-out`, `morph` |
+| Filter results | Result content changes around retained controls | Result group | `crossfade`, `stagger`, `morph` |
+| Details disclosure | More information opens below a summary | Disclosure panel | `reveal`, `morph` |
+| Kanban move | A card changes column or order | Moved card | `drag-to-reorder`, `spring` |
+| Cart update | Quantity or subtotal changes locally | Cart row | `text-morph`, `morph` |
+| Comment reply | A reply appears in a conversation thread | Reply composer and new comment | `reveal`, `crossfade` |
 
 ## Scene recipe
 

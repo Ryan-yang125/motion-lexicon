@@ -17,7 +17,7 @@ body:
     id: route
     attributes:
       label: Route, Skill, or project context
-      placeholder: /en/entrances/slide-in/ or Motion Director Skill in your project
+      placeholder: /en/primitives/slide-in/ or the Motion Lexicon Agent Skill in your project
   - type: textarea
     id: reproduce
     attributes:

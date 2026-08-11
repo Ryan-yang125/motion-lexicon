@@ -24,6 +24,7 @@ export type UsePasswordStrengthOptions = {
   rules?: readonly PasswordRule[];
   labels?: readonly string[];
   announceDelay?: number;
+  formatAnnouncement?: (state: { label: string; guessable: boolean; unmet: readonly EvaluatedRule[] }) => string;
 };
 
 export type PasswordStrengthState = {
@@ -54,6 +55,7 @@ export function usePasswordStrength(
     rules = defaultPasswordRules,
     labels = defaultLabels,
     announceDelay = 700,
+    formatAnnouncement,
   }: UsePasswordStrengthOptions = {},
 ): PasswordStrengthState {
   const state = useMemo(() => {
@@ -68,7 +70,9 @@ export function usePasswordStrength(
     const label = labels[Math.min(score, labels.length - 1)] ?? "";
     const unmet = evaluated.filter((r) => !r.met);
 
-    const announcement =
+    const announcement = formatAnnouncement
+      ? value.length === 0 ? "" : formatAnnouncement({ label, guessable, unmet })
+      :
       value.length === 0
         ? ""
         : [
@@ -82,7 +86,7 @@ export function usePasswordStrength(
             .join(" ");
 
     return { score, max: rules.length, label, rules: evaluated, guessable, announcement };
-  }, [value, rules, labels]);
+  }, [formatAnnouncement, value, rules, labels]);
 
   const [settled, setSettled] = useState("");
 
@@ -105,6 +109,11 @@ export type PasswordStrengthProps = {
   announceDelay?: number;
   showRules?: boolean;
   className?: string;
+  meterLabel?: string;
+  guessableLabel?: string;
+  metLabel?: string;
+  notMetLabel?: string;
+  formatAnnouncement?: UsePasswordStrengthOptions["formatAnnouncement"];
 };
 
 const TONES = {
@@ -129,6 +138,11 @@ export function PasswordStrength({
   announceDelay = 700,
   showRules = true,
   className = "",
+  meterLabel = "Password strength",
+  guessableLabel = "Commonly guessed",
+  metLabel = "met",
+  notMetLabel = "not met",
+  formatAnnouncement,
 }: PasswordStrengthProps) {
   const {
     score,
@@ -137,7 +151,7 @@ export function PasswordStrength({
     rules: evaluated,
     guessable,
     announcement,
-  } = usePasswordStrength(value, { rules, labels, announceDelay });
+  } = usePasswordStrength(value, { rules, labels, announceDelay, formatAnnouncement });
   const reduced = useReducedMotion();
   const tone = toneFor(score, max);
 
@@ -145,7 +159,7 @@ export function PasswordStrength({
     <div className={`w-full ${className}`}>
       <div
         role="meter"
-        aria-label="Password strength"
+        aria-label={meterLabel}
         aria-valuemin={0}
         aria-valuemax={max}
         aria-valuenow={score}
@@ -193,7 +207,7 @@ export function PasswordStrength({
           animate={{ opacity: guessable ? 1 : 0 }}
           transition={reduced ? INSTANT : CROSSFADE}
         >
-          Commonly guessed
+          {guessableLabel}
         </motion.span>
       </div>
 
@@ -235,7 +249,7 @@ export function PasswordStrength({
               >
                 {rule.label}
               </span>
-              <span className="sr-only">{rule.met ? "met" : "not met"}</span>
+              <span className="sr-only">{rule.met ? metLabel : notMetLabel}</span>
             </li>
           ))}
         </ul>

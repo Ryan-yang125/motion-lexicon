@@ -9,7 +9,7 @@ import {
 } from "../components/icons";
 import { Seo } from "../components/Seo";
 import { useTabs } from "../components/interior/tabs";
-import { getRegistryComponent, registryComponents } from "../data/component-registry";
+import { getRegistryComponent } from "../data/component-registry";
 import { getCatalogRecipe } from "../data/recipes";
 import { pathFor, text } from "../data/site";
 import type { Locale, MotionRecipe } from "../data/types";
@@ -75,7 +75,7 @@ function Stage({ locale }: { locale: Locale }) {
             exit={reduceMotion ? { opacity: 1, transform: "translate3d(0, 0, 0)" } : { opacity: 0, transform: "translate3d(0, -4px, 0)" }}
             transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
           >
-            <RegistryPreview id={activeId} />
+            <RegistryPreview id={activeId} locale={locale} />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -117,10 +117,10 @@ function PrimitiveCard({ locale, recipe }: { locale: Locale; recipe: MotionRecip
 
 export function HomePage({ locale }: { locale: Locale }) {
   const zh = locale === "zh";
-  const title = zh ? "把成熟动效，直接带进产品。" : "Bring refined motion straight into your product.";
+  const title = zh ? "把好动效，直接带进产品。" : "Bring better motion into your product.";
   const description = zh
-    ? "48 个 React 动效组件，44 个可调节原子动效。预览、复制、安装。"
-    : "48 React motion components and 44 tunable primitives. Preview, copy, and install.";
+    ? "48 个组件，44 个原子动效。预览、复制、安装。"
+    : "48 components and 44 motion primitives. Preview, copy, install.";
 
   return (
     <>
@@ -134,7 +134,6 @@ export function HomePage({ locale }: { locale: Locale }) {
       <div className="landing-page">
         <section className="landing-hero" aria-labelledby="landing-title">
           <div className="landing-hero-copy">
-            <span className="landing-eyebrow">React · Motion · shadcn registry</span>
             <h1 id="landing-title">{title}</h1>
             <p>{description}</p>
             <div className="landing-actions">
@@ -145,11 +144,6 @@ export function HomePage({ locale }: { locale: Locale }) {
                 {zh ? "浏览原子动效" : "Browse primitives"}
               </Link>
             </div>
-            <ul className="landing-facts" aria-label={zh ? "项目数据" : "Project facts"}>
-              <li><strong>{registryComponents.length}</strong><span>{zh ? "组件" : "components"}</span></li>
-              <li><strong>44</strong><span>{zh ? "原子动效" : "primitives"}</span></li>
-              <li><strong>MIT</strong><span>{zh ? "免费开放" : "free & open"}</span></li>
-            </ul>
           </div>
           <Stage locale={locale} />
         </section>
@@ -162,7 +156,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="landing-component-grid">
             {featuredComponents.map((entry) => (
               <article className="landing-component-card" key={entry.id}>
-                <div className="landing-component-stage"><RegistryPreview id={entry.id} deferred /></div>
+                <div className="landing-component-stage"><RegistryPreview id={entry.id} locale={locale} deferred /></div>
                 <Link
                   className="landing-component-footer"
                   to="/$locale/components/$componentId/"
@@ -188,8 +182,7 @@ export function HomePage({ locale }: { locale: Locale }) {
 
         <section className="landing-delivery" aria-labelledby="landing-delivery-title">
           <div className="landing-delivery-copy">
-            <span className="landing-eyebrow">COPY · INSTALL · ADAPT</span>
-            <h2 id="landing-delivery-title">{zh ? "代码归你，细节继续调。" : "Own the code. Tune every detail."}</h2>
+            <h2 id="landing-delivery-title">{zh ? "复制代码，继续调。" : "Copy the code. Keep tuning."}</h2>
             <code>npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json</code>
           </div>
           <Link className="landing-skill-card" to="/$locale/skill/" params={{ locale }}>

@@ -1,5 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
-import { registryComponents } from "../src/data/component-registry";
+import {
+  registryComponentDependencies,
+  registryComponentEngines,
+  registryComponentRuntimeCost,
+  registryComponentSignature,
+  registryComponents
+} from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
@@ -24,7 +30,14 @@ assert(new Set(canonicalMotionCatalog.map((item) => item.id)).size === canonical
 for (const component of registryComponents) {
   assert(component.name.zh.trim() && component.name.en.trim(), `${component.id} needs bilingual names`);
   assert(component.description.zh.trim() && component.description.en.trim(), `${component.id} needs bilingual descriptions`);
+  assert(registryComponentSignature(component).zh.trim() && registryComponentSignature(component).en.trim(), `${component.id} needs a bilingual behavior signature`);
   assert(component.primitiveIds.length > 0, `${component.id} needs at least one related primitive`);
+  for (const primitiveId of component.primitiveIds) {
+    assert(canonicalMotionCatalog.some((entry) => entry.id === primitiveId), `${component.id} references an unknown primitive: ${primitiveId}`);
+  }
+  assert(registryComponentEngines(component).length > 0, `${component.id} needs at least one runtime engine`);
+  assert(["light", "medium", "heavy"].includes(registryComponentRuntimeCost(component)), `${component.id} needs a valid runtime cost`);
+  assert(Array.isArray(registryComponentDependencies(component)), `${component.id} dependencies must be readable`);
   assert(existsSync(`src/registry/components/${component.id}.tsx`), `${component.id} component source is missing`);
   assert(existsSync(`src/registry/demos/${component.id}-demo.tsx`), `${component.id} demo source is missing`);
   const source = readFileSync(`src/registry/components/${component.id}.tsx`, "utf8");
@@ -52,6 +65,27 @@ for (const guide of seoGuides) {
     assert(length >= minimum, `${guide.id}.${locale} is too short (${length}/${minimum})`);
   }
 }
+
+const componentSelectionArticle = seoGuideArticles.find((article) => article.guideId === "component-or-primitive");
+assert(componentSelectionArticle, "Component and primitive selection guide is missing");
+function collectChineseCopy(value: unknown): string[] {
+  if (!value || typeof value !== "object") return [];
+  if (Array.isArray(value)) return value.flatMap(collectChineseCopy);
+  const record = value as Record<string, unknown>;
+  return [
+    ...(typeof record.zh === "string" ? [record.zh] : []),
+    ...Object.values(record).flatMap(collectChineseCopy)
+  ];
+}
+const componentSelectionChineseCopy = collectChineseCopy(componentSelectionArticle).join("\n");
+assert(
+  !/\b(?:Component|Components|Primitive|Primitives)\b/.test(componentSelectionChineseCopy),
+  "Component and primitive selection guide must use natural Chinese terminology in Chinese copy"
+);
+assert(
+  componentSelectionChineseCopy.includes("组件") && componentSelectionChineseCopy.includes("原子动效"),
+  "Component and primitive selection guide must use the canonical Chinese terminology"
+);
 
 const springArticle = seoGuideArticles.find((article) => article.guideId === "spring-or-ease-out");
 assert(springArticle, "Spring and ease-out guide is missing");
@@ -88,7 +122,7 @@ for (const routePath of expectedPaths) {
 
 const redirects = staticRedirects();
 assert(redirects.some((item) => item.source === "/" && item.destination === "/zh/"), "Root must redirect to the Chinese landing page");
-for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playground"]) {
+for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playground", "/guides/pack-or-primitive"]) {
   assert(!redirects.some((item) => item.source.includes(obsolete)), `Obsolete redirect remains: ${obsolete}`);
   assert(!sitemap.some((item) => item.includes(obsolete)), `Obsolete route remains in sitemap: ${obsolete}`);
 }

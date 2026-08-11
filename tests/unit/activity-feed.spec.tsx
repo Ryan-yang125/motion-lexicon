@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 
 import { render, screen } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ActivityFeed, type ActivityItem } from "@/registry/components/activity-feed";
 
 vi.mock("motion/react", async (importOriginal) => ({
   ...await importOriginal<typeof import("motion/react")>(),
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
   useReducedMotion: () => true,
 }));
 

@@ -1,21 +1,27 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useState } from "react";
 import { UploadQueue, type UploadItem } from "@/registry/components/upload-queue";
 
-const initial: UploadItem[] = [
-  { id: "a", name: "hero-final.webp", size: 1420000, status: "uploading", progress: 68 },
-  { id: "b", name: "brand-notes.pdf", size: 820000, status: "complete", progress: 100 },
-  { id: "c", name: "intro.mov", size: 18400000, status: "error", error: "Connection lost" },
-];
-
-export function UploadQueueDemo() {
-  const [items, setItems] = useState(initial);
+export function UploadQueueDemo({ locale = "en" }: DemoLocaleProps = {}) {
+  const [items, setItems] = useState<UploadItem[]>(() => [
+    { id: "a", name: "hero-final.webp", size: 1420000, status: "uploading", progress: 68 },
+    { id: "b", name: "brand-notes.pdf", size: 820000, status: "complete", progress: 100 },
+    { id: "c", name: "intro.mov", size: 18400000, status: "error", error: demoValue(locale, "连接中断", "Connection lost") },
+  ]);
 
   return (
-    <div className="mx-auto h-[250px] w-full max-w-[440px] overflow-y-auto pr-1">
+    <div role="group" aria-label={demoText("upload-queue", locale)} className="mx-auto h-[250px] w-full max-w-[440px] overflow-y-auto pr-1">
       <UploadQueue
         items={items}
+        label={demoValue(locale, "上传文件", "Upload files")}
+        copy={locale === "zh" ? {
+          drop: (remaining) => `拖放到这里，最多选择 ${remaining} 个`, full: "队列已满", choose: "选择文件", queue: "上传队列",
+          complete: "已完成", failed: "上传失败", uploading: "上传中", queued: "等待上传", retry: "重试", remove: "移除",
+          progress: "上传进度", summary: (complete, total) => `${total} 个文件中 ${complete} 个已上传`,
+        } : undefined}
         maxFiles={5}
         accept="image/*,video/*,.pdf"
         onFiles={(files) => {

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { motion, useReducedMotion } from "motion/react";
 
 const REVEAL = { duration: 0.24, ease: [0.23, 1, 0.32, 1] } as const;
-const HIDE = { duration: 0.13, ease: [0.4, 0, 1, 1] } as const;
+const HIDE = { duration: 0.13, ease: [0.23, 1, 0.32, 1] } as const;
 const INSTANT = { duration: 0 } as const;
 
 export type SkeletonRevealProps = {
@@ -12,6 +12,8 @@ export type SkeletonRevealProps = {
   skeleton: ReactNode;
   children: ReactNode;
   label?: string;
+  loadingLabel?: string;
+  loadedLabel?: string;
   minHeight?: number | string;
   className?: string;
 };
@@ -21,17 +23,19 @@ export function SkeletonReveal({
   skeleton,
   children,
   label = "Content",
+  loadingLabel = "Loading",
+  loadedLabel = "Content loaded",
   minHeight = 160,
   className = "",
 }: SkeletonRevealProps) {
   const reduced = useReducedMotion() === true;
   const mounted = useRef(false);
-  const [announcement, setAnnouncement] = useState(loading ? "Loading" : "Content loaded");
+  const [announcement, setAnnouncement] = useState(loading ? loadingLabel : loadedLabel);
 
   useEffect(() => {
-    if (mounted.current) setAnnouncement(loading ? "Loading" : "Content loaded");
+    if (mounted.current) setAnnouncement(loading ? loadingLabel : loadedLabel);
     mounted.current = true;
-  }, [loading]);
+  }, [loadedLabel, loading, loadingLabel]);
 
   const style: CSSProperties = { minHeight };
   const skeletonInert: Record<string, string> = !loading ? { inert: "" } : {};

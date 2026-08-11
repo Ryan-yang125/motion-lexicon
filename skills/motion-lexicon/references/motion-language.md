@@ -3,8 +3,8 @@
 Use this reference to select a behavior before composing a full Product Moment.
 Motion Lexicon keeps two connected vocabularies:
 
-- **Motion Primitives** define one reusable behavior such as slide-in, shared
-  element, stagger, or easing.
+- **Motion Primitives** define one reusable behavior such as `slide-in`,
+  `morph`, `stagger`, or `easing`.
 - **Product Moments** combine primitives into a user-visible product event such
   as save confirmation, card choice, filter results, or recovery after sync.
 
@@ -13,7 +13,7 @@ Motion Lexicon keeps two connected vocabularies:
 | Product job | Useful primitives | Product signal |
 | --- | --- | --- |
 | Introduce new context | fade, slide-in, scale-in, reveal | Arrival and orientation |
-| Keep identity through a view change | shared element, morph, crossfade | Continuity in space |
+| Keep identity through a view change | `morph` with shared mode, `crossfade` | Continuity in space |
 | Confirm a completed action | status change, checkmark draw, highlight, count update | Confidence and closure |
 | Guide a grouped sequence | stagger, delay, orchestration, progress | Order and pacing |
 | Change a local selection | selection emphasis, layout transition, height match | Focus and causality |
@@ -41,7 +41,8 @@ first rendered frame.
 
 Use a transition when identity should persist across state or surface changes.
 
-- **Shared element:** one object changes place or size while retaining identity.
+- **Shared element (`morph` with shared mode):** one object changes place or
+  size while retaining identity.
 - **Morph:** a component changes shape or structure in the same interaction.
 - **Crossfade:** a fast replacement when spatial continuity carries less value.
 - **Height match:** a container adapts while surrounding layout remains stable.
@@ -74,7 +75,7 @@ Use sequencing for related items that benefit from order.
 | Immediate feedback | 120–180 ms | ease-out | A press, selection, or field acknowledgement |
 | Arrival | 200–280 ms | `cubic-bezier(.23, 1, .32, 1)` | New context settles into a reserved place |
 | Local transition | 180–260 ms | ease-in-out | Existing content changes shape or local position |
-| Leaving | 110–180 ms | `cubic-bezier(.4, 0, 1, 1)` | Departing context clears space quickly |
+| Leaving | 110–180 ms | `cubic-bezier(.23, 1, .32, 1)` | Departing context clears space quickly |
 | Progress | truthful to process | linear or measured | The movement reflects actual duration |
 | Group stagger | 30–70 ms between items | arrival curve | Keep the whole group within a readable beat |
 
@@ -91,3 +92,7 @@ Use sequencing for related items that benefit from order.
    spring or direct transform.
 
 Use [composition.md](composition.md) when more than one state changes.
+
+When citing a published primitive ID, copy the exact ID from the public
+catalog. Keep human-facing labels separate from IDs; for example, Shared
+element uses the published `morph` primitive with shared mode.

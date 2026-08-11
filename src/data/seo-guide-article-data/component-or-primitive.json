@@ -1,0 +1,302 @@
+{
+  "guideId": "component-or-primitive",
+  "standfirst": {
+    "zh": "组件和原子动效是 Motion Lexicon 的两条公开入口。组件交付完整 React 交互，原子动效交付一个可复用动效行为。起点取决于需求是否已经包含控件结构、多个状态、焦点流转与恢复路径。",
+    "en": "Components and Motion Primitives are Motion Lexicon’s two public entry points. A Component delivers a complete React interaction; a Primitive delivers one reusable motion behavior. Choose from the amount of interface structure, state, focus management, and recovery already present in the request."
+  },
+  "sections": [
+    {
+      "id": "two-levels",
+      "title": {
+        "zh": "理解组件与原子动效的交付边界",
+        "en": "Understand the delivery boundary of each level"
+      },
+      "paragraphs": [
+        {
+          "zh": "组件面向一个可直接放进产品的完整交互，例如复制按钮、抽屉、筛选网格、上传队列或行内校验。它同时处理控件结构、业务状态、键盘与焦点路径、错误和恢复、减弱动效以及运行依赖。Motion Lexicon 的组件页面提供真实预览、实际 React 源码、shadcn Registry 安装入口和关联原子动效。团队可以从可运行的整体开始，再把文案、数据与视觉语言接入自己的设计系统。",
+          "en": "A Component covers a complete interaction that can enter a product: a copy button, drawer, filter grid, upload queue, or inline validation flow. It owns control structure, business states, keyboard and focus paths, errors and recovery, reduced motion, and runtime dependencies together. Each Motion Lexicon Component page provides a realistic preview, the actual React source, a shadcn Registry install path, and links to its underlying Primitives. A team can begin with a working whole and adapt copy, data, and visual language to its design system."
+        },
+        {
+          "zh": "原子动效聚焦一个行为规则，例如淡入、滑入、交错、缓动、按压反馈或交叉淡入淡出。它适合界面结构和业务状态已经明确，当前任务只需要解决对象如何进入、退出、响应输入或保持连续性的场景。原子动效页面给出参数、实现规则、相关术语、减弱动效策略、源码与 Registry 安装入口。清楚的边界让同一规则可以进入不同组件，也让设计与工程能用相同词汇讨论节奏、空间和中断。",
+          "en": "A Motion Primitive focuses on one behavioral rule such as fade, slide, stagger, easing, press feedback, or crossfade. It fits an interface whose structure and business state are already established and whose current task is to decide how an object arrives, leaves, responds to input, or preserves continuity. A Primitive page supplies parameters, implementation rules, related vocabulary, a reduced-motion strategy, source, and a Registry install path. That narrow boundary lets one rule serve several Components and gives design and engineering shared language for timing, space, and interruption."
+        }
+      ]
+    },
+    {
+      "id": "choose",
+      "title": {
+        "zh": "按交互所有权选择起点",
+        "en": "Choose by interaction ownership"
+      },
+      "paragraphs": [
+        {
+          "zh": "先列出需求涉及的对象与状态。一个按钮需要等待、成功、失败和再次操作，一组筛选控件需要更新命中数量、列表、空状态和焦点位置，一个抽屉需要管理触发器、遮罩、焦点锁定、关闭手势与返回焦点；这些需求都拥有完整交互边界，组件能提供更接近成品的起点。组件把相互依赖的状态放在同一契约里，团队可以直接验证真实任务是否顺畅。",
+          "en": "List the objects and states named by the request. A button may need pending, success, failure, and repeat action. A filter surface may update criteria, result count, list content, empty state, and focus. A drawer may own its trigger, backdrop, focus trap, dismissal gesture, and focus return. These requests have a complete interaction boundary, so a Component provides the closest useful starting point. It keeps dependent states in one contract and lets the team validate the real task immediately."
+        },
+        {
+          "zh": "再检查产品是否已经拥有可靠结构。现有菜单已经处理焦点和键盘导航，当前只想让高亮在选项间连续移动；现有列表已经处理筛选数据和空状态，当前只想确定新旧卡片如何交接；现有按钮已经覆盖请求状态，当前只想调整按压反馈。此时原子动效给出更小的改造面。团队保留原有语义和状态源，只把明确的动效规则接入对应对象，并在真实布局中验证。",
+          "en": "Next, inspect the structure already owned by the product. An existing menu may already handle focus and keyboard navigation while needing a continuous highlight. An existing list may already own filtering and empty state while needing a clear handoff between old and new cards. An existing button may already cover request states while needing press feedback. A Primitive gives these cases a smaller adaptation surface. The product keeps its semantics and state source, then applies one explicit motion rule to the relevant object and validates it in the real layout."
+        }
+      ]
+    },
+    {
+      "id": "bridge",
+      "title": {
+        "zh": "在两个层级之间保留可追溯关系",
+        "en": "Keep the two levels traceable"
+      },
+      "paragraphs": [
+        {
+          "zh": "从组件开始时，先运行完整交互，再查看页面列出的基础动效。复制按钮把按压反馈和文字形变组合在同一位置；筛选网格把交叉淡入淡出、交错和位移用于不同阶段；抽屉把滑入、弹簧与方向关系放进焦点完整的层级里。关联链接解释组件为何这样移动，也指出可以独立调整的规则。修改原子动效参数后，要回到组件的等待、错误、重复操作与减弱动效路径中复测。",
+          "en": "When starting from a Component, run the complete interaction first and inspect the Motion foundations listed on its page. A copy button combines press feedback and text morphing in one stable location. A filter grid applies crossfade, stagger, and translation at different phases. A drawer places slide and spring behavior inside a focus-complete layer. These relationships explain why the Component moves as it does and identify rules that can be tuned independently. After changing a Primitive parameter, retest pending, error, repeat-action, and reduced-motion paths in the full Component."
+        },
+        {
+          "zh": "从原子动效开始时，把行为放回现有组件契约。为卡片加入交错，需要同时确认数据顺序、稳定 key、首屏数量和重复筛选；为菜单加入方向感过渡，需要同时确认导航层级、返回方向与焦点目标；为按钮加入文字形变，需要同时确认宽度、状态文案和辅助技术播报。原子动效提供精确规则，产品组件继续拥有业务事实。这样的所有权分工能防止局部效果脱离状态，也让复用保持清楚。",
+          "en": "When starting from a Primitive, place the behavior back inside the existing component contract. Staggered cards also require stable data order, stable keys, a bounded first group, and repeat-filter behavior. A direction-aware menu also requires navigation hierarchy, a return direction, and a focus target. Text morphing in a button also requires stable width, state copy, and an assistive-technology announcement. The Primitive supplies the precise rule while the product Component continues to own business facts. This ownership keeps local motion connected to state and makes reuse understandable."
+        }
+      ]
+    },
+    {
+      "id": "adapt",
+      "title": {
+        "zh": "按改造范围控制成本",
+        "en": "Control cost through adaptation scope"
+      },
+      "paragraphs": [
+        {
+          "zh": "改造范围可以分成内容、规则和结构三层。内容层替换名称、文案、图标、颜色和数据，完整状态关系保持稳定；规则层调整时长、缓动、距离、出现顺序和减弱动效表达；结构层改变触发器、参与对象、状态图、焦点顺序与恢复路径。内容层通常适合直接采用组件，规则层适合沿关联原子动效精调，结构层需要重新确认组件公共 API 和业务状态源。先写清层级，评审和测试就能围绕同一边界进行。",
+          "en": "Adaptation has three practical layers: content, rules, and structure. Content changes names, copy, icons, color, and data while preserving the interaction’s state relationships. Rules change duration, easing, distance, reveal order, and reduced-motion expression. Structure changes triggers, participating objects, the state graph, focus order, and recovery. Content-level work often begins efficiently from a Component. Rule-level work follows related Primitives. Structure-level work requires a fresh review of the Component API and business state source. Naming the layer early gives design, engineering, and testing one shared boundary."
+        },
+        {
+          "zh": "技术成本也应进入选择。组件页面列出运行引擎、依赖和成本等级，适合在安装前判断 Motion、GSAP、Three.js、WebGL 或 CSS 是否符合项目约束。原子动效通常拥有更窄依赖和更小 API，适合已有设计系统逐项吸收。两条路径都要检查服务端渲染、布局稳定、合成属性、交互中断和 `prefers-reduced-motion`。页面预览帮助判断感觉，源码与 Registry 文件帮助确认真实交付内容，产品环境负责最后验收。",
+          "en": "Technical cost belongs in the choice as well. Component pages state runtime engine, dependencies, and cost level so a team can assess Motion, GSAP, Three.js, WebGL, or CSS before installation. A Primitive usually has a narrower dependency and API surface, which suits selective adoption inside an existing design system. Both paths still require checks for server rendering, layout stability, compositor-friendly properties, interruption, and `prefers-reduced-motion`. The page preview supports judgment, source and Registry files reveal the delivered implementation, and the product environment provides final acceptance."
+        }
+      ]
+    },
+    {
+      "id": "workflow",
+      "title": {
+        "zh": "用同一条工作流完成选择与验证",
+        "en": "Use one workflow for selection and validation"
+      },
+      "paragraphs": [
+        {
+          "zh": "实际工作可以沿一条短链路推进：用一句话写出用户事件和预期结果；列出对象、状态、焦点与恢复；判断需要完整组件还是单一原子动效；在对应目录打开真实预览；检查源码、依赖和关联规则；安装到产品分支；用真实数据测试默认、失败、重复操作与减弱动效。每一步都留下可验证证据，选择也能从视觉偏好转成对任务、状态和运行边界的共同判断。",
+          "en": "A practical workflow can stay short: write the user event and expected outcome in one sentence; list objects, states, focus, and recovery; choose a complete Component or one Primitive; open a realistic preview in the matching directory; inspect source, dependencies, and related rules; install into a product branch; then test real data across default, failure, repeat-action, and reduced-motion paths. Each step leaves verifiable evidence and turns the choice from visual preference into a shared judgment about task, state, and runtime boundaries."
+        },
+        {
+          "zh": "复用结果还可以改进目录。一个组件在多个产品中反复出现相同的局部规则，说明对应原子动效值得补充参数、术语或评审说明；一个原子动效经常与相同控件结构、状态和无障碍路径组合，说明现有组件可以扩展公共 API，或新的组件候选已经形成。贡献时记录真实事件、边界、失败方式和验证结果。这样组件保持完整可用，原子动效保持清晰可复用，二者共同形成可持续演进的动效语言。",
+          "en": "Reuse can also improve the library. When the same local rule appears across several product Components, its Primitive deserves stronger parameters, vocabulary, or review guidance. When a Primitive repeatedly appears with the same control structure, states, and accessibility path, an existing Component may need a broader public API or a new Component candidate may have emerged. A contribution should record the real event, boundaries, failure modes, and validation result. Components then remain complete and usable, Primitives remain clear and reusable, and both collections evolve through product evidence."
+        }
+      ]
+    }
+  ],
+  "checklistTitle": {
+    "zh": "选择层级清单",
+    "en": "Level-selection checklist"
+  },
+  "checklist": [
+    {
+      "id": "scope",
+      "label": {
+        "zh": "列出对象、状态与结果",
+        "en": "List objects, states, and outcomes"
+      },
+      "detail": {
+        "zh": "完整交互边界指向组件，单一行为规则指向原子动效。",
+        "en": "A complete interaction boundary points to a Component; one behavioral rule points to a Primitive."
+      }
+    },
+    {
+      "id": "structure",
+      "label": {
+        "zh": "检查现有产品结构",
+        "en": "Inspect existing product structure"
+      },
+      "detail": {
+        "zh": "已有可靠控件、状态和焦点路径时，可以直接嵌入原子动效。",
+        "en": "Reliable controls, state, and focus paths make a Primitive easy to embed."
+      }
+    },
+    {
+      "id": "delivery",
+      "label": {
+        "zh": "确认需要的交付物",
+        "en": "Confirm the required deliverable"
+      },
+      "detail": {
+        "zh": "组件交付完整 React 交互，原子动效交付聚焦行为与参数。",
+        "en": "A Component delivers a complete React interaction; a Primitive delivers focused behavior and parameters."
+      }
+    },
+    {
+      "id": "runtime",
+      "label": {
+        "zh": "核对引擎、依赖与成本",
+        "en": "Check engine, dependencies, and cost"
+      },
+      "detail": {
+        "zh": "在安装前确认运行约束，并保留稳定布局和减弱动效路径。",
+        "en": "Confirm runtime constraints before installation and retain stable layout and reduced motion."
+      }
+    },
+    {
+      "id": "validate",
+      "label": {
+        "zh": "回到真实任务验收",
+        "en": "Validate in the real task"
+      },
+      "detail": {
+        "zh": "测试默认、失败、重复操作、中断、键盘和减弱动效。",
+        "en": "Test default, failure, repeat action, interruption, keyboard, and reduced-motion paths."
+      }
+    }
+  ],
+  "caseStudy": {
+    "title": {
+      "zh": "案例：筛选结果该从组件还是原子动效开始",
+      "en": "Case: should filtered results start from a Component or a Primitive?"
+    },
+    "context": {
+      "zh": "团队最初只想让筛选后的卡片淡入，随后确认该交互还要管理筛选条件、命中数量、旧内容离开、新内容到达、空状态与键盘焦点。",
+      "en": "The team initially wants filtered cards to fade in, then confirms that the interaction also owns criteria, result count, old content leaving, new content arriving, empty state, and keyboard focus."
+    },
+    "code": "Scenario: status filter changes in a resource library\nStart registry item: filter-grid\nKeep: active filter, result count, stable list container, empty state, keyboard focus\nTune registry items: primitive-crossfade; primitive-stagger; primitive-duration at 160-220ms\nReduced motion: update count and rows in place; retain the live-region result announcement",
+    "explanation": {
+      "zh": "需求包含控件、多个对象、连续状态和焦点结果，因此筛选网格组件提供完整起点。团队保留筛选语义与无障碍路径，再沿关联原子动效调整交叉淡入淡出、交错和时长。",
+      "en": "The requirement contains controls, multiple objects, sequential states, and a focus outcome, so the Filter grid Component provides the complete starting point. The team keeps filtering semantics and accessibility paths, then tunes crossfade, stagger, and duration through the related Primitives."
+    }
+  },
+  "diagrams": [
+    {
+      "id": "two-entry-points",
+      "title": {
+        "zh": "图解一：两条公开入口",
+        "en": "Diagram 1: two public entry points"
+      },
+      "alt": {
+        "zh": "产品需求可以进入组件或原子动效，两条路径都回到真实产品验证。",
+        "en": "A product request can enter through a Component or Motion Primitive; both paths return to validation in the real product."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "request",
+          "label": { "zh": "产品需求", "en": "Product request" },
+          "detail": { "zh": "事件、状态、结果", "en": "Event, state, outcome" },
+          "x": 365, "y": 55, "width": 230, "height": 90, "tone": "ink"
+        },
+        {
+          "id": "component",
+          "label": { "zh": "组件", "en": "Component" },
+          "detail": { "zh": "完整 React 交互", "en": "Complete React interaction" },
+          "x": 120, "y": 230, "width": 260, "height": 105, "tone": "accent"
+        },
+        {
+          "id": "primitive",
+          "label": { "zh": "原子动效", "en": "Motion Primitive" },
+          "detail": { "zh": "一个行为与参数", "en": "One behavior and parameters" },
+          "x": 580, "y": 230, "width": 260, "height": 105, "tone": "surface"
+        },
+        {
+          "id": "validation",
+          "label": { "zh": "真实产品验证", "en": "Validate in product" },
+          "detail": { "zh": "任务、性能、低动态", "en": "Task, speed, low motion" },
+          "x": 365, "y": 415, "width": 230, "height": 80, "tone": "success"
+        }
+      ],
+      "connectors": [
+        { "from": "request", "to": "component" },
+        { "from": "request", "to": "primitive" },
+        { "from": "component", "to": "validation" },
+        { "from": "primitive", "to": "validation" }
+      ]
+    },
+    {
+      "id": "selection-matrix",
+      "title": {
+        "zh": "图解二：按交互所有权选择",
+        "en": "Diagram 2: choose by interaction ownership"
+      },
+      "alt": {
+        "zh": "已有完整界面的局部行为指向原子动效，包含控件、多个状态和焦点路径的需求指向组件。",
+        "en": "A local behavior inside an established interface points to a Primitive; a request owning controls, states, and focus points to a Component."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "existing",
+          "label": { "zh": "已有完整界面", "en": "Established interface" },
+          "detail": { "zh": "状态与焦点已明确", "en": "State and focus are owned" },
+          "x": 85, "y": 100, "width": 250, "height": 95, "tone": "surface"
+        },
+        {
+          "id": "primitive",
+          "label": { "zh": "原子动效", "en": "Motion Primitive" },
+          "detail": { "zh": "局部行为规则", "en": "Local behavior rule" },
+          "x": 85, "y": 345, "width": 250, "height": 95, "tone": "accent"
+        },
+        {
+          "id": "complete",
+          "label": { "zh": "完整交互需求", "en": "Complete interaction" },
+          "detail": { "zh": "控件、状态、恢复", "en": "Controls, states, recovery" },
+          "x": 625, "y": 100, "width": 250, "height": 95, "tone": "ink"
+        },
+        {
+          "id": "component",
+          "label": { "zh": "组件", "en": "Component" },
+          "detail": { "zh": "可运行整体", "en": "Working whole" },
+          "x": 625, "y": 345, "width": 250, "height": 95, "tone": "success"
+        }
+      ],
+      "connectors": [
+        { "from": "existing", "to": "primitive", "label": { "zh": "补充规则", "en": "Add one rule" } },
+        { "from": "complete", "to": "component", "label": { "zh": "交付整体", "en": "Deliver the whole" } }
+      ]
+    },
+    {
+      "id": "evidence-loop",
+      "title": {
+        "zh": "图解三：两个目录由产品证据共同演进",
+        "en": "Diagram 3: both collections evolve through product evidence"
+      },
+      "alt": {
+        "zh": "真实项目连接组件、原子动效与评审证据，形成持续改进循环。",
+        "en": "Real projects connect Components, Primitives, and review evidence in a continuous improvement loop."
+      },
+      "viewBox": "0 0 960 540",
+      "nodes": [
+        {
+          "id": "project",
+          "label": { "zh": "真实项目", "en": "Real project" },
+          "detail": { "zh": "场景与约束", "en": "Scene and constraints" },
+          "x": 385, "y": 55, "width": 190, "height": 90, "tone": "ink"
+        },
+        {
+          "id": "component",
+          "label": { "zh": "组件", "en": "Component" },
+          "detail": { "zh": "验证完整交互", "en": "Validate complete interaction" },
+          "x": 650, "y": 220, "width": 190, "height": 90, "tone": "success"
+        },
+        {
+          "id": "primitive",
+          "label": { "zh": "原子动效", "en": "Motion Primitive" },
+          "detail": { "zh": "提炼行为规则", "en": "Extract behavior rule" },
+          "x": 385, "y": 385, "width": 190, "height": 90, "tone": "accent"
+        },
+        {
+          "id": "evidence",
+          "label": { "zh": "评审证据", "en": "Review evidence" },
+          "detail": { "zh": "任务、错误、性能", "en": "Task, errors, performance" },
+          "x": 120, "y": 220, "width": 190, "height": 90, "tone": "surface"
+        }
+      ],
+      "connectors": [
+        { "from": "project", "to": "component" },
+        { "from": "component", "to": "primitive" },
+        { "from": "primitive", "to": "evidence" },
+        { "from": "evidence", "to": "project" }
+      ]
+    }
+  ]
+}

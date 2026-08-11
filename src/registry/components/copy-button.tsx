@@ -123,6 +123,8 @@ export type CopyButtonProps = {
   timeout?: number;
   onCopy?: (value: string) => void;
   onError?: (reason: unknown) => void;
+  onIntent?: () => void;
+  resolveValue?: () => Promise<string>;
   disabled?: boolean;
   className?: string;
 };
@@ -135,6 +137,8 @@ export function CopyButton({
   timeout = 2000,
   onCopy,
   onError,
+  onIntent,
+  resolveValue,
   disabled = false,
   className = "",
 }: CopyButtonProps) {
@@ -155,8 +159,17 @@ export function CopyButton({
       type="button"
       disabled={disabled}
       aria-label={label}
+      onFocus={onIntent}
+      onPointerEnter={onIntent}
       onClick={() => {
-        void copy(value);
+        void (async () => {
+          try {
+            const resolvedValue = value || await resolveValue?.() || "";
+            await copy(resolvedValue);
+          } catch (error) {
+            onError?.(error);
+          }
+        })();
       }}
       whileTap={disabled || reduced ? undefined : { y: 1 }}
       transition={CELL}

@@ -121,7 +121,6 @@ a,
 
 /* Search fields */
 .interior-hero-search,
-.interior-finder-search,
 .interior-catalog-search,
 .interior-vocabulary-search {
   min-width: 0;
@@ -129,7 +128,6 @@ a,
 }
 
 .interior-hero-search > div,
-.interior-finder-search > div,
 .interior-catalog-search > div,
 .interior-vocabulary-search > div {
   border-color: var(--interior-line);
@@ -137,7 +135,6 @@ a,
 }
 
 .interior-hero-search input,
-.interior-finder-search input,
 .interior-catalog-search input,
 .interior-vocabulary-search input {
   height: 40px;
@@ -146,7 +143,6 @@ a,
 }
 
 .interior-hero-search button,
-.interior-finder-search button,
 .interior-catalog-search button,
 .interior-vocabulary-search button {
   min-width: 0;
@@ -159,79 +155,16 @@ a,
   box-shadow: none;
 }
 
-.apple-hero-finder .interior-hero-search button,
-.apple-search-pill .finder-search-field .interior-finder-search button {
-  min-width: 0;
-  min-height: 40px;
-  border: 0;
-  border-radius: 8px;
-  padding: 0;
-  color: var(--interior-secondary);
-  background: transparent;
-  box-shadow: none;
-}
-
-.apple-hero-finder .interior-hero-search > button,
-.apple-search-pill .finder-search-field .interior-finder-search > button {
-  width: 40px;
-}
-
-.apple-hero-finder .interior-hero-search > div button,
-.apple-search-pill .finder-search-field .interior-finder-search > div button {
-  width: 36px;
-}
-
 .interior-hero-search > button,
-.interior-finder-search > button,
 .interior-catalog-search > button,
 .interior-vocabulary-search > button {
   width: 40px;
 }
 
 .interior-hero-search > div button,
-.interior-finder-search > div button,
 .interior-catalog-search > div button,
 .interior-vocabulary-search > div button {
   width: 36px;
-}
-
-.apple-hero-finder > .interior-hero-search {
-  min-height: 44px;
-  display: block;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.apple-search-pill .finder-search-field {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  min-height: 58px;
-  border-color: var(--interior-line);
-  border-radius: 16px;
-  padding: 6px;
-  background: var(--interior-panel);
-  box-shadow: var(--interior-shadow);
-}
-
-.apple-hero-finder > .interior-hero-search:focus-within {
-  border: 0;
-  outline: 0;
-  box-shadow: none;
-}
-
-.apple-search-pill .finder-search-field:focus-within {
-  border-color: var(--interior-focus);
-  outline: 0;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interior-focus) 26%, transparent), var(--interior-shadow);
-}
-
-.apple-search-pill .finder-search-field > .ml-button {
-  min-width: max-content;
-  min-height: 44px;
-  padding-inline: 16px;
 }
 
 .library-catalog-toolbar .interior-catalog-search {
@@ -466,61 +399,8 @@ a,
   background: color-mix(in srgb, var(--interior-focus) 13%, transparent);
 }
 
-/* Finder candidate tabs */
-.finder-candidate-choice {
-  isolation: isolate;
-  overflow: hidden;
-  border-color: var(--interior-line);
-  background: var(--interior-panel);
-  box-shadow: var(--interior-shadow);
-}
-
-.finder-candidate-choice-content {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  color: var(--interior-secondary);
-}
-
-.finder-candidate-choice-content > strong {
-  color: var(--interior-ink);
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.finder-candidate-choice-content > span,
-.finder-candidate-choice-content > small {
-  color: var(--interior-secondary);
-  font-size: 12px;
-}
-
-.finder-candidate-choice-content > svg {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-end: 0;
-  color: var(--interior-focus);
-}
-
-.finder-candidate-selection {
-  position: absolute;
-  inset: 3px;
-  z-index: 0;
-  border: 1px solid color-mix(in srgb, var(--interior-focus) 30%, var(--interior-line));
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--interior-focus) 8%, var(--interior-panel));
-}
-
-.finder-candidate-choice.is-selected {
-  border-color: color-mix(in srgb, var(--interior-focus) 42%, var(--interior-line));
-  box-shadow: var(--interior-shadow);
-}
-
 /* Auto-height disclosures */
 [data-interior-disclosure] button.apple-disclosure-summary,
-[data-interior-disclosure] button.finder-export-summary,
 [data-interior-disclosure] button.apple-inspector-disclosure-summary {
   width: 100%;
   border: 0;
@@ -530,7 +410,6 @@ a,
 }
 
 [data-interior-disclosure] button.apple-disclosure-summary:hover,
-[data-interior-disclosure] button.finder-export-summary:hover,
 [data-interior-disclosure] button.apple-inspector-disclosure-summary:hover {
   background: var(--interior-well);
 }
@@ -558,21 +437,6 @@ a,
 
 .apple-disclosure-body {
   animation: none;
-}
-
-.finder-export-summary {
-  min-height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.finder-export-body {
-  border-top: 1px solid var(--interior-line);
-  padding: 12px;
 }
 
 .interior-disclosure-chevron {
@@ -696,7 +560,6 @@ a,
 .library-code-files,
 .library-code-file,
 .apple-reference-topic,
-.finder-workspace-shell,
 .library-catalog-toolbar,
 .library-card-grid,
 .vocabulary-page,
@@ -729,14 +592,6 @@ a,
     max-width: 100%;
   }
 
-  .finder-candidate-switcher {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .finder-candidate-choice {
-    min-height: 88px;
-  }
-
   .apple-preview-toolbar {
     align-items: stretch;
     flex-direction: column;
@@ -744,34 +599,6 @@ a,
 
   .interior-device-switcher,
   .interior-motion-mode {
-    width: 100%;
-  }
-
-  .apple-search-pill .finder-search-field {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill .finder-search-field {
-    min-height: 58px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 6px;
-    padding: 6px;
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill .finder-search-field > .ml-button {
-    width: 48px;
-    min-width: 48px;
-    min-height: 44px;
-    padding: 0;
-    font-size: 0;
-  }
-
-  .apple-finder-intake.has-result .apple-search-pill .finder-search-field > .ml-button svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .apple-search-pill .finder-search-field > .ml-button {
     width: 100%;
   }
 }

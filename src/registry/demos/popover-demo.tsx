@@ -1,5 +1,7 @@
 "use client";
 
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+
 import { useRef, useState } from "react";
 import { Popover } from "@/registry/components/popover";
 
@@ -34,16 +36,16 @@ const people = [
   },
 ];
 
-export function PopoverDemo() {
+export function PopoverDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const field = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<string | null>(null);
 
   return (
-    <div ref={field} className="relative h-full w-full">
+    <div role="group" aria-label={demoText("popover", locale)} ref={field} className="relative h-full w-full">
       {people.map((person) => (
         <div key={person.id} className={`absolute ${person.at}`}>
           <Popover
-            label={`${person.name}, profile`}
+            label={demoValue(locale, `${person.name} 的资料`, `${person.name}, profile`)}
             side="top"
             boundary={field}
             open={open === person.id}
@@ -55,10 +57,10 @@ export function PopoverDemo() {
                 {person.name}
               </p>
               <p className="mt-0.5 text-[11.5px] text-stone-400 dark:text-stone-500">
-                {person.role} · joined 2019
+                {demoValue(locale, `${person.role} · 2019 年加入`, `${person.role} · joined 2019`)}
               </p>
               <p className="mt-2 text-[12.5px] leading-relaxed text-stone-500 dark:text-stone-400">
-                Two reviews open. Last shipped the docs shell on Tuesday.
+                {demoValue(locale, "有两个评审待处理。周二刚发布文档框架。", "Two reviews open. Last shipped the docs shell on Tuesday.")}
               </p>
             </div>
           </Popover>
