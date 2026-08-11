@@ -316,5 +316,6 @@
   "preview": {
     "stdout": "\n> motion-lexicon-page-eval-fixture@1.0.0 preview\n> vite preview --host 127.0.0.1 --port 43126\n\n  ➜  Local:   http://127.0.0.1:43126/\n",
     "stderr": ""
-  }
+  },
+  "browserHarnessSha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
 }

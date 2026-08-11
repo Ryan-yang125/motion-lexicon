@@ -11,7 +11,9 @@
     "identity": "Codex zero-context independent scorer /root/v420_independent_forward_scorer",
     "independent": true,
     "promptPath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/scorer-prompt.md",
-    "promptSha256": "d41de07d80bbc758a38a7ee3ffa8ad639dccdb0381121308b3caed52ca643076"
+    "promptSha256": "d41de07d80bbc758a38a7ee3ffa8ad639dccdb0381121308b3caed52ca643076",
+    "outputPath": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/scorer-output.json",
+    "outputSha256": "7524589b294fcda67a00009ddae162b29686004e2292f0f21dc5a01a149aae1b"
   },
   "runs": [
     {
@@ -1336,7 +1338,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r1/isolation-manifest.json": "76afb77a07fd2585ed54e15886514142cab8c747fc187d247345c7fafef4d985",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r1/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r1/build.json": "47330001a08bc6c9c97e0c18f255507a1d18c5eedc9972853ebcbb5876bdb28c",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r1/browser-acceptance.json": "2aaf2dadde545dfbf3f1ea8027bbb416ab7e3ff68452ad224a06096a1595f6b6"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r1/browser-acceptance.json": "bea9bfcfcfef97decb828811fbfdee32e1084087ba582741f40c1f09e35f5572"
       },
       "artifactSha256": {
         "prompt": "56025f2bbfde2a63c830fe5f8fca02eeb2860549135faba125bf9690dc6d09da",
@@ -1347,7 +1349,7 @@
         "sourceTree": "16f6653e0878a2e1f4872c87cdf7271971e21aefc31752ffaaccb24d6bb0f82e",
         "distTree": "56505e281e40a15be1c8b1166b9cd4d30254e98472a9d420f0718a2a6b65e336",
         "buildEvidence": "47330001a08bc6c9c97e0c18f255507a1d18c5eedc9972853ebcbb5876bdb28c",
-        "browserAcceptance": "2aaf2dadde545dfbf3f1ea8027bbb416ab7e3ff68452ad224a06096a1595f6b6",
+        "browserAcceptance": "bea9bfcfcfef97decb828811fbfdee32e1084087ba582741f40c1f09e35f5572",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -1500,7 +1502,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r2/isolation-manifest.json": "7513491fa676c85eadca873fb80e27dac3c881c2b93b62b4c7175cd7892f9f57",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r2/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r2/build.json": "4b340933417f7795b7aac7deccc1babb50f21031db97f2a4621484d40479709b",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r2/browser-acceptance.json": "8f1d739be448a104b956f7960d8b000d284c6c59e4c028f36026bb023a5e162a"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r2/browser-acceptance.json": "22c658072168fc325b31f609da8c5439d634ff8af66784e122b7215f40c66483"
       },
       "artifactSha256": {
         "prompt": "56025f2bbfde2a63c830fe5f8fca02eeb2860549135faba125bf9690dc6d09da",
@@ -1511,7 +1513,7 @@
         "sourceTree": "82844ef65ed636ad3666237ca1429ab3b83b231280fff231195385a1566a393b",
         "distTree": "9bf245dcf3a1dda674518f21dcb2596f6b4fcfca7767c30c7d5be75ff74f0c0b",
         "buildEvidence": "4b340933417f7795b7aac7deccc1babb50f21031db97f2a4621484d40479709b",
-        "browserAcceptance": "8f1d739be448a104b956f7960d8b000d284c6c59e4c028f36026bb023a5e162a",
+        "browserAcceptance": "22c658072168fc325b31f609da8c5439d634ff8af66784e122b7215f40c66483",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -1664,7 +1666,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r3/isolation-manifest.json": "58ddf820edaf706619f7ea9319885d2bbe993ada101e12ba942ad7bd2bbb814f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r3/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r3/build.json": "0bac88ce2fdbd873c4018635d4ee6ba310a1ff54f284d719b37176924c3ada1a",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r3/browser-acceptance.json": "faebfb6015c1f29552eea60642141ee7bfcf963d561d3ca1842b0c4de203e3a3"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-project-dashboard/r3/browser-acceptance.json": "9e8119ed05ec1c1e4b192e1949348b5b8676f96ef397fe88a391eb9246436801"
       },
       "artifactSha256": {
         "prompt": "56025f2bbfde2a63c830fe5f8fca02eeb2860549135faba125bf9690dc6d09da",
@@ -1675,7 +1677,7 @@
         "sourceTree": "7ba9bebba7f1137dfb7e9c9bb383ee7e4691a2b19be0924acdc2c648fab7d58a",
         "distTree": "d3fb2c556445217f77f0e3232e683268696754673f2e3bbf2e54a49d1eaa9372",
         "buildEvidence": "0bac88ce2fdbd873c4018635d4ee6ba310a1ff54f284d719b37176924c3ada1a",
-        "browserAcceptance": "faebfb6015c1f29552eea60642141ee7bfcf963d561d3ca1842b0c4de203e3a3",
+        "browserAcceptance": "9e8119ed05ec1c1e4b192e1949348b5b8676f96ef397fe88a391eb9246436801",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -1828,7 +1830,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r1/isolation-manifest.json": "0e5208221e49b8574ece34c653425387cda9db3d3999e39c1668b04a3bcc4fad",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r1/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r1/build.json": "716e7dc3bc3b809a456ba2f0937226c5fdf7ea73f5f4632ccbfa0012a1c13a8d",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r1/browser-acceptance.json": "6047fb9939e056de29bed6e25fcbf11aeb79d364ff67f330e2f3018344924b99"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r1/browser-acceptance.json": "32b80faa38d227259f92e7b7d4dad9c481a443e48a840cced61dd74fa7cbf2b8"
       },
       "artifactSha256": {
         "prompt": "2ff062021e5004947e8c1dff734ebfb3d2836618a209cf9f3107b834ad4cf54d",
@@ -1839,7 +1841,7 @@
         "sourceTree": "978c9b57e94d8a0f316b1447ad04c416b40c0d925e3f28d11725fe3ff39fd9ff",
         "distTree": "1d38d9588b8a081424a35dfd5ea9fc8b3142eb0352812a99b534437dd6e39b37",
         "buildEvidence": "716e7dc3bc3b809a456ba2f0937226c5fdf7ea73f5f4632ccbfa0012a1c13a8d",
-        "browserAcceptance": "6047fb9939e056de29bed6e25fcbf11aeb79d364ff67f330e2f3018344924b99",
+        "browserAcceptance": "32b80faa38d227259f92e7b7d4dad9c481a443e48a840cced61dd74fa7cbf2b8",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -2032,7 +2034,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/isolation-manifest.json": "4b28325e01a4432f710ce4770613d19751c69dda2288f2b7c818e7d09c4b60ef",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/build.json": "c18ce5dc55144993369a52ed0228c8ff3b006f14fd9043962389d8916f4c1060",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/browser-acceptance.json": "f7c48bd8dc5eace08b37e388dd4940473b60b908523ce930ae7827e65108ed01"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r2/browser-acceptance.json": "58e0466454015b7dca9271a66c07da7be9827388808a3a57bce409b1f6564020"
       },
       "artifactSha256": {
         "prompt": "2ff062021e5004947e8c1dff734ebfb3d2836618a209cf9f3107b834ad4cf54d",
@@ -2043,7 +2045,7 @@
         "sourceTree": "88d48e0617534c7b5d5b6dc9813182c1ca311485f06f580dd5c69d71f7bdc3bc",
         "distTree": "f808e86b0cdcf0e910eb0c6a1e0bf99f8267d6311c24fd81f600c66058631c62",
         "buildEvidence": "c18ce5dc55144993369a52ed0228c8ff3b006f14fd9043962389d8916f4c1060",
-        "browserAcceptance": "f7c48bd8dc5eace08b37e388dd4940473b60b908523ce930ae7827e65108ed01",
+        "browserAcceptance": "58e0466454015b7dca9271a66c07da7be9827388808a3a57bce409b1f6564020",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -2236,7 +2238,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r3/isolation-manifest.json": "18c59891fc9351c1e94e6bc401b1d6d85a90d0b489e1b22687da805bcf0a281b",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r3/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r3/build.json": "6f9a88633657032f9366eba9132c2fe2c5494efb743415fdb4e61935c16c90ad",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r3/browser-acceptance.json": "26c725830d64ad75861a58606e0dace796cb7f461538ec20094b535d3d6c2df1"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/zh-build-page-product-landing/r3/browser-acceptance.json": "c33a1040a9930bd579bf544ca2bfa16e8f37216097af9474e9f2480bc665fed2"
       },
       "artifactSha256": {
         "prompt": "2ff062021e5004947e8c1dff734ebfb3d2836618a209cf9f3107b834ad4cf54d",
@@ -2247,7 +2249,7 @@
         "sourceTree": "1730b2e7ed9a7d7ca53226c5a5eff0c21d60c8473b9fefd131f28e12e7deed77",
         "distTree": "b35b7c577c56a9f20e6d11483533865d9d9c6919c2b77c44073f65951aee1a8b",
         "buildEvidence": "6f9a88633657032f9366eba9132c2fe2c5494efb743415fdb4e61935c16c90ad",
-        "browserAcceptance": "26c725830d64ad75861a58606e0dace796cb7f461538ec20094b535d3d6c2df1",
+        "browserAcceptance": "c33a1040a9930bd579bf544ca2bfa16e8f37216097af9474e9f2480bc665fed2",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -3280,7 +3282,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r1/isolation-manifest.json": "2df6d1334dcf74fc94b14ae896313f409c1a61ba93450cb2f35eb28900c96020",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r1/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r1/build.json": "b337d4e7e6b4e1e5c3878b337dea3e001647fe975e610bf22b87b3cbc9b95d8f",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r1/browser-acceptance.json": "5bed4f01c0fedfa50550eb86eb3c5c9f6863e5116c97c4631e48ab51f1ab4efb"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r1/browser-acceptance.json": "65a733b5aed47f0a7b449bd02dd9d1ad42afd695622fe22e5e898eda96f32d85"
       },
       "artifactSha256": {
         "prompt": "2658df279f20f99b9b7547d9af9d9074c159922c90d8c768ac55e95fbb0616fc",
@@ -3291,7 +3293,7 @@
         "sourceTree": "6306eb23b7fa66328ad80071219e79a735c76b2ac9a4732c93e8966cffbf1a91",
         "distTree": "25891e0d5ab396ba8ac28fe9448975107fe1797e26033ae466315b6edfc1937d",
         "buildEvidence": "b337d4e7e6b4e1e5c3878b337dea3e001647fe975e610bf22b87b3cbc9b95d8f",
-        "browserAcceptance": "5bed4f01c0fedfa50550eb86eb3c5c9f6863e5116c97c4631e48ab51f1ab4efb",
+        "browserAcceptance": "65a733b5aed47f0a7b449bd02dd9d1ad42afd695622fe22e5e898eda96f32d85",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -3444,7 +3446,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r2/isolation-manifest.json": "19f94d7a20ed9e95b65a6724214e54c806b46888395708f8d71c886562a9309f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r2/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r2/build.json": "2beff2812af86e05a2b580ac07d93ccf9c1a133394c9a4c281687e0037cc0888",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r2/browser-acceptance.json": "a672cfc79b135b9cd37ceb408ba0178def83d87ddbec7c7e39de813407907024"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r2/browser-acceptance.json": "369eb0b7da1f918d7e747c4b2ba63d9665b7a6ec23e2150edd0842caa23d06d2"
       },
       "artifactSha256": {
         "prompt": "2658df279f20f99b9b7547d9af9d9074c159922c90d8c768ac55e95fbb0616fc",
@@ -3455,7 +3457,7 @@
         "sourceTree": "20717d01444e2cd95651c89a08de312f35027a46506f0f7f6f53d7b2d95e8f70",
         "distTree": "456ab2ab3abd4404fa19dd36e221d4282519910895dd178b7cfa2553685d57b7",
         "buildEvidence": "2beff2812af86e05a2b580ac07d93ccf9c1a133394c9a4c281687e0037cc0888",
-        "browserAcceptance": "a672cfc79b135b9cd37ceb408ba0178def83d87ddbec7c7e39de813407907024",
+        "browserAcceptance": "369eb0b7da1f918d7e747c4b2ba63d9665b7a6ec23e2150edd0842caa23d06d2",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -3608,7 +3610,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r3/isolation-manifest.json": "9cb5ddfe1af2ad79787ba4d9b42a8eda84c9f4ff683ba80aa98f09dba04d7410",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r3/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r3/build.json": "d82708103f6b3aef284e939f787e337c348697cce83b1bb5943cab61d06996af",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r3/browser-acceptance.json": "96247c49bd05d00b40878004c15f1938ee576335d538f7165500761f119381a8"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-analytics-dashboard/r3/browser-acceptance.json": "ec8f0ef979d7cdddb1a371ff644d26e93b9afac5300c641839e4efb3b464004e"
       },
       "artifactSha256": {
         "prompt": "2658df279f20f99b9b7547d9af9d9074c159922c90d8c768ac55e95fbb0616fc",
@@ -3619,7 +3621,7 @@
         "sourceTree": "38a4375a85cb79c224e24a35f06327da4e660c513468052137536e01087e181c",
         "distTree": "f404bbda99e7dc01f96a3197a809809ca6e0d59dbfff82113b114516115c1cfa",
         "buildEvidence": "d82708103f6b3aef284e939f787e337c348697cce83b1bb5943cab61d06996af",
-        "browserAcceptance": "96247c49bd05d00b40878004c15f1938ee576335d538f7165500761f119381a8",
+        "browserAcceptance": "ec8f0ef979d7cdddb1a371ff644d26e93b9afac5300c641839e4efb3b464004e",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -3772,7 +3774,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r1/isolation-manifest.json": "e51ac1d8b0e5fd425c1b6b3cad4e6e8bac649e4cf685b8c7ecf645051833af3e",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r1/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r1/build.json": "d75517423b2d713fc0eb2ab43db98b8b26a48ab9d9142fc4fed5051ccde925a0",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r1/browser-acceptance.json": "0bc05c1b36b05936efff9f67b56cf01045280ed0dc0f11de2ca880f5ffb59756"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r1/browser-acceptance.json": "1f73cae63521705cb76810459ff4344cb63fcd05728bdc712b8295baa136d3ab"
       },
       "artifactSha256": {
         "prompt": "3a3a1e737c54cd3d2132f9aac1c742f2ccf819e14b90c75448cc868d9d9cb6f6",
@@ -3783,7 +3785,7 @@
         "sourceTree": "ffa6b155a0fe1222ad1bd9995bca17ec87e34cc2a04f1856deca19eb0cbdb9fd",
         "distTree": "bb1af7e41361bb7803970c1b3c5bc78f04e47cb1cf1fea5554354e820c2f203d",
         "buildEvidence": "d75517423b2d713fc0eb2ab43db98b8b26a48ab9d9142fc4fed5051ccde925a0",
-        "browserAcceptance": "0bc05c1b36b05936efff9f67b56cf01045280ed0dc0f11de2ca880f5ffb59756",
+        "browserAcceptance": "1f73cae63521705cb76810459ff4344cb63fcd05728bdc712b8295baa136d3ab",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -3936,7 +3938,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r2/isolation-manifest.json": "33adcc6064babb66f05a401587835e4d7f3e91166af83c5fc8321d6f8940b69d",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r2/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r2/build.json": "15ac54678e96f612d8f3c563870f98b71a1e220559b6604432bfc347fb45eadc",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r2/browser-acceptance.json": "67fc22291ed12b7cd077508f9c4516e80e088cf69a0f6ead0b394259db52a328"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r2/browser-acceptance.json": "f0dcd839dc8e217763d417c11ed3526ebe43bb17b19961cc26678f0682b5806d"
       },
       "artifactSha256": {
         "prompt": "3a3a1e737c54cd3d2132f9aac1c742f2ccf819e14b90c75448cc868d9d9cb6f6",
@@ -3947,7 +3949,7 @@
         "sourceTree": "2dc939a2cc5b047d3b8f198b321d38e54ba11816b0bf32474707749efcdd4dea",
         "distTree": "d3e44efb7cdcab9e62680ed29be21b3ee1bcee612aa635ee45a45390330e1c64",
         "buildEvidence": "15ac54678e96f612d8f3c563870f98b71a1e220559b6604432bfc347fb45eadc",
-        "browserAcceptance": "67fc22291ed12b7cd077508f9c4516e80e088cf69a0f6ead0b394259db52a328",
+        "browserAcceptance": "f0dcd839dc8e217763d417c11ed3526ebe43bb17b19961cc26678f0682b5806d",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -4100,7 +4102,7 @@
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r3/isolation-manifest.json": "24c94d23edd07b9e35075f43c182d91c53c36fa7b6b326aeff67f5b18c735416",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r3/initial-fixture-manifest.json": "0e9a428fd404e6fee0da9e21be8730346d927fc68d25a472808db0a7487f039f",
         "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r3/build.json": "2cb7215370bd4526bfbf53510bd6582d7bfc6400493e0af6139916c205f5391e",
-        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r3/browser-acceptance.json": "a22e39bb5c388022b77a7fa56d638cc239f6fa3fa985b4a69344e8219389c4f6"
+        "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/en-build-page-support-inbox/r3/browser-acceptance.json": "4cea708359ec35b50bfe96db2224b7db6449934cc14eaf899c041b24ba8c229c"
       },
       "artifactSha256": {
         "prompt": "3a3a1e737c54cd3d2132f9aac1c742f2ccf819e14b90c75448cc868d9d9cb6f6",
@@ -4111,7 +4113,7 @@
         "sourceTree": "fedb9486090adeb2bc6c8e73ed7fe4aa984327b1f3d29c75a3bc2e2327c270e1",
         "distTree": "75bc3258061ffcd3e62d9fdee9aed83e0ff29ac9ce4239275a604592004e7376",
         "buildEvidence": "2cb7215370bd4526bfbf53510bd6582d7bfc6400493e0af6139916c205f5391e",
-        "browserAcceptance": "a22e39bb5c388022b77a7fa56d638cc239f6fa3fa985b4a69344e8219389c4f6",
+        "browserAcceptance": "4cea708359ec35b50bfe96db2224b7db6449934cc14eaf899c041b24ba8c229c",
         "blueprint": null,
         "validatorEvidence": null,
         "candidate": null,
@@ -5545,5 +5547,9 @@
     "casesPassingAllThreeRepetitions": 12,
     "casesTotal": 12,
     "passed": true
+  },
+  "browserHarness": {
+    "path": "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11/browser-evidence.mjs",
+    "sha256": "7f486257dd70fab8d5cd74138357e8d36668b911f338567239d9f10d6c46844c"
   }
 }

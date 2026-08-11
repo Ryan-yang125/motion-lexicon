@@ -17,8 +17,11 @@ repository-relative artifacts:
   `validator.json`, `placeholder-scan.json` with `placeholderCount: 0`, and the
   successful portable implementation in `source/`, `dist/`, and `build.json`.
 
-The evidence root also keeps `scorer-prompt.md`. The result identifies the
-independent scorer and hashes that exact prompt.
+The evidence root also keeps `scorer-prompt.md`, `scorer-output.json`, and the
+byte-identical `browser-evidence.mjs` harness used for the recorded page runs.
+The result hashes all three. The scorer output binds the prompt, contract,
+fixtures, browser harness, complete scoring input, per-case scores, and suite
+summary.
 
 Every run's `artifactFileSha256` object contains exactly one key for every file
 in `artifactPaths`; directories use the dedicated source/dist tree hashes. This
@@ -49,8 +52,9 @@ stdout, stderr, and the preserved source/dist tree hashes. `source/` contains
 the project without `node_modules`, `.git`, caches, or `dist`; `dist/` contains
 the exact successful build output.
 
-`browser-acceptance.json` contains the automation command, exit code, four
-`viewports` records, theme observations, keyboard/focus evidence, reduced
+`browser-acceptance.json` binds its `evalId`, `repetition`, source/dist tree
+hashes, and browser-harness hash, then records the automation command, exit
+code, four `viewports`, theme observations, keyboard/focus evidence, reduced
 motion, primary state evidence, and runtime counts. Each viewport record uses:
 
 ```json

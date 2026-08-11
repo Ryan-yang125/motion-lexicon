@@ -743,7 +743,7 @@ const validateForwardTestContract = () => {
   if (contract.scoring?.criticalPassRate !== 1 || contract.scoring?.overallPassRate !== 0.9) {
     fail("Fresh-context scoring contract needs a 100% critical and 90% overall threshold.");
   }
-  for (const field of ["suite", "skillVersion", "skillSha256", "skillTreeSha256", "model", "startedAt", "completedAt", "evidenceRoot", "scorer", "runs", "summary"]) {
+  for (const field of ["suite", "skillVersion", "skillSha256", "skillTreeSha256", "model", "startedAt", "completedAt", "evidenceRoot", "browserHarness", "scorer", "runs", "summary"]) {
     if (!(field in (contract.resultFormat ?? {}))) {
       fail(`Fresh-context result format is missing ${field}.`);
     }
@@ -772,6 +772,19 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   const expectedRunTotal = caseById.size * contract.runRequirements.repetitionsPerCase;
   const expectedEvidenceRootPath = "skills/motion-lexicon/evals/evidence/forward-test-2026-08-11";
   const evidenceRoot = path.join(repositoryRoot, expectedEvidenceRootPath);
+  const scoringInputSha256 = sha256(JSON.stringify({
+    suite: result.suite,
+    skillVersion: result.skillVersion,
+    skillSha256: result.skillSha256,
+    skillTreeSha256: result.skillTreeSha256,
+    model: result.model,
+    startedAt: result.startedAt,
+    completedAt: result.completedAt,
+    evidenceRoot: result.evidenceRoot,
+    browserHarness: result.browserHarness,
+    runs: result.runs,
+    summary: result.summary,
+  }));
 
   if (result.suite !== contract.suite) fail("Recorded fresh-context result has the wrong suite.");
   if (result.skillVersion !== packageManifest.version) fail("Recorded fresh-context result has a stale Skill version.");
@@ -804,6 +817,12 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   if (!fs.existsSync(evidenceRoot) || !fs.lstatSync(evidenceRoot).isDirectory()) {
     fail("Recorded fresh-context evidence root is missing.");
   }
+  const browserHarnessPath = resolveRepositoryEvidencePath(result.browserHarness?.path, evidenceRoot, "recordedResult.browserHarness.path");
+  if (!browserHarnessPath || !fs.existsSync(browserHarnessPath) || !fs.statSync(browserHarnessPath).isFile()) {
+    fail("Recorded fresh-context browser harness artifact is missing.");
+  } else if (!sha256Pattern.test(result.browserHarness?.sha256 ?? "") || sha256(fs.readFileSync(browserHarnessPath)) !== result.browserHarness.sha256) {
+    fail("Recorded fresh-context browser harness hash does not match its artifact.");
+  }
   if (typeof result.scorer?.identity !== "string" || result.scorer.identity.trim().length < 3) {
     fail("Recorded fresh-context result needs an independent scorer identity.");
   }
@@ -815,6 +834,28 @@ const validateForwardTestResult = (contract, taskFixtures) => {
     fail("Recorded fresh-context scorer prompt artifact is missing.");
   } else if (sha256(fs.readFileSync(scorerPromptPath)) !== result.scorer.promptSha256) {
     fail("Recorded fresh-context scorer prompt hash does not match its artifact.");
+  }
+  const scorerOutputPath = resolveRepositoryEvidencePath(result.scorer?.outputPath, evidenceRoot, "recordedResult.scorer.outputPath");
+  let scorerOutput = null;
+  if (!scorerOutputPath || !fs.existsSync(scorerOutputPath) || !fs.statSync(scorerOutputPath).isFile()) {
+    fail("Recorded fresh-context scorer output artifact is missing.");
+  } else if (!sha256Pattern.test(result.scorer?.outputSha256 ?? "") || sha256(fs.readFileSync(scorerOutputPath)) !== result.scorer.outputSha256) {
+    fail("Recorded fresh-context scorer output hash does not match its artifact.");
+  } else {
+    scorerOutput = readJsonArtifact(scorerOutputPath, "recordedResult.scorer.outputPath");
+    if (scorerOutput?.identity !== result.scorer.identity || scorerOutput?.independent !== true) {
+      fail("Recorded fresh-context scorer output must bind the declared independent scorer.");
+    }
+    if (scorerOutput?.promptSha256 !== result.scorer.promptSha256 || scorerOutput?.scoringInputSha256 !== scoringInputSha256) {
+      fail("Recorded fresh-context scorer output must bind its prompt and complete scoring input.");
+    }
+    if (scorerOutput?.contractSha256 !== sha256(fs.readFileSync(path.join(skillDirectory, "evals", "forward-test-contract.json"))) || scorerOutput?.taskFixturesSha256 !== sha256(fs.readFileSync(path.join(skillDirectory, "evals", "evals.json")))) {
+      fail("Recorded fresh-context scorer output must bind the scoring contract and task fixtures.");
+    }
+    if (scorerOutput?.browserHarnessSha256 !== result.browserHarness?.sha256) {
+      fail("Recorded fresh-context scorer output must bind the preserved browser harness.");
+    }
+    validateEvidenceTimeRange({ startedAt: result.startedAt, completedAt: scorerOutput?.completedAt }, "recordedResult.scorer.outputPath");
   }
   if (!Array.isArray(result.runs) || result.runs.length !== expectedRunTotal) {
     fail(`Recorded fresh-context result needs exactly ${expectedRunTotal} runs.`);
@@ -1018,6 +1059,9 @@ const validateForwardTestResult = (contract, taskFixtures) => {
       }
       if (browserEvidence?.sourceTreeSha256 !== sourceTreeSha256 || browserEvidence?.distTreeSha256 !== distTreeSha256) {
         fail(`${runPath}.browserAcceptancePath must bind the preserved source and dist trees.`);
+      }
+      if (browserEvidence?.browserHarnessSha256 !== result.browserHarness?.sha256) {
+        fail(`${runPath}.browserAcceptancePath must bind the preserved browser harness.`);
       }
       const viewports = browserEvidence?.viewports;
       if (!Array.isArray(viewports) || viewports.length !== 4 || JSON.stringify(viewports.map((item) => item.width).sort((a, b) => a - b)) !== JSON.stringify([320, 390, 768, 1440])) {
@@ -1348,6 +1392,23 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   };
   for (const [field, expected] of Object.entries(computedSummary)) {
     if (result.summary?.[field] !== expected) fail(`Recorded fresh-context summary.${field} should equal ${expected}.`);
+  }
+  const computedCaseResults = [...caseById.keys()].map((evalId) => {
+    const runs = result.runs.filter((run) => run.evalId === evalId).sort((left, right) => left.repetition - right.repetition);
+    const assertions = runs.flatMap((run) => run.assertions ?? []);
+    const critical = assertions.filter((assertion) => assertion.critical);
+    return {
+      evalId,
+      repetitions: runs.map((run) => run.repetition),
+      criticalPassed: critical.filter((assertion) => assertion.score === 1).length,
+      criticalTotal: critical.length,
+      assertionsPassed: assertions.filter((assertion) => assertion.score === 1).length,
+      assertionsTotal: assertions.length,
+      passedRepetitions: runs.filter((run) => run.passed).length,
+    };
+  });
+  if (scorerOutput && (scorerOutput.verdict !== "APPROVE" || JSON.stringify(scorerOutput.summary) !== JSON.stringify(computedSummary) || JSON.stringify(scorerOutput.cases) !== JSON.stringify(computedCaseResults))) {
+    fail("Recorded fresh-context scorer output must reproduce every case result and the final summary.");
   }
   if (!computedSummary.passed) fail("Recorded fresh-context status requires all 36 runs to pass the contract.");
 };
