@@ -352,7 +352,7 @@ export function ImageLightbox({
                           animate={{ opacity: 1, filter: "blur(0px)", transform: "scale(1)" }}
                           exit={instant ? { opacity: 0 } : { opacity: 0, filter: "blur(2px)", transform: "scale(0.99)" }}
                           transition={sharedTransition}
-                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-[13px] bg-stone-100 shadow-[0_24px_60px_-34px_rgba(41,41,41,0.65)] dark:bg-black/20"
+                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-[13px] border border-black/[0.08] bg-stone-100 shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.12] dark:bg-black/20"
                         >
                           {activeItem.art}
                         </motion.div>
