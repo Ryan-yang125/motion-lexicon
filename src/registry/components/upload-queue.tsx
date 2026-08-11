@@ -58,6 +58,11 @@ export type UploadQueueCopy = {
   summary: (complete: number, total: number) => string;
 };
 
+type UploadRejection =
+  | { type: "unsupported" }
+  | { type: "limit"; capacity: number }
+  | null;
+
 const defaultCopy: UploadQueueCopy = {
   drop: (remaining) => `Drop here or choose up to ${remaining}`,
   full: "Queue is full",
@@ -140,7 +145,7 @@ export function UploadQueue({
   const id = useId();
   const reduced = useReducedMotion() === true;
   const [dragging, setDragging] = useState(false);
-  const [rejection, setRejection] = useState<"unsupported" | "limit" | null>(null);
+  const [rejection, setRejection] = useState<UploadRejection>(null);
   const { ref, active } = useAnimationActivity<HTMLDivElement>();
   const input = useRef<HTMLInputElement>(null);
   const chooseButton = useRef<HTMLButtonElement>(null);
@@ -206,15 +211,16 @@ export function UploadQueue({
     if (!source || remaining === 0) return;
     const sourceFiles = Array.from(source);
     const acceptedFiles = sourceFiles.filter((file) => accepts(file, accept));
+    const capacity = multiple ? remaining : Math.min(1, remaining);
     setRejection(
       acceptedFiles.length < sourceFiles.length
-        ? "unsupported"
-        : acceptedFiles.length > (multiple ? remaining : Math.min(1, remaining))
-          ? "limit"
+        ? { type: "unsupported" }
+        : acceptedFiles.length > capacity
+          ? { type: "limit", capacity }
           : null,
     );
     const files = acceptedFiles
-      .slice(0, multiple ? remaining : Math.min(1, remaining));
+      .slice(0, capacity);
     if (files.length > 0) onFiles(files);
   };
 
@@ -263,10 +269,10 @@ export function UploadQueue({
                 : "text-stone-500 dark:text-stone-300"
             }`}
           >
-            {rejection === "unsupported"
+            {rejection?.type === "unsupported"
               ? copy.unsupported
-              : rejection === "limit"
-                ? copy.limit(remaining)
+              : rejection?.type === "limit"
+                ? copy.limit(rejection.capacity)
                 : remaining > 0
                   ? copy.drop(remaining)
                   : copy.full}

@@ -316,7 +316,7 @@ export function ImageLightbox({
                     animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
                     exit={instant ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px) scale(0.985)" }}
                     transition={{ duration: instant ? 0 : 0.24, ease: EASE_OUT }}
-                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] bg-[#EEECE5] shadow-[0_30px_100px_-30px_rgba(0,0,0,0.75)] outline-none dark:bg-[#1D1D1A] sm:max-h-[calc(100dvh-48px)]"
+                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] border border-black/[0.08] bg-[#EEECE5] outline-none dark:border-white/[0.14] dark:bg-[#1D1D1A] sm:max-h-[calc(100dvh-48px)]"
                   >
                     <header className="flex min-h-14 items-center justify-between gap-4 border-b border-black/[0.08] px-3 dark:border-white/[0.1]">
                       <div className="min-w-0">

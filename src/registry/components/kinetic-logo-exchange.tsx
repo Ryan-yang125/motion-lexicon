@@ -127,7 +127,7 @@ export function KineticLogoExchange({
         if (next && event.currentTarget.contains(next)) return;
         setFocusPaused(false);
       }}
-      className={`w-full overflow-hidden rounded-[18px] bg-[#EEECE5] p-3 dark:bg-[#1D1D1A] ${className}`}
+      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
         <div className="min-w-0">

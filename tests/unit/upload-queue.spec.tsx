@@ -56,6 +56,41 @@ describe("UploadQueue failed items", () => {
     expect(onFiles).toHaveBeenCalledWith([first]);
   });
 
+  it("keeps the single-file rejection capacity stable after controlled items update", () => {
+    const accepted: File[][] = [];
+
+    function ControlledQueue() {
+      const [items, setItems] = useState<UploadItem[]>([]);
+      return (
+        <UploadQueue
+          items={items}
+          multiple={false}
+          maxFiles={8}
+          onFiles={(files) => {
+            accepted.push(files);
+            setItems(files.map((file) => ({
+              id: file.name,
+              name: file.name,
+              status: "queued",
+            })));
+          }}
+        />
+      );
+    }
+
+    const { container } = render(<ControlledQueue />);
+    const first = new File(["first"], "first.png", { type: "image/png" });
+    const second = new File(["second"], "second.png", { type: "image/png" });
+
+    fireEvent.drop(container.querySelector("[data-upload-drop-zone]")!, {
+      dataTransfer: { files: [first, second] },
+    });
+
+    expect(accepted).toEqual([[first]]);
+    expect(screen.getByRole("alert")).toHaveTextContent("Only 1 more file can be added");
+    expect(screen.getByText(first.name)).toBeInTheDocument();
+  });
+
   it("offers independent retry and remove actions when both callbacks are provided", () => {
     const onRetry = vi.fn();
     const onRemove = vi.fn();

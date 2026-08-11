@@ -72,6 +72,25 @@ describe("component group A hardening", () => {
     }
   });
 
+  it("keeps thin boundaries without wide ghost-card shadows", () => {
+    const { rerender } = render(
+      <FloatingDock items={[]} label="Tools" />,
+    );
+    expect(screen.getByRole("navigation", { name: "Tools" })).toHaveClass(
+      "border",
+      "border-stone-200",
+      "shadow-[0_4px_8px_-8px_rgba(28,25,23,.72)]",
+    );
+
+    rerender(
+      <KineticLogoExchange items={[]} label="Connected tools" />,
+    );
+    expect(screen.getByRole("region", { name: "Connected tools" })).toHaveClass(
+      "border",
+      "border-stone-200",
+    );
+  });
+
   it("bounds long activity times and dock tooltips", () => {
     const { rerender } = render(
       <ActivityFeed

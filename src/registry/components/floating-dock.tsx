@@ -131,7 +131,7 @@ export function FloatingDock({
         pointerX.set(DISTANT);
         pointerY.set(DISTANT);
       }}
-      className={`flex min-h-[66px] max-w-full flex-wrap items-end justify-center gap-px rounded-[18px] bg-white/88 px-1.5 pb-2 pt-3 shadow-[0_18px_40px_-26px_rgba(28,25,23,.72)] backdrop-blur-md dark:bg-[#1E1E1B]/92 ${className}`}
+      className={`flex min-h-[66px] max-w-full flex-wrap items-end justify-center gap-px rounded-[18px] border border-stone-200 bg-white/88 px-1.5 pb-2 pt-3 shadow-[0_4px_8px_-8px_rgba(28,25,23,.72)] backdrop-blur-md dark:border-white/15 dark:bg-[#1E1E1B]/92 ${className}`}
     >
       {items.length === 0 ? (
         <span role="status" className="grid min-h-11 place-items-center px-3 text-center text-[12px] text-stone-600 dark:text-stone-300">
