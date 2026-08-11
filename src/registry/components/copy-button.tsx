@@ -73,6 +73,14 @@ export function useCopyToClipboard({
     setTicket(0);
   }, []);
 
+  const fail = useCallback((reason: unknown) => {
+    if (!mounted.current) return;
+
+    setStatus("error");
+    setTicket((t) => t + 1);
+    failed.current?.(reason);
+  }, []);
+
   const copy = useCallback(async (text: string) => {
     if (!text) return false;
 
@@ -97,14 +105,16 @@ export function useCopyToClipboard({
 
     if (!mounted.current) return ok;
 
-    setStatus(ok ? "copied" : "error");
-    setTicket((t) => t + 1);
-
-    if (ok) copied.current?.(text);
-    else failed.current?.(reason);
+    if (ok) {
+      setStatus("copied");
+      setTicket((t) => t + 1);
+      copied.current?.(text);
+    } else {
+      fail(reason);
+    }
 
     return ok;
-  }, []);
+  }, [fail]);
 
   useEffect(() => {
     if (ticket === 0 || status === "idle") return;
@@ -112,7 +122,7 @@ export function useCopyToClipboard({
     return () => clearTimeout(id);
   }, [ticket, status, timeout]);
 
-  return { copy, reset, status, copied: status === "copied" };
+  return { copy, fail, reset, status, copied: status === "copied" };
 }
 
 export type CopyButtonProps = {
@@ -142,7 +152,7 @@ export function CopyButton({
   disabled = false,
   className = "",
 }: CopyButtonProps) {
-  const { copy, status } = useCopyToClipboard({ timeout, onCopy, onError });
+  const { copy, fail, status } = useCopyToClipboard({ timeout, onCopy, onError });
   const reduced = useReducedMotion();
 
   const fade = reduced ? INSTANT : CROSSFADE;
@@ -167,7 +177,7 @@ export function CopyButton({
             const resolvedValue = value || await resolveValue?.() || "";
             await copy(resolvedValue);
           } catch (error) {
-            onError?.(error);
+            fail(error);
           }
         })();
       }}

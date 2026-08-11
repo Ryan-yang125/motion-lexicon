@@ -188,7 +188,7 @@ export function SortableTable<T>({
 
   const template = useMemo(
     () =>
-      (markable ? "28px " : "") +
+      (markable ? "44px " : "") +
       columns.map((c) => c.width ?? "minmax(0, 1fr)").join(" "),
     [columns, markable],
   );
