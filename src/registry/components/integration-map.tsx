@@ -142,7 +142,12 @@ export function IntegrationMap({
 
   if (nodes.length === 0) {
     return (
-      <div ref={ref} className={`grid min-h-28 w-full place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:text-stone-300 ${className}`}>
+      <div
+        ref={ref}
+        role="group"
+        aria-label={label}
+        className={`grid min-h-28 w-full place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:text-stone-300 ${className}`}
+      >
         <span role="status">{emptyLabel}</span>
       </div>
     );

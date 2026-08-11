@@ -525,11 +525,13 @@ export function ProceduralProductViewer({
         rotation.current.velocityX = 0;
         rotation.current.velocityY = 0;
       }}
-      onLostPointerCapture={() => {
-        rotation.current.dragging = false;
-        rotation.current.pointerId = null;
-        rotation.current.velocityX = 0;
-        rotation.current.velocityY = 0;
+      onLostPointerCapture={(event) => {
+        const state = rotation.current;
+        if (!state.dragging || state.pointerId !== event.pointerId) return;
+        state.dragging = false;
+        state.pointerId = null;
+        state.velocityX = 0;
+        state.velocityY = 0;
       }}
       onKeyDown={
         rendererReady

@@ -44,6 +44,21 @@ afterEach(() => {
 });
 
 describe("IntegrationMap", () => {
+  it("keeps the map label on its empty group", () => {
+    render(
+      <IntegrationMap
+        nodes={[]}
+        edges={[]}
+        label="Payment integrations"
+        emptyLabel="No payment integrations"
+      />,
+    );
+
+    const group = screen.getByRole("group", { name: "Payment integrations" });
+    expect(group).toContainElement(screen.getByRole("status"));
+    expect(screen.getByRole("status")).toHaveTextContent("No payment integrations");
+  });
+
   it("clears selection when the selected node is removed", async () => {
     const { rerender } = render(
       <IntegrationMap nodes={[removed, remaining]} edges={[]} />,
