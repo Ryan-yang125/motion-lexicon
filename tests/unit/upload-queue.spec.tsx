@@ -91,6 +91,49 @@ describe("UploadQueue failed items", () => {
     expect(screen.getByText(first.name)).toBeInTheDocument();
   });
 
+  it("reports unsupported and capacity reasons together after controlled items update", () => {
+    const accepted: File[][] = [];
+
+    function ControlledQueue() {
+      const [items, setItems] = useState<UploadItem[]>([]);
+      return (
+        <UploadQueue
+          items={items}
+          accept="image/*"
+          multiple={false}
+          maxFiles={8}
+          copy={{
+            unsupported: "不支持此文件类型",
+            limit: (capacity) => `只能再添加 ${capacity} 个文件`,
+          }}
+          onFiles={(files) => {
+            accepted.push(files);
+            setItems(files.map((file) => ({
+              id: file.name,
+              name: file.name,
+              status: "queued",
+            })));
+          }}
+        />
+      );
+    }
+
+    const { container } = render(<ControlledQueue />);
+    const first = new File(["first"], "first.png", { type: "image/png" });
+    const second = new File(["second"], "second.png", { type: "image/png" });
+    const unsupported = new File(["notes"], "notes.txt", { type: "text/plain" });
+
+    fireEvent.drop(container.querySelector("[data-upload-drop-zone]")!, {
+      dataTransfer: { files: [first, second, unsupported] },
+    });
+
+    expect(accepted).toEqual([[first]]);
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "不支持此文件类型 只能再添加 1 个文件",
+    );
+    expect(screen.getByText(first.name)).toBeInTheDocument();
+  });
+
   it("offers independent retry and remove actions when both callbacks are provided", () => {
     const onRetry = vi.fn();
     const onRemove = vi.fn();

@@ -59,8 +59,7 @@ export type UploadQueueCopy = {
 };
 
 type UploadRejection =
-  | { type: "unsupported" }
-  | { type: "limit"; capacity: number }
+  | { unsupported: boolean; capacity: number | null }
   | null;
 
 const defaultCopy: UploadQueueCopy = {
@@ -212,12 +211,12 @@ export function UploadQueue({
     const sourceFiles = Array.from(source);
     const acceptedFiles = sourceFiles.filter((file) => accepts(file, accept));
     const capacity = multiple ? remaining : Math.min(1, remaining);
+    const unsupported = acceptedFiles.length < sourceFiles.length;
+    const exceedsCapacity = acceptedFiles.length > capacity;
     setRejection(
-      acceptedFiles.length < sourceFiles.length
-        ? { type: "unsupported" }
-        : acceptedFiles.length > capacity
-          ? { type: "limit", capacity }
-          : null,
+      unsupported || exceedsCapacity
+        ? { unsupported, capacity: exceedsCapacity ? capacity : null }
+        : null,
     );
     const files = acceptedFiles
       .slice(0, capacity);
@@ -269,13 +268,14 @@ export function UploadQueue({
                 : "text-stone-500 dark:text-stone-300"
             }`}
           >
-            {rejection?.type === "unsupported"
-              ? copy.unsupported
-              : rejection?.type === "limit"
-                ? copy.limit(rejection.capacity)
-                : remaining > 0
-                  ? copy.drop(remaining)
-                  : copy.full}
+            {rejection
+              ? [
+                  rejection.unsupported ? copy.unsupported : null,
+                  rejection.capacity !== null ? copy.limit(rejection.capacity) : null,
+                ].filter((message): message is string => message !== null).join(" ")
+              : remaining > 0
+                ? copy.drop(remaining)
+                : copy.full}
           </span>
         </span>
         <input
