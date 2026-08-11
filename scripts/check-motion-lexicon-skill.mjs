@@ -73,7 +73,15 @@ const resolveJsonPointer = (value, pointer) => {
   let current = value;
   for (const encodedPart of pointer.slice(1).split("/")) {
     const part = encodedPart.replaceAll("~1", "/").replaceAll("~0", "~");
-    if (current === null || typeof current !== "object" || !(part in current)) return { found: false };
+    if (current === null || typeof current !== "object") return { found: false };
+    if (Array.isArray(current)) {
+      if (!/^(0|[1-9]\d*)$/.test(part)) return { found: false };
+      const index = Number(part);
+      if (index >= current.length || !Object.hasOwn(current, index)) return { found: false };
+      current = current[index];
+      continue;
+    }
+    if (!Object.hasOwn(current, part)) return { found: false };
     current = current[part];
   }
   return { found: true, value: current };
