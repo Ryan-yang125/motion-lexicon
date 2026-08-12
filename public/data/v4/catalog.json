@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "release": "4.3.0",
+  "release": "4.4.0",
   "name": "Motion Lexicon",
   "description": "Copy-ready React page blocks and components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",
@@ -11,11 +11,39 @@
     "source": "https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon"
   },
   "counts": {
-    "blocks": 4,
-    "components": 48,
+    "blocks": 5,
+    "components": 59,
     "primitives": 44
   },
   "blocks": [
+    {
+      "id": "agent-workspace",
+      "name": {
+        "zh": "Agent 产品工作台",
+        "en": "Agent workspace"
+      },
+      "description": {
+        "zh": "把任务、思考、工具执行、人工审批与证据组织成一个连续的 Agent 产品页面。",
+        "en": "Organizes missions, thinking, tool execution, human approval, and evidence into one continuous agent product page."
+      },
+      "primitiveIds": [
+        "stagger",
+        "direction-aware-transition",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "signature": {
+        "zh": "任务从需求进入，经由可见执行轨和人工审批，最终收束为带证据的完成状态。",
+        "en": "A mission moves from request through visible execution and human approval into evidence-backed completion."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-workspace/",
+        "en": "https://motion-lexicon.pages.dev/en/components/agent-workspace/",
+        "registry": "https://motion-lexicon.pages.dev/r/agent-workspace.json"
+      }
+    },
     {
       "id": "product-landing",
       "name": {
@@ -130,6 +158,358 @@
     }
   ],
   "components": [
+    {
+      "id": "agent-thinking-trace",
+      "category": "agent",
+      "name": {
+        "zh": "Agent 思考轨迹",
+        "en": "Agent thinking trace"
+      },
+      "description": {
+        "zh": "把推理阶段、当前焦点与耗时组织成一条可展开的证据轨。",
+        "en": "Organizes reasoning phases, current focus, and elapsed time into an expandable evidence trail."
+      },
+      "primitiveIds": [
+        "stagger",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "沿信号轨逐步显现的思考阶段",
+        "en": "Thinking stages revealed along a signal rail"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-thinking-trace/",
+        "en": "https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/",
+        "registry": "https://motion-lexicon.pages.dev/r/agent-thinking-trace.json"
+      }
+    },
+    {
+      "id": "streaming-answer",
+      "category": "agent",
+      "name": {
+        "zh": "流式回答",
+        "en": "Streaming answer"
+      },
+      "description": {
+        "zh": "让生成文本、引用来源与追问建议在同一回答中逐步到位。",
+        "en": "Brings generated text, cited sources, and follow-up prompts into one progressive answer."
+      },
+      "primitiveIds": [
+        "perceived-performance",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "文字完成后接续展开来源与追问",
+        "en": "Sources and follow-ups resolve after the streamed answer"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/streaming-answer/",
+        "en": "https://motion-lexicon.pages.dev/en/components/streaming-answer/",
+        "registry": "https://motion-lexicon.pages.dev/r/streaming-answer.json"
+      }
+    },
+    {
+      "id": "tool-call-stack",
+      "category": "agent",
+      "name": {
+        "zh": "工具调用堆栈",
+        "en": "Tool call stack"
+      },
+      "description": {
+        "zh": "把搜索、写入、命令和失败状态收拢成可检查的执行记录。",
+        "en": "Collects search, write, command, and failure states into an inspectable execution record."
+      },
+      "primitiveIds": [
+        "accordion-collapse",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "执行记录按工具状态展开并归档",
+        "en": "Execution records expand and resolve by tool state"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/tool-call-stack/",
+        "en": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
+        "registry": "https://motion-lexicon.pages.dev/r/tool-call-stack.json"
+      }
+    },
+    {
+      "id": "approval-flow",
+      "category": "agent",
+      "name": {
+        "zh": "人工审批流程",
+        "en": "Human approval flow"
+      },
+      "description": {
+        "zh": "在 Agent 执行动作前承载推荐项、自定义指令与明确确认。",
+        "en": "Carries recommendations, custom instructions, and explicit confirmation before an agent acts."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "选择结果原位收束为审批完成",
+        "en": "The selected path resolves in place into approval"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/approval-flow/",
+        "en": "https://motion-lexicon.pages.dev/en/components/approval-flow/",
+        "registry": "https://motion-lexicon.pages.dev/r/approval-flow.json"
+      }
+    },
+    {
+      "id": "agent-task-queue",
+      "category": "agent",
+      "name": {
+        "zh": "Agent 任务队列",
+        "en": "Agent task queue"
+      },
+      "description": {
+        "zh": "展示排队、运行、完成和失败任务，并在两种密度之间切换。",
+        "en": "Shows queued, running, complete, and failed work across two useful densities."
+      },
+      "primitiveIds": [
+        "morph",
+        "perceived-performance"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "任务密度切换时保持状态连续",
+        "en": "Task state stays continuous across density changes"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-task-queue/",
+        "en": "https://motion-lexicon.pages.dev/en/components/agent-task-queue/",
+        "registry": "https://motion-lexicon.pages.dev/r/agent-task-queue.json"
+      }
+    },
+    {
+      "id": "prompt-composer",
+      "category": "agent",
+      "name": {
+        "zh": "Agent 提示词编辑器",
+        "en": "Agent prompt composer"
+      },
+      "description": {
+        "zh": "把来源、附件、模型、语音与发送操作组织成一个清晰输入面。",
+        "en": "Combines sources, attachments, model choice, voice, and sending into one focused input surface."
+      },
+      "primitiveIds": [
+        "origin-aware-animation",
+        "morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "来源菜单从输入器锚点展开",
+        "en": "The source menu reveals from the composer anchor"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/prompt-composer/",
+        "en": "https://motion-lexicon.pages.dev/en/components/prompt-composer/",
+        "registry": "https://motion-lexicon.pages.dev/r/prompt-composer.json"
+      }
+    },
+    {
+      "id": "context-sources",
+      "category": "agent",
+      "name": {
+        "zh": "上下文来源卡",
+        "en": "Context sources"
+      },
+      "description": {
+        "zh": "展示 Agent 检索到的片段、来源与相关度，并支持局部展开。",
+        "en": "Presents retrieved chunks, provenance, and relevance with focused disclosure."
+      },
+      "primitiveIds": [
+        "accordion-collapse",
+        "morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "选中来源跨栏展开为阅读状态",
+        "en": "A selected source expands across the reading surface"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/context-sources/",
+        "en": "https://motion-lexicon.pages.dev/en/components/context-sources/",
+        "registry": "https://motion-lexicon.pages.dev/r/context-sources.json"
+      }
+    },
+    {
+      "id": "diff-review",
+      "category": "agent",
+      "name": {
+        "zh": "修改对比评审",
+        "en": "Diff review"
+      },
+      "description": {
+        "zh": "逐项接受或拒绝 Agent 提出的字段修改。",
+        "en": "Reviews agent-proposed field edits with explicit per-change decisions."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "number-ticker"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "差异决策直接落回表格行",
+        "en": "Diff decisions resolve directly inside each row"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/diff-review/",
+        "en": "https://motion-lexicon.pages.dev/en/components/diff-review/",
+        "registry": "https://motion-lexicon.pages.dev/r/diff-review.json"
+      }
+    },
+    {
+      "id": "agent-recommendation",
+      "category": "agent",
+      "name": {
+        "zh": "Agent 建议卡",
+        "en": "Agent recommendation"
+      },
+      "description": {
+        "zh": "通过置信度、依据、备选方案与接受动作表达建议。",
+        "en": "Frames a recommendation through confidence, rationale, alternatives, and acceptance."
+      },
+      "primitiveIds": [
+        "line-drawing",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "置信度信号与备选路径共同完成决策",
+        "en": "Confidence and alternative paths complete the decision"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-recommendation/",
+        "en": "https://motion-lexicon.pages.dev/en/components/agent-recommendation/",
+        "registry": "https://motion-lexicon.pages.dev/r/agent-recommendation.json"
+      }
+    },
+    {
+      "id": "multi-agent-handoff",
+      "category": "agent",
+      "name": {
+        "zh": "多 Agent 交接",
+        "en": "Multi-agent handoff"
+      },
+      "description": {
+        "zh": "让任务、产物和下一位负责人沿同一条交接轨连续移动。",
+        "en": "Moves task ownership, artifacts, and the next responsible agent along one continuous relay."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "任务所有权沿 Agent 接力轨移动",
+        "en": "Task ownership travels along an agent relay rail"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/multi-agent-handoff/",
+        "en": "https://motion-lexicon.pages.dev/en/components/multi-agent-handoff/",
+        "registry": "https://motion-lexicon.pages.dev/r/multi-agent-handoff.json"
+      }
+    },
+    {
+      "id": "agent-status-orbit",
+      "category": "agent",
+      "name": {
+        "zh": "Agent 状态轨道",
+        "en": "Agent status orbit"
+      },
+      "description": {
+        "zh": "用紧凑轨道状态表达空闲、思考、执行、等待和完成。",
+        "en": "Expresses idle, thinking, working, waiting, and complete states through a compact orbit."
+      },
+      "primitiveIds": [
+        "idle-animation",
+        "number-ticker"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "轨道点数量与速度编码 Agent 状态",
+        "en": "Orbit count and speed encode agent status"
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-status-orbit/",
+        "en": "https://motion-lexicon.pages.dev/en/components/agent-status-orbit/",
+        "registry": "https://motion-lexicon.pages.dev/r/agent-status-orbit.json"
+      }
+    },
     {
       "id": "copy-button",
       "category": "actions",

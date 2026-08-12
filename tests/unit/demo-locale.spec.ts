@@ -5,7 +5,7 @@ import { demoIds, demoLabels, demoText } from "@/registry/demo-locale";
 
 describe("component demo locale contract", () => {
   it("enumerates every component demo with distinct Chinese and English labels", () => {
-    expect(demoIds).toHaveLength(48);
+    expect(demoIds).toHaveLength(59);
     expect(new Set(demoIds)).toEqual(new Set(registryComponents.map((entry) => entry.id)));
     for (const id of demoIds) {
       expect(demoLabels[id].zh.trim()).not.toBe("");

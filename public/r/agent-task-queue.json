@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-task-queue",
+  "type": "registry:ui",
+  "title": "Agent task queue",
+  "description": "Shows queued, running, complete, and failed work across two useful densities.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "agent"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/agent-task-queue/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Task state stays continuous across density changes"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/agent-task-queue.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/agent-task-queue.tsx",
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport { useState } from \"react\";\n\nexport type AgentTask = {\n  id: string;\n  title: string;\n  detail?: string;\n  status: \"queued\" | \"running\" | \"complete\" | \"failed\";\n  progress?: number;\n  meta?: string;\n};\nexport type AgentTaskQueueProps = {\n  tasks: readonly AgentTask[];\n  label?: string;\n  runningLabel?: (count: number) => string;\n  clearLabel?: string;\n  rowsLabel?: string;\n  compactLabel?: string;\n  className?: string;\n};\n\nexport function AgentTaskQueue({\n  tasks,\n  label = \"Agent tasks\",\n  runningLabel = (count) => `${count} running`,\n  clearLabel = \"Queue clear\",\n  rowsLabel = \"Rows\",\n  compactLabel = \"Compact\",\n  className = \"\",\n}: AgentTaskQueueProps) {\n  const [layout, setLayout] = useState<\"rows\" | \"compact\">(\"rows\");\n  const reduced = useReducedMotion();\n  const active = tasks.filter((task) => task.status === \"running\").length;\n\n  return (\n    <section\n      className={`w-full rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-[0_18px_50px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}\n    >\n      <header className=\"mb-2 flex min-h-10 items-center gap-2 px-1\">\n        <div>\n          <strong className=\"block text-[12px]\">{label}</strong>\n          <span className=\"text-[9px] text-zinc-400\">\n            {active ? runningLabel(active) : clearLabel}\n          </span>\n        </div>\n        <div className=\"ml-auto flex rounded-lg bg-zinc-100 p-0.5 dark:bg-white/5\">\n          <button\n            type=\"button\"\n            aria-label={rowsLabel}\n            aria-pressed={layout === \"rows\"}\n            onClick={() => setLayout(\"rows\")}\n            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === \"rows\" ? \"bg-white shadow-sm dark:bg-white/10\" : \"text-zinc-400\"}`}\n          >\n            {rowsLabel}\n          </button>\n          <button\n            type=\"button\"\n            aria-label={compactLabel}\n            aria-pressed={layout === \"compact\"}\n            onClick={() => setLayout(\"compact\")}\n            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === \"compact\" ? \"bg-white shadow-sm dark:bg-white/10\" : \"text-zinc-400\"}`}\n          >\n            {compactLabel}\n          </button>\n        </div>\n      </header>\n      <motion.ol\n        layout={!reduced}\n        className={\n          layout === \"compact\" ? \"flex flex-wrap gap-2\" : \"grid gap-1.5\"\n        }\n      >\n        {tasks.map((task, index) => (\n          <motion.li\n            layout={!reduced}\n            key={task.id}\n            className={`relative overflow-hidden border ${layout === \"compact\" ? \"min-h-10 rounded-full px-3\" : \"min-h-14 rounded-xl px-3\"} ${task.status === \"running\" ? \"border-[#4568ff]/35 bg-[#4568ff]/[.035]\" : \"border-zinc-100 dark:border-white/8\"}`}\n          >\n            <div className=\"flex h-full min-h-10 items-center gap-3 py-2\">\n              <span\n                className={`grid size-6 shrink-0 place-items-center rounded-full text-[9px] ${task.status === \"complete\" ? \"bg-emerald-500 text-white\" : task.status === \"failed\" ? \"bg-red-500 text-white\" : task.status === \"running\" ? \"bg-[#4568ff] text-white\" : \"bg-zinc-100 text-zinc-400 dark:bg-white/5\"}`}\n              >\n                {task.status === \"complete\"\n                  ? \"✓\"\n                  : task.status === \"failed\"\n                    ? \"!\"\n                    : index + 1}\n              </span>\n              <span className=\"min-w-0 flex-1\">\n                <strong className=\"block truncate text-[11px] font-medium\">\n                  {task.title}\n                </strong>\n                {layout === \"rows\" && task.detail ? (\n                  <span className=\"block truncate text-[9px] text-zinc-400\">\n                    {task.detail}\n                  </span>\n                ) : null}\n              </span>\n              {task.meta ? (\n                <code className=\"text-[9px] text-zinc-400\">{task.meta}</code>\n              ) : null}\n            </div>\n            <AnimatePresence>\n              {task.status === \"running\" &&\n              typeof task.progress === \"number\" ? (\n                <motion.span\n                  aria-label={`${task.progress}%`}\n                  className=\"absolute inset-x-0 bottom-0 h-0.5 bg-zinc-100 dark:bg-white/5\"\n                >\n                  <motion.i\n                    className=\"block h-full bg-[#4568ff]\"\n                    initial={{ width: 0 }}\n                    animate={{ width: `${task.progress}%` }}\n                    transition={{ duration: reduced ? 0 : 0.5 }}\n                  />\n                </motion.span>\n              ) : null}\n            </AnimatePresence>\n          </motion.li>\n        ))}\n      </motion.ol>\n    </section>\n  );\n}\n"
+    }
+  ]
+}

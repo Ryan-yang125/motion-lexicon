@@ -25,9 +25,9 @@ export function ProgressBarDemo({ locale = "en" }: DemoLocaleProps = {}) {
     <div role="group" aria-label={demoText("progress-bar", locale)} className="mx-auto w-full max-w-[360px]">
       <ProgressBar
         value={value}
-        label="roadmap.pdf"
-        pendingLabel={demoValue(locale, "计算大小", "Sizing")}
-        completeLabel={demoValue(locale, "上传完成", "Upload complete")}
+        label={demoValue(locale, "正在索引产品上下文", "Indexing product context")}
+        pendingLabel={demoValue(locale, "连接知识源", "Connecting sources")}
+        completeLabel={demoValue(locale, "上下文已就绪", "Context ready")}
       />
     </div>
   );

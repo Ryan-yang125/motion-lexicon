@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-call-stack",
+  "type": "registry:ui",
+  "title": "Tool call stack",
+  "description": "Collects search, write, command, and failure states into an inspectable execution record.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "agent"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Execution records expand and resolve by tool state"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/tool-call-stack.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/tool-call-stack.tsx",
+      "content": "\"use client\";\n\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\nimport { useState } from \"react\";\n\nexport type ToolCall = {\n  id: string;\n  name: string;\n  summary: string;\n  detail?: string;\n  status: \"running\" | \"complete\" | \"failed\";\n  duration?: string;\n  kind?: \"search\" | \"code\" | \"file\" | \"command\";\n};\nexport type ToolCallStackProps = {\n  calls: readonly ToolCall[];\n  label?: string;\n  className?: string;\n};\n\nconst marks = { search: \"⌕\", code: \"<>\", file: \"□\", command: \">_\" } as const;\n\nexport function ToolCallStack({\n  calls,\n  label = \"Tool calls\",\n  className = \"\",\n}: ToolCallStackProps) {\n  const [open, setOpen] = useState<string[]>(() =>\n    calls.filter((call) => call.status === \"running\").map((call) => call.id),\n  );\n  const reduced = useReducedMotion();\n  const complete = calls.filter((call) => call.status === \"complete\").length;\n\n  return (\n    <section\n      className={`w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-950 shadow-[0_18px_50px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}\n    >\n      <header className=\"flex min-h-12 items-center gap-3 border-b border-zinc-100 px-4 dark:border-white/8\">\n        <span className=\"font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400\">\n          {label}\n        </span>\n        <span className=\"ml-auto rounded-full bg-zinc-100 px-2 py-1 text-[9px] text-zinc-500 dark:bg-white/5 dark:text-zinc-400\">\n          {complete}/{calls.length}\n        </span>\n      </header>\n      <div className=\"p-2\">\n        {calls.map((call) => {\n          const expanded = open.includes(call.id);\n          return (\n            <div\n              key={call.id}\n              className=\"overflow-hidden rounded-xl border border-transparent hover:border-zinc-100 dark:hover:border-white/8\"\n            >\n              <button\n                type=\"button\"\n                aria-expanded={expanded}\n                onClick={() =>\n                  setOpen((current) =>\n                    current.includes(call.id)\n                      ? current.filter((id) => id !== call.id)\n                      : [...current, call.id],\n                  )\n                }\n                className=\"flex min-h-12 w-full items-center gap-3 px-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#4568ff]\"\n              >\n                <span\n                  className={`relative grid size-8 shrink-0 place-items-center rounded-xl font-mono text-[9px] ${call.status === \"complete\" ? \"bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300\" : call.status === \"failed\" ? \"bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-300\" : \"bg-blue-50 text-[#4568ff] dark:bg-[#4568ff]/10 dark:text-[#93b0ff]\"}`}\n                >\n                  {marks[call.kind ?? \"command\"]}\n                  {call.status === \"running\" ? (\n                    <motion.i\n                      className=\"absolute inset-0 rounded-xl border border-[#4568ff]/50\"\n                      animate={\n                        reduced ? undefined : { opacity: [0.25, 1, 0.25] }\n                      }\n                      transition={{ duration: 1.2, repeat: Infinity }}\n                    />\n                  ) : null}\n                </span>\n                <span className=\"min-w-0 flex-1\">\n                  <strong className=\"block truncate text-[12px] font-medium\">\n                    {call.name}\n                  </strong>\n                  <span className=\"block truncate text-[10px] text-zinc-500 dark:text-zinc-400\">\n                    {call.summary}\n                  </span>\n                </span>\n                {call.duration ? (\n                  <code className=\"text-[9px] tabular-nums text-zinc-400\">\n                    {call.duration}\n                  </code>\n                ) : null}\n              </button>\n              <AnimatePresence initial={false}>\n                {expanded && call.detail ? (\n                  <motion.pre\n                    initial={reduced ? false : { height: 0, opacity: 0 }}\n                    animate={{ height: \"auto\", opacity: 1 }}\n                    exit={{ height: 0, opacity: 0 }}\n                    className=\"mx-3 mb-3 overflow-auto rounded-lg bg-zinc-950 p-3 text-[9px] leading-5 text-zinc-300\"\n                  >\n                    <code>{call.detail}</code>\n                  </motion.pre>\n                ) : null}\n              </AnimatePresence>\n            </div>\n          );\n        })}\n      </div>\n    </section>\n  );\n}\n"
+    }
+  ]
+}

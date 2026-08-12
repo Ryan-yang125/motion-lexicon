@@ -20,6 +20,7 @@ import { PrimitivePreview } from "../registry/primitive-preview-map";
 import { useRegistrySource } from "../registry/use-registry-source";
 import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
+import { buildAgentBrief } from "../data/agent-brief";
 
 export function PrimitivePage({ locale, primitiveId }: { locale: Locale; primitiveId: string }) {
   const recipe = catalogRecipes.find((entry) => entry.id === primitiveId);
@@ -59,6 +60,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
         code: "代码",
         replay: "重播",
         copyCode: "复制代码",
+        copyAgent: "复制给 Agent",
         copied: "已复制",
         failed: "复制失败",
         loadingCode: "正在载入源码…",
@@ -77,6 +79,7 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
         code: "Code",
         replay: "Replay",
         copyCode: "Copy code",
+        copyAgent: "Copy for Agent",
         copied: "Copied",
         failed: "Copy failed",
         loadingCode: "Loading source…",
@@ -89,6 +92,9 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
         components: "Components using this primitive",
         related: "Related primitives"
       };
+
+  const previewUrl = `${siteUrl}${pathFor(locale, ["primitives", recipe.id])}`;
+  const agentBrief = buildAgentBrief({ locale, kind: "primitive", id: recipe.id, name: text(recipe.name, locale), description: text(recipe.shortDescription, locale), behavior: guidance ? text(guidance.purpose, locale) : undefined, previewUrl, registryUrl: registryEntry.installable ? registryUrl : undefined });
 
   return (
     <>
@@ -126,9 +132,10 @@ function PrimitiveDetail({ locale, recipeId }: { locale: Locale; recipeId: strin
               <h1>{text(recipe.name, locale)}</h1>
               <p>{text(recipe.shortDescription, locale)}</p>
             </div>
-            {registryEntry.installable ? (
-              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} className="component-primary-copy" />
-            ) : null}
+            <div className="component-detail-actions">
+              <CopyButton value={agentBrief} label={copy.copyAgent} copiedLabel={copy.copied} errorLabel={copy.failed} className="component-primary-copy agent-brief-copy" />
+              {registryEntry.installable ? <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} className="component-primary-copy" /> : null}
+            </div>
           </div>
           <ul className="component-quality-list" aria-label={locale === "zh" ? "原子动效能力" : "Primitive capabilities"}>
             <li><span className="primitive-kind-dot" />{primitiveSurfaceLabel(recipe, locale)}</li>

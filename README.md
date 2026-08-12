@@ -25,8 +25,8 @@
 <p align="center">
   <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/page_blocks-4-4568FF.svg" alt="4 page blocks" />
-  <img src="https://img.shields.io/badge/components-48-292929.svg" alt="48 components" />
+  <img src="https://img.shields.io/badge/page_blocks-5-4568FF.svg" alt="5 page blocks" />
+  <img src="https://img.shields.io/badge/components-59-292929.svg" alt="59 components" />
   <img src="https://img.shields.io/badge/primitives-44-55745D.svg" alt="44 primitives" />
 </p>
 
@@ -56,6 +56,8 @@ source view and registry response. There is no generated source-string layer.
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/product-landing.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-workspace.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-thinking-trace.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
@@ -74,10 +76,16 @@ Add the project registry once to `components.json` for shorter commands:
 npx shadcn@latest add @motion-lexicon/product-landing
 ```
 
-The registry includes 4 complete page blocks and 48 product and website components spanning
+The registry includes 5 complete page blocks and 59 product, agent, and website components spanning
 Motion, GSAP, Three.js, native WebGL, SVG, and CSS, plus 40 executable motion
 primitives. Four editorial primitives remain design guides. Every installable
 item includes TypeScript types, real dependencies, and a reduced-motion path.
+
+The Agent UI collection covers thinking traces, streaming answers, tool calls,
+approval, task queues, prompt composition, context sources, diff review,
+recommendations, multi-agent handoff, and agent status. Every detail page also
+offers a Copy for Agent brief with the preview URL, source URL, integration
+requirements, and acceptance criteria.
 
 ![3D product viewer component page](docs/assets/readme-v4-component.png)
 

@@ -1,6 +1,7 @@
 import type { Locale, LocalizedText } from "./types";
 
 export type ComponentCategory =
+  | "agent"
   | "actions"
   | "overlays"
   | "inputs"
@@ -32,6 +33,7 @@ export const componentCategories: ReadonlyArray<{
   id: ComponentCategory;
   name: LocalizedText;
 }> = [
+  { id: "agent", name: { zh: "Agent 产品", en: "Agent UI" } },
   { id: "actions", name: { zh: "操作", en: "Actions" } },
   { id: "overlays", name: { zh: "浮层", en: "Overlays" } },
   { id: "inputs", name: { zh: "输入", en: "Inputs" } },
@@ -73,6 +75,18 @@ const component = (
 });
 
 export const registryComponents: readonly RegistryComponent[] = [
+  component("agent-thinking-trace", "AgentThinkingTrace", "agent", "Agent 思考轨迹", "Agent thinking trace", "把推理阶段、当前焦点与耗时组织成一条可展开的证据轨。", "Organizes reasoning phases, current focus, and elapsed time into an expandable evidence trail.", ["stagger", "crossfade"], true, ["motion"], ["motion"], "light", { zh: "沿信号轨逐步显现的思考阶段", en: "Thinking stages revealed along a signal rail" }),
+  component("streaming-answer", "StreamingAnswer", "agent", "流式回答", "Streaming answer", "让生成文本、引用来源与追问建议在同一回答中逐步到位。", "Brings generated text, cited sources, and follow-up prompts into one progressive answer.", ["perceived-performance", "crossfade"], true, ["motion"], ["motion"], "light", { zh: "文字完成后接续展开来源与追问", en: "Sources and follow-ups resolve after the streamed answer" }),
+  component("tool-call-stack", "ToolCallStack", "agent", "工具调用堆栈", "Tool call stack", "把搜索、写入、命令和失败状态收拢成可检查的执行记录。", "Collects search, write, command, and failure states into an inspectable execution record.", ["accordion-collapse", "stagger"], true, ["motion"], ["motion"], "light", { zh: "执行记录按工具状态展开并归档", en: "Execution records expand and resolve by tool state" }),
+  component("approval-flow", "ApprovalFlow", "agent", "人工审批流程", "Human approval flow", "在 Agent 执行动作前承载推荐项、自定义指令与明确确认。", "Carries recommendations, custom instructions, and explicit confirmation before an agent acts.", ["crossfade", "press-tap-feedback"], true, ["motion"], ["motion"], "light", { zh: "选择结果原位收束为审批完成", en: "The selected path resolves in place into approval" }),
+  component("agent-task-queue", "AgentTaskQueue", "agent", "Agent 任务队列", "Agent task queue", "展示排队、运行、完成和失败任务，并在两种密度之间切换。", "Shows queued, running, complete, and failed work across two useful densities.", ["morph", "perceived-performance"], false, ["motion"], ["motion"], "light", { zh: "任务密度切换时保持状态连续", en: "Task state stays continuous across density changes" }),
+  component("prompt-composer", "PromptComposer", "agent", "Agent 提示词编辑器", "Agent prompt composer", "把来源、附件、模型、语音与发送操作组织成一个清晰输入面。", "Combines sources, attachments, model choice, voice, and sending into one focused input surface.", ["origin-aware-animation", "morph"], true, ["motion"], ["motion"], "light", { zh: "来源菜单从输入器锚点展开", en: "The source menu reveals from the composer anchor" }),
+  component("context-sources", "ContextSources", "agent", "上下文来源卡", "Context sources", "展示 Agent 检索到的片段、来源与相关度，并支持局部展开。", "Presents retrieved chunks, provenance, and relevance with focused disclosure.", ["accordion-collapse", "morph"], false, ["motion"], ["motion"], "light", { zh: "选中来源跨栏展开为阅读状态", en: "A selected source expands across the reading surface" }),
+  component("diff-review", "DiffReview", "agent", "修改对比评审", "Diff review", "逐项接受或拒绝 Agent 提出的字段修改。", "Reviews agent-proposed field edits with explicit per-change decisions.", ["crossfade", "number-ticker"], true, ["motion"], ["motion"], "light", { zh: "差异决策直接落回表格行", en: "Diff decisions resolve directly inside each row" }),
+  component("agent-recommendation", "AgentRecommendation", "agent", "Agent 建议卡", "Agent recommendation", "通过置信度、依据、备选方案与接受动作表达建议。", "Frames a recommendation through confidence, rationale, alternatives, and acceptance.", ["line-drawing", "crossfade"], false, ["motion"], ["motion"], "light", { zh: "置信度信号与备选路径共同完成决策", en: "Confidence and alternative paths complete the decision" }),
+  component("multi-agent-handoff", "MultiAgentHandoff", "agent", "多 Agent 交接", "Multi-agent handoff", "让任务、产物和下一位负责人沿同一条交接轨连续移动。", "Moves task ownership, artifacts, and the next responsible agent along one continuous relay.", ["direction-aware-transition", "morph"], true, ["motion"], ["motion"], "light", { zh: "任务所有权沿 Agent 接力轨移动", en: "Task ownership travels along an agent relay rail" }),
+  component("agent-status-orbit", "AgentStatusOrbit", "agent", "Agent 状态轨道", "Agent status orbit", "用紧凑轨道状态表达空闲、思考、执行、等待和完成。", "Expresses idle, thinking, working, waiting, and complete states through a compact orbit.", ["idle-animation", "number-ticker"], false, ["motion"], ["motion"], "light", { zh: "轨道点数量与速度编码 Agent 状态", en: "Orbit count and speed encode agent status" }),
+
   component("copy-button", "CopyButton", "actions", "复制按钮", "Copy button", "复制完成后原位切换状态，宽度保持稳定。", "Reports clipboard state in place without shifting nearby content.", ["press-tap-feedback", "text-morph"], true),
   component("loading-button", "LoadingButton", "actions", "加载按钮", "Loading button", "把等待、成功与失败收进同一个操作位置。", "Keeps pending, success, and error feedback inside one action.", ["press-tap-feedback", "crossfade"], true),
   component("hold-to-confirm", "HoldToConfirm", "actions", "长按确认", "Hold to confirm", "用可取消进度保护高风险操作。", "Protects destructive actions with cancellable hold progress.", ["hold-to-confirm", "line-drawing"], true),

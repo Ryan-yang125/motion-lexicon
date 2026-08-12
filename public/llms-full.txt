@@ -4,7 +4,7 @@
 
 ## Core resources
 
-- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 4 page blocks, 48 components, and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
+- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 5 page blocks, 59 components, and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
 - [shadcn registry](https://motion-lexicon.pages.dev/r/registry.json): Installable React page block, component, and primitive index.
 - [Motion Grammar](https://motion-lexicon.pages.dev/data/v4/motion-grammar.json): Composition rules, timing tokens, and Skill modes.
 - [Motion Blueprint schema](https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json): JSON Schema for portable product-motion decisions.
@@ -33,10 +33,11 @@
 - [Pricing](https://motion-lexicon.pages.dev/pricing.txt): Free and open-source availability in English and Chinese.
 - [Source](https://github.com/Ryan-yang125/motion-lexicon): MIT code, CC BY 4.0 original editorial content, notices, and contribution history.
 - [Agent Skill source](https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon): Install with `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`.
-- [Release 4.3.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.3.0, updated 2026-08-12.
+- [Release 4.4.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.4.0, updated 2026-08-12.
 
 ## English page blocks
 
+- [Agent workspace](https://motion-lexicon.pages.dev/en/components/agent-workspace/): Organizes missions, thinking, tool execution, human approval, and evidence into one continuous agent product page. [Registry](https://motion-lexicon.pages.dev/r/agent-workspace.json)
 - [Product landing](https://motion-lexicon.pages.dev/en/components/product-landing/): Connects positioning, collaborative review, and launch action through one continuous release workspace. [Registry](https://motion-lexicon.pages.dev/r/product-landing.json)
 - [Analytics dashboard](https://motion-lexicon.pages.dev/en/components/analytics-dashboard/): Explores time ranges through stable metrics, trends, and channel structure. [Registry](https://motion-lexicon.pages.dev/r/analytics-dashboard.json)
 - [Project dashboard](https://motion-lexicon.pages.dev/en/components/project-dashboard/): Organizes milestones, current work, and team activity into one actionable project workspace. [Registry](https://motion-lexicon.pages.dev/r/project-dashboard.json)
@@ -44,6 +45,7 @@
 
 ## 中文页面 Blocks
 
+- [Agent 产品工作台](https://motion-lexicon.pages.dev/zh/components/agent-workspace/): 把任务、思考、工具执行、人工审批与证据组织成一个连续的 Agent 产品页面。 [Registry](https://motion-lexicon.pages.dev/r/agent-workspace.json)
 - [产品发布页](https://motion-lexicon.pages.dev/zh/components/product-landing/): 用一个连续的发布工作台连接产品定位、协作审阅与上线行动。 [Registry](https://motion-lexicon.pages.dev/r/product-landing.json)
 - [数据分析台](https://motion-lexicon.pages.dev/zh/components/analytics-dashboard/): 通过稳定的指标、趋势和渠道结构完成时间范围分析。 [Registry](https://motion-lexicon.pages.dev/r/analytics-dashboard.json)
 - [项目执行台](https://motion-lexicon.pages.dev/zh/components/project-dashboard/): 把里程碑、当前任务和团队活动组织成一个可推进的项目工作区。 [Registry](https://motion-lexicon.pages.dev/r/project-dashboard.json)
@@ -51,6 +53,17 @@
 
 ## English components
 
+- [Agent thinking trace](https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/): Organizes reasoning phases, current focus, and elapsed time into an expandable evidence trail. [Registry](https://motion-lexicon.pages.dev/r/agent-thinking-trace.json)
+- [Streaming answer](https://motion-lexicon.pages.dev/en/components/streaming-answer/): Brings generated text, cited sources, and follow-up prompts into one progressive answer. [Registry](https://motion-lexicon.pages.dev/r/streaming-answer.json)
+- [Tool call stack](https://motion-lexicon.pages.dev/en/components/tool-call-stack/): Collects search, write, command, and failure states into an inspectable execution record. [Registry](https://motion-lexicon.pages.dev/r/tool-call-stack.json)
+- [Human approval flow](https://motion-lexicon.pages.dev/en/components/approval-flow/): Carries recommendations, custom instructions, and explicit confirmation before an agent acts. [Registry](https://motion-lexicon.pages.dev/r/approval-flow.json)
+- [Agent task queue](https://motion-lexicon.pages.dev/en/components/agent-task-queue/): Shows queued, running, complete, and failed work across two useful densities. [Registry](https://motion-lexicon.pages.dev/r/agent-task-queue.json)
+- [Agent prompt composer](https://motion-lexicon.pages.dev/en/components/prompt-composer/): Combines sources, attachments, model choice, voice, and sending into one focused input surface. [Registry](https://motion-lexicon.pages.dev/r/prompt-composer.json)
+- [Context sources](https://motion-lexicon.pages.dev/en/components/context-sources/): Presents retrieved chunks, provenance, and relevance with focused disclosure. [Registry](https://motion-lexicon.pages.dev/r/context-sources.json)
+- [Diff review](https://motion-lexicon.pages.dev/en/components/diff-review/): Reviews agent-proposed field edits with explicit per-change decisions. [Registry](https://motion-lexicon.pages.dev/r/diff-review.json)
+- [Agent recommendation](https://motion-lexicon.pages.dev/en/components/agent-recommendation/): Frames a recommendation through confidence, rationale, alternatives, and acceptance. [Registry](https://motion-lexicon.pages.dev/r/agent-recommendation.json)
+- [Multi-agent handoff](https://motion-lexicon.pages.dev/en/components/multi-agent-handoff/): Moves task ownership, artifacts, and the next responsible agent along one continuous relay. [Registry](https://motion-lexicon.pages.dev/r/multi-agent-handoff.json)
+- [Agent status orbit](https://motion-lexicon.pages.dev/en/components/agent-status-orbit/): Expresses idle, thinking, working, waiting, and complete states through a compact orbit. [Registry](https://motion-lexicon.pages.dev/r/agent-status-orbit.json)
 - [Copy button](https://motion-lexicon.pages.dev/en/components/copy-button/): Reports clipboard state in place without shifting nearby content. [Registry](https://motion-lexicon.pages.dev/r/copy-button.json)
 - [Loading button](https://motion-lexicon.pages.dev/en/components/loading-button/): Keeps pending, success, and error feedback inside one action. [Registry](https://motion-lexicon.pages.dev/r/loading-button.json)
 - [Hold to confirm](https://motion-lexicon.pages.dev/en/components/hold-to-confirm/): Protects destructive actions with cancellable hold progress. [Registry](https://motion-lexicon.pages.dev/r/hold-to-confirm.json)
@@ -102,6 +115,17 @@
 
 ## 中文组件
 
+- [Agent 思考轨迹](https://motion-lexicon.pages.dev/zh/components/agent-thinking-trace/): 把推理阶段、当前焦点与耗时组织成一条可展开的证据轨。 [Registry](https://motion-lexicon.pages.dev/r/agent-thinking-trace.json)
+- [流式回答](https://motion-lexicon.pages.dev/zh/components/streaming-answer/): 让生成文本、引用来源与追问建议在同一回答中逐步到位。 [Registry](https://motion-lexicon.pages.dev/r/streaming-answer.json)
+- [工具调用堆栈](https://motion-lexicon.pages.dev/zh/components/tool-call-stack/): 把搜索、写入、命令和失败状态收拢成可检查的执行记录。 [Registry](https://motion-lexicon.pages.dev/r/tool-call-stack.json)
+- [人工审批流程](https://motion-lexicon.pages.dev/zh/components/approval-flow/): 在 Agent 执行动作前承载推荐项、自定义指令与明确确认。 [Registry](https://motion-lexicon.pages.dev/r/approval-flow.json)
+- [Agent 任务队列](https://motion-lexicon.pages.dev/zh/components/agent-task-queue/): 展示排队、运行、完成和失败任务，并在两种密度之间切换。 [Registry](https://motion-lexicon.pages.dev/r/agent-task-queue.json)
+- [Agent 提示词编辑器](https://motion-lexicon.pages.dev/zh/components/prompt-composer/): 把来源、附件、模型、语音与发送操作组织成一个清晰输入面。 [Registry](https://motion-lexicon.pages.dev/r/prompt-composer.json)
+- [上下文来源卡](https://motion-lexicon.pages.dev/zh/components/context-sources/): 展示 Agent 检索到的片段、来源与相关度，并支持局部展开。 [Registry](https://motion-lexicon.pages.dev/r/context-sources.json)
+- [修改对比评审](https://motion-lexicon.pages.dev/zh/components/diff-review/): 逐项接受或拒绝 Agent 提出的字段修改。 [Registry](https://motion-lexicon.pages.dev/r/diff-review.json)
+- [Agent 建议卡](https://motion-lexicon.pages.dev/zh/components/agent-recommendation/): 通过置信度、依据、备选方案与接受动作表达建议。 [Registry](https://motion-lexicon.pages.dev/r/agent-recommendation.json)
+- [多 Agent 交接](https://motion-lexicon.pages.dev/zh/components/multi-agent-handoff/): 让任务、产物和下一位负责人沿同一条交接轨连续移动。 [Registry](https://motion-lexicon.pages.dev/r/multi-agent-handoff.json)
+- [Agent 状态轨道](https://motion-lexicon.pages.dev/zh/components/agent-status-orbit/): 用紧凑轨道状态表达空闲、思考、执行、等待和完成。 [Registry](https://motion-lexicon.pages.dev/r/agent-status-orbit.json)
 - [复制按钮](https://motion-lexicon.pages.dev/zh/components/copy-button/): 复制完成后原位切换状态，宽度保持稳定。 [Registry](https://motion-lexicon.pages.dev/r/copy-button.json)
 - [加载按钮](https://motion-lexicon.pages.dev/zh/components/loading-button/): 把等待、成功与失败收进同一个操作位置。 [Registry](https://motion-lexicon.pages.dev/r/loading-button.json)
 - [长按确认](https://motion-lexicon.pages.dev/zh/components/hold-to-confirm/): 用可取消进度保护高风险操作。 [Registry](https://motion-lexicon.pages.dev/r/hold-to-confirm.json)

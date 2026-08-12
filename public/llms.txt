@@ -4,7 +4,7 @@
 
 ## Core resources
 
-- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 4 page blocks, 48 components, and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
+- [Machine-readable catalog](https://motion-lexicon.pages.dev/data/v4/catalog.json): 5 page blocks, 59 components, and 44 motion primitives with bilingual names, descriptions, URLs, and registry metadata.
 - [shadcn registry](https://motion-lexicon.pages.dev/r/registry.json): Installable React page block, component, and primitive index.
 - [Motion Grammar](https://motion-lexicon.pages.dev/data/v4/motion-grammar.json): Composition rules, timing tokens, and Skill modes.
 - [Motion Blueprint schema](https://motion-lexicon.pages.dev/data/v4/motion-blueprint.schema.json): JSON Schema for portable product-motion decisions.
@@ -33,4 +33,4 @@
 - [Pricing](https://motion-lexicon.pages.dev/pricing.txt): Free and open-source availability in English and Chinese.
 - [Source](https://github.com/Ryan-yang125/motion-lexicon): MIT code, CC BY 4.0 original editorial content, notices, and contribution history.
 - [Agent Skill source](https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon): Install with `npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon`.
-- [Release 4.3.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.3.0, updated 2026-08-12.
+- [Release 4.4.0](https://github.com/Ryan-yang125/motion-lexicon/releases): Public artifact version 4.4.0, updated 2026-08-12.

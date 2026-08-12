@@ -11,16 +11,16 @@ export function ComponentsPage({ locale }: { locale: Locale }) {
   const copy = locale === "zh"
       ? {
         title: "可直接复制的 React 动效组件",
-        description: "4 个完整页面 Block 与 48 个适用于真实产品和网站界面的 React 动效组件。",
-        count: "4 个页面 Block · 48 个组件",
+        description: "5 个完整页面 Block 与 59 个适用于 Agent 产品、真实产品和网站界面的 React 动效组件。",
+        count: "5 个页面 Block · 59 个组件",
         open: "查看组件",
         blocks: "页面 Blocks",
         openBlock: "查看页面 Block"
       }
     : {
         title: "Copy-ready React motion components",
-        description: "4 complete page blocks and 48 React motion components for real products and websites.",
-        count: "4 page blocks · 48 components",
+        description: "5 complete page blocks and 59 React motion components for agent products, real products, and websites.",
+        count: "5 page blocks · 59 components",
         open: "Open component",
         blocks: "Page Blocks",
         openBlock: "Open page block"

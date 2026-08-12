@@ -22,7 +22,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = path.join(root, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const installSkill = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
-const skillComponentReferencePath = path.join(root, "skills", "motion-lexicon", "references", "components.md");
 const skillPageCssPath = path.join(root, "skills", "motion-lexicon", "assets", "motion-lexicon-page.css");
 const v4CssPath = path.join(root, "src", "v4.css");
 
@@ -192,42 +191,6 @@ const pricing = [
   ""
 ].join("\n");
 
-const markdownCell = (value: string) => value.replaceAll("|", "\\|").replaceAll("\n", " ");
-
-export function renderSkillComponentReference() {
-  const rows = registryComponents.map((component) => {
-    const engines = registryComponentEngines(component).join(", ");
-    const dependencies = registryComponentDependencies(component).join(", ");
-    return [
-      `\`${component.id}\``,
-      `${markdownCell(component.name.zh)} / ${markdownCell(component.name.en)}`,
-      `${markdownCell(component.description.zh)} / ${markdownCell(component.description.en)}`,
-      component.primitiveIds.map((id) => `\`${id}\``).join(", "),
-      `${engines}; ${registryComponentRuntimeCost(component)}; deps: ${dependencies || "none"}`
-    ].join(" | ");
-  });
-
-  return [
-    "# Published component catalog",
-    "",
-    `Generated from \`src/data/component-registry.ts\` for Motion Lexicon ${release.skillVersion}.`,
-    `Use only the ${registryComponents.length} published IDs below. Treat any other ID as a candidate, not a published component.`,
-    "",
-    "| ID | 名称 / Name | 产品用途 / Product use | Foundations | Runtime |",
-    "| --- | --- | --- | --- | --- |",
-    ...rows.map((row) => `| ${row} |`),
-    "",
-    "## Selection rules",
-    "",
-    "1. Match the user-visible product event to the product-use column.",
-    "2. Prefer one component whose published behavior already covers the full event.",
-    "3. Use Foundations to explain or tune the component's motion language.",
-    "4. State the exact published ID and installation URL: `https://motion-lexicon.pages.dev/r/<id>.json`.",
-    "5. If no row fits, recommend primitives or mark a new contribution as `candidate`.",
-    ""
-  ].join("\n");
-}
-
 function extractTokenBlock(source: string, selector: string) {
   const start = source.indexOf(`${selector} {`);
   if (start < 0) throw new Error(`Missing ${selector} token block in src/v4.css`);
@@ -374,7 +337,6 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
   await writeFile(path.join(outputDir, "llms-full.txt"), llmsFull);
   await writeFile(path.join(outputDir, "pricing.txt"), pricing);
   if (path.resolve(outputDir) === publicDir) {
-    await writeFile(skillComponentReferencePath, renderSkillComponentReference());
     await writeFile(skillPageCssPath, renderSkillPageCss());
   }
 }

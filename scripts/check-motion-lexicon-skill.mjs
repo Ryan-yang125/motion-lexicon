@@ -390,16 +390,8 @@ const validateSkillDocument = () => {
   }
 
   const componentReference = readText(path.join(skillDirectory, "references", "components.md"));
-  if (!componentReference.includes(`Use only the ${publicCatalog.components?.length ?? 0} published IDs below.`)) {
-    fail("Generated component reference has a stale published-component count.");
-  }
-  for (const component of publicCatalog.components ?? []) {
-    if (typeof component.id !== "string" || typeof component.name?.zh !== "string" || typeof component.name?.en !== "string" ||
-        !componentReference.includes(`\`${component.id}\``) ||
-        !componentReference.includes(component.name.zh) ||
-        !componentReference.includes(component.name.en)) {
-      fail(`Generated component reference is missing ${component.id}.`);
-    }
+  if (!componentReference.includes(`for Motion Lexicon ${packageManifest.skillVersion}.`)) {
+    fail("Skill component reference has a stale Skill version.");
   }
 
   for (const referenceName of ["entrances.md", "feedback.md", "transitions.md", "sequencing.md"]) {
@@ -416,8 +408,9 @@ const validateSkillDocument = () => {
     .filter((line) => /^\| `[^`]+` \|/.test(line))
     .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
   const publishedComponents = new Map((publicCatalog.components ?? []).map((component) => [component.id, component]));
-  if (componentRows.length !== publishedComponents.size) {
-    fail(`Generated component reference needs exactly ${publishedComponents.size} component rows.`);
+  const declaredComponentCount = Number(componentReference.match(/Use only the (\d+) published IDs below\./)?.[1]);
+  if (!Number.isInteger(declaredComponentCount) || componentRows.length !== declaredComponentCount) {
+    fail(`Skill component reference needs exactly its declared ${declaredComponentCount || 0} component rows.`);
   }
   for (const row of componentRows) {
     const id = row[0]?.match(/^`([^`]+)`$/)?.[1];

@@ -32,6 +32,17 @@ const block = (
 
 export const registryBlocks: readonly RegistryBlock[] = [
   block(
+    "agent-workspace",
+    "AgentWorkspaceBlock",
+    "Agent 产品工作台",
+    "Agent workspace",
+    "把任务、思考、工具执行、人工审批与证据组织成一个连续的 Agent 产品页面。",
+    "Organizes missions, thinking, tool execution, human approval, and evidence into one continuous agent product page.",
+    ["stagger", "direction-aware-transition", "crossfade"],
+    "任务从需求进入，经由可见执行轨和人工审批，最终收束为带证据的完成状态。",
+    "A mission moves from request through visible execution and human approval into evidence-backed completion.",
+  ),
+  block(
     "product-landing",
     "ProductLandingBlock",
     "产品发布页",

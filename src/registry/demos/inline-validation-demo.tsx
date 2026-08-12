@@ -6,10 +6,10 @@ import { useState } from "react";
 import { InlineValidation } from "@/registry/components/inline-validation";
 
 export function InlineValidationDemo({ locale = "en" }: DemoLocaleProps = {}) {
-  const [email, setEmail] = useState("");
-  const checkEmail = (value: string) => {
-    if (value.trim() === "") return demoValue(locale, "请输入工作邮箱。", "A work email is required.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(value)) return demoValue(locale, "邮箱地址不完整。", "That is not a complete email address.");
+  const [url, setUrl] = useState("");
+  const checkUrl = (value: string) => {
+    if (value.trim() === "") return demoValue(locale, "请输入知识库地址。", "A knowledge base URL is required.");
+    if (!/^https:\/\/[a-z0-9.-]+(?:\/.*)?$/iu.test(value)) return demoValue(locale, "请输入完整的 HTTPS 地址。", "Enter a complete HTTPS URL.");
     return null;
   };
 
@@ -17,13 +17,13 @@ export function InlineValidationDemo({ locale = "en" }: DemoLocaleProps = {}) {
     <div role="group" aria-label={demoText("inline-validation", locale)} className="flex justify-center">
       <div className="w-full max-w-[300px]">
         <InlineValidation
-          label={demoValue(locale, "工作邮箱", "Work email")}
-          type="email"
-          placeholder="you@work.com"
-          value={email}
-          onChange={setEmail}
-          validate={checkEmail}
-          hint={demoValue(locale, "仅用于发送邀请。", "Only used to send the invite.")}
+          label={demoValue(locale, "Agent 知识库", "Agent knowledge base")}
+          type="url"
+          placeholder="https://docs.example.com"
+          value={url}
+          onChange={setUrl}
+          validate={checkUrl}
+          hint={demoValue(locale, "Agent 将读取此地址中的公开内容。", "The agent will read public content from this URL.")}
         />
       </div>
     </div>

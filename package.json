@@ -1,6 +1,6 @@
 {
   "name": "motion-lexicon",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "skillVersion": "4.2.0",
   "description": "Copy-ready React page blocks and motion components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS.",
   "license": "MIT",

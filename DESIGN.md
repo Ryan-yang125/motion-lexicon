@@ -1,12 +1,12 @@
-# Motion Lexicon V4.3 Product Design
+# Motion Lexicon V4.4 Product Design
 
 ## Experience model
 
-Motion Lexicon V4.3 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language.
+Motion Lexicon V4.4 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language, with a complete Agent UI collection for building agent products.
 
 ```text
 Page Blocks: Browse → Preview responsively → Inspect source → Install
-Components: Browse → Interact → Inspect source → Install
+Components: Browse → Interact → Copy for Agent or inspect source → Install
 Primitives: Browse → Preview → Tune → Inspect source → Install
 Agent Skill: Understand → Plan Page → Build → Review
 ```
@@ -19,7 +19,7 @@ the visual interest; the shell stays calm, compact, and predictable.
 Primary routes:
 
 - `/:locale/` — live product showcase and the shortest path into both collections.
-- `/:locale/components/` — 4 React page blocks and 48 React motion components.
+- `/:locale/components/` — 5 React page blocks and 59 React motion components.
 - `/:locale/components/:componentId/` — live preview, source, install command, and related primitives; Page Blocks add viewport controls and fullscreen preview.
 - `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
 - `/:locale/primitives/:primitiveId/` — live preview, props, React source, install command, and guidance.
@@ -115,7 +115,7 @@ Page Block, Component, and Primitive implementation files are the source of trut
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V4.3 catalog and root `registry.json`.
+4. the public V4.4 catalog and root `registry.json`.
 
 The Page Block chain is explicit:
 

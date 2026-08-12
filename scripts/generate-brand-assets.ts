@@ -40,12 +40,12 @@ type OgKind = "home" | "components" | "primitives" | "guides" | "method" | "skil
 
 const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: string; preview: string; meta: string }>> = {
   home: {
-    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "4 个页面 Block、48 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "4 BLOCKS · 48 COMPONENTS · 44 PRIMITIVES" },
-    en: { title: "Bring refined motion<br>straight into your product.", copy: "4 page blocks, 48 React motion components, and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "4 BLOCKS · 48 COMPONENTS · 44 PRIMITIVES" }
+    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "5 个页面 Block、59 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "5 BLOCKS · 59 COMPONENTS · 44 PRIMITIVES" },
+    en: { title: "Bring refined motion<br>straight into your product.", copy: "5 page blocks, 59 React motion components, and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "5 BLOCKS · 59 COMPONENTS · 44 PRIMITIVES" }
   },
   components: {
-    zh: { title: "完整页面与交互，<br>预览后直接安装。", copy: "4 个页面 Block 与 48 个组件共用真实预览、源码和 Registry。", preview: "React Components", meta: "4 BLOCKS · 48 COMPONENTS · SHADCN" },
-    en: { title: "Complete pages and<br>interactions, ready to install.", copy: "4 page blocks and 48 components share real previews, source, and Registry delivery.", preview: "React Components", meta: "4 BLOCKS · 48 COMPONENTS · SHADCN" }
+    zh: { title: "完整页面与交互，<br>预览后直接安装。", copy: "5 个页面 Block 与 59 个组件共用真实预览、源码和 Registry。", preview: "React Components", meta: "5 BLOCKS · 59 COMPONENTS · SHADCN" },
+    en: { title: "Complete pages and<br>interactions, ready to install.", copy: "5 page blocks and 59 components share real previews, source, and Registry delivery.", preview: "React Components", meta: "5 BLOCKS · 59 COMPONENTS · SHADCN" }
   },
   primitives: {
     zh: { title: "一个动效，<br>放进真实场景。", copy: "44 个可预览、可调节的动效基础，覆盖进入、节奏、状态和反馈。", preview: "Motion Primitives", meta: "44 MOTION PRIMITIVES · 91 TERMS · FREE & OPEN" },

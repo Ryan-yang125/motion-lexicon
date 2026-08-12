@@ -48,7 +48,7 @@ describe("registry source intent", () => {
   it("loads component source on copy intent and Code selection", () => {
     render(<ComponentPage locale="en" componentId="copy-button" />);
 
-    fireEvent.pointerEnter(screen.getByTestId("primary-copy"));
+    fireEvent.pointerEnter(screen.getByRole("button", { name: "Copy code" }));
     expect(harness.ensureLoaded).toHaveBeenCalledOnce();
 
     fireEvent.click(screen.getByRole("button", { name: "Code" }));
@@ -58,7 +58,7 @@ describe("registry source intent", () => {
   it("loads primitive source on copy intent and Code selection", () => {
     render(<PrimitivePage locale="en" primitiveId="slide-in" />);
 
-    fireEvent.pointerEnter(screen.getByTestId("primary-copy"));
+    fireEvent.pointerEnter(screen.getByRole("button", { name: "Copy code" }));
     expect(harness.ensureLoaded).toHaveBeenCalledOnce();
 
     fireEvent.click(screen.getByRole("button", { name: "Code" }));

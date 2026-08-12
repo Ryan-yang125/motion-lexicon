@@ -1,6 +1,9 @@
 import type { Locale, LocalizedText } from "../data/types";
 
 export const demoIds = [
+  "agent-thinking-trace", "streaming-answer", "tool-call-stack", "approval-flow",
+  "agent-task-queue", "prompt-composer", "context-sources", "diff-review",
+  "agent-recommendation", "multi-agent-handoff", "agent-status-orbit",
   "copy-button", "loading-button", "hold-to-confirm", "long-press",
   "command-palette", "context-menu", "drawer", "dropdown", "modal", "popover",
   "expanding-search", "floating-label", "inline-validation", "otp-input",
@@ -18,6 +21,17 @@ export type DemoId = (typeof demoIds)[number];
 export type DemoLocaleProps = { locale?: Locale };
 
 export const demoLabels = {
+  "agent-thinking-trace": { zh: "Agent 思考轨迹演示", en: "Agent thinking trace demo" },
+  "streaming-answer": { zh: "流式回答演示", en: "Streaming answer demo" },
+  "tool-call-stack": { zh: "工具调用堆栈演示", en: "Tool call stack demo" },
+  "approval-flow": { zh: "人工审批流程演示", en: "Human approval flow demo" },
+  "agent-task-queue": { zh: "Agent 任务队列演示", en: "Agent task queue demo" },
+  "prompt-composer": { zh: "Agent 提示词编辑器演示", en: "Agent prompt composer demo" },
+  "context-sources": { zh: "上下文来源卡演示", en: "Context sources demo" },
+  "diff-review": { zh: "修改对比评审演示", en: "Diff review demo" },
+  "agent-recommendation": { zh: "Agent 建议卡演示", en: "Agent recommendation demo" },
+  "multi-agent-handoff": { zh: "多 Agent 交接演示", en: "Multi-agent handoff demo" },
+  "agent-status-orbit": { zh: "Agent 状态轨道演示", en: "Agent status orbit demo" },
   "copy-button": { zh: "复制按钮演示", en: "Copy button demo" },
   "loading-button": { zh: "加载按钮演示", en: "Loading button demo" },
   "hold-to-confirm": { zh: "长按确认演示", en: "Hold to confirm demo" },

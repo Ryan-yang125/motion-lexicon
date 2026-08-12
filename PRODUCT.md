@@ -1,4 +1,4 @@
-# Motion Lexicon V4.3 Product Strategy
+# Motion Lexicon V4.4 Product Strategy
 
 ## Product promise
 
@@ -28,7 +28,7 @@ Browse → Preview → Copy or install → Adapt → Review
 | Surface | Job | Public scope |
 | --- | --- | --- |
 | Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
-| Components | Deliver complete pages and focused product interactions | 4 React page blocks and 48 components across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
+| Components | Deliver complete pages and focused product interactions | 5 React page blocks and 59 components, including a dedicated Agent UI collection, across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
 | Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
 | Agent Skill | Build and refine from product context | Build Page, Recommend, Compose, Implement, Review, Contribute |
 | Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
@@ -95,15 +95,18 @@ The build publishes 222 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V4.3 acceptance
+## V4.4 acceptance
 
 V4 is complete when:
 
 - Components and Primitives are the only primary product directories.
-- Four responsive Page Blocks lead the Components directory and expose desktop, tablet, mobile, fullscreen, source, and install views.
+- Five responsive Page Blocks lead the Components directory and expose desktop, tablet, mobile, fullscreen, source, and install views.
 - Every Page Block uses one source file for its website preview, code view, root registry catalog, and public Registry JSON.
 - Each locale root presents both directories through real, interactive previews.
-- All 48 component previews use the same source delivered by code view and registry JSON.
+- All 59 component previews use the same source delivered by code view and registry JSON.
+- The Agent UI collection covers the core state, input, tool, approval, evidence, review, recommendation, handoff, and status patterns used by agent products.
+- Agent Workspace combines the collection into one responsive, installable product surface with a complete run-state flow.
+- Every Block, Component, and Primitive detail page can copy a self-contained brief for an implementation agent.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
 - All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.
 - Every executable primitive owns an independent implementation and an independent real-product demo.

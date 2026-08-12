@@ -58,7 +58,7 @@ const detailOgFiles = [
   ...registryComponents.flatMap((component) => ["zh", "en"].map((locale) => `og/components/${component.id}-${locale}.png`)),
   ...canonicalMotionCatalog.flatMap((primitive) => ["zh", "en"].map((locale) => `og/primitives/${primitive.id}-${locale}.png`))
 ];
-assert(detailOgFiles.length === 192, `Expected 192 detail Open Graph images, found ${detailOgFiles.length}`);
+assert(detailOgFiles.length === 216, `Expected 216 detail Open Graph images, found ${detailOgFiles.length}`);
 let detailOgBytes = 0;
 const detailOgHashes = new Set<string>();
 for (const asset of detailOgFiles) {
@@ -77,7 +77,7 @@ const routes = sitemapPaths();
 const staticRoutes = getStaticPaths();
 const routeSet = new Set(routes);
 assert(routeSet.size === routes.length, "Sitemap routes contain duplicates");
-assert(routes.length === 222, `Expected 222 canonical routes, found ${routes.length}`);
+assert(routes.length === 246, `Expected 246 canonical routes, found ${routes.length}`);
 assert(staticRoutes.length === routes.length, "Static and sitemap route counts differ");
 
 const sitemapXml = readFileSync("dist/sitemap.xml", "utf8");

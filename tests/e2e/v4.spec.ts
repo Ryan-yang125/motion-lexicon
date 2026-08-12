@@ -110,8 +110,8 @@ test("page block workbench previews, resizes, opens fullscreen, and exposes the 
 });
 
 test("all Chinese component routes stay localized, stable, and within the viewport", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name.includes("mobile"), "The full 48-route scan runs once; mobile contracts have focused coverage.");
-  test.setTimeout(120_000);
+  test.skip(testInfo.project.name.includes("mobile"), "The full 59-route scan runs once; mobile contracts have focused coverage.");
+  test.setTimeout(180_000);
   const runtimeErrors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") runtimeErrors.push(message.text());
@@ -132,7 +132,24 @@ test("all Chinese component routes stay localized, stable, and within the viewpo
 
 test("mobile component controls keep 44px targets", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.includes("mobile"), "Mobile target sizing runs once.");
-  for (const id of ["expanding-search", "inline-validation", "otp-input", "slider-detents", "tag-input", "reorder-list"] as const) {
+  for (const id of [
+    "agent-thinking-trace",
+    "streaming-answer",
+    "tool-call-stack",
+    "approval-flow",
+    "agent-task-queue",
+    "prompt-composer",
+    "context-sources",
+    "diff-review",
+    "agent-recommendation",
+    "multi-agent-handoff",
+    "expanding-search",
+    "inline-validation",
+    "otp-input",
+    "slider-detents",
+    "tag-input",
+    "reorder-list",
+  ] as const) {
     await page.goto(`/zh/components/${id}/`);
     const controls = page.locator(`[data-component="${id}"]`).locator('button, a, input:not([type="file"]), select, textarea, [role="button"], [role="slider"]');
     for (const control of await controls.all()) {
@@ -152,6 +169,25 @@ test("component detail keeps preview, source, install, and related primitives to
   await expect(page.locator(".component-source")).toContainText("export function CopyButton");
   await expect(page.locator(".component-install-panel code")).toContainText("/r/copy-button.json");
   await expect(page.getByRole("heading", { level: 2, name: "基础动效" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test("agent collection exposes a complete workspace and implementation brief", async ({ page }) => {
+  await page.goto("/zh/components/agent-workspace/");
+  await expect(page.getByRole("heading", { level: 1, name: "Agent 产品工作台" })).toBeVisible();
+  const workspace = page.locator('.block-detail-stage [data-page-block="agent-workspace"]');
+  await expect(workspace).toBeVisible();
+  await workspace.getByRole("button", { name: "开始任务" }).click();
+  await expect(workspace.getByText("正在读取需求")).toBeVisible();
+  await expect(page.getByRole("button", { name: "复制给 Agent" })).toBeVisible();
+  await page.getByRole("radio", { name: "代码" }).click();
+  await expect(page.locator(".component-source")).toContainText("export function AgentWorkspaceBlock");
+  await expect(page.locator(".component-install-panel code")).toContainText("/r/agent-workspace.json");
+  await expectNoHorizontalOverflow(page);
+
+  await page.goto("/zh/components/agent-thinking-trace/");
+  await expect(page.locator('[data-component="agent-thinking-trace"]')).toBeVisible();
+  await expect(page.getByRole("button", { name: "复制给 Agent" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -399,8 +435,8 @@ test("global search opens immediately and navigates by keyboard", async ({ page 
 test("component keyboard and reduced-motion contracts remain intact", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Component keyboard contract runs once.");
   await page.goto("/zh/components/command-palette/");
-  await page.getByRole("button", { name: "打开命令" }).click();
-  await expect(page.getByRole("combobox", { name: "命令面板" })).toBeFocused();
+  await page.getByRole("button", { name: "调用 Agent 命令" }).click();
+  await expect(page.getByRole("combobox", { name: "Agent 命令" })).toBeFocused();
 
   await page.goto("/zh/components/tabs/");
   const tabs = page.getByRole("tablist", { name: "工作区栏目" });
@@ -539,7 +575,7 @@ test("mobile navigation, language, theme, and Agent Skill remain reachable", asy
   await expect(page).toHaveURL(/\/zh\/skill\//);
   await expect(page.getByRole("heading", { level: 1, name: "Motion Lexicon" })).toBeVisible();
   await page.goto("/zh/components/copy-button/");
-  const copyButton = page.locator(".component-primary-copy");
+  const copyButton = page.locator(".agent-brief-copy");
   await expect(copyButton).toBeEnabled();
   await expect.poll(async () => (await copyButton.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
   await expectNoHorizontalOverflow(page);
