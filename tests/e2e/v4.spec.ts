@@ -21,8 +21,7 @@ test("landing page presents live components, primitives, and the Skill entry", a
     await expect(tab).toHaveAttribute("aria-controls", "landing-stage-panel");
   }
   await expect(page.locator("#landing-stage-panel")).toBeVisible();
-  await firstTab.focus();
-  await page.keyboard.press("ArrowRight");
+  await firstTab.press("ArrowRight");
   await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
   await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('[data-component="tabs"]')).toBeVisible({ timeout: 15_000 });
@@ -320,7 +319,10 @@ test("Three.js previews wait for intent before their first long task", async ({ 
       longTasks: (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks ?? [],
     }), activationStart);
     expect(activationResult.elapsed).toBeLessThan(1_000);
-    expect(Math.max(0, ...activationResult.longTasks)).toBeLessThanOrEqual(250);
+    expect(
+      Math.max(0, ...activationResult.longTasks),
+      `${id} activation long tasks: ${activationResult.longTasks.join(", ")}`,
+    ).toBeLessThanOrEqual(250);
   }
 });
 

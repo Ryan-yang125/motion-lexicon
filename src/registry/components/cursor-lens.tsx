@@ -176,7 +176,7 @@ export function CursorLens({
         setKeyboardVisible(false);
       }}
       onKeyDown={keyDown}
-      className={`relative isolate min-h-[240px] w-full overflow-hidden rounded-[16px] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] ${className}`}
+      className={`relative isolate min-h-[240px] w-full overflow-hidden rounded-[10px] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] ${className}`}
       style={{ touchAction: "pan-y" }}
     >
       <div className="absolute inset-0">{base}</div>
@@ -190,7 +190,7 @@ export function CursorLens({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={reduced ? { duration: 0 } : { duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
-            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_4px_8px_-6px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:border-white/25 dark:bg-[#22221F]"
+            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden rounded-full border border-white/70 bg-white shadow-[0_4px_8px_-6px_rgba(28,25,23,.72),inset_0_0_0_1px_rgba(41,41,41,.1)] dark:border-white/25 dark:bg-[#202020]"
             style={{ width: resolvedSize, height: resolvedSize, transform }}
           >
             <motion.div

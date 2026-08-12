@@ -21,73 +21,71 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
   const snapshot = copy.snapshots[range];
 
   return (
-    <section className={`min-h-[720px] w-full overflow-hidden rounded-[24px] border border-slate-200 bg-[#eef1f3] text-slate-950 shadow-[0_28px_80px_-48px_rgba(15,23,42,.42)] dark:border-white/10 dark:bg-[#121719] dark:text-slate-50 ${className}`} data-page-block="analytics-dashboard">
+    <section className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="analytics-dashboard">
       <div className="grid min-h-[720px] md:grid-cols-[196px_minmax(0,1fr)]">
-        <aside className="hidden border-r border-slate-900/10 bg-[#e7eaec] p-4 md:flex md:flex-col dark:border-white/10 dark:bg-[#171d20]">
-          <a className="flex min-h-11 items-center gap-2.5 rounded-xl px-2 font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#northstar-dashboard">
-            <span className="grid size-8 place-items-center rounded-[10px] bg-slate-950 text-white dark:bg-slate-50 dark:text-slate-950" aria-hidden="true">
+        <aside className="hidden border-r border-neutral-200 bg-[#fafafa] p-4 md:flex md:flex-col dark:border-white/10 dark:bg-[#181818]">
+          <a className="flex min-h-11 items-center gap-2.5 rounded-lg px-2 font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#northstar-dashboard">
+            <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true">
               <svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.7"><path d="M4 17 9 12l4 3 7-8" /><path d="M16 7h4v4" /></svg>
             </span>
             Northstar
           </a>
           <nav className="mt-8 grid gap-1 text-[12px]" aria-label={copy.navigation}>
-            {copy.nav.map((item, index) => <a className={`flex min-h-11 items-center gap-2 rounded-xl px-3 ${index === 0 ? "bg-white font-semibold shadow-sm dark:bg-white/8" : "text-slate-500 hover:bg-white/60 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"}`} href={item.href} key={item.label}><i className={`size-1.5 rounded-full ${index === 0 ? "bg-blue-600" : "bg-slate-300 dark:bg-slate-600"}`} />{item.label}</a>)}
+            {copy.nav.map((item, index) => <a className={`flex min-h-11 items-center rounded-lg px-3 ${index === 0 ? "bg-neutral-950 font-medium text-white dark:bg-neutral-50 dark:text-neutral-950" : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-950 dark:text-neutral-400 dark:hover:bg-white/5 dark:hover:text-white"}`} href={item.href} key={item.label}>{item.label}</a>)}
           </nav>
-          <div className="mt-auto rounded-2xl border border-slate-900/10 bg-white/60 p-3 dark:border-white/10 dark:bg-white/5">
-            <span className="font-mono text-[9px] uppercase tracking-[.12em] text-slate-400">{copy.pipeline}</span>
+          <div className="mt-auto border-t border-neutral-200 p-3 dark:border-white/10">
+            <span className="text-[10px] text-neutral-400">{copy.pipeline}</span>
             <strong className="mt-2 block text-[12px]">{copy.healthy}</strong>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10"><div className="h-full w-[86%] rounded-full bg-emerald-500" /></div>
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-neutral-200 dark:bg-white/10"><div className="h-full w-[86%] rounded-full bg-emerald-500" /></div>
           </div>
         </aside>
 
         <main className="min-w-0" id="northstar-dashboard">
-          <header className="flex min-h-16 items-center justify-between gap-4 border-b border-slate-900/10 bg-white/55 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-white/[.025]">
+          <header className="flex min-h-14 items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 sm:px-6 dark:border-white/10 dark:bg-[#1b1b1b]">
             <div className="flex min-w-0 items-center gap-3">
-              <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-slate-950 text-[11px] font-bold text-white md:hidden dark:bg-slate-50 dark:text-slate-950">N</span>
-              <div className="min-w-0"><strong className="block truncate text-[13px]">{copy.workspace}</strong><span className="text-[10px] text-slate-500 dark:text-slate-400">{copy.updated}</span></div>
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-neutral-950 text-[11px] font-bold text-white md:hidden dark:bg-neutral-50 dark:text-neutral-950">N</span>
+              <div className="min-w-0"><strong className="block truncate text-[13px]">{copy.workspace}</strong><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{copy.updated}</span></div>
             </div>
-            <button className="min-h-11 rounded-full border border-slate-900/10 bg-white px-4 text-[12px] font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-white/10 dark:bg-white/6" type="button">{copy.export}</button>
+            <button className="min-h-11 rounded-lg border border-neutral-300 bg-white px-4 text-[12px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-white/15 dark:bg-transparent" type="button">{copy.export}</button>
           </header>
 
           <div className="p-4 sm:p-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-              <div><span className="font-mono text-[9px] uppercase tracking-[.14em] text-blue-600 dark:text-blue-400">{copy.eyebrow}</span><h1 className="mt-2 text-[clamp(26px,4vw,40px)] font-semibold tracking-[-.045em]">{copy.title}</h1></div>
-              <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-900/5 p-1 dark:bg-white/7" role="tablist" aria-label={copy.rangeLabel}>
-                {ranges.map((item) => <button aria-selected={range === item} className={`relative min-h-11 min-w-14 rounded-lg px-3 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${range === item ? "text-slate-950 dark:text-white" : "text-slate-500"}`} key={item} onClick={() => setRange(item)} role="tab" type="button">{range === item ? <motion.span className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-white/9" layoutId="analytics-range" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 34 }} /> : null}<span className="relative">{copy.rangeNames[item]}</span></button>)}
+              <div><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{copy.eyebrow}</span><h1 className="mt-2 text-[26px] font-semibold tracking-[-.03em]">{copy.title}</h1></div>
+              <div className="grid grid-cols-3 gap-1 rounded-lg bg-neutral-900/5 p-1 dark:bg-white/7" role="tablist" aria-label={copy.rangeLabel}>
+                {ranges.map((item) => <button aria-selected={range === item} className={`relative min-h-11 min-w-14 rounded-lg px-3 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${range === item ? "text-neutral-950 dark:text-white" : "text-neutral-500"}`} key={item} onClick={() => setRange(item)} role="tab" type="button">{range === item ? <motion.span className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-white/9" layoutId="analytics-range" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 34 }} /> : null}<span className="relative">{copy.rangeNames[item]}</span></button>)}
               </div>
             </div>
 
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={range} initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : -6 }} transition={{ duration: reduced ? 0 : .22, ease }}>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                  {snapshot.metrics.map((metric) => <article className="rounded-2xl border border-slate-900/10 bg-white p-4 shadow-[0_1px_1px_rgba(15,23,42,.04)] dark:border-white/10 dark:bg-white/5" key={metric.label}><span className="text-[10px] text-slate-500 dark:text-slate-400">{metric.label}</span><div className="mt-3 flex items-end justify-between gap-3"><strong className="text-[clamp(24px,3vw,34px)] tracking-[-.055em] tabular-nums">{metric.value}</strong><span className={`rounded-full px-2 py-1 font-mono text-[9px] ${metric.positive ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300" : "bg-amber-50 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300"}`}>{metric.change}</span></div></article>)}
+                  {snapshot.metrics.map((metric) => <article className="rounded-[10px] border border-neutral-200 bg-white p-4 dark:border-white/10 dark:bg-[#1b1b1b]" key={metric.label}><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{metric.label}</span><div className="mt-3 flex items-end justify-between gap-3"><strong className="text-[28px] tracking-[-.04em] tabular-nums">{metric.value}</strong><span className={`font-mono text-[9px] ${metric.positive ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`}>{metric.change}</span></div></article>)}
                 </div>
 
                 <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1.55fr)_minmax(250px,.75fr)]">
-                  <article className="min-w-0 rounded-2xl border border-slate-900/10 bg-white p-4 shadow-[0_1px_1px_rgba(15,23,42,.04)] dark:border-white/10 dark:bg-white/5">
-                    <div className="flex items-center justify-between gap-4"><div><span className="text-[10px] text-slate-500 dark:text-slate-400">{copy.traffic}</span><strong className="mt-1 block text-[13px]">{snapshot.trafficLabel}</strong></div><code className="font-mono text-[9px] text-slate-400">{snapshot.axis}</code></div>
-                    <div className="relative mt-5 h-48 overflow-hidden rounded-xl bg-slate-50 dark:bg-black/10">
-                      <div className="absolute inset-0 grid grid-rows-4">{[0, 1, 2, 3].map((line) => <i className="border-b border-slate-900/[.06] dark:border-white/[.06]" key={line} />)}</div>
+                  <article className="min-w-0 rounded-[10px] border border-neutral-900/10 bg-white p-4 dark:border-white/10 dark:bg-white/5">
+                    <div className="flex items-center justify-between gap-4"><div><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{copy.traffic}</span><strong className="mt-1 block text-[13px]">{snapshot.trafficLabel}</strong></div><code className="font-mono text-[9px] text-neutral-400">{snapshot.axis}</code></div>
+                    <div className="relative mt-5 h-48 overflow-hidden rounded-lg bg-neutral-50 dark:bg-black/10">
+                      <div className="absolute inset-0 grid grid-rows-4">{[0, 1, 2, 3].map((line) => <i className="border-b border-neutral-900/[.06] dark:border-white/[.06]" key={line} />)}</div>
                       <svg className="absolute inset-0 size-full overflow-visible" viewBox="0 0 640 190" preserveAspectRatio="none" role="img" aria-label={copy.traffic}>
-                        <defs><linearGradient id={`northstar-fill-${range}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2563eb" stopOpacity=".24" /><stop offset="1" stopColor="#2563eb" stopOpacity="0" /></linearGradient></defs>
-                        <motion.path d={`${snapshot.path} L640 190 L0 190 Z`} fill={`url(#northstar-fill-${range})`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : .35 }} />
-                        <motion.path d={snapshot.path} fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" initial={{ pathLength: reduced ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduced ? 0 : .65, ease }} />
+                        <motion.path d={snapshot.path} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" initial={{ pathLength: reduced ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduced ? 0 : .65, ease }} />
                       </svg>
                     </div>
                   </article>
 
-                  <article className="rounded-2xl border border-slate-900/10 bg-slate-950 p-4 text-white shadow-[0_1px_1px_rgba(15,23,42,.04)] dark:border-white/10 dark:bg-slate-50 dark:text-slate-950">
+                  <article className="rounded-[10px] border border-neutral-900/10 bg-neutral-950 p-4 text-white dark:border-white/10 dark:bg-neutral-50 dark:text-neutral-950">
                     <span className="text-[10px] opacity-55">{copy.channels}</span>
                     <div className="mt-5 grid gap-4">
-                      {snapshot.channels.map((channel, index) => <div key={channel.label}><div className="flex justify-between gap-3 text-[10px]"><span>{channel.label}</span><strong className="tabular-nums">{channel.value}%</strong></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15 dark:bg-slate-950/10"><motion.div className="h-full rounded-full bg-white dark:bg-slate-950" initial={{ width: 0 }} animate={{ width: `${channel.value}%` }} transition={{ delay: reduced ? 0 : index * .08, duration: reduced ? 0 : .45, ease }} /></div></div>)}
+                      {snapshot.channels.map((channel, index) => <div key={channel.label}><div className="flex justify-between gap-3 text-[10px]"><span>{channel.label}</span><strong className="tabular-nums">{channel.value}%</strong></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15 dark:bg-neutral-950/10"><motion.div className="h-full rounded-full bg-white dark:bg-neutral-950" initial={{ width: 0 }} animate={{ width: `${channel.value}%` }} transition={{ delay: reduced ? 0 : index * .08, duration: reduced ? 0 : .45, ease }} /></div></div>)}
                     </div>
                   </article>
                 </div>
 
-                <article className="mt-3 overflow-hidden rounded-2xl border border-slate-900/10 bg-white shadow-[0_1px_1px_rgba(15,23,42,.04)] dark:border-white/10 dark:bg-white/5">
-                  <div className="flex min-h-12 items-center justify-between border-b border-slate-900/10 px-4 dark:border-white/10"><strong className="text-[12px]">{copy.segments}</strong><span className="font-mono text-[9px] text-slate-400">{copy.live}</span></div>
-                  <div className="divide-y divide-slate-900/[.07] dark:divide-white/[.07]">
-                    {snapshot.segments.map((segment) => <div className="grid min-h-12 grid-cols-[1fr_auto_auto] items-center gap-4 px-4 text-[10px]" key={segment.name}><strong className="truncate text-[11px]">{segment.name}</strong><span className="text-slate-500 dark:text-slate-400">{segment.users}</span><span className="min-w-12 text-right font-mono text-emerald-600 dark:text-emerald-400">{segment.rate}</span></div>)}
+                <article className="mt-3 overflow-hidden rounded-[10px] border border-neutral-900/10 bg-white dark:border-white/10 dark:bg-white/5">
+                  <div className="flex min-h-12 items-center justify-between border-b border-neutral-900/10 px-4 dark:border-white/10"><strong className="text-[12px]">{copy.segments}</strong><span className="font-mono text-[9px] text-neutral-400">{copy.live}</span></div>
+                  <div className="divide-y divide-neutral-900/[.07] dark:divide-white/[.07]">
+                    {snapshot.segments.map((segment) => <div className="grid min-h-12 grid-cols-[1fr_auto_auto] items-center gap-4 px-4 text-[10px]" key={segment.name}><strong className="truncate text-[11px]">{segment.name}</strong><span className="text-neutral-500 dark:text-neutral-400">{segment.users}</span><span className="min-w-12 text-right font-mono text-emerald-600 dark:text-emerald-400">{segment.rate}</span></div>)}
                   </div>
                 </article>
               </motion.div>

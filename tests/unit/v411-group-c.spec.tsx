@@ -34,12 +34,12 @@ afterEach(() => {
 });
 
 describe("V4.1 group C interaction hardening", () => {
-  it("keeps the landing stage on a thin boundary and compact shadow", () => {
+  it("keeps the landing stage on a thin boundary without decorative elevation", () => {
     const css = readFileSync("src/v4.css", "utf8");
     const rule = css.match(/\.landing-stage\s*\{([^}]+)\}/)?.[1];
 
     expect(rule).toContain("border: 1px solid var(--hairline);");
-    expect(rule).toContain("box-shadow: 0 4px 8px -7px rgba(28, 25, 23, 0.5);");
+    expect(rule).toContain("box-shadow: none;");
   });
 
   it("keeps the cursor lens boundary without a wide shadow", () => {

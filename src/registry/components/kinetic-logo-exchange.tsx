@@ -30,10 +30,10 @@ export type KineticLogoExchangeProps = {
 };
 
 const toneClass = {
-  blue: "bg-[#E6EBFF] text-[#3D5FD7] dark:bg-[#4568FF]/20 dark:text-[#B7C5FF]",
-  clay: "bg-[#F1E1DA] text-[#9B513B] dark:bg-[#B3654A]/20 dark:text-[#E5A791]",
-  moss: "bg-[#E1E7DC] text-[#53624E] dark:bg-[#73806B]/20 dark:text-[#B7C5B0]",
-  ink: "bg-[#292929] text-white dark:bg-stone-100 dark:text-[#292929]",
+  blue: "bg-neutral-100 text-neutral-950 dark:bg-neutral-800 dark:text-neutral-100",
+  clay: "bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100",
+  moss: "bg-neutral-300 text-neutral-800 dark:bg-neutral-600 dark:text-white",
+  ink: "bg-neutral-950 text-white dark:bg-neutral-100 dark:text-neutral-950",
 } as const;
 
 function rotate<T>(values: readonly T[]) {
@@ -127,12 +127,12 @@ export function KineticLogoExchange({
         if (next && event.currentTarget.contains(next)) return;
         setFocusPaused(false);
       }}
-      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
+      className={`w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] p-3 dark:border-white/[0.14] dark:bg-[#181818] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
         <div className="min-w-0">
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-400">{eyebrow}</span>
-          <h3 className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{label}</h3>
+          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">{eyebrow}</span>
+          <h3 className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100">{label}</h3>
         </div>
         {reduced || items.length < 2 ? null : (
           <button
@@ -140,7 +140,7 @@ export function KineticLogoExchange({
             aria-label={paused ? resumeLabel : pauseLabel}
             aria-pressed={paused}
             onClick={() => setPaused((value) => !value)}
-            className="grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] outline-none transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-white"
+            className="grid size-11 place-items-center rounded-lg border border-black/[0.08] bg-white text-[#292929] outline-none transition-transform duration-150 active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#202020] dark:text-white"
           >
             {paused ? (
               <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
@@ -156,7 +156,7 @@ export function KineticLogoExchange({
       </header>
 
       {items.length === 0 ? (
-        <div role="status" className="grid min-h-[72px] place-items-center rounded-[12px] border border-black/[0.07] bg-white/72 px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.09] dark:bg-white/[0.055] dark:text-stone-300">
+        <div role="status" className="grid min-h-[72px] place-items-center rounded-lg border border-black/[0.07] bg-white px-4 text-center text-[12px] text-neutral-600 dark:border-white/[0.09] dark:bg-[#202020] dark:text-neutral-300">
           {emptyLabel}
         </div>
       ) : <div
@@ -184,9 +184,9 @@ export function KineticLogoExchange({
                   ? { duration: 0 }
                   : { type: "spring", stiffness: 430, damping: 38, mass: 0.52 }
               }
-              className={`group relative min-h-[72px] min-w-0 overflow-hidden rounded-[12px] border bg-white/72 p-2 text-left outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:bg-white/[0.055] ${
+              className={`group relative min-h-[72px] min-w-0 overflow-hidden rounded-lg border bg-white p-2 text-left outline-none transition-[border-color,background-color] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1 dark:bg-[#202020] ${
                 active
-                  ? "border-[#4568FF]/40 shadow-[inset_0_0_0_1px_rgba(69,104,255,0.18)] dark:border-[#93B0FF]/50"
+                  ? "border-neutral-950 dark:border-neutral-50"
                   : "border-black/[0.07] dark:border-white/[0.09]"
               }`}
             >
@@ -206,13 +206,13 @@ export function KineticLogoExchange({
                 className="flex min-w-0 items-center gap-2"
               >
                 <span
-                  className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${toneClass[item.tone ?? "ink"]}`}
+                  className={`grid size-9 shrink-0 place-items-center rounded-lg ${toneClass[item.tone ?? "ink"]}`}
                 >
                   {item.mark ?? (
                     <span className="text-[11px] font-semibold uppercase">{item.label.slice(0, 2)}</span>
                   )}
                 </span>
-                <span className="min-w-0 truncate text-[10.5px] font-medium text-stone-600 dark:text-stone-300">{item.label}</span>
+                <span className="min-w-0 truncate text-[10.5px] font-medium text-neutral-600 dark:text-neutral-300">{item.label}</span>
               </motion.span>
             </motion.button>
           );

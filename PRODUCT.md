@@ -1,4 +1,4 @@
-# Motion Lexicon V4.4 Product Strategy
+# Motion Lexicon V5 Product Strategy
 
 ## Product promise
 
@@ -50,8 +50,9 @@ Every published component includes:
 - compositor-friendly motion and stable layout;
 - TypeScript types and a focused public API.
 
-The interaction language follows Interior's material and motion discipline:
-warm bezel, raised panel, recessed well, compact travel, stable resting states,
+The interaction language combines Interior's material discipline with the
+zero-chroma product restraint seen in strong contemporary interface libraries:
+neutral page layers, crisp boundaries, compact travel, stable resting states,
 and precise feedback.
 
 ## Shared architecture quality bar
@@ -91,13 +92,13 @@ No account, server, API key, or paid tier is required.
 
 ## Discoverability
 
-The build publishes 222 localized canonical pages, reciprocal hreflang,
+The build publishes 246 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V4.4 acceptance
+## V5 acceptance
 
-V4 is complete when:
+V5 is complete when:
 
 - Components and Primitives are the only primary product directories.
 - Five responsive Page Blocks lead the Components directory and expose desktop, tablet, mobile, fullscreen, source, and install views.
@@ -106,6 +107,9 @@ V4 is complete when:
 - All 59 component previews use the same source delivered by code view and registry JSON.
 - The Agent UI collection covers the core state, input, tool, approval, evidence, review, recommendation, handoff, and status patterns used by agent products.
 - Agent Workspace combines the collection into one responsive, installable product surface with a complete run-state flow.
+- The website shell, five Page Blocks, and every component added after the initial 28-component collection use one zero-chroma light and dark system.
+- Black primary actions, gray hierarchy, thin borders, compact radii, and restrained elevation replace decorative gradients, tinted surfaces, and ornamental glow.
+- Blue appears for keyboard focus and explicit selection; green, amber, and red appear only for semantic status.
 - Every Block, Component, and Primitive detail page can copy a self-contained brief for an implementation agent.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.
 - All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.

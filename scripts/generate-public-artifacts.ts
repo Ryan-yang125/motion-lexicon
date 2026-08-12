@@ -22,7 +22,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicDir = path.join(root, "public");
 const repositoryUrl = "https://github.com/Ryan-yang125/motion-lexicon";
 const installSkill = "npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon";
-const skillPageCssPath = path.join(root, "skills", "motion-lexicon", "assets", "motion-lexicon-page.css");
 const v4CssPath = path.join(root, "src", "v4.css");
 
 function absolute(route: string) {
@@ -336,9 +335,6 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
   await writeFile(path.join(outputDir, "llms.txt"), llmsIndex.join("\n"));
   await writeFile(path.join(outputDir, "llms-full.txt"), llmsFull);
   await writeFile(path.join(outputDir, "pricing.txt"), pricing);
-  if (path.resolve(outputDir) === publicDir) {
-    await writeFile(skillPageCssPath, renderSkillPageCss());
-  }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

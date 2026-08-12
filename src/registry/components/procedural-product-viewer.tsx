@@ -89,22 +89,22 @@ function makeProduct(
   };
 
   const shell = track(
-    new THREE.MeshLambertMaterial({
+    new THREE.MeshBasicMaterial({
       color: 0xe8e5dd,
     }),
   );
   const dark = track(
-    new THREE.MeshLambertMaterial({
+    new THREE.MeshBasicMaterial({
       color: 0x292929,
     }),
   );
   const accentMaterial = track(
-    new THREE.MeshLambertMaterial({
+    new THREE.MeshBasicMaterial({
       color: accent,
     }),
   );
   const glass = track(
-    new THREE.MeshLambertMaterial({
+    new THREE.MeshBasicMaterial({
       color: 0xdce4ef,
       transparent: true,
       opacity: 0.84,
@@ -199,7 +199,7 @@ export function ProceduralProductViewer({
   productName = "Arc One",
   detailLabel = "Tactile dial",
   labels,
-  accent = "#4568FF",
+  accent = "#171717",
   activation = "intent",
   className = "",
 }: ProceduralProductViewerProps) {
@@ -363,14 +363,6 @@ export function ProceduralProductViewer({
     };
     renderer.domElement.addEventListener("webglcontextlost", onContextLost);
     renderer.domElement.addEventListener("webglcontextrestored", onContextRestored);
-
-    const ambient = new THREE.HemisphereLight(0xf8f5ed, 0x8b7f70, 2.4);
-    const key = new THREE.DirectionalLight(0xffffff, 3.6);
-    key.position.set(2.8, 3.6, 4.5);
-    key.castShadow = true;
-    const rim = new THREE.DirectionalLight(0x93b0ff, 2.4);
-    rim.position.set(-3.2, 1.2, -2.4);
-    scene.add(ambient, key, rim);
 
     const product = makeProduct(renderRequest.accent, resources);
     scene.add(product);
@@ -551,14 +543,14 @@ export function ProceduralProductViewer({
             }
           : undefined
       }
-      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_4px_8px_-7px_rgba(41,41,41,0.5)] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-100 outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#181818] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
     >
       <div
         data-webgl-fallback="procedural-product-viewer"
         aria-hidden
         className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
       >
-        <div className="relative h-40 w-28 -rotate-3 rounded-[22px] border border-white/80 bg-[#E8E5DD] shadow-md dark:border-white/20 dark:bg-[#353531]">
+        <div className="relative h-40 w-28 -rotate-3 rounded-[10px] border border-white/80 bg-neutral-200 dark:border-white/20 dark:bg-neutral-700">
           <span className="absolute inset-x-3 top-4 h-16 rounded-[10px] border border-black/10 bg-[#171918] shadow-inner">
             <span className="absolute left-3 top-5 h-1 w-10 rounded-full" style={{ background: accent }} />
             <span className="absolute left-3 top-8 h-1 w-6 rounded-full bg-white/40" />
@@ -578,7 +570,7 @@ export function ProceduralProductViewer({
             focusAfterActivationRef.current = true;
             setActivationRequested(true);
           }}
-          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_4px_8px_-4px_rgba(41,41,41,.6)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-black/10 bg-white px-4 text-[12px] font-semibold text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#202020] dark:text-white"
         >
           {copy.activateInteractive}
         </button>
@@ -586,10 +578,10 @@ export function ProceduralProductViewer({
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-300">{copy.objectStudy}</span>
-          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{productName}</strong>
+          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">{copy.objectStudy}</span>
+          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-neutral-100">{productName}</strong>
         </span>
-        <span className="rounded-full border border-black/[0.08] bg-white/60 px-2.5 py-1 font-mono text-[9px] text-stone-600 backdrop-blur-md dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-300">
+        <span className="rounded-md border border-black/[0.08] bg-white px-2.5 py-1 font-mono text-[9px] text-neutral-600 dark:border-white/[0.12] dark:bg-[#202020] dark:text-neutral-300">
           {rendererReady ? copy.dragToTurn : copy.staticBadge}
         </span>
       </div>
@@ -601,7 +593,7 @@ export function ProceduralProductViewer({
         onClick={() => setDetailOpen((open) => !open)}
         className="absolute left-[62%] top-[44%] z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2"
       >
-        <span className="grid size-5 place-items-center rounded-full border-2 border-white bg-[#4568FF] shadow-[0_0_0_5px_rgba(69,104,255,0.16),0_4px_12px_rgba(41,41,41,0.25)]">
+        <span className="grid size-5 place-items-center rounded-full border-2 border-white bg-neutral-950 shadow-[0_0_0_5px_rgba(23,23,23,0.12)] dark:bg-neutral-50">
           <span className="size-1 rounded-full bg-white" />
         </span>
         <span className="sr-only">{detailLabel}</span>
@@ -612,21 +604,21 @@ export function ProceduralProductViewer({
         role="region"
         aria-label={detailLabel}
         aria-hidden={!detailOpen}
-        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-[12px] border border-black/[0.08] bg-white/90 px-3 py-2.5 shadow-md backdrop-blur-xl dark:border-white/[0.12] dark:bg-[#242421]/95 ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
+        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-lg border border-black/[0.08] bg-white px-3 py-2.5 dark:border-white/[0.12] dark:bg-[#202020] ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
         style={{
           opacity: detailOpen ? 1 : 0,
           transform: detailOpen ? "translate3d(0,0,0)" : "translate3d(0,6px,0)",
         }}
       >
-        <strong className="block text-[12px] font-medium text-[#292929] dark:text-stone-100">{detailLabel}</strong>
-        <span className="mt-0.5 block text-[10px] leading-4 text-stone-500 dark:text-stone-300">{copy.detailDescription}</span>
+        <strong className="block text-[12px] font-medium text-[#292929] dark:text-neutral-100">{detailLabel}</strong>
+        <span className="mt-0.5 block text-[10px] leading-4 text-neutral-500 dark:text-neutral-300">{copy.detailDescription}</span>
       </div>
 
       {rendererReady ? (
         <button
           type="button"
           onClick={reset}
-          className={`absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/70 text-[#292929] shadow-sm outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-black/25 dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
+          className={`absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-lg border border-black/[0.08] bg-white text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#202020] dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
         >
           <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
             <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -1,8 +1,8 @@
-# Motion Lexicon V4.4 Product Design
+# Motion Lexicon V5 Product Design
 
 ## Experience model
 
-Motion Lexicon V4.4 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language, with a complete Agent UI collection for building agent products.
+Motion Lexicon V5 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language, with a zero-chroma website system and a complete Agent UI collection for building agent products.
 
 ```text
 Page Blocks: Browse → Preview responsively → Inspect source → Install
@@ -54,7 +54,7 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 
 ## Component directory
 
-- Four Page Blocks appear first as scaled, interactive page viewports.
+- Five Page Blocks appear first as scaled, interactive page viewports.
 - Every card contains a real lazy-loaded React demo.
 - The preview remains interactive; the footer owns navigation to avoid nested interactive controls.
 - Two columns provide enough room for realistic component states on desktop.
@@ -82,20 +82,21 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 
 ## Material and visual system
 
-The visual language follows Interior's proven material hierarchy:
+The visual language follows a zero-chroma product hierarchy informed by Interior and Beautiful UI:
 
 | Layer | Role |
 | --- | --- |
-| Bezel | warm page background and navigation context |
-| Panel | raised cards, workbenches, and dialogs |
-| Well | recessed previews, inputs, and code |
+| Bezel | neutral page background and navigation context |
+| Panel | crisp working surfaces, workbenches, and dialogs |
+| Well | quiet preview, input, and code regions |
 
 - Platform system typography with SF Pro where available.
 - 12px, 13px, 14px, and 24px type steps with `-0.15px` letter spacing.
-- `#292929`, `#5D5D5D`, and a quiet tertiary neutral for hierarchy.
-- 14px navigation icons, 20px card icons, 8px navigation radii, 16px card radii, pill actions.
-- Blue is reserved for focus, selection, and active state.
-- Thin neutral boundaries and material shadows replace decorative color blocks.
+- `#111111`, `#555555`, and `#737373` form the light-theme hierarchy; dark surfaces use `#141414`, `#1B1B1B`, and `#232323`.
+- 14px navigation icons, 20px card icons, 8px control radii, and 10px surface radii.
+- Black carries primary action and selected navigation. Blue is reserved for keyboard focus and explicit selection.
+- Green, amber, and red appear only when state meaning requires them.
+- Thin neutral boundaries and rare one-pixel shadows create depth without decorative glow, glass, or tinted cards.
 
 ## Interaction and motion
 
@@ -115,7 +116,7 @@ Page Block, Component, and Primitive implementation files are the source of trut
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V4.4 catalog and root `registry.json`.
+4. the public machine-readable catalog and root `registry.json`.
 
 The Page Block chain is explicit:
 
@@ -149,7 +150,7 @@ must install at least one generated item successfully with `shadcn@latest`.
 
 ## Static delivery and SEO
 
-The build prerenders 222 localized canonical pages and generates the sitemap,
+The build prerenders 246 localized canonical pages and generates the sitemap,
 robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
 and shadcn registry. Each public route carries one H1, one canonical URL,
 reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

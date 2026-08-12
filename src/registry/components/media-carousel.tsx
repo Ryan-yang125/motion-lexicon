@@ -252,16 +252,16 @@ export function MediaCarousel({
   return (
     <section
       aria-labelledby={titleId}
-      className={`w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EEECE5] p-3 shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.14] dark:bg-[#1D1D1A] ${className}`}
+      className={`w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] p-3 dark:border-white/[0.14] dark:bg-[#181818] ${className}`}
     >
       <header className="mb-2 flex min-h-11 items-center justify-between gap-3 px-1">
         <div className="min-w-0">
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-300">
+          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
             {copy.collection}
           </span>
           <h3
             id={titleId}
-            className="mt-0.5 truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100"
+            className="mt-0.5 truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100"
           >
             {label}
           </h3>
@@ -269,7 +269,7 @@ export function MediaCarousel({
         <div className="flex items-center gap-1.5">
           <span
             aria-live="polite"
-            className="mr-1 font-mono text-[10px] tabular-nums text-stone-600 dark:text-stone-300"
+            className="mr-1 font-mono text-[10px] tabular-nums text-neutral-600 dark:text-neutral-300"
           >
             {items.length === 0 ? "00 / 00" : `${String(activeIndex + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`}
           </span>
@@ -278,7 +278,7 @@ export function MediaCarousel({
             aria-label={copy.previousSlide}
             disabled={!hasPrevious}
             onClick={() => goTo(activeIndex - 1, true)}
-            className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
+            className={`grid size-11 place-items-center rounded-lg border border-black/[0.08] bg-white text-[#292929] outline-none disabled:cursor-default disabled:text-neutral-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#202020] dark:text-neutral-100 dark:disabled:text-neutral-600 ${arrowMotionClass}`}
           >
             {PREVIOUS_ICON}
           </button>
@@ -287,7 +287,7 @@ export function MediaCarousel({
             aria-label={copy.nextSlide}
             disabled={!hasNext}
             onClick={() => goTo(activeIndex + 1, true)}
-            className={`grid size-11 place-items-center rounded-full border border-black/[0.08] bg-white/75 text-[#292929] outline-none disabled:cursor-default disabled:text-stone-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-black/20 dark:text-stone-100 dark:disabled:text-stone-600 ${arrowMotionClass}`}
+            className={`grid size-11 place-items-center rounded-lg border border-black/[0.08] bg-white text-[#292929] outline-none disabled:cursor-default disabled:text-neutral-300 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#202020] dark:text-neutral-100 dark:disabled:text-neutral-600 ${arrowMotionClass}`}
           >
             {NEXT_ICON}
           </button>
@@ -302,11 +302,11 @@ export function MediaCarousel({
         tabIndex={items.length === 0 ? -1 : 0}
         onKeyDown={onKeyDown}
         onScroll={updateFromScroll}
-        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain rounded-[14px] outline-none [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain rounded-[10px] outline-none [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 [&::-webkit-scrollbar]:hidden"
         style={{ touchAction: "pan-x pan-y" }}
       >
         {items.length === 0 ? (
-          <p role="status" className="grid min-h-[180px] min-w-full place-items-center px-4 text-center text-[12px] text-stone-600 dark:text-stone-300">
+          <p role="status" className="grid min-h-[180px] min-w-full place-items-center px-4 text-center text-[12px] text-neutral-600 dark:text-neutral-300">
             {copy.emptyCollection}
           </p>
         ) : null}
@@ -330,33 +330,33 @@ export function MediaCarousel({
                 onFocus={() => {
                   if (index !== activeIndex) goTo(index, false);
                 }}
-                className={`group block w-full overflow-hidden rounded-[14px] border bg-white text-left outline-none transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-inset dark:bg-[#151513] ${
+                className={`group block w-full overflow-hidden rounded-[10px] border bg-white text-left outline-none transition-[border-color] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-inset dark:bg-[#181818] ${
                   active
-                    ? "border-black/[0.16] shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.22]"
+                    ? "border-neutral-950 dark:border-neutral-50"
                     : "border-black/[0.07] dark:border-white/[0.1]"
                 }`}
               >
-                <span className="block aspect-[16/10] overflow-hidden border-b border-black/[0.07] bg-stone-100 dark:border-white/[0.1] dark:bg-white/[0.04]">
+                <span className="block aspect-[16/10] overflow-hidden border-b border-black/[0.07] bg-neutral-100 dark:border-white/[0.1] dark:bg-white/[0.04]">
                   {item.art}
                 </span>
                 <span className="grid min-h-[112px] grid-cols-[1fr_auto] gap-x-4 gap-y-2 p-3.5">
                   <span className="min-w-0">
                     {item.eyebrow ? (
-                      <span className="block font-mono text-[9px] uppercase tracking-[0.14em] text-stone-600 dark:text-stone-300">
+                      <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
                         {item.eyebrow}
                       </span>
                     ) : null}
-                    <span className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">
+                    <span className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-neutral-100">
                       {item.title}
                     </span>
                     {item.description ? (
-                      <span className="mt-1.5 block max-w-[34rem] text-[11px] leading-[1.55] text-stone-500 dark:text-stone-300">
+                      <span className="mt-1.5 block max-w-[34rem] text-[11px] leading-[1.55] text-neutral-500 dark:text-neutral-300">
                         {item.description}
                       </span>
                     ) : null}
                   </span>
                   {item.meta ? (
-                    <span className="self-start whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-stone-600 dark:text-stone-300">
+                    <span className="self-start whitespace-nowrap font-mono text-[9px] text-neutral-600 dark:text-neutral-300">
                       {item.meta}
                     </span>
                   ) : null}

@@ -78,16 +78,17 @@ describe("component group A hardening", () => {
     );
     expect(screen.getByRole("navigation", { name: "Tools" })).toHaveClass(
       "border",
-      "border-stone-200",
-      "shadow-[0_4px_8px_-8px_rgba(28,25,23,.72)]",
+      "border-neutral-200",
+      "bg-white",
     );
+    expect(screen.getByRole("navigation", { name: "Tools" }).className).not.toContain("shadow-");
 
     rerender(
       <KineticLogoExchange items={[]} label="Connected tools" />,
     );
     expect(screen.getByRole("region", { name: "Connected tools" })).toHaveClass(
       "border",
-      "border-stone-200",
+      "border-neutral-200",
     );
   });
 

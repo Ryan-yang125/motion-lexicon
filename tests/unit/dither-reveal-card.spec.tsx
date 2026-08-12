@@ -121,9 +121,10 @@ describe("DitherRevealCard WebGL fallback", () => {
     );
     expect(screen.getByRole("button", { name: "Reveal card" })).toHaveClass(
       "border",
-      "border-stone-200",
-      "shadow-[0_4px_8px_-8px_rgba(41,41,41,0.45)]",
+      "border-neutral-200",
+      "bg-[#f5f5f5]",
     );
+    expect(screen.getByRole("button", { name: "Reveal card" }).className).not.toContain("shadow-");
     await waitFor(() =>
       expect(getContext.mock.calls.filter(([type]) => type === "webgl")).toHaveLength(1),
     );

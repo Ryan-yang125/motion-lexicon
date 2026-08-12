@@ -21,8 +21,8 @@ const copy: Record<
   { tone: string; points: number; speed: number }
 > = {
   idle: { tone: "#a1a1aa", points: 1, speed: 0 },
-  thinking: { tone: "#4568ff", points: 3, speed: 2.8 },
-  working: { tone: "#4568ff", points: 5, speed: 1.7 },
+  thinking: { tone: "#737373", points: 3, speed: 2.8 },
+  working: { tone: "#171717", points: 5, speed: 1.7 },
   waiting: { tone: "#f59e0b", points: 2, speed: 0 },
   complete: { tone: "#10b981", points: 1, speed: 0 },
 };
@@ -39,10 +39,10 @@ export function AgentStatusOrbit({
   return (
     <div
       role="status"
-      className={`inline-flex min-h-12 items-center gap-3 rounded-full border border-zinc-200 bg-white px-2.5 pr-4 text-zinc-950 shadow-[0_10px_30px_-22px_rgba(24,24,27,.55)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`inline-flex min-h-12 items-center gap-3 rounded-[10px] border border-neutral-200 bg-white px-2.5 pr-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <span
-        className="relative grid size-8 place-items-center rounded-full bg-zinc-950 dark:bg-zinc-50"
+        className="relative grid size-8 place-items-center rounded-full bg-neutral-100 dark:bg-neutral-800"
         aria-hidden="true"
       >
         <span
@@ -74,12 +74,12 @@ export function AgentStatusOrbit({
       </span>
       <span className="min-w-0">
         <strong className="block text-[11px] font-medium">{label}</strong>
-        <span className="block truncate text-[9px] capitalize text-zinc-400">
+        <span className="block truncate text-[9px] capitalize text-neutral-400">
           {detail ?? status}
         </span>
       </span>
       {elapsed ? (
-        <code className="ml-1 text-[9px] tabular-nums text-zinc-400">
+        <code className="ml-1 text-[9px] tabular-nums text-neutral-400">
           {elapsed}
         </code>
       ) : null}

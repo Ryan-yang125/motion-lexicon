@@ -4,7 +4,7 @@
  * signals from lingering in search results after a release.
  */
 export const release = {
-  version: "4.4.0",
+  version: "5.0.0",
   skillVersion: "4.2.0",
   publishedAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",

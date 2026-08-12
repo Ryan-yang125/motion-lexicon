@@ -43,7 +43,7 @@ export type ToastStackProps = {
 };
 
 const toneClass: Record<ToastTone, string> = {
-  neutral: "bg-stone-500 dark:bg-stone-400",
+  neutral: "bg-neutral-500 dark:bg-neutral-400",
   success: "bg-[#55745D] dark:bg-[#87A88F]",
   warning: "bg-[#A36F3F] dark:bg-[#D2A06F]",
   error: "bg-[#93664F] dark:bg-[#C99078]",
@@ -211,18 +211,18 @@ export function ToastStack({
                   }}
                   onKeyDown={(event) => dismissFromKeyboard(event, item.id, index)}
                   style={{ touchAction: "pan-y" }}
-                  className="flex min-h-[58px] items-center gap-3 rounded-[12px] border border-stone-200 bg-white px-3 py-1.5 shadow-[0_6px_12px_-10px_rgba(28,25,23,0.55)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+                  className="flex min-h-[58px] items-center gap-3 rounded-[10px] border border-neutral-200 bg-white px-3 py-1.5 shadow-[0_1px_2px_rgba(0,0,0,.05)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:border-white/[0.16] dark:bg-[#181818] dark:focus-visible:border-[#93B0FF] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
                 >
                   <span
                     aria-hidden="true"
                     className={`size-2.5 shrink-0 rounded-[4px] ${toneClass[tone]}`}
                   />
                   <span className="min-w-0 flex-1">
-                    <strong className="block truncate text-[13px] font-medium text-stone-800 dark:text-stone-100">
+                    <strong className="block truncate text-[13px] font-medium text-neutral-800 dark:text-neutral-100">
                       {item.title}
                     </strong>
                     {item.description ? (
-                      <span className="mt-0.5 block truncate text-[11.5px] text-stone-500 dark:text-stone-400">
+                      <span className="mt-0.5 block truncate text-[11.5px] text-neutral-500 dark:text-neutral-400">
                         {item.description}
                       </span>
                     ) : null}
@@ -238,7 +238,7 @@ export function ToastStack({
                       requestDismiss(item.id, index, "keyboard");
                     }}
                     onClick={() => requestDismiss(item.id, index, "button")}
-                    className="grid size-12 shrink-0 place-items-center rounded-[9px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+                    className="grid size-12 shrink-0 place-items-center rounded-[9px] text-neutral-500 outline-none transition-colors duration-150 hover:bg-neutral-100 hover:text-neutral-800 focus-visible:bg-neutral-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100 dark:focus-visible:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
                   >
                     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
                       <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

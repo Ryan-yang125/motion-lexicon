@@ -23,9 +23,9 @@ export type MultiAgentHandoffProps = {
 };
 
 const tones = {
-  blue: "bg-[#4568ff]",
-  green: "bg-emerald-500",
-  amber: "bg-amber-500",
+  blue: "bg-neutral-950 dark:bg-neutral-50 dark:text-neutral-950",
+  green: "bg-neutral-700 dark:bg-neutral-300 dark:text-neutral-950",
+  amber: "bg-neutral-500 dark:bg-neutral-400 dark:text-neutral-950",
 } as const;
 
 export function MultiAgentHandoff({
@@ -51,14 +51,14 @@ export function MultiAgentHandoff({
   };
   return (
     <section
-      className={`w-full rounded-2xl border border-zinc-200 bg-white p-4 text-zinc-950 shadow-[0_20px_55px_-36px_rgba(24,24,27,.55)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <header className="flex items-center gap-2">
-        <span className="font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400">
+        <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
           {eyebrow}
         </span>
         {artifact ? (
-          <code className="ml-auto rounded-md bg-zinc-100 px-2 py-1 text-[9px] text-zinc-500 dark:bg-white/5 dark:text-zinc-400">
+          <code className="ml-auto rounded-md bg-neutral-100 px-2 py-1 text-[9px] text-neutral-500 dark:bg-white/5 dark:text-neutral-400">
             {artifact}
           </code>
         ) : null}
@@ -74,7 +74,7 @@ export function MultiAgentHandoff({
       >
         <span
           aria-hidden="true"
-          className="absolute left-[12%] right-[12%] top-5 h-px bg-zinc-200 dark:bg-white/10"
+          className="absolute left-[12%] right-[12%] top-5 h-px bg-neutral-200 dark:bg-white/10"
         />
         {agents.map((agent, index) => (
           <div
@@ -82,14 +82,14 @@ export function MultiAgentHandoff({
             className="relative z-10 grid justify-items-center text-center"
           >
             <motion.span
-              className={`grid size-10 place-items-center rounded-full border-4 border-white text-[10px] font-semibold text-white shadow-sm dark:border-[#17191d] ${tones[agent.tone ?? "blue"]}`}
+              className={`grid size-10 place-items-center rounded-full border-4 border-white text-[10px] font-semibold text-white shadow-sm dark:border-[#181818] ${tones[agent.tone ?? "blue"]}`}
               animate={
                 index === active && !reduced
                   ? {
                       y: [0, -3, 0],
                       boxShadow: [
                         "0 2px 6px rgba(0,0,0,.12)",
-                        "0 8px 18px rgba(69,104,255,.3)",
+                        "0 4px 10px rgba(0,0,0,.2)",
                         "0 2px 6px rgba(0,0,0,.12)",
                       ],
                     }
@@ -103,16 +103,16 @@ export function MultiAgentHandoff({
               {agent.initials}
             </motion.span>
             <strong className="mt-2 text-[10px]">{agent.name}</strong>
-            <span className="mt-0.5 text-[8px] text-zinc-400">
+            <span className="mt-0.5 text-[8px] text-neutral-400">
               {agent.role}
             </span>
           </div>
         ))}
       </div>
-      <div className="mt-5 rounded-xl border border-zinc-100 bg-zinc-50 p-3 dark:border-white/8 dark:bg-white/[.025]">
+      <div className="mt-5 border-t border-neutral-100 pt-3 dark:border-white/8">
         <div className="flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-emerald-500" />
-          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+          <span className="size-1.5 rounded-full bg-neutral-950 dark:bg-neutral-50" />
+          <span className="text-[10px] text-neutral-500 dark:text-neutral-400">
             {ownerLabel(agents[active]?.name ?? "Agent")}
           </span>
         </div>
@@ -120,7 +120,7 @@ export function MultiAgentHandoff({
           type="button"
           disabled={agents.length < 2}
           onClick={advance}
-          className="mt-3 min-h-11 w-full rounded-full bg-zinc-950 text-[10px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] disabled:opacity-40 dark:bg-zinc-50 dark:text-zinc-950"
+          className="mt-3 min-h-11 w-full rounded-lg bg-neutral-950 text-[10px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-40 dark:bg-neutral-50 dark:text-neutral-950"
         >
           {handoffLabel} → {agents[next]?.name}
         </button>

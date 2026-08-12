@@ -247,25 +247,25 @@ export function UploadQueue({
           if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setDragging(false);
         }}
         onDrop={onDrop}
-        className={`flex min-h-16 items-center gap-3 rounded-[12px] border border-dashed px-3 py-2.5 transition-[background-color,border-color] duration-150 ${
+        className={`flex min-h-16 items-center gap-3 rounded-[10px] border border-dashed px-3 py-2.5 transition-[background-color,border-color] duration-150 ${
           dragging
-            ? "border-[#4568FF] bg-[#4568FF]/[0.06] dark:border-[#93B0FF] dark:bg-[#93B0FF]/[0.08]"
-            : "border-stone-300 bg-stone-50 dark:border-white/[0.2] dark:bg-white/[0.04]"
+            ? "border-neutral-950 bg-neutral-100 dark:border-neutral-50 dark:bg-white/[0.08]"
+            : "border-neutral-300 bg-neutral-50 dark:border-white/[0.2] dark:bg-white/[0.04]"
         }`}
       >
-        <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-[9px] bg-white text-stone-500 shadow-[0_1px_3px_rgba(28,25,23,0.12)] dark:bg-[#252522] dark:text-stone-400 dark:shadow-[0_1px_3px_rgba(0,0,0,0.45)]">
+        <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-[9px] bg-white text-neutral-500 shadow-[0_1px_3px_rgba(28,25,23,0.12)] dark:bg-[#252522] dark:text-neutral-400 dark:shadow-[0_1px_3px_rgba(0,0,0,0.45)]">
           <svg viewBox="0 0 18 18" width="16" height="16" fill="none">
             <path d="M9 12V3m0 0L5.5 6.5M9 3l3.5 3.5M3 11v2.5A1.5 1.5 0 0 0 4.5 15h9a1.5 1.5 0 0 0 1.5-1.5V11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
         <span className="min-w-0 flex-1">
-          <strong className="block text-[13px] font-medium text-stone-800 dark:text-stone-100">{label}</strong>
+          <strong className="block text-[13px] font-medium text-neutral-800 dark:text-neutral-100">{label}</strong>
           <span
             role={rejection ? "alert" : undefined}
             className={`mt-0.5 block text-[11.5px] ${
               rejection
-                ? "text-[#8C4B35] dark:text-[#E2A38A]"
-                : "text-stone-500 dark:text-stone-300"
+                ? "text-red-700 dark:text-red-400"
+                : "text-neutral-500 dark:text-neutral-300"
             }`}
           >
             {rejection
@@ -295,7 +295,7 @@ export function UploadQueue({
           type="button"
           disabled={remaining === 0}
           onClick={() => input.current?.click()}
-          className="h-11 shrink-0 rounded-[9px] border border-stone-200 bg-white px-3 text-[12.5px] font-medium text-stone-700 outline-none transition-[background-color,border-color] duration-150 hover:bg-stone-100 focus-visible:border-[#4568FF] disabled:cursor-not-allowed disabled:opacity-45 dark:border-white/[0.16] dark:bg-[#252522] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:border-[#93B0FF]"
+          className="h-11 shrink-0 rounded-[9px] border border-neutral-200 bg-white px-3 text-[12.5px] font-medium text-neutral-700 outline-none transition-[background-color,border-color] duration-150 hover:bg-neutral-100 focus-visible:border-[#4568FF] disabled:cursor-not-allowed disabled:opacity-45 dark:border-white/[0.16] dark:bg-[#252522] dark:text-neutral-200 dark:hover:bg-white/10 dark:focus-visible:border-[#93B0FF]"
         >
           {copy.choose}
         </button>
@@ -359,12 +359,12 @@ function UploadRow({
       animate={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
       exit={reduced ? { opacity: 0 } : { opacity: 0, transform: "translate3d(12px, 0, 0)", transition: LEAVE }}
       transition={reduced ? INSTANT : ROW}
-      className={`relative overflow-hidden rounded-[11px] border bg-white px-3 dark:bg-[#1D1D1A] ${
-        error ? "border-[#93664F]/50 dark:border-[#C99078]/50" : "border-stone-200 dark:border-white/[0.16]"
+      className={`relative overflow-hidden rounded-[11px] border bg-white px-3 dark:bg-[#181818] ${
+        error ? "border-red-600/50" : "border-neutral-200 dark:border-white/[0.16]"
       } ${complete ? "py-0" : "py-1.5"}`}
     >
       <div className="flex min-h-11 items-center gap-2.5">
-        <span aria-hidden="true" className={`grid size-8 shrink-0 place-items-center rounded-[8px] ${complete ? "bg-[#55745D]/[0.12] text-[#55745D] dark:bg-[#87A88F]/[0.14] dark:text-[#87A88F]" : error ? "bg-[#93664F]/[0.12] text-[#93664F] dark:bg-[#C99078]/[0.14] dark:text-[#C99078]" : "bg-stone-100 text-stone-500 dark:bg-white/[0.08] dark:text-stone-400"}`}>
+        <span aria-hidden="true" className={`grid size-8 shrink-0 place-items-center rounded-[8px] ${complete ? "bg-emerald-600/10 text-emerald-700 dark:text-emerald-400" : error ? "bg-red-600/10 text-red-700 dark:text-red-400" : "bg-neutral-100 text-neutral-500 dark:bg-white/[0.08] dark:text-neutral-400"}`}>
           {complete ? (
             <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><path d="m3.5 8.2 2.7 2.7 6.3-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
           ) : (
@@ -373,10 +373,10 @@ function UploadRow({
         </span>
         <span className="min-w-0 flex-1">
           <span className="flex items-baseline justify-between gap-3">
-            <strong className="truncate text-[12.5px] font-medium text-stone-800 dark:text-stone-100">{item.name}</strong>
-            <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-stone-500 dark:text-stone-400">{status}</span>
+            <strong className="truncate text-[12.5px] font-medium text-neutral-800 dark:text-neutral-100">{item.name}</strong>
+            <span className="shrink-0 font-mono text-[10.5px] tabular-nums text-neutral-500 dark:text-neutral-400">{status}</span>
           </span>
-          {!complete ? <span className="mt-0.5 block text-[10.5px] text-stone-600 dark:text-stone-300">{formatBytes(item.size)}</span> : null}
+          {!complete ? <span className="mt-0.5 block text-[10.5px] text-neutral-600 dark:text-neutral-300">{formatBytes(item.size)}</span> : null}
         </span>
         {hasActions ? (
           <span className="flex shrink-0 items-center gap-0.5">
@@ -385,7 +385,7 @@ function UploadRow({
                 type="button"
                 onClick={onRetry}
                 aria-label={`${copy.retry} ${item.name}`}
-                className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-stone-700 outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+                className="h-11 shrink-0 rounded-[8px] px-2.5 text-[12px] font-medium text-neutral-700 outline-none transition-colors duration-150 hover:bg-neutral-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-neutral-200 dark:hover:bg-white/10 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
                 {copy.retry}
               </button>
@@ -395,7 +395,7 @@ function UploadRow({
                 type="button"
                 onClick={onRemove}
                 aria-label={`${copy.remove} ${item.name}`}
-                className="grid size-11 shrink-0 place-items-center rounded-[8px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
+                className="grid size-11 shrink-0 place-items-center rounded-[8px] text-neutral-500 outline-none transition-colors duration-150 hover:bg-neutral-100 hover:text-neutral-800 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-100 dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF]"
               >
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
               </button>
@@ -411,19 +411,19 @@ function UploadRow({
           aria-valuemax={100}
           aria-valuenow={unknown ? undefined : Math.round(progress)}
           aria-valuetext={unknown ? copy.uploading : `${Math.round(progress)}%`}
-          className="absolute inset-x-3 bottom-0 h-[2px] overflow-hidden rounded-full bg-stone-100 dark:bg-white/10"
+          className="absolute inset-x-3 bottom-0 h-[2px] overflow-hidden rounded-full bg-neutral-100 dark:bg-white/10"
         >
           {unknown ? (
             <motion.span
               aria-hidden="true"
-              className="absolute inset-y-0 left-0 w-2/5 rounded-full bg-[#4568FF] dark:bg-[#93B0FF]"
+              className="absolute inset-y-0 left-0 w-2/5 rounded-full bg-neutral-950 dark:bg-neutral-50"
               animate={reduced || !animateIndeterminate ? { transform: "translate3d(0,0,0)" } : { transform: ["translate3d(-110%,0,0)", "translate3d(270%,0,0)"] }}
               transition={reduced || !animateIndeterminate ? INSTANT : { duration: 1.15, ease: "linear", repeat: Infinity }}
             />
           ) : (
             <motion.span
               aria-hidden="true"
-              className="absolute inset-0 origin-left rounded-full bg-[#4568FF] dark:bg-[#93B0FF]"
+              className="absolute inset-0 origin-left rounded-full bg-neutral-950 dark:bg-neutral-50"
               initial={false}
               animate={{ scaleX: progress / 100 }}
               transition={reduced ? INSTANT : FILL}

@@ -164,7 +164,7 @@ export function RadialActions({
                   }}
                   onKeyDown={(event) => keyDown(event, index)}
                   onClick={() => { action.onSelect(); close(); }}
-                  className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-stone-200 bg-white text-stone-700 shadow-[0_4px_8px_-6px_rgba(28,25,23,.6)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_4px_8px_-6px_rgba(28,25,23,.6)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200"
+                  className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid size-11 place-items-center rounded-full border border-neutral-200 bg-white text-neutral-700 shadow-[0_4px_8px_-6px_rgba(28,25,23,.6)] outline-none focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2),0_4px_8px_-6px_rgba(28,25,23,.6)] dark:border-white/15 dark:bg-[#202020] dark:text-neutral-200"
                 >
                   {action.icon}
                 </motion.button>
@@ -184,7 +184,7 @@ export function RadialActions({
         onClick={() => { if (menuOpen) close(); else openMenu(); }}
         animate={{ transform: menuOpen && !reduced ? "rotate(45deg)" : "rotate(0deg)" }}
         transition={reduced ? INSTANT : SPRING}
-        className="relative z-10 grid size-14 place-items-center rounded-full bg-stone-900 text-white shadow-[0_16px_32px_-18px_rgba(28,25,23,.8)] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_16px_32px_-18px_rgba(28,25,23,.8)] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-stone-100 dark:text-stone-950"
+        className="relative z-10 grid size-14 place-items-center rounded-full bg-neutral-900 text-white shadow-[0_1px_2px_rgba(0,0,0,.06)] outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_16px_32px_-18px_rgba(28,25,23,.8)] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-950"
       >
         {trigger}
       </motion.button>

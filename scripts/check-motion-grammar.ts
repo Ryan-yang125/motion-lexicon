@@ -15,7 +15,7 @@ function assert(condition: unknown, message: string): asserts condition {
 const primitiveIds = new Set(canonicalMotionCatalog.map((entry) => entry.id));
 const componentIds = new Set<string>(registryComponents.map((component) => component.id));
 
-assert(motionGrammar.version === "4.4.0", "Motion Grammar must carry the V4.4.0 version");
+assert(motionGrammar.version === "5.0.0", "Motion Grammar must carry the V5.0.0 version");
 assert(motionGrammar.collections.primitives.count === canonicalMotionCatalog.length, "Motion Grammar primitive count is out of sync");
 assert(motionGrammar.collections.components.count === registryComponents.length, "Motion Grammar component count is out of sync");
 assert(motionGrammarDataPath === "/data/v4/motion-grammar.json", "Motion Grammar public data path changed unexpectedly");

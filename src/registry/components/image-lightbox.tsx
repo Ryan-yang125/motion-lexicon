@@ -230,19 +230,19 @@ export function ImageLightbox({
       <section aria-labelledby={titleId} className={`w-full ${className}`}>
         <header className="mb-2 flex min-h-11 items-end justify-between gap-4 px-1">
           <div className="min-w-0">
-            <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-500 dark:text-stone-400">
+            <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
               {copy.gallery}
             </span>
-            <h3 id={titleId} className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">
+            <h3 id={titleId} className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100">
               {label}
             </h3>
           </div>
-          <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-stone-600 dark:text-stone-400">
+          <span className="shrink-0 font-mono text-[9px] text-neutral-600 dark:text-neutral-400">
             {copy.works(items.length)}
           </span>
         </header>
         {items.length === 0 ? (
-          <div role="status" className="grid min-h-28 place-items-center rounded-[13px] border border-black/[0.08] bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.12] dark:bg-[#1D1D1A] dark:text-stone-300">
+          <div role="status" className="grid min-h-28 place-items-center rounded-lg border border-black/[0.08] bg-white px-4 text-center text-[12px] text-neutral-600 dark:border-white/[0.12] dark:bg-[#181818] dark:text-neutral-300">
             {copy.empty}
           </div>
         ) : <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -262,20 +262,20 @@ export function ImageLightbox({
                   event.detail === 0 ? "keyboard" : "pointer",
                 )
               }
-              className="group overflow-hidden rounded-[13px] border border-black/[0.08] bg-white text-left outline-none transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#1D1D1A]"
+              className="group overflow-hidden rounded-lg border border-black/[0.08] bg-white text-left outline-none transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#181818]"
             >
               <motion.span
                 layoutId={`${layoutGroupId}-${item.id}`}
                 transition={sharedTransition}
-                className="block aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-white/[0.04]"
+                className="block aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-white/[0.04]"
               >
                 {item.art}
               </motion.span>
               <span className="flex min-h-[52px] items-center justify-between gap-2 border-t border-black/[0.07] px-2.5 dark:border-white/[0.1]">
-                <span className="truncate text-[11px] font-medium text-[#292929] dark:text-stone-100">
+                <span className="truncate text-[11px] font-medium text-[#292929] dark:text-neutral-100">
                   {item.title}
                 </span>
-                <span className="font-mono text-[8.5px] uppercase tracking-[0.1em] text-stone-600 dark:text-stone-400">
+                <span className="font-mono text-[8.5px] text-neutral-600 dark:text-neutral-400">
                   {item.meta ?? String(index + 1).padStart(2, "0")}
                 </span>
               </span>
@@ -303,7 +303,7 @@ export function ImageLightbox({
                     }
                     backdropDownRef.current = false;
                   }}
-                  className="fixed inset-0 z-50 grid place-items-center bg-[#171715]/88 p-3 backdrop-blur-[10px] sm:p-6"
+                  className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-3 sm:p-6"
                 >
                   <motion.div
                     ref={dialogRef}
@@ -316,16 +316,16 @@ export function ImageLightbox({
                     animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
                     exit={instant ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px) scale(0.985)" }}
                     transition={{ duration: instant ? 0 : 0.24, ease: EASE_OUT }}
-                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] border border-black/[0.08] bg-[#EEECE5] outline-none dark:border-white/[0.14] dark:bg-[#1D1D1A] sm:max-h-[calc(100dvh-48px)]"
+                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[10px] border border-black/[0.08] bg-[#f5f5f5] outline-none dark:border-white/[0.14] dark:bg-[#181818] sm:max-h-[calc(100dvh-48px)]"
                   >
                     <header className="flex min-h-14 items-center justify-between gap-4 border-b border-black/[0.08] px-3 dark:border-white/[0.1]">
                       <div className="min-w-0">
-                        <span className="block font-mono text-[8.5px] uppercase tracking-[0.14em] text-stone-500 dark:text-stone-400">
+                        <span className="block font-mono text-[8.5px] text-neutral-500 dark:text-neutral-400">
                           {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
                         </span>
                         <h3
                           id={`${layoutGroupId}-dialog-title`}
-                          className="truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100"
+                          className="truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100"
                         >
                           {activeItem.title}
                         </h3>
@@ -335,7 +335,7 @@ export function ImageLightbox({
                         type="button"
                         aria-label={copy.close}
                         onClick={() => close("pointer")}
-                        className={`grid size-11 shrink-0 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 shrink-0 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
                       >
                         {CLOSE_ICON}
                       </button>
@@ -352,7 +352,7 @@ export function ImageLightbox({
                           animate={{ opacity: 1, filter: "blur(0px)", transform: "scale(1)" }}
                           exit={instant ? { opacity: 0 } : { opacity: 0, filter: "blur(2px)", transform: "scale(0.99)" }}
                           transition={sharedTransition}
-                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-[13px] border border-black/[0.08] bg-stone-100 shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)] dark:border-white/[0.12] dark:bg-black/20"
+                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-lg border border-black/[0.08] bg-neutral-100 dark:border-white/[0.12] dark:bg-black/20"
                         >
                           {activeItem.art}
                         </motion.div>
@@ -365,13 +365,13 @@ export function ImageLightbox({
                         aria-label={copy.previous}
                         onClick={() => move(-1, "pointer")}
                         disabled={items.length < 2}
-                        className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
                       >
                         <span className="rotate-180">{ARROW_ICON}</span>
                       </button>
                       <p
                         id={`${layoutGroupId}-dialog-caption`}
-                        className="min-w-0 text-center text-[11px] leading-[1.45] text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400"
+                        className="min-w-0 text-center text-[11px] leading-[1.45] text-neutral-600 [overflow-wrap:anywhere] dark:text-neutral-400"
                       >
                         {activeItem.caption ?? activeItem.title}
                       </p>
@@ -380,7 +380,7 @@ export function ImageLightbox({
                         aria-label={copy.next}
                         onClick={() => move(1, "pointer")}
                         disabled={items.length < 2}
-                        className={`grid size-11 place-items-center rounded-full border border-black/[0.09] bg-white/72 text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-white/[0.06] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
                       >
                         {ARROW_ICON}
                       </button>

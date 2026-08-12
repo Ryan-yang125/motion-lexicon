@@ -10,7 +10,7 @@ const Icon = ({ children }: { children: string }) => <span aria-hidden className
 export function RadialActionsDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [last, setLast] = useState(() => demoValue(locale, "选择工具", "Choose a tool"));
   return (
-    <div role="group" aria-label={demoText("radial-actions", locale)} className="relative grid w-full max-w-[420px] place-items-center overflow-hidden rounded-[18px] bg-[#E7E2D9] dark:bg-[#262522]">
+    <div role="group" aria-label={demoText("radial-actions", locale)} className="relative grid w-full max-w-[420px] place-items-center overflow-hidden rounded-[10px] bg-[#f0f0f0] dark:bg-[#202020]">
       <span className="absolute left-4 top-4 text-[10px] uppercase tracking-[.08em] text-stone-600 dark:text-stone-300">{demoValue(locale, "画布工具", "Canvas tools")}</span>
       <span role="status" className="absolute bottom-4 left-4 text-[11px] text-stone-600 dark:text-stone-300">{last}</span>
       <RadialActions

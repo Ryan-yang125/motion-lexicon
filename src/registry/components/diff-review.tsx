@@ -49,11 +49,11 @@ export function DiffReview({
   const decided = Object.keys(decisions).length;
   return (
     <section
-      className={`w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white text-zinc-950 shadow-[0_18px_50px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-white text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
-      <header className="flex min-h-12 items-center gap-3 border-b border-zinc-100 px-4 dark:border-white/8">
+      <header className="flex min-h-12 items-center gap-3 border-b border-neutral-100 px-4 dark:border-white/8">
         <strong className="text-[12px]">{title}</strong>
-        <span className="text-[9px] text-zinc-400">
+        <span className="text-[9px] text-neutral-400">
           {editsLabel(changes.length)}
         </span>
         <button
@@ -65,7 +65,7 @@ export function DiffReview({
               ),
             )
           }
-          className="ml-auto min-h-11 rounded-full bg-zinc-950 px-3 text-[9px] font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950"
+          className="ml-auto min-h-11 rounded-lg bg-neutral-950 px-3 text-[9px] font-semibold text-white dark:bg-neutral-50 dark:text-neutral-950"
         >
           {acceptAllLabel}
         </button>
@@ -73,7 +73,7 @@ export function DiffReview({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[460px] border-collapse text-left">
           <thead>
-            <tr className="text-[9px] uppercase tracking-[.12em] text-zinc-400">
+            <tr className="text-[9px] uppercase tracking-[.12em] text-neutral-400">
               <th className="px-4 py-3 font-medium">{fieldLabel}</th>
               <th className="px-3 py-3 font-medium">{beforeLabel}</th>
               <th className="px-3 py-3 font-medium">{afterLabel}</th>
@@ -87,7 +87,7 @@ export function DiffReview({
               <motion.tr
                 layout={!reduced}
                 key={change.id}
-                className="border-t border-zinc-100 text-[10px] dark:border-white/8"
+                className="border-t border-neutral-100 text-[10px] dark:border-white/8"
               >
                 <th className="px-4 py-3 font-medium">{change.field}</th>
                 <td className="px-3 py-3">
@@ -150,7 +150,7 @@ export function DiffReview({
           </tbody>
         </table>
       </div>
-      <footer className="border-t border-zinc-100 px-4 py-2 text-[9px] text-zinc-400 dark:border-white/8">
+      <footer className="border-t border-neutral-100 px-4 py-2 text-[9px] text-neutral-400 dark:border-white/8">
         {reviewedLabel(decided, changes.length)}
       </footer>
     </section>

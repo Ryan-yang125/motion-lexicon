@@ -8,7 +8,7 @@ import { SkeletonReveal } from "@/registry/components/skeleton-reveal";
 
 function SkeletonCard() {
   return (
-    <div className="h-[178px] rounded-[13px] border border-stone-200 bg-white p-4 dark:border-white/[0.16] dark:bg-[#1D1D1A]">
+    <div className="h-[178px] rounded-[10px] border border-stone-200 bg-white p-4 dark:border-white/[0.16] dark:bg-[#1b1b1b]">
       <div className="flex items-center gap-3">
         <span className="size-10 rounded-[10px] bg-stone-200/80 dark:bg-white/10" />
         <span className="grid flex-1 gap-2">
@@ -25,9 +25,9 @@ function SkeletonCard() {
 
 function LoadedCard({ locale }: { locale: Locale }) {
   return (
-    <div className="h-[178px] rounded-[13px] border border-stone-200 bg-white p-4 shadow-[0_6px_12px_-10px_rgba(28,25,23,0.5)] dark:border-white/[0.16] dark:bg-[#1D1D1A]">
+    <div className="h-[178px] rounded-[10px] border border-stone-200 bg-white p-4 shadow-[0_6px_12px_-10px_rgba(28,25,23,0.5)] dark:border-white/[0.16] dark:bg-[#1b1b1b]">
       <div className="flex items-center gap-3">
-        <span className="grid size-10 place-items-center rounded-[10px] bg-[#2563EB] text-[12px] font-semibold text-white">AR</span>
+        <span className="grid size-10 place-items-center rounded-[10px] bg-[#171717] text-[12px] font-semibold text-white">AR</span>
         <span className="min-w-0 flex-1">
           <strong className="block text-[13px] font-medium text-stone-800 dark:text-stone-100">{demoValue(locale, "Agent 运行报告", "Agent run report")}</strong>
           <span className="mt-0.5 block text-[11.5px] text-stone-500 dark:text-stone-400">{demoValue(locale, "产品界面任务 · 刚刚完成", "Product UI task · completed now")}</span>

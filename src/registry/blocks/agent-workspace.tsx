@@ -39,18 +39,18 @@ export function AgentWorkspaceBlock({
 
   return (
     <section
-      className={`min-h-[720px] w-full overflow-hidden rounded-[24px] border border-zinc-200 bg-[#f3f5f7] text-zinc-950 shadow-[0_30px_90px_-50px_rgba(24,24,27,.55)] dark:border-white/10 dark:bg-[#101216] dark:text-zinc-50 ${className}`}
+      className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
       data-page-block="agent-workspace"
     >
-      <header className="flex min-h-16 items-center gap-4 border-b border-zinc-900/10 bg-white/70 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-white/[.035]">
+      <header className="flex min-h-14 items-center gap-3 border-b border-neutral-200 bg-white px-4 dark:border-white/10 dark:bg-[#1b1b1b]">
         <a
           href="#relay-workspace"
-          className="flex min-h-11 items-center gap-2.5 rounded-xl font-semibold tracking-[-.025em] outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff]"
+          className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-.02em] outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
         >
-          <span className="grid size-8 place-items-center rounded-[11px] bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950">
+          <span className="grid size-7 place-items-center rounded-lg bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950">
             <svg
               viewBox="0 0 24 24"
-              className="size-4 fill-none stroke-current"
+              className="size-3.5 fill-none stroke-current"
               strokeWidth="1.7"
             >
               <path d="M5 17V7l7 4 7-4v10l-7 4-7-4Z" />
@@ -59,25 +59,25 @@ export function AgentWorkspaceBlock({
           </span>
           Relay
         </a>
-        <span className="hidden h-5 w-px bg-zinc-200 sm:block dark:bg-white/10" />
-        <span className="hidden text-[11px] text-zinc-500 sm:block dark:text-zinc-400">
+        <span className="hidden h-4 w-px bg-neutral-200 sm:block dark:bg-white/10" />
+        <span className="hidden text-[11px] text-neutral-500 sm:block dark:text-neutral-400">
           {copy.workspace}
         </span>
         <div className="ml-auto flex items-center gap-2">
           <span
-            className={`size-2 rounded-full ${state === "complete" ? "bg-emerald-500" : state === "approval" ? "bg-amber-500" : "bg-[#4568ff]"}`}
+            className={`size-1.5 rounded-full ${state === "complete" ? "bg-emerald-600" : state === "approval" ? "bg-amber-500" : state === "ready" ? "bg-neutral-300 dark:bg-neutral-600" : "bg-neutral-950 dark:bg-neutral-50"}`}
           />
-          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+          <span className="text-[10px] text-neutral-500 dark:text-neutral-400">
             {copy.state[state]}
           </span>
         </div>
       </header>
       <div
-        className="grid min-h-[655px] lg:grid-cols-[180px_minmax(0,1fr)_238px]"
+        className="grid min-h-[664px] lg:grid-cols-[188px_minmax(0,1fr)_220px]"
         id="relay-workspace"
       >
-        <aside className="hidden border-r border-zinc-900/10 p-3 lg:flex lg:flex-col dark:border-white/10">
-          <span className="px-3 py-3 font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400">
+        <aside className="hidden border-r border-neutral-200 bg-[#fafafa] p-3 lg:flex lg:flex-col dark:border-white/10 dark:bg-[#181818]">
+          <span className="px-3 py-3 text-[10px] font-medium text-neutral-500 dark:text-neutral-400">
             {copy.missionsLabel}
           </span>
           <nav className="grid gap-1">
@@ -89,51 +89,44 @@ export function AgentWorkspaceBlock({
                   setMission(index);
                   setState("ready");
                 }}
-                className={`min-h-11 rounded-xl px-3 text-left text-[11px] outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] ${mission === index ? "bg-white font-semibold shadow-sm dark:bg-white/8" : "text-zinc-500 hover:bg-white/55 dark:text-zinc-400 dark:hover:bg-white/5"}`}
+                className={`min-h-11 rounded-lg px-3 text-left text-[11px] outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${mission === index ? "bg-neutral-950 font-medium text-white dark:bg-neutral-50 dark:text-neutral-950" : "text-neutral-500 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/5"}`}
               >
-                <span
-                  className={`mr-2 inline-block size-1.5 rounded-full ${mission === index ? "bg-[#4568ff]" : "bg-zinc-300 dark:bg-white/15"}`}
-                />
                 {item.short}
               </button>
             ))}
           </nav>
-          <div className="mt-auto rounded-2xl border border-zinc-900/10 bg-white/60 p-3 dark:border-white/10 dark:bg-white/[.035]">
-            <div className="flex -space-x-1.5">
+          <div className="mt-auto border-t border-neutral-200 px-3 pt-4 dark:border-white/10">
+            <div className="flex -space-x-1">
               {["R", "D", "Q"].map((agent, index) => (
                 <span
                   key={agent}
-                  className={`grid size-7 place-items-center rounded-full border-2 border-white text-[8px] font-semibold text-white dark:border-[#15171b] ${["bg-[#4568ff]", "bg-amber-500", "bg-emerald-500"][index]}`}
+                  className={`grid size-7 place-items-center rounded-full border-2 border-[#fafafa] text-[8px] font-semibold text-white dark:border-[#181818] ${["bg-neutral-950", "bg-neutral-700", "bg-neutral-500"][index]}`}
                 >
                   {agent}
                 </span>
               ))}
             </div>
             <strong className="mt-3 block text-[10px]">{copy.team}</strong>
-            <span className="text-[9px] text-zinc-400">{copy.teamMeta}</span>
+            <span className="text-[9px] text-neutral-400">{copy.teamMeta}</span>
           </div>
         </aside>
-        <main className="min-w-0 p-4 sm:p-6">
-          <div className="mx-auto flex max-w-[700px] flex-col gap-4">
-            <div>
-              <span className="font-mono text-[9px] uppercase tracking-[.15em] text-[#4568ff]">
-                {active.kicker}
-              </span>
-              <h1 className="mt-2 text-[clamp(24px,4vw,38px)] font-semibold leading-none tracking-[-.045em]">
-                {active.title}
-              </h1>
-              <p className="mt-3 max-w-xl text-[12px] leading-6 text-zinc-500 dark:text-zinc-400">
-                {active.description}
-              </p>
-            </div>
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-[0_18px_50px_-38px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d]">
-              <div className="flex items-center gap-3">
-                <span className="grid size-8 place-items-center rounded-xl bg-zinc-950 text-[10px] font-semibold text-white dark:bg-zinc-50 dark:text-zinc-950">
-                  YR
-                </span>
-                <p className="text-[12px]">{active.request}</p>
-              </div>
-            </div>
+        <main className="flex min-w-0 flex-col bg-white dark:bg-[#1b1b1b]">
+          <div className="border-b border-neutral-200 px-5 py-6 sm:px-7 dark:border-white/10">
+            <code className="text-[10px] text-neutral-500 dark:text-neutral-400">
+              {active.kicker}
+            </code>
+            <h1 className="mt-2 max-w-[620px] text-[26px] font-semibold leading-[1.1] tracking-[-.03em]">
+              {active.title}
+            </h1>
+            <p className="mt-3 max-w-[620px] text-[12px] leading-5 text-neutral-500 dark:text-neutral-400">
+              {active.description}
+            </p>
+          </div>
+          <div className="grid min-h-14 grid-cols-[74px_1fr] items-center border-b border-neutral-200 px-5 text-[11px] sm:px-7 dark:border-white/10">
+            <span className="text-neutral-400">{copy.requestLabel}</span>
+            <p className="m-0 text-neutral-700 dark:text-neutral-200">{active.request}</p>
+          </div>
+          <div className="flex flex-1 flex-col px-5 py-5 sm:px-7">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${mission}-${state}`}
@@ -141,37 +134,41 @@ export function AgentWorkspaceBlock({
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduced ? undefined : { opacity: 0, y: -6 }}
                 transition={{ duration: reduced ? 0 : 0.3, ease }}
-                className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-[0_18px_50px_-38px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d]"
+                className="min-h-[286px]"
               >
                 {state === "ready" ? (
-                  <div className="grid min-h-[200px] place-items-center text-center">
-                    <div>
-                      <span className="mx-auto grid size-11 place-items-center rounded-2xl bg-blue-50 text-[#4568ff] dark:bg-[#4568ff]/10">
-                        ↗
-                      </span>
-                      <strong className="mt-4 block text-[13px]">
-                        {copy.readyTitle}
-                      </strong>
-                      <p className="mt-1 text-[10px] text-zinc-400">
-                        {copy.readyBody}
-                      </p>
+                  <div>
+                    <div className="flex items-center justify-between gap-4 border-b border-neutral-200 pb-4 dark:border-white/10">
+                      <div>
+                        <strong className="block text-[13px]">{copy.readyTitle}</strong>
+                        <span className="mt-1 block text-[10px] text-neutral-500 dark:text-neutral-400">{copy.readyBody}</span>
+                      </div>
                       <button
                         type="button"
                         onClick={run}
-                        className="mt-4 min-h-11 rounded-full bg-zinc-950 px-5 text-[10px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] dark:bg-zinc-50 dark:text-zinc-950"
+                        className="min-h-11 shrink-0 rounded-lg bg-neutral-950 px-4 text-[10px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950"
                       >
                         {copy.start}
                       </button>
                     </div>
+                    <ol>
+                      {active.steps.map((step, index) => (
+                        <li key={step} className="grid min-h-12 grid-cols-[28px_1fr_auto] items-center gap-3 border-b border-neutral-100 text-[11px] last:border-b-0 dark:border-white/8">
+                          <code className="text-[9px] text-neutral-400">0{index + 1}</code>
+                          <span>{step}</span>
+                          <span className="text-[9px] text-neutral-400">{copy.queued}</span>
+                        </li>
+                      ))}
+                    </ol>
                   </div>
                 ) : (
                   <div>
                     <div className="flex items-center gap-3">
-                      <span className="relative grid size-8 place-items-center rounded-xl bg-zinc-950 dark:bg-zinc-50">
-                        <span className="size-1.5 rounded-full bg-[#4568ff]" />
+                      <span className="relative grid size-8 place-items-center rounded-lg border border-neutral-300 dark:border-white/20">
+                        <span className="size-1.5 rounded-full bg-neutral-950 dark:bg-neutral-50" />
                         {state !== "complete" ? (
                           <motion.i
-                            className="absolute inset-0 rounded-xl border border-[#4568ff]/50"
+                            className="absolute inset-0 rounded-lg border border-neutral-500/50"
                             animate={
                               reduced
                                 ? undefined
@@ -185,12 +182,12 @@ export function AgentWorkspaceBlock({
                         <strong className="block text-[12px]">
                           {copy.runTitle[state]}
                         </strong>
-                        <span className="text-[9px] text-zinc-400">
+                        <span className="text-[9px] text-neutral-400">
                           {copy.runMeta[state]}
                         </span>
                       </div>
                     </div>
-                    <ol className="mt-5 grid gap-3">
+                    <ol className="mt-4 border-t border-neutral-200 dark:border-white/10">
                       {active.steps.map((step, index) => {
                         const visible =
                           state === "complete" ||
@@ -204,24 +201,25 @@ export function AgentWorkspaceBlock({
                         return (
                           <li
                             key={step}
-                            className="grid grid-cols-[20px_1fr] gap-3"
+                            className="grid min-h-12 grid-cols-[28px_1fr_auto] items-center gap-3 border-b border-neutral-100 dark:border-white/8"
                           >
                             <span
-                              className={`mt-0.5 grid size-5 place-items-center rounded-full border text-[8px] ${visible && !current ? "border-emerald-500 bg-emerald-500 text-white" : current ? "border-[#4568ff] text-[#4568ff]" : "border-zinc-200 text-zinc-300 dark:border-white/10"}`}
+                              className={`grid size-5 place-items-center rounded-md border text-[8px] ${visible && !current ? "border-emerald-600 bg-emerald-600 text-white" : current ? "border-neutral-950 text-neutral-950 dark:border-neutral-50 dark:text-neutral-50" : "border-neutral-200 text-neutral-300 dark:border-white/10"}`}
                             >
                               {visible && !current ? "✓" : index + 1}
                             </span>
                             <span
-                              className={`text-[11px] ${visible ? "text-zinc-700 dark:text-zinc-200" : "text-zinc-300 dark:text-zinc-600"}`}
+                              className={`text-[11px] ${visible ? "text-neutral-700 dark:text-neutral-200" : "text-neutral-300 dark:text-neutral-600"}`}
                             >
                               {step}
                             </span>
+                            <span className="text-[9px] text-neutral-400">{current ? copy.state[state] : visible ? copy.state.complete : copy.state.ready}</span>
                           </li>
                         );
                       })}
                     </ol>
                     {state === "approval" ? (
-                      <div className="mt-5 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-500/20 dark:bg-amber-500/5">
+                      <div className="mt-4 flex items-center gap-3 border-t border-amber-300 pt-4 dark:border-amber-500/30">
                         <span className="text-amber-600">!</span>
                         <span className="text-[10px] text-amber-800 dark:text-amber-200">
                           {copy.approval}
@@ -229,7 +227,7 @@ export function AgentWorkspaceBlock({
                         <button
                           type="button"
                           onClick={() => setState("complete")}
-                          className="ml-auto min-h-11 rounded-full bg-amber-500 px-3 text-[9px] font-semibold text-white"
+                          className="ml-auto min-h-11 rounded-lg bg-neutral-950 px-3 text-[9px] font-semibold text-white dark:bg-neutral-50 dark:text-neutral-950"
                         >
                           {copy.approve}
                         </button>
@@ -239,17 +237,18 @@ export function AgentWorkspaceBlock({
                 )}
               </motion.div>
             </AnimatePresence>
-            <form
+          </div>
+          <form
               onSubmit={(event) => {
                 event.preventDefault();
                 if (prompt.trim()) run();
               }}
-              className="flex min-h-13 items-center gap-2 rounded-2xl border border-zinc-200 bg-white p-1.5 shadow-sm focus-within:border-[#4568ff] dark:border-white/10 dark:bg-[#17191d]"
+              className="m-4 mt-0 flex min-h-13 items-center gap-2 rounded-[10px] border border-neutral-200 bg-white p-1.5 focus-within:border-neutral-950 focus-within:ring-2 focus-within:ring-blue-600/20 sm:mx-7 dark:border-white/10 dark:bg-[#202020] dark:focus-within:border-neutral-50"
             >
               <button
                 type="button"
                 aria-label={copy.attach}
-                className="grid size-11 shrink-0 place-items-center rounded-xl text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/5"
+                className="grid size-11 shrink-0 place-items-center rounded-lg text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5"
               >
                 ＋
               </button>
@@ -258,42 +257,35 @@ export function AgentWorkspaceBlock({
                 onChange={(event) => setPrompt(event.target.value)}
                 placeholder={copy.placeholder}
                 aria-label={copy.placeholder}
-                className="min-w-0 flex-1 bg-transparent text-[12px] outline-none placeholder:text-zinc-400"
+                className="min-w-0 flex-1 bg-transparent text-[12px] outline-none placeholder:text-neutral-400"
               />
               <button
                 type="submit"
                 disabled={!prompt.trim()}
-                className="grid size-11 shrink-0 place-items-center rounded-xl bg-zinc-950 text-white disabled:opacity-30 dark:bg-zinc-50 dark:text-zinc-950"
+                className="grid size-11 shrink-0 place-items-center rounded-lg bg-neutral-950 text-white disabled:opacity-30 dark:bg-neutral-50 dark:text-neutral-950"
               >
                 ↑
               </button>
-            </form>
-          </div>
+          </form>
         </main>
-        <aside className="hidden border-l border-zinc-900/10 p-4 lg:block dark:border-white/10">
-          <span className="font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400">
+        <aside className="hidden border-l border-neutral-200 bg-[#fafafa] p-4 lg:block dark:border-white/10 dark:bg-[#181818]">
+          <span className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400">
             {copy.evidence}
           </span>
-          <div className="mt-4 grid gap-2">
+          <div className="mt-4 border-t border-neutral-200 dark:border-white/10">
             {active.evidence.map((item, index) => (
               <div
                 key={item}
-                className="rounded-xl border border-zinc-900/10 bg-white/60 p-3 dark:border-white/10 dark:bg-white/[.035]"
+                className="grid min-h-[76px] grid-cols-[22px_1fr] content-center gap-2 border-b border-neutral-200 py-3 dark:border-white/10"
               >
-                <span className="font-mono text-[8px] text-zinc-400">
-                  0{index + 1}
+                <span className="grid size-5 place-items-center rounded-md border border-neutral-300 text-[8px] text-neutral-500 dark:border-white/20">
+                  {state === "complete" ? "✓" : index + 1}
                 </span>
-                <strong className="mt-2 block text-[10px]">{item}</strong>
-                <div className="mt-3 h-1 overflow-hidden rounded-full bg-zinc-200 dark:bg-white/8">
-                  <motion.div
-                    className="h-full rounded-full bg-[#4568ff]"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${[92, 78, 64][index]}%` }}
-                    transition={{
-                      duration: reduced ? 0 : 0.7,
-                      delay: index * 0.12,
-                    }}
-                  />
+                <div>
+                  <strong className="block text-[10px]">{item}</strong>
+                  <span className="mt-1 block text-[8px] text-neutral-400">
+                    {copy.evidenceState[index]}
+                  </span>
                 </div>
               </div>
             ))}
@@ -306,6 +298,9 @@ export function AgentWorkspaceBlock({
 
 const en = {
   workspace: "Agent product workspace",
+  requestLabel: "Request",
+  queued: "Queued",
+  evidenceState: ["Verified", "Available", "Recorded"],
   missionsLabel: "Missions",
   team: "Interface team",
   teamMeta: "3 agents · 1 active",
@@ -391,6 +386,9 @@ const en = {
 };
 const zh = {
   workspace: "Agent 产品工作区",
+  requestLabel: "需求",
+  queued: "待执行",
+  evidenceState: ["已验证", "可使用", "已记录"],
   missionsLabel: "任务",
   team: "界面协作组",
   teamMeta: "3 个 Agent · 1 个执行中",

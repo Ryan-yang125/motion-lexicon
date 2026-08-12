@@ -20,10 +20,10 @@ export function DitherRevealCardDemo({ locale = "en" }: DemoLocaleProps = {}) {
         }
         back={
           <>
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#4F6651]">{demoValue(locale, "已通过的方向", "Approved direction")}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#525252]">{demoValue(locale, "已通过的方向", "Approved direction")}</span>
             <span>
               <strong className="block max-w-[15ch] text-[22px] font-medium leading-[1.05] tracking-[-0.035em] text-[#292929]">{demoValue(locale, "安静表面。精准动效。", "Quiet surfaces. Precise motion.")}</strong>
-              <span className="mt-2 block text-[12px] text-[#4F6651]">{demoValue(locale, "点击保持这一面", "Click to keep this side open")}</span>
+              <span className="mt-2 block text-[12px] text-[#525252]">{demoValue(locale, "点击保持这一面", "Click to keep this side open")}</span>
             </span>
           </>
         }
