@@ -36,10 +36,10 @@ export type IntegrationMapProps = {
 };
 
 const tone: Record<IntegrationNodeTone, { node: string; text: string }> = {
-  blue: { node: "fill-[#EEF2FF] stroke-[#8DA2FF] dark:fill-[#20283F] dark:stroke-[#657BCB]", text: "fill-[#3347A5] dark:fill-[#B7C4FF]" },
-  clay: { node: "fill-[#F4ECE8] stroke-[#C99078] dark:fill-[#352822] dark:stroke-[#9D6B55]", text: "fill-[#714635] dark:fill-[#E3B29D]" },
-  moss: { node: "fill-[#EAF0EB] stroke-[#87A88F] dark:fill-[#243128] dark:stroke-[#63816A]", text: "fill-[#3F6247] dark:fill-[#A9CBB0]" },
-  neutral: { node: "fill-[#F5F5F4] stroke-[#D6D3D1] dark:fill-[#252522] dark:stroke-[#57534E]", text: "fill-[#57534E] dark:fill-[#D6D3D1]" },
+  blue: { node: "fill-[#fafafa] stroke-[#a3a3a3] dark:fill-[#262626] dark:stroke-[#737373]", text: "fill-[#262626] dark:fill-[#e5e5e5]" },
+  clay: { node: "fill-[#f5f5f5] stroke-[#b5b5b5] dark:fill-[#303030] dark:stroke-[#666]", text: "fill-[#404040] dark:fill-[#d4d4d4]" },
+  moss: { node: "fill-[#ededed] stroke-[#9a9a9a] dark:fill-[#383838] dark:stroke-[#7a7a7a]", text: "fill-[#333] dark:fill-[#e5e5e5]" },
+  neutral: { node: "fill-[#fff] stroke-[#d4d4d4] dark:fill-[#202020] dark:stroke-[#525252]", text: "fill-[#525252] dark:fill-[#d4d4d4]" },
 };
 
 function useFinePointer() {
@@ -146,7 +146,7 @@ export function IntegrationMap({
         ref={ref}
         role="group"
         aria-label={label}
-        className={`grid min-h-28 w-full place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12px] text-stone-600 dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:text-stone-300 ${className}`}
+        className={`grid min-h-28 w-full place-items-center rounded-[10px] border border-neutral-200 bg-white px-4 text-center text-[12px] text-neutral-600 dark:border-white/[0.14] dark:bg-[#181818] dark:text-neutral-300 ${className}`}
       >
         <span role="status">{emptyLabel}</span>
       </div>
@@ -180,7 +180,7 @@ export function IntegrationMap({
                   initial={reduced ? false : { pathLength: 0, opacity: 0 }}
                   animate={{ pathLength: 1, opacity: connected ? 0.42 : 0.1 }}
                   transition={reduced ? INSTANT : { ...DRAW, delay: index * 0.04 }}
-                  className="text-stone-400 dark:text-stone-500"
+                  className="text-neutral-400 dark:text-neutral-500"
                 />
                 <motion.path
                   d={path}
@@ -201,7 +201,7 @@ export function IntegrationMap({
                           strokeDashoffset: { duration: 1.5 + index * 0.16, ease: "linear", repeat: Infinity },
                         }
                   }
-                  className="stroke-[#4568FF] dark:stroke-[#93B0FF]"
+                  className="stroke-neutral-900 dark:stroke-neutral-100"
                 />
               </g>
             );
@@ -224,9 +224,9 @@ export function IntegrationMap({
                 y={node.y - 22}
                 width="96"
                 height="44"
-                rx="11"
+                rx="8"
                 strokeWidth={activeNode === node.id ? 2 : 1}
-                className={`${colors.node} ${activeNode === node.id ? "stroke-[#4568FF] dark:stroke-[#93B0FF]" : ""}`}
+                className={`${colors.node} ${activeNode === node.id ? "stroke-neutral-950 dark:stroke-neutral-50" : ""}`}
               />
               <text x={node.x} y={node.y - (node.meta ? 2 : -4)} textAnchor="middle" fontSize="12" fontWeight="600" className={colors.text}>
                 {fitNodeText(node.label, 7.4)}

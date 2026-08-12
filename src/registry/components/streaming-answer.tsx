@@ -58,15 +58,15 @@ export function StreamingAnswer({
   return (
     <section
       aria-label={label}
-      className={`w-full rounded-2xl border border-zinc-200 bg-white p-4 text-zinc-950 shadow-[0_18px_50px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <div className="flex items-center gap-2">
-        <span className="size-2 rounded-full bg-[#4568ff]" />
-        <span className="font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400">
+        <span className="size-1.5 rounded-full bg-neutral-950 dark:bg-neutral-50" />
+        <span className="text-[11px] font-medium text-neutral-600 dark:text-neutral-300">
           {label}
         </span>
         {!complete ? (
-          <span className="ml-auto text-[10px] text-zinc-400">
+          <span className="ml-auto text-[10px] text-neutral-400">
             {streamingLabel}
           </span>
         ) : null}
@@ -76,7 +76,7 @@ export function StreamingAnswer({
         {!complete ? (
           <motion.span
             aria-hidden="true"
-            className="ml-1 inline-block h-[1em] w-[2px] translate-y-0.5 bg-[#4568ff]"
+            className="ml-1 inline-block h-[1em] w-px translate-y-0.5 bg-neutral-950 dark:bg-neutral-50"
             animate={{ opacity: [1, 0.15, 1] }}
             transition={{ duration: 0.8, repeat: Infinity }}
           />
@@ -87,19 +87,19 @@ export function StreamingAnswer({
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 border-t border-zinc-100 pt-3 dark:border-white/8"
+            className="mt-4 border-t border-neutral-100 pt-3 dark:border-white/8"
           >
             <button
               type="button"
               aria-expanded={sourceOpen}
               onClick={() => setSourceOpen((value) => !value)}
-              className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-[11px] font-medium hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] dark:hover:bg-white/5"
+              className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-[11px] font-medium hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:hover:bg-white/5"
             >
               <span className="flex -space-x-1">
                 {sources.slice(0, 3).map((source, index) => (
                   <i
                     key={source.id}
-                    className="grid size-5 place-items-center rounded-full border border-white bg-zinc-100 text-[8px] not-italic text-zinc-500 dark:border-[#17191d] dark:bg-white/10 dark:text-zinc-300"
+                    className="grid size-5 place-items-center rounded-full border border-white bg-neutral-100 text-[8px] not-italic text-neutral-500 dark:border-[#181818] dark:bg-white/10 dark:text-neutral-300"
                   >
                     {index + 1}
                   </i>
@@ -118,12 +118,12 @@ export function StreamingAnswer({
                   {sources.map((source) => (
                     <li
                       key={source.id}
-                      className="rounded-xl p-2.5 hover:bg-zinc-50 dark:hover:bg-white/5"
+                      className="rounded-lg p-2.5 hover:bg-neutral-50 dark:hover:bg-white/5"
                     >
                       <strong className="block truncate text-[11px]">
                         {source.title}
                       </strong>
-                      <span className="text-[10px] text-zinc-400">
+                      <span className="text-[10px] text-neutral-400">
                         {source.domain}
                       </span>
                     </li>
@@ -141,7 +141,7 @@ export function StreamingAnswer({
               key={prompt}
               type="button"
               onClick={() => onFollowUp?.(prompt)}
-              className="min-h-11 rounded-full border border-zinc-200 px-3 text-[11px] text-zinc-600 transition hover:border-zinc-300 hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/5"
+              className="min-h-11 rounded-lg border border-neutral-200 px-3 text-[11px] text-neutral-600 transition hover:border-neutral-400 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-white/10 dark:text-neutral-300 dark:hover:bg-white/5"
             >
               {prompt}
             </button>

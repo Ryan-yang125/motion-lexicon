@@ -283,7 +283,7 @@ export function NetworkGlobe({
       const geometry = track(new THREE.SphereGeometry(index === 0 ? 0.075 : 0.055, 18, 12));
       const material = track(
         new THREE.MeshBasicMaterial({
-          color: node.color ?? (index === 0 ? "#4568FF" : "#B3654A"),
+          color: node.color ?? (index === 0 ? "#171717" : "#737373"),
           transparent: true,
           opacity: 0.72,
         }),
@@ -453,17 +453,17 @@ export function NetworkGlobe({
             }
           : undefined
       }
-      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-stone-200 bg-[#EDEBE4] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F2EC] dark:border-white/[0.14] dark:bg-[#1D1D1A] dark:focus-visible:ring-[#93B0FF] dark:focus-visible:ring-offset-[#151513] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-100 outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#181818] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
     >
       <div
         data-webgl-fallback="network-globe"
         aria-hidden
         className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
       >
-        <div className="relative size-40 rounded-full border border-stone-400/35 bg-[#DDE4D5] shadow-md dark:border-white/20 dark:bg-[#2A2A27]">
-          <span className="absolute inset-[18%] rounded-full border border-stone-500/20" />
-          <span className="absolute inset-x-2 top-1/2 border-t border-stone-500/20" />
-          <span className="absolute inset-y-2 left-1/2 border-l border-stone-500/20" />
+        <div className="relative size-40 rounded-full border border-neutral-400/35 bg-neutral-200 dark:border-white/20 dark:bg-neutral-800">
+          <span className="absolute inset-[18%] rounded-full border border-neutral-500/20" />
+          <span className="absolute inset-x-2 top-1/2 border-t border-neutral-500/20" />
+          <span className="absolute inset-y-2 left-1/2 border-l border-neutral-500/20" />
           {nodes.slice(0, 6).map((node, index) => (
             <span
               key={node.id}
@@ -471,7 +471,7 @@ export function NetworkGlobe({
               style={{
                 left: `${20 + ((node.longitude + 180) / 360) * 60}%`,
                 top: `${18 + ((90 - node.latitude) / 180) * 64}%`,
-                background: node.color ?? (index === 0 ? "#4568FF" : "#B3654A"),
+                background: node.color ?? (index === 0 ? "#171717" : "#737373"),
               }}
             />
           ))}
@@ -487,32 +487,32 @@ export function NetworkGlobe({
             focusAfterActivationRef.current = true;
             setActivationRequested(true);
           }}
-          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 px-4 text-[12px] font-semibold text-[#292929] shadow-[0_4px_8px_-4px_rgba(41,41,41,.6)] outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#292927]/90 dark:text-white"
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-black/10 bg-white px-4 text-[12px] font-semibold text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#202020] dark:text-white"
         >
           {activateLabel}
         </button>
       ) : null}
 
       {nodes.length === 0 ? (
-        <p role="status" className="absolute inset-x-4 top-1/2 z-20 -translate-y-1/2 text-center text-[12px] font-medium text-stone-700 dark:text-stone-200">
+        <p role="status" className="absolute inset-x-4 top-1/2 z-20 -translate-y-1/2 text-center text-[12px] font-medium text-neutral-700 dark:text-neutral-200">
           {emptyLabel}
         </p>
       ) : null}
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-stone-600 dark:text-stone-300">
+          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
             {rendererReady ? liveLabel : staticLabel}
           </span>
-          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-stone-100">{label}</strong>
+          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-neutral-100">{label}</strong>
         </span>
         {focused ? <span className="text-right">
-          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#292929] dark:text-stone-100">{focused?.value ?? onlineLabel}</strong>
-          <span className="mt-0.5 block text-[10px] text-stone-600 dark:text-stone-300">{focused.label}</span>
+          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#292929] dark:text-neutral-100">{focused?.value ?? onlineLabel}</strong>
+          <span className="mt-0.5 block text-[10px] text-neutral-600 dark:text-neutral-300">{focused.label}</span>
         </span> : null}
       </div>
 
-      {nodes.length > 0 ? <div className="absolute inset-x-3 bottom-3 z-20 grid grid-cols-3 gap-1.5 rounded-[13px] border border-black/[0.08] bg-white/70 p-1.5 shadow-[0_4px_8px_-6px_rgba(41,41,41,0.5)] backdrop-blur-xl dark:border-white/[0.12] dark:bg-black/25">
+      {nodes.length > 0 ? <div className="absolute inset-x-3 bottom-3 z-20 grid grid-cols-3 gap-1.5 rounded-lg border border-black/[0.08] bg-white p-1.5 dark:border-white/[0.12] dark:bg-[#202020]">
         {nodes.map((node) => {
           const selected = node.id === focused?.id;
           return (
@@ -523,8 +523,8 @@ export function NetworkGlobe({
               onClick={() => focusNode(node)}
               className={`min-h-11 min-w-0 truncate rounded-[9px] px-2 text-[11px] font-medium outline-none transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] ${
                 selected
-                  ? "bg-[#DCE4FF] shadow-[inset_0_0_0_1px_rgba(69,104,255,.42)] dark:bg-[#263358]"
-                  : "text-stone-600 hover:bg-black/[0.05] dark:text-stone-300 dark:hover:bg-white/[0.08]"
+                  ? "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950"
+                  : "text-neutral-600 hover:bg-black/[0.05] dark:text-neutral-300 dark:hover:bg-white/[0.08]"
               }`}
             >
               {node.label}

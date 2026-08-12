@@ -161,9 +161,9 @@ export function VoiceCapture({
         type="button"
         aria-label={recordLabel}
         onClick={start}
-        className={`inline-flex min-h-11 items-center gap-2 rounded-full border border-stone-200 bg-white px-4 text-[13px] font-medium text-stone-700 outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:border-white/15 dark:bg-[#242421] dark:text-stone-200 ${className}`}
+        className={`inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 text-[13px] font-medium text-neutral-700 outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:border-white/15 dark:bg-[#202020] dark:text-neutral-200 ${className}`}
       >
-        <span className="grid size-7 place-items-center rounded-full bg-[#93664F]/12 text-[#93664F]"><Mic /></span>
+        <span className="grid size-7 place-items-center rounded-md bg-neutral-100 text-neutral-700 dark:bg-white/10 dark:text-neutral-200"><Mic /></span>
         {label}
       </button>
     );
@@ -174,27 +174,27 @@ export function VoiceCapture({
       ref={root}
       layout
       transition={transition}
-      className={`flex min-h-14 w-full min-w-0 max-w-[420px] items-center gap-1 rounded-[16px] border border-stone-200 bg-white p-2 dark:border-white/15 dark:bg-[#242421] ${className}`}
+      className={`flex min-h-14 w-full min-w-0 max-w-[420px] items-center gap-1 rounded-[10px] border border-neutral-200 bg-white p-2 dark:border-white/15 dark:bg-[#202020] ${className}`}
     >
       <button
         ref={primaryControl}
         type="button"
         aria-label={state === "recording" ? pauseLabel : resumeLabel}
         onClick={state === "recording" ? pause : resume}
-        className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-stone-900 text-white outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] dark:bg-stone-100 dark:text-stone-950"
+        className="grid size-11 shrink-0 place-items-center rounded-lg bg-neutral-900 text-white outline-none focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] dark:bg-neutral-100 dark:text-neutral-950"
       >
         {state === "recording" ? <Pause /> : <Play />}
       </button>
 
       <div className="flex min-w-0 flex-1 items-center gap-1">
-        <span aria-hidden className={`size-1.5 shrink-0 rounded-full ${state === "recording" ? "bg-[#93664F]" : "bg-stone-300 dark:bg-stone-600"}`} />
+        <span aria-hidden className={`size-1.5 shrink-0 rounded-full ${state === "recording" ? "bg-red-600" : "bg-neutral-300 dark:bg-neutral-600"}`} />
         <div aria-hidden className="flex h-8 min-w-0 flex-1 items-center justify-center gap-0 overflow-hidden min-[390px]:gap-0.5">
           {levels.map((level, index) => {
             const base = Math.max(0.14, Math.min(1, level));
             return (
               <motion.span
                 key={index}
-                className="h-6 min-w-0 max-w-[3px] flex-1 origin-center rounded-full bg-stone-400 dark:bg-stone-500"
+                className="h-6 min-w-0 max-w-[3px] flex-1 origin-center rounded-full bg-neutral-400 dark:bg-neutral-500"
                 animate={state === "recording" && !reduced && visible
                   ? { transform: [`scaleY(${base})`, `scaleY(${Math.min(1, base * 1.55)})`, `scaleY(${base})`] }
                   : { transform: `scaleY(${state === "paused" ? base * 0.58 : base})` }}
@@ -205,14 +205,14 @@ export function VoiceCapture({
             );
           })}
         </div>
-        <span role="timer" aria-label={`${stateLabel}, ${time}`} className="w-9 shrink-0 text-right font-mono text-[11px] tabular-nums text-stone-600 dark:text-stone-300">{time}</span>
+        <span role="timer" aria-label={`${stateLabel}, ${time}`} className="w-9 shrink-0 text-right font-mono text-[11px] tabular-nums text-neutral-600 dark:text-neutral-300">{time}</span>
       </div>
 
       <button
         type="button"
         aria-label={deleteLabel}
         onClick={remove}
-        className="grid size-11 shrink-0 place-items-center rounded-[12px] text-[18px] text-stone-500 outline-none transition-colors duration-150 hover:bg-stone-100 hover:text-stone-700 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:text-stone-400 dark:hover:bg-white/10 dark:hover:text-stone-200"
+        className="grid size-11 shrink-0 place-items-center rounded-lg text-[18px] text-neutral-500 outline-none transition-colors duration-150 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] dark:text-neutral-400 dark:hover:bg-white/10 dark:hover:text-neutral-200"
       >
         <span aria-hidden>×</span>
       </button>
@@ -220,7 +220,7 @@ export function VoiceCapture({
         type="button"
         aria-label={sendLabel}
         onClick={send}
-        className="grid size-11 shrink-0 place-items-center rounded-[12px] bg-[#4568FF] text-white outline-none transition-[background-color,box-shadow] duration-150 hover:bg-[#3658EC] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.25)]"
+        className="grid size-11 shrink-0 place-items-center rounded-lg bg-neutral-950 text-white outline-none transition-[background-color,box-shadow] duration-150 hover:bg-neutral-800 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.25)] dark:bg-neutral-50 dark:text-neutral-950"
       >
         <span aria-hidden>↗</span>
       </button>

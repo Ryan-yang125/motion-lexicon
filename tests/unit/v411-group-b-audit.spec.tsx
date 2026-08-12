@@ -66,8 +66,7 @@ describe("V4.1 group B audit regressions", () => {
     const { rerender } = render(<NetworkGlobe nodes={nodes} />);
     const selected = screen.getByRole("button", { name: "San Francisco" });
     expect(selected).toHaveAttribute("aria-pressed", "true");
-    expect(selected).toHaveClass("bg-[#DCE4FF]", "dark:bg-[#263358]");
-    expect(selected).not.toHaveClass("text-white");
+    expect(selected).toHaveClass("bg-neutral-950", "text-white", "dark:bg-neutral-50", "dark:text-neutral-950");
 
     rerender(<NetworkGlobe nodes={[]} emptyLabel="No regions yet" />);
     expect(screen.getByRole("status")).toHaveTextContent("No regions yet");
@@ -111,8 +110,8 @@ describe("V4.1 group B audit regressions", () => {
     expect(panel).not.toBeNull();
     if (!panel) throw new Error("Detail panel was not rendered");
     expect(trigger).toHaveAttribute("aria-controls", panel.id);
-    expect(panel).toHaveClass("dark:bg-[#242421]/95");
-    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("dark:text-stone-300");
+    expect(panel).toHaveClass("bg-white", "dark:bg-[#202020]");
+    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("dark:text-neutral-300");
   });
 
   it("dismisses menus on an outside pointer action", async () => {
@@ -150,8 +149,8 @@ describe("V4.1 group B audit regressions", () => {
         items={[{ id: "one", title: "First story", eyebrow: "Collection type", description: "Story description", meta: "04:12", art: <span>Artwork</span> }]}
       />,
     );
-    expect(screen.getByText("Collection")).toHaveClass("text-stone-600", "dark:text-stone-300");
-    expect(screen.getByText("04:12")).toHaveClass("text-stone-600", "dark:text-stone-300");
+    expect(screen.getByText("Collection")).toHaveClass("text-neutral-500", "dark:text-neutral-400");
+    expect(screen.getByText("04:12")).toHaveClass("text-neutral-600", "dark:text-neutral-300");
     unmount();
 
     render(
@@ -161,9 +160,9 @@ describe("V4.1 group B audit regressions", () => {
       />,
     );
     const trigger = screen.getByRole("button", { name: "Product" });
-    expect(trigger).toHaveClass("text-stone-600", "dark:text-stone-300");
+    expect(trigger).toHaveClass("text-neutral-600", "dark:text-neutral-300");
     fireEvent.click(trigger);
-    expect(screen.getByText("Product summary")).toHaveClass("text-stone-600", "dark:text-stone-300");
+    expect(screen.getByText("Product summary")).toHaveClass("text-neutral-600", "dark:text-neutral-300");
   });
 
   it("wires localized empty copy through the bilingual demos", () => {

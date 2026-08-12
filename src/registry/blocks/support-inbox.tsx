@@ -38,31 +38,31 @@ export function SupportInboxBlock({ locale = "en", className = "" }: SupportInbo
   }
 
   return (
-    <section className={`min-h-[720px] w-full overflow-hidden rounded-[24px] border border-stone-200 bg-[#efeeea] text-stone-950 shadow-[0_28px_80px_-48px_rgba(28,25,23,.45)] dark:border-white/10 dark:bg-[#141413] dark:text-stone-50 ${className}`} data-page-block="support-inbox">
-      <header className="flex min-h-16 items-center justify-between gap-4 border-b border-stone-900/10 bg-white/55 px-4 backdrop-blur sm:px-6 dark:border-white/10 dark:bg-white/[.025]">
-        <a className="flex min-h-11 items-center gap-2.5 rounded-xl font-semibold tracking-[-.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#relay-inbox">
-          <span className="grid size-8 place-items-center rounded-[10px] bg-stone-950 text-white dark:bg-stone-50 dark:text-stone-950" aria-hidden="true"><svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.8"><path d="M5 6h14v10H9l-4 3V6Z" /><path d="M8 10h8M8 13h5" /></svg></span>
+    <section className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="support-inbox">
+      <header className="flex min-h-14 items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 sm:px-6 dark:border-white/10 dark:bg-[#1b1b1b]">
+        <a className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#relay-inbox">
+          <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true"><svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.8"><path d="M5 6h14v10H9l-4 3V6Z" /><path d="M8 10h8M8 13h5" /></svg></span>
           Relay
         </a>
-        <div className="hidden min-w-0 flex-1 justify-center md:flex"><label className="flex min-h-11 w-full max-w-sm items-center gap-2 rounded-xl border border-stone-900/10 bg-white px-3 text-[11px] text-stone-400 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 dark:border-white/10 dark:bg-white/5"><span aria-hidden="true">⌕</span><input className="min-w-0 flex-1 bg-transparent text-[16px] text-stone-950 outline-none placeholder:text-stone-400 md:text-[11px] dark:text-white" placeholder={copy.search} /></label></div>
-        <button className="min-h-11 rounded-full border border-stone-900/10 bg-white px-4 text-[12px] font-semibold shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-white/10 dark:bg-white/6" type="button">{copy.settings}</button>
+        <div className="hidden min-w-0 flex-1 justify-center md:flex"><label className="flex min-h-11 w-full max-w-sm items-center gap-2 rounded-lg border border-neutral-900/10 bg-white px-3 text-[11px] text-neutral-400 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 dark:border-white/10 dark:bg-white/5"><span aria-hidden="true">⌕</span><input className="min-w-0 flex-1 bg-transparent text-[16px] text-neutral-950 outline-none placeholder:text-neutral-400 md:text-[11px] dark:text-white" placeholder={copy.search} /></label></div>
+        <button className="min-h-11 rounded-lg border border-neutral-300 bg-white px-4 text-[12px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-white/15 dark:bg-transparent" type="button">{copy.settings}</button>
       </header>
 
       <main className="grid min-h-[655px] lg:grid-cols-[260px_minmax(360px,1fr)_260px]" id="relay-inbox">
-        <aside className="border-b border-stone-900/10 bg-[#e9e7e2] p-3 lg:border-b-0 lg:border-r dark:border-white/10 dark:bg-[#191918]">
-          <div className="flex min-h-11 items-center justify-between gap-3 px-2"><h1 className="text-[13px] font-semibold">{copy.inbox}</h1><span className="rounded-full bg-blue-600 px-2 py-1 font-mono text-[9px] text-white">{copy.conversations.length}</span></div>
+        <aside className="border-b border-neutral-200 bg-[#fafafa] p-3 lg:border-b-0 lg:border-r dark:border-white/10 dark:bg-[#181818]">
+          <div className="flex min-h-11 items-center justify-between gap-3 px-2"><h1 className="text-[13px] font-semibold">{copy.inbox}</h1><span className="font-mono text-[9px] text-neutral-500">{copy.conversations.length}</span></div>
           <div className="mt-2 grid max-h-[238px] gap-1 overflow-auto lg:max-h-none">
             {copy.conversations.map((conversation) => (
               <button
                 aria-pressed={conversation.id === active.id}
-                className={`min-h-[84px] rounded-xl p-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${conversation.id === active.id ? "bg-white shadow-sm dark:bg-white/8" : "hover:bg-white/50 dark:hover:bg-white/5"}`}
+                className={`min-h-[84px] rounded-lg p-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${conversation.id === active.id ? "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" : "hover:bg-neutral-100 dark:hover:bg-white/5"}`}
                 key={conversation.id}
                 onClick={() => { setActiveId(conversation.id); setSendState("idle"); }}
                 type="button"
               >
-                <span className="flex items-center justify-between gap-3"><strong className="truncate text-[11px]">{conversation.name}</strong><span className="shrink-0 font-mono text-[8px] text-stone-400">{conversation.time}</span></span>
-                <span className="mt-2 block truncate text-[10px] text-stone-500 dark:text-stone-400">{conversation.subject}</span>
-                <span className="mt-2 flex items-center gap-2"><i className={`size-1.5 rounded-full ${conversation.priority ? "bg-amber-500" : "bg-emerald-500"}`} /><small className="text-[9px] text-stone-400">{conversation.channel}</small></span>
+                <span className="flex items-center justify-between gap-3"><strong className="truncate text-[11px]">{conversation.name}</strong><span className="shrink-0 font-mono text-[8px] text-neutral-400">{conversation.time}</span></span>
+                <span className="mt-2 block truncate text-[10px] text-neutral-500 dark:text-neutral-400">{conversation.subject}</span>
+                <span className="mt-2 flex items-center gap-2"><i className={`size-1.5 rounded-full ${conversation.priority ? "bg-amber-500" : "bg-emerald-500"}`} /><small className="text-[9px] text-neutral-400">{conversation.channel}</small></span>
               </button>
             ))}
           </div>
@@ -71,35 +71,35 @@ export function SupportInboxBlock({ locale = "en", className = "" }: SupportInbo
         <section className="min-w-0 bg-white dark:bg-[#1d1d1b]" aria-live="polite">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div className="grid min-h-[655px] grid-rows-[auto_1fr_auto]" key={active.id} initial={{ opacity: 0, x: reduced ? 0 : 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: reduced ? 0 : -10 }} transition={{ duration: reduced ? 0 : .22, ease }}>
-              <header className="flex min-h-[76px] items-center justify-between gap-4 border-b border-stone-900/10 px-4 sm:px-5 dark:border-white/10">
-                <div className="min-w-0"><span className="font-mono text-[8px] uppercase tracking-[.12em] text-blue-600 dark:text-blue-400">{active.ticket}</span><h2 className="mt-1 truncate text-[15px] font-semibold tracking-[-.02em]">{active.subject}</h2></div>
-                <button className="min-h-11 shrink-0 rounded-full bg-stone-950 px-4 text-[11px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-stone-50 dark:text-stone-950" type="button">{copy.resolve}</button>
+              <header className="flex min-h-[76px] items-center justify-between gap-4 border-b border-neutral-900/10 px-4 sm:px-5 dark:border-white/10">
+                <div className="min-w-0"><span className="font-mono text-[9px] text-neutral-500 dark:text-neutral-400">{active.ticket}</span><h2 className="mt-1 truncate text-[15px] font-semibold tracking-[-.02em]">{active.subject}</h2></div>
+                <button className="min-h-11 shrink-0 rounded-lg bg-neutral-950 px-4 text-[11px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" type="button">{copy.resolve}</button>
               </header>
 
               <div className="min-h-0 overflow-auto p-4 sm:p-5">
                 <div className="mx-auto grid max-w-xl gap-5">
-                  {active.messages.map((message, index) => <motion.article className={`grid gap-2 ${message.agent ? "justify-items-end" : "justify-items-start"}`} initial={{ opacity: 0, y: reduced ? 0 : 7 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : index * .05 }} key={`${active.id}-${index}`}><span className="text-[9px] text-stone-400">{message.author} · {message.time}</span><p className={`m-0 max-w-[88%] rounded-2xl px-4 py-3 text-[11px] leading-5 ${message.agent ? "rounded-br-md bg-stone-950 text-white dark:bg-stone-50 dark:text-stone-950" : "rounded-bl-md bg-stone-100 text-stone-700 dark:bg-white/7 dark:text-stone-200"}`}>{message.body}</p></motion.article>)}
-                  {sendState === "sent" ? <motion.article className="grid justify-items-end gap-2" initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }}><span className="text-[9px] text-stone-400">{copy.you} · {copy.now}</span><p className="m-0 max-w-[88%] rounded-2xl rounded-br-md bg-stone-950 px-4 py-3 text-[11px] leading-5 text-white dark:bg-stone-50 dark:text-stone-950">{copy.sentMessage}</p></motion.article> : null}
+                  {active.messages.map((message, index) => <motion.article className={`grid gap-2 ${message.agent ? "justify-items-end" : "justify-items-start"}`} initial={{ opacity: 0, y: reduced ? 0 : 7 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : index * .05 }} key={`${active.id}-${index}`}><span className="text-[9px] text-neutral-400">{message.author} · {message.time}</span><p className={`m-0 max-w-[88%] rounded-[10px] px-4 py-3 text-[11px] leading-5 ${message.agent ? "rounded-br-md bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" : "rounded-bl-md bg-neutral-100 text-neutral-700 dark:bg-white/7 dark:text-neutral-200"}`}>{message.body}</p></motion.article>)}
+                  {sendState === "sent" ? <motion.article className="grid justify-items-end gap-2" initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }}><span className="text-[9px] text-neutral-400">{copy.you} · {copy.now}</span><p className="m-0 max-w-[88%] rounded-[10px] rounded-br-md bg-neutral-950 px-4 py-3 text-[11px] leading-5 text-white dark:bg-neutral-50 dark:text-neutral-950">{copy.sentMessage}</p></motion.article> : null}
                 </div>
               </div>
 
-              <div className="border-t border-stone-900/10 p-3 sm:p-4 dark:border-white/10">
-                <div className="mx-auto max-w-xl rounded-2xl border border-stone-900/10 bg-stone-50 p-2 shadow-[inset_0_1px_2px_rgba(28,25,23,.04)] focus-within:ring-2 focus-within:ring-blue-500 dark:border-white/10 dark:bg-black/10">
+              <div className="border-t border-neutral-900/10 p-3 sm:p-4 dark:border-white/10">
+                <div className="mx-auto max-w-xl rounded-[10px] border border-neutral-900/10 bg-neutral-50 p-2 shadow-[inset_0_1px_2px_rgba(28,25,23,.04)] focus-within:ring-2 focus-within:ring-blue-500 dark:border-white/10 dark:bg-black/10">
                   <label className="sr-only" htmlFor={`relay-reply-${active.id}`}>{copy.reply}</label>
-                  <textarea className="min-h-20 w-full resize-none bg-transparent px-2 py-2 text-[16px] leading-5 outline-none placeholder:text-stone-400 md:text-[11px]" id={`relay-reply-${active.id}`} onChange={(event) => { setReply(event.target.value); setSendState("idle"); }} onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") { event.preventDefault(); sendReply(); } }} placeholder={copy.placeholder} value={reply} />
-                  <div className="flex items-center justify-between gap-3 px-1 pb-1"><span className="font-mono text-[8px] text-stone-400">{sendState === "sending" ? copy.sending : sendState === "sent" ? copy.sent : copy.shortcut}</span><button className="min-h-11 rounded-full bg-blue-600 px-4 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-45 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" disabled={!reply.trim() || sendState === "sending"} onClick={sendReply} type="button">{sendState === "sending" ? copy.sending : copy.send}</button></div>
+                  <textarea className="min-h-20 w-full resize-none bg-transparent px-2 py-2 text-[16px] leading-5 outline-none placeholder:text-neutral-400 md:text-[11px]" id={`relay-reply-${active.id}`} onChange={(event) => { setReply(event.target.value); setSendState("idle"); }} onKeyDown={(event) => { if ((event.metaKey || event.ctrlKey) && event.key === "Enter") { event.preventDefault(); sendReply(); } }} placeholder={copy.placeholder} value={reply} />
+                  <div className="flex items-center justify-between gap-3 px-1 pb-1"><span className="font-mono text-[8px] text-neutral-400">{sendState === "sending" ? copy.sending : sendState === "sent" ? copy.sent : copy.shortcut}</span><button className="min-h-11 rounded-lg bg-neutral-950 px-4 text-[11px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-45 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" disabled={!reply.trim() || sendState === "sending"} onClick={sendReply} type="button">{sendState === "sending" ? copy.sending : copy.send}</button></div>
                 </div>
               </div>
             </motion.div>
           </AnimatePresence>
         </section>
 
-        <aside className="hidden border-l border-stone-900/10 bg-[#f5f4f1] p-4 lg:block dark:border-white/10 dark:bg-[#181817]">
-          <div className="flex items-center gap-3"><span className={`grid size-10 place-items-center rounded-full text-[12px] font-bold ${active.avatarTone}`}>{active.initials}</span><div className="min-w-0"><strong className="block truncate text-[12px]">{active.name}</strong><span className="text-[9px] text-stone-400">{active.company}</span></div></div>
+        <aside className="hidden border-l border-neutral-200 bg-[#fafafa] p-4 lg:block dark:border-white/10 dark:bg-[#181818]">
+          <div className="flex items-center gap-3"><span className={`grid size-10 place-items-center rounded-full text-[12px] font-bold ${active.avatarTone}`}>{active.initials}</span><div className="min-w-0"><strong className="block truncate text-[12px]">{active.name}</strong><span className="text-[9px] text-neutral-400">{active.company}</span></div></div>
           <dl className="mt-6 grid gap-4">
-            {active.details.map((detail) => <div className="grid gap-1 border-b border-stone-900/[.07] pb-3 dark:border-white/[.07]" key={detail.label}><dt className="text-[9px] text-stone-400">{detail.label}</dt><dd className="m-0 text-[11px] font-medium">{detail.value}</dd></div>)}
+            {active.details.map((detail) => <div className="grid gap-1 border-b border-neutral-900/[.07] pb-3 dark:border-white/[.07]" key={detail.label}><dt className="text-[9px] text-neutral-400">{detail.label}</dt><dd className="m-0 text-[11px] font-medium">{detail.value}</dd></div>)}
           </dl>
-          <section className="mt-6 rounded-2xl border border-stone-900/10 bg-white p-3 dark:border-white/10 dark:bg-white/5" aria-labelledby={`relay-context-${active.id}`}><h3 className="text-[10px] font-semibold" id={`relay-context-${active.id}`}>{copy.context}</h3><p className="mb-0 mt-3 text-[10px] leading-5 text-stone-500 dark:text-stone-300">{active.context}</p></section>
+          <section className="mt-6 border-t border-neutral-200 pt-4 dark:border-white/10" aria-labelledby={`relay-context-${active.id}`}><h3 className="text-[10px] font-semibold" id={`relay-context-${active.id}`}>{copy.context}</h3><p className="mb-0 mt-3 text-[10px] leading-5 text-neutral-500 dark:text-neutral-300">{active.context}</p></section>
         </aside>
       </main>
     </section>

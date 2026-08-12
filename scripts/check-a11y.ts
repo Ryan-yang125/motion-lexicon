@@ -21,8 +21,8 @@ assert(css.includes(":focus-visible"), "Visible focus styles are missing");
 assert(css.includes("@media (prefers-reduced-motion: reduce)"), "Reduced-motion handling is missing");
 assert(css.includes("overflow-x: clip"), "The global layout must prevent horizontal overflow");
 assert(css.includes("min-height: 44px") || css.includes("min-height: 2.75rem"), "A 44px interactive target baseline is missing");
-assert(css.includes("--ink: #292929"), "Primary text token is missing");
-assert(css.includes("--ink-2: #5d5d5d"), "Secondary text token is missing");
+assert(css.includes("--ink: #111111"), "Primary text token is missing");
+assert(css.includes("--ink-2: #555555"), "Secondary text token is missing");
 assert(css.includes("--hairline:"), "Non-color boundary token is missing");
 
 const shell = readFileSync("src/components/LibraryShell.tsx", "utf8");

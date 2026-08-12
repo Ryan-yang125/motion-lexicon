@@ -89,7 +89,7 @@ export function MagneticAction({
       onPointerMove={move}
       onPointerLeave={reset}
       onBlur={reset}
-      className={`group relative inline-flex min-h-11 select-none items-center justify-center overflow-hidden rounded-full bg-stone-900 px-5 text-[13px] font-medium text-white shadow-[0_12px_30px_-18px_rgba(28,25,23,.75)] outline-none transition-[box-shadow,background-color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_14px_34px_-18px_rgba(28,25,23,.8)] disabled:pointer-events-none disabled:opacity-45 dark:bg-stone-100 dark:text-stone-950 ${className}`}
+      className={`group relative inline-flex min-h-11 select-none items-center justify-center overflow-hidden rounded-full bg-neutral-900 px-5 text-[13px] font-medium text-white shadow-[0_1px_2px_rgba(0,0,0,.06)] outline-none transition-[box-shadow,background-color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28),0_14px_34px_-18px_rgba(28,25,23,.8)] disabled:pointer-events-none disabled:opacity-45 dark:bg-neutral-100 dark:text-neutral-950 ${className}`}
       style={{
         ...style,
         backgroundImage: `radial-gradient(circle at var(--magnetic-x,50%) var(--magnetic-y,50%), ${glow}, transparent 34%)`,

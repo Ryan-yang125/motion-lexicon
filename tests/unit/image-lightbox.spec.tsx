@@ -65,8 +65,8 @@ describe("ImageLightbox", () => {
       "border",
       "border-black/[0.08]",
       "dark:border-white/[0.12]",
-      "shadow-[0_4px_8px_-7px_rgba(41,41,41,0.5)]",
     );
+    expect(screen.getByRole("img", { name: "Beta study" }).className).not.toContain("shadow-");
     expect(screen.getByText("02 / 03")).toBeInTheDocument();
     expect(onChange).toHaveBeenCalledOnce();
     expect(onChange).toHaveBeenLastCalledWith(beta, 1);

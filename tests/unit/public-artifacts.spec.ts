@@ -25,7 +25,7 @@ describe("V4 public machine-readable artifacts", () => {
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(4);
-    expect(catalog.release).toBe("4.4.0");
+    expect(catalog.release).toBe("5.0.0");
     expect(catalog.counts).toEqual({ blocks: 5, components: 59, primitives: 44 });
     expect(catalog.blocks).toHaveLength(registryBlocks.length);
     expect(catalog.components).toHaveLength(registryComponents.length);
@@ -50,7 +50,7 @@ describe("V4 public machine-readable artifacts", () => {
     };
     const publicSchema = await parse("data/v4/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("4.4.0");
+    expect(grammar.version).toBe("5.0.0");
     expect(grammar.collections.components.count).toBe(59);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({

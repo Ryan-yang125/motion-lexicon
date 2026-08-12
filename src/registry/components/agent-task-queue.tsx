@@ -36,22 +36,22 @@ export function AgentTaskQueue({
 
   return (
     <section
-      className={`w-full rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-[0_18px_50px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-3 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <header className="mb-2 flex min-h-10 items-center gap-2 px-1">
         <div>
           <strong className="block text-[12px]">{label}</strong>
-          <span className="text-[9px] text-zinc-400">
+          <span className="text-[9px] text-neutral-400">
             {active ? runningLabel(active) : clearLabel}
           </span>
         </div>
-        <div className="ml-auto flex rounded-lg bg-zinc-100 p-0.5 dark:bg-white/5">
+        <div className="ml-auto flex rounded-lg bg-neutral-100 p-0.5 dark:bg-white/5">
           <button
             type="button"
             aria-label={rowsLabel}
             aria-pressed={layout === "rows"}
             onClick={() => setLayout("rows")}
-            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === "rows" ? "bg-white shadow-sm dark:bg-white/10" : "text-zinc-400"}`}
+            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === "rows" ? "bg-white shadow-sm dark:bg-white/10" : "text-neutral-400"}`}
           >
             {rowsLabel}
           </button>
@@ -60,7 +60,7 @@ export function AgentTaskQueue({
             aria-label={compactLabel}
             aria-pressed={layout === "compact"}
             onClick={() => setLayout("compact")}
-            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === "compact" ? "bg-white shadow-sm dark:bg-white/10" : "text-zinc-400"}`}
+            className={`min-h-11 min-w-11 rounded-md px-2 text-[10px] ${layout === "compact" ? "bg-white shadow-sm dark:bg-white/10" : "text-neutral-400"}`}
           >
             {compactLabel}
           </button>
@@ -76,11 +76,11 @@ export function AgentTaskQueue({
           <motion.li
             layout={!reduced}
             key={task.id}
-            className={`relative overflow-hidden border ${layout === "compact" ? "min-h-10 rounded-full px-3" : "min-h-14 rounded-xl px-3"} ${task.status === "running" ? "border-[#4568ff]/35 bg-[#4568ff]/[.035]" : "border-zinc-100 dark:border-white/8"}`}
+            className={`relative overflow-hidden border ${layout === "compact" ? "min-h-10 rounded-lg px-3" : "min-h-14 rounded-lg px-3"} ${task.status === "running" ? "border-neutral-400 bg-neutral-50 dark:border-white/25 dark:bg-white/[.03]" : "border-neutral-100 dark:border-white/8"}`}
           >
             <div className="flex h-full min-h-10 items-center gap-3 py-2">
               <span
-                className={`grid size-6 shrink-0 place-items-center rounded-full text-[9px] ${task.status === "complete" ? "bg-emerald-500 text-white" : task.status === "failed" ? "bg-red-500 text-white" : task.status === "running" ? "bg-[#4568ff] text-white" : "bg-zinc-100 text-zinc-400 dark:bg-white/5"}`}
+                className={`grid size-6 shrink-0 place-items-center rounded-md text-[9px] ${task.status === "complete" ? "bg-emerald-600 text-white" : task.status === "failed" ? "bg-red-600 text-white" : task.status === "running" ? "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" : "bg-neutral-100 text-neutral-500 dark:bg-white/5"}`}
               >
                 {task.status === "complete"
                   ? "✓"
@@ -93,13 +93,13 @@ export function AgentTaskQueue({
                   {task.title}
                 </strong>
                 {layout === "rows" && task.detail ? (
-                  <span className="block truncate text-[9px] text-zinc-400">
+                  <span className="block truncate text-[9px] text-neutral-400">
                     {task.detail}
                   </span>
                 ) : null}
               </span>
               {task.meta ? (
-                <code className="text-[9px] text-zinc-400">{task.meta}</code>
+                <code className="text-[9px] text-neutral-400">{task.meta}</code>
               ) : null}
             </div>
             <AnimatePresence>
@@ -107,10 +107,10 @@ export function AgentTaskQueue({
               typeof task.progress === "number" ? (
                 <motion.span
                   aria-label={`${task.progress}%`}
-                  className="absolute inset-x-0 bottom-0 h-0.5 bg-zinc-100 dark:bg-white/5"
+                  className="absolute inset-x-0 bottom-0 h-0.5 bg-neutral-100 dark:bg-white/5"
                 >
                   <motion.i
-                    className="block h-full bg-[#4568ff]"
+                    className="block h-full bg-neutral-950 dark:bg-neutral-50"
                     initial={{ width: 0 }}
                     animate={{ width: `${task.progress}%` }}
                     transition={{ duration: reduced ? 0 : 0.5 }}

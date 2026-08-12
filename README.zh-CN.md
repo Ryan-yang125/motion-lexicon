@@ -24,7 +24,7 @@
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon 组件目录](docs/assets/readme-v4-components.png)
+![Motion Lexicon 组件目录](docs/assets/readme-v5-components.png)
 
 ## 按需要选择层级
 
@@ -37,7 +37,9 @@
 
 组件与原子动效是并列内容。一个组件可以组合多个原子动效，组件详情页会标出对应的底层动效。
 
-![Motion Lexicon 原子动效目录](docs/assets/readme-v4-primitives.png)
+V5 将网站主体、5 个页面 Block、Agent UI 集合和初版之后新增的组件统一到同一套黑白灰明暗主题中。
+
+![Motion Lexicon 原子动效目录](docs/assets/readme-v5-primitives.png)
 
 ## 安装页面 Block、组件与原子动效
 
@@ -69,9 +71,9 @@ Registry 包含 5 个完整页面 Block 与 59 个产品、Agent 和网站组件
 
 Agent UI 集合覆盖思考轨迹、流式回答、工具调用、审批、任务队列、Prompt 输入、上下文来源、Diff 审阅、建议、多 Agent 交接与状态。每个详情页还提供“复制给 Agent”，其中包含预览地址、源码地址、接入要求与验收标准。
 
-![三维产品查看器组件页](docs/assets/readme-v4-component.png)
+![Agent 产品工作台组件页](docs/assets/readme-v5-component.png)
 
-![滑入原子动效工作台](docs/assets/readme-v4-primitive.png)
+![滑入原子动效工作台](docs/assets/readme-v5-primitive.png)
 
 ## Agent Skill
 

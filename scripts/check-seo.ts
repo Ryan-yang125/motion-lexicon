@@ -20,7 +20,7 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 assert(siteUrl === "https://motion-lexicon.pages.dev", "Production site URL is inconsistent");
-assert(release.version === "4.4.0", `Expected release 4.4.0, found ${release.version}`);
+assert(release.version === "5.0.0", `Expected release 5.0.0, found ${release.version}`);
 assert(registryBlocks.length === 5, `Expected 5 registry blocks, found ${registryBlocks.length}`);
 assert(registryComponents.length === 59, `Expected 59 registry components, found ${registryComponents.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 motion primitives, found ${canonicalMotionCatalog.length}`);

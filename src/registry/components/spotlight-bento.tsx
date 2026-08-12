@@ -27,10 +27,10 @@ export type SpotlightBentoProps = {
 };
 
 const toneClass = {
-  blue: "bg-[#4568FF] text-white",
-  clay: "bg-[#B3654A] text-white",
-  moss: "bg-[#73806B] text-white",
-  ink: "bg-[#292929] text-white dark:bg-stone-100 dark:text-[#292929]",
+  blue: "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950",
+  clay: "bg-neutral-700 text-white dark:bg-neutral-300 dark:text-neutral-950",
+  moss: "bg-neutral-500 text-white dark:bg-neutral-500 dark:text-white",
+  ink: "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-950",
 } as const;
 
 export function SpotlightBento({
@@ -92,7 +92,7 @@ export function SpotlightBento({
   return (
     <section
       aria-label={label}
-      className={`w-full rounded-[16px] border border-stone-200 bg-[#EAE8E1] p-2 dark:border-white/[0.14] dark:bg-[#191917] ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-neutral-100 p-2 dark:border-white/[0.14] dark:bg-[#181818] ${className}`}
     >
       <div
         ref={rootRef}
@@ -103,12 +103,12 @@ export function SpotlightBento({
           pointRef.current = { x: root.clientWidth * 0.72, y: root.clientHeight * 0.28 };
           schedule();
         }}
-        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-[12px]"
+        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-lg"
       >
         <div
           ref={lightRef}
           aria-hidden
-          className={`pointer-events-none absolute left-0 top-0 z-0 size-[300px] rounded-full bg-[radial-gradient(circle,rgba(69,104,255,0.30)_0%,rgba(179,101,74,0.14)_42%,rgba(115,128,107,0)_72%)] blur-2xl ${
+          className={`pointer-events-none absolute left-0 top-0 z-0 size-[300px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0)_72%)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0)_72%)] ${
             reduced ? "" : "will-change-transform"
           }`}
         />
@@ -116,9 +116,9 @@ export function SpotlightBento({
         {items.map((item) => {
           const interactive = typeof onSelect === "function";
           const selected = interactive && item.id === selectedId;
-          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-[12px] border bg-white/80 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] dark:bg-[#242421]/88 ${
+          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-lg border bg-white p-3 text-left dark:bg-[#202020] ${
             selected
-              ? "border-[#4568FF] dark:border-[#93B0FF]"
+              ? "border-neutral-950 dark:border-neutral-50"
               : "border-black/[0.075] dark:border-white/[0.1]"
           } ${
             item.wide ? "col-span-2" : ""
@@ -134,23 +134,23 @@ export function SpotlightBento({
           const content = (
             <>
               <span className="flex items-start justify-between gap-2">
-                <span className={`grid size-9 shrink-0 place-items-center rounded-[10px] ${toneClass[item.tone ?? "ink"]}`}>
+                <span className={`grid size-9 shrink-0 place-items-center rounded-lg ${toneClass[item.tone ?? "ink"]}`}>
                   {item.icon ?? <span className="size-1.5 rounded-full bg-current" />}
                 </span>
                 {item.meta ? (
-                  <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-stone-600 dark:text-stone-300">{item.meta}</span>
+                  <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-neutral-600 dark:text-neutral-300">{item.meta}</span>
                 ) : null}
               </span>
               <span className="mt-3 block min-w-0">
-                <strong className="block truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-stone-100">{item.value}</strong>
-                <span className="mt-0.5 block truncate text-[10.5px] text-stone-500 dark:text-stone-400">{item.label}</span>
+                <strong className="block truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100">{item.value}</strong>
+                <span className="mt-0.5 block truncate text-[10.5px] text-neutral-500 dark:text-neutral-400">{item.label}</span>
               </span>
               {interactive ? (
                 <span
                   aria-hidden
                   data-spotlight-indicator
                   data-motion-mode={reduced ? "instant" : "standard"}
-                  className={`absolute inset-x-3 bottom-0 h-px bg-[#4568FF] ${selected ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"} ${
+                  className={`absolute inset-x-3 bottom-0 h-px bg-neutral-950 dark:bg-neutral-50 ${selected ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"} ${
                     reduced
                       ? ""
                       : `origin-left transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] ${selected ? "scale-x-100" : "scale-x-0 group-focus-visible:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100"}`

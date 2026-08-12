@@ -25,69 +25,69 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
 
   return (
     <section
-      className={`min-h-[720px] w-full overflow-hidden rounded-[24px] border border-stone-200 bg-[#f4f2ed] text-stone-950 shadow-[0_28px_80px_-48px_rgba(28,25,23,.45)] dark:border-white/10 dark:bg-[#171716] dark:text-stone-50 ${className}`}
+      className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
       data-page-block="product-landing"
     >
-      <header className="flex min-h-16 items-center justify-between gap-5 border-b border-stone-900/10 px-5 sm:px-8 dark:border-white/10">
-        <a className="flex min-h-11 items-center gap-2.5 rounded-xl font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#caldera-home">
-          <span className="grid size-8 place-items-center rounded-[10px] bg-stone-950 text-white dark:bg-stone-50 dark:text-stone-950" aria-hidden="true">
+      <header className="flex min-h-16 items-center justify-between gap-5 border-b border-neutral-900/10 px-5 sm:px-8 dark:border-white/10">
+        <a className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#caldera-home">
+          <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true">
             <svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.8"><path d="M5 17.5 12 5l7 12.5-7-3.2-7 3.2Z" /><path d="m8.8 15.8 3.2-5.5 3.2 5.5" /></svg>
           </span>
           Caldera
         </a>
-        <nav className="hidden items-center gap-1 text-[13px] text-stone-600 md:flex dark:text-stone-300" aria-label={copy.navigation}>
-          {copy.nav.map((item) => <a className="flex min-h-11 items-center rounded-xl px-3 hover:bg-white/70 hover:text-stone-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/8 dark:hover:text-white" href={item.href} key={item.label}>{item.label}</a>)}
+        <nav className="hidden items-center gap-1 text-[13px] text-neutral-600 md:flex dark:text-neutral-300" aria-label={copy.navigation}>
+          {copy.nav.map((item) => <a className="flex min-h-11 items-center rounded-lg px-3 hover:bg-white/70 hover:text-neutral-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-white/8 dark:hover:text-white" href={item.href} key={item.label}>{item.label}</a>)}
         </nav>
-        <button className="min-h-11 rounded-full bg-stone-950 px-4 text-[13px] font-semibold text-white shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-stone-50 dark:text-stone-950" type="button" onClick={() => setStarted(true)}>
+        <button className="min-h-11 rounded-lg bg-neutral-950 px-4 text-[13px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" type="button" onClick={() => setStarted(true)}>
           {started ? copy.opened : copy.open}
         </button>
       </header>
 
       <div className="grid min-h-[655px] items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(280px,.82fr)_minmax(500px,1.18fr)] lg:px-12 lg:py-14">
         <div className="max-w-xl">
-          <span className="inline-flex min-h-8 items-center rounded-full border border-stone-900/10 bg-white/65 px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-stone-600 dark:border-white/10 dark:bg-white/5 dark:text-stone-300">
+          <span className="text-[11px] text-neutral-500 dark:text-neutral-400">
             {copy.kicker}
           </span>
-          <h1 className="mt-6 max-w-[9ch] text-[clamp(46px,7vw,84px)] font-semibold leading-[.92] tracking-[-0.065em]">
+          <h1 className="mt-5 max-w-[10ch] text-[clamp(42px,6vw,64px)] font-semibold leading-[.98] tracking-[-0.035em]">
             {copy.title}
           </h1>
-          <p className="mt-6 max-w-md text-[15px] leading-7 text-stone-600 dark:text-stone-300">{copy.body}</p>
+          <p className="mt-6 max-w-md text-[15px] leading-7 text-neutral-600 dark:text-neutral-300">{copy.body}</p>
           <div className="mt-8 flex flex-wrap gap-2">
-            <button className="min-h-12 rounded-full bg-blue-600 px-5 text-[13px] font-semibold text-white shadow-[0_12px_28px_-14px_rgba(37,99,235,.8)] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" type="button" onClick={() => setStarted(true)}>
+            <button className="min-h-12 rounded-lg bg-neutral-950 px-5 text-[13px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" type="button" onClick={() => setStarted(true)}>
               {started ? copy.ready : copy.primary}
             </button>
-            <a className="flex min-h-12 items-center rounded-full border border-stone-900/10 bg-white px-5 text-[13px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-white/10 dark:bg-white/6" href="#release-workspace">
+            <a className="flex min-h-12 items-center rounded-lg border border-neutral-300 bg-white px-5 text-[13px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-white/15 dark:bg-transparent" href="#release-workspace">
               {copy.secondary}
             </a>
           </div>
-          <div className="mt-10 flex items-center gap-3 text-[11px] text-stone-500 dark:text-stone-400">
+          <div className="mt-10 flex items-center gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
             <span className="flex -space-x-2" aria-hidden="true">
-              {["bg-[#d7a577]", "bg-[#7896b8]", "bg-[#8da27d]"].map((tone, index) => <i className={`size-7 rounded-full border-2 border-[#f4f2ed] ${tone} dark:border-[#171716]`} key={index} />)}
+              {["bg-neutral-950", "bg-neutral-700", "bg-neutral-500"].map((tone, index) => <i className={`size-7 rounded-full border-2 border-[#f5f5f5] ${tone} dark:border-[#151515]`} key={index} />)}
             </span>
             {copy.proof}
           </div>
         </div>
 
         <div className="min-w-0" id="release-workspace">
-          <div className="overflow-hidden rounded-[22px] border border-stone-900/10 bg-white shadow-[0_34px_74px_-42px_rgba(28,25,23,.55)] dark:border-white/10 dark:bg-[#20201e]">
-            <div className="flex min-h-12 items-center justify-between gap-4 border-b border-stone-900/10 px-4 dark:border-white/10">
-              <div className="flex items-center gap-2" aria-hidden="true"><i className="size-2 rounded-full bg-[#a66b52]" /><i className="size-2 rounded-full bg-[#c6a05d]" /><i className="size-2 rounded-full bg-[#5c8065]" /></div>
+          <div className="overflow-hidden rounded-[10px] border border-neutral-900/10 bg-white dark:border-white/10 dark:bg-[#202020]">
+            <div className="flex min-h-12 items-center justify-between gap-4 border-b border-neutral-900/10 px-4 dark:border-white/10">
+              <div className="flex items-center gap-2" aria-hidden="true"><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /></div>
               <span className="text-[11px] font-semibold">{copy.workspace}</span>
-              <code className="font-mono text-[9px] uppercase tracking-[0.12em] text-stone-400">{active.release}</code>
+              <code className="font-mono text-[9px] text-neutral-400">{active.release}</code>
             </div>
 
-            <div className="grid grid-cols-3 gap-1 border-b border-stone-900/10 bg-stone-50 p-1.5 dark:border-white/10 dark:bg-black/10" role="tablist" aria-label={copy.phaseLabel}>
+            <div className="grid grid-cols-3 gap-1 border-b border-neutral-900/10 bg-neutral-50 p-1.5 dark:border-white/10 dark:bg-black/10" role="tablist" aria-label={copy.phaseLabel}>
               {phaseOrder.map((item, index) => (
                 <button
                   aria-selected={phase === item}
-                  className={`relative min-h-11 overflow-hidden rounded-xl px-2 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${phase === item ? "text-stone-950 dark:text-white" : "text-stone-400"}`}
+                  className={`relative min-h-11 overflow-hidden rounded-lg px-2 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${phase === item ? "text-neutral-950 dark:text-white" : "text-neutral-400"}`}
                   key={item}
                   onClick={() => setPhase(item)}
                   role="tab"
                   type="button"
                 >
-                  {phase === item ? <motion.span className="absolute inset-0 rounded-xl bg-white shadow-sm dark:bg-white/8" layoutId="product-landing-phase" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }} /> : null}
-                  <span className="relative flex items-center justify-center gap-2"><i className={`size-1.5 rounded-full ${index <= activeIndex ? "bg-blue-600" : "bg-stone-300 dark:bg-stone-600"}`} />{copy.phaseNames[item]}</span>
+                  {phase === item ? <motion.span className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-white/8" layoutId="product-landing-phase" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }} /> : null}
+                  <span className="relative flex items-center justify-center gap-2"><i className={`size-1.5 rounded-full ${index <= activeIndex ? "bg-neutral-950 dark:bg-neutral-50" : "bg-neutral-300 dark:bg-neutral-600"}`} />{copy.phaseNames[item]}</span>
                 </button>
               ))}
             </div>
@@ -104,32 +104,32 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400">{active.eyebrow}</span>
-                      <h2 className="mt-2 text-[clamp(22px,3vw,34px)] font-semibold tracking-[-0.04em]">{active.title}</h2>
+                      <span className="text-[10px] text-neutral-500 dark:text-neutral-400">{active.eyebrow}</span>
+                      <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.03em]">{active.title}</h2>
                     </div>
-                    <span className="rounded-full bg-stone-100 px-3 py-1.5 font-mono text-[9px] text-stone-500 dark:bg-white/7 dark:text-stone-300">{active.status}</span>
+                    <span className="rounded-full bg-neutral-100 px-3 py-1.5 font-mono text-[9px] text-neutral-500 dark:bg-white/7 dark:text-neutral-300">{active.status}</span>
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-[1.25fr_.75fr]">
-                    <div className="rounded-2xl border border-stone-900/10 bg-stone-50 p-4 dark:border-white/10 dark:bg-black/10">
-                      <div className="flex items-center justify-between text-[10px] text-stone-500"><span>{active.board}</span><span>{active.progress}%</span></div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-stone-200 dark:bg-white/10"><motion.div className="h-full rounded-full bg-blue-600" animate={{ width: `${active.progress}%` }} transition={reduced ? { duration: 0 } : { duration: 0.45, ease }} /></div>
+                    <div className="rounded-[10px] border border-neutral-900/10 bg-neutral-50 p-4 dark:border-white/10 dark:bg-black/10">
+                      <div className="flex items-center justify-between text-[10px] text-neutral-500"><span>{active.board}</span><span>{active.progress}%</span></div>
+                      <div className="mt-3 h-1 overflow-hidden rounded-full bg-neutral-200 dark:bg-white/10"><motion.div className="h-full rounded-full bg-neutral-950 dark:bg-neutral-50" animate={{ width: `${active.progress}%` }} transition={reduced ? { duration: 0 } : { duration: 0.45, ease }} /></div>
                       <div className="mt-5 grid gap-2">
                         {active.items.map((item, index) => (
-                          <motion.div className="flex min-h-12 items-center justify-between gap-3 rounded-xl bg-white px-3 shadow-[0_1px_0_rgba(28,25,23,.08)] dark:bg-white/6" initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : index * 0.05 }} key={item.label}>
-                            <span className="flex min-w-0 items-center gap-2 text-[11px] font-medium"><i className={`size-2 shrink-0 rounded-full ${item.done ? "bg-emerald-500" : "border border-stone-300 dark:border-stone-500"}`} /><span className="truncate">{item.label}</span></span>
-                            <code className="font-mono text-[9px] text-stone-400">{item.owner}</code>
+                          <motion.div className="flex min-h-12 items-center justify-between gap-3 border-b border-neutral-200 px-1 last:border-b-0 dark:border-white/10" initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : index * 0.05 }} key={item.label}>
+                            <span className="flex min-w-0 items-center gap-2 text-[11px] font-medium"><i className={`size-2 shrink-0 rounded-full ${item.done ? "bg-emerald-500" : "border border-neutral-300 dark:border-neutral-500"}`} /><span className="truncate">{item.label}</span></span>
+                            <code className="font-mono text-[9px] text-neutral-400">{item.owner}</code>
                           </motion.div>
                         ))}
                       </div>
                     </div>
-                    <div className="grid content-between gap-4 rounded-2xl bg-stone-950 p-4 text-white dark:bg-stone-50 dark:text-stone-950">
+                    <div className="grid content-between gap-4 rounded-[10px] bg-neutral-950 p-4 text-white dark:bg-neutral-50 dark:text-neutral-950">
                       <div>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.12em] opacity-55">{active.signalLabel}</span>
+                        <span className="font-mono text-[9px] opacity-55">{active.signalLabel}</span>
                         <strong className="mt-3 block text-3xl tracking-[-0.05em]">{active.signal}</strong>
                       </div>
                       <div className="flex items-end gap-1" aria-label={active.signalLabel}>
-                        {active.bars.map((height, index) => <motion.i className="w-full rounded-sm bg-white/25 dark:bg-stone-950/20" animate={{ height }} transition={{ delay: reduced ? 0 : index * 0.035 }} key={`${phase}-${index}`} />)}
+                        {active.bars.map((height, index) => <motion.i className="w-full rounded-sm bg-white/25 dark:bg-neutral-950/20" animate={{ height }} transition={{ delay: reduced ? 0 : index * 0.035 }} key={`${phase}-${index}`} />)}
                       </div>
                     </div>
                   </div>

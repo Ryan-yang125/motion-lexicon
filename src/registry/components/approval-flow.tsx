@@ -48,7 +48,7 @@ export function ApprovalFlow({
 
   return (
     <section
-      className={`w-full rounded-2xl border border-zinc-200 bg-white p-4 text-zinc-950 shadow-[0_20px_55px_-36px_rgba(24,24,27,.5)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <AnimatePresence mode="wait" initial={false}>
         {approved ? (
@@ -68,7 +68,7 @@ export function ApprovalFlow({
               <button
                 type="button"
                 onClick={() => setApproved(false)}
-                className="mt-3 min-h-11 rounded-full px-3 text-[11px] text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5"
+                className="mt-3 min-h-11 rounded-full px-3 text-[11px] text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/5"
               >
                 {reviewAgainLabel}
               </button>
@@ -79,7 +79,7 @@ export function ApprovalFlow({
             key="question"
             exit={reduced ? undefined : { opacity: 0, y: -6 }}
           >
-            <span className="font-mono text-[9px] uppercase tracking-[.14em] text-amber-600 dark:text-amber-300">
+            <span className="text-[11px] font-medium text-amber-700 dark:text-amber-300">
               {eyebrow}
             </span>
             <h3 className="mt-2 text-[16px] font-semibold tracking-[-.025em]">
@@ -96,21 +96,21 @@ export function ApprovalFlow({
                     setSelected(option.id);
                     setCustom("");
                   }}
-                  className={`relative min-h-12 rounded-xl border px-3 py-2 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-[#4568ff] ${selected === option.id ? "border-[#4568ff] bg-[#4568ff]/5" : "border-zinc-200 hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-white/5"}`}
+                  className={`relative min-h-12 rounded-lg border px-3 py-2 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-blue-600 ${selected === option.id ? "border-neutral-950 bg-neutral-50 dark:border-neutral-50 dark:bg-white/5" : "border-neutral-200 hover:bg-neutral-50 dark:border-white/10 dark:hover:bg-white/5"}`}
                 >
                   <span className="flex items-center gap-2 text-[12px] font-medium">
                     <i
-                      className={`size-2 rounded-full ${selected === option.id ? "bg-[#4568ff]" : "bg-zinc-200 dark:bg-white/15"}`}
+                      className={`size-2 rounded-full ${selected === option.id ? "bg-neutral-950 dark:bg-neutral-50" : "bg-neutral-200 dark:bg-white/15"}`}
                     />
                     {option.label}
                     {option.recommended ? (
-                      <small className="ml-auto rounded-full bg-emerald-50 px-2 py-0.5 text-[8px] uppercase tracking-wide text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+                      <small className="ml-auto rounded-md bg-neutral-100 px-2 py-0.5 text-[9px] text-neutral-600 dark:bg-white/8 dark:text-neutral-300">
                         {recommendedLabel}
                       </small>
                     ) : null}
                   </span>
                   {option.description ? (
-                    <span className="mt-1 block pl-4 text-[10px] text-zinc-500 dark:text-zinc-400">
+                    <span className="mt-1 block pl-4 text-[10px] text-neutral-500 dark:text-neutral-400">
                       {option.description}
                     </span>
                   ) : null}
@@ -121,13 +121,13 @@ export function ApprovalFlow({
               value={custom}
               onChange={(event) => setCustom(event.target.value)}
               placeholder={customPlaceholder}
-              className="mt-3 min-h-11 w-full rounded-xl border border-zinc-200 bg-transparent px-3 text-[12px] outline-none placeholder:text-zinc-400 focus:border-[#4568ff] dark:border-white/10"
+              className="mt-3 min-h-11 w-full rounded-lg border border-neutral-200 bg-transparent px-3 text-[12px] outline-none placeholder:text-neutral-500 focus:border-neutral-950 focus:ring-2 focus:ring-blue-600/20 dark:border-white/10 dark:focus:border-neutral-50"
             />
             <div className="mt-4 flex justify-end gap-2">
               <button
                 type="button"
                 onClick={onDismiss}
-                className="min-h-11 rounded-full px-4 text-[11px] text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5"
+                className="min-h-11 rounded-lg px-4 text-[11px] text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/5"
               >
                 {dismissLabel}
               </button>
@@ -138,7 +138,7 @@ export function ApprovalFlow({
                   setApproved(true);
                   onApprove?.(value);
                 }}
-                className="min-h-11 rounded-full bg-zinc-950 px-4 text-[11px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] disabled:opacity-40 dark:bg-zinc-50 dark:text-zinc-950"
+                className="min-h-11 rounded-lg bg-neutral-950 px-4 text-[11px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-blue-600 disabled:opacity-40 dark:bg-neutral-50 dark:text-neutral-950"
               >
                 {approveLabel}
               </button>

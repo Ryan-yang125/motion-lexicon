@@ -84,18 +84,18 @@ function DockItem({ item, pointerX, pointerY, reduced, active, magnification, di
           if (tooltip.current) tooltip.current.style.transform = "";
         }}
         onClick={item.onSelect}
-        className={`relative grid size-11 place-items-center rounded-[13px] border outline-none shadow-[0_4px_8px_-6px_rgba(28,25,23,.7)] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.22),0_4px_8px_-6px_rgba(28,25,23,.7)] ${active ? "border-stone-800 bg-stone-800 text-white dark:border-stone-100 dark:bg-stone-100 dark:text-stone-950" : "border-stone-200 bg-white text-stone-600 dark:border-white/15 dark:bg-[#292926] dark:text-stone-300"}`}
+        className={`relative grid size-11 place-items-center rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${active ? "border-neutral-950 bg-neutral-950 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-950" : "border-neutral-200 bg-white text-neutral-600 dark:border-white/15 dark:bg-[#202020] dark:text-neutral-300"}`}
         style={{ transform, transformOrigin: "50% 100%", touchAction: "manipulation" }}
       >
         <span aria-hidden>
           {item.icon}
         </span>
-        {active ? <span aria-hidden className="absolute -bottom-1 size-1 rounded-full bg-[#4568FF]" /> : null}
+        {active ? <span aria-hidden className="absolute -bottom-1 size-1 rounded-full bg-neutral-950 dark:bg-neutral-50" /> : null}
       </motion.button>
       <span
         ref={tooltip}
         role="tooltip"
-        className="pointer-events-none absolute bottom-[calc(100%+10px)] w-max max-w-[min(240px,calc(100vw-16px))] whitespace-normal rounded-[7px] bg-stone-900 px-2 py-1 text-center text-[10px] leading-[1.3] text-white opacity-0 shadow-lg transition-opacity duration-150 [overflow-wrap:anywhere] group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 dark:bg-stone-100 dark:text-stone-950"
+        className="pointer-events-none absolute bottom-[calc(100%+10px)] w-max max-w-[min(240px,calc(100vw-16px))] whitespace-normal rounded-[7px] bg-neutral-900 px-2 py-1 text-center text-[10px] leading-[1.3] text-white opacity-0 transition-opacity duration-150 [overflow-wrap:anywhere] group-focus-within:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 dark:bg-neutral-100 dark:text-neutral-950"
       >
         {item.label}
       </span>
@@ -131,10 +131,10 @@ export function FloatingDock({
         pointerX.set(DISTANT);
         pointerY.set(DISTANT);
       }}
-      className={`flex min-h-[66px] max-w-full flex-wrap items-end justify-center gap-px rounded-[18px] border border-stone-200 bg-white/88 px-1.5 pb-2 pt-3 shadow-[0_4px_8px_-8px_rgba(28,25,23,.72)] backdrop-blur-md dark:border-white/15 dark:bg-[#1E1E1B]/92 ${className}`}
+      className={`flex min-h-[66px] max-w-full flex-wrap items-end justify-center gap-px rounded-[10px] border border-neutral-200 bg-white px-1.5 pb-2 pt-3 dark:border-white/15 dark:bg-[#1e1e1e] ${className}`}
     >
       {items.length === 0 ? (
-        <span role="status" className="grid min-h-11 place-items-center px-3 text-center text-[12px] text-stone-600 dark:text-stone-300">
+        <span role="status" className="grid min-h-11 place-items-center px-3 text-center text-[12px] text-neutral-600 dark:text-neutral-300">
           {emptyLabel}
         </span>
       ) : items.map((item) => (

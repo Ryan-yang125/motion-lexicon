@@ -40,14 +40,14 @@ export function AgentRecommendation({
   const reduced = useReducedMotion();
   return (
     <section
-      className={`w-full rounded-2xl border border-zinc-200 bg-white p-4 text-zinc-950 shadow-[0_20px_55px_-36px_rgba(24,24,27,.55)] dark:border-white/10 dark:bg-[#17191d] dark:text-zinc-50 ${className}`}
+      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <div className="flex items-start gap-3">
-        <span className="relative mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-[#4568ff] text-white">
+        <span className="relative mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950">
           <span className="text-[13px]">↗</span>
           <motion.i
             aria-hidden="true"
-            className="absolute inset-0 rounded-xl border border-[#4568ff]"
+            className="absolute inset-0 rounded-lg border border-neutral-950 dark:border-neutral-50"
             animate={
               reduced ? undefined : { scale: [1, 1.35], opacity: [0.35, 0] }
             }
@@ -55,28 +55,28 @@ export function AgentRecommendation({
           />
         </span>
         <div className="min-w-0">
-          <span className="font-mono text-[9px] uppercase tracking-[.14em] text-zinc-400">
+          <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
             {eyebrow}
           </span>
           <h3 className="mt-1 text-[15px] font-semibold tracking-[-.02em]">
             {title}
           </h3>
-          <p className="mt-1 text-[11px] leading-5 text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-[11px] leading-5 text-neutral-500 dark:text-neutral-400">
             {description}
           </p>
         </div>
       </div>
       <div className="mt-4 flex items-center gap-3">
-        <span className="text-[9px] text-zinc-400">{confidenceLabel}</span>
-        <span className="h-1 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/8">
+        <span className="text-[9px] text-neutral-400">{confidenceLabel}</span>
+        <span className="h-1 flex-1 overflow-hidden rounded-full bg-neutral-100 dark:bg-white/8">
           <motion.i
-            className="block h-full rounded-full bg-emerald-500"
+            className="block h-full rounded-full bg-neutral-950 dark:bg-neutral-50"
             initial={{ width: 0 }}
             animate={{ width: `${Math.max(0, Math.min(100, confidence))}%` }}
             transition={{ duration: reduced ? 0 : 0.7 }}
           />
         </span>
-        <code className="text-[9px] text-emerald-600 dark:text-emerald-300">
+        <code className="text-[9px] text-neutral-500 dark:text-neutral-400">
           {confidence}%
         </code>
       </div>
@@ -85,7 +85,7 @@ export function AgentRecommendation({
           type="button"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="min-h-11 rounded-full px-3 text-[10px] text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/5"
+          className="min-h-11 rounded-lg px-3 text-[10px] text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/5"
         >
           {alternativesLabel}
           {alternatives.length ? ` · ${alternatives.length}` : ""}
@@ -97,7 +97,7 @@ export function AgentRecommendation({
             onAccept?.();
           }}
           whileTap={reduced ? undefined : { scale: 0.96 }}
-          className={`ml-auto min-h-11 rounded-full px-4 text-[10px] font-semibold text-white ${accepted ? "bg-emerald-500" : "bg-zinc-950 dark:bg-zinc-50 dark:text-zinc-950"}`}
+          className={`ml-auto min-h-11 rounded-lg px-4 text-[10px] font-semibold text-white ${accepted ? "bg-emerald-600" : "bg-neutral-950 dark:bg-neutral-50 dark:text-neutral-950"}`}
         >
           {accepted ? acceptedLabel : acceptLabel}
         </motion.button>
@@ -108,17 +108,17 @@ export function AgentRecommendation({
             initial={reduced ? false : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="mt-3 grid overflow-hidden border-t border-zinc-100 pt-3 dark:border-white/8"
+            className="mt-3 grid overflow-hidden border-t border-neutral-100 pt-3 dark:border-white/8"
           >
             {alternatives.map((alternative) => (
               <button
                 key={alternative.id}
                 type="button"
-                className="flex min-h-11 items-center rounded-lg px-2 text-left hover:bg-zinc-50 dark:hover:bg-white/5"
+                className="flex min-h-11 items-center rounded-lg px-2 text-left hover:bg-neutral-50 dark:hover:bg-white/5"
               >
                 <span className="text-[10px]">{alternative.title}</span>
                 {alternative.signal ? (
-                  <small className="ml-auto text-[9px] text-zinc-400">
+                  <small className="ml-auto text-[9px] text-neutral-400">
                     {alternative.signal}
                   </small>
                 ) : null}

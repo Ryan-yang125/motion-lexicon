@@ -320,7 +320,10 @@ test("Three.js previews wait for intent before their first long task", async ({ 
       longTasks: (window as typeof window & { __threeLongTasks?: number[] }).__threeLongTasks ?? [],
     }), activationStart);
     expect(activationResult.elapsed).toBeLessThan(1_000);
-    expect(Math.max(0, ...activationResult.longTasks)).toBeLessThanOrEqual(250);
+    expect(
+      Math.max(0, ...activationResult.longTasks),
+      `${id} activation long tasks: ${activationResult.longTasks.join(", ")}`,
+    ).toBeLessThanOrEqual(250);
   }
 });
 

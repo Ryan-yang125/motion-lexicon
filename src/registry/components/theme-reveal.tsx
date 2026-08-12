@@ -87,7 +87,7 @@ export function ThemeReveal({
       aria-disabled={unavailable || undefined}
       disabled={disabled}
       onClick={toggle}
-      className={`relative grid size-11 place-items-center overflow-hidden rounded-full border border-stone-200 bg-white text-stone-700 outline-none transition-[border-color,box-shadow,background-color,color] duration-150 focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.22)] disabled:opacity-45 dark:border-white/15 dark:bg-[#242421] dark:text-stone-200 ${className}`}
+      className={`relative grid size-11 place-items-center overflow-hidden rounded-full border border-neutral-200 bg-white text-neutral-700 outline-none transition-[border-color,box-shadow,background-color,color] duration-150 focus-visible:border-[#4568FF] focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.22)] disabled:opacity-45 dark:border-white/15 dark:bg-[#202020] dark:text-neutral-200 ${className}`}
     >
       <span aria-hidden className={`absolute size-4 rounded-full bg-current transition-[opacity,transform] ${reduced ? "duration-0" : "duration-200"} ${dark ? "scale-[.72] opacity-0" : "scale-100 opacity-100"}`} />
       <svg aria-hidden viewBox="0 0 24 24" width="18" height="18" fill="none" className={`absolute transition-[opacity,transform] ${reduced ? "duration-0" : "duration-200"} ${dark ? "scale-100 opacity-100" : "scale-[.72] opacity-0"}`}>

@@ -31,10 +31,10 @@ export type ActivityFeedProps = {
 };
 
 const dotClass: Record<ActivityTone, string> = {
-  neutral: "bg-stone-400 dark:bg-stone-500",
-  success: "bg-[#55745D] dark:bg-[#87A88F]",
-  warning: "bg-[#A36F3F] dark:bg-[#D2A06F]",
-  error: "bg-[#93664F] dark:bg-[#C99078]",
+  neutral: "bg-neutral-400 dark:bg-neutral-500",
+  success: "bg-emerald-600",
+  warning: "bg-amber-500",
+  error: "bg-red-600",
 };
 
 const DEFAULT_TONE_LABELS: Record<ActivityTone, string> = {
@@ -74,7 +74,7 @@ export function ActivityFeed({
   if (items.length === 0) {
     return (
       <section aria-label={label} className={`w-full max-w-[430px] ${className}`}>
-        <div role="status" className="grid min-h-28 place-items-center rounded-[12px] border border-stone-200 bg-white px-4 text-center text-[12.5px] text-stone-600 dark:border-white/[0.16] dark:bg-[#1D1D1A] dark:text-stone-300">
+        <div role="status" className="grid min-h-28 place-items-center rounded-[10px] border border-neutral-200 bg-white px-4 text-center text-[12.5px] text-neutral-600 dark:border-white/[0.16] dark:bg-[#181818] dark:text-neutral-300">
           {emptyLabel}
         </div>
       </section>
@@ -100,10 +100,10 @@ export function ActivityFeed({
                     <span className="sr-only">{toneLabels[item.tone ?? "neutral"]}. </span>
                   ) : null}
                   <span className="flex items-baseline justify-between gap-3">
-                    <strong className="truncate text-[12.5px] font-medium text-stone-800 dark:text-stone-100">{item.title}</strong>
-                    <time className="max-w-[45%] shrink-0 truncate font-mono text-[10px] tabular-nums text-stone-600 dark:text-stone-400">{item.time}</time>
+                    <strong className="truncate text-[12.5px] font-medium text-neutral-800 dark:text-neutral-100">{item.title}</strong>
+                    <time className="max-w-[45%] shrink-0 truncate font-mono text-[10px] tabular-nums text-neutral-600 dark:text-neutral-400">{item.time}</time>
                   </span>
-                  {item.description ? <span className="mt-0.5 block text-[11.5px] leading-relaxed text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400">{item.description}</span> : null}
+                  {item.description ? <span className="mt-0.5 block text-[11.5px] leading-relaxed text-neutral-600 [overflow-wrap:anywhere] dark:text-neutral-400">{item.description}</span> : null}
                 </span>
               </>
             );
@@ -118,27 +118,27 @@ export function ActivityFeed({
                 transition={reduced ? INSTANT : { ...INSERT, delay: Math.min(index, 3) * 0.025 }}
               >
                 {showGroup ? (
-                  <div className="pb-1 pt-2 text-[10.5px] font-medium text-stone-600 [overflow-wrap:anywhere] dark:text-stone-400">{item.group}</div>
+                  <div className="pb-1 pt-2 text-[10.5px] font-medium text-neutral-600 [overflow-wrap:anywhere] dark:text-neutral-400">{item.group}</div>
                 ) : null}
                 {showUnread ? (
                   <div className="flex items-center gap-2 py-1" aria-label={unreadStartLabel}>
-                    <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
-                    <span className="text-[9.5px] font-medium text-[#3D5FDA] dark:text-[#93B0FF]">{unreadLabel}</span>
-                    <span className="h-px flex-1 bg-[#4568FF]/25 dark:bg-[#93B0FF]/30" />
+                    <span className="h-px flex-1 bg-neutral-200 dark:bg-white/10" />
+                    <span className="text-[9.5px] font-medium text-neutral-500 dark:text-neutral-400">{unreadLabel}</span>
+                    <span className="h-px flex-1 bg-neutral-200 dark:bg-white/10" />
                   </div>
                 ) : null}
                 <div className="relative">
-                  {index < items.length - 1 ? <span aria-hidden="true" className="absolute bottom-0 left-[13px] top-[30px] w-px bg-stone-200 dark:bg-white/[0.12]" /> : null}
+                  {index < items.length - 1 ? <span aria-hidden="true" className="absolute bottom-0 left-[13px] top-[30px] w-px bg-neutral-200 dark:bg-white/[0.12]" /> : null}
                   {onItemClick ? (
                     <button
                       type="button"
                       onClick={() => onItemClick(item)}
-                      className={`relative flex min-h-11 w-full gap-2.5 rounded-[10px] px-2 text-left outline-none transition-colors duration-150 hover:bg-stone-100 focus-visible:bg-stone-100 focus-visible:shadow-[inset_0_0_0_1px_#4568FF] dark:hover:bg-white/[0.07] dark:focus-visible:bg-white/[0.07] dark:focus-visible:shadow-[inset_0_0_0_1px_#93B0FF] ${item.unread ? "bg-[#4568FF]/[0.035] dark:bg-[#93B0FF]/[0.05]" : ""}`}
+                      className={`relative flex min-h-11 w-full gap-2.5 rounded-lg px-2 text-left outline-none transition-colors duration-150 hover:bg-neutral-100 focus-visible:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-blue-600 dark:hover:bg-white/[0.07] dark:focus-visible:bg-white/[0.07] ${item.unread ? "bg-neutral-100/80 dark:bg-white/[0.05]" : ""}`}
                     >
                       {content}
                     </button>
                   ) : (
-                    <div className={`relative flex min-h-11 gap-2.5 rounded-[10px] px-2 ${item.unread ? "bg-[#4568FF]/[0.035] dark:bg-[#93B0FF]/[0.05]" : ""}`}>{content}</div>
+                    <div className={`relative flex min-h-11 gap-2.5 rounded-lg px-2 ${item.unread ? "bg-neutral-100/80 dark:bg-white/[0.05]" : ""}`}>{content}</div>
                   )}
                 </div>
               </motion.li>

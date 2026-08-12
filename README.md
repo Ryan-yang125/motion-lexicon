@@ -25,14 +25,14 @@
 <p align="center">
   <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/page_blocks-5-4568FF.svg" alt="5 page blocks" />
+  <img src="https://img.shields.io/badge/page_blocks-5-111111.svg" alt="5 page blocks" />
   <img src="https://img.shields.io/badge/components-59-292929.svg" alt="59 components" />
-  <img src="https://img.shields.io/badge/primitives-44-55745D.svg" alt="44 primitives" />
+  <img src="https://img.shields.io/badge/primitives-44-737373.svg" alt="44 primitives" />
 </p>
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon component directory](docs/assets/readme-v4-components.png)
+![Motion Lexicon component directory](docs/assets/readme-v5-components.png)
 
 ## Start from the level you need
 
@@ -47,7 +47,10 @@ Components and Primitives are parallel collections. A component can combine
 several primitives; each component page links back to the underlying motion
 decisions.
 
-![Motion Lexicon primitive directory](docs/assets/readme-v4-primitives.png)
+V5 gives the website shell, all five Page Blocks, the Agent UI collection, and
+the post-launch component set one zero-chroma light and dark design system.
+
+![Motion Lexicon primitive directory](docs/assets/readme-v5-primitives.png)
 
 ## Install page blocks, components, and primitives
 
@@ -87,9 +90,9 @@ recommendations, multi-agent handoff, and agent status. Every detail page also
 offers a Copy for Agent brief with the preview URL, source URL, integration
 requirements, and acceptance criteria.
 
-![3D product viewer component page](docs/assets/readme-v4-component.png)
+![Agent Workspace component page](docs/assets/readme-v5-component.png)
 
-![Slide-in primitive workbench](docs/assets/readme-v4-primitive.png)
+![Slide-in primitive workbench](docs/assets/readme-v5-primitive.png)
 
 ## Agent Skill
 
