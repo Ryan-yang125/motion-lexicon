@@ -1,3 +1,4 @@
+import { registryBlocks } from "./block-registry";
 import { registryComponents } from "./component-registry";
 import { canonicalMotionCatalog } from "./motion-catalog";
 import { seoGuideIds } from "./seo-guide-ids";
@@ -60,6 +61,10 @@ export function sitemapPaths() {
 
     for (const component of registryComponents) {
       paths.add(pathFor(locale, ["components", component.id]));
+    }
+
+    for (const block of registryBlocks) {
+      paths.add(pathFor(locale, ["components", block.id]));
     }
 
     for (const item of canonicalMotionCatalog) {

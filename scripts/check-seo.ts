@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { registryBlocks } from "../src/data/block-registry";
 import {
   registryComponentDependencies,
   registryComponentEngines,
@@ -19,12 +20,14 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 assert(siteUrl === "https://motion-lexicon.pages.dev", "Production site URL is inconsistent");
-assert(release.version === "4.2.0", `Expected release 4.2.0, found ${release.version}`);
+assert(release.version === "4.3.0", `Expected release 4.3.0, found ${release.version}`);
+assert(registryBlocks.length === 4, `Expected 4 registry blocks, found ${registryBlocks.length}`);
 assert(registryComponents.length === 48, `Expected 48 registry components, found ${registryComponents.length}`);
 assert(canonicalMotionCatalog.length === 44, `Expected 44 motion primitives, found ${canonicalMotionCatalog.length}`);
 assert(installablePrimitiveEntries.length === 40, `Expected 40 installable primitives, found ${installablePrimitiveEntries.length}`);
 assert(seoGuides.length === 8, `Expected 8 scenario guides, found ${seoGuides.length}`);
 assert(new Set(registryComponents.map((item) => item.id)).size === registryComponents.length, "Registry component IDs must be unique");
+assert(new Set(registryBlocks.map((item) => item.id)).size === registryBlocks.length, "Registry block IDs must be unique");
 assert(new Set(canonicalMotionCatalog.map((item) => item.id)).size === canonicalMotionCatalog.length, "Primitive IDs must be unique");
 
 for (const component of registryComponents) {
@@ -42,6 +45,15 @@ for (const component of registryComponents) {
   assert(existsSync(`src/registry/demos/${component.id}-demo.tsx`), `${component.id} demo source is missing`);
   const source = readFileSync(`src/registry/components/${component.id}.tsx`, "utf8");
   assert(source.includes("export"), `${component.id} must export an installable React component`);
+}
+
+for (const block of registryBlocks) {
+  assert(block.name.zh.trim() && block.name.en.trim(), `${block.id} needs bilingual names`);
+  assert(block.description.zh.trim() && block.description.en.trim(), `${block.id} needs bilingual descriptions`);
+  assert(block.signature.zh.trim() && block.signature.en.trim(), `${block.id} needs a bilingual behavior signature`);
+  assert(existsSync(`src/registry/blocks/${block.id}.tsx`), `${block.id} block source is missing`);
+  assert(existsSync(`src/registry/block-demos/${block.id}-demo.tsx`), `${block.id} block demo is missing`);
+  assert(existsSync(`public/r/${block.id}.json`), `${block.id} registry item is missing`);
 }
 
 for (const primitive of installablePrimitiveEntries) {
@@ -99,6 +111,7 @@ assert(
 const expectedPaths = locales.flatMap((locale) => [
   pathFor(locale),
   pathFor(locale, ["components"]),
+  ...registryBlocks.map((block) => pathFor(locale, ["components", block.id])),
   ...registryComponents.map((component) => pathFor(locale, ["components", component.id])),
   pathFor(locale, ["primitives"]),
   ...canonicalMotionCatalog.map((primitive) => pathFor(locale, ["primitives", primitive.id])),
@@ -110,7 +123,7 @@ const expectedPaths = locales.flatMap((locale) => [
 ]);
 const staticPaths = getStaticPaths();
 const sitemap = sitemapPaths();
-assert(expectedPaths.length === 214, `Expected 214 localized routes, found ${expectedPaths.length}`);
+assert(expectedPaths.length === 222, `Expected 222 localized routes, found ${expectedPaths.length}`);
 assert(staticPaths.length === expectedPaths.length, `Expected ${expectedPaths.length} static routes, found ${staticPaths.length}`);
 assert(sitemap.length === expectedPaths.length, `Expected ${expectedPaths.length} sitemap routes, found ${sitemap.length}`);
 assert(new Set(staticPaths).size === staticPaths.length, "Static routes contain duplicates");
@@ -127,4 +140,4 @@ for (const obsolete of ["/packs", "/catalog", "/finder", "/director", "/playgrou
   assert(!sitemap.some((item) => item.includes(obsolete)), `Obsolete route remains in sitemap: ${obsolete}`);
 }
 
-console.log(`SEO check passed: 48 components, 40 installable primitives, 4 primitive guides, 8 bilingual long-form guides, and ${sitemap.length} canonical localized pages.`);
+console.log(`SEO check passed: 4 page blocks, 48 components, 40 installable primitives, 4 primitive guides, 8 bilingual long-form guides, and ${sitemap.length} canonical localized pages.`);

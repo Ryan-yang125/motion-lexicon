@@ -119,8 +119,8 @@ export function HomePage({ locale }: { locale: Locale }) {
   const zh = locale === "zh";
   const title = zh ? "把好动效，直接带进产品。" : "Bring better motion into your product.";
   const description = zh
-    ? "48 个组件，44 个原子动效。预览、复制、安装。"
-    : "48 components and 44 motion primitives. Preview, copy, install.";
+    ? "4 个页面 Block、48 个组件、44 个原子动效。预览、复制、安装。"
+    : "4 page blocks, 48 components, and 44 motion primitives. Preview, copy, install.";
 
   return (
     <>

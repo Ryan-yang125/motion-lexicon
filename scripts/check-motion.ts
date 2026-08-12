@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
+import { registryBlocks } from "../src/data/block-registry";
 import { registryComponentEngines, registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { catalogRecipes } from "../src/data/recipes";
@@ -80,6 +81,18 @@ for (const file of registryFiles) {
   }
 }
 
+const blockFiles = readdirSync("src/registry/blocks").filter((file) => file.endsWith(".tsx"));
+assert(blockFiles.length === registryBlocks.length, "Block registry source count is inconsistent");
+for (const file of blockFiles) {
+  const source = readFileSync(`src/registry/blocks/${file}`, "utf8");
+  const entry = registryBlocks.find((block) => `${block.id}.tsx` === file);
+  assert(entry, `${file} has no block registry metadata`);
+  assert(!/transition\s*:\s*["'`]all\b/.test(source), `${file} uses transition: all`);
+  assert(!/scale\s*:\s*0(?!\.)/.test(source), `${file} animates from scale 0`);
+  assert(source.includes('from "motion/react"'), `${file} must use Motion`);
+  assert(source.includes("useReducedMotion"), `${file} needs a reduced-motion branch`);
+}
+
 for (const primitive of installablePrimitiveEntries) {
   const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
   assert(source.includes(`export function ${primitive.exportName}`), `${primitive.id} export is missing`);
@@ -129,4 +142,4 @@ for (const recipe of catalogRecipes) {
   }
 }
 
-console.log(`Motion check passed: ${registryComponents.length} product components and ${installablePrimitiveEntries.length} React + Motion primitives are reduced-motion aware, compositor safe, and registry ready.`);
+console.log(`Motion check passed: ${registryBlocks.length} page blocks, ${registryComponents.length} product components, and ${installablePrimitiveEntries.length} React + Motion primitives are reduced-motion aware, compositor safe, and registry ready.`);

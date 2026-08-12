@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { registryBlocks } from "../src/data/block-registry";
 import {
   registryComponentDependencies,
   registryComponentDevDependencies,
@@ -33,12 +34,25 @@ const catalog = {
   schemaVersion: 4,
   release: release.version,
   name: "Motion Lexicon",
-  description: "Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
+  description: "Copy-ready React page blocks and components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   siteUrl,
   repositoryUrl,
   registryUrl: `${siteUrl}/r/registry.json`,
   skill: { install: installSkill, source: `${repositoryUrl}/tree/main/skills/motion-lexicon` },
-  counts: { components: registryComponents.length, primitives: catalogRecipes.length },
+  counts: { blocks: registryBlocks.length, components: registryComponents.length, primitives: catalogRecipes.length },
+  blocks: registryBlocks.map((block) => ({
+    id: block.id,
+    name: block.name,
+    description: block.description,
+    primitiveIds: block.primitiveIds,
+    dependencies: block.dependencies,
+    signature: block.signature,
+    urls: {
+      zh: absolute(pathFor("zh", ["components", block.id])),
+      en: absolute(pathFor("en", ["components", block.id])),
+      registry: `${siteUrl}/r/${block.id}.json`
+    }
+  })),
   components: registryComponents.map((component) => ({
     id: component.id,
     category: component.category,
@@ -76,18 +90,18 @@ const catalog = {
 const llmsIndex = [
   "# Motion Lexicon",
   "",
-  "> Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.",
+  "> Copy-ready React page blocks and components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus motion primitives and an Agent Skill.",
   "",
   "## Core resources",
   "",
-  `- [Machine-readable catalog](${siteUrl}/data/v4/catalog.json): ${registryComponents.length} components and ${catalogRecipes.length} motion primitives with bilingual names, descriptions, URLs, and registry metadata.`,
-  `- [shadcn registry](${siteUrl}/r/registry.json): Installable React component and primitive index.`,
+  `- [Machine-readable catalog](${siteUrl}/data/v4/catalog.json): ${registryBlocks.length} page blocks, ${registryComponents.length} components, and ${catalogRecipes.length} motion primitives with bilingual names, descriptions, URLs, and registry metadata.`,
+  `- [shadcn registry](${siteUrl}/r/registry.json): Installable React page block, component, and primitive index.`,
   `- [Motion Grammar](${siteUrl}/data/v4/motion-grammar.json): Composition rules, timing tokens, and Skill modes.`,
   `- [Motion Blueprint schema](${siteUrl}/data/v4/motion-blueprint.schema.json): JSON Schema for portable product-motion decisions.`,
   "",
   "## English",
   "",
-  `- [Components](${absolute(pathFor("en", ["components"]))}): Copy-ready React product interactions.`,
+  `- [Components](${absolute(pathFor("en", ["components"]))}): Complete React page blocks and copy-ready product interactions.`,
   `- [Motion primitives](${absolute(pathFor("en", ["primitives"]))}): Precise behaviors, timing, and implementation guidance.`,
   `- [Animation vocabulary](${absolute(pathFor("en", ["vocabulary"]))}): 91 bilingual motion terms with definitions, distinctions, and canonical workspaces.`,
   `- [Scenario guides](${absolute(pathFor("en", ["guides"]))}): Long-form motion decisions and production examples.`,
@@ -96,7 +110,7 @@ const llmsIndex = [
   "",
   "## 中文",
   "",
-  `- [组件](${absolute(pathFor("zh", ["components"]))}): 可直接安装的 React 产品交互。`,
+  `- [组件](${absolute(pathFor("zh", ["components"]))}): 完整 React 页面 Block 与可直接安装的产品交互。`,
   `- [原子动效](${absolute(pathFor("zh", ["primitives"]))}): 精确的动效行为、节奏与实现规则。`,
   `- [动画词汇表](${absolute(pathFor("zh", ["vocabulary"]))}): 91 个中英双语动效术语，包含定义、辨析和对应工作区。`,
   `- [场景指南](${absolute(pathFor("zh", ["guides"]))}): 深度动效决策与生产示例。`,
@@ -115,6 +129,18 @@ const llmsIndex = [
 
 const llmsFull = [
   ...llmsIndex,
+  "## English page blocks",
+  "",
+  ...registryBlocks.map((block) =>
+    `- [${block.name.en}](${absolute(pathFor("en", ["components", block.id]))}): ${block.description.en} [Registry](${siteUrl}/r/${block.id}.json)`
+  ),
+  "",
+  "## 中文页面 Blocks",
+  "",
+  ...registryBlocks.map((block) =>
+    `- [${block.name.zh}](${absolute(pathFor("zh", ["components", block.id]))}): ${block.description.zh} [Registry](${siteUrl}/r/${block.id}.json)`
+  ),
+  "",
   "## English components",
   "",
   ...registryComponents.map((component) =>
@@ -184,7 +210,7 @@ export function renderSkillComponentReference() {
   return [
     "# Published component catalog",
     "",
-    `Generated from \`src/data/component-registry.ts\` for Motion Lexicon ${release.version}.`,
+    `Generated from \`src/data/component-registry.ts\` for Motion Lexicon ${release.skillVersion}.`,
     `Use only the ${registryComponents.length} published IDs below. Treat any other ID as a candidate, not a published component.`,
     "",
     "| ID | 名称 / Name | 产品用途 / Product use | Foundations | Runtime |",
@@ -355,5 +381,5 @@ export async function generatePublicArtifacts(outputDir = publicDir) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await generatePublicArtifacts();
-  console.log(`Generated V4 public artifacts: ${registryComponents.length} components and ${catalogRecipes.length} primitives.`);
+  console.log(`Generated V4 public artifacts: ${registryBlocks.length} blocks, ${registryComponents.length} components, and ${catalogRecipes.length} primitives.`);
 }

@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { getRegistryComponent, registryComponentRuntimeCost } from "../data/component-registry";
+import { getRegistryBlock } from "../data/block-registry";
 import type { Locale } from "../data/types";
 import type { DemoLocaleProps } from "./demo-locale";
 
@@ -16,11 +17,20 @@ type DemoModule = Record<string, ComponentType<DemoLocaleProps>>;
 const demoModules = typeof import.meta.env === "undefined"
   ? {}
   : import.meta.glob<DemoModule>("./demos/*-demo.tsx");
+const blockDemoModules = typeof import.meta.env === "undefined"
+  ? {}
+  : import.meta.glob<DemoModule>("./block-demos/*-demo.tsx");
 const demoLoaders = Object.fromEntries(
-  Object.entries(demoModules).map(([modulePath, loader]) => {
-    const id = modulePath.slice("./demos/".length, -"-demo.tsx".length);
-    return [id, loader];
-  })
+  [
+    ...Object.entries(demoModules).map(([modulePath, loader]) => {
+      const id = modulePath.slice("./demos/".length, -"-demo.tsx".length);
+      return [id, loader] as const;
+    }),
+    ...Object.entries(blockDemoModules).map(([modulePath, loader]) => {
+      const id = modulePath.slice("./block-demos/".length, -"-demo.tsx".length);
+      return [id, loader] as const;
+    }),
+  ]
 ) as Record<string, () => Promise<DemoModule>>;
 
 const lazyDemos = Object.fromEntries(
@@ -88,16 +98,19 @@ export function RegistryPreview({ id, locale, deferred = false }: { id: string; 
   const Demo = lazyDemos[id];
   const entry = getRegistryComponent(id);
   const heavy = entry ? registryComponentRuntimeCost(entry) === "heavy" : false;
+  const kind = getRegistryBlock(id) ? "block" : "component";
 
   return (
-    <DeferredPreview id={id} deferred={deferred} heavy={heavy}>
-      {hydrated && Demo ? (
-        <Suspense fallback={<PreviewFallback />}>
-          <Demo locale={locale} />
-        </Suspense>
-      ) : (
-        <PreviewFallback />
-      )}
-    </DeferredPreview>
+    <div data-registry-kind={kind} className="registry-preview-kind">
+      <DeferredPreview id={id} deferred={deferred} heavy={heavy}>
+        {hydrated && Demo ? (
+          <Suspense fallback={<PreviewFallback />}>
+            <Demo locale={locale} />
+          </Suspense>
+        ) : (
+          <PreviewFallback />
+        )}
+      </DeferredPreview>
+    </div>
   );
 }

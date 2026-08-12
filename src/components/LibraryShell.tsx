@@ -13,6 +13,7 @@ import {
 } from "./icons";
 import type { CommandItem } from "../registry/components/command-palette";
 import { categories } from "../data/categories";
+import { registryBlocks } from "../data/block-registry";
 import { registryComponents, componentCategories } from "../data/component-registry";
 import { catalogRecipes } from "../data/recipes";
 import { pathFor, switchLocalePath, text } from "../data/site";
@@ -94,8 +95,21 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
           >
             <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
             <span>{componentLabel}</span>
-            <small>{registryComponents.length}</small>
+            <small>{registryComponents.length + registryBlocks.length}</small>
           </ShellLink>
+          <div className="shell-nav-group">
+            <span className="shell-nav-group-label">{locale === "zh" ? "页面 Blocks" : "Page Blocks"}</span>
+            {registryBlocks.map((entry) => (
+              <ShellLink
+                href={pathFor(locale, ["components", entry.id])}
+                current={activeComponent === entry.id}
+                activeRef={activeLinkRef}
+                key={entry.id}
+              >
+                {text(entry.name, locale)}
+              </ShellLink>
+            ))}
+          </div>
           {componentCategories.map((category) => {
             const entries = registryComponents.filter((entry) => entry.category === category.id);
             return (
@@ -267,6 +281,12 @@ export function LibraryShell({ locale }: { locale: Locale }) {
   }, [mobileOpen]);
 
   const searchItems = useMemo<CommandItem[]>(() => [
+    ...registryBlocks.map((entry) => ({
+      id: `block:${entry.id}`,
+      label: text(entry.name, locale),
+      hint: locale === "zh" ? "页面 Block" : "Page Block",
+      keywords: `${entry.id} ${entry.name.zh} ${entry.name.en} ${entry.description.zh} ${entry.description.en}`
+    })),
     ...registryComponents.map((entry) => ({
       id: `component:${entry.id}`,
       label: text(entry.name, locale),
@@ -283,7 +303,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
 
   function selectSearch(item: CommandItem) {
     const [kind, id] = item.id.split(":");
-    const href = pathFor(locale, [kind === "component" ? "components" : "primitives", id]);
+    const href = pathFor(locale, [kind === "component" || kind === "block" ? "components" : "primitives", id]);
     setSearchOpen(false);
     void navigate({ href });
   }

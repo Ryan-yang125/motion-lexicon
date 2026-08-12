@@ -3,6 +3,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { registryBlocks } from "../../src/data/block-registry";
 import { registryComponents } from "../../src/data/component-registry";
 import { catalogRecipes } from "../../src/data/recipes";
 import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
@@ -14,20 +15,24 @@ async function parse(relativePath: string) {
 }
 
 describe("V4 public machine-readable artifacts", () => {
-  it("publishes one catalog for components and primitives", async () => {
+  it("publishes one catalog for blocks, components, and primitives", async () => {
     const catalog = await parse("data/v4/catalog.json") as unknown as {
       schemaVersion: number;
       release: string;
-      counts: { components: number; primitives: number };
+      counts: { blocks: number; components: number; primitives: number };
+      blocks: Array<{ id: string; urls: { en: string; zh: string; registry: string } }>;
       components: Array<{ id: string; dependencies: string[]; devDependencies?: string[]; engines: string[]; runtimeCost: string; urls: { registry: string } }>;
       primitives: Array<{ id: string; urls: { en: string; registry?: string } }>;
     };
     expect(catalog.schemaVersion).toBe(4);
-    expect(catalog.release).toBe("4.2.0");
-    expect(catalog.counts).toEqual({ components: 48, primitives: 44 });
+    expect(catalog.release).toBe("4.3.0");
+    expect(catalog.counts).toEqual({ blocks: 4, components: 48, primitives: 44 });
+    expect(catalog.blocks).toHaveLength(registryBlocks.length);
     expect(catalog.components).toHaveLength(registryComponents.length);
     expect(catalog.primitives).toHaveLength(catalogRecipes.length);
     expect(catalog.components.every((item) => item.urls.registry.endsWith(`/r/${item.id}.json`))).toBe(true);
+    expect(catalog.blocks.every((item) => item.urls.registry.endsWith(`/r/${item.id}.json`))).toBe(true);
+    expect(catalog.blocks.every((item) => item.urls.en.includes(`/en/components/${item.id}/`) && item.urls.zh.includes(`/zh/components/${item.id}/`))).toBe(true);
     expect(catalog.components.find((item) => item.id === "scroll-story")).toMatchObject({ dependencies: ["gsap"], engines: ["gsap"], runtimeCost: "medium" });
     expect(catalog.components.find((item) => item.id === "network-globe")).toMatchObject({ dependencies: ["motion", "three"], engines: ["motion", "three"], runtimeCost: "heavy" });
     expect(catalog.components.find((item) => item.id === "network-globe")?.devDependencies).toEqual(["@types/three"]);
@@ -45,7 +50,7 @@ describe("V4 public machine-readable artifacts", () => {
     };
     const publicSchema = await parse("data/v4/motion-blueprint.schema.json");
     const skillSchema = JSON.parse(await readFile(path.resolve("skills/motion-lexicon/assets/motion-blueprint.schema.json"), "utf8"));
-    expect(grammar.version).toBe("4.2.0");
+    expect(grammar.version).toBe("4.3.0");
     expect(grammar.collections.components.count).toBe(48);
     expect(grammar.collections.primitives.count).toBe(44);
     expect(grammar.urls).toEqual({
@@ -76,6 +81,8 @@ describe("V4 public machine-readable artifacts", () => {
     expect(llms).not.toMatch(/\/(?:packs|catalog|finder|director)\//);
     expect(llmsFull).toContain("## English components");
     expect(llmsFull).toContain("## 中文组件");
+    expect(llmsFull).toContain("## English page blocks");
+    expect(llmsFull).toContain("## 中文页面 Blocks");
     expect(llmsFull).toContain("## English scenario guides");
     expect(llmsFull).toContain("## 中文场景指南");
     expect(pricing).toContain("free and open source");

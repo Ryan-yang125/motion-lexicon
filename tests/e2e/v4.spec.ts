@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { registryBlocks } from "../../src/data/block-registry";
 import { registryComponents } from "../../src/data/component-registry";
 import { canonicalMotionCatalog } from "../../src/data/motion-catalog";
 import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
@@ -74,12 +75,37 @@ test("landing preview switches instantly with reduced motion", async ({ page }, 
   expect(runningTransitions).toBe(0);
 });
 
-test("component directory exposes all live registry components", async ({ page }) => {
+test("component directory exposes all live registry blocks and components", async ({ page }) => {
   await page.goto("/zh/components/");
   await expect(page.getByRole("heading", { level: 1, name: "可直接复制的 React 动效组件" })).toBeVisible();
-  await expect(page.locator(".component-card")).toHaveCount(registryComponents.length);
+  await expect(page.locator(".block-card")).toHaveCount(registryBlocks.length);
+  await expect(page.locator(".component-card")).toHaveCount(registryBlocks.length + registryComponents.length);
   await expect(page.locator('.shell-nav-link[aria-current="page"]')).toContainText("组件");
   await expect(page.locator('[data-component="copy-button"]')).toBeVisible();
+  await expect(page.locator('[data-page-block="product-landing"]')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test("page block workbench previews, resizes, opens fullscreen, and exposes the exact source", async ({ page }, testInfo) => {
+  await page.goto("/zh/components/product-landing/");
+  await expect(page.getByRole("heading", { level: 1, name: "产品发布页" })).toBeVisible();
+  const workbench = page.locator(".block-workbench");
+  const block = workbench.locator('[data-page-block="product-landing"]');
+  await expect(block).toBeVisible();
+  await page.getByRole("tab", { name: "审阅" }).click();
+  await expect(page.getByRole("tab", { name: "审阅" })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("radio", { name: "平板" }).click();
+  await expect(page.locator(".block-detail-stage")).toHaveAttribute("data-block-viewport", "tablet");
+  if (!testInfo.project.name.includes("mobile")) {
+    await page.getByRole("button", { name: "全屏预览" }).click();
+    const dialog = page.getByRole("dialog", { name: "产品发布页 全屏预览" });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: "关闭预览" }).click();
+    await expect(page.getByRole("button", { name: "全屏预览" })).toBeFocused();
+  }
+  await page.getByRole("radio", { name: "代码" }).click();
+  await expect(page.locator(".component-source")).toContainText("export function ProductLandingBlock");
+  await expect(page.locator(".component-install-panel code")).toContainText("/r/product-landing.json");
   await expectNoHorizontalOverflow(page);
 });
 
@@ -548,7 +574,15 @@ test("English routes and the shadcn registry are publishable", async ({ page, re
   const registry = await request.get("/r/registry.json");
   expect(registry.ok()).toBe(true);
   const index = await registry.json() as { items: Array<{ name: string }> };
-  expect(index.items).toHaveLength(registryComponents.length + installablePrimitiveEntries.length);
+  expect(index.items).toHaveLength(registryBlocks.length + registryComponents.length + installablePrimitiveEntries.length);
+  const productLanding = await request.get("/r/product-landing.json");
+  expect(productLanding.ok()).toBe(true);
+  expect(await productLanding.json()).toMatchObject({
+    name: "product-landing",
+    type: "registry:block",
+    dependencies: ["motion"],
+    files: [{ type: "registry:component", target: "components/motion-lexicon/blocks/product-landing.tsx" }],
+  });
   const copyButton = await request.get("/r/copy-button.json");
   expect(copyButton.ok()).toBe(true);
   expect(await copyButton.json()).toMatchObject({ name: "copy-button", type: "registry:ui" });

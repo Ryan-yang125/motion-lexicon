@@ -1,8 +1,8 @@
 {
   "schemaVersion": 4,
-  "release": "4.2.0",
+  "release": "4.3.0",
   "name": "Motion Lexicon",
-  "description": "Copy-ready React components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
+  "description": "Copy-ready React page blocks and components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",
   "repositoryUrl": "https://github.com/Ryan-yang125/motion-lexicon",
   "registryUrl": "https://motion-lexicon.pages.dev/r/registry.json",
@@ -11,9 +11,124 @@
     "source": "https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon"
   },
   "counts": {
+    "blocks": 4,
     "components": 48,
     "primitives": 44
   },
+  "blocks": [
+    {
+      "id": "product-landing",
+      "name": {
+        "zh": "产品发布页",
+        "en": "Product landing"
+      },
+      "description": {
+        "zh": "用一个连续的发布工作台连接产品定位、协作审阅与上线行动。",
+        "en": "Connects positioning, collaborative review, and launch action through one continuous release workspace."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "crossfade",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "signature": {
+        "zh": "发布阶段切换时，内容与进度在同一工作台内连续交接。",
+        "en": "Release stages hand content and progress forward inside one stable workspace."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/product-landing/",
+        "en": "https://motion-lexicon.pages.dev/en/components/product-landing/",
+        "registry": "https://motion-lexicon.pages.dev/r/product-landing.json"
+      }
+    },
+    {
+      "id": "analytics-dashboard",
+      "name": {
+        "zh": "数据分析台",
+        "en": "Analytics dashboard"
+      },
+      "description": {
+        "zh": "通过稳定的指标、趋势和渠道结构完成时间范围分析。",
+        "en": "Explores time ranges through stable metrics, trends, and channel structure."
+      },
+      "primitiveIds": [
+        "number-ticker",
+        "morph",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "signature": {
+        "zh": "时间范围变化会同步更新指标、趋势线与渠道贡献。",
+        "en": "A range change updates metrics, trend geometry, and channel contribution together."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/analytics-dashboard/",
+        "en": "https://motion-lexicon.pages.dev/en/components/analytics-dashboard/",
+        "registry": "https://motion-lexicon.pages.dev/r/analytics-dashboard.json"
+      }
+    },
+    {
+      "id": "project-dashboard",
+      "name": {
+        "zh": "项目执行台",
+        "en": "Project dashboard"
+      },
+      "description": {
+        "zh": "把里程碑、当前任务和团队活动组织成一个可推进的项目工作区。",
+        "en": "Organizes milestones, current work, and team activity into one actionable project workspace."
+      },
+      "primitiveIds": [
+        "morph",
+        "stagger",
+        "line-drawing"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "signature": {
+        "zh": "任务完成后会进入下一阶段，并同步推进里程碑进度。",
+        "en": "Completing work advances the next task and the milestone progress in one transition."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/project-dashboard/",
+        "en": "https://motion-lexicon.pages.dev/en/components/project-dashboard/",
+        "registry": "https://motion-lexicon.pages.dev/r/project-dashboard.json"
+      }
+    },
+    {
+      "id": "support-inbox",
+      "name": {
+        "zh": "客户支持收件箱",
+        "en": "Support inbox"
+      },
+      "description": {
+        "zh": "在队列、对话与客户上下文之间维持清楚的处理路径。",
+        "en": "Maintains a clear handling path across queue, conversation, and customer context."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "crossfade",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "signature": {
+        "zh": "会话选择、回复发送与队列状态共享同一处理上下文。",
+        "en": "Conversation selection, reply delivery, and queue state share one handling context."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/support-inbox/",
+        "en": "https://motion-lexicon.pages.dev/en/components/support-inbox/",
+        "registry": "https://motion-lexicon.pages.dev/r/support-inbox.json"
+      }
+    }
+  ],
   "components": [
     {
       "id": "copy-button",

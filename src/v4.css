@@ -253,6 +253,7 @@ body {
 .component-card-footer strong { font-size: 13px; font-weight: 600; }
 .component-card-footer code { color: var(--ink-3); font: 500 10.5px/1.2 var(--mono); }
 .component-card-footer svg { color: var(--ink-3); }
+.registry-preview-kind { width: 100%; min-width: 0; }
 .registry-preview { width: 100%; min-width: 0; min-height: 220px; display: grid; place-items: center; }
 .registry-preview > * { min-width: 0; }
 .registry-preview-loading { width: 72px; height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); }
@@ -294,6 +295,61 @@ body {
 .component-install-panel > div { min-width: 0; display: grid; gap: 5px; }
 .component-install-panel span { color: var(--ink-3); font-size: 11px; }
 .component-install-panel code { min-width: 0; overflow-wrap: anywhere; font: 12px/1.5 var(--mono); }
+.block-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.block-card-stage { min-height: 360px; padding: 16px; }
+.block-card-stage .registry-preview-kind[data-registry-kind="block"] {
+  position: relative;
+  height: 328px;
+  overflow: hidden;
+}
+.block-card-stage .registry-preview-kind[data-registry-kind="block"] > .registry-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1080px;
+  min-width: 1080px;
+  min-height: 720px;
+  transform: translate(-50%, -50%) scale(0.45);
+  transform-origin: center;
+}
+.block-workbench-toolbar { flex-wrap: wrap; }
+.block-toolbar-actions { min-width: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.block-toolbar-actions [role="radiogroup"] { min-width: 246px; }
+.block-fullscreen-button { min-height: 44px; white-space: nowrap; }
+.block-detail-stage {
+  min-height: 640px;
+  display: block;
+  overflow: auto;
+  padding: 20px;
+  overscroll-behavior: contain;
+}
+.block-viewport-frame {
+  width: min(100%, 1180px);
+  min-width: 0;
+  margin: 0 auto;
+  transition: width 240ms var(--ease-out);
+}
+.block-detail-stage[data-block-viewport="tablet"] .block-viewport-frame { width: 768px; }
+.block-detail-stage[data-block-viewport="mobile"] .block-viewport-frame { width: 390px; }
+.block-detail-stage .registry-preview { min-height: 720px; align-items: start; }
+.block-source { max-height: 820px; }
+.block-preview-dialog {
+  width: min(1440px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 0;
+  color: var(--ink);
+  background: var(--bezel);
+  box-shadow: var(--shadow-float);
+}
+.block-preview-dialog::backdrop { background: rgba(20, 19, 18, 0.56); backdrop-filter: blur(8px); }
+.block-preview-dialog-toolbar { min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--hairline); padding: 7px 10px 7px 18px; }
+.block-preview-dialog-toolbar strong { font-size: 13px; }
+.block-preview-dialog-body { max-height: calc(100vh - 84px); overflow: auto; padding: 14px; }
+.block-preview-dialog-body .registry-preview { min-height: 720px; align-items: start; }
 .component-related { padding: 18px; }
 .component-related h2 { margin: 0 0 12px; font-size: 14px; }
 .component-related > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -436,10 +492,17 @@ body {
   .component-related > div,
   .skill-page { grid-template-columns: 1fr; }
   .component-card-stage { min-height: 250px; padding: 18px; }
+  .block-card-stage { min-height: 276px; padding: 10px; }
+  .block-card-stage .registry-preview-kind[data-registry-kind="block"] { height: 254px; }
+  .block-card-stage .registry-preview-kind[data-registry-kind="block"] > .registry-preview { transform: translate(-50%, -50%) scale(0.28); }
   .component-detail-header { padding: 18px; }
   .component-detail-title-row { align-items: start; flex-direction: column; gap: 18px; margin-top: 24px; }
   .component-detail-stage { min-height: 420px; padding: 20px 12px; }
   .component-detail-stage .registry-preview { min-height: 360px; }
+  .block-detail-stage { min-height: 520px; padding: 10px; }
+  .block-detail-stage .registry-preview { min-height: 720px; }
+  .block-toolbar-actions { width: 100%; justify-content: stretch; }
+  .block-toolbar-actions [role="radiogroup"] { min-width: 0; flex: 1; }
   .primitive-detail-stage { min-height: 390px; padding: 20px 10px; }
   .primitive-reference-grid { grid-template-columns: 1fr; }
   .component-install-panel { align-items: stretch; flex-direction: column; }
@@ -455,6 +518,7 @@ body {
     transition-property: opacity, color, background-color, border-color;
     transition-duration: 150ms;
   }
+  .block-viewport-frame { transition: none; }
 }
 
 /* Landing — live product motion carries the visual identity. */
