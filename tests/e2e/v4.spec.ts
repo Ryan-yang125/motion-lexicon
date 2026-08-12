@@ -21,8 +21,7 @@ test("landing page presents live components, primitives, and the Skill entry", a
     await expect(tab).toHaveAttribute("aria-controls", "landing-stage-panel");
   }
   await expect(page.locator("#landing-stage-panel")).toBeVisible();
-  await firstTab.focus();
-  await page.keyboard.press("ArrowRight");
+  await firstTab.press("ArrowRight");
   await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
   await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
   await expect(page.locator('[data-component="tabs"]')).toBeVisible({ timeout: 15_000 });
