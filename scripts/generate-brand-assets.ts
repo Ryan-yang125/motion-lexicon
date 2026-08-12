@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import type { Page } from "playwright";
 import { categories } from "../src/data/categories";
+import { registryBlocks } from "../src/data/block-registry";
 import { componentCategories, registryComponentEngines, registryComponents } from "../src/data/component-registry";
 import { glossaryTerms } from "../src/data/glossary";
 import { canonicalMotionCatalog } from "../src/data/motion-catalog";
@@ -39,12 +40,12 @@ type OgKind = "home" | "components" | "primitives" | "guides" | "method" | "skil
 
 const ogContent: Record<OgKind, Record<"zh" | "en", { title: string; copy: string; preview: string; meta: string }>> = {
   home: {
-    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "48 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "48 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" },
-    en: { title: "Bring refined motion<br>straight into your product.", copy: "48 React motion components and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "48 COMPONENTS · 44 PRIMITIVES · FREE & OPEN" }
+    zh: { title: "把成熟动效组件，<br>直接带进产品。", copy: "4 个页面 Block、48 个 React 动效组件与 44 个可调节原子动效。", preview: "Motion Lexicon", meta: "4 BLOCKS · 48 COMPONENTS · 44 PRIMITIVES" },
+    en: { title: "Bring refined motion<br>straight into your product.", copy: "4 page blocks, 48 React motion components, and 44 adjustable motion primitives.", preview: "Motion Lexicon", meta: "4 BLOCKS · 48 COMPONENTS · 44 PRIMITIVES" }
   },
   components: {
-    zh: { title: "完整交互组件，<br>预览后直接安装。", copy: "真实状态、键盘操作与减弱动效，封装在同一份 React 源码里。", preview: "React Components", meta: "48 COMPONENTS · SHADCN REGISTRY · MIT" },
-    en: { title: "Complete interactions,<br>ready to install.", copy: "Real states, keyboard behavior, and reduced motion in one React source.", preview: "React Components", meta: "48 COMPONENTS · SHADCN REGISTRY · MIT" }
+    zh: { title: "完整页面与交互，<br>预览后直接安装。", copy: "4 个页面 Block 与 48 个组件共用真实预览、源码和 Registry。", preview: "React Components", meta: "4 BLOCKS · 48 COMPONENTS · SHADCN" },
+    en: { title: "Complete pages and<br>interactions, ready to install.", copy: "4 page blocks and 48 components share real previews, source, and Registry delivery.", preview: "React Components", meta: "4 BLOCKS · 48 COMPONENTS · SHADCN" }
   },
   primitives: {
     zh: { title: "一个动效，<br>放进真实场景。", copy: "44 个可预览、可调节的动效基础，覆盖进入、节奏、状态和反馈。", preview: "Motion Primitives", meta: "44 MOTION PRIMITIVES · 91 TERMS · FREE & OPEN" },
@@ -164,7 +165,7 @@ function accentFor(id: string) {
 
 type DetailOgContent = {
   id: string;
-  kind: "component" | "primitive";
+  kind: "block" | "component" | "primitive";
   title: string;
   description: string;
   eyebrow: string;
@@ -180,10 +181,12 @@ function detailOgMarkup(locale: "zh" | "en", content: DetailOgContent) {
   const description = escapeHtml(content.description);
   const category = escapeHtml(content.category);
   const facts = content.facts.slice(0, 3).map((fact) => `<span>${escapeHtml(fact)}</span>`).join("");
-  const route = `/${locale}/${content.kind === "component" ? "components" : "primitives"}/${content.id}/`;
-  const itemLabel = content.kind === "component"
-    ? (locale === "zh" ? "组件" : "Component")
-    : (locale === "zh" ? "原子动效" : "Motion Primitive");
+  const route = `/${locale}/${content.kind === "primitive" ? "primitives" : "components"}/${content.id}/`;
+  const itemLabel = content.kind === "block"
+    ? (locale === "zh" ? "页面 Block" : "Page Block")
+    : content.kind === "component"
+      ? (locale === "zh" ? "组件" : "Component")
+      : (locale === "zh" ? "原子动效" : "Motion Primitive");
   return `
     <style>
       * { box-sizing: border-box; }
@@ -269,6 +272,22 @@ for (const [index, entry] of registryComponents.entries()) {
         registryComponentEngines(entry).join(" · ").toUpperCase(),
         ...(entry.primitiveIds.slice(0, 2))
       ]
+    }, path.join(componentOgDir, `${entry.id}-${locale}.png`));
+  }
+}
+
+for (const [index, entry] of registryBlocks.entries()) {
+  for (const locale of ["zh", "en"] as const) {
+    await captureDetailOg(page, locale, {
+      id: entry.id,
+      kind: "block",
+      title: entry.name[locale],
+      description: entry.description[locale],
+      eyebrow: locale === "zh" ? "React 页面 Block" : "React Page Block",
+      category: locale === "zh" ? "完整产品页面" : "Complete product page",
+      index: index + 1,
+      total: registryBlocks.length,
+      facts: ["REACT · MOTION", "REGISTRY:BLOCK", ...(entry.primitiveIds.slice(0, 1))]
     }, path.join(componentOgDir, `${entry.id}-${locale}.png`));
   }
 }

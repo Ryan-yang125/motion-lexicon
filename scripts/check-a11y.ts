@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { registryBlocks } from "../src/data/block-registry";
 import { registryComponents } from "../src/data/component-registry";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 
@@ -43,10 +44,16 @@ for (const component of registryComponents) {
     );
   }
 }
+for (const block of registryBlocks) {
+  const source = readFileSync(`src/registry/blocks/${block.id}.tsx`, "utf8");
+  assert(!source.includes('outline: "none"'), `${block.id} removes focus without a replacement`);
+  assert(source.includes("useReducedMotion"), `${block.id} needs an equivalent reduced-motion result`);
+  assert(source.includes("focus-visible:"), `${block.id} needs visible keyboard focus styles`);
+}
 for (const primitive of installablePrimitiveEntries) {
   const source = readFileSync(`src/registry/primitives/${primitive.id}.tsx`, "utf8");
   assert(source.includes("useReducedMotion"), `${primitive.id} needs an equivalent reduced-motion result`);
   assert(!source.includes('outline: "none"'), `${primitive.id} removes focus without a replacement`);
 }
 
-console.log(`Accessibility check passed: global focus, reduced motion, overflow containment, target sizing, navigation semantics, ${registryComponents.length} component sources, and ${installablePrimitiveEntries.length} primitive sources are covered.`);
+console.log(`Accessibility check passed: global focus, reduced motion, overflow containment, target sizing, navigation semantics, ${registryBlocks.length} block sources, ${registryComponents.length} component sources, and ${installablePrimitiveEntries.length} primitive sources are covered.`);

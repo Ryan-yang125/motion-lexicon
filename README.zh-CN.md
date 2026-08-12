@@ -7,7 +7,7 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>可直接复制的 React 动效组件与原子动效。</strong>
+  <strong>可直接复制的 React 页面 Block、动效组件与原子动效。</strong>
 </p>
 
 <p align="center">
@@ -30,6 +30,7 @@
 
 | 内容 | 适合场景 | 交付 |
 | --- | --- | --- |
+| [页面 Blocks](https://motion-lexicon.pages.dev/zh/components/) | 想预览并直接安装一张完整产品页面 | 通过 shadcn Registry 安装的单文件 TypeScript 页面 |
 | [组件](https://motion-lexicon.pages.dev/zh/components/) | 想把一个精致的产品交互直接放进 React 项目 | 通过 shadcn Registry 安装的单文件 TypeScript 组件 |
 | [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 需要精确的行为、节奏或动效规则 | React + Motion 实时预览、Props 调节、源码与 Registry 安装 |
 | [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/) | 在 Agent 工作流中构建完整页面并完成动效决策 | 页面计划、已发布组件组合、生产实现与验收记录 |
@@ -38,11 +39,12 @@
 
 ![Motion Lexicon 原子动效目录](docs/assets/readme-v4-primitives.png)
 
-## 安装组件与原子动效
+## 安装页面 Block、组件与原子动效
 
 每个预览 Demo 都直接导入对应 Primitive；源码展示与 Registry 发布同一份 Primitive 实现，中间没有字符串源码生成层。
 
 ```bash
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/product-landing.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
@@ -58,10 +60,10 @@ npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
 
 ```bash
-npx shadcn@latest add @motion-lexicon/copy-button
+npx shadcn@latest add @motion-lexicon/product-landing
 ```
 
-Registry 包含 48 个完整产品与网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
+Registry 包含 4 个完整页面 Block 与 48 个产品和网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
 
 ![三维产品查看器组件页](docs/assets/readme-v4-component.png)
 
@@ -96,6 +98,8 @@ Skill 支持六种工作模式：
 ## 开发
 
 ```text
+src/registry/blocks/            4 个 React 页面 Block 源码
+src/registry/block-demos/       页面 Block 真实交互预览
 src/registry/components/        48 个 React 组件源码
 src/registry/demos/             组件真实交互预览
 src/registry/primitives/        40 个独立 React + Motion 原子动效

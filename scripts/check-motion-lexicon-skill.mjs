@@ -787,7 +787,7 @@ const validateForwardTestResult = (contract, taskFixtures) => {
   }));
 
   if (result.suite !== contract.suite) fail("Recorded fresh-context result has the wrong suite.");
-  if (result.skillVersion !== packageManifest.version) fail("Recorded fresh-context result has a stale Skill version.");
+  if (result.skillVersion !== packageManifest.skillVersion) fail("Recorded fresh-context result has a stale Skill version.");
   if (result.skillSha256 !== sha256(skillText)) fail("Recorded fresh-context result does not match the current SKILL.md hash.");
   if (result.skillTreeSha256 !== sha256Tree(skillDirectory, new Set(["evals"]))) {
     fail("Recorded fresh-context result does not match the current installed Skill payload hash.");

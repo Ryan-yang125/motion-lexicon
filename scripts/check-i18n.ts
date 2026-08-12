@@ -1,5 +1,6 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { registryBlocks } from "../src/data/block-registry";
 import { categories } from "../src/data/categories";
 import { registryComponents } from "../src/data/component-registry";
 import { aliasMetadata, canonicalMotionCatalog } from "../src/data/motion-catalog";
@@ -110,6 +111,22 @@ for (const component of registryComponents) {
   }
 }
 
+for (const block of registryBlocks) {
+  assertLocalized(block.name, `block.${block.id}.name`);
+  assertLocalized(block.description, `block.${block.id}.description`);
+  assertLocalized(block.signature, `block.${block.id}.signature`);
+  for (const locale of locales) {
+    assert(
+      paths.includes(pathFor(locale, ["components", block.id])),
+      `Missing static path for ${locale}/components/${block.id}`
+    );
+  }
+  const source = await readFile(path.resolve(`src/registry/blocks/${block.id}.tsx`), "utf8");
+  const demo = await readFile(path.resolve(`src/registry/block-demos/${block.id}-demo.tsx`), "utf8");
+  assert(source.includes('type Locale = "zh" | "en"'), `Block ${block.id} needs an explicit locale contract`);
+  assert(demo.includes("locale"), `Block demo ${block.id} needs to forward locale`);
+}
+
 assert(demoIds.length === 48, `Expected 48 localized demos, found ${demoIds.length}`);
 assert(
   JSON.stringify([...demoIds].sort()) === JSON.stringify(registryComponents.map(({ id }) => id).sort()),
@@ -131,6 +148,6 @@ for (const alias of aliasMetadata) {
 }
 
 console.log(
-  `i18n check passed: ${registryComponents.length} components and ${demoIds.length} bilingual demos, ${entries.length} localized terms, ` +
+  `i18n check passed: ${registryBlocks.length} blocks, ${registryComponents.length} components and ${demoIds.length} bilingual component demos, ${entries.length} localized terms, ` +
     `${canonicalMotionCatalog.length} primitives, ${aliasMetadata.length} aliases, ${categories.length} categories, and ${zhKeys.length} UI keys.`
 );

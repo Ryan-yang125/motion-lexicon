@@ -1,9 +1,10 @@
-# Motion Lexicon V4.2 Product Strategy
+# Motion Lexicon V4.3 Product Strategy
 
 ## Product promise
 
 Motion Lexicon gives builders production-ready motion at two useful levels:
 
+- **Page Blocks:** complete React product pages that can be previewed responsively, copied, or installed through a shadcn registry.
 - **Components:** complete React interactions that can be previewed, copied, or installed through a shadcn registry.
 - **Primitives:** focused React + Motion behaviors that can be previewed, tuned, copied, or installed.
 
@@ -27,16 +28,16 @@ Browse → Preview → Copy or install → Adapt → Review
 | Surface | Job | Public scope |
 | --- | --- | --- |
 | Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
-| Components | Deliver complete product and website interactions | 48 React components across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
+| Components | Deliver complete pages and focused product interactions | 4 React page blocks and 48 components across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
 | Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
 | Agent Skill | Build and refine from product context | Build Page, Recommend, Compose, Implement, Review, Contribute |
 | Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
 
-Components and Primitives are equal first-level directories. Search spans both
-collections. Components link to the primitives that explain their behavior;
+Components and Primitives are equal first-level directories. Page Blocks lead
+the Components directory. Search spans both collections. Components link to the primitives that explain their behavior;
 primitive workspaces link back to relevant components.
 
-## Component quality bar
+## Page Block and component quality bar
 
 Every published component includes:
 
@@ -84,21 +85,23 @@ become Primitives after they appear across several product contexts.
 
 ## Static product boundary
 
-The website remains a static React application. Content, routes, component
+The website remains a static React application. Content, routes, block and component
 source, registry JSON, localized metadata, and guides build into static files.
 No account, server, API key, or paid tier is required.
 
 ## Discoverability
 
-The build publishes 214 localized canonical pages, reciprocal hreflang,
+The build publishes 222 localized canonical pages, reciprocal hreflang,
 structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
 and the shadcn registry index.
 
-## V4.2 acceptance
+## V4.3 acceptance
 
 V4 is complete when:
 
 - Components and Primitives are the only primary product directories.
+- Four responsive Page Blocks lead the Components directory and expose desktop, tablet, mobile, fullscreen, source, and install views.
+- Every Page Block uses one source file for its website preview, code view, root registry catalog, and public Registry JSON.
 - Each locale root presents both directories through real, interactive previews.
 - All 48 component previews use the same source delivered by code view and registry JSON.
 - All 44 primitive workspaces use direct `/primitives/:id/` routes.

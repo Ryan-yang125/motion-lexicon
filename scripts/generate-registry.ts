@@ -2,6 +2,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { transform } from "esbuild";
 import path from "node:path";
 import ts from "typescript";
+import { registryBlocks } from "../src/data/block-registry";
 import {
   registryComponentDependencies,
   registryComponentDevDependencies,
@@ -140,6 +141,52 @@ const primitiveBuilds = await Promise.all(installablePrimitiveEntries.map(async 
 }));
 const primitiveItems = primitiveBuilds.map(({ meta }) => meta);
 
+const blockBuilds = await Promise.all(registryBlocks.map(async (entry) => {
+  const sourcePath = `src/registry/blocks/${entry.id}.tsx`;
+  const source = await readFile(sourcePath, "utf8");
+  try {
+    await transform(source, { loader: "tsx", jsx: "automatic", target: "es2023" });
+  } catch (error) {
+    throw new Error(`Block source failed to compile: ${entry.id}`, { cause: error });
+  }
+  if (!new RegExp(`export\\s+(?:(?:async|default)\\s+)?(?:function|const|class)\\s+${entry.exportName}\\b`).test(source)) {
+    throw new Error(`${entry.id} must export ${entry.exportName}`);
+  }
+  assertDependencies(source, sourcePath, entry.dependencies);
+  const meta = {
+    name: entry.id,
+    type: "registry:block" as const,
+    title: entry.name.en,
+    description: entry.description.en,
+    dependencies: entry.dependencies,
+    categories: ["page-block"],
+    docs: `${site}/en/components/${entry.id}/`,
+    meta: {
+      engines: ["motion"],
+      runtimeCost: "light",
+      signature: entry.signature.en
+    },
+    files: [{
+      path: sourcePath,
+      type: "registry:component" as const,
+      target: `components/motion-lexicon/blocks/${entry.id}.tsx`
+    }]
+  };
+
+  await writeFile(
+    path.join(outputDir, `${entry.id}.json`),
+    `${JSON.stringify({
+      $schema: itemSchema,
+      ...meta,
+      files: [{ ...meta.files[0], content: source }]
+    }, null, 2)}\n`,
+    "utf8"
+  );
+
+  return { meta, source, sourcePath };
+}));
+const blockItems = blockBuilds.map(({ meta }) => meta);
+
 const compilerOptions: ts.CompilerOptions = {
   allowSyntheticDefaultImports: true,
   esModuleInterop: true,
@@ -153,7 +200,7 @@ const compilerOptions: ts.CompilerOptions = {
   target: ts.ScriptTarget.ES2023
 };
 const virtualSources = new Map(
-  [...componentBuilds, ...primitiveBuilds].map(({ source, sourcePath }) => [path.resolve(sourcePath), source])
+  [...componentBuilds, ...blockBuilds, ...primitiveBuilds].map(({ source, sourcePath }) => [path.resolve(sourcePath), source])
 );
 const compilerHost = ts.createCompilerHost(compilerOptions);
 const readFileFromDisk = compilerHost.readFile.bind(compilerHost);
@@ -174,17 +221,21 @@ if (registryDiagnostics.length > 0) {
   })}`);
 }
 
-const items = [...componentItems, ...primitiveItems];
+const items = [...blockItems, ...componentItems, ...primitiveItems];
+
+const registry = {
+  $schema: schema,
+  name: "motion-lexicon",
+  homepage: site,
+  items
+};
 
 await writeFile(
   path.join(outputDir, "registry.json"),
-  `${JSON.stringify({
-    $schema: schema,
-    name: "motion-lexicon",
-    homepage: site,
-    items
-  }, null, 2)}\n`,
+  `${JSON.stringify(registry, null, 2)}\n`,
   "utf8"
 );
 
-console.log(`Registry generated: ${componentItems.length} components and ${primitiveItems.length} primitives`);
+await writeFile(path.resolve("registry.json"), `${JSON.stringify(registry, null, 2)}\n`, "utf8");
+
+console.log(`Registry generated: ${blockItems.length} blocks, ${componentItems.length} components, and ${primitiveItems.length} primitives`);

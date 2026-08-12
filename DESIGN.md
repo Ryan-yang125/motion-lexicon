@@ -1,10 +1,11 @@
-# Motion Lexicon V4.2 Product Design
+# Motion Lexicon V4.3 Product Design
 
 ## Experience model
 
-Motion Lexicon V4.2 gives Components, Primitives, and the Agent Skill one copy-ready React design language.
+Motion Lexicon V4.3 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language.
 
 ```text
+Page Blocks: Browse → Preview responsively → Inspect source → Install
 Components: Browse → Interact → Inspect source → Install
 Primitives: Browse → Preview → Tune → Inspect source → Install
 Agent Skill: Understand → Plan Page → Build → Review
@@ -18,8 +19,8 @@ the visual interest; the shell stays calm, compact, and predictable.
 Primary routes:
 
 - `/:locale/` — live product showcase and the shortest path into both collections.
-- `/:locale/components/` — 48 React motion components.
-- `/:locale/components/:componentId/` — live preview, source, install command, and related primitives.
+- `/:locale/components/` — 4 React page blocks and 48 React motion components.
+- `/:locale/components/:componentId/` — live preview, source, install command, and related primitives; Page Blocks add viewport controls and fullscreen preview.
 - `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
 - `/:locale/primitives/:primitiveId/` — live preview, props, React source, install command, and guidance.
 
@@ -37,7 +38,7 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 - The landing page uses a compact top navigation with Components, Primitives, and Guides.
 - Skill sits immediately left of GitHub in the top-right actions.
 - Internal product pages use a fixed 248px desktop sidebar for Components, Primitives, Guides, and the Agent Skill.
-- Component entries are grouped by product role: actions, overlays, inputs, navigation, data, feedback, media, and visual.
+- Page Blocks lead the Components group. Focused component entries follow by product role: actions, overlays, inputs, navigation, data, feedback, media, and visual.
 - Primitive links are grouped by motion family.
 - A mobile off-canvas sidebar preserves the same hierarchy.
 - Global search opens with `Cmd/Ctrl + K`, searches both collections, and appears immediately.
@@ -53,6 +54,7 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 
 ## Component directory
 
+- Four Page Blocks appear first as scaled, interactive page viewports.
 - Every card contains a real lazy-loaded React demo.
 - The preview remains interactive; the footer owns navigation to avoid nested interactive controls.
 - Two columns provide enough room for realistic component states on desktop.
@@ -61,6 +63,7 @@ The domain root opens the Chinese landing page. Locale roots render the localize
 
 ## Component workbench
 
+- Page Block workbenches switch among desktop, tablet, and mobile widths and open a fullscreen dialog.
 - The header contains identity, one concise description, quality signals, and a copy action.
 - Preview and Code form one stable two-option control.
 - Code view displays the exact source rendered by the preview.
@@ -107,12 +110,22 @@ The visual language follows Interior's proven material hierarchy:
 
 ## Registry contract
 
-Component and Primitive implementation files are the source of truth for:
+Page Block, Component, and Primitive implementation files are the source of truth for:
 
 1. the live website preview;
 2. component and primitive source views;
 3. `/r/:id.json`;
-4. the public V4.2 catalog.
+4. the public V4.3 catalog and root `registry.json`.
+
+The Page Block chain is explicit:
+
+```text
+blocks/:id.tsx
+  → block-demos/:id-demo.tsx
+  → directory and responsive workbench preview
+  → source view
+  → /r/:id.json
+```
 
 The Primitive chain is explicit:
 
@@ -136,7 +149,7 @@ must install at least one generated item successfully with `shadcn@latest`.
 
 ## Static delivery and SEO
 
-The build prerenders 214 localized canonical pages and generates the sitemap,
+The build prerenders 222 localized canonical pages and generates the sitemap,
 robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
 and shadcn registry. Each public route carries one H1, one canonical URL,
 reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.

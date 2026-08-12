@@ -106,6 +106,28 @@ describe("preview hydration", () => {
     container.remove();
   });
 
+  it("keeps a page block preview on the same source registry through hydration", async () => {
+    const html = renderToString(<RegistryPreview id="product-landing" locale="en" />);
+    expect(html).toContain("registry-preview-loading");
+
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    document.body.append(container);
+    const recoverable = vi.fn();
+    let root: ReturnType<typeof hydrateRoot> | undefined;
+    act(() => {
+      root = hydrateRoot(container, <RegistryPreview id="product-landing" locale="en" />, {
+        onRecoverableError: recoverable,
+      });
+    });
+
+    await waitFor(() => expect(container.querySelector('[data-page-block="product-landing"]')).toBeInTheDocument());
+    expect(container.querySelector('[data-registry-kind="block"]')).toBeInTheDocument();
+    expect(recoverable).not.toHaveBeenCalled();
+    act(() => root?.unmount());
+    container.remove();
+  });
+
   it("keeps an executable primitive on the same placeholder through hydration", async () => {
     const recipe = getCatalogRecipe("slide-in");
     expect(recipe).toBeDefined();
