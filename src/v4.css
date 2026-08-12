@@ -283,6 +283,9 @@ body {
 .component-detail-title-row h1 { margin: 8px 0 0; font-size: 24px; line-height: 1.15; }
 .component-detail-title-row p { max-width: 640px; margin: 10px 0 0; color: var(--ink-2); font-size: 14px; }
 .component-primary-copy { flex: 0 0 auto; border-radius: 999px !important; }
+.component-detail-actions { min-width: auto !important; display: flex; flex: 0 0 auto; align-items: center; gap: 8px; }
+.agent-brief-copy { border-color: var(--ink) !important; background: var(--ink) !important; color: var(--sub) !important; box-shadow: none !important; }
+.agent-brief-copy:hover { opacity: .88; }
 .component-quality-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0; padding: 0; color: var(--ink-3); font-size: 12px; list-style: none; }
 .component-quality-list li { display: flex; align-items: center; gap: 5px; }
 .component-workbench { overflow: hidden; }
@@ -497,6 +500,7 @@ body {
   .block-card-stage .registry-preview-kind[data-registry-kind="block"] > .registry-preview { transform: translate(-50%, -50%) scale(0.28); }
   .component-detail-header { padding: 18px; }
   .component-detail-title-row { align-items: start; flex-direction: column; gap: 18px; margin-top: 24px; }
+  .component-detail-actions { width: 100%; flex-wrap: wrap; }
   .component-detail-stage { min-height: 420px; padding: 20px 12px; }
   .component-detail-stage .registry-preview { min-height: 360px; }
   .block-detail-stage { min-height: 520px; padding: 10px; }

@@ -10,6 +10,7 @@ import { CopyButton } from "../registry/components/copy-button";
 import { SegmentedControl } from "../registry/components/segmented-control";
 import { RegistryPreview } from "../registry/preview-map";
 import { useRegistrySource } from "../registry/use-registry-source";
+import { buildAgentBrief } from "../data/agent-brief";
 
 type BlockViewport = "desktop" | "tablet" | "mobile";
 
@@ -52,6 +53,8 @@ export function BlockPage({ locale, blockId }: { locale: Locale; blockId: string
   const description = text(entry.description, locale);
   const install = registryBlockInstallCommand(entry.id);
   const registryUrl = `${siteUrl}/r/${entry.id}.json`;
+  const previewUrl = `${siteUrl}${pathFor(locale, ["components", entry.id])}`;
+  const agentBrief = buildAgentBrief({ locale, kind: "block", id: entry.id, name: text(entry.name, locale), description, behavior: text(entry.signature, locale), previewUrl, registryUrl });
   const related = entry.primitiveIds.map((id) => getCanonicalRecipe(id)).filter((recipe): recipe is NonNullable<typeof recipe> => Boolean(recipe));
   const requestSource = () => void sourceState.ensureLoaded().catch(() => undefined);
   const selectView = (nextView: string) => {
@@ -93,15 +96,10 @@ export function BlockPage({ locale, blockId }: { locale: Locale; blockId: string
               <h1>{text(entry.name, locale)}</h1>
               <p>{description}</p>
             </div>
-            <CopyButton
-              value={sourceState.source}
-              label={copy.copyCode}
-              copiedLabel={copy.copied}
-              errorLabel={copy.failed}
-              onIntent={requestSource}
-              resolveValue={sourceState.ensureLoaded}
-              className="component-primary-copy"
-            />
+            <div className="component-detail-actions">
+              <CopyButton value={agentBrief} label={copy.copyAgent} copiedLabel={copy.copied} errorLabel={copy.failed} className="component-primary-copy agent-brief-copy" />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} className="component-primary-copy" />
+            </div>
           </div>
           <ul className="component-quality-list" aria-label={copy.capabilities}>
             {copy.access.map((item) => <li key={item}><CheckIcon size={13} aria-hidden="true" />{item}</li>)}
@@ -183,13 +181,13 @@ export function BlockPage({ locale, blockId }: { locale: Locale; blockId: string
 }
 
 const enCopy = {
-  back: "All components", preview: "Preview", code: "Code", copyCode: "Copy code", copied: "Copied", failed: "Copy failed", loadingCode: "Loading source…", loadCodeFailed: "Source failed to load", retry: "Retry",
+  back: "All components", preview: "Preview", code: "Code", copyCode: "Copy code", copyAgent: "Copy for Agent", copied: "Copied", failed: "Copy failed", loadingCode: "Loading source…", loadCodeFailed: "Source failed to load", retry: "Retry",
   install: "Install page block", copyCommand: "Copy command", behavior: "Page behavior", foundations: "Motion foundations", runtime: "Delivery information", registryType: "Registry type", dependencies: "Dependencies", delivery: "Delivery", deliveryValue: "One self-contained React page file", registrySource: "Open public Registry JSON",
   capabilities: "Page block capabilities", access: ["Responsive page", "Keyboard ready", "Reduced motion", "TypeScript"], viewLabel: "Page block view", viewportLabel: "Preview viewport", desktop: "Desktop", tablet: "Tablet", mobile: "Mobile", fullScreen: "Full screen", close: "Close preview",
 };
 
 const zhCopy = {
-  back: "全部组件", preview: "预览", code: "代码", copyCode: "复制代码", copied: "已复制", failed: "复制失败", loadingCode: "正在载入源码…", loadCodeFailed: "源码载入失败", retry: "重试",
+  back: "全部组件", preview: "预览", code: "代码", copyCode: "复制代码", copyAgent: "复制给 Agent", copied: "已复制", failed: "复制失败", loadingCode: "正在载入源码…", loadCodeFailed: "源码载入失败", retry: "重试",
   install: "安装页面 Block", copyCommand: "复制命令", behavior: "页面行为", foundations: "基础动效", runtime: "交付信息", registryType: "Registry 类型", dependencies: "依赖", delivery: "交付方式", deliveryValue: "一个自包含的 React 页面文件", registrySource: "打开公开 Registry JSON",
   capabilities: "页面 Block 能力", access: ["响应式页面", "键盘可用", "支持减弱动效", "TypeScript"], viewLabel: "页面 Block 视图", viewportLabel: "预览视口", desktop: "桌面", tablet: "平板", mobile: "手机", fullScreen: "全屏预览", close: "关闭预览",
 };

@@ -127,7 +127,7 @@ for (const block of registryBlocks) {
   assert(demo.includes("locale"), `Block demo ${block.id} needs to forward locale`);
 }
 
-assert(demoIds.length === 48, `Expected 48 localized demos, found ${demoIds.length}`);
+assert(demoIds.length === 59, `Expected 59 localized demos, found ${demoIds.length}`);
 assert(
   JSON.stringify([...demoIds].sort()) === JSON.stringify(registryComponents.map(({ id }) => id).sort()),
   "Localized demo IDs differ from the component registry"

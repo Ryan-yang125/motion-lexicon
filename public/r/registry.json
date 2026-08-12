@@ -4,6 +4,33 @@
   "homepage": "https://motion-lexicon.pages.dev",
   "items": [
     {
+      "name": "agent-workspace",
+      "type": "registry:block",
+      "title": "Agent workspace",
+      "description": "Organizes missions, thinking, tool execution, human approval, and evidence into one continuous agent product page.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/agent-workspace/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "A mission moves from request through visible execution and human approval into evidence-backed completion."
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/agent-workspace.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/agent-workspace.tsx"
+        }
+      ]
+    },
+    {
       "name": "product-landing",
       "type": "registry:block",
       "title": "Product landing",
@@ -108,6 +135,303 @@
           "path": "src/registry/blocks/support-inbox.tsx",
           "type": "registry:component",
           "target": "components/motion-lexicon/blocks/support-inbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-thinking-trace",
+      "type": "registry:ui",
+      "title": "Agent thinking trace",
+      "description": "Organizes reasoning phases, current focus, and elapsed time into an expandable evidence trail.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Thinking stages revealed along a signal rail"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/agent-thinking-trace.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/agent-thinking-trace.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-answer",
+      "type": "registry:ui",
+      "title": "Streaming answer",
+      "description": "Brings generated text, cited sources, and follow-up prompts into one progressive answer.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/streaming-answer/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Sources and follow-ups resolve after the streamed answer"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/streaming-answer.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/streaming-answer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tool-call-stack",
+      "type": "registry:ui",
+      "title": "Tool call stack",
+      "description": "Collects search, write, command, and failure states into an inspectable execution record.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Execution records expand and resolve by tool state"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/tool-call-stack.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/tool-call-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "approval-flow",
+      "type": "registry:ui",
+      "title": "Human approval flow",
+      "description": "Carries recommendations, custom instructions, and explicit confirmation before an agent acts.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/approval-flow/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "The selected path resolves in place into approval"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/approval-flow.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/approval-flow.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-task-queue",
+      "type": "registry:ui",
+      "title": "Agent task queue",
+      "description": "Shows queued, running, complete, and failed work across two useful densities.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/agent-task-queue/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Task state stays continuous across density changes"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/agent-task-queue.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/agent-task-queue.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-composer",
+      "type": "registry:ui",
+      "title": "Agent prompt composer",
+      "description": "Combines sources, attachments, model choice, voice, and sending into one focused input surface.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/prompt-composer/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "The source menu reveals from the composer anchor"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/prompt-composer.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/prompt-composer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "context-sources",
+      "type": "registry:ui",
+      "title": "Context sources",
+      "description": "Presents retrieved chunks, provenance, and relevance with focused disclosure.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/context-sources/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "A selected source expands across the reading surface"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/context-sources.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/context-sources.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diff-review",
+      "type": "registry:ui",
+      "title": "Diff review",
+      "description": "Reviews agent-proposed field edits with explicit per-change decisions.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/diff-review/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Diff decisions resolve directly inside each row"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/diff-review.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/diff-review.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-recommendation",
+      "type": "registry:ui",
+      "title": "Agent recommendation",
+      "description": "Frames a recommendation through confidence, rationale, alternatives, and acceptance.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/agent-recommendation/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Confidence and alternative paths complete the decision"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/agent-recommendation.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/agent-recommendation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "multi-agent-handoff",
+      "type": "registry:ui",
+      "title": "Multi-agent handoff",
+      "description": "Moves task ownership, artifacts, and the next responsible agent along one continuous relay.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/multi-agent-handoff/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Task ownership travels along an agent relay rail"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/multi-agent-handoff.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/multi-agent-handoff.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-status-orbit",
+      "type": "registry:ui",
+      "title": "Agent status orbit",
+      "description": "Expresses idle, thinking, working, waiting, and complete states through a compact orbit.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "agent"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/agent-status-orbit/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Orbit count and speed encode agent status"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/agent-status-orbit.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/agent-status-orbit.tsx"
         }
       ]
     },

@@ -17,6 +17,7 @@ import { pathFor, siteUrl, text } from "../data/site";
 import type { Locale } from "../data/types";
 import { Seo } from "../components/Seo";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "../components/icons";
+import { buildAgentBrief } from "../data/agent-brief";
 
 export function ComponentPage({ locale, componentId }: { locale: Locale; componentId: string }) {
   const entry = getRegistryComponent(componentId);
@@ -33,6 +34,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         preview: "预览",
         code: "代码",
         copyCode: "复制代码",
+        copyAgent: "复制给 Agent",
         copied: "已复制",
         failed: "复制失败",
         loadingCode: "正在载入源码…",
@@ -49,6 +51,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         dependencies: "依赖",
         registrySource: "打开公开 Registry JSON",
         eventCopy: {
+          agent: "适合 Agent 思考、工具执行、审批、回答、任务协作与上下文交接。",
           actions: "适合点击、提交、复制与高风险确认等直接操作。",
           overlays: "适合打开、定位和关闭浮层，以及键盘焦点切换。",
           inputs: "适合输入、校验、选择与字段状态变化。",
@@ -65,6 +68,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         preview: "Preview",
         code: "Code",
         copyCode: "Copy code",
+        copyAgent: "Copy for Agent",
         copied: "Copied",
         failed: "Copy failed",
         loadingCode: "Loading source…",
@@ -81,6 +85,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         dependencies: "Dependencies",
         registrySource: "Open public Registry JSON",
         eventCopy: {
+          agent: "Use for agent reasoning, tool execution, approval, answers, task collaboration, and context handoff.",
           actions: "Use for direct actions such as clicks, submissions, copying, and high-risk confirmation.",
           overlays: "Use for opening, positioning, and closing overlays, including keyboard focus transitions.",
           inputs: "Use for input, validation, selection, and field-state changes.",
@@ -103,6 +108,8 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
   const runtimeCost = registryComponentRuntimeCost(entry);
   const dependencies = registryComponentDependencies(entry);
   const registryUrl = `${siteUrl}/r/${entry.id}.json`;
+  const previewUrl = `${siteUrl}${pathFor(locale, ["components", entry.id])}`;
+  const agentBrief = buildAgentBrief({ locale, kind: "component", id: entry.id, name: text(entry.name, locale), description, behavior: signature, previewUrl, registryUrl });
   const requestSource = () => {
     void sourceState.ensureLoaded().catch(() => undefined);
   };
@@ -147,15 +154,10 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
               <h1>{text(entry.name, locale)}</h1>
               <p>{description}</p>
             </div>
-            <CopyButton
-              value={sourceState.source}
-              label={copy.copyCode}
-              copiedLabel={copy.copied}
-              errorLabel={copy.failed}
-              onIntent={requestSource}
-              resolveValue={sourceState.ensureLoaded}
-              className="component-primary-copy"
-            />
+            <div className="component-detail-actions">
+              <CopyButton value={agentBrief} label={copy.copyAgent} copiedLabel={copy.copied} errorLabel={copy.failed} className="component-primary-copy agent-brief-copy" />
+              <CopyButton value={sourceState.source} label={copy.copyCode} copiedLabel={copy.copied} errorLabel={copy.failed} onIntent={requestSource} resolveValue={sourceState.ensureLoaded} className="component-primary-copy" />
+            </div>
           </div>
           <ul className="component-quality-list" aria-label={locale === "zh" ? "组件能力" : "Component capabilities"}>
             {copy.access.map((item) => <li key={item}><CheckIcon size={13} aria-hidden="true" />{item}</li>)}

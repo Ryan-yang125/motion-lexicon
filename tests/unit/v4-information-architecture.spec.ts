@@ -9,10 +9,10 @@ import { locales } from "../../src/data/types";
 
 describe("V4 component registry architecture", () => {
   it("publishes Components and Primitives as the two primary directories", () => {
-    expect(registryComponents).toHaveLength(48);
-    expect(registryBlocks).toHaveLength(4);
+    expect(registryComponents).toHaveLength(59);
+    expect(registryBlocks).toHaveLength(5);
     expect(canonicalMotionCatalog).toHaveLength(44);
-    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(48);
+    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(59);
     expect(installablePrimitiveEntries).toHaveLength(40);
 
     for (const locale of locales) {
@@ -78,7 +78,7 @@ describe("V4 component registry architecture", () => {
 
   it("removes obsolete product routes", () => {
     const obsolete = ["/packs", "/catalog", "/finder", "/director", "/playground"];
-    expect(getStaticPaths()).toHaveLength(222);
+    expect(getStaticPaths()).toHaveLength(246);
     for (const fragment of obsolete) {
       expect(sitemapPaths().some((route) => route.includes(fragment))).toBe(false);
       expect(staticRedirects().some((route) => route.source.includes(fragment))).toBe(false);

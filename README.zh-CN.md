@@ -45,6 +45,8 @@
 
 ```bash
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/product-landing.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-workspace.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-thinking-trace.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
 npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
@@ -63,7 +65,9 @@ npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 npx shadcn@latest add @motion-lexicon/product-landing
 ```
 
-Registry 包含 4 个完整页面 Block 与 48 个产品和网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
+Registry 包含 5 个完整页面 Block 与 59 个产品、Agent 和网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
+
+Agent UI 集合覆盖思考轨迹、流式回答、工具调用、审批、任务队列、Prompt 输入、上下文来源、Diff 审阅、建议、多 Agent 交接与状态。每个详情页还提供“复制给 Agent”，其中包含预览地址、源码地址、接入要求与验收标准。
 
 ![三维产品查看器组件页](docs/assets/readme-v4-component.png)
 
@@ -98,9 +102,9 @@ Skill 支持六种工作模式：
 ## 开发
 
 ```text
-src/registry/blocks/            4 个 React 页面 Block 源码
+src/registry/blocks/            5 个 React 页面 Block 源码
 src/registry/block-demos/       页面 Block 真实交互预览
-src/registry/components/        48 个 React 组件源码
+src/registry/components/        59 个 React 组件源码
 src/registry/demos/             组件真实交互预览
 src/registry/primitives/        40 个独立 React + Motion 原子动效
 src/registry/primitive-demos/   40 个直接使用原子动效的产品 Demo

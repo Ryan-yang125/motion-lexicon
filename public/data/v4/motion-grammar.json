@@ -1,5 +1,5 @@
 {
-  "version": "4.3.0",
+  "version": "4.4.0",
   "name": "Motion Grammar",
   "promise": {
     "zh": "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -18,7 +18,7 @@
       }
     },
     "components": {
-      "count": 48,
+      "count": 59,
       "title": {
         "zh": "组件",
         "en": "Components"

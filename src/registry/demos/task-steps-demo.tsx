@@ -8,10 +8,10 @@ import { TaskSteps } from "@/registry/components/task-steps";
 export function TaskStepsDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [current, setCurrent] = useState(0);
   const steps = [
-    { id: "queue", label: demoValue(locale, "已排队", "Queued"), meta: "0.2s" },
-    { id: "build", label: demoValue(locale, "构建中", "Building"), meta: "8.1s" },
-    { id: "test", label: demoValue(locale, "运行检查", "Running checks"), meta: "3.4s" },
-    { id: "deploy", label: demoValue(locale, "部署中", "Deploying"), meta: "5.0s" },
+    { id: "context", label: demoValue(locale, "读取上下文", "Read context"), meta: "0.8s" },
+    { id: "build", label: demoValue(locale, "实现界面", "Build interface"), meta: "8.1s" },
+    { id: "review", label: demoValue(locale, "浏览器验收", "Browser review"), meta: "3.4s" },
+    { id: "deliver", label: demoValue(locale, "生成交付地址", "Create delivery URL"), meta: "5.0s" },
   ];
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function TaskStepsDemo({ locale = "en" }: DemoLocaleProps = {}) {
       <TaskSteps
         steps={steps}
         current={current}
-        label={demoValue(locale, "部署进度", "Deploy progress")}
+        label={demoValue(locale, "Agent 执行进度", "Agent run progress")}
         copy={locale === "zh" ? {
           failedAt: (label) => `在${label}失败`,
           complete: (count) => `${count} 个步骤已全部完成`,

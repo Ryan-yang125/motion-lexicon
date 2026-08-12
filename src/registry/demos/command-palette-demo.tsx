@@ -11,14 +11,14 @@ import {
 export function CommandPaletteDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [open, setOpen] = useState(false);
   const commands: CommandItem[] = [
-    { id: "new", label: demoValue(locale, "新建文档", "New document"), hint: demoValue(locale, "工作区", "Workspace"), shortcut: ["⌘", "N"] },
-    { id: "dup", label: demoValue(locale, "复制文档", "Duplicate document"), keywords: "copy clone 复制" },
-    { id: "del", label: demoValue(locale, "删除文档", "Delete document"), keywords: "remove trash 删除" },
-    { id: "share", label: demoValue(locale, "分享链接", "Share link"), hint: demoValue(locale, "任何获得链接的人", "Anyone with the link") },
-    { id: "export", label: demoValue(locale, "导出 PDF", "Export as PDF"), keywords: "download print 下载" },
-    { id: "rename", label: demoValue(locale, "重命名文档", "Rename document"), shortcut: ["F2"] },
-    { id: "history", label: demoValue(locale, "版本历史", "Version history"), keywords: "revisions restore 版本" },
-    { id: "settings", label: demoValue(locale, "打开设置", "Open settings"), shortcut: ["⌘", ","] },
+    { id: "research", label: demoValue(locale, "研究参考产品", "Research reference products"), hint: demoValue(locale, "浏览器", "Browser"), shortcut: ["⌘", "R"] },
+    { id: "build", label: demoValue(locale, "构建 Agent Workspace", "Build Agent Workspace"), keywords: "agent interface workspace 构建" },
+    { id: "review", label: demoValue(locale, "检查动效与无障碍", "Review motion and accessibility"), keywords: "review motion a11y 检查" },
+    { id: "explain", label: demoValue(locale, "解释当前实现", "Explain current implementation"), hint: demoValue(locale, "基于源码", "From source") },
+    { id: "test", label: demoValue(locale, "运行完整质量检查", "Run full quality checks"), keywords: "test lint build 测试" },
+    { id: "preview", label: demoValue(locale, "发布预览", "Publish preview"), shortcut: ["⌘", "↵"] },
+    { id: "diff", label: demoValue(locale, "审阅所有改动", "Review all changes"), keywords: "diff changes review 改动" },
+    { id: "handoff", label: demoValue(locale, "交接给另一个 Agent", "Hand off to another agent"), keywords: "handoff delegate 交接" },
   ];
 
   return (
@@ -28,7 +28,7 @@ export function CommandPaletteDemo({ locale = "en" }: DemoLocaleProps = {}) {
         onClick={() => setOpen(true)}
         className="mat-cap press h-9 rounded-[9px] px-3.5 text-[13px] font-medium text-ink"
       >
-        {demoValue(locale, "打开命令", "Open commands")}
+        {demoValue(locale, "调用 Agent 命令", "Open agent commands")}
       </button>
       {open ? (
         <CommandPalette
@@ -36,8 +36,8 @@ export function CommandPaletteDemo({ locale = "en" }: DemoLocaleProps = {}) {
           items={commands}
           onDismiss={() => setOpen(false)}
           onSelect={() => setOpen(false)}
-          label={demoValue(locale, "命令面板", "Command palette")}
-          placeholder={demoValue(locale, "输入关键词", "Type a command")}
+          label={demoValue(locale, "Agent 命令", "Agent commands")}
+          placeholder={demoValue(locale, "告诉 Agent 下一步做什么", "Tell the agent what to do")}
           emptyLabel={demoValue(locale, "没有匹配命令", "No matching command")}
         />
       ) : null}

@@ -4,7 +4,7 @@ import { registryComponents } from "../src/data/component-registry";
 import { catalogRecipes } from "../src/data/recipes";
 import { installablePrimitiveEntries } from "../src/data/primitive-registry";
 import { release } from "../src/data/release";
-import { renderSkillComponentReference, renderSkillPageCss } from "./generate-public-artifacts";
+import { renderSkillPageCss } from "./generate-public-artifacts";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -44,8 +44,6 @@ assert(
   "Public component IDs are out of sync with the registry source"
 );
 
-const skillComponentReference = readFileSync("skills/motion-lexicon/references/components.md", "utf8");
-assert(skillComponentReference === renderSkillComponentReference(), "Generated Skill component reference is stale");
 const skillPageCss = readFileSync("skills/motion-lexicon/assets/motion-lexicon-page.css", "utf8");
 assert(skillPageCss === renderSkillPageCss(), "Generated Skill page CSS is stale");
 
@@ -80,4 +78,4 @@ for (const value of ["# Pricing / 定价", "## English", "## 中文", "free and 
   assert(pricing.includes(value), `pricing.txt is missing ${value}`);
 }
 
-console.log(`Public artifact check passed: V4 catalog, bilingual llms files, pricing, registry, generated Skill references, and page tokens expose ${registryBlocks.length} blocks, ${registryComponents.length} components, and ${installablePrimitiveEntries.length} installable primitives.`);
+console.log(`Public artifact check passed: V4 catalog, bilingual llms files, pricing, registry, and page tokens expose ${registryBlocks.length} blocks, ${registryComponents.length} components, and ${installablePrimitiveEntries.length} installable primitives while Skill ${release.skillVersion} remains independently versioned.`);
