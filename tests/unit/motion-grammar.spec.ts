@@ -14,7 +14,7 @@ describe("Motion Grammar", () => {
     expect(motionGrammar.collections.primitives.count).toBe(canonicalMotionCatalog.length);
     expect(motionGrammar.collections.components.count).toBe(registryComponents.length);
     expect(motionGrammar.collections.primitives.count).toBe(44);
-    expect(motionGrammar.collections.components.count).toBe(59);
+    expect(motionGrammar.collections.components.count).toBe(100);
   });
 
   it("sets an Interior-informed interaction baseline", () => {

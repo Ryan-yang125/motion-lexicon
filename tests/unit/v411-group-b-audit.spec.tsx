@@ -65,7 +65,7 @@ describe("V4.1 group B audit regressions", () => {
     const { rerender } = render(<NetworkGlobe nodes={nodes} />);
     const selected = screen.getByRole("button", { name: "San Francisco" });
     expect(selected).toHaveAttribute("aria-pressed", "true");
-    expect(selected).toHaveClass("bg-neutral-950", "text-white", "dark:bg-neutral-50", "dark:text-neutral-950");
+    expect(selected).toHaveClass("bg-[#dff3e8]", "text-[#102127]");
 
     rerender(<NetworkGlobe nodes={[]} emptyLabel="No regions yet" />);
     expect(screen.getByRole("status")).toHaveTextContent("No regions yet");
@@ -109,8 +109,8 @@ describe("V4.1 group B audit regressions", () => {
     expect(panel).not.toBeNull();
     if (!panel) throw new Error("Detail panel was not rendered");
     expect(trigger).toHaveAttribute("aria-controls", panel.id);
-    expect(panel).toHaveClass("bg-white", "dark:bg-[#202020]");
-    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("dark:text-neutral-300");
+    expect(panel).toHaveClass("bg-[#1b1d18]/92", "backdrop-blur-sm");
+    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("text-[#ead7ba]/65");
   });
 
   it("dismisses menus on an outside pointer action", async () => {

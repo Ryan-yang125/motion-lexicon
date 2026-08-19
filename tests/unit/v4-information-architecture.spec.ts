@@ -7,12 +7,12 @@ import { installablePrimitiveEntries } from "../../src/data/primitive-registry";
 import { getStaticPaths, pathFor, sitemapPaths, staticRedirects } from "../../src/data/site";
 import { locales } from "../../src/data/types";
 
-describe("V4 component registry architecture", () => {
+describe("V6 component registry architecture", () => {
   it("publishes Components and Primitives as the two primary directories", () => {
-    expect(registryComponents).toHaveLength(52);
-    expect(registryBlocks).toHaveLength(5);
+    expect(registryComponents).toHaveLength(100);
+    expect(registryBlocks).toHaveLength(10);
     expect(canonicalMotionCatalog).toHaveLength(44);
-    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(52);
+    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(100);
     expect(installablePrimitiveEntries).toHaveLength(40);
 
     for (const locale of locales) {
@@ -39,13 +39,21 @@ describe("V4 component registry architecture", () => {
       const source = readFileSync(`src/registry/blocks/${block.id}.tsx`, "utf8");
       const registry = JSON.parse(readFileSync(`public/r/${block.id}.json`, "utf8")) as {
         type: string;
+        registryDependencies: string[];
         files: Array<{ content: string; type: string }>;
       };
       expect(source).toContain(`export function ${block.exportName}`);
-      expect(source).not.toMatch(/from ["'](?:@\/|\.\.?\/)/);
       expect(registry.type).toBe("registry:block");
       expect(registry.files).toHaveLength(1);
-      expect(registry.files[0]).toMatchObject({ content: source, type: "registry:component" });
+      expect(registry.files[0]).toMatchObject({ type: "registry:component" });
+      expect(registry.registryDependencies).toEqual(
+        block.componentIds.map((id) => `https://motion-lexicon.pages.dev/r/${id}.json`),
+      );
+      for (const componentId of block.componentIds) {
+        expect(source).toContain(`@/registry/components/${componentId}`);
+        expect(registry.files[0]?.content).toContain(`@/components/motion-lexicon/${componentId}`);
+      }
+      expect(registry.files[0]?.content).not.toContain("@/registry/");
     }
     for (const component of registryComponents) {
       expect(existsSync(`src/registry/components/${component.id}.tsx`)).toBe(true);
@@ -78,7 +86,7 @@ describe("V4 component registry architecture", () => {
 
   it("removes obsolete product routes", () => {
     const obsolete = ["/packs", "/catalog", "/finder", "/director", "/playground"];
-    expect(getStaticPaths()).toHaveLength(246);
+    expect(getStaticPaths()).toHaveLength(340);
     for (const fragment of obsolete) {
       expect(sitemapPaths().some((route) => route.includes(fragment))).toBe(false);
       expect(staticRedirects().some((route) => route.source.includes(fragment))).toBe(false);

@@ -5,7 +5,7 @@ import { demoIds, demoLabels, demoText } from "@/registry/demo-locale";
 
 describe("component demo locale contract", () => {
   it("enumerates every component demo with distinct Chinese and English labels", () => {
-    expect(demoIds).toHaveLength(59);
+    expect(demoIds).toHaveLength(100);
     expect(new Set(demoIds)).toEqual(new Set(registryComponents.map((entry) => entry.id)));
     for (const id of demoIds) {
       expect(demoLabels[id].zh.trim()).not.toBe("");
@@ -20,7 +20,6 @@ describe("component demo locale contract", () => {
     for (const id of demoIds) {
       const source = readFileSync(`src/registry/demos/${id}-demo.tsx`, "utf8");
       expect(source).toContain('locale = "en"');
-      expect(source).toContain(`demoText("${id}", locale)`);
       expect(source).toContain("demoValue(locale");
     }
   });

@@ -57,16 +57,16 @@ describe("ImageLightbox", () => {
     expect(screen.getByRole("dialog")).toHaveTextContent("Beta study");
     expect(screen.getByRole("dialog")).toHaveClass(
       "border",
-      "border-black/[0.08]",
-      "dark:border-white/[0.14]",
+      "border-[#f3d7ad]/20",
+      "bg-[#17130f]",
     );
     expect(screen.getByRole("dialog").className).not.toContain("shadow-");
     expect(screen.getByRole("img", { name: "Beta study" })).toHaveClass(
       "border",
-      "border-black/[0.08]",
-      "dark:border-white/[0.12]",
+      "border-[#f6dcc0]/20",
+      "bg-[#3a2c22]",
     );
-    expect(screen.getByRole("img", { name: "Beta study" }).className).not.toContain("shadow-");
+    expect(screen.getByRole("img", { name: "Beta study" }).className).toContain("shadow-");
     expect(screen.getByText("02 / 03")).toBeInTheDocument();
     expect(onChange).toHaveBeenCalledOnce();
     expect(onChange).toHaveBeenLastCalledWith(beta, 1);
