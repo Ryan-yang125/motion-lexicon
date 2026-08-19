@@ -81,7 +81,7 @@
     "react-dom": "^18.3.1",
     "react-helmet-async": "^3.0.0",
     "react-i18next": "^17.0.11",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.23.1",
     "typescript": "^5.7.2",
