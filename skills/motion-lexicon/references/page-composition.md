@@ -133,6 +133,18 @@ Read [components.md](components.md) and choose by product job and public API.
   requested. Pause offscreen work, react to resize, and release resources.
 - Respect the Component's static first frame and reduced-motion path.
 
+## Registry integration gate
+
+- Fetch `https://motion-lexicon.pages.dev/r/<component-id>.json` and verify its
+  files, dependencies, engine, and runtime cost before integration.
+- Keep every interactive target at least 44 px. When CSS owns the target size,
+  use `min-height: 44px` or an equivalent token.
+- Run browser checks at the required viewports for every visible `button`,
+  link, input, and disclosure control.
+- Record undersized, clipped, inaccessible, or overflowing controls as
+  offenders, fix every offender, and mark acceptance incomplete while any
+  offender remains.
+
 ## Implement and verify
 
 Build the complete route with production state ownership. Verify:

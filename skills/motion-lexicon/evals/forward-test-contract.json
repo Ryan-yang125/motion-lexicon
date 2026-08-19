@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "suite": "motion-lexicon-fresh-context",
-  "status": "recorded",
+  "status": "contract-only",
   "description": "A repeatable scoring contract for the complete Skill, backed by 36 independently scored fresh-context runs and repository-bound evidence.",
   "runRequirements": {
     "freshContextPerRun": true,
