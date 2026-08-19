@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "multi-step-form",
+  "type": "registry:ui",
+  "title": "Multi-step form",
+  "description": "Maintains step direction, validation, pending state, and saved progress in a short flow.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "forms-input"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/multi-step-form/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Steps, validation, and saved state stay continuous",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "First-step form with reserved layout space",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/multi-step-form.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/multi-step-form.tsx",
+      "content": "\"use client\";\n\nimport { useId, useState, type ReactNode } from \"react\";\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\n\nexport type MultiStepFormStep = { id: string; title: string; description?: string; content: ReactNode; validate?: () => string | null };\nexport type MultiStepFormProps = { steps: readonly MultiStepFormStep[]; label?: string; submitLabel?: string; onSubmit?: () => void | Promise<void>; className?: string };\n\nexport function MultiStepForm({ steps, label = \"Setup\", submitLabel = \"Finish setup\", onSubmit, className = \"\" }: MultiStepFormProps) {\n  const reduced = useReducedMotion() === true; const titleId = useId(); const [index, setIndex] = useState(0); const [state, setState] = useState<\"idle\" | \"pending\" | \"error\" | \"complete\">(\"idle\"); const [error, setError] = useState<string | null>(null); const current = steps[index];\n  const next = async () => { if (!current || state === \"pending\") return; const issue = current.validate?.() ?? null; if (issue) { setState(\"error\"); setError(issue); return; } if (index < steps.length - 1) { setIndex(index + 1); setState(\"idle\"); setError(null); return; } try { setState(\"pending\"); setError(null); await onSubmit?.(); setState(\"complete\"); } catch { setState(\"error\"); setError(\"We could not save this step. Try again.\"); } };\n  if (!current) return <div role=\"status\" className={`rounded-[16px] bg-neutral-100 p-5 text-sm text-neutral-500 ${className}`}>No steps available.</div>;\n  return <form onSubmit={(event) => { event.preventDefault(); void next(); }} aria-labelledby={titleId} className={`rounded-[16px] border border-black/[.1] bg-white p-4 shadow-[0_16px_38px_-28px_rgba(30,30,28,.42)] ${className}`}>\n    <div className=\"flex items-center justify-between gap-3\"><span className=\"font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500\">{label}</span><span className=\"font-mono text-[10px] text-neutral-500\">{index + 1}/{steps.length}</span></div><div aria-hidden className=\"mt-3 h-1 overflow-hidden rounded-full bg-neutral-100\"><motion.span animate={{ width: `${((index + 1) / steps.length) * 100}%` }} transition={{ duration: reduced ? 0 : .28 }} className=\"block h-full bg-[#242424]\" /></div>\n    <AnimatePresence mode=\"wait\" initial={false}><motion.div key={current.id} initial={reduced ? false : { opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={reduced ? undefined : { opacity: 0, x: -12 }} transition={{ duration: reduced ? 0 : .22 }} className=\"min-h-[152px] py-6\"><h3 id={titleId} className=\"text-xl font-medium tracking-[-.04em] text-[#292929]\">{current.title}</h3>{current.description ? <p className=\"mt-1 text-[12px] leading-relaxed text-neutral-500\">{current.description}</p> : null}<div className=\"mt-5\">{current.content}</div></motion.div></AnimatePresence>\n    <div className=\"flex items-center justify-between gap-3 border-t border-black/[.08] pt-3\"><button type=\"button\" disabled={index === 0 || state === \"pending\"} onClick={() => { setIndex((value) => Math.max(0, value - 1)); setState(\"idle\"); setError(null); }} className=\"min-h-11 rounded-full px-3 text-[12px] text-neutral-500 outline-none hover:bg-neutral-100 disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF]\">Back</button><button type=\"submit\" disabled={state === \"pending\" || state === \"complete\"} className=\"min-h-11 rounded-full bg-[#242424] px-4 text-[12px] font-medium text-white outline-none transition hover:bg-[#3b3b3b] disabled:opacity-55 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2\">{state === \"pending\" ? \"Saving…\" : state === \"complete\" ? \"Saved\" : index === steps.length - 1 ? submitLabel : \"Continue\"}</button></div>\n    <AnimatePresence>{error ? <motion.p role=\"alert\" initial={reduced ? false : { opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className=\"mt-3 rounded-lg bg-red-50 px-3 py-2 text-[12px] text-red-700\">{error}</motion.p> : null}</AnimatePresence>\n  </form>;\n}\n"
+    }
+  ]
+}

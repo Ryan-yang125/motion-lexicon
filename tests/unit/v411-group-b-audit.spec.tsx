@@ -8,7 +8,6 @@ import { MediaCarousel } from "@/registry/components/media-carousel";
 import { MegaMenu } from "@/registry/components/mega-menu";
 import { NetworkGlobe } from "@/registry/components/network-globe";
 import { ProceduralProductViewer } from "@/registry/components/procedural-product-viewer";
-import { RadialActions } from "@/registry/components/radial-actions";
 import { ScrollStory } from "@/registry/components/scroll-story";
 
 const gsapHarness = vi.hoisted(() => ({
@@ -128,19 +127,6 @@ describe("V4.1 group B audit regressions", () => {
     fireEvent.pointerDown(document.body);
     await waitFor(() => expect(screen.queryByRole("menu", { name: "Product" })).not.toBeInTheDocument());
 
-    render(
-      <RadialActions
-        label="Canvas actions"
-        trigger={<span>+</span>}
-        actions={[{ id: "note", label: "Add note", icon: <span>N</span>, onSelect: vi.fn() }]}
-      />,
-    );
-    const radialTrigger = screen.getByRole("button", { name: "Canvas actions" });
-    expect(radialTrigger).toHaveAttribute("aria-haspopup", "menu");
-    fireEvent.click(radialTrigger);
-    expect(screen.getByRole("menu", { name: "Canvas actions" })).toBeInTheDocument();
-    fireEvent.pointerDown(document.body);
-    await waitFor(() => expect(screen.queryByRole("menu", { name: "Canvas actions" })).not.toBeInTheDocument());
   });
 
   it("keeps normal component text on AA contrast tokens", () => {

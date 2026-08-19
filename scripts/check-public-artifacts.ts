@@ -17,7 +17,7 @@ const catalog = JSON.parse(readFileSync("public/data/v4/catalog.json", "utf8")) 
   schemaVersion?: number;
   release?: string;
   counts?: { blocks?: number; components?: number; primitives?: number };
-  blocks?: Array<{ id?: string; urls?: { registry?: string } }>;
+  blocks?: Array<{ id?: string; componentIds?: string[]; sceneFamily?: string; primaryState?: { zh?: string; en?: string }; urls?: { registry?: string } }>;
   components?: Array<{ id?: string }>;
   primitives?: Array<{ id?: string; urls?: { registry?: string } }>;
 };
@@ -38,6 +38,13 @@ assert(
   "Public block IDs are out of sync with the registry source"
 );
 assert(catalog.blocks?.every((item) => item.urls?.registry?.endsWith(`/r/${item.id}.json`)), "Public block registry links are incomplete");
+for (const block of registryBlocks) {
+  const artifact = catalog.blocks?.find((item) => item.id === block.id);
+  assert(artifact, `Public catalog is missing ${block.id}`);
+  assert(JSON.stringify(artifact.componentIds) === JSON.stringify(block.componentIds), `${block.id} component composition is stale`);
+  assert(artifact.sceneFamily === block.sceneFamily, `${block.id} scene family is stale`);
+  assert(artifact.primaryState?.zh === block.primaryState.zh && artifact.primaryState.en === block.primaryState.en, `${block.id} primary state is stale`);
+}
 assert(
   JSON.stringify(catalog.components?.map((item) => item.id)) === JSON.stringify(registryComponents.map((item) => item.id)),
   "Public component IDs are out of sync with the registry source"
@@ -54,8 +61,8 @@ for (const obsolete of ["/packs/", "/catalog/", "/finder/", "/director/"]) {
 
 const llmsFull = readFileSync("public/llms-full.txt", "utf8");
 for (const block of registryBlocks) {
-  assert(llmsFull.includes(`/en/components/${block.id}/`), `llms-full.txt is missing the English ${block.id} block`);
-  assert(llmsFull.includes(`/zh/components/${block.id}/`), `llms-full.txt is missing the Chinese ${block.id} block`);
+  assert(llmsFull.includes(`/en/blocks/${block.id}/`), `llms-full.txt is missing the English ${block.id} block`);
+  assert(llmsFull.includes(`/zh/blocks/${block.id}/`), `llms-full.txt is missing the Chinese ${block.id} block`);
 }
 for (const component of registryComponents) {
   assert(llmsFull.includes(`/en/components/${component.id}/`), `llms-full.txt is missing the English ${component.id} component`);

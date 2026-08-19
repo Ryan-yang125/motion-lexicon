@@ -1,0 +1,44 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+import { DitherRevealCard } from "@/registry/components/dither-reveal-card";
+import { ImageLightbox, type ImageLightboxItem } from "@/registry/components/image-lightbox";
+import { MediaCarousel, type MediaCarouselItem } from "@/registry/components/media-carousel";
+import { ScrollMediaExpansion } from "@/registry/components/scroll-media-expansion";
+import { TextMorph } from "@/registry/components/text-morph";
+
+type Locale = "zh" | "en";
+export type CreativePortfolioBlockProps = { locale?: Locale; className?: string };
+
+function Artwork({ tone, mark }: { tone: string; mark: string }) {
+  return <div className={`relative size-full overflow-hidden ${tone}`}><i className="absolute -left-[12%] top-[12%] size-[62%] rounded-full border-[18px] border-white/65" /><i className="absolute bottom-[7%] right-[10%] h-[62%] w-[34%] rounded-t-full bg-[#1d2731]/80" /><span className="absolute bottom-4 left-4 font-mono text-[10px] tracking-[.18em] text-white/80">{mark}</span></div>;
+}
+
+export function CreativePortfolioBlock({ locale = "en", className = "" }: CreativePortfolioBlockProps) {
+  const reduced = useReducedMotion() === true;
+  const [contacted, setContacted] = useState(false);
+  const c = locale === "zh" ? zh : en;
+  const gallery: ImageLightboxItem[] = [
+    { id: "harbor", title: c.gallery[0], caption: c.captions[0], meta: "2026", art: <Artwork tone="bg-[#3b6f91]" mark="01 / HARBOR" /> },
+    { id: "mineral", title: c.gallery[1], caption: c.captions[1], meta: "2025", art: <Artwork tone="bg-[#b5673d]" mark="02 / MINERAL" /> },
+    { id: "garden", title: c.gallery[2], caption: c.captions[2], meta: "2025", art: <Artwork tone="bg-[#64856d]" mark="03 / GARDEN" /> },
+  ];
+  const stories: MediaCarouselItem[] = gallery.map((item) => ({ id: item.id, title: item.title, description: item.caption, meta: item.meta, eyebrow: c.caseStudy, art: item.art }));
+  return <section data-page-block="creative-portfolio" className={`w-full overflow-hidden rounded-[18px] bg-[#f1e8dc] text-[#33271f] shadow-[0_24px_60px_-45px_rgba(58,37,22,.6)] ${className}`}>
+    <header className="flex min-h-16 items-center justify-between border-b border-[#6e5140]/15 px-5 sm:px-8"><a href="#portfolio-work" className="min-h-11 py-3 font-serif text-[21px] tracking-[-.05em] outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff]">Mara Vale</a><span className="font-mono text-[9px] uppercase tracking-[.16em] text-[#806a58]">Independent practice</span></header>
+    <div>
+      <div className="grid gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end lg:px-12 lg:py-16">
+        <div><p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#9b7355]">{c.kicker}</p><h1 className="mt-5 max-w-[8ch] font-serif text-[clamp(52px,8vw,92px)] leading-[.82] tracking-[-.075em]">{c.title}</h1><p className="mt-7 max-w-sm text-[14px] leading-6 text-[#705b4b]">{c.body}</p><button type="button" onClick={() => setContacted(true)} className="mt-7 min-h-11 rounded-full bg-[#30231b] px-5 text-[11px] font-medium text-white outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff]">{contacted ? c.sent : c.contact}</button></div>
+        <div className="min-h-[310px] overflow-hidden rounded-[16px] bg-[#1c2630] sm:min-h-[390px]"><DitherRevealCard label={c.visualLabel} palette={{ front: "#1c2630", back: "#bd7044", ink: "#fff1db" }} front={<Artwork tone="bg-[#1f4d69]" mark="MARA / SELECTED" />} back={<div className="grid size-full place-items-center p-8 text-center text-[#fff1db]"><span className="font-mono text-[10px] tracking-[.16em]">MATERIAL STUDIES</span><strong className="mt-3 font-serif text-[clamp(34px,5vw,58px)] leading-none tracking-[-.06em]">{c.reveal}</strong></div>} className="h-full min-h-[310px] border-0 rounded-none sm:min-h-[390px]" /></div>
+      </div>
+      <div className="border-t border-[#6e5140]/15 px-5 py-10 sm:px-8 lg:px-12"><ScrollMediaExpansion label={c.caseStudy} slides={[{ id: "harbour", eyebrow: "01 / FIELD", title: c.gallery[0], description: c.captions[0], image: "/og-home-en.png", imageAlt: c.gallery[0] }, { id: "mineral", eyebrow: "02 / OBJECT", title: c.gallery[1], description: c.captions[1], image: "/og-components-en.png", imageAlt: c.gallery[1] }, { id: "garden", eyebrow: "03 / ARCHIVE", title: c.gallery[2], description: c.captions[2], image: "/og-vocabulary-en.png", imageAlt: c.gallery[2] }]} /></div>
+      <div id="portfolio-work" className="border-t border-[#6e5140]/15 px-5 py-10 sm:px-8 lg:px-12"><div className="flex flex-wrap items-center justify-between gap-4"><h2 className="font-serif text-[32px] tracking-[-.05em]">{c.work}</h2><TextMorph label={c.rolesLabel} phrases={c.roles} className="max-w-full" /></div><div className="mt-7"><ImageLightbox items={gallery} label={c.work} className="bg-transparent" /></div></div>
+      <div className="border-t border-[#6e5140]/15 px-5 py-10 sm:px-8 lg:px-12"><MediaCarousel items={stories} label={c.caseStudy} className="bg-[#f7f0e6]" /></div>
+      <footer className="flex flex-col gap-4 border-t border-[#6e5140]/15 px-5 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12"><p className="max-w-md font-serif text-[26px] leading-none tracking-[-.05em]">{c.footer}</p><motion.a whileTap={reduced ? undefined : { scale: .96 }} href="mailto:studio@example.com" className="min-h-11 rounded-full border border-[#6e5140]/30 px-5 py-3 text-center text-[11px] font-medium outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff]">studio@example.com</motion.a></footer>
+    </div>
+  </section>;
+}
+
+const en = { kicker: "Visual identity · digital objects", title: "Ideas, given a tactile life.", body: "An independent art direction practice for brands building a point of view in culture.", contact: "Start a conversation", sent: "Message prepared", visualLabel: "Material study reveal", reveal: "Light finds its form.", work: "Selected work", caseStudy: "Case studies", rolesLabel: "Creative disciplines", roles: ["Art direction", "Identity systems", "Digital objects"], gallery: ["Harbor house", "Mineral edition", "Garden archive"], captions: ["A hospitality identity shaped around tide and timber.", "Packaging and a small publishing system for a ceramic studio.", "A living visual language for a botanical archive."], footer: "A good identity leaves room for the world around it." };
+const zh: typeof en = { kicker: "视觉识别 · 数字物件", title: "让想法拥有可触摸的生命。", body: "为在文化中建立鲜明视角的品牌提供独立艺术指导。", contact: "开始对话", sent: "消息已准备", visualLabel: "材质研究揭示", reveal: "光找到了自己的形状。", work: "精选项目", caseStudy: "案例研究", rolesLabel: "创意方向", roles: ["艺术指导", "品牌识别", "数字物件"], gallery: ["港湾之家", "矿物版", "花园档案"], captions: ["围绕潮汐和木材展开的酒店品牌识别。", "为陶瓷工作室设计的包装与小型出版系统。", "为植物档案建立持续生长的视觉语言。"], footer: "好的识别，为周围的世界留下空间。" };

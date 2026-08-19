@@ -41,7 +41,7 @@ export function PopoverDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
-    <div role="group" aria-label={demoText("popover", locale)} ref={field} className="relative h-full w-full">
+    <div role="group" aria-label={demoText("popover", locale)} ref={field} className="relative h-full w-full overflow-hidden rounded-[16px] bg-[#e9f1ef] p-3">
       {people.map((person) => (
         <div key={person.id} className={`absolute ${person.at}`}>
           <Popover

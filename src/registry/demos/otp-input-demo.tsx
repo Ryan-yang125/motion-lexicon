@@ -25,7 +25,7 @@ export function OtpInputDemo({ locale = "en" }: DemoLocaleProps = {}) {
   }, [status]);
 
   return (
-    <div role="group" aria-label={demoText("otp-input", locale)} className="flex justify-center">
+    <div role="group" aria-label={demoText("otp-input", locale)} className="flex justify-center rounded-[16px] bg-[#edf3f8] p-6">
       <OtpInput
         ref={field}
         status={status}

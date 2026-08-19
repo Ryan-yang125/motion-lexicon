@@ -9,10 +9,10 @@ import { locales } from "../../src/data/types";
 
 describe("V4 component registry architecture", () => {
   it("publishes Components and Primitives as the two primary directories", () => {
-    expect(registryComponents).toHaveLength(59);
+    expect(registryComponents).toHaveLength(52);
     expect(registryBlocks).toHaveLength(5);
     expect(canonicalMotionCatalog).toHaveLength(44);
-    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(59);
+    expect(new Set(registryComponents.map((item) => item.id)).size).toBe(52);
     expect(installablePrimitiveEntries).toHaveLength(40);
 
     for (const locale of locales) {
@@ -20,7 +20,7 @@ describe("V4 component registry architecture", () => {
       expect(sitemapPaths()).toContain(pathFor(locale, ["components"]));
       expect(sitemapPaths()).toContain(pathFor(locale, ["primitives"]));
       for (const block of registryBlocks) {
-        expect(sitemapPaths()).toContain(pathFor(locale, ["components", block.id]));
+        expect(sitemapPaths()).toContain(pathFor(locale, ["blocks", block.id]));
       }
       for (const component of registryComponents) {
         expect(sitemapPaths()).toContain(pathFor(locale, ["components", component.id]));

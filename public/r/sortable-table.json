@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "data"
+    "data-commerce"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Explains sorting through row position while keeping data readable."
+    "signature": "Sorting is expressed through row position and direction",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Data table sorted by its active field",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

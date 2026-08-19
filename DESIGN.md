@@ -1,156 +1,130 @@
-# Motion Lexicon V5 Product Design
+# Motion Lexicon V6 Product Design
 
 ## Experience model
 
-Motion Lexicon V5 gives Page Blocks, Components, Primitives, and the Agent Skill one copy-ready React design language, with a zero-chroma website system and a complete Agent UI collection for building agent products.
+Motion Lexicon V6 is a Components-first React library. The website lets a
+builder judge a complete static frame, interact with a real product state,
+inspect the source, and install the same implementation through the Registry.
 
 ```text
-Page Blocks: Browse → Preview responsively → Inspect source → Install
-Components: Browse → Interact → Copy for Agent or inspect source → Install
-Primitives: Browse → Preview → Tune → Inspect source → Install
-Agent Skill: Understand → Plan Page → Build → Review
+Components: Browse → Judge → Interact → Inspect → Install
+Page Blocks: Browse → Preview by viewport → Inspect → Install
+Primitives: Browse → Tune → Inspect → Install
+Skill: Understand product job → Select Components → Compose → Review
 ```
 
-The interface keeps attention on working interactions. Product state supplies
-the visual interest; the shell stays calm, compact, and predictable.
+The shell stays quiet and legible. The components carry visual character through
+Product Mono, Editorial Warm, and Spatial Dark scenes.
 
 ## Information architecture
 
 Primary routes:
 
-- `/:locale/` — live product showcase and the shortest path into both collections.
-- `/:locale/components/` — 5 React page blocks and 59 React motion components.
-- `/:locale/components/:componentId/` — live preview, source, install command, and related primitives; Page Blocks add viewport controls and fullscreen preview.
-- `/:locale/primitives/` — 40 installable React motion primitives and 4 design guides.
-- `/:locale/primitives/:primitiveId/` — live preview, props, React source, install command, and guidance.
+- `/:locale/` — component-led showcase and discovery.
+- `/:locale/components/` — all 100 Components across 11 categories.
+- `/:locale/components/:componentId/` — live preview, source, install command,
+  related Primitives, and visual contract.
+- `/:locale/blocks/` — ten complete Page Blocks.
+- `/:locale/blocks/:blockId/` — responsive Block preview, source, and install command.
+- `/:locale/primitives/` — 44 canonical motion Primitives.
+- `/:locale/primitives/:primitiveId/` — live preview, props, source, install,
+  and related Components.
 
-Resource routes:
+Resource routes include `/:locale/guides/`, `/:locale/skill/`,
+`/:locale/method/`, and `/:locale/vocabulary/`. The domain root opens the
+Chinese landing page.
 
-- `/:locale/guides/` and `/:locale/guides/:guideId/`.
-- `/:locale/skill/`.
-- `/:locale/method/`.
-- `/:locale/vocabulary/`.
+## Navigation and discovery
 
-The domain root opens the Chinese landing page. Locale roots render the localized landing page. Old product routes are removed.
+- Components occupy the first navigation position and the primary directory entry.
+- Page Blocks have their own directory and show complete product compositions.
+- Category filtering exposes Agent UI, Actions, Overlays & Surfaces, Forms &
+  Input, Navigation, Data & Commerce, Feedback, Cards & Media, Visual &
+  Ambient, Hero & Story, and Text & Type.
+- Primitives remain accessible as stable motion vocabulary: 44 canonical entries
+  preserve 91 source terms through mappings and redirects.
+- Global search opens with `Cmd/Ctrl + K`; language, theme, and GitHub remain
+  compact top-level actions.
+- Desktop and mobile navigation preserve the same hierarchy.
 
-## Navigation
+## Directory and workbench
 
-- The landing page uses a compact top navigation with Components, Primitives, and Guides.
-- Skill sits immediately left of GitHub in the top-right actions.
-- Internal product pages use a fixed 248px desktop sidebar for Components, Primitives, Guides, and the Agent Skill.
-- Page Blocks lead the Components group. Focused component entries follow by product role: actions, overlays, inputs, navigation, data, feedback, media, and visual.
-- Primitive links are grouped by motion family.
-- A mobile off-canvas sidebar preserves the same hierarchy.
-- Global search opens with `Cmd/Ctrl + K`, searches both collections, and appears immediately.
-- Language, theme, and GitHub remain in the compact top bar.
+Each Component card renders a lazy real demo with an intentional primary frame.
+The directory supports scanning by category, scene family, runtime cost, and
+search. Narrow layouts place the active work ahead of the full directory.
 
-## Landing page
+A Component workbench provides identity, a concise product job, the live
+preview, source from the rendered implementation, install command, dependencies,
+and relevant motion foundations. Page Block workbenches add desktop, tablet,
+mobile, and fullscreen previews.
 
-- The hero renders one real component at a time and switches among three representative product interactions.
-- Components and Primitives receive equal entry points and real working previews.
-- Featured cards reuse the same preview registry as the directories and detail pages.
-- Installation and Agent Skill complete the path from discovery to implementation.
-- Motion supports comprehension and state continuity; reduced motion keeps every route and action intact.
+## Scene families
 
-## Component directory
+| Family | Visual direction | Typical use |
+| --- | --- | --- |
+| Product Mono | quiet neutrals, crisp boundaries, compact mono metadata, exact state color | forms, tools, data, navigation, feedback |
+| Editorial Warm | paper and material warmth, expressive type, image-led pacing | media, cards, stories, cultural products |
+| Spatial Dark | dark depth, controlled light, dimensional context | technical worlds, visual systems, spatial product stories |
 
-- Five Page Blocks appear first as scaled, interactive page viewports.
-- Every card contains a real lazy-loaded React demo.
-- The preview remains interactive; the footer owns navigation to avoid nested interactive controls.
-- Two columns provide enough room for realistic component states on desktop.
-- Cards collapse to one column on narrow layouts.
-- Category counts and identifiers use small mono labels.
+The primary static frame must remain informative without autoplay. Dynamic
+behavior starts from intent or a meaningful state transition.
 
-## Component workbench
+## Material, type, and interaction
 
-- Page Block workbenches switch among desktop, tablet, and mobile widths and open a fullscreen dialog.
-- The header contains identity, one concise description, quality signals, and a copy action.
-- Preview and Code form one stable two-option control.
-- Code view displays the exact source rendered by the preview.
-- The install row publishes `npx shadcn@latest add https://motion-lexicon.pages.dev/r/:id.json`.
-- Related Primitives explain the building blocks inside the component.
-
-## Primitive directory and workbench
-
-- Search and category pills filter 44 canonical primitives.
-- Gallery previews use the real React + Motion renderer and mount only near the viewport.
-- Every direct route uses `/primitives/:id/`.
-- Forty executable entries expose props, replay, source, reduced motion, and a shadcn install command.
-- Four editorial entries remain focused design guides.
-- Each executable card mounts its own product demo. Repeated placeholder scenes and shared visual stand-ins are absent.
-- Each demo imports its corresponding Primitive, while source and Registry output read that Primitive file directly.
-
-## Material and visual system
-
-The visual language follows a zero-chroma product hierarchy informed by Interior and Beautiful UI:
-
-| Layer | Role |
-| --- | --- |
-| Bezel | neutral page background and navigation context |
-| Panel | crisp working surfaces, workbenches, and dialogs |
-| Well | quiet preview, input, and code regions |
-
-- Platform system typography with SF Pro where available.
-- 12px, 13px, 14px, and 24px type steps with `-0.15px` letter spacing.
-- `#111111`, `#555555`, and `#737373` form the light-theme hierarchy; dark surfaces use `#141414`, `#1B1B1B`, and `#232323`.
-- 14px navigation icons, 20px card icons, 8px control radii, and 10px surface radii.
-- Black carries primary action and selected navigation. Blue is reserved for keyboard focus and explicit selection.
-- Green, amber, and red appear only when state meaning requires them.
-- Thin neutral boundaries and rare one-pixel shadows create depth without decorative glow, glass, or tinted cards.
-
-## Interaction and motion
-
-- Motion begins from a user action or a real system state.
-- Frequent keyboard surfaces such as the command palette open immediately.
-- State changes reserve space and preserve the final geometry.
-- Arrival motion typically resolves in 180–280ms; departure resolves in 110–180ms.
-- Direct manipulation uses interruptible springs.
-- Transform and opacity carry visible travel.
-- Fine-pointer hover behavior stays inside the matching media query.
-- Reduced motion preserves state, focus, outcome, and control.
+- The website shell uses chroma-zero light and dark neutrals, thin boundaries,
+  compact radii, black primary actions, restrained blue focus/selection, and
+  semantic status colors.
+- Components may expand into their scene family while keeping core content,
+  controls, focus visibility, and contrast legible.
+- Platform system typography and compact mono metadata keep dense implementation
+  details scannable; Editorial Warm scenes may use larger display rhythm.
+- Motion relies on transform and opacity where possible, preserves final geometry,
+  supports interruption, and respects fine-pointer media queries.
+- Reduced motion preserves state, focus, content, and the resulting action.
 
 ## Registry contract
 
-Page Block, Component, and Primitive implementation files are the source of truth for:
+Component and Block source files are the source of truth for:
 
-1. the live website preview;
-2. component and primitive source views;
-3. `/r/:id.json`;
-4. the public machine-readable catalog and root `registry.json`.
-
-The Page Block chain is explicit:
+1. direct-import live demos;
+2. directory and workbench previews;
+3. source views;
+4. `/r/:id.json`;
+5. the public machine-readable catalog and root `registry.json`.
 
 ```text
+components/:id.tsx
+  → demos/:id-demo.tsx
+  → directory and Component workbench
+  → source view
+  → /r/:id.json
+
 blocks/:id.tsx
   → block-demos/:id-demo.tsx
-  → directory and responsive workbench preview
+  → Block directory and responsive workbench
   → source view
   → /r/:id.json
 ```
 
-The Primitive chain is explicit:
+Registry items declare runtime dependencies. The release workflow generates the
+official shadcn schema and verifies fresh representative installs.
 
-```text
-primitives/:id.tsx
-  → primitive-demos/:id-demo.tsx
-  → directory and workbench preview
-  → source view
-  → /r/primitive-:id.json
-```
+## Accessibility, responsiveness, and performance
 
-`scripts/generate-registry.ts` publishes the official shadcn schema. A release
-must install at least one generated item successfully with `shadcn@latest`.
+- Native semantics, labels, focus restoration, keyboard paths, live regions,
+  touch targets, and visible focus remain part of the implementation.
+- Primary interactive targets use a 44px baseline.
+- Components and Blocks hold at 320, 390, 768, and 1440px without page-level
+  horizontal overflow.
+- Heavy canvas, WebGL, and Three.js scenes initialize only when useful, pause
+  when offscreen, respond to resize, dispose resources on unmount, and render a
+  meaningful static/reduced-motion frame.
+- Each scene supports light and dark context where its product job needs it.
 
-## Accessibility and responsive behavior
+## Static delivery and release
 
-- Native controls, roles, labels, focus restoration, keyboard navigation, and live regions remain part of the component implementation.
-- Primary touch targets keep a 44px baseline.
-- Light and dark themes preserve readable contrast.
-- `html`, `body`, the shell, cards, source blocks, and previews never create page-level horizontal scrolling.
-
-## Static delivery and SEO
-
-The build prerenders 246 localized canonical pages and generates the sitemap,
-robots file, security headers, redirects, Open Graph assets, V4 JSON catalog,
-and shadcn registry. Each public route carries one H1, one canonical URL,
-reciprocal hreflang, first-party social imagery, and WebPage JSON-LD.
+`npm run build` prerenders localized canonical routes and produces the sitemap,
+robots file, structured metadata, public catalog, social assets, and shadcn
+Registry output. V6 release acceptance verifies those generated assets after the
+100-Component and 10-Block catalog passes source, visual, accessibility,
+installation, and browser review.

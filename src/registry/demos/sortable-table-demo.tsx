@@ -31,7 +31,7 @@ export function SortableTableDemo({ locale = "en" }: DemoLocaleProps = {}) {
     { id: "seen", header: demoValue(locale, "最近在线", "Last seen"), width: "96px", align: "end", value: (row) => row.ago, cell: (row) => locale === "zh" ? row.seen.replace(" ago", "前").replace("h", "小时").replace("d", "天").replace("m", "分钟") : row.seen },
   ];
   return (
-    <div role="group" aria-label={demoText("sortable-table", locale)} className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("sortable-table", locale)} className="mx-auto w-full max-w-[440px] rounded-[16px] bg-[#eef4f8] p-3">
       <SortableTable
         label={demoValue(locale, "评审者", "Reviewers")}
         rows={REVIEWERS}

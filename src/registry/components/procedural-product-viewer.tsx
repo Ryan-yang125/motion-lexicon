@@ -90,12 +90,12 @@ function makeProduct(
 
   const shell = track(
     new THREE.MeshBasicMaterial({
-      color: 0xe8e5dd,
+      color: 0x262823,
     }),
   );
   const dark = track(
     new THREE.MeshBasicMaterial({
-      color: 0x292929,
+      color: 0x0b0d0c,
     }),
   );
   const accentMaterial = track(
@@ -105,7 +105,7 @@ function makeProduct(
   );
   const glass = track(
     new THREE.MeshBasicMaterial({
-      color: 0xdce4ef,
+      color: 0xb6d7d5,
       transparent: true,
       opacity: 0.84,
     }),
@@ -151,7 +151,7 @@ function makeProduct(
 
   const displayGeometry = track(new THREE.PlaneGeometry(0.72, 0.5));
   const displayMaterial = track(
-    new THREE.MeshBasicMaterial({ color: 0x171918, transparent: true, opacity: 0.94 }),
+    new THREE.MeshBasicMaterial({ color: 0x09110f, transparent: true, opacity: 0.96 }),
   );
   const display = new THREE.Mesh(displayGeometry, displayMaterial);
   display.position.set(0, 0.25, 0.27);
@@ -187,7 +187,7 @@ function makeProduct(
 
   const edgeGeometry = track(new THREE.EdgesGeometry(bodyGeometry, 35));
   const edgeMaterial = track(
-    new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.38 }),
+    new THREE.LineBasicMaterial({ color: 0xf3d9af, transparent: true, opacity: 0.22 }),
   );
   group.add(new THREE.LineSegments(edgeGeometry, edgeMaterial));
 
@@ -199,7 +199,7 @@ export function ProceduralProductViewer({
   productName = "Arc One",
   detailLabel = "Tactile dial",
   labels,
-  accent = "#171717",
+  accent = "#dc774a",
   activation = "intent",
   className = "",
 }: ProceduralProductViewerProps) {
@@ -543,21 +543,23 @@ export function ProceduralProductViewer({
             }
           : undefined
       }
-      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-100 outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#181818] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-[#f4d5a8]/20 bg-[#11140f] outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#11140f] ${rendererReady ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"} ${className}`}
     >
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,rgba(221,119,74,.3),transparent_27%),radial-gradient(circle_at_25%_84%,rgba(94,155,145,.22),transparent_35%)]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,246,225,.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,246,225,.06)_1px,transparent_1px)] [background-size:24px_24px]" />
       <div
         data-webgl-fallback="procedural-product-viewer"
         aria-hidden
         className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
       >
-        <div className="relative h-40 w-28 -rotate-3 rounded-[10px] border border-white/80 bg-neutral-200 dark:border-white/20 dark:bg-neutral-700">
-          <span className="absolute inset-x-3 top-4 h-16 rounded-[10px] border border-black/10 bg-[#171918] shadow-inner">
+        <div className="relative h-40 w-28 -rotate-3 rounded-[14px] border border-[#f5dfbb]/30 bg-[#252721] shadow-[0_26px_44px_-24px_rgba(0,0,0,.95)]">
+          <span className="absolute inset-x-3 top-4 h-16 rounded-[10px] border border-white/10 bg-[#09110f] shadow-inner">
             <span className="absolute left-3 top-5 h-1 w-10 rounded-full" style={{ background: accent }} />
             <span className="absolute left-3 top-8 h-1 w-6 rounded-full bg-white/40" />
           </span>
           <span className="absolute bottom-7 left-4 size-8 rounded-full border-[5px]" style={{ borderColor: accent }} />
-          <span className="absolute bottom-7 right-4 size-7 rounded-full bg-[#292929] shadow-[inset_2px_2px_4px_rgba(255,255,255,.16)]" />
-          <span className="absolute -bottom-2 left-1/2 h-3 w-20 -translate-x-1/2 rounded-full bg-[#292929] shadow-lg" />
+          <span className="absolute bottom-7 right-4 size-7 rounded-full bg-[#080a09] shadow-[inset_2px_2px_4px_rgba(255,255,255,.16)]" />
+          <span className="absolute -bottom-2 left-1/2 h-3 w-20 -translate-x-1/2 rounded-full bg-[#080a09] shadow-lg" />
         </div>
       </div>
 
@@ -570,7 +572,7 @@ export function ProceduralProductViewer({
             focusAfterActivationRef.current = true;
             setActivationRequested(true);
           }}
-          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-black/10 bg-white px-4 text-[12px] font-semibold text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#202020] dark:text-white"
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f5dfbb]/25 bg-[#f7e7d0] px-4 text-[12px] font-semibold text-[#201c16] shadow-[0_12px_30px_-14px_rgba(0,0,0,.8)] outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#11140f] disabled:opacity-60"
         >
           {copy.activateInteractive}
         </button>
@@ -578,10 +580,10 @@ export function ProceduralProductViewer({
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">{copy.objectStudy}</span>
-          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-neutral-100">{productName}</strong>
+          <span className="block font-mono text-[9px] tracking-[.16em] text-[#f2d7ad]/60">{copy.objectStudy}</span>
+          <strong className="mt-1 block text-[15px] font-medium tracking-[-0.03em] text-[#fff6e7]">{productName}</strong>
         </span>
-        <span className="rounded-md border border-black/[0.08] bg-white px-2.5 py-1 font-mono text-[9px] text-neutral-600 dark:border-white/[0.12] dark:bg-[#202020] dark:text-neutral-300">
+        <span className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 font-mono text-[9px] tracking-[.1em] text-[#f7e7d0]/75 backdrop-blur-sm">
           {rendererReady ? copy.dragToTurn : copy.staticBadge}
         </span>
       </div>
@@ -591,10 +593,10 @@ export function ProceduralProductViewer({
         aria-expanded={detailOpen}
         aria-controls={detailId}
         onClick={() => setDetailOpen((open) => !open)}
-        className="absolute left-[62%] top-[44%] z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2"
+        className="absolute left-[62%] top-[44%] z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#11140f]"
       >
-        <span className="grid size-5 place-items-center rounded-full border-2 border-white bg-neutral-950 shadow-[0_0_0_5px_rgba(23,23,23,0.12)] dark:bg-neutral-50">
-          <span className="size-1 rounded-full bg-white" />
+        <span className="grid size-5 place-items-center rounded-full border-2 border-[#fff2db] bg-[#dc774a] shadow-[0_0_0_5px_rgba(220,119,74,.18)]">
+          <span className="size-1 rounded-full bg-[#fff3dd]" />
         </span>
         <span className="sr-only">{detailLabel}</span>
       </button>
@@ -604,21 +606,21 @@ export function ProceduralProductViewer({
         role="region"
         aria-label={detailLabel}
         aria-hidden={!detailOpen}
-        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-lg border border-black/[0.08] bg-white px-3 py-2.5 dark:border-white/[0.12] dark:bg-[#202020] ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
+        className={`pointer-events-none absolute bottom-4 left-4 z-20 max-w-[170px] rounded-xl border border-white/15 bg-[#1b1d18]/92 px-3 py-2.5 backdrop-blur-sm ${reduced ? "" : "transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)]"}`}
         style={{
           opacity: detailOpen ? 1 : 0,
           transform: detailOpen ? "translate3d(0,0,0)" : "translate3d(0,6px,0)",
         }}
       >
-        <strong className="block text-[12px] font-medium text-[#292929] dark:text-neutral-100">{detailLabel}</strong>
-        <span className="mt-0.5 block text-[10px] leading-4 text-neutral-500 dark:text-neutral-300">{copy.detailDescription}</span>
+        <strong className="block text-[12px] font-medium text-[#fff4e2]">{detailLabel}</strong>
+        <span className="mt-0.5 block text-[10px] leading-4 text-[#ead7ba]/65">{copy.detailDescription}</span>
       </div>
 
       {rendererReady ? (
         <button
           type="button"
           onClick={reset}
-          className={`absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-lg border border-black/[0.08] bg-white text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#202020] dark:text-white ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
+          className={`absolute bottom-3 right-3 z-20 grid size-11 place-items-center rounded-full border border-white/15 bg-[#f7e7d0] text-[#211c16] outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#11140f] ${reduced ? "" : "transition-transform duration-150 active:scale-[0.96]"}`}
         >
           <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
             <path d="M5.4 6.2A6 6 0 1 1 4.2 11M5.4 6.2V2.9M5.4 6.2H2.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

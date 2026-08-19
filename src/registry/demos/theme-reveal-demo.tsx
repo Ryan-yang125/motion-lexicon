@@ -9,7 +9,7 @@ export function ThemeRevealDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const dark = theme === "dark";
   return (
-    <div role="group" aria-label={demoText("theme-reveal", locale)} data-theme-reveal-state={theme} className={`w-full max-w-[420px] rounded-[10px] border p-4 transition-[background-color,border-color,color] duration-200 ${dark ? "border-white/10 bg-[#1b1b1b] text-stone-100" : "border-stone-200 bg-[#ededed] text-stone-800"}`}>
+    <div role="group" aria-label={demoText("theme-reveal", locale)} data-theme-reveal-state={theme} className={`w-full max-w-[420px] rounded-[16px] border p-4 transition-[background-color,border-color,color] duration-200 ${dark ? "border-[#d5b782]/20 bg-[#161b1e] text-stone-100" : "border-[#b9cbd1]/55 bg-[#eaf3f1] text-stone-800"}`}>
       <div className="flex items-center justify-between">
         <strong className="text-[14px] font-medium">{demoValue(locale, "晚间笔记", "Evening notes")}</strong>
         <ThemeReveal theme={theme} onThemeChange={setTheme} lightLabel={demoValue(locale, "使用浅色主题", "Use light theme")} darkLabel={demoValue(locale, "使用深色主题", "Use dark theme")} />

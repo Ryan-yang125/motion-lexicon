@@ -32,7 +32,7 @@ export function AccordionDemo({ locale = "en" }: DemoLocaleProps = {}) {
     { id: "sizing", title: demoValue(locale, "尺码", "Sizing"), content: <ul className="space-y-1 tabular-nums">{sizes.map((size) => <li key={size}>{size}</li>)}</ul> },
   ];
   return (
-    <div role="group" aria-label={demoText("accordion", locale)} className="mx-auto flex h-[248px] w-full max-w-[440px] items-start">
+    <div role="group" aria-label={demoText("accordion", locale)} className="mx-auto flex h-[248px] w-full max-w-[440px] items-start rounded-[16px] bg-[#f5ead9] p-3">
       <Accordion
         type="single"
         items={items}

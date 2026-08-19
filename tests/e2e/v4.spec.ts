@@ -74,19 +74,21 @@ test("landing preview switches instantly with reduced motion", async ({ page }, 
   expect(runningTransitions).toBe(0);
 });
 
-test("component directory exposes all live registry blocks and components", async ({ page }) => {
+test("component and Page Block directories expose separate live collections", async ({ page }) => {
   await page.goto("/zh/components/");
   await expect(page.getByRole("heading", { level: 1, name: "可直接复制的 React 动效组件" })).toBeVisible();
-  await expect(page.locator(".block-card")).toHaveCount(registryBlocks.length);
-  await expect(page.locator(".component-card")).toHaveCount(registryBlocks.length + registryComponents.length);
+  await expect(page.locator(".block-card")).toHaveCount(0);
+  expect(await page.locator(".component-card").count()).toBeGreaterThan(0);
   await expect(page.locator('.shell-nav-link[aria-current="page"]')).toContainText("组件");
   await expect(page.locator('[data-component="copy-button"]')).toBeVisible();
+  await page.goto("/zh/blocks/");
+  await expect(page.locator(".block-card")).toHaveCount(registryBlocks.length);
   await expect(page.locator('[data-page-block="product-landing"]')).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
 test("page block workbench previews, resizes, opens fullscreen, and exposes the exact source", async ({ page }, testInfo) => {
-  await page.goto("/zh/components/product-landing/");
+  await page.goto("/zh/blocks/product-landing/");
   await expect(page.getByRole("heading", { level: 1, name: "产品发布页" })).toBeVisible();
   const workbench = page.locator(".block-workbench");
   const block = workbench.locator('[data-page-block="product-landing"]');
@@ -136,11 +138,10 @@ test("mobile component controls keep 44px targets", async ({ page }, testInfo) =
     "streaming-answer",
     "tool-call-stack",
     "approval-flow",
-    "agent-task-queue",
+    "task-progress",
     "prompt-composer",
     "context-sources",
     "diff-review",
-    "agent-recommendation",
     "multi-agent-handoff",
     "expanding-search",
     "inline-validation",
@@ -172,7 +173,7 @@ test("component detail keeps preview, source, install, and related primitives to
 });
 
 test("agent collection exposes a complete workspace and implementation brief", async ({ page }) => {
-  await page.goto("/zh/components/agent-workspace/");
+  await page.goto("/zh/blocks/agent-workspace/");
   await expect(page.getByRole("heading", { level: 1, name: "Agent 产品工作台" })).toBeVisible();
   const workspace = page.locator('.block-detail-stage [data-page-block="agent-workspace"]');
   await expect(workspace).toBeVisible();
@@ -484,8 +485,8 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await page.mouse.move(0, 0);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/zh/components/hold-to-confirm/");
-  const hold = page.getByRole("button", { name: /按住删除工作区/ });
+  await page.goto("/zh/components/hold-action/");
+  const hold = page.getByRole("button", { name: /按住归档/ });
   await hold.focus();
   await page.keyboard.down("Space");
   await page.waitForTimeout(80);
@@ -597,9 +598,9 @@ test("Agent Skill publishes the complete bilingual six-mode workflow", async ({ 
 test("reduced motion stops non-essential task progress rotation", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion runtime contract runs once.");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/zh/components/task-steps/");
-  await expect(page.locator('[data-component="task-steps"]')).toBeVisible();
-  const rotations = await page.locator('[data-component="task-steps"] svg').evaluateAll((icons) =>
+  await page.goto("/zh/components/task-progress/");
+  await expect(page.locator('[data-component="task-progress"]')).toBeVisible();
+  const rotations = await page.locator('[data-component="task-progress"] svg').evaluateAll((icons) =>
     icons.flatMap((icon) => icon.getAnimations()).filter((animation) => animation.playState === "running").length
   );
   expect(rotations).toBe(0);

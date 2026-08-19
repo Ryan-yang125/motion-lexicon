@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "focus-gallery",
+  "type": "registry:ui",
+  "title": "Focus gallery",
+  "description": "Lets one image gain focus while neighboring media yields.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "cards-media"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/focus-gallery/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Focus, crop, and caption change together",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "gentle",
+    "primaryState": "Centered focus image with neighboring media",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/focus-gallery.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/focus-gallery.tsx",
+      "content": "\"use client\";\n\nimport { useMemo, useRef, useState, type ReactNode } from \"react\";\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\";\n\nexport type FocusGalleryItem = {\n  id: string;\n  title: string;\n  caption?: string;\n  meta?: string;\n  art: ReactNode;\n};\n\nexport type FocusGalleryProps = {\n  items: readonly FocusGalleryItem[];\n  label?: string;\n  activeId?: string;\n  defaultActiveId?: string;\n  onActiveChange?: (item: FocusGalleryItem, index: number) => void;\n  className?: string;\n};\n\nexport function FocusGallery({\n  items,\n  label = \"Focus gallery\",\n  activeId,\n  defaultActiveId,\n  onActiveChange,\n  className = \"\",\n}: FocusGalleryProps) {\n  const fallbackId = items[0]?.id ?? \"\";\n  const [internalId, setInternalId] = useState(defaultActiveId ?? fallbackId);\n  const selectedId = activeId ?? internalId;\n  const selectedIndex = Math.max(0, items.findIndex((item) => item.id === selectedId));\n  const selected = items[selectedIndex];\n  const reduced = useReducedMotion() === true;\n  const startX = useRef<number | null>(null);\n  const transition = reduced ? { duration: 0 } : { duration: 0.34, ease: [0.22, 1, 0.36, 1] as const };\n\n  const setActive = (index: number) => {\n    const item = items[index];\n    if (!item) return;\n    if (activeId === undefined) setInternalId(item.id);\n    onActiveChange?.(item, index);\n  };\n  const move = (delta: number) => setActive((selectedIndex + delta + items.length) % Math.max(items.length, 1));\n  const status = useMemo(() => selected ? `${selected.title}. ${selected.caption ?? \"\"}` : \"\", [selected]);\n\n  if (!selected) return null;\n\n  return (\n    <section\n      aria-label={label}\n      onKeyDown={(event) => {\n        if (event.key === \"ArrowLeft\") { event.preventDefault(); move(-1); }\n        if (event.key === \"ArrowRight\") { event.preventDefault(); move(1); }\n        if (event.key === \"Home\") { event.preventDefault(); setActive(0); }\n        if (event.key === \"End\") { event.preventDefault(); setActive(items.length - 1); }\n      }}\n      onPointerDown={(event) => { startX.current = event.clientX; }}\n      onPointerUp={(event) => {\n        if (startX.current === null) return;\n        const delta = event.clientX - startX.current;\n        startX.current = null;\n        if (Math.abs(delta) > 36) move(delta > 0 ? -1 : 1);\n      }}\n      className={`w-full overflow-hidden rounded-[20px] border border-[#3c3024]/15 bg-[#f2e6d3] p-3 shadow-[0_24px_50px_-38px_rgba(48,31,13,.82)] dark:border-white/10 dark:bg-[#191510] ${className}`}\n    >\n      <div className=\"mb-3 flex items-end justify-between gap-4 px-1\">\n        <div><span className=\"font-mono text-[9px] tracking-[.16em] text-[#7b6650] dark:text-[#f3d6af]/60\">EDITORIAL SELECTION</span><h3 className=\"mt-1 font-serif text-[20px] leading-none tracking-[-.05em] text-[#2d251d] dark:text-[#fff2dc]\">{label}</h3></div>\n        <span className=\"font-mono text-[9px] tracking-[.12em] text-[#7b6650] dark:text-[#f3d6af]/60\">{String(selectedIndex + 1).padStart(2, \"0\")} / {String(items.length).padStart(2, \"0\")}</span>\n      </div>\n      <div className=\"grid gap-3 lg:grid-cols-[minmax(0,1fr)_128px]\">\n        <div className=\"relative min-h-[250px] overflow-hidden rounded-[15px] bg-[#221913] sm:min-h-[300px]\">\n          <AnimatePresence initial={false} mode=\"wait\">\n            <motion.div key={selected.id} initial={reduced ? false : { opacity: 0, scale: 1.035 }} animate={{ opacity: 1, scale: 1 }} exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.985 }} transition={transition} className=\"absolute inset-0\">\n              {selected.art}\n            </motion.div>\n          </AnimatePresence>\n          <div className=\"pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent p-5 text-[#fff3df]\">\n            <span className=\"font-mono text-[9px] tracking-[.14em] text-[#ffe1b7]/75\">{selected.meta ?? \"FEATURE\"}</span>\n            <strong className=\"mt-1 block font-serif text-[30px] leading-[.9] tracking-[-.055em]\">{selected.title}</strong>\n            {selected.caption ? <span className=\"mt-2 block max-w-[42ch] text-[11px] leading-relaxed text-white/72\">{selected.caption}</span> : null}\n          </div>\n        </div>\n        <div className=\"grid grid-cols-3 gap-2 lg:grid-cols-1\">\n          {items.map((item, index) => {\n            const active = index === selectedIndex;\n            return <button key={item.id} type=\"button\" aria-pressed={active} aria-label={`Show ${item.title}`} onClick={() => setActive(index)} className={`group relative min-h-[80px] overflow-hidden rounded-xl border text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4568ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f2e6d3] dark:focus-visible:ring-offset-[#191510] ${active ? \"border-[#c56b47] ring-1 ring-[#c56b47]/35\" : \"border-[#3c3024]/15 dark:border-white/10\"}`}>\n              <span className={`absolute inset-0 ${active ? \"opacity-100\" : \"opacity-65 group-hover:opacity-100\"}`}>{item.art}</span>\n              <span className=\"absolute inset-0 bg-black/20\" />\n              <span className=\"relative z-10 flex h-full items-end p-2 font-mono text-[8px] tracking-[.12em] text-white\">{String(index + 1).padStart(2, \"0\")}</span>\n            </button>;\n          })}\n        </div>\n      </div>\n      <span className=\"sr-only\" role=\"status\" aria-live=\"polite\">{status}</span>\n    </section>\n  );\n}\n"
+    }
+  ]
+}

@@ -7,11 +7,23 @@ import { ScrollStory } from "@/registry/components/scroll-story";
 
 function Scene({ tone, title, index, locale }: { tone: string; title: string; index: string; locale: Locale }) {
   return (
-    <div className="mx-auto w-full max-w-[230px] rounded-[10px] border border-white/55 bg-white/88 p-4 shadow-[0_4px_8px_-6px_rgba(28,25,23,.7)] dark:border-white/10 dark:bg-[#202020]">
-      <div className="flex items-center justify-between"><span className="text-[9px] uppercase tracking-[.12em] text-stone-600 dark:text-stone-300">{demoValue(locale, `章节 ${index}`, `Chapter ${index}`)}</span><span className={`size-2 rounded-full ${tone}`} /></div>
-      <strong className="mt-8 block text-[15px] text-stone-800 dark:text-stone-100">{title}</strong>
-      <div className="mt-3 h-1.5 w-4/5 rounded-full bg-stone-200 dark:bg-white/10" />
-      <div className="mt-1.5 h-1.5 w-1/2 rounded-full bg-stone-100 dark:bg-white/5" />
+    <div className="mx-auto w-full max-w-[260px] overflow-hidden rounded-[18px] border border-[#f8e6cc]/35 bg-[#f2e5cf] p-3 shadow-[0_28px_60px_-28px_rgba(0,0,0,.88)]">
+      <div className="relative min-h-[196px] overflow-hidden rounded-[12px] bg-[#29241d] p-4">
+        <div aria-hidden className={`absolute -right-10 -top-10 size-40 rounded-full opacity-90 blur-[1px] ${tone}`} />
+        <div aria-hidden className="absolute bottom-[-38%] left-[-4%] h-[74%] w-[112%] rotate-[-9deg] rounded-[42%] border border-white/20 bg-[#11110f]/65" />
+        <div className="relative z-10 flex items-center justify-between text-[#f8ead8]">
+          <span className="font-mono text-[9px] uppercase tracking-[.16em]">{demoValue(locale, "北岸工作室", "Northline Studio")}</span>
+          <span className="rounded-full border border-white/25 px-2 py-1 font-mono text-[8px]">{index}/03</span>
+        </div>
+        <div className="relative z-10 mt-11 max-w-[13ch]">
+          <span className="font-mono text-[9px] uppercase tracking-[.14em] text-[#ffd7ad]/75">{demoValue(locale, `章节 ${index}`, `Chapter ${index}`)}</span>
+          <strong className="mt-2 block font-serif text-[25px] leading-[.92] tracking-[-.06em] text-[#fff5e7]">{title}</strong>
+        </div>
+        <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between">
+          <span className="h-px w-20 bg-white/45" />
+          <span className="font-mono text-[8px] tracking-[.18em] text-white/55">FIELD NOTES</span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -23,9 +35,9 @@ export function ScrollStoryDemo({ locale = "en" }: DemoLocaleProps = {}) {
       emptyLabel={demoValue(locale, "暂无章节", "No chapters available.")}
       height={300}
       chapters={[
-        { id: "capture", eyebrow: "01", title: demoValue(locale, "捕捉信号", "Capture the signal"), scene: <Scene locale={locale} index="01" title={demoValue(locale, "新需求", "New request")} tone="bg-[#171717]" /> },
-        { id: "shape", eyebrow: "02", title: demoValue(locale, "塑造动效", "Shape the motion"), scene: <Scene locale={locale} index="02" title={demoValue(locale, "动效草案", "Motion draft")} tone="bg-[#737373]" /> },
-        { id: "ship", eyebrow: "03", title: demoValue(locale, "放心发布", "Ship with confidence"), scene: <Scene locale={locale} index="03" title={demoValue(locale, "可以发布", "Ready to publish")} tone="bg-[#525252]" /> },
+        { id: "capture", eyebrow: "01", title: demoValue(locale, "收集现场", "Collect the field"), scene: <Scene locale={locale} index="01" title={demoValue(locale, "海岸的光", "Light from the coast")} tone="bg-[#d97848]" /> },
+        { id: "shape", eyebrow: "02", title: demoValue(locale, "编辑节奏", "Edit the rhythm"), scene: <Scene locale={locale} index="02" title={demoValue(locale, "一张缓慢的牌", "One slow card")} tone="bg-[#6e8b80]" /> },
+        { id: "ship", eyebrow: "03", title: demoValue(locale, "发布成册", "Publish the issue"), scene: <Scene locale={locale} index="03" title={demoValue(locale, "在纸上停留", "Hold on paper")} tone="bg-[#d7a74d]" /> },
       ]}
     />
   );

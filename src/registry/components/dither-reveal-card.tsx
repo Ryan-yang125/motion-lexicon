@@ -29,9 +29,9 @@ type ResolvedPalette = {
 };
 
 const DEFAULT_COLORS: ResolvedPalette = {
-  front: { css: "rgb(238, 236, 229)", channels: [238 / 255, 236 / 255, 229 / 255, 1] },
-  back: { css: "rgb(221, 228, 213)", channels: [221 / 255, 228 / 255, 213 / 255, 1] },
-  ink: { css: "rgb(41, 41, 41)", channels: [41 / 255, 41 / 255, 41 / 255, 1] },
+  front: { css: "rgb(29, 30, 25)", channels: [29 / 255, 30 / 255, 25 / 255, 1] },
+  back: { css: "rgb(203, 103, 65)", channels: [203 / 255, 103 / 255, 65 / 255, 1] },
+  ink: { css: "rgb(255, 242, 218)", channels: [255 / 255, 242 / 255, 218 / 255, 1] },
 };
 
 export type DitherRevealCardProps = {
@@ -525,7 +525,7 @@ export function DitherRevealCard({
         if (event.pointerType === "mouse") setHovered(true);
       }}
       onPointerLeave={() => setHovered(false)}
-      className={`group relative isolate min-h-[220px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#181818] ${className}`}
+      className={`group relative isolate min-h-[220px] w-full overflow-hidden rounded-[18px] border border-[#f9e3bd]/25 bg-[#1d1e19] text-left outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1d1e19] ${className}`}
     >
       <canvas
         ref={canvasRef}
@@ -565,7 +565,7 @@ export function DitherRevealCard({
       </span>
       <span
         data-dither-arrow
-        className={`absolute bottom-4 right-4 z-20 grid size-11 place-items-center rounded-lg border border-black/10 bg-white text-[#292929] dark:border-white/[0.14] dark:bg-[#202020] dark:text-white ${reduced ? "" : "transition-transform duration-150 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-active:scale-[0.96]"}`}
+        className={`absolute bottom-4 right-4 z-20 grid size-11 place-items-center rounded-full border border-[#f7e4c7]/25 bg-[#fff0d9] text-[#252019] shadow-[0_10px_28px_-16px_rgba(0,0,0,.8)] ${reduced ? "" : "transition-transform duration-150 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-active:scale-[0.96]"}`}
       >
         <svg viewBox="0 0 20 20" fill="none" className="size-4" aria-hidden>
           <path d="M5 10h10M11.5 6.5 15 10l-3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

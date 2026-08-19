@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aurora-canvas",
+  "type": "registry:ui",
+  "title": "Aurora canvas",
+  "description": "Provides a branded atmospheric field that breathes slowly while visible.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "visual-ambient"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/aurora-canvas/",
+  "meta": {
+    "engines": [
+      "motion",
+      "css"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Layered color moves quietly across the canvas",
+    "sceneFamily": "spatial-dark",
+    "motionRole": "ambient",
+    "primaryState": "Still dark aurora field",
+    "assetProvenance": "generated"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/aurora-canvas.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/aurora-canvas.tsx",
+      "content": "\"use client\";\nimport { useEffect, useRef, type ReactNode } from \"react\";\nimport { useReducedMotion } from \"motion/react\";\nexport type AuroraCanvasProps = { label?: string; colors?: readonly string[]; className?: string; children?: ReactNode };\nexport function AuroraCanvas({ label = \"Aurora field\", colors = [\"#276b7d\", \"#bf6f58\", \"#bda8f0\"], className = \"\", children }: AuroraCanvasProps) { const canvasRef = useRef<HTMLCanvasElement>(null); const reduced = useReducedMotion() === true; const signature = colors.join(\"|\"); useEffect(() => { const palette = signature.split(\"|\"); const canvas = canvasRef.current; if (!canvas) return; const context = canvas.getContext(\"2d\"); if (!context) return; let frame: number | null = null; let visible = true; let intersecting = true; let width = 1; let height = 1; const draw = (time = 0) => { if (!visible) return; context.clearRect(0, 0, width, height); const shade = context.createLinearGradient(0, 0, width, height); shade.addColorStop(0, \"#08151b\"); shade.addColorStop(1, \"#111025\"); context.fillStyle = shade; context.fillRect(0, 0, width, height); palette.forEach((color, index) => { const x = width * (0.18 + index * 0.3) + Math.sin(time / 2400 + index) * width * 0.09; const y = height * (0.32 + (index % 2) * 0.3) + Math.cos(time / 3100 + index) * height * 0.08; const radius = Math.max(width, height) * 0.54; const glow = context.createRadialGradient(x, y, 0, x, y, radius); glow.addColorStop(0, `${color}a8`); glow.addColorStop(0.5, `${color}3b`); glow.addColorStop(1, \"transparent\"); context.fillStyle = glow; context.fillRect(0, 0, width, height); }); if (!reduced) frame = requestAnimationFrame(draw); }; const resize = new ResizeObserver(([entry]) => { const dpr = Math.min(window.devicePixelRatio || 1, 1.5); width = Math.max(1, entry.contentRect.width); height = Math.max(1, entry.contentRect.height); canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr); canvas.style.width = `${width}px`; canvas.style.height = `${height}px`; context.setTransform(dpr, 0, 0, dpr, 0, 0); if (frame !== null) cancelAnimationFrame(frame); frame = requestAnimationFrame(draw); }); resize.observe(canvas); const observer = new IntersectionObserver(([entry]) => { intersecting = entry.isIntersecting; visible = intersecting && !document.hidden; if (visible && frame === null) frame = requestAnimationFrame(draw); if (!visible && frame !== null) { cancelAnimationFrame(frame); frame = null; } }); observer.observe(canvas); const onVisibility = () => { visible = intersecting && !document.hidden; if (visible && frame === null) frame = requestAnimationFrame(draw); if (!visible && frame !== null) { cancelAnimationFrame(frame); frame = null; } }; document.addEventListener(\"visibilitychange\", onVisibility); frame = requestAnimationFrame(draw); return () => { resize.disconnect(); observer.disconnect(); document.removeEventListener(\"visibilitychange\", onVisibility); if (frame !== null) cancelAnimationFrame(frame); }; }, [reduced, signature]); return <section aria-label={label} className={`relative isolate min-h-[260px] overflow-hidden rounded-[22px] border border-[#b5e1ed]/18 bg-[#08151b] shadow-[0_28px_64px_-40px_rgba(0,0,0,.92)] ${className}`}><canvas ref={canvasRef} aria-hidden className=\"absolute inset-0 size-full\" /><div aria-hidden className=\"pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(7,14,18,.3),transparent_50%,rgba(20,9,33,.35))]\" />{children ? <div className=\"relative z-10\">{children}</div> : null}</section>; }\n"
+    }
+  ]
+}

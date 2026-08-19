@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type HandoffAgent = {
   id: string;
@@ -23,9 +23,9 @@ export type MultiAgentHandoffProps = {
 };
 
 const tones = {
-  blue: "bg-neutral-950 dark:bg-neutral-50 dark:text-neutral-950",
-  green: "bg-neutral-700 dark:bg-neutral-300 dark:text-neutral-950",
-  amber: "bg-neutral-500 dark:bg-neutral-400 dark:text-neutral-950",
+  blue: "bg-[#2457d6]",
+  green: "bg-[#147a56]",
+  amber: "bg-[#bc6b18]",
 } as const;
 
 export function MultiAgentHandoff({
@@ -43,6 +43,23 @@ export function MultiAgentHandoff({
     Math.min(defaultActive, Math.max(0, agents.length - 1)),
   );
   const reduced = useReducedMotion();
+  const root = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const node = root.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    let intersecting = true;
+    let documentVisible = !document.hidden;
+    const update = () => setVisible(intersecting && documentVisible);
+    const observer = new IntersectionObserver(([entry]) => {
+      intersecting = entry.isIntersecting;
+      update();
+    });
+    const onVisibility = () => { documentVisible = !document.hidden; update(); };
+    observer.observe(node);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange", onVisibility); };
+  }, []);
   const next = agents.length ? (active + 1) % agents.length : 0;
   const advance = () => {
     if (!agents.length) return;
@@ -51,7 +68,8 @@ export function MultiAgentHandoff({
   };
   return (
     <section
-      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-4 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
+      ref={root}
+      className={`w-full rounded-[14px] border border-neutral-200 bg-white p-4 text-neutral-950 shadow-[0_18px_48px_-40px_rgba(15,23,42,.55)] dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <header className="flex items-center gap-2">
         <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
@@ -84,7 +102,7 @@ export function MultiAgentHandoff({
             <motion.span
               className={`grid size-10 place-items-center rounded-full border-4 border-white text-[10px] font-semibold text-white shadow-sm dark:border-[#181818] ${tones[agent.tone ?? "blue"]}`}
               animate={
-                index === active && !reduced
+                index === active && !reduced && visible
                   ? {
                       y: [0, -3, 0],
                       boxShadow: [
@@ -97,7 +115,7 @@ export function MultiAgentHandoff({
               }
               transition={{
                 duration: 1.6,
-                repeat: index === active ? Infinity : 0,
+                repeat: index === active && visible ? Infinity : 0,
               }}
             >
               {agent.initials}

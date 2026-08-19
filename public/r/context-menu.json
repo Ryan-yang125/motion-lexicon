@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/context-menu/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Opens from the trigger coordinate and stays inside the viewport."
+    "signature": "Menu opens from the trigger coordinate and avoids viewport edges",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Context menu anchored to its trigger",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

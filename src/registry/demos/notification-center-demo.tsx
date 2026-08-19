@@ -1,0 +1,4 @@
+"use client";
+import { demoValue, type DemoLocaleProps } from "../demo-locale";
+import { NotificationCenter } from "@/registry/components/notification-center";
+export function NotificationCenterDemo({ locale = "en" }: DemoLocaleProps = {}) { return <NotificationCenter label={demoValue(locale, "通知中心", "Notification center")} items={[{ id: "review", title: demoValue(locale, "新评审已就绪", "New review ready"), detail: demoValue(locale, "沿海读本等待你的确认", "Coastal reader is ready for approval"), time: "2m", unread: true }, { id: "export", title: demoValue(locale, "导出完成", "Export complete"), detail: demoValue(locale, "版本 06 已经生成", "Edition 06 is ready"), time: "18m", unread: true }, { id: "invite", title: demoValue(locale, "协作者已加入", "Collaborator joined"), detail: "Mara joined Spring atelier", time: "1h" }]} />; }

@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Per-file upload flow that resolves into completion"
+    "signature": "Per-file upload flow that resolves into completion",
+    "sceneFamily": "product-mono",
+    "motionRole": "lively",
+    "primaryState": "Upload queue advancing item by item",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

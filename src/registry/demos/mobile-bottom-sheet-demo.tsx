@@ -1,0 +1,4 @@
+"use client";
+import { demoValue, type DemoLocaleProps } from "../demo-locale";
+import { MobileBottomSheet } from "@/registry/components/mobile-bottom-sheet";
+export function MobileBottomSheetDemo({ locale = "en" }: DemoLocaleProps = {}) { return <div className="grid min-h-[180px] place-items-center rounded-[18px] bg-[#ecede9]"><MobileBottomSheet title={demoValue(locale, "分享版本", "Share edition")} triggerLabel={demoValue(locale, "打开操作", "Open actions")}><div className="space-y-1">{[demoValue(locale, "复制链接", "Copy link"), demoValue(locale, "邀请协作者", "Invite collaborator"), demoValue(locale, "导出 PDF", "Export PDF")].map((item) => <button key={item} type="button" className="min-h-11 w-full rounded-lg px-3 text-left text-[13px] outline-none hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-[#4568FF]">{item}</button>)}</div></MobileBottomSheet></div>; }

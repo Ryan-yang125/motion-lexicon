@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pixelated-image",
+  "type": "registry:ui",
+  "title": "Pixelated image",
+  "description": "Uses image resolution as a controllable reveal and transition material.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "cards-media"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/pixelated-image/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Pixel structure resolves into a complete image",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "gentle",
+    "primaryState": "Resolved editorial image",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/pixelated-image.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/pixelated-image.tsx",
+      "content": "\"use client\";\n\nimport { useState, type ReactNode } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport type PixelatedImageProps = {\n  art: ReactNode;\n  label?: string;\n  alt: string;\n  caption?: string;\n  defaultRevealed?: boolean;\n  onRevealChange?: (revealed: boolean) => void;\n  className?: string;\n};\n\nexport function PixelatedImage({ art, alt, label = \"Pixelated image\", caption, defaultRevealed = true, onRevealChange, className = \"\" }: PixelatedImageProps) {\n  const [revealed, setRevealed] = useState(defaultRevealed);\n  const reduced = useReducedMotion() === true;\n  const toggle = () => { const next = !revealed; setRevealed(next); onRevealChange?.(next); };\n  return (\n    <figure className={`w-full overflow-hidden rounded-[20px] border border-[#b9d1d5]/20 bg-[#0c171b] p-3 shadow-[0_24px_54px_-36px_rgba(0,0,0,.9)] ${className}`}>\n      <div className=\"mb-2 flex items-center justify-between gap-3 px-1\"><span className=\"font-mono text-[9px] tracking-[.15em] text-[#bce8e7]/60\">RESOLUTION STUDY</span><button type=\"button\" aria-pressed={revealed} onClick={toggle} className=\"min-h-11 rounded-full border border-white/15 bg-white/[0.06] px-3 text-[10px] font-medium text-[#e9fff6] outline-none focus-visible:ring-2 focus-visible:ring-[#8bd9e2]\">{revealed ? \"View grid\" : \"Develop image\"}</button></div>\n      <button type=\"button\" aria-label={`${label}: ${alt}`} aria-pressed={revealed} onClick={toggle} className=\"relative block aspect-[16/10] w-full overflow-hidden rounded-[14px] bg-[#17333d] text-left outline-none focus-visible:ring-2 focus-visible:ring-[#8bd9e2]\">\n        <motion.span initial={false} animate={{ opacity: revealed ? 1 : 0.38, scale: revealed ? 1 : 1.045, filter: revealed ? \"blur(0px)\" : \"blur(4px)\" }} transition={reduced ? { duration: 0 } : { duration: 0.38, ease: [0.22, 1, 0.36, 1] }} className=\"absolute inset-0 block\">{art}</motion.span>\n        <motion.span aria-hidden initial={false} animate={{ opacity: revealed ? 0.14 : 0.92, backgroundSize: revealed ? \"9px 9px\" : \"28px 28px\" }} transition={reduced ? { duration: 0 } : { duration: 0.36 }} className=\"absolute inset-0 bg-[linear-gradient(90deg,rgba(239,255,248,.9)_1px,transparent_1px),linear-gradient(rgba(239,255,248,.9)_1px,transparent_1px)] mix-blend-screen\" />\n        <span aria-hidden className=\"absolute inset-0 bg-[linear-gradient(135deg,rgba(255,177,103,.18),transparent_42%,rgba(92,219,214,.14))]\" />\n        <span className=\"absolute bottom-3 left-3 rounded-full border border-white/20 bg-black/25 px-2.5 py-1 font-mono text-[8px] tracking-[.14em] text-[#effff7]\">{revealed ? \"FULL FRAME\" : \"24 × 15 GRID\"}</span>\n      </button>\n      {caption ? <figcaption className=\"mt-3 px-1 text-[11px] leading-relaxed text-[#c7dfdd]/70\">{caption}</figcaption> : null}\n    </figure>\n  );\n}\n"
+    }
+  ]
+}

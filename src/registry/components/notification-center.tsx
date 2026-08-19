@@ -1,0 +1,13 @@
+"use client";
+
+import { useId, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+export type NotificationCenterItem = { id: string; title: string; detail: string; time: string; unread?: boolean };
+export type NotificationCenterProps = { items: readonly NotificationCenterItem[]; label?: string; className?: string; onRead?: (id: string) => void };
+
+export function NotificationCenter({ items, label = "Notifications", className = "", onRead }: NotificationCenterProps) {
+  const reduced = useReducedMotion() === true; const id = useId(); const [open, setOpen] = useState(false); const [unread, setUnread] = useState(() => new Set(items.filter((item) => item.unread).map((item) => item.id))); const visible = open ? items : items.slice(0, 2);
+  const read = (item: NotificationCenterItem) => { setUnread((current) => { const next = new Set(current); next.delete(item.id); return next; }); onRead?.(item.id); };
+  return <section aria-labelledby={id} className={`rounded-[16px] border border-black/[.1] bg-white p-3 shadow-[0_14px_34px_-27px_rgba(25,25,25,.36)] ${className}`}><div className="flex min-h-11 items-center justify-between gap-3"><div><span className="font-mono text-[10px] uppercase tracking-[.15em] text-neutral-500">Inbox</span><h3 id={id} className="mt-0.5 text-[14px] font-medium text-[#292929]">{label}</h3></div><span className="rounded-full bg-[#252827] px-2 py-1 font-mono text-[9px] text-white">{unread.size}</span></div><ul className="mt-2 space-y-1">{visible.map((item) => <motion.li layout key={item.id}><button type="button" onClick={() => read(item)} className={`flex min-h-11 w-full items-start gap-2 rounded-[10px] p-2 text-left outline-none transition hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-[#4568FF] ${unread.has(item.id) ? "bg-[#f1f3ef]" : ""}`}><span aria-hidden className={`mt-1.5 size-1.5 shrink-0 rounded-full ${unread.has(item.id) ? "bg-[#4568FF]" : "bg-transparent"}`} /><span className="min-w-0 flex-1"><strong className="block text-[11px] text-[#292929]">{item.title}</strong><span className="mt-0.5 block truncate text-[10px] text-neutral-500">{item.detail}</span></span><time className="font-mono text-[9px] text-neutral-400">{item.time}</time></button></motion.li>)}</ul><AnimatePresence>{items.length > 2 ? <motion.button initial={reduced ? false : { opacity: 0 }} animate={{ opacity: 1 }} type="button" onClick={() => setOpen((value) => !value)} className="mt-2 min-h-11 w-full rounded-lg border border-black/[.08] text-[11px] text-neutral-600 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-[#4568FF]">{open ? "Show recent" : `Show all ${items.length}`}</motion.button> : null}</AnimatePresence></section>;
+}

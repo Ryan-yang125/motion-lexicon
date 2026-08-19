@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "inputs"
+    "forms-input"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/otp-input/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Coordinates typing, paste, error, and success feedback."
+    "signature": "Typing, paste, and validation feedback share one rhythm",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Completed OTP entry with confirmation state",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

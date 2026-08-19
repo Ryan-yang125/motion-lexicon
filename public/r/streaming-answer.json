@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "agent"
+    "agent-ui"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/streaming-answer/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Sources and follow-ups resolve after the streamed answer"
+    "signature": "Sources and follow-ups resolve after the streamed answer",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Resolved answer with expandable sources",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Distance-aware spring dock"
+    "signature": "Distance-aware spring dock",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Floating dock with a focused destination",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

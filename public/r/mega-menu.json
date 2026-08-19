@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Mega menu driven by a shared highlight"
+    "signature": "Mega menu driven by a shared highlight",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded navigation panel with active highlight",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

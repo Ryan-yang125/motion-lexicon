@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Reports clipboard state in place without shifting nearby content."
+    "signature": "Button label resolves in place to copied",
+    "sceneFamily": "product-mono",
+    "motionRole": "snap",
+    "primaryState": "Copy action in its confirmed state",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

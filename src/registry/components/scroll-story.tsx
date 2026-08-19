@@ -147,10 +147,10 @@ export function ScrollStory({ chapters, label, emptyLabel = "No chapters availab
       ref={root}
       role="group"
       aria-label={label}
-      className={`grid w-full min-w-0 grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] overflow-hidden rounded-[10px] border border-neutral-200 bg-white shadow-[0_4px_8px_-7px_rgba(28,25,23,.64)] dark:border-white/15 dark:bg-[#202020] ${className}`}
+      className={`grid w-full min-w-0 grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] overflow-hidden rounded-[18px] border border-[#342d24]/20 bg-[#eee4d2] shadow-[0_22px_46px_-30px_rgba(28,20,12,.84)] dark:border-white/15 dark:bg-[#202020] ${className}`}
       style={{ height }}
     >
-      <div ref={scroller} className="overscroll-contain overflow-y-auto border-r border-neutral-200 bg-[#F4F1EB] px-3 py-[38%] [scrollbar-width:none] dark:border-white/10 dark:bg-[#1C1C1A]">
+        <div ref={scroller} className="overscroll-contain overflow-y-auto border-r border-[#342d24]/15 bg-[#eee4d2] px-3 py-[38%] [scrollbar-width:none] dark:border-white/10 dark:bg-[#1c1915]">
         {chapters.map((chapter) => (
           <section
             key={chapter.id}
@@ -164,7 +164,7 @@ export function ScrollStory({ chapters, label, emptyLabel = "No chapters availab
               type="button"
               aria-current={chapter.id === effectiveActiveId ? "step" : undefined}
               onClick={() => scrollToChapter(chapter.id)}
-              className={`min-h-11 rounded-lg px-3 py-2 text-left outline-none transition-[background-color,color] duration-150 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.2)] ${chapter.id === effectiveActiveId ? "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" : "text-neutral-600 hover:bg-white/55 dark:text-neutral-300 dark:hover:bg-white/5"}`}
+              className={`min-h-11 rounded-xl px-3 py-2.5 text-left outline-none transition-[background-color,color,transform] duration-200 focus-visible:shadow-[0_0_0_3px_rgba(69,104,255,.28)] ${chapter.id === effectiveActiveId ? "bg-[#211c17] text-[#fff7ea] shadow-[0_10px_24px_-18px_rgba(35,25,15,.9)] dark:bg-[#f4e8d4] dark:text-[#211c17]" : "text-[#605648] hover:bg-white/50 dark:text-neutral-300 dark:hover:bg-white/5"}`}
             >
               {chapter.eyebrow ? <span className="block text-[9px] opacity-65">{chapter.eyebrow}</span> : null}
               <strong className="mt-1 block text-[12px] leading-tight">{chapter.title}</strong>
@@ -173,8 +173,9 @@ export function ScrollStory({ chapters, label, emptyLabel = "No chapters availab
           </section>
         ))}
       </div>
-      <div className="relative grid min-w-0 place-items-center overflow-hidden bg-[#D9D4CB] p-4 dark:bg-[#2B2A27]">
-        <div ref={stage} key={current.id} className="w-full will-change-transform">
+      <div className="relative grid min-w-0 place-items-center overflow-hidden bg-[#171612] p-4 before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_18%_18%,rgba(228,153,93,.36),transparent_34%),radial-gradient(circle_at_82%_72%,rgba(81,111,106,.34),transparent_42%)] before:content-[''] dark:bg-[#10110f]">
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,246,232,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,246,232,.06)_1px,transparent_1px)] [background-size:28px_28px]" />
+        <div ref={stage} key={current.id} className="relative z-10 w-full will-change-transform">
           {current.scene}
         </div>
         <div className="absolute bottom-3 right-3 flex items-center gap-1" aria-hidden>
@@ -183,7 +184,7 @@ export function ScrollStory({ chapters, label, emptyLabel = "No chapters availab
               <span
                 data-scroll-story-indicator
                 data-motion-mode={reduced === false ? "standard" : "instant"}
-                className={`block h-full rounded-full bg-neutral-800 dark:bg-white ${reduced === false ? `w-full origin-left transition-transform duration-150 ${chapter.id === effectiveActiveId ? "scale-x-100" : "scale-x-25"}` : chapter.id === effectiveActiveId ? "w-full" : "w-1/4"}`}
+                className={`block h-full rounded-full bg-[#f0a96c] dark:bg-[#f6d4a8] ${reduced === false ? `w-full origin-left transition-transform duration-150 ${chapter.id === effectiveActiveId ? "scale-x-100" : "scale-x-25"}` : chapter.id === effectiveActiveId ? "w-full" : "w-1/4"}`}
               />
             </span>
           ))}

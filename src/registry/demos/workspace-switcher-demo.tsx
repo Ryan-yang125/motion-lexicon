@@ -1,0 +1,4 @@
+"use client";
+import { demoValue, type DemoLocaleProps } from "../demo-locale";
+import { WorkspaceSwitcher } from "@/registry/components/workspace-switcher";
+export function WorkspaceSwitcherDemo({ locale = "en" }: DemoLocaleProps = {}) { return <div className="grid min-h-[180px] place-items-center rounded-[18px] bg-[#eceeea]"><WorkspaceSwitcher label={demoValue(locale, "切换工作区", "Switch workspace")} workspaces={[{ id: "spring", name: demoValue(locale, "春季工作室", "Spring atelier"), detail: demoValue(locale, "8 位协作者", "8 collaborators"), initials: "SA", tone: "#54715d" }, { id: "coast", name: demoValue(locale, "沿海读本", "Coastal reader"), detail: demoValue(locale, "4 个草稿", "4 drafts"), initials: "CR", tone: "#966241" }, { id: "archive", name: demoValue(locale, "物件档案", "Object archive"), detail: demoValue(locale, "上周更新", "Updated last week"), initials: "OA", tone: "#5d6677" }]} /></div>; }

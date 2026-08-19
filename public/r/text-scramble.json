@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-scramble",
+  "type": "registry:ui",
+  "title": "Text scramble",
+  "description": "Transitions technical labels and status through quick character substitution.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "text-type"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/text-scramble/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Noisy characters resolve quickly into readable state",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Stable technical status output",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/text-scramble.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/text-scramble.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useId, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"motion/react\";\n\nexport type TextScrambleProps = { value: string; label?: string; characters?: string; duration?: number; className?: string };\n\nexport function TextScramble({ value, label = \"Text scramble\", characters = \"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\", duration = 520, className = \"\" }: TextScrambleProps) {\n  const reduced = useReducedMotion() === true;\n  const outputId = useId();\n  const frameRef = useRef<number | null>(null);\n  const previousRef = useRef(value);\n  const [output, setOutput] = useState(value);\n  useEffect(() => {\n    if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);\n    if (reduced || previousRef.current === value) { previousRef.current = value; setOutput(value); return; }\n    const start = performance.now(); const from = previousRef.current; const length = Math.max(from.length, value.length);\n    const animate = (now: number) => {\n      const progress = Math.min(1, (now - start) / Math.max(1, duration));\n      const resolved = Math.floor(progress * length);\n      const next = Array.from({ length }, (_, index) => index < resolved ? (value[index] ?? \"\") : value[index] === \" \" ? \" \" : characters[(index * 17 + Math.floor(now / 42)) % characters.length]).join(\"\");\n      setOutput(next);\n      if (progress < 1) frameRef.current = requestAnimationFrame(animate); else { frameRef.current = null; previousRef.current = value; setOutput(value); }\n    };\n    frameRef.current = requestAnimationFrame(animate);\n    return () => { if (frameRef.current !== null) cancelAnimationFrame(frameRef.current); };\n  }, [characters, duration, reduced, value]);\n  return <output id={outputId} aria-label={label} aria-live=\"polite\" className={`inline-flex min-h-11 items-center rounded-md border border-black/[.1] bg-[#171717] px-4 font-mono text-sm tracking-[.12em] text-[#d9ff82] shadow-[0_12px_28px_-18px_rgba(18,18,18,.95)] ${className}`}>{output}</output>;\n}\n"
+    }
+  ]
+}

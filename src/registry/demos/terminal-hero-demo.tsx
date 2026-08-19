@@ -1,0 +1,4 @@
+"use client";
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+import { TerminalHero } from "@/registry/components/terminal-hero";
+export function TerminalHeroDemo({ locale = "en" }: DemoLocaleProps = {}) { return <div role="group" aria-label={demoText("terminal-hero", locale)} className="mx-auto w-full max-w-[560px]"><TerminalHero title={demoValue(locale, "把版面送到海边", "Ship the page to the coast")} runLabel={demoValue(locale, "运行下一步", "Run next")} resetLabel={demoValue(locale, "重置", "Reset")} steps={[{ command: "collect --notes harbor.md", output: demoValue(locale, "已找到 12 条现场笔记", "12 field notes found"), status: "info" }, { command: "compose --issue autumn-08", output: demoValue(locale, "版面与影像已同步", "Layout and image sequence synced"), status: "info" }, { command: "publish --coast", output: demoValue(locale, "已发布：Northline / Autumn 08", "Published: Northline / Autumn 08"), status: "success" }]} /></div>; }

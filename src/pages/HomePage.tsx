@@ -1,202 +1,43 @@
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useMemo, useState } from "react";
-import {
-  ArrowRightIcon,
-  ComponentLibraryGlyph,
-  MotionPrimitiveGlyph,
-  MotionSkillGlyph,
-} from "../components/icons";
+import { useState } from "react";
+import { ArrowRightIcon, ComponentLibraryGlyph, MotionPrimitiveGlyph, MotionSkillGlyph } from "../components/icons";
 import { Seo } from "../components/Seo";
-import { useTabs } from "../components/interior/tabs";
-import { getRegistryComponent } from "../data/component-registry";
-import { getCatalogRecipe } from "../data/recipes";
+import { registryBlocks } from "../data/block-registry";
+import { componentCategories, registryComponents } from "../data/component-registry";
 import { pathFor, text } from "../data/site";
-import type { Locale, MotionRecipe } from "../data/types";
-import { getDefaultParamValues } from "../lib/motion-engine";
-import { PrimitivePreview } from "../registry/primitive-preview-map";
+import type { Locale } from "../data/types";
 import { RegistryPreview } from "../registry/preview-map";
 
-const stageIds = ["reorder-list", "tabs", "inline-validation"] as const;
-const featuredIds = ["copy-button", "loading-button", "expanding-search", "value-flash"] as const;
-const primitiveIds = ["spring", "morph", "stagger"] as const;
+const sceneFamilies = ["product-mono", "editorial-warm", "spatial-dark"] as const;
 
-const featuredComponents = featuredIds.map((id) => {
-  const component = getRegistryComponent(id);
-  if (!component) throw new Error(`Missing landing component: ${id}`);
-  return component;
-});
-
-const landingPrimitives = primitiveIds.map((id) => {
-  const recipe = getCatalogRecipe(id);
-  if (!recipe) throw new Error(`Missing landing primitive: ${id}`);
-  return recipe;
-});
-
-function Stage({ locale }: { locale: Locale }) {
-  const [activeId, setActiveId] = useState<(typeof stageIds)[number]>(stageIds[0]);
-  const reduceMotion = useReducedMotion();
-  const active = getRegistryComponent(activeId);
-  const items = useMemo(() => stageIds.map((id) => ({
-    value: id,
-    label: text(getRegistryComponent(id)?.name ?? { zh: id, en: id }, locale)
-  })), [locale]);
-  const tabs = useTabs({
-    items,
-    value: activeId,
-    onValueChange: (value) => setActiveId(value as (typeof stageIds)[number])
-  });
-  const panelProps = tabs.getPanelProps(activeId);
-
-  return (
-    <div className="landing-stage mat-float">
-      <div className="landing-stage-bar">
-        <span className="landing-stage-lights" aria-hidden="true"><i /><i /><i /></span>
-        <span>{locale === "zh" ? "实时组件" : "Live component"}</span>
-        <code>React + Motion</code>
-      </div>
-      <div {...tabs.tabListProps} className="landing-stage-tabs" aria-label={locale === "zh" ? "组件预览" : "Component previews"}>
-        {items.map((item, index) => {
-          const tabProps = tabs.getTabProps(item, index);
-          return (
-            <button key={item.value} {...tabProps} aria-controls="landing-stage-panel">
-              {item.label}
-            </button>
-          );
-        })}
-      </div>
-      <div {...panelProps} id="landing-stage-panel" className="landing-stage-canvas">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            className="landing-stage-motion"
-            key={activeId}
-            initial={reduceMotion ? false : { opacity: 0, transform: "translate3d(0, 8px, 0)" }}
-            animate={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-            exit={reduceMotion ? { opacity: 1, transform: "translate3d(0, 0, 0)" } : { opacity: 0, transform: "translate3d(0, -4px, 0)" }}
-            transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <RegistryPreview id={activeId} locale={locale} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      <Link
-        className="landing-stage-footer"
-        to="/$locale/components/$componentId/"
-        params={{ locale, componentId: activeId }}
-      >
-        <span><strong>{active ? text(active.name, locale) : activeId}</strong><code>{activeId}.tsx</code></span>
-        <span>{locale === "zh" ? "查看源码" : "View source"}<ArrowRightIcon size={14} aria-hidden="true" /></span>
-      </Link>
-    </div>
-  );
-}
-
-function PrimitiveCard({ locale, recipe }: { locale: Locale; recipe: MotionRecipe }) {
-  return (
-    <article className="landing-primitive-card">
-      <div className="landing-primitive-stage">
-        <PrimitivePreview
-          locale={locale}
-          recipe={recipe}
-          values={getDefaultParamValues(recipe)}
-          deferred
-          compact
-        />
-      </div>
-      <Link
-        className="landing-primitive-footer"
-        to="/$locale/primitives/$primitiveId/"
-        params={{ locale, primitiveId: recipe.id }}
-      >
-        <span><strong>{text(recipe.name, locale)}</strong><code>{recipe.id}</code></span>
-        <ArrowRightIcon size={14} aria-hidden="true" />
-      </Link>
-    </article>
-  );
+function FlagshipStage({ locale, entries }: { locale: Locale; entries: readonly (typeof registryComponents)[number][] }) {
+  const reduced = useReducedMotion() === true;
+  const [index, setIndex] = useState(0);
+  const entry = entries[index] ?? entries[0];
+  if (!entry) return null;
+  return <section className={`v6-stage is-${entry.sceneFamily}`} aria-label={locale === "zh" ? "旗舰组件预览" : "Flagship component preview"}>
+    <div className="v6-stage-meta"><span>{entry.sceneFamily.replace("-", " · ")}</span><code>{entry.runtimeCost ?? "light"} · {(entry.engines ?? ["motion"]).join(" + ")}</code></div>
+    <div className="v6-stage-canvas"><AnimatePresence mode="wait" initial={false}><motion.div key={entry.id} initial={reduced ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={reduced ? undefined : { opacity: 0, y: -8 }} transition={{ duration: reduced ? 0 : .26 }}><RegistryPreview id={entry.id} locale={locale} deferred /></motion.div></AnimatePresence></div>
+    <div className="v6-stage-controls" role="tablist" aria-label={locale === "zh" ? "旗舰组件" : "Flagship components"}>{entries.slice(0, 4).map((item, itemIndex) => <button type="button" role="tab" aria-selected={itemIndex === index} key={item.id} onClick={() => setIndex(itemIndex)}>{text(item.name, locale)}</button>)}</div>
+    <Link className="v6-stage-link" to="/$locale/components/$componentId/" params={{ locale, componentId: entry.id }}><span><strong>{text(entry.name, locale)}</strong><code>{entry.id}</code></span><ArrowRightIcon size={15} aria-hidden="true" /></Link>
+  </section>;
 }
 
 export function HomePage({ locale }: { locale: Locale }) {
   const zh = locale === "zh";
-  const title = zh ? "把好动效，直接带进产品。" : "Bring better motion into your product.";
-  const description = zh
-    ? "5 个页面 Block、59 个组件、44 个原子动效。预览、复制、交给 Agent。"
-    : "5 page blocks, 59 components, and 44 motion primitives. Preview, copy, hand to an agent.";
-
-  return (
-    <>
-      <Seo
-        locale={locale}
-        title={`${title} — Motion Lexicon`}
-        description={description}
-        path={pathFor(locale)}
-        image={`/og-home-${locale}.png`}
-      />
-      <div className="landing-page">
-        <section className="landing-hero" aria-labelledby="landing-title">
-          <div className="landing-hero-copy">
-            <h1 id="landing-title">{title}</h1>
-            <p>{description}</p>
-            <div className="landing-actions">
-              <Link className="landing-primary-action press" to="/$locale/components/" params={{ locale }}>
-                {zh ? "浏览组件" : "Browse components"}<ArrowRightIcon size={15} aria-hidden="true" />
-              </Link>
-              <Link className="landing-secondary-action press" to="/$locale/primitives/" params={{ locale }}>
-                {zh ? "浏览原子动效" : "Browse primitives"}
-              </Link>
-            </div>
-          </div>
-          <Stage locale={locale} />
-        </section>
-
-        <section className="landing-section" aria-labelledby="landing-components-title">
-          <header className="landing-section-heading">
-            <div><ComponentLibraryGlyph size={20} aria-hidden="true" /><h2 id="landing-components-title">{zh ? "产品级动效组件" : "Product-ready motion components"}</h2></div>
-            <Link to="/$locale/components/" params={{ locale }}>{zh ? "查看全部 59 个" : "View all 59"}<ArrowRightIcon size={14} aria-hidden="true" /></Link>
-          </header>
-          <div className="landing-component-grid">
-            {featuredComponents.map((entry) => (
-              <article className="landing-component-card" key={entry.id}>
-                <div className="landing-component-stage"><RegistryPreview id={entry.id} locale={locale} deferred /></div>
-                <Link
-                  className="landing-component-footer"
-                  to="/$locale/components/$componentId/"
-                  params={{ locale, componentId: entry.id }}
-                >
-                  <span><strong>{text(entry.name, locale)}</strong><code>{entry.id}</code></span>
-                  <ArrowRightIcon size={14} aria-hidden="true" />
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="landing-section" aria-labelledby="landing-primitives-title">
-          <header className="landing-section-heading">
-            <div><MotionPrimitiveGlyph size={20} aria-hidden="true" /><h2 id="landing-primitives-title">{zh ? "可调节原子动效" : "Tunable motion primitives"}</h2></div>
-            <Link to="/$locale/primitives/" params={{ locale }}>{zh ? "查看全部 44 个" : "View all 44"}<ArrowRightIcon size={14} aria-hidden="true" /></Link>
-          </header>
-          <div className="landing-primitive-grid">
-            {landingPrimitives.map((recipe) => <PrimitiveCard key={recipe.id} locale={locale} recipe={recipe} />)}
-          </div>
-        </section>
-
-        <section className="landing-delivery" aria-labelledby="landing-delivery-title">
-          <div className="landing-delivery-copy">
-            <h2 id="landing-delivery-title">{zh ? "复制代码，继续调。" : "Copy the code. Keep tuning."}</h2>
-            <code>npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json</code>
-          </div>
-          <Link className="landing-skill-card" to="/$locale/skill/" params={{ locale }}>
-            <MotionSkillGlyph size={24} aria-hidden="true" />
-            <span><strong>Agent Skill</strong><small>{zh ? "构建页面、推荐、编排、审查" : "Build pages, recommend, compose, review"}</small></span>
-            <ArrowRightIcon size={15} aria-hidden="true" />
-          </Link>
-        </section>
-
-        <footer className="landing-footer">
-          <span>Motion Lexicon</span>
-          <span>React · Motion · TypeScript · MIT</span>
-        </footer>
-      </div>
-    </>
-  );
+  const featured = registryComponents.filter((entry) => entry.featured).slice(0, 12);
+  const title = zh ? "100 个可直接复制的 React 动效组件" : "100 copy-ready React motion components";
+  const description = zh ? "为产品界面、媒体叙事和空间视觉准备的完整实现。" : "Complete implementations for product UI, media narratives, and spatial visuals.";
+  const sceneCopy = zh ? { "product-mono": ["Product Mono", "精密产品工作台"], "editorial-warm": ["Editorial Warm", "图像与编辑节奏"], "spatial-dark": ["Spatial Dark", "深色空间与环境光"] } : { "product-mono": ["Product Mono", "Precise working surfaces"], "editorial-warm": ["Editorial Warm", "Image-led editorial rhythm"], "spatial-dark": ["Spatial Dark", "Dark spatial atmosphere"] };
+  return <><Seo locale={locale} title={`${title} — Motion Lexicon`} description={description} path={pathFor(locale)} image={`/og-home-${locale}.png`} />
+    <div className="v6-home">
+      <section className="v6-hero"><div className="v6-hero-copy"><p className="v6-eyebrow">React · Motion · Registry</p><h1>{title}</h1><p>{description}</p><div className="v6-actions"><Link className="v6-primary-action" to="/$locale/components/" params={{ locale }}>{zh ? "浏览组件" : "Browse components"}<ArrowRightIcon size={15} aria-hidden="true" /></Link><code>npx shadcn@latest add</code></div></div><FlagshipStage locale={locale} entries={featured.slice(0, 4)} /></section>
+      <section className="v6-scene-rail" aria-label={zh ? "视觉场景" : "Visual scene families"}>{sceneFamilies.map((scene) => <article className={`v6-scene-card is-${scene}`} key={scene}><span>{sceneCopy[scene][0]}</span><strong>{sceneCopy[scene][1]}</strong><i aria-hidden="true" /></article>)}</section>
+      <section className="v6-section" aria-labelledby="v6-flagships"><div className="v6-section-head"><div><p className="v6-eyebrow">12 FLAGSHIPS</p><h2 id="v6-flagships">{zh ? "建立视觉基准的组件" : "Components that set the visual bar"}</h2></div><Link to="/$locale/components/" params={{ locale }}>{zh ? `全部 ${registryComponents.length} 个组件` : `All ${registryComponents.length} components`}<ArrowRightIcon size={14} aria-hidden="true" /></Link></div><div className="v6-feature-grid">{featured.map((entry, index) => <article className={`v6-feature-card is-${entry.sceneFamily} ${index === 0 ? "is-large" : ""}`} key={entry.id}><div className="v6-feature-stage"><RegistryPreview id={entry.id} locale={locale} deferred /></div><Link to="/$locale/components/$componentId/" params={{ locale, componentId: entry.id }}><span><strong>{text(entry.name, locale)}</strong><code>{entry.id}</code></span><small>{entry.runtimeCost ?? "light"} · {(entry.engines ?? ["motion"]).join("+")}</small></Link></article>)}</div></section>
+      <section className="v6-section" aria-labelledby="v6-categories"><div className="v6-section-head"><div><p className="v6-eyebrow">COLLECTIONS</p><h2 id="v6-categories">{zh ? "从产品任务开始浏览" : "Browse from the product job"}</h2></div></div><div className="v6-category-grid">{componentCategories.map((category) => { const count = registryComponents.filter((entry) => entry.category === category.id).length; return <a key={category.id} href={`${pathFor(locale, ["components"])}?category=${category.id}`}><ComponentLibraryGlyph size={16} aria-hidden="true" /><span>{text(category.name, locale)}</span><code>{count}</code><ArrowRightIcon size={14} aria-hidden="true" /></a>; })}</div></section>
+      <section className="v6-section" aria-labelledby="v6-blocks"><div className="v6-section-head"><div><p className="v6-eyebrow">PAGE BLOCKS</p><h2 id="v6-blocks">{zh ? "用完整页面验证组合" : "Composition proved in complete pages"}</h2></div><Link to="/$locale/blocks/" params={{ locale }}>{zh ? `全部 ${registryBlocks.length} 个 Blocks` : `All ${registryBlocks.length} Blocks`}<ArrowRightIcon size={14} aria-hidden="true" /></Link></div><div className="v6-block-grid">{registryBlocks.map((entry) => <Link key={entry.id} to="/$locale/blocks/$blockId/" params={{ locale, blockId: entry.id }}><div><RegistryPreview id={entry.id} locale={locale} deferred /></div><span><strong>{text(entry.name, locale)}</strong><code>{entry.id}</code></span></Link>)}</div></section>
+      <section className="v6-secondary"><Link to="/$locale/primitives/" params={{ locale }}><MotionPrimitiveGlyph size={20} aria-hidden="true" /><span><strong>{zh ? "44 个动效原子" : "44 motion primitives"}</strong><small>{zh ? "组合每一个动作" : "Compose every movement"}</small></span><ArrowRightIcon size={15} aria-hidden="true" /></Link><div><code>npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json</code></div><Link to="/$locale/skill/" params={{ locale }}><MotionSkillGlyph size={20} aria-hidden="true" /><span><strong>Agent Skill</strong><small>{zh ? "规划、构建与评审" : "Plan, build, review"}</small></span><ArrowRightIcon size={15} aria-hidden="true" /></Link></section>
+    </div>
+  </>;
 }

@@ -1,0 +1,4 @@
+"use client";
+import { demoValue, type DemoLocaleProps } from "../demo-locale";
+import { PageTransitionStack } from "@/registry/components/page-transition-stack";
+export function PageTransitionStackDemo({ locale = "en" }: DemoLocaleProps = {}) { return <PageTransitionStack label={demoValue(locale, "页面序列", "Page sequence")} pages={[{ id: "home", label: demoValue(locale, "首页", "Home"), title: demoValue(locale, "这个季度的选题。", "This season’s stories."), detail: demoValue(locale, "进入目录时，出发页保留为可理解的空间上下文。", "The origin remains understandable spatial context when entering the catalog."), accent: "#476f57" }, { id: "story", label: demoValue(locale, "文章", "Story"), title: demoValue(locale, "沿着海岸阅读。", "Read along the coast."), detail: demoValue(locale, "目标页面完整出现，同时保持路径的方向感。", "The destination arrives fully while preserving the direction of travel."), accent: "#9c643f" }]} />; }

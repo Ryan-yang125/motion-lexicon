@@ -49,6 +49,7 @@ export function sitemapPaths() {
   for (const locale of ["zh", "en"] as const) {
     paths.add(pathFor(locale));
     paths.add(pathFor(locale, ["components"]));
+    paths.add(pathFor(locale, ["blocks"]));
     paths.add(pathFor(locale, ["primitives"]));
     paths.add(pathFor(locale, ["guides"]));
     paths.add(pathFor(locale, ["method"]));
@@ -64,7 +65,7 @@ export function sitemapPaths() {
     }
 
     for (const block of registryBlocks) {
-      paths.add(pathFor(locale, ["components", block.id]));
+      paths.add(pathFor(locale, ["blocks", block.id]));
     }
 
     for (const item of canonicalMotionCatalog) {

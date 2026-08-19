@@ -10,7 +10,7 @@ export function PasswordStrengthDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [value, setValue] = useState("");
 
   return (
-    <div role="group" aria-label={demoText("password-strength", locale)} className="mx-auto w-full max-w-[320px]">
+    <div role="group" aria-label={demoText("password-strength", locale)} className="mx-auto w-full max-w-[320px] rounded-[16px] bg-[#edf4f1] p-4">
       <label
         htmlFor={id}
         className="block text-[13px] font-medium text-stone-700 dark:text-stone-200"

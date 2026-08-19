@@ -14,7 +14,7 @@ export function ValueFlashDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [value, setValue] = useState(1284);
 
   return (
-    <div role="group" aria-label={demoText("value-flash", locale)} className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-5">
+    <div role="group" aria-label={demoText("value-flash", locale)} className="mx-auto flex w-full max-w-[440px] flex-col items-center gap-5 rounded-[16px] bg-[#1b2b35] p-6 text-[#effaf6]">
       <ValueFlash
         value={value}
         format={(n) => n.toLocaleString(locale === "zh" ? "zh-CN" : "en-US")}

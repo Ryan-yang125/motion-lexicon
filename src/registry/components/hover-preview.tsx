@@ -1,0 +1,13 @@
+"use client";
+
+import { useId, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+export type HoverPreviewItem = { id: string; label: string; title: string; detail: string; image: string; imageAlt: string };
+export type HoverPreviewProps = { items: readonly HoverPreviewItem[]; label?: string; onSelect?: (item: HoverPreviewItem) => void; className?: string };
+
+export function HoverPreview({ items, label = "Destination previews", onSelect, className = "" }: HoverPreviewProps) {
+  const reduced = useReducedMotion() === true; const id = useId(); const [active, setActive] = useState(0); const [pinned, setPinned] = useState(false); const current = items[active]; const show = pinned || active >= 0;
+  if (!current) return null;
+  return <section aria-labelledby={id} className={`grid overflow-hidden rounded-[16px] border border-black/[.1] bg-white sm:grid-cols-[.8fr_1.2fr] ${className}`}><nav aria-label={label} className="p-3"><span id={id} className="font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500">{label}</span><div className="mt-3 space-y-1">{items.map((item, index) => <button key={item.id} type="button" onPointerEnter={() => { if (!pinned) setActive(index); }} onFocus={() => setActive(index)} onClick={() => { setActive(index); setPinned((value) => !value); onSelect?.(item); }} className={`flex min-h-11 w-full items-center justify-between rounded-lg px-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] ${index === active ? "bg-[#f1f3ef] text-[#292929]" : "text-neutral-500 hover:bg-neutral-50"}`}><span className="text-[12px] font-medium">{item.label}</span><span aria-hidden className="text-[11px]">↗</span></button>)}</div><p className="mt-4 text-[10px] leading-relaxed text-neutral-400">Focus previews a destination. Tap pins it on touch devices.</p></nav><div className="relative min-h-[230px] overflow-hidden bg-[#ded9cf]"><AnimatePresence initial={false} mode="wait">{show ? <motion.div key={current.id} initial={reduced ? false : { opacity: 0, scale: 1.04 }} animate={{ opacity: 1, scale: 1 }} exit={reduced ? undefined : { opacity: 0, scale: .98 }} transition={{ duration: reduced ? 0 : .25 }} className="absolute inset-0"><img src={current.image} alt={current.imageAlt} className="size-full object-cover" /><span className="absolute inset-0 bg-[linear-gradient(0deg,rgba(20,20,18,.65),transparent_65%)]" /><div className="absolute inset-x-4 bottom-4 text-white"><span className="font-mono text-[9px] uppercase tracking-[.16em] text-white/70">{current.title}</span><p className="mt-1 text-[12px] leading-relaxed text-white/80">{current.detail}</p></div></motion.div> : null}</AnimatePresence></div></section>;
+}

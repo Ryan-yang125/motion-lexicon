@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Covers pending, determinate, and complete progress states."
+    "signature": "Pending, progress, and completion resolve along one bar",
+    "sceneFamily": "product-mono",
+    "motionRole": "lively",
+    "primaryState": "Task bar at a determinate progress value",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

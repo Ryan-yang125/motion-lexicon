@@ -1,0 +1,13 @@
+"use client";
+
+import { useId, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+export type PageTransitionStackPage = { id: string; label: string; title: string; detail: string; accent?: string };
+export type PageTransitionStackProps = { pages: readonly PageTransitionStackPage[]; label?: string; onNavigate?: (page: PageTransitionStackPage) => void; className?: string };
+
+export function PageTransitionStack({ pages, label = "Page transitions", onNavigate, className = "" }: PageTransitionStackProps) {
+  const reduced = useReducedMotion() === true; const id = useId(); const [index, setIndex] = useState(0); const current = pages[index]; const navigate = (next: number) => { const safe = Math.max(0, Math.min(pages.length - 1, next)); setIndex(safe); if (pages[safe]) onNavigate?.(pages[safe]); };
+  if (!current) return null;
+  return <section aria-labelledby={id} className={`overflow-hidden rounded-[18px] bg-[#e9e7e2] p-4 ${className}`}><div className="flex items-center justify-between"><span className="font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500">{label}</span><div className="flex gap-1"><button type="button" onClick={() => navigate(index - 1)} disabled={index === 0} className="grid size-9 place-items-center rounded-full outline-none hover:bg-white disabled:opacity-30 focus-visible:ring-2 focus-visible:ring-[#4568FF]">←</button><button type="button" onClick={() => navigate(index + 1)} disabled={index === pages.length - 1} className="grid size-9 place-items-center rounded-full outline-none hover:bg-white disabled:opacity-30 focus-visible:ring-2 focus-visible:ring-[#4568FF]">→</button></div></div><div className="relative mt-5 min-h-[220px]"><div aria-hidden className="absolute inset-x-6 top-3 h-[190px] rounded-[14px] bg-[#c8ccc5]" /><AnimatePresence mode="popLayout" initial={false}><motion.article key={current.id} initial={reduced ? false : { opacity: 0, y: 24, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={reduced ? undefined : { opacity: 0, y: -16, scale: 1.02 }} transition={{ duration: reduced ? 0 : .32, ease: [0.22, 1, 0.36, 1] }} className="relative min-h-[190px] rounded-[14px] bg-white p-5 shadow-[0_18px_35px_-24px_rgba(40,40,37,.44)]"><span className="rounded-full px-2 py-1 font-mono text-[9px] text-white" style={{ background: current.accent ?? "#4568FF" }}>{current.label}</span><h3 id={id} className="mt-6 text-2xl font-medium tracking-[-.05em] text-[#292929]">{current.title}</h3><p className="mt-2 max-w-sm text-[12px] leading-relaxed text-neutral-500">{current.detail}</p></motion.article></AnimatePresence></div></section>;
+}

@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "media"
+    "cards-media"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/cursor-lens/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Pointer and keyboard controlled comparison lens"
+    "signature": "Pointer and keyboard controlled comparison lens",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "gentle",
+    "primaryState": "Comparison lens settled on media detail",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

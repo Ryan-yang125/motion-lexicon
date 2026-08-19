@@ -14,7 +14,7 @@ export function InlineValidationDemo({ locale = "en" }: DemoLocaleProps = {}) {
   };
 
   return (
-    <div role="group" aria-label={demoText("inline-validation", locale)} className="flex justify-center">
+    <div role="group" aria-label={demoText("inline-validation", locale)} className="flex justify-center rounded-[16px] bg-[#f1f5f3] p-5">
       <div className="w-full max-w-[300px]">
         <InlineValidation
           label={demoValue(locale, "Agent 知识库", "Agent knowledge base")}

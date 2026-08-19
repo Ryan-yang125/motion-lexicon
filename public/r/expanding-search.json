@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "inputs"
+    "forms-input"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Expands from a toolbar action into a focused search field."
+    "signature": "Toolbar action expands continuously into an input field",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded toolbar search field with focus",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

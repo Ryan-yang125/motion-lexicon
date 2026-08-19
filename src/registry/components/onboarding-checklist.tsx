@@ -1,0 +1,13 @@
+"use client";
+
+import { useId, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+
+export type OnboardingChecklistItem = { id: string; title: string; detail?: string; complete?: boolean };
+export type OnboardingChecklistProps = { items: readonly OnboardingChecklistItem[]; title?: string; onChange?: (items: OnboardingChecklistItem[]) => void; className?: string };
+
+export function OnboardingChecklist({ items, title = "Your setup", onChange, className = "" }: OnboardingChecklistProps) {
+  const reduced = useReducedMotion() === true; const headingId = useId(); const [completed, setCompleted] = useState(() => new Set(items.filter((item) => item.complete).map((item) => item.id))); const done = items.filter((item) => completed.has(item.id)).length;
+  const toggle = (id: string) => setCompleted((current) => { const next = new Set(current); if (next.has(id)) next.delete(id); else next.add(id); onChange?.(items.map((item) => ({ ...item, complete: next.has(item.id) }))); return next; });
+  return <section aria-labelledby={headingId} className={`rounded-[16px] border border-black/[.09] bg-white p-4 shadow-[0_14px_34px_-27px_rgba(25,25,25,.4)] ${className}`}><div className="flex items-end justify-between gap-3"><div><span className="font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500">Getting started</span><h3 id={headingId} className="mt-1 text-lg font-medium tracking-[-.035em] text-[#292929]">{title}</h3></div><span className="font-mono text-[10px] text-neutral-500">{done}/{items.length}</span></div><div aria-hidden className="mt-4 h-1.5 overflow-hidden rounded-full bg-neutral-100"><motion.span animate={{ width: `${items.length ? (done / items.length) * 100 : 0}%` }} transition={{ duration: reduced ? 0 : .28 }} className="block h-full bg-[#242424]" /></div><ul className="mt-4 space-y-1.5">{items.map((item) => { const checked = completed.has(item.id); return <li key={item.id}><button type="button" aria-pressed={checked} onClick={() => toggle(item.id)} className="flex min-h-11 w-full items-center gap-3 rounded-[10px] p-2 text-left outline-none transition hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-[#4568FF]"><span aria-hidden className={`grid size-5 shrink-0 place-items-center rounded-full border text-[10px] ${checked ? "border-[#242424] bg-[#242424] text-white" : "border-neutral-300 text-transparent"}`}>✓</span><span className="min-w-0"><strong className={`block text-[12px] ${checked ? "text-neutral-400 line-through" : "text-[#292929]"}`}>{item.title}</strong>{item.detail ? <span className="mt-0.5 block text-[10px] text-neutral-500">{item.detail}</span> : null}</span></button></li>; })}</ul></section>;
+}

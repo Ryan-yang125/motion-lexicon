@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-velocity",
+  "type": "registry:ui",
+  "title": "Scroll velocity",
+  "description": "Lets background typography respond briefly to page velocity and settle readable at rest.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "text-type"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/scroll-velocity/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "Velocity shifts type while rest returns to baseline",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "gentle",
+    "primaryState": "Readable typography rail at rest",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/scroll-velocity.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/scroll-velocity.tsx",
+      "content": "\"use client\";\n\nimport { useEffect, useId, useRef, useState } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport type ScrollVelocityProps = { text: string; label?: string; maxOffset?: number; className?: string };\n\nexport function ScrollVelocity({ text, label = \"Scroll velocity\", maxOffset = 34, className = \"\" }: ScrollVelocityProps) {\n  const reduced = useReducedMotion() === true;\n  const labelId = useId(); const rootRef = useRef<HTMLDivElement>(null); const visibleRef = useRef(true); const previousY = useRef(0); const settleRef = useRef<number | null>(null); const [offset, setOffset] = useState(0);\n  useEffect(() => {\n    const root = rootRef.current; if (!root || reduced) return;\n    const observer = new IntersectionObserver(([entry]) => { visibleRef.current = entry?.isIntersecting ?? false; }, { threshold: .08 }); observer.observe(root);\n    previousY.current = window.scrollY;\n    const onScroll = () => { if (!visibleRef.current) return; const delta = window.scrollY - previousY.current; previousY.current = window.scrollY; const next = Math.max(-maxOffset, Math.min(maxOffset, delta * .72)); setOffset(next); if (settleRef.current !== null) window.clearTimeout(settleRef.current); settleRef.current = window.setTimeout(() => { settleRef.current = null; setOffset(0); }, 130); };\n    window.addEventListener(\"scroll\", onScroll, { passive: true });\n    return () => { observer.disconnect(); window.removeEventListener(\"scroll\", onScroll); if (settleRef.current !== null) window.clearTimeout(settleRef.current); };\n  }, [maxOffset, reduced]);\n  const repeated = `${text} · ${text} · ${text}`;\n  return <section ref={rootRef} aria-labelledby={labelId} className={`relative isolate overflow-hidden rounded-[16px] bg-[#20201e] px-4 py-7 text-[#f6f0e6] shadow-[0_14px_38px_-22px_rgba(12,12,10,.75)] ${className}`}>\n    <span id={labelId} className=\"relative z-10 font-mono text-[10px] uppercase tracking-[.18em] text-[#d8bd93]\">{label}</span><div aria-hidden className=\"mt-5 overflow-hidden\"><motion.div animate={{ x: reduced ? 0 : offset }} transition={{ type: \"spring\", stiffness: 280, damping: 24, mass: .35 }} className=\"w-max whitespace-nowrap text-4xl font-medium leading-none tracking-[-.065em] text-[#f2ebe0] sm:text-6xl\">{repeated}</motion.div></div><p className=\"relative z-10 mt-4 max-w-xs text-[12px] leading-relaxed text-white/64\">{text}</p>\n  </section>;\n}\n"
+    }
+  ]
+}

@@ -27,10 +27,10 @@ export type SpotlightBentoProps = {
 };
 
 const toneClass = {
-  blue: "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950",
-  clay: "bg-neutral-700 text-white dark:bg-neutral-300 dark:text-neutral-950",
-  moss: "bg-neutral-500 text-white dark:bg-neutral-500 dark:text-white",
-  ink: "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-950",
+  blue: "bg-[#315f8c] text-[#eff9ff]",
+  clay: "bg-[#d36a42] text-[#fff3df]",
+  moss: "bg-[#6b8760] text-[#f5ffe8]",
+  ink: "bg-[#2a2520] text-[#fff0dc]",
 } as const;
 
 export function SpotlightBento({
@@ -92,7 +92,7 @@ export function SpotlightBento({
   return (
     <section
       aria-label={label}
-      className={`w-full rounded-[10px] border border-neutral-200 bg-neutral-100 p-2 dark:border-white/[0.14] dark:bg-[#181818] ${className}`}
+      className={`w-full rounded-[18px] border border-[#f3dab2]/20 bg-[#15130f] p-2 shadow-[0_24px_48px_-34px_rgba(0,0,0,.9)] ${className}`}
     >
       <div
         ref={rootRef}
@@ -103,12 +103,12 @@ export function SpotlightBento({
           pointRef.current = { x: root.clientWidth * 0.72, y: root.clientHeight * 0.28 };
           schedule();
         }}
-        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-lg"
+        className="relative isolate grid grid-cols-2 gap-1.5 overflow-hidden rounded-[13px] bg-[radial-gradient(circle_at_76%_16%,rgba(229,154,89,.22),transparent_34%),radial-gradient(circle_at_12%_90%,rgba(80,130,116,.22),transparent_40%)]"
       >
         <div
           ref={lightRef}
           aria-hidden
-          className={`pointer-events-none absolute left-0 top-0 z-0 size-[300px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(255,255,255,0)_72%)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,rgba(255,255,255,0)_72%)] ${
+          className={`pointer-events-none absolute left-0 top-0 z-0 size-[300px] rounded-full bg-[radial-gradient(circle,rgba(255,225,179,.44)_0%,rgba(255,225,179,0)_72%)] ${
             reduced ? "" : "will-change-transform"
           }`}
         />
@@ -116,41 +116,42 @@ export function SpotlightBento({
         {items.map((item) => {
           const interactive = typeof onSelect === "function";
           const selected = interactive && item.id === selectedId;
-          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-lg border bg-white p-3 text-left dark:bg-[#202020] ${
+          const cardClassName = `group relative z-10 min-h-[106px] min-w-0 overflow-hidden rounded-xl border bg-[#211d17]/94 p-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,.03)] ${
             selected
-              ? "border-neutral-950 dark:border-neutral-50"
-              : "border-black/[0.075] dark:border-white/[0.1]"
+              ? "border-[#f1c98d]/75"
+              : "border-white/[0.1]"
           } ${
             item.wide ? "col-span-2" : ""
           } ${
             interactive
-              ? "outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-1"
+              ? "outline-none focus-visible:ring-2 focus-visible:ring-[#f1c98d] focus-visible:ring-offset-1 focus-visible:ring-offset-[#15130f]"
               : ""
           } ${
             interactive && !reduced
-              ? "transition-[transform,border-color,background-color] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-black/[0.16] dark:[@media(hover:hover)_and_(pointer:fine)]:hover:border-white/[0.2]"
+              ? "transition-[transform,border-color,background-color] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-[#f1c98d]/45"
               : ""
           }`;
           const content = (
             <>
+              <span aria-hidden className="absolute -right-7 -top-8 size-24 rounded-full border border-white/[0.08]" />
               <span className="flex items-start justify-between gap-2">
                 <span className={`grid size-9 shrink-0 place-items-center rounded-lg ${toneClass[item.tone ?? "ink"]}`}>
                   {item.icon ?? <span className="size-1.5 rounded-full bg-current" />}
                 </span>
                 {item.meta ? (
-                  <span className="font-mono text-[10.5px] uppercase tracking-[0.06em] text-neutral-600 dark:text-neutral-300">{item.meta}</span>
+                  <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-[#f6dfbb]/52">{item.meta}</span>
                 ) : null}
               </span>
               <span className="mt-3 block min-w-0">
-                <strong className="block truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100">{item.value}</strong>
-                <span className="mt-0.5 block truncate text-[10.5px] text-neutral-500 dark:text-neutral-400">{item.label}</span>
+                <strong className="block truncate text-[14px] font-medium tracking-[-0.025em] text-[#fff0d8]">{item.value}</strong>
+                <span className="mt-0.5 block truncate text-[10.5px] text-[#f6dfbb]/60">{item.label}</span>
               </span>
               {interactive ? (
                 <span
                   aria-hidden
                   data-spotlight-indicator
                   data-motion-mode={reduced ? "instant" : "standard"}
-                  className={`absolute inset-x-3 bottom-0 h-px bg-neutral-950 dark:bg-neutral-50 ${selected ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"} ${
+                  className={`absolute inset-x-3 bottom-0 h-px bg-[#f2c98c] ${selected ? "opacity-100" : "opacity-0 group-focus-visible:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100"} ${
                     reduced
                       ? ""
                       : `origin-left transition-[opacity,transform] duration-200 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] ${selected ? "scale-x-100" : "scale-x-0 group-focus-visible:scale-x-100 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-x-100"}`

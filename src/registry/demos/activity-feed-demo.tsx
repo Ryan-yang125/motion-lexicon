@@ -18,7 +18,7 @@ export function ActivityFeedDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [count, setCount] = useState(1);
 
   return (
-    <div role="group" aria-label={demoText("activity-feed", locale)} className="mx-auto h-[250px] w-full max-w-[420px] overflow-y-auto pr-1">
+    <div role="group" aria-label={demoText("activity-feed", locale)} className="mx-auto h-[250px] w-full max-w-[420px] overflow-y-auto rounded-[16px] bg-[#f5ead9] p-3 pr-1">
       <div className="sticky top-0 z-10 mb-1 flex justify-end bg-[var(--sub)] pb-2">
         <button
           type="button"

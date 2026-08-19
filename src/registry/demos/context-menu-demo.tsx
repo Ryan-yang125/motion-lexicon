@@ -31,7 +31,7 @@ export function ContextMenuDemo({ locale = "en" }: DemoLocaleProps = {}) {
   ];
 
   return (
-    <div role="group" aria-label={demoText("context-menu", locale)} className="mx-auto w-full max-w-[380px]">
+    <div role="group" aria-label={demoText("context-menu", locale)} className="mx-auto w-full max-w-[380px] rounded-[16px] bg-[#f5ead9] p-3 shadow-[0_18px_38px_-30px_rgba(67,46,21,.4)]">
       {files.length > 0 ? (
         <ul className="space-y-1">
           {files.map((file) => (

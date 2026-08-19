@@ -58,7 +58,7 @@ const detailOgFiles = [
   ...registryComponents.flatMap((component) => ["zh", "en"].map((locale) => `og/components/${component.id}-${locale}.png`)),
   ...canonicalMotionCatalog.flatMap((primitive) => ["zh", "en"].map((locale) => `og/primitives/${primitive.id}-${locale}.png`))
 ];
-assert(detailOgFiles.length === 216, `Expected 216 detail Open Graph images, found ${detailOgFiles.length}`);
+assert(detailOgFiles.length === 308, `Expected 308 detail Open Graph images, found ${detailOgFiles.length}`);
 let detailOgBytes = 0;
 const detailOgHashes = new Set<string>();
 for (const asset of detailOgFiles) {
@@ -70,14 +70,14 @@ for (const asset of detailOgFiles) {
   detailOgBytes += dimensions.bytes;
   detailOgHashes.add(dimensions.hash);
 }
-assert(detailOgBytes <= 32 * 1024 * 1024, "Detail Open Graph images exceed the 32 MiB total budget");
+assert(detailOgBytes <= 36 * 1024 * 1024, "Detail Open Graph images exceed the 36 MiB total budget");
 assert(detailOgHashes.size === detailOgFiles.length, "Every detail page must have a visually distinct Open Graph image");
 
 const routes = sitemapPaths();
 const staticRoutes = getStaticPaths();
 const routeSet = new Set(routes);
 assert(routeSet.size === routes.length, "Sitemap routes contain duplicates");
-assert(routes.length === 246, `Expected 246 canonical routes, found ${routes.length}`);
+assert(routes.length === 340, `Expected 340 canonical routes, found ${routes.length}`);
 assert(staticRoutes.length === routes.length, "Static and sitemap route counts differ");
 
 const sitemapXml = readFileSync("dist/sitemap.xml", "utf8");
@@ -107,13 +107,11 @@ for (const routePath of routes) {
   assert(pageTitle, `${routePath} title is empty`);
   if (locale === "zh") assert(/\p{Script=Han}/u.test(pageTitle), `${routePath} Chinese title needs Han characters: ${pageTitle}`);
   if (/^\/zh\/components\/[^/]+\/$/.test(routePath)) {
-    const id = routePath.split("/").filter(Boolean).at(-1);
-    if (registryBlocks.some((block) => block.id === id)) {
-      assert(pageTitle.endsWith(" React 页面 Block | Motion Lexicon"), `${routePath} must use the canonical Chinese block title`);
-    } else {
-      assert(pageTitle.endsWith(" React 组件 | Motion Lexicon"), `${routePath} must use the canonical Chinese component title`);
-      assert(!pageTitle.includes("React 动效组件"), `${routePath} contains obsolete Chinese component terminology`);
-    }
+    assert(pageTitle.endsWith(" React 组件 | Motion Lexicon"), `${routePath} must use the canonical Chinese component title`);
+    assert(!pageTitle.includes("React 动效组件"), `${routePath} contains obsolete Chinese component terminology`);
+  }
+  if (/^\/zh\/blocks\/[^/]+\/$/.test(routePath)) {
+    assert(pageTitle.endsWith(" React 页面 Block | Motion Lexicon"), `${routePath} must use the canonical Chinese block title`);
   }
   if (/^\/zh\/primitives\/[^/]+\/$/.test(routePath)) {
     assert(pageTitle.endsWith(" 原子动效 | Motion Lexicon"), `${routePath} must use the canonical Chinese primitive title`);
@@ -151,11 +149,19 @@ for (const routePath of routes) {
   if (componentMatch) {
     assert(ogImage === `${siteUrl}/og/components/${componentMatch[2]}-${locale}.png`, `${routePath} must use its page-specific Open Graph image`);
     const componentId = componentMatch[2];
-    const isBlock = registryBlocks.some((block) => block.id === componentId);
-    for (const section of isBlock ? ["behavior", "foundations", "runtime"] : ["behavior", "events", "foundations", "runtime"]) {
+    for (const section of ["behavior", "events", "foundations", "runtime"]) {
       assert(html.includes(`data-seo-section="${section}"`), `${routePath} is missing the static ${section} section`);
     }
     assert(html.includes(`href="/r/${componentId}.json"`), `${routePath} is missing its public Registry JSON link`);
+  }
+  const blockMatch = routePath.match(/^\/(zh|en)\/blocks\/([^/]+)\/$/);
+  if (blockMatch) {
+    const blockId = blockMatch[2];
+    assert(ogImage === `${siteUrl}/og/components/${blockId}-${locale}.png`, `${routePath} must use its page-specific Open Graph image`);
+    for (const section of ["behavior", "foundations", "runtime"]) {
+      assert(html.includes(`data-seo-section="${section}"`), `${routePath} is missing the static ${section} section`);
+    }
+    assert(html.includes(`href="/r/${blockId}.json"`), `${routePath} is missing its public Registry JSON link`);
   }
   const primitiveMatch = routePath.match(/^\/(zh|en)\/primitives\/([^/]+)\/$/);
   if (primitiveMatch) {

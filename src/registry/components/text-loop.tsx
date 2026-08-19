@@ -1,0 +1,19 @@
+"use client";
+
+import { useEffect, useId, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+export type TextLoopProps = { items: readonly string[]; label?: string; interval?: number; className?: string; onChange?: (item: string, index: number) => void };
+
+export function TextLoop({ items, label = "Text loop", interval = 3000, className = "", onChange }: TextLoopProps) {
+  const reduced = useReducedMotion() === true;
+  const labelId = useId(); const rootRef = useRef<HTMLDivElement>(null); const visibleRef = useRef(true); const [index, setIndex] = useState(0);
+  useEffect(() => setIndex((value) => Math.min(value, Math.max(0, items.length - 1))), [items.length]);
+  useEffect(() => { const root = rootRef.current; if (!root) return; const observer = new IntersectionObserver(([entry]) => { visibleRef.current = entry?.isIntersecting ?? false; }, { threshold: .1 }); observer.observe(root); return () => observer.disconnect(); }, []);
+  useEffect(() => { if (reduced || items.length < 2 || interval <= 0) return; const timer = window.setInterval(() => { if (!visibleRef.current) return; setIndex((current) => { const next = (current + 1) % items.length; onChange?.(items[next], next); return next; }); }, interval); return () => window.clearInterval(timer); }, [interval, items, onChange, reduced]);
+  const select = (next: number) => { if (!items.length) return; const safe = (next + items.length) % items.length; setIndex(safe); onChange?.(items[safe], safe); };
+  const value = items[index] ?? "";
+  return <div ref={rootRef} role="group" aria-labelledby={labelId} className={`inline-flex min-h-11 items-center overflow-hidden rounded-full border border-black/[.09] bg-[#f7f5f1] pl-4 shadow-[0_8px_22px_-18px_rgba(41,38,33,.45)] ${className}`}>
+    <span id={labelId} className="font-mono text-[10px] uppercase tracking-[.14em] text-stone-500">{label}</span><span aria-live="polite" className="relative ml-3 min-w-[10ch] self-stretch overflow-hidden border-l border-black/[.08] px-3"><AnimatePresence mode="wait" initial={false}><motion.span key={value} initial={reduced ? false : { y: 22, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={reduced ? undefined : { y: -20, opacity: 0 }} transition={{ duration: reduced ? 0 : .24, ease: [0.22, 1, 0.36, 1] }} className="absolute inset-x-3 top-1/2 -translate-y-1/2 whitespace-nowrap text-[12px] font-medium text-stone-800">{value}</motion.span></AnimatePresence></span><button type="button" onClick={() => select(index + 1)} aria-label="Show next item" className="grid min-h-11 min-w-11 place-items-center border-l border-black/[.08] text-stone-500 outline-none transition hover:bg-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#4568FF]">→</button>
+  </div>;
+}

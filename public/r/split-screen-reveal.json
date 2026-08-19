@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "split-screen-reveal",
+  "type": "registry:ui",
+  "title": "Split screen reveal",
+  "description": "Connects two product states or story perspectives with a draggable boundary.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "hero-story"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/split-screen-reveal/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "light",
+    "signature": "The split boundary becomes the narrative transition",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "ui",
+    "primaryState": "Two juxtaposed scenes with centered slider",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/split-screen-reveal.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/split-screen-reveal.tsx",
+      "content": "\"use client\";\nimport { useId, useState, type ReactNode } from \"react\";\nimport { useReducedMotion } from \"motion/react\";\nexport type SplitScreenRevealProps = { left: ReactNode; right: ReactNode; leftLabel?: string; rightLabel?: string; alt: string; label?: string; defaultPosition?: number; onPositionChange?: (position: number) => void; className?: string };\nexport function SplitScreenReveal({ left, right, leftLabel = \"Origin\", rightLabel = \"Result\", alt, label = \"Split screen reveal\", defaultPosition = 50, onPositionChange, className = \"\" }: SplitScreenRevealProps) { const [position, setPosition] = useState(defaultPosition); const reduced = useReducedMotion() === true; const rangeId = useId(); const update = (next: number) => { const value = Math.max(0, Math.min(100, next)); setPosition(value); onPositionChange?.(value); }; return <figure className={`w-full overflow-hidden rounded-[20px] border border-[#4b3425]/15 bg-[#f0e3ce] p-3 ${className}`}><div className=\"mb-2 flex justify-between px-1 font-mono text-[9px] tracking-[.15em] text-[#78604a]\"><span>STORY SPLIT</span><span>DRAG / ARROWS</span></div><div role=\"img\" aria-label={alt} className=\"relative aspect-[16/10] touch-pan-y overflow-hidden rounded-[14px]\" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); const rect = event.currentTarget.getBoundingClientRect(); update(((event.clientX - rect.left) / rect.width) * 100); }} onPointerMove={(event) => { if (!event.currentTarget.hasPointerCapture(event.pointerId)) return; const rect = event.currentTarget.getBoundingClientRect(); update(((event.clientX - rect.left) / rect.width) * 100); }}><div aria-hidden className=\"absolute inset-0\">{right}</div><div aria-hidden className={`absolute inset-y-0 left-0 overflow-hidden ${reduced ? \"\" : \"transition-[width] duration-150\"}`} style={{ width: `${position}%` }}><div className=\"absolute inset-y-0 left-0\" style={{ width: `${10000 / Math.max(position, 1)}%` }}>{left}</div></div><span aria-hidden className=\"absolute inset-y-0 z-10 w-px bg-white\" style={{ left: `${position}%` }} /><span aria-hidden className=\"absolute top-1/2 z-20 grid size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#fff2de] text-[#322116] shadow-lg\" style={{ left: `${position}%` }}>↔</span><span className=\"absolute left-3 top-3 rounded-full bg-black/30 px-2.5 py-1 font-mono text-[8px] tracking-[.13em] text-white\">{leftLabel}</span><span className=\"absolute right-3 top-3 rounded-full bg-white/85 px-2.5 py-1 font-mono text-[8px] tracking-[.13em] text-[#342216]\">{rightLabel}</span></div><label htmlFor={rangeId} className=\"sr-only\">{label}</label><input id={rangeId} aria-label={label} type=\"range\" min=\"0\" max=\"100\" value={position} onChange={(event) => update(Number(event.target.value))} className=\"mt-3 h-11 w-full accent-[#c96847]\" /></figure>; }\n"
+    }
+  ]
+}

@@ -156,7 +156,7 @@ export const motionSkillModes = [
 ] as const;
 
 export const motionGrammar = {
-  version: "5.0.0",
+  version: "6.0.0",
   name: "Motion Grammar",
   promise: text(
     "让每个产品变化都有清楚的起点、过程和结果，并保持产品界面的克制感。",
@@ -169,7 +169,7 @@ export const motionGrammar = {
       purpose: text("构成动作的底层语言。", "The foundational language used to build motion.")
     },
     components: {
-      count: 59,
+      count: 100,
       title: text("组件", "Components"),
       purpose: text("把多个原子动效编排成可安装的 React 产品交互。", "Installable React interactions composed from motion primitives.")
     }

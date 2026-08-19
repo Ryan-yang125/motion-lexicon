@@ -34,7 +34,7 @@ export function FilterGridDemo({ locale = "en" }: DemoLocaleProps = {}) {
     { id: "doc", label: demoValue(locale, "文档", "Docs"), match: (asset) => asset.kind === "doc" },
   ];
   return (
-    <div role="group" aria-label={demoText("filter-grid", locale)} className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("filter-grid", locale)} className="mx-auto w-full max-w-[440px] rounded-[18px] bg-[#efe8dc] p-3 dark:bg-[#211d1a]"><div className="mb-3 flex items-end justify-between px-1"><div><p className="font-mono text-[9px] uppercase tracking-[.15em] text-[#866f5d]">Studio library</p><h3 className="mt-1 font-serif text-[22px] leading-none tracking-[-.04em] text-[#482e25] dark:text-[#f0dfce]">{demoValue(locale, "秋季素材", "Autumn selects")}</h3></div><span className="font-mono text-[9px] text-[#866f5d]">09 ITEMS</span></div>
       <FilterGrid
         label={demoValue(locale, "素材类型", "Asset type")}
         items={ASSETS}
@@ -46,11 +46,10 @@ export function FilterGridDemo({ locale = "en" }: DemoLocaleProps = {}) {
         columns={3}
         rowHeight={64}
         renderItem={(a) => (
-          <div className="flex h-full flex-col justify-between">
-            <p className="truncate text-[12.5px] font-medium text-ink">
-              {a.name}
-            </p>
-            <p className="meta text-ink-3">{a.size}</p>
+          <div className="relative flex h-full flex-col justify-between overflow-hidden">
+            <span aria-hidden className={`absolute -right-3 -top-4 size-12 rounded-full opacity-80 ${a.kind === "image" ? "bg-[#d69a55]" : a.kind === "clip" ? "bg-[#4976bd]" : "bg-[#70996f]"}`} />
+            <p className="relative truncate text-[12.5px] font-medium text-ink">{a.name}</p>
+            <p className="relative meta text-ink-3">{a.kind.toUpperCase()} · {a.size}</p>
           </div>
         )}
       />

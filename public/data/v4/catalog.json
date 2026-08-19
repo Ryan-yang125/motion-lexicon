@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "release": "5.0.0",
+  "release": "6.0.0",
   "name": "Motion Lexicon",
   "description": "Copy-ready React page blocks and components powered by Motion, GSAP, Three.js, WebGL, SVG, and CSS, plus Motion primitives.",
   "siteUrl": "https://motion-lexicon.pages.dev",
@@ -11,8 +11,8 @@
     "source": "https://github.com/Ryan-yang125/motion-lexicon/tree/main/skills/motion-lexicon"
   },
   "counts": {
-    "blocks": 5,
-    "components": 59,
+    "blocks": 10,
+    "components": 100,
     "primitives": 44
   },
   "blocks": [
@@ -34,13 +34,23 @@
       "dependencies": [
         "motion"
       ],
+      "componentIds": [
+        "inline-edit",
+        "metric-ticker",
+        "prompt-composer"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "包含执行轨与审批节点的 Agent 工作台",
+        "en": "Agent workspace with execution rail and approval nodes"
+      },
       "signature": {
         "zh": "任务从需求进入，经由可见执行轨和人工审批，最终收束为带证据的完成状态。",
         "en": "A mission moves from request through visible execution and human approval into evidence-backed completion."
       },
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-workspace/",
-        "en": "https://motion-lexicon.pages.dev/en/components/agent-workspace/",
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/agent-workspace/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/agent-workspace/",
         "registry": "https://motion-lexicon.pages.dev/r/agent-workspace.json"
       }
     },
@@ -62,13 +72,23 @@
       "dependencies": [
         "motion"
       ],
+      "componentIds": [
+        "cinematic-hero",
+        "media-carousel",
+        "split-text-reveal"
+      ],
+      "sceneFamily": "editorial-warm",
+      "primaryState": {
+        "zh": "产品定位与发布阶段工作台",
+        "en": "Positioning and release-stage workspace"
+      },
       "signature": {
         "zh": "发布阶段切换时，内容与进度在同一工作台内连续交接。",
         "en": "Release stages hand content and progress forward inside one stable workspace."
       },
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/product-landing/",
-        "en": "https://motion-lexicon.pages.dev/en/components/product-landing/",
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/product-landing/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/product-landing/",
         "registry": "https://motion-lexicon.pages.dev/r/product-landing.json"
       }
     },
@@ -90,13 +110,23 @@
       "dependencies": [
         "motion"
       ],
+      "componentIds": [
+        "animated-chart",
+        "metric-ticker",
+        "segmented-control"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "带指标与趋势对比的数据面板",
+        "en": "Data dashboard with metrics and trend comparison"
+      },
       "signature": {
         "zh": "时间范围变化会同步更新指标、趋势线与渠道贡献。",
         "en": "A range change updates metrics, trend geometry, and channel contribution together."
       },
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/analytics-dashboard/",
-        "en": "https://motion-lexicon.pages.dev/en/components/analytics-dashboard/",
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/analytics-dashboard/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/analytics-dashboard/",
         "registry": "https://motion-lexicon.pages.dev/r/analytics-dashboard.json"
       }
     },
@@ -118,13 +148,23 @@
       "dependencies": [
         "motion"
       ],
+      "componentIds": [
+        "inline-edit",
+        "kanban-board",
+        "loading-button"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "可推进的项目里程碑与任务面板",
+        "en": "Actionable project milestones and task dashboard"
+      },
       "signature": {
         "zh": "任务完成后会进入下一阶段，并同步推进里程碑进度。",
         "en": "Completing work advances the next task and the milestone progress in one transition."
       },
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/project-dashboard/",
-        "en": "https://motion-lexicon.pages.dev/en/components/project-dashboard/",
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/project-dashboard/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/project-dashboard/",
         "registry": "https://motion-lexicon.pages.dev/r/project-dashboard.json"
       }
     },
@@ -146,21 +186,231 @@
       "dependencies": [
         "motion"
       ],
+      "componentIds": [
+        "drawer",
+        "inline-edit",
+        "loading-button",
+        "metric-ticker"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "队列、对话与客户上下文并列的支持工作台",
+        "en": "Support workspace with queue, conversation, and customer context"
+      },
       "signature": {
         "zh": "会话选择、回复发送与队列状态共享同一处理上下文。",
         "en": "Conversation selection, reply delivery, and queue state share one handling context."
       },
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/support-inbox/",
-        "en": "https://motion-lexicon.pages.dev/en/components/support-inbox/",
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/support-inbox/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/support-inbox/",
         "registry": "https://motion-lexicon.pages.dev/r/support-inbox.json"
+      }
+    },
+    {
+      "id": "creative-portfolio",
+      "name": {
+        "zh": "创意作品集",
+        "en": "Creative portfolio"
+      },
+      "description": {
+        "zh": "通过作品、材质研究和案例叙事呈现独立创意实践。",
+        "en": "Presents an independent creative practice through work, material studies, and case-story transitions."
+      },
+      "primitiveIds": [
+        "reveal",
+        "morph",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "componentIds": [
+        "dither-reveal-card",
+        "image-lightbox",
+        "media-carousel",
+        "scroll-media-expansion",
+        "text-morph"
+      ],
+      "sceneFamily": "editorial-warm",
+      "primaryState": {
+        "zh": "温暖材质中的精选项目与案例入口",
+        "en": "Selected work and case-study entry points in a warm material setting"
+      },
+      "signature": {
+        "zh": "作品在材质显影、聚焦查看和案例轮播之间连续展开。",
+        "en": "Work moves continuously between material reveal, focused viewing, and case-study browsing."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/creative-portfolio/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/creative-portfolio/",
+        "registry": "https://motion-lexicon.pages.dev/r/creative-portfolio.json"
+      }
+    },
+    {
+      "id": "commerce-storefront",
+      "name": {
+        "zh": "商业店铺",
+        "en": "Commerce storefront"
+      },
+      "description": {
+        "zh": "将产品叙事、细节浏览、批量定价和购物车确认组织为完整购买路径。",
+        "en": "Organizes product story, detail browsing, volume pricing, and cart confirmation into a complete purchase path."
+      },
+      "primitiveIds": [
+        "morph",
+        "number-ticker",
+        "scroll-reveal"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "componentIds": [
+        "add-to-cart-morph",
+        "animated-combobox",
+        "cinematic-hero",
+        "media-carousel",
+        "pricing-calculator"
+      ],
+      "sceneFamily": "editorial-warm",
+      "primaryState": {
+        "zh": "主产品、材质详情与可确认购买面板",
+        "en": "Hero product, material details, and a confirmable purchase panel"
+      },
+      "signature": {
+        "zh": "商品浏览、价格配置和购物车状态在一条购买路径中收束。",
+        "en": "Product browsing, price configuration, and cart state resolve along one purchase path."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/commerce-storefront/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/commerce-storefront/",
+        "registry": "https://motion-lexicon.pages.dev/r/commerce-storefront.json"
+      }
+    },
+    {
+      "id": "developer-docs",
+      "name": {
+        "zh": "开发者文档",
+        "en": "Developer docs"
+      },
+      "description": {
+        "zh": "把安装、代码比较、命令检索和预览结果组织成可导航的开发者文档。",
+        "en": "Organizes installation, code comparison, command search, and preview output into navigable developer documentation."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "crossfade",
+        "text-morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "componentIds": [
+        "code-comparison",
+        "command-palette",
+        "mega-menu",
+        "split-text-reveal"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "可导航的安装与 API 文档工作台",
+        "en": "Navigable installation and API documentation workspace"
+      },
+      "signature": {
+        "zh": "导航、命令搜索和内容章节在稳定文档框架内交接。",
+        "en": "Navigation, command search, and content sections hand off inside a stable documentation frame."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/developer-docs/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/developer-docs/",
+        "registry": "https://motion-lexicon.pages.dev/r/developer-docs.json"
+      }
+    },
+    {
+      "id": "media-editorial",
+      "name": {
+        "zh": "媒体编辑特辑",
+        "en": "Media editorial"
+      },
+      "description": {
+        "zh": "以章节、焦点画廊和滚动叙事浏览完整的视觉报道。",
+        "en": "Browses a complete visual feature through chapters, focus galleries, and scroll-led storytelling."
+      },
+      "primitiveIds": [
+        "scroll-driven-animation",
+        "parallax",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "componentIds": [
+        "cinematic-hero",
+        "focus-gallery",
+        "kinetic-heading",
+        "scroll-story"
+      ],
+      "sceneFamily": "editorial-warm",
+      "primaryState": {
+        "zh": "带章节导航的视觉报道首屏",
+        "en": "Visual feature lead with chapter navigation"
+      },
+      "signature": {
+        "zh": "章节导航把电影式主视觉、画廊焦点和滚动故事连接为同一篇报道。",
+        "en": "Chapter navigation connects a cinematic lead, gallery focus, and scroll story into one feature."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/media-editorial/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/media-editorial/",
+        "registry": "https://motion-lexicon.pages.dev/r/media-editorial.json"
+      }
+    },
+    {
+      "id": "onboarding-flow",
+      "name": {
+        "zh": "引导流程",
+        "en": "Onboarding flow"
+      },
+      "description": {
+        "zh": "以账户设置、文件导入和完成清单组织首个工作区的成功路径。",
+        "en": "Organizes account setup, file import, and completion checklist into a successful first-workspace path."
+      },
+      "primitiveIds": [
+        "morph",
+        "stagger",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "componentIds": [
+        "drawer",
+        "file-dropzone",
+        "multi-step-form",
+        "onboarding-checklist",
+        "progress-bar",
+        "tabs"
+      ],
+      "sceneFamily": "product-mono",
+      "primaryState": {
+        "zh": "进行中的账户设置与导入步骤",
+        "en": "In-progress account setup and import steps"
+      },
+      "signature": {
+        "zh": "表单、导入和清单完成度连续推进到首个成功状态。",
+        "en": "Form, import, and checklist completion progress continuously toward the first successful state."
+      },
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/blocks/onboarding-flow/",
+        "en": "https://motion-lexicon.pages.dev/en/blocks/onboarding-flow/",
+        "registry": "https://motion-lexicon.pages.dev/r/onboarding-flow.json"
       }
     }
   ],
   "components": [
     {
       "id": "agent-thinking-trace",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "Agent 思考轨迹",
         "en": "Agent thinking trace"
@@ -184,6 +434,13 @@
         "zh": "沿信号轨逐步显现的思考阶段",
         "en": "Thinking stages revealed along a signal rail"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "当前推理阶段与证据轨",
+        "en": "Active reasoning phase on an evidence rail"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/agent-thinking-trace/",
         "en": "https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/",
@@ -192,7 +449,7 @@
     },
     {
       "id": "streaming-answer",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "流式回答",
         "en": "Streaming answer"
@@ -216,6 +473,13 @@
         "zh": "文字完成后接续展开来源与追问",
         "en": "Sources and follow-ups resolve after the streamed answer"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "已完成回答与可展开来源",
+        "en": "Resolved answer with expandable sources"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/streaming-answer/",
         "en": "https://motion-lexicon.pages.dev/en/components/streaming-answer/",
@@ -224,7 +488,7 @@
     },
     {
       "id": "tool-call-stack",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "工具调用堆栈",
         "en": "Tool call stack"
@@ -248,6 +512,13 @@
         "zh": "执行记录按工具状态展开并归档",
         "en": "Execution records expand and resolve by tool state"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开的工具执行记录",
+        "en": "Expanded tool execution record"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/tool-call-stack/",
         "en": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
@@ -256,7 +527,7 @@
     },
     {
       "id": "approval-flow",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "人工审批流程",
         "en": "Human approval flow"
@@ -280,6 +551,13 @@
         "zh": "选择结果原位收束为审批完成",
         "en": "The selected path resolves in place into approval"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "待确认的建议、证据与备选方案",
+        "en": "Approval-ready recommendation with evidence and alternatives"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/approval-flow/",
         "en": "https://motion-lexicon.pages.dev/en/components/approval-flow/",
@@ -287,18 +565,18 @@
       }
     },
     {
-      "id": "agent-task-queue",
-      "category": "agent",
+      "id": "task-progress",
+      "category": "agent-ui",
       "name": {
-        "zh": "Agent 任务队列",
-        "en": "Agent task queue"
+        "zh": "任务进度",
+        "en": "Task progress"
       },
       "description": {
-        "zh": "展示排队、运行、完成和失败任务，并在两种密度之间切换。",
-        "en": "Shows queued, running, complete, and failed work across two useful densities."
+        "zh": "在紧凑与展开布局中呈现队列、执行、阻塞、失败、恢复和完成状态。",
+        "en": "Presents queued, active, blocked, failed, recovered, and complete work across compact and expanded layouts."
       },
       "primitiveIds": [
-        "morph",
+        "stagger",
         "perceived-performance"
       ],
       "dependencies": [
@@ -309,18 +587,25 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "任务密度切换时保持状态连续",
-        "en": "Task state stays continuous across density changes"
+        "zh": "任务状态沿同一条进度轨连续推进",
+        "en": "Task state advances continuously along one progress rail"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "执行中的任务进度轨",
+        "en": "Active task progress rail"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-task-queue/",
-        "en": "https://motion-lexicon.pages.dev/en/components/agent-task-queue/",
-        "registry": "https://motion-lexicon.pages.dev/r/agent-task-queue.json"
+        "zh": "https://motion-lexicon.pages.dev/zh/components/task-progress/",
+        "en": "https://motion-lexicon.pages.dev/en/components/task-progress/",
+        "registry": "https://motion-lexicon.pages.dev/r/task-progress.json"
       }
     },
     {
       "id": "prompt-composer",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "Agent 提示词编辑器",
         "en": "Agent prompt composer"
@@ -344,6 +629,13 @@
         "zh": "来源菜单从输入器锚点展开",
         "en": "The source menu reveals from the composer anchor"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带来源标签的聚焦提示输入器",
+        "en": "Focused prompt composer with source chips"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/prompt-composer/",
         "en": "https://motion-lexicon.pages.dev/en/components/prompt-composer/",
@@ -352,7 +644,7 @@
     },
     {
       "id": "context-sources",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "上下文来源卡",
         "en": "Context sources"
@@ -376,6 +668,13 @@
         "zh": "选中来源跨栏展开为阅读状态",
         "en": "A selected source expands across the reading surface"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开的检索来源与相关度",
+        "en": "Expanded retrieved source with relevance"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/context-sources/",
         "en": "https://motion-lexicon.pages.dev/en/components/context-sources/",
@@ -384,7 +683,7 @@
     },
     {
       "id": "diff-review",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "修改对比评审",
         "en": "Diff review"
@@ -408,6 +707,13 @@
         "zh": "差异决策直接落回表格行",
         "en": "Diff decisions resolve directly inside each row"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带逐项决策的字段差异",
+        "en": "Field diff with per-change decisions"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/diff-review/",
         "en": "https://motion-lexicon.pages.dev/en/components/diff-review/",
@@ -415,40 +721,8 @@
       }
     },
     {
-      "id": "agent-recommendation",
-      "category": "agent",
-      "name": {
-        "zh": "Agent 建议卡",
-        "en": "Agent recommendation"
-      },
-      "description": {
-        "zh": "通过置信度、依据、备选方案与接受动作表达建议。",
-        "en": "Frames a recommendation through confidence, rationale, alternatives, and acceptance."
-      },
-      "primitiveIds": [
-        "line-drawing",
-        "crossfade"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "置信度信号与备选路径共同完成决策",
-        "en": "Confidence and alternative paths complete the decision"
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-recommendation/",
-        "en": "https://motion-lexicon.pages.dev/en/components/agent-recommendation/",
-        "registry": "https://motion-lexicon.pages.dev/r/agent-recommendation.json"
-      }
-    },
-    {
       "id": "multi-agent-handoff",
-      "category": "agent",
+      "category": "agent-ui",
       "name": {
         "zh": "多 Agent 交接",
         "en": "Multi-agent handoff"
@@ -472,42 +746,17 @@
         "zh": "任务所有权沿 Agent 接力轨移动",
         "en": "Task ownership travels along an agent relay rail"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "当前负责人之间的任务交接",
+        "en": "Task handoff between current owners"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/multi-agent-handoff/",
         "en": "https://motion-lexicon.pages.dev/en/components/multi-agent-handoff/",
         "registry": "https://motion-lexicon.pages.dev/r/multi-agent-handoff.json"
-      }
-    },
-    {
-      "id": "agent-status-orbit",
-      "category": "agent",
-      "name": {
-        "zh": "Agent 状态轨道",
-        "en": "Agent status orbit"
-      },
-      "description": {
-        "zh": "用紧凑轨道状态表达空闲、思考、执行、等待和完成。",
-        "en": "Expresses idle, thinking, working, waiting, and complete states through a compact orbit."
-      },
-      "primitiveIds": [
-        "idle-animation",
-        "number-ticker"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "轨道点数量与速度编码 Agent 状态",
-        "en": "Orbit count and speed encode agent status"
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/agent-status-orbit/",
-        "en": "https://motion-lexicon.pages.dev/en/components/agent-status-orbit/",
-        "registry": "https://motion-lexicon.pages.dev/r/agent-status-orbit.json"
       }
     },
     {
@@ -533,9 +782,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "复制完成后原位切换状态，宽度保持稳定。",
-        "en": "Reports clipboard state in place without shifting nearby content."
+        "zh": "按钮文案原位切换为复制完成",
+        "en": "Button label resolves in place to copied"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "snap",
+      "primaryState": {
+        "zh": "复制完成后的确认按钮",
+        "en": "Copy action in its confirmed state"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/copy-button/",
         "en": "https://motion-lexicon.pages.dev/en/components/copy-button/",
@@ -565,9 +821,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "把等待、成功与失败收进同一个操作位置。",
-        "en": "Keeps pending, success, and error feedback inside one action."
+        "zh": "等待、成功与失败在同一按钮内交接",
+        "en": "Pending, success, and failure hand off inside one button"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "snap",
+      "primaryState": {
+        "zh": "带进度反馈的提交按钮",
+        "en": "Submit button with in-place progress feedback"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/loading-button/",
         "en": "https://motion-lexicon.pages.dev/en/components/loading-button/",
@@ -575,47 +838,15 @@
       }
     },
     {
-      "id": "hold-to-confirm",
-      "category": "actions",
-      "name": {
-        "zh": "长按确认",
-        "en": "Hold to confirm"
-      },
-      "description": {
-        "zh": "用可取消进度保护高风险操作。",
-        "en": "Protects destructive actions with cancellable hold progress."
-      },
-      "primitiveIds": [
-        "hold-to-confirm",
-        "line-drawing"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "用可取消进度保护高风险操作。",
-        "en": "Protects destructive actions with cancellable hold progress."
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/hold-to-confirm/",
-        "en": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
-        "registry": "https://motion-lexicon.pages.dev/r/hold-to-confirm.json"
-      }
-    },
-    {
-      "id": "long-press",
+      "id": "hold-action",
       "category": "actions",
       "name": {
         "zh": "长按操作",
-        "en": "Long press"
+        "en": "Hold action"
       },
       "description": {
-        "zh": "兼顾触控、指针和键盘的长按手势。",
-        "en": "A long-press gesture that works across touch, pointer, and keyboard."
+        "zh": "用可取消进度保护触控、指针和键盘触发的高风险操作。",
+        "en": "Protects high-risk actions with cancellable touch, pointer, and keyboard progress."
       },
       "primitiveIds": [
         "hold-to-confirm",
@@ -629,18 +860,25 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "兼顾触控、指针和键盘的长按手势。",
-        "en": "A long-press gesture that works across touch, pointer, and keyboard."
+        "zh": "按住进度在原位完成或平滑回退",
+        "en": "Hold progress completes in place or returns smoothly"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "snap",
+      "primaryState": {
+        "zh": "正在填充的长按确认按钮",
+        "en": "Hold-to-confirm button with active fill"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/long-press/",
-        "en": "https://motion-lexicon.pages.dev/en/components/long-press/",
-        "registry": "https://motion-lexicon.pages.dev/r/long-press.json"
+        "zh": "https://motion-lexicon.pages.dev/zh/components/hold-action/",
+        "en": "https://motion-lexicon.pages.dev/en/components/hold-action/",
+        "registry": "https://motion-lexicon.pages.dev/r/hold-action.json"
       }
     },
     {
       "id": "command-palette",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "命令面板",
         "en": "Command palette"
@@ -661,9 +899,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "搜索、键盘导航与焦点管理完整配合。",
-        "en": "Combines search, keyboard navigation, and deliberate focus management."
+        "zh": "搜索结果与键盘焦点在面板内连续移动",
+        "en": "Search results and keyboard focus move continuously inside the palette"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带键盘焦点的命令搜索结果",
+        "en": "Command results with active keyboard focus"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/command-palette/",
         "en": "https://motion-lexicon.pages.dev/en/components/command-palette/",
@@ -672,7 +917,7 @@
     },
     {
       "id": "context-menu",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "上下文菜单",
         "en": "Context menu"
@@ -693,9 +938,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "从触发坐标展开，并自动避开视口边缘。",
-        "en": "Opens from the trigger coordinate and stays inside the viewport."
+        "zh": "菜单从触发坐标展开并避开视口边缘",
+        "en": "Menu opens from the trigger coordinate and avoids viewport edges"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "锚定在触发点的上下文菜单",
+        "en": "Context menu anchored to its trigger"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/context-menu/",
         "en": "https://motion-lexicon.pages.dev/en/components/context-menu/",
@@ -704,7 +956,7 @@
     },
     {
       "id": "drawer",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "抽屉",
         "en": "Drawer"
@@ -725,9 +977,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "支持焦点锁定、拖拽关闭与可中断弹簧。",
-        "en": "Includes focus containment, drag dismissal, and interruptible spring motion."
+        "zh": "抽屉、遮罩与焦点作为同一层级进出",
+        "en": "Drawer, backdrop, and focus enter and leave as one layer"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "已打开的侧边操作面板",
+        "en": "Open side panel for a focused task"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/drawer/",
         "en": "https://motion-lexicon.pages.dev/en/components/drawer/",
@@ -736,7 +995,7 @@
     },
     {
       "id": "dropdown",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "下拉选择",
         "en": "Dropdown"
@@ -757,9 +1016,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "选项高亮连续移动，键盘操作完整。",
-        "en": "Moves selection continuously with full keyboard behavior."
+        "zh": "高亮沿选项列表连续落位",
+        "en": "The highlight settles continuously across options"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开并高亮当前选项的选择器",
+        "en": "Expanded selector with the current option highlighted"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/dropdown/",
         "en": "https://motion-lexicon.pages.dev/en/components/dropdown/",
@@ -768,7 +1034,7 @@
     },
     {
       "id": "modal",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "模态框",
         "en": "Modal"
@@ -789,9 +1055,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "稳定处理焦点、遮罩、退出与异步确认。",
-        "en": "Handles focus, backdrop, exit, and async confirmation as one flow."
+        "zh": "对话框、遮罩与焦点范围共同切换",
+        "en": "Dialog, backdrop, and focus scope transition together"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带明确确认动作的模态窗口",
+        "en": "Modal with a clear confirmation action"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/modal/",
         "en": "https://motion-lexicon.pages.dev/en/components/modal/",
@@ -800,7 +1073,7 @@
     },
     {
       "id": "popover",
-      "category": "overlays",
+      "category": "overlays-surfaces",
       "name": {
         "zh": "气泡浮层",
         "en": "Popover"
@@ -821,9 +1094,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "根据触发点与空间方向确定展开原点。",
-        "en": "Derives its reveal origin from the trigger and available space."
+        "zh": "浮层依据触发点和可用空间确定展开原点",
+        "en": "Popover derives its reveal origin from the trigger and available space"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "贴近触发点的辅助信息浮层",
+        "en": "Supporting popover positioned at its trigger"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/popover/",
         "en": "https://motion-lexicon.pages.dev/en/components/popover/",
@@ -832,7 +1112,7 @@
     },
     {
       "id": "expanding-search",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "展开搜索",
         "en": "Expanding search"
@@ -853,9 +1133,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "从工具栏动作自然展开为完整搜索框。",
-        "en": "Expands from a toolbar action into a focused search field."
+        "zh": "工具栏动作连续扩展为可输入搜索框",
+        "en": "Toolbar action expands continuously into an input field"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开并聚焦的工具栏搜索框",
+        "en": "Expanded toolbar search field with focus"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/expanding-search/",
         "en": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
@@ -863,40 +1150,8 @@
       }
     },
     {
-      "id": "floating-label",
-      "category": "inputs",
-      "name": {
-        "zh": "浮动标签输入框",
-        "en": "Floating label"
-      },
-      "description": {
-        "zh": "输入内容时保留字段标签与上下文。",
-        "en": "Keeps the field label and context visible while typing."
-      },
-      "primitiveIds": [
-        "translate",
-        "crossfade"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "输入内容时保留字段标签与上下文。",
-        "en": "Keeps the field label and context visible while typing."
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/floating-label/",
-        "en": "https://motion-lexicon.pages.dev/en/components/floating-label/",
-        "registry": "https://motion-lexicon.pages.dev/r/floating-label.json"
-      }
-    },
-    {
       "id": "inline-validation",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "行内校验",
         "en": "Inline validation"
@@ -917,9 +1172,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "把等待、错误和通过状态放在输入旁边。",
-        "en": "Places pending, error, and success states next to the input."
+        "zh": "等待、错误与通过反馈紧贴字段切换",
+        "en": "Pending, error, and success feedback transitions beside the field"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "输入旁的明确校验结果",
+        "en": "Clear validation result beside the input"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/inline-validation/",
         "en": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
@@ -928,7 +1190,7 @@
     },
     {
       "id": "otp-input",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "验证码输入",
         "en": "OTP input"
@@ -949,9 +1211,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "输入、粘贴、错误与成功反馈连续发生。",
-        "en": "Coordinates typing, paste, error, and success feedback."
+        "zh": "输入、粘贴和校验反馈保持同一节奏",
+        "en": "Typing, paste, and validation feedback share one rhythm"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "完整验证码与确认状态",
+        "en": "Completed OTP entry with confirmation state"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/otp-input/",
         "en": "https://motion-lexicon.pages.dev/en/components/otp-input/",
@@ -960,7 +1229,7 @@
     },
     {
       "id": "password-strength",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "密码强度",
         "en": "Password strength"
@@ -981,9 +1250,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "规则检查与强度变化保持清晰节奏。",
-        "en": "Makes rule checks and strength changes legible as one response."
+        "zh": "规则状态与强度指示同步更新",
+        "en": "Rule status and strength indicator update together"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "显示规则通过度的密码字段",
+        "en": "Password field showing rule completion"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/password-strength/",
         "en": "https://motion-lexicon.pages.dev/en/components/password-strength/",
@@ -992,7 +1268,7 @@
     },
     {
       "id": "slider-detents",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "刻度滑块",
         "en": "Slider detents"
@@ -1013,9 +1289,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "拖动时吸附语义刻度，并保留连续值。",
-        "en": "Snaps to meaningful detents while preserving continuous input."
+        "zh": "连续拖动在语义刻度处吸附",
+        "en": "Continuous drag settles at meaningful detents"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "吸附在语义刻度上的滑块",
+        "en": "Slider settled on a semantic detent"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/slider-detents/",
         "en": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
@@ -1024,7 +1307,7 @@
     },
     {
       "id": "tag-input",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "标签输入",
         "en": "Tag input"
@@ -1045,9 +1328,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "新增、删除和拒绝状态都有明确反馈。",
-        "en": "Gives clear feedback for adding, removing, and rejecting tags."
+        "zh": "标签新增、移除与拒绝反馈在输入位置完成",
+        "en": "Tag add, remove, and reject feedback resolves at the input"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带已选标签的输入字段",
+        "en": "Input field with selected tags"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/tag-input/",
         "en": "https://motion-lexicon.pages.dev/en/components/tag-input/",
@@ -1077,9 +1367,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "内容高度与开合状态保持连续。",
-        "en": "Keeps content height and disclosure state visually continuous."
+        "zh": "内容高度和展开状态在同一位置连续交接",
+        "en": "Content height and disclosure state hand off in place"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开的内容分组",
+        "en": "Expanded content group"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/accordion/",
         "en": "https://motion-lexicon.pages.dev/en/components/accordion/",
@@ -1109,45 +1406,20 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "跟随滚动方向收起与恢复工具栏。",
-        "en": "Hides and restores a toolbar in response to scroll direction."
+        "zh": "工具栏随滚动方向收起并在反向滚动时恢复",
+        "en": "Toolbar yields to scroll direction and returns on reversal"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "阅读时收起的顶部工具栏",
+        "en": "Top toolbar settled into its reading state"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/hide-on-scroll/",
         "en": "https://motion-lexicon.pages.dev/en/components/hide-on-scroll/",
         "registry": "https://motion-lexicon.pages.dev/r/hide-on-scroll.json"
-      }
-    },
-    {
-      "id": "pagination",
-      "category": "navigation",
-      "name": {
-        "zh": "分页",
-        "en": "Pagination"
-      },
-      "description": {
-        "zh": "页码范围切换时保持当前页位置清楚。",
-        "en": "Keeps the current page legible while the visible range changes."
-      },
-      "primitiveIds": [
-        "morph",
-        "crossfade"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "页码范围切换时保持当前页位置清楚。",
-        "en": "Keeps the current page legible while the visible range changes."
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/pagination/",
-        "en": "https://motion-lexicon.pages.dev/en/components/pagination/",
-        "registry": "https://motion-lexicon.pages.dev/r/pagination.json"
       }
     },
     {
@@ -1173,9 +1445,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "共享高亮在选项之间连续移动。",
-        "en": "Carries one shared highlight between options."
+        "zh": "一个共享高亮在选项间连续滑动",
+        "en": "One shared highlight moves continuously between options"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "共享高亮落在当前分段",
+        "en": "Shared highlight settled on the current segment"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/segmented-control/",
         "en": "https://motion-lexicon.pages.dev/en/components/segmented-control/",
@@ -1205,9 +1484,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "指示器、方向与内容切换保持一致。",
-        "en": "Coordinates the indicator, direction, and panel change."
+        "zh": "指示器、方向和内容面板协同切换",
+        "en": "Indicator, direction, and content panel change together"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "激活标签与对应内容面板",
+        "en": "Active tab with its corresponding panel"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/tabs/",
         "en": "https://motion-lexicon.pages.dev/en/components/tabs/",
@@ -1216,7 +1502,7 @@
     },
     {
       "id": "filter-grid",
-      "category": "data",
+      "category": "data-commerce",
       "name": {
         "zh": "筛选网格",
         "en": "Filter grid"
@@ -1237,9 +1523,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "筛选结果重新排列时维持空间连续性。",
-        "en": "Preserves spatial continuity as filtered results rearrange."
+        "zh": "结果在保留空间关系的同时重新排列",
+        "en": "Results rearrange while preserving spatial relationships"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "筛选后的紧凑结果网格",
+        "en": "Compact result grid after filtering"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/filter-grid/",
         "en": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
@@ -1248,7 +1541,7 @@
     },
     {
       "id": "reorder-list",
-      "category": "data",
+      "category": "data-commerce",
       "name": {
         "zh": "拖拽排序列表",
         "en": "Reorder list"
@@ -1269,9 +1562,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "指针拖拽与键盘排序共享清晰落点。",
-        "en": "Provides clear drop position for pointer and keyboard reordering."
+        "zh": "指针和键盘排序共享同一落点反馈",
+        "en": "Pointer and keyboard reordering share one drop-position signal"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "显示明确落点的排序列表",
+        "en": "Reorderable list with a clear drop position"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/reorder-list/",
         "en": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
@@ -1280,7 +1580,7 @@
     },
     {
       "id": "sortable-table",
-      "category": "data",
+      "category": "data-commerce",
       "name": {
         "zh": "可排序表格",
         "en": "Sortable table"
@@ -1301,9 +1601,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "排序变化通过行位置表达，数据保持可读。",
-        "en": "Explains sorting through row position while keeping data readable."
+        "zh": "排序变化通过表行位置与方向表达",
+        "en": "Sorting is expressed through row position and direction"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "按当前字段排序的数据表",
+        "en": "Data table sorted by its active field"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/sortable-table/",
         "en": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
@@ -1333,45 +1640,20 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "支持等待、确定进度与完成三个阶段。",
-        "en": "Covers pending, determinate, and complete progress states."
+        "zh": "等待、推进和完成在一条进度轨内完成",
+        "en": "Pending, progress, and completion resolve along one bar"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "处于确定进度的任务条",
+        "en": "Task bar at a determinate progress value"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/progress-bar/",
         "en": "https://motion-lexicon.pages.dev/en/components/progress-bar/",
         "registry": "https://motion-lexicon.pages.dev/r/progress-bar.json"
-      }
-    },
-    {
-      "id": "task-steps",
-      "category": "feedback",
-      "name": {
-        "zh": "任务步骤",
-        "en": "Task steps"
-      },
-      "description": {
-        "zh": "让排队、执行、完成与失败状态连成一条流程。",
-        "en": "Connects queued, active, complete, and failed states into one flow."
-      },
-      "primitiveIds": [
-        "stagger",
-        "line-drawing"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "让排队、执行、完成与失败状态连成一条流程。",
-        "en": "Connects queued, active, complete, and failed states into one flow."
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/task-steps/",
-        "en": "https://motion-lexicon.pages.dev/en/components/task-steps/",
-        "registry": "https://motion-lexicon.pages.dev/r/task-steps.json"
       }
     },
     {
@@ -1397,9 +1679,16 @@
       ],
       "runtimeCost": "light",
       "signature": {
-        "zh": "用方向与短暂颜色反馈解释数值变化。",
-        "en": "Explains value changes with direction and brief color feedback."
+        "zh": "数值变化通过方向和短暂色彩获得解释",
+        "en": "Value change is explained through direction and brief color"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "带方向提示的更新数值",
+        "en": "Updated value with directional feedback"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/value-flash/",
         "en": "https://motion-lexicon.pages.dev/en/components/value-flash/",
@@ -1432,42 +1721,17 @@
         "zh": "GSAP 快速追踪触点并回正",
         "en": "GSAP pointer tracking with a clean return"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "snap",
+      "primaryState": {
+        "zh": "响应邻近指针的主操作",
+        "en": "Primary action responding to a nearby pointer"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/magnetic-action/",
         "en": "https://motion-lexicon.pages.dev/en/components/magnetic-action/",
         "registry": "https://motion-lexicon.pages.dev/r/magnetic-action.json"
-      }
-    },
-    {
-      "id": "radial-actions",
-      "category": "actions",
-      "name": {
-        "zh": "放射快捷操作",
-        "en": "Radial actions"
-      },
-      "description": {
-        "zh": "围绕主操作展开一组方向清楚的快捷入口。",
-        "en": "Fans a compact set of shortcuts around one anchored action."
-      },
-      "primitiveIds": [
-        "origin-aware-animation",
-        "stagger"
-      ],
-      "dependencies": [
-        "motion"
-      ],
-      "engines": [
-        "motion"
-      ],
-      "runtimeCost": "light",
-      "signature": {
-        "zh": "以主按钮为原点的放射展开",
-        "en": "Radial reveal anchored to the primary action"
-      },
-      "urls": {
-        "zh": "https://motion-lexicon.pages.dev/zh/components/radial-actions/",
-        "en": "https://motion-lexicon.pages.dev/en/components/radial-actions/",
-        "registry": "https://motion-lexicon.pages.dev/r/radial-actions.json"
       }
     },
     {
@@ -1494,6 +1758,13 @@
         "zh": "View Transition 圆形裁切揭幕",
         "en": "Circular View Transition theme reveal"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "主题切换后的稳定界面",
+        "en": "Stable interface after a theme transition"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/theme-reveal/",
         "en": "https://motion-lexicon.pages.dev/en/components/theme-reveal/",
@@ -1526,6 +1797,13 @@
         "zh": "共享高亮驱动的大型菜单",
         "en": "Mega menu driven by a shared highlight"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带当前高亮的大型导航面板",
+        "en": "Expanded navigation panel with active highlight"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/mega-menu/",
         "en": "https://motion-lexicon.pages.dev/en/components/mega-menu/",
@@ -1558,6 +1836,13 @@
         "zh": "距离感知的弹性程序坞",
         "en": "Distance-aware spring dock"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带焦点图标的浮动程序坞",
+        "en": "Floating dock with a focused destination"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/floating-dock/",
         "en": "https://motion-lexicon.pages.dev/en/components/floating-dock/",
@@ -1566,7 +1851,7 @@
     },
     {
       "id": "voice-capture",
-      "category": "inputs",
+      "category": "forms-input",
       "name": {
         "zh": "语音输入器",
         "en": "Voice capture"
@@ -1590,6 +1875,13 @@
         "zh": "响应声级的语音采集流程",
         "en": "Voice capture flow with responsive levels"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "显示声级的录音输入器",
+        "en": "Voice input showing the current level"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/voice-capture/",
         "en": "https://motion-lexicon.pages.dev/en/components/voice-capture/",
@@ -1622,6 +1914,13 @@
         "zh": "可展开并滑动关闭的通知队列",
         "en": "Expandable notification queue with swipe dismissal"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "展开的通知队列",
+        "en": "Expanded notification queue"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/toast-stack/",
         "en": "https://motion-lexicon.pages.dev/en/components/toast-stack/",
@@ -1654,6 +1953,13 @@
         "zh": "逐项推进并自动收拢的上传流程",
         "en": "Per-file upload flow that resolves into completion"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "逐项推进的上传队列",
+        "en": "Upload queue advancing item by item"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/upload-queue/",
         "en": "https://motion-lexicon.pages.dev/en/components/upload-queue/",
@@ -1686,6 +1992,13 @@
         "zh": "稳定几何上的骨架内容交接",
         "en": "Skeleton-to-content handoff on stable geometry"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "骨架与真实内容交接的阅读面",
+        "en": "Reading surface handing off from skeleton to content"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/skeleton-reveal/",
         "en": "https://motion-lexicon.pages.dev/en/components/skeleton-reveal/",
@@ -1694,7 +2007,7 @@
     },
     {
       "id": "activity-feed",
-      "category": "data",
+      "category": "data-commerce",
       "name": {
         "zh": "实时动态流",
         "en": "Activity feed"
@@ -1718,6 +2031,13 @@
         "zh": "带未读边界的实时插入列表",
         "en": "Live insertion feed with an unread boundary"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带未读边界的实时动态流",
+        "en": "Live activity feed with an unread boundary"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/activity-feed/",
         "en": "https://motion-lexicon.pages.dev/en/components/activity-feed/",
@@ -1726,7 +2046,7 @@
     },
     {
       "id": "integration-map",
-      "category": "data",
+      "category": "data-commerce",
       "name": {
         "zh": "集成关系图",
         "en": "Integration map"
@@ -1750,6 +2070,13 @@
         "zh": "SVG 路径连接的集成拓扑",
         "en": "Integration topology connected by SVG paths"
       },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带活跃路径的系统集成拓扑",
+        "en": "Integration topology with active paths"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/integration-map/",
         "en": "https://motion-lexicon.pages.dev/en/components/integration-map/",
@@ -1758,7 +2085,7 @@
     },
     {
       "id": "cursor-lens",
-      "category": "media",
+      "category": "cards-media",
       "name": {
         "zh": "局部对比镜",
         "en": "Cursor lens"
@@ -1782,6 +2109,13 @@
         "zh": "指针与键盘可控的局部对比镜",
         "en": "Pointer and keyboard controlled comparison lens"
       },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "落在媒体细节上的对比镜",
+        "en": "Comparison lens settled on media detail"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/cursor-lens/",
         "en": "https://motion-lexicon.pages.dev/en/components/cursor-lens/",
@@ -1790,7 +2124,7 @@
     },
     {
       "id": "media-carousel",
-      "category": "media",
+      "category": "cards-media",
       "name": {
         "zh": "惯性媒体轮播",
         "en": "Media carousel"
@@ -1814,6 +2148,13 @@
         "zh": "原生滚动惯性与吸附驱动的媒体轨道",
         "en": "Media rail driven by native scroll inertia and snap"
       },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "居中聚焦的媒体轮播卡",
+        "en": "Media carousel with a centered focal card"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/media-carousel/",
         "en": "https://motion-lexicon.pages.dev/en/components/media-carousel/",
@@ -1822,7 +2163,7 @@
     },
     {
       "id": "image-lightbox",
-      "category": "media",
+      "category": "cards-media",
       "name": {
         "zh": "连续画廊灯箱",
         "en": "Gallery lightbox"
@@ -1846,6 +2187,13 @@
         "zh": "共享元素过渡连接缩略图与画廊",
         "en": "Shared-element transition from thumbnail to gallery"
       },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "带缩略图上下文的沉浸式画廊",
+        "en": "Immersive gallery with thumbnail context"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/image-lightbox/",
         "en": "https://motion-lexicon.pages.dev/en/components/image-lightbox/",
@@ -1854,7 +2202,7 @@
     },
     {
       "id": "scroll-story",
-      "category": "media",
+      "category": "cards-media",
       "name": {
         "zh": "滚动产品叙事",
         "en": "Scroll story"
@@ -1878,6 +2226,13 @@
         "zh": "ScrollTrigger 驱动的章节化产品场景",
         "en": "Chaptered product scene driven by ScrollTrigger"
       },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "章节进度与产品场景同步的叙事面",
+        "en": "Story scene synchronized with chapter progress"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/scroll-story/",
         "en": "https://motion-lexicon.pages.dev/en/components/scroll-story/",
@@ -1886,7 +2241,7 @@
     },
     {
       "id": "procedural-product-viewer",
-      "category": "media",
+      "category": "cards-media",
       "name": {
         "zh": "三维产品查看器",
         "en": "3D product viewer"
@@ -1915,6 +2270,13 @@
         "zh": "可拖拽检查的 Three.js 产品模型",
         "en": "Drag-inspectable Three.js product model"
       },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "可拖拽检查的深色三维产品",
+        "en": "Dark 3D product ready for drag inspection"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/procedural-product-viewer/",
         "en": "https://motion-lexicon.pages.dev/en/components/procedural-product-viewer/",
@@ -1923,7 +2285,7 @@
     },
     {
       "id": "dither-reveal-card",
-      "category": "visual",
+      "category": "visual-ambient",
       "name": {
         "zh": "抖动显影卡",
         "en": "Dither reveal card"
@@ -1948,6 +2310,13 @@
         "zh": "原生 WebGL Bayer 阈值显影",
         "en": "Native WebGL Bayer-threshold reveal"
       },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "静止的 WebGL 抖动显影卡",
+        "en": "Still WebGL dither-reveal card"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/dither-reveal-card/",
         "en": "https://motion-lexicon.pages.dev/en/components/dither-reveal-card/",
@@ -1956,7 +2325,7 @@
     },
     {
       "id": "network-globe",
-      "category": "visual",
+      "category": "visual-ambient",
       "name": {
         "zh": "交互网络地球",
         "en": "Network globe"
@@ -1985,6 +2354,13 @@
         "zh": "Three.js 节点弧线网络地球",
         "en": "Three.js globe with routed network arcs"
       },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "聚焦节点的深色网络地球",
+        "en": "Dark network globe focused on a selected node"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/network-globe/",
         "en": "https://motion-lexicon.pages.dev/en/components/network-globe/",
@@ -1993,7 +2369,7 @@
     },
     {
       "id": "kinetic-logo-exchange",
-      "category": "visual",
+      "category": "visual-ambient",
       "name": {
         "zh": "动态品牌墙",
         "en": "Kinetic logo exchange"
@@ -2017,6 +2393,13 @@
         "zh": "布局交换与遮罩显影的品牌队列",
         "en": "Brand queue with layout exchange and masked reveal"
       },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "停在当前选择的动态品牌队列",
+        "en": "Kinetic brand queue settled on its selection"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/kinetic-logo-exchange/",
         "en": "https://motion-lexicon.pages.dev/en/components/kinetic-logo-exchange/",
@@ -2025,7 +2408,7 @@
     },
     {
       "id": "spotlight-bento",
-      "category": "visual",
+      "category": "visual-ambient",
       "name": {
         "zh": "联动聚光矩阵",
         "en": "Spotlight bento"
@@ -2049,10 +2432,1893 @@
         "zh": "跨卡片共享坐标的连续光场",
         "en": "Continuous spotlight sharing coordinates across tiles"
       },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "聚光停在当前卡片的联动矩阵",
+        "en": "Connected bento with the spotlight on its active tile"
+      },
+      "assetProvenance": "self-contained",
       "urls": {
         "zh": "https://motion-lexicon.pages.dev/zh/components/spotlight-bento/",
         "en": "https://motion-lexicon.pages.dev/en/components/spotlight-bento/",
         "registry": "https://motion-lexicon.pages.dev/r/spotlight-bento.json"
+      }
+    },
+    {
+      "id": "scroll-media-expansion",
+      "category": "hero-story",
+      "name": {
+        "zh": "滚动媒体扩展",
+        "en": "Scroll media expansion"
+      },
+      "description": {
+        "zh": "让受限媒体卡在章节滚动中扩展为沉浸式主视觉。",
+        "en": "Expands contained media into an immersive hero through chapter scrolling."
+      },
+      "primitiveIds": [
+        "scroll-driven-animation",
+        "scale-in"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "媒体与视口逐步合并为一个连续画面",
+        "en": "Media and viewport resolve into one continuous frame"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "全幅海岸媒体与章节轨",
+        "en": "Full-bleed coastal media with chapter rail"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/scroll-media-expansion/",
+        "en": "https://motion-lexicon.pages.dev/en/components/scroll-media-expansion/",
+        "registry": "https://motion-lexicon.pages.dev/r/scroll-media-expansion.json"
+      }
+    },
+    {
+      "id": "device-scroll-reveal",
+      "category": "hero-story",
+      "name": {
+        "zh": "设备滚动展示",
+        "en": "Device scroll reveal"
+      },
+      "description": {
+        "zh": "在设备框内同步推进产品屏幕、章节文案和产品状态。",
+        "en": "Advances product screens, chapter copy, and product state inside a device frame."
+      },
+      "primitiveIds": [
+        "scroll-driven-animation",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "设备外框与屏幕内容一起推进",
+        "en": "Device chrome and screen content advance together"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "设备框中的产品步骤",
+        "en": "Product step inside a device frame"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/device-scroll-reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/components/device-scroll-reveal/",
+        "registry": "https://motion-lexicon.pages.dev/r/device-scroll-reveal.json"
+      }
+    },
+    {
+      "id": "cinematic-hero",
+      "category": "hero-story",
+      "name": {
+        "zh": "电影式主视觉",
+        "en": "Cinematic hero"
+      },
+      "description": {
+        "zh": "用图像、排版和行动按钮建立有节奏的品牌开场。",
+        "en": "Uses image, typography, and action to establish a paced brand opening."
+      },
+      "primitiveIds": [
+        "scale-in",
+        "reveal"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "大图、标题和行动按顺序抵达",
+        "en": "Media, title, and action arrive in deliberate sequence"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "暖色图形与大标题",
+        "en": "Warm graphic field with display title"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/cinematic-hero/",
+        "en": "https://motion-lexicon.pages.dev/en/components/cinematic-hero/",
+        "registry": "https://motion-lexicon.pages.dev/r/cinematic-hero.json"
+      }
+    },
+    {
+      "id": "shader-hero",
+      "category": "hero-story",
+      "name": {
+        "zh": "着色器主视觉",
+        "en": "Shader hero"
+      },
+      "description": {
+        "zh": "以低功耗 WebGL 场域让指针在主视觉周围塑造氛围。",
+        "en": "Uses a low-power WebGL field that reshapes around pointer intent."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "idle-animation"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion",
+        "webgl"
+      ],
+      "runtimeCost": "heavy",
+      "signature": {
+        "zh": "指针在发光场域中改变波纹焦点",
+        "en": "Pointer input reshapes the focal wave field"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "静止的深色光场与清晰标题",
+        "en": "Still dark light field with legible heading"
+      },
+      "assetProvenance": "generated",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/shader-hero/",
+        "en": "https://motion-lexicon.pages.dev/en/components/shader-hero/",
+        "registry": "https://motion-lexicon.pages.dev/r/shader-hero.json"
+      }
+    },
+    {
+      "id": "split-screen-reveal",
+      "category": "hero-story",
+      "name": {
+        "zh": "分屏揭示",
+        "en": "Split screen reveal"
+      },
+      "description": {
+        "zh": "用可拖动边界连接两个产品状态或叙事视角。",
+        "en": "Connects two product states or story perspectives with a draggable boundary."
+      },
+      "primitiveIds": [
+        "before-after-slider",
+        "reveal"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "分界线成为两端叙事的过渡",
+        "en": "The split boundary becomes the narrative transition"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "两个并置画面与居中滑块",
+        "en": "Two juxtaposed scenes with centered slider"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/split-screen-reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/components/split-screen-reveal/",
+        "registry": "https://motion-lexicon.pages.dev/r/split-screen-reveal.json"
+      }
+    },
+    {
+      "id": "screenshot-stack",
+      "category": "hero-story",
+      "name": {
+        "zh": "截图层叠",
+        "en": "Screenshot stack"
+      },
+      "description": {
+        "zh": "用前后层次呈现多个产品界面，并维持当前焦点。",
+        "en": "Presents multiple product surfaces in depth while retaining the active focus."
+      },
+      "primitiveIds": [
+        "morph",
+        "scale-in"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "当前截图向前推进，其他截图保留上下文",
+        "en": "Active screenshot moves forward while context stays visible"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "深色空间中的产品截图堆栈",
+        "en": "Product screenshot stack in dark space"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/screenshot-stack/",
+        "en": "https://motion-lexicon.pages.dev/en/components/screenshot-stack/",
+        "registry": "https://motion-lexicon.pages.dev/r/screenshot-stack.json"
+      }
+    },
+    {
+      "id": "terminal-hero",
+      "category": "hero-story",
+      "name": {
+        "zh": "终端主视觉",
+        "en": "Terminal hero"
+      },
+      "description": {
+        "zh": "通过可逐步执行的命令展示开发者工作流和结果。",
+        "en": "Demonstrates a developer workflow and result through progressive commands."
+      },
+      "primitiveIds": [
+        "typewriter",
+        "perceived-performance"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "命令、输出和完成状态组成一个循环",
+        "en": "Command, output, and completion form one loop"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "等待执行的终端工作流",
+        "en": "Terminal workflow ready to run"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/terminal-hero/",
+        "en": "https://motion-lexicon.pages.dev/en/components/terminal-hero/",
+        "registry": "https://motion-lexicon.pages.dev/r/terminal-hero.json"
+      }
+    },
+    {
+      "id": "product-orbit-hero",
+      "category": "hero-story",
+      "name": {
+        "zh": "产品轨道主视觉",
+        "en": "Product orbit hero"
+      },
+      "description": {
+        "zh": "围绕中心产品对象布置能力，并让焦点与文案同步。",
+        "en": "Arranges capabilities around a central product object with synchronized focus copy."
+      },
+      "primitiveIds": [
+        "orbit",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "轨道位置与能力说明同步切换",
+        "en": "Orbit position and capability copy change together"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "中心对象周围的能力轨道",
+        "en": "Capability orbit around a central object"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/product-orbit-hero/",
+        "en": "https://motion-lexicon.pages.dev/en/components/product-orbit-hero/",
+        "registry": "https://motion-lexicon.pages.dev/r/product-orbit-hero.json"
+      }
+    },
+    {
+      "id": "expandable-card",
+      "category": "cards-media",
+      "name": {
+        "zh": "展开卡片",
+        "en": "Expandable card"
+      },
+      "description": {
+        "zh": "让紧凑故事卡在原位展开为完整阅读表面。",
+        "en": "Expands a compact story card in place into a full reading surface."
+      },
+      "primitiveIds": [
+        "morph",
+        "scale-in"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "共享几何保留卡片的起点和上下文",
+        "en": "Shared geometry preserves the card origin and context"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "温暖编辑图片卡片",
+        "en": "Warm editorial image card"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/expandable-card/",
+        "en": "https://motion-lexicon.pages.dev/en/components/expandable-card/",
+        "registry": "https://motion-lexicon.pages.dev/r/expandable-card.json"
+      }
+    },
+    {
+      "id": "focus-gallery",
+      "category": "cards-media",
+      "name": {
+        "zh": "焦点画廊",
+        "en": "Focus gallery"
+      },
+      "description": {
+        "zh": "让一张图片获得焦点，周围媒体同步退让。",
+        "en": "Lets one image gain focus while neighboring media yields."
+      },
+      "primitiveIds": [
+        "morph",
+        "parallax"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "焦点、裁切和说明一起变化",
+        "en": "Focus, crop, and caption change together"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "中心焦点图与两侧媒体",
+        "en": "Centered focus image with neighboring media"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/focus-gallery/",
+        "en": "https://motion-lexicon.pages.dev/en/components/focus-gallery/",
+        "registry": "https://motion-lexicon.pages.dev/r/focus-gallery.json"
+      }
+    },
+    {
+      "id": "card-stack",
+      "category": "cards-media",
+      "name": {
+        "zh": "卡片堆栈",
+        "en": "Card stack"
+      },
+      "description": {
+        "zh": "在紧凑空间中逐张浏览叠放的记录或故事。",
+        "en": "Browses stacked records or stories in a compact space."
+      },
+      "primitiveIds": [
+        "swipe-to-dismiss",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "当前卡片离开后露出下一层",
+        "en": "Current card exits to expose the next layer"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "可继续浏览的顶层卡片",
+        "en": "Top card ready for continued browsing"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/card-stack/",
+        "en": "https://motion-lexicon.pages.dev/en/components/card-stack/",
+        "registry": "https://motion-lexicon.pages.dev/r/card-stack.json"
+      }
+    },
+    {
+      "id": "animated-testimonials",
+      "category": "cards-media",
+      "name": {
+        "zh": "动态客户证言",
+        "en": "Animated testimonials"
+      },
+      "description": {
+        "zh": "让人物、引语、归属和进度作为一个连续证据单元切换。",
+        "en": "Transitions portrait, quote, attribution, and progress as one evidence unit."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "人物与引语以同一节奏交接",
+        "en": "Portrait and quote hand off in one rhythm"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "人物照片与完整客户引语",
+        "en": "Portrait photography with complete customer quote"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/animated-testimonials/",
+        "en": "https://motion-lexicon.pages.dev/en/components/animated-testimonials/",
+        "registry": "https://motion-lexicon.pages.dev/r/animated-testimonials.json"
+      }
+    },
+    {
+      "id": "coverflow-gallery",
+      "category": "cards-media",
+      "name": {
+        "zh": "封面流画廊",
+        "en": "Coverflow gallery"
+      },
+      "description": {
+        "zh": "以深度、吸附和键盘浏览呈现媒体序列。",
+        "en": "Browses media with depth, snapping, and keyboard control."
+      },
+      "primitiveIds": [
+        "parallax",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "当前媒体旋转进入稳定正面",
+        "en": "Active media rotates into a stable frontal position"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "正面媒体与两侧倾斜预览",
+        "en": "Frontal media with angled adjacent previews"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/coverflow-gallery/",
+        "en": "https://motion-lexicon.pages.dev/en/components/coverflow-gallery/",
+        "registry": "https://motion-lexicon.pages.dev/r/coverflow-gallery.json"
+      }
+    },
+    {
+      "id": "image-trail",
+      "category": "cards-media",
+      "name": {
+        "zh": "图像轨迹",
+        "en": "Image trail"
+      },
+      "description": {
+        "zh": "沿指针或拖动路径生成并自动回收克制的图像碎片。",
+        "en": "Generates and retires restrained image fragments along pointer or drag paths."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "图像沿路径出现并干净退场",
+        "en": "Images appear along the path and retire cleanly"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "森林主图上的静态轨迹首帧",
+        "en": "Forest lead image with still trail frame"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/image-trail/",
+        "en": "https://motion-lexicon.pages.dev/en/components/image-trail/",
+        "registry": "https://motion-lexicon.pages.dev/r/image-trail.json"
+      }
+    },
+    {
+      "id": "pixelated-image",
+      "category": "cards-media",
+      "name": {
+        "zh": "像素图像",
+        "en": "Pixelated image"
+      },
+      "description": {
+        "zh": "把图像分辨率作为可控的显影和切换材质。",
+        "en": "Uses image resolution as a controllable reveal and transition material."
+      },
+      "primitiveIds": [
+        "reveal",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "像素结构逐步解析为完整图像",
+        "en": "Pixel structure resolves into a complete image"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "已解析的编辑图像",
+        "en": "Resolved editorial image"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/pixelated-image/",
+        "en": "https://motion-lexicon.pages.dev/en/components/pixelated-image/",
+        "registry": "https://motion-lexicon.pages.dev/r/pixelated-image.json"
+      }
+    },
+    {
+      "id": "chromatic-image",
+      "category": "cards-media",
+      "name": {
+        "zh": "色差图像",
+        "en": "Chromatic image"
+      },
+      "description": {
+        "zh": "在聚焦时为编辑图片增加可控的色彩通道位移。",
+        "en": "Adds controlled color-channel displacement to editorial media on focus."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "blur"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "色彩位移随焦点出现并平稳归位",
+        "en": "Color displacement follows focus and settles cleanly"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "静止的彩色编辑图像",
+        "en": "Still chromatic editorial image"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/chromatic-image/",
+        "en": "https://motion-lexicon.pages.dev/en/components/chromatic-image/",
+        "registry": "https://motion-lexicon.pages.dev/r/chromatic-image.json"
+      }
+    },
+    {
+      "id": "code-comparison",
+      "category": "cards-media",
+      "name": {
+        "zh": "代码对比",
+        "en": "Code comparison"
+      },
+      "description": {
+        "zh": "把实现差异与渲染结果绑定在一个可切换的比较面。",
+        "en": "Binds implementation differences and rendered output inside one switchable comparison surface."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "选择差异同时更新代码和预览",
+        "en": "Selected difference updates code and preview together"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "代码与结果并排比较",
+        "en": "Side-by-side code and result comparison"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/code-comparison/",
+        "en": "https://motion-lexicon.pages.dev/en/components/code-comparison/",
+        "registry": "https://motion-lexicon.pages.dev/r/code-comparison.json"
+      }
+    },
+    {
+      "id": "before-after-comparison",
+      "category": "cards-media",
+      "name": {
+        "zh": "前后对比",
+        "en": "Before and after comparison"
+      },
+      "description": {
+        "zh": "用稳定边界比较两张完整图像状态。",
+        "en": "Compares two complete image states through a stable boundary."
+      },
+      "primitiveIds": [
+        "before-after-slider",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "边界无布局跳动地揭示两种状态",
+        "en": "Stable boundary reveals both states without layout shift"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "居中对比边界",
+        "en": "Centered comparison boundary"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/before-after-comparison/",
+        "en": "https://motion-lexicon.pages.dev/en/components/before-after-comparison/",
+        "registry": "https://motion-lexicon.pages.dev/r/before-after-comparison.json"
+      }
+    },
+    {
+      "id": "split-text-reveal",
+      "category": "text-type",
+      "name": {
+        "zh": "分段文字揭示",
+        "en": "Split text reveal"
+      },
+      "description": {
+        "zh": "按词或字符揭示标题，并在静止状态保持完整可读。",
+        "en": "Reveals a heading by word or character while retaining complete static legibility."
+      },
+      "primitiveIds": [
+        "reveal",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "文字分段组装为稳定标题",
+        "en": "Text segments assemble into a stable heading"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "完整显示的大型编辑标题",
+        "en": "Fully assembled editorial display heading"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/split-text-reveal/",
+        "en": "https://motion-lexicon.pages.dev/en/components/split-text-reveal/",
+        "registry": "https://motion-lexicon.pages.dev/r/split-text-reveal.json"
+      }
+    },
+    {
+      "id": "text-scramble",
+      "category": "text-type",
+      "name": {
+        "zh": "文字扰动",
+        "en": "Text scramble"
+      },
+      "description": {
+        "zh": "让技术标签与状态通过字符替换快速落定。",
+        "en": "Transitions technical labels and status through quick character substitution."
+      },
+      "primitiveIds": [
+        "typewriter",
+        "text-morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "噪点字符快速收束为可读状态",
+        "en": "Noisy characters resolve quickly into readable state"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "稳定的技术状态输出",
+        "en": "Stable technical status output"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/text-scramble/",
+        "en": "https://motion-lexicon.pages.dev/en/components/text-scramble/",
+        "registry": "https://motion-lexicon.pages.dev/r/text-scramble.json"
+      }
+    },
+    {
+      "id": "text-morph",
+      "category": "text-type",
+      "name": {
+        "zh": "文字变形",
+        "en": "Text morph"
+      },
+      "description": {
+        "zh": "在固定阅读节奏内切换相关短语，保持宽度稳定。",
+        "en": "Moves between related phrases within a fixed reading rhythm and stable width."
+      },
+      "primitiveIds": [
+        "text-morph",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "短语交接时周围布局保持稳定",
+        "en": "Surrounding layout stays stable as phrases hand off"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "居中的短语状态",
+        "en": "Centered phrase state"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/text-morph/",
+        "en": "https://motion-lexicon.pages.dev/en/components/text-morph/",
+        "registry": "https://motion-lexicon.pages.dev/r/text-morph.json"
+      }
+    },
+    {
+      "id": "text-loop",
+      "category": "text-type",
+      "name": {
+        "zh": "文字循环",
+        "en": "Text loop"
+      },
+      "description": {
+        "zh": "在紧凑徽标或行内空间中循环可操作的短消息。",
+        "en": "Cycles compact, operable messages inside a badge or inline space."
+      },
+      "primitiveIds": [
+        "loop",
+        "slide-in"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "进入与离开方向解释消息顺序",
+        "en": "Entry and exit direction explains message sequence"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "静止的状态徽标",
+        "en": "Still status badge"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/text-loop/",
+        "en": "https://motion-lexicon.pages.dev/en/components/text-loop/",
+        "registry": "https://motion-lexicon.pages.dev/r/text-loop.json"
+      }
+    },
+    {
+      "id": "scroll-velocity",
+      "category": "text-type",
+      "name": {
+        "zh": "滚动速度文字",
+        "en": "Scroll velocity"
+      },
+      "description": {
+        "zh": "让背景排版随页面速度短暂响应，停下时回到可读状态。",
+        "en": "Lets background typography respond briefly to page velocity and settle readable at rest."
+      },
+      "primitiveIds": [
+        "scroll-driven-animation",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "速度影响文字位移，静止时回归基线",
+        "en": "Velocity shifts type while rest returns to baseline"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "可读的静止排版轨道",
+        "en": "Readable typography rail at rest"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/scroll-velocity/",
+        "en": "https://motion-lexicon.pages.dev/en/components/scroll-velocity/",
+        "registry": "https://motion-lexicon.pages.dev/r/scroll-velocity.json"
+      }
+    },
+    {
+      "id": "kinetic-heading",
+      "category": "text-type",
+      "name": {
+        "zh": "动态标题",
+        "en": "Kinetic heading"
+      },
+      "description": {
+        "zh": "用指针或键盘改变展示标题的字距、权重和张力。",
+        "en": "Changes display-heading spacing, weight, and tension through pointer or keyboard input."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "标题作为一个整体响应输入张力",
+        "en": "Heading responds to input tension as one object"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "静止的绿色可变标题",
+        "en": "Still green variable heading"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/kinetic-heading/",
+        "en": "https://motion-lexicon.pages.dev/en/components/kinetic-heading/",
+        "registry": "https://motion-lexicon.pages.dev/r/kinetic-heading.json"
+      }
+    },
+    {
+      "id": "dynamic-toolbar",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "动态工具栏",
+        "en": "Dynamic toolbar"
+      },
+      "description": {
+        "zh": "围绕当前任务展开紧凑操作，并在收起时保留主入口。",
+        "en": "Expands compact actions around the current task while retaining a clear primary entry."
+      },
+      "primitiveIds": [
+        "morph",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "工具从紧凑主按钮周围展开",
+        "en": "Tools reorganize around a compact primary action"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "收起的圆形主工具",
+        "en": "Collapsed circular primary tool"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/dynamic-toolbar/",
+        "en": "https://motion-lexicon.pages.dev/en/components/dynamic-toolbar/",
+        "registry": "https://motion-lexicon.pages.dev/r/dynamic-toolbar.json"
+      }
+    },
+    {
+      "id": "resizable-sidebar",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "可调整侧栏",
+        "en": "Resizable sidebar"
+      },
+      "description": {
+        "zh": "让产品侧栏在调整宽度或折叠时连续保留导航上下文。",
+        "en": "Preserves navigation context while a product sidebar resizes or collapses."
+      },
+      "primitiveIds": [
+        "morph",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "标签、图标和内容宽度连续过渡",
+        "en": "Labels, icons, and content width transition continuously"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开的项目导航侧栏",
+        "en": "Expanded project navigation sidebar"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/resizable-sidebar/",
+        "en": "https://motion-lexicon.pages.dev/en/components/resizable-sidebar/",
+        "registry": "https://motion-lexicon.pages.dev/r/resizable-sidebar.json"
+      }
+    },
+    {
+      "id": "notification-center",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "通知中心",
+        "en": "Notification center"
+      },
+      "description": {
+        "zh": "将瞬时通知扩展为可阅读、可处理的分组历史。",
+        "en": "Expands transient notices into a readable, actionable grouped history."
+      },
+      "primitiveIds": [
+        "stagger",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "通知堆栈展开为阅读历史",
+        "en": "Notification stack expands into readable history"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "最近两条通知与未读计数",
+        "en": "Two recent notifications with unread count"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/notification-center/",
+        "en": "https://motion-lexicon.pages.dev/en/components/notification-center/",
+        "registry": "https://motion-lexicon.pages.dev/r/notification-center.json"
+      }
+    },
+    {
+      "id": "mobile-bottom-sheet",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "移动底部面板",
+        "en": "Mobile bottom sheet"
+      },
+      "description": {
+        "zh": "以可拖拽、可聚焦的底部面板承载移动端操作和详情。",
+        "en": "Presents mobile actions and detail in a draggable, focus-managed bottom sheet."
+      },
+      "primitiveIds": [
+        "slide-in",
+        "spring"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "吸附、遮罩、焦点和关闭保持协调",
+        "en": "Snap, backdrop, focus, and dismissal stay coordinated"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "关闭状态下的操作入口",
+        "en": "Action trigger in closed state"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/mobile-bottom-sheet/",
+        "en": "https://motion-lexicon.pages.dev/en/components/mobile-bottom-sheet/",
+        "registry": "https://motion-lexicon.pages.dev/r/mobile-bottom-sheet.json"
+      }
+    },
+    {
+      "id": "page-transition-stack",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "页面过渡堆栈",
+        "en": "Page transition stack"
+      },
+      "description": {
+        "zh": "通过前后页面的深度关系保留路由来源和目的地意义。",
+        "en": "Preserves route origin and destination meaning through layered page depth."
+      },
+      "primitiveIds": [
+        "page-transition",
+        "scale-in"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "离开页成为进入页的空间上下文",
+        "en": "Outgoing page becomes spatial context for incoming page"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "前景页面与背景上下文",
+        "en": "Foreground page with background context"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/page-transition-stack/",
+        "en": "https://motion-lexicon.pages.dev/en/components/page-transition-stack/",
+        "registry": "https://motion-lexicon.pages.dev/r/page-transition-stack.json"
+      }
+    },
+    {
+      "id": "hover-preview",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "悬停预览",
+        "en": "Hover preview"
+      },
+      "description": {
+        "zh": "在不离开当前位置的情况下预览目的地，并支持键盘和触控固定。",
+        "en": "Previews a destination without leaving place, with keyboard and touch pinning support."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "origin-aware-animation"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "预览从聚焦锚点旁出现",
+        "en": "Preview emerges beside the focused anchor"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "首个目的地的固定预览",
+        "en": "Pinned preview for first destination"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/hover-preview/",
+        "en": "https://motion-lexicon.pages.dev/en/components/hover-preview/",
+        "registry": "https://motion-lexicon.pages.dev/r/hover-preview.json"
+      }
+    },
+    {
+      "id": "workspace-switcher",
+      "category": "overlays-surfaces",
+      "name": {
+        "zh": "工作区切换",
+        "en": "Workspace switcher"
+      },
+      "description": {
+        "zh": "在紧凑控制中管理工作区身份、最近状态和选择变化。",
+        "en": "Manages workspace identity, recent state, and selection changes in a compact control."
+      },
+      "primitiveIds": [
+        "morph",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "身份标识和选择在同一控件中交接",
+        "en": "Identity and selection hand off inside one control"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "当前工作区切换按钮",
+        "en": "Current workspace switcher button"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/workspace-switcher/",
+        "en": "https://motion-lexicon.pages.dev/en/components/workspace-switcher/",
+        "registry": "https://motion-lexicon.pages.dev/r/workspace-switcher.json"
+      }
+    },
+    {
+      "id": "file-dropzone",
+      "category": "forms-input",
+      "name": {
+        "zh": "文件拖放区",
+        "en": "File dropzone"
+      },
+      "description": {
+        "zh": "通过拖放、选择器和粘贴接收文件，并给出明确的接收反馈。",
+        "en": "Accepts files through drag, picker, and paste with clear intake feedback."
+      },
+      "primitiveIds": [
+        "scale-in",
+        "perceived-performance"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "文件接收后交给可逆队列",
+        "en": "File intake hands off into a reversible queue"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "带浏览入口的文件接收区",
+        "en": "File intake surface with browse entry"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/file-dropzone/",
+        "en": "https://motion-lexicon.pages.dev/en/components/file-dropzone/",
+        "registry": "https://motion-lexicon.pages.dev/r/file-dropzone.json"
+      }
+    },
+    {
+      "id": "multi-step-form",
+      "category": "forms-input",
+      "name": {
+        "zh": "多步骤表单",
+        "en": "Multi-step form"
+      },
+      "description": {
+        "zh": "在短流程中维持步骤方向、校验、等待和已保存进度。",
+        "en": "Maintains step direction, validation, pending state, and saved progress in a short flow."
+      },
+      "primitiveIds": [
+        "direction-aware-transition",
+        "perceived-performance"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "步骤、校验和已保存状态连续呈现",
+        "en": "Steps, validation, and saved state stay continuous"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "第一步的已保留表单空间",
+        "en": "First-step form with reserved layout space"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/multi-step-form/",
+        "en": "https://motion-lexicon.pages.dev/en/components/multi-step-form/",
+        "registry": "https://motion-lexicon.pages.dev/r/multi-step-form.json"
+      }
+    },
+    {
+      "id": "sign-in-flow",
+      "category": "forms-input",
+      "name": {
+        "zh": "登录流程",
+        "en": "Sign-in flow"
+      },
+      "description": {
+        "zh": "协调身份输入、等待、错误和成功，保留已填写内容。",
+        "en": "Coordinates identity input, pending, error, and success while retaining entered context."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "shake-wiggle"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "登录卡在状态间保持同一几何",
+        "en": "Sign-in card keeps one geometry through states"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "完整的邮箱和密码登录卡",
+        "en": "Complete email and password sign-in card"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/sign-in-flow/",
+        "en": "https://motion-lexicon.pages.dev/en/components/sign-in-flow/",
+        "registry": "https://motion-lexicon.pages.dev/r/sign-in-flow.json"
+      }
+    },
+    {
+      "id": "onboarding-checklist",
+      "category": "forms-input",
+      "name": {
+        "zh": "引导清单",
+        "en": "Onboarding checklist"
+      },
+      "description": {
+        "zh": "把设置任务转为有完成度和下一步提示的产品表面。",
+        "en": "Turns setup tasks into a product surface with progress and next-step clarity."
+      },
+      "primitiveIds": [
+        "number-ticker",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "完成项推进整体进度",
+        "en": "Completed items advance the overall progress"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "部分完成的引导任务",
+        "en": "Partially complete onboarding tasks"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/onboarding-checklist/",
+        "en": "https://motion-lexicon.pages.dev/en/components/onboarding-checklist/",
+        "registry": "https://motion-lexicon.pages.dev/r/onboarding-checklist.json"
+      }
+    },
+    {
+      "id": "date-range-picker",
+      "category": "forms-input",
+      "name": {
+        "zh": "日期范围选择",
+        "en": "Date range picker"
+      },
+      "description": {
+        "zh": "在日历网格中区分悬停、暂定、确认范围和预设。",
+        "en": "Distinguishes hover, provisional, confirmed range, and presets inside a calendar grid."
+      },
+      "primitiveIds": [
+        "before-after-slider",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "范围选择在日历空间中连续延展",
+        "en": "Range selection extends continuously through calendar space"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "已确认的周范围",
+        "en": "Confirmed weekly range"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/date-range-picker/",
+        "en": "https://motion-lexicon.pages.dev/en/components/date-range-picker/",
+        "registry": "https://motion-lexicon.pages.dev/r/date-range-picker.json"
+      }
+    },
+    {
+      "id": "animated-combobox",
+      "category": "forms-input",
+      "name": {
+        "zh": "动态组合框",
+        "en": "Animated combobox"
+      },
+      "description": {
+        "zh": "搜索和选择不断变化的结果集，同时保持键盘位置。",
+        "en": "Searches and selects a changing result set while preserving keyboard position."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "高亮和结果排序保持焦点连续",
+        "en": "Highlight and result ordering preserve focus continuity"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "展开的项目搜索结果",
+        "en": "Expanded project search results"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/animated-combobox/",
+        "en": "https://motion-lexicon.pages.dev/en/components/animated-combobox/",
+        "registry": "https://motion-lexicon.pages.dev/r/animated-combobox.json"
+      }
+    },
+    {
+      "id": "inline-edit",
+      "category": "forms-input",
+      "name": {
+        "zh": "就地编辑",
+        "en": "Inline edit"
+      },
+      "description": {
+        "zh": "在相同几何中处理阅读、编辑、保存、错误和提交状态。",
+        "en": "Handles read, edit, save, error, and commit states inside shared geometry."
+      },
+      "primitiveIds": [
+        "morph",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "显示值原位变为可保存字段",
+        "en": "Displayed value becomes a savable field in place"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "可编辑的项目名称",
+        "en": "Editable project name"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/inline-edit/",
+        "en": "https://motion-lexicon.pages.dev/en/components/inline-edit/",
+        "registry": "https://motion-lexicon.pages.dev/r/inline-edit.json"
+      }
+    },
+    {
+      "id": "animated-empty-state",
+      "category": "forms-input",
+      "name": {
+        "zh": "动态空状态",
+        "en": "Animated empty state"
+      },
+      "description": {
+        "zh": "把有效空状态直接导向第一个明确操作和后续结果。",
+        "en": "Moves a valid empty state directly toward one clear first action and result."
+      },
+      "primitiveIds": [
+        "scale-in",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "上下文、插画和行动作为一个序列到达",
+        "en": "Context, illustration, and action arrive as one sequence"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "有行动入口的空白工作面",
+        "en": "Empty working surface with clear action"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/animated-empty-state/",
+        "en": "https://motion-lexicon.pages.dev/en/components/animated-empty-state/",
+        "registry": "https://motion-lexicon.pages.dev/r/animated-empty-state.json"
+      }
+    },
+    {
+      "id": "metric-ticker",
+      "category": "data-commerce",
+      "name": {
+        "zh": "指标滚动数值",
+        "en": "Metric ticker"
+      },
+      "description": {
+        "zh": "把 KPI、涨跌方向和比较周期呈现为一次可读更新。",
+        "en": "Presents KPI, direction, and comparison period as one readable update."
+      },
+      "primitiveIds": [
+        "number-ticker",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "数字、变化和周期一起更新",
+        "en": "Number, delta, and period update together"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "已结算的订阅指标",
+        "en": "Settled subscriber metric"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/metric-ticker/",
+        "en": "https://motion-lexicon.pages.dev/en/components/metric-ticker/",
+        "registry": "https://motion-lexicon.pages.dev/r/metric-ticker.json"
+      }
+    },
+    {
+      "id": "animated-chart",
+      "category": "data-commerce",
+      "name": {
+        "zh": "动态图表",
+        "en": "Animated chart"
+      },
+      "description": {
+        "zh": "比较数据范围与系列变化，保持标签和焦点稳定。",
+        "en": "Compares data ranges and series changes while keeping labels and focus stable."
+      },
+      "primitiveIds": [
+        "line-drawing",
+        "crossfade"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "图形变形时标签保持可读",
+        "en": "Geometry morphs while labels remain readable"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "gentle",
+      "primaryState": {
+        "zh": "读者系列折线图",
+        "en": "Reader-series line chart"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/animated-chart/",
+        "en": "https://motion-lexicon.pages.dev/en/components/animated-chart/",
+        "registry": "https://motion-lexicon.pages.dev/r/animated-chart.json"
+      }
+    },
+    {
+      "id": "changelog-timeline",
+      "category": "data-commerce",
+      "name": {
+        "zh": "更新日志时间线",
+        "en": "Changelog timeline"
+      },
+      "description": {
+        "zh": "以渐进焦点呈现产品或项目的历史记录。",
+        "en": "Presents product or project history with progressive focus."
+      },
+      "primitiveIds": [
+        "crossfade",
+        "stagger"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "当前条目连接日期、版本和详情",
+        "en": "Active entry connects date, version, and detail"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "当前版本的完整更新卡",
+        "en": "Complete update card for current release"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/changelog-timeline/",
+        "en": "https://motion-lexicon.pages.dev/en/components/changelog-timeline/",
+        "registry": "https://motion-lexicon.pages.dev/r/changelog-timeline.json"
+      }
+    },
+    {
+      "id": "kanban-board",
+      "category": "data-commerce",
+      "name": {
+        "zh": "看板",
+        "en": "Kanban board"
+      },
+      "description": {
+        "zh": "让工作在列间移动，同时反馈落点、数量和周围卡片。",
+        "en": "Moves work across columns while responding through destination, count, and surrounding cards."
+      },
+      "primitiveIds": [
+        "drag-to-reorder",
+        "morph"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "落点列、计数和卡片同步响应",
+        "en": "Destination column, count, and cards respond together"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "三列发布看板",
+        "en": "Three-column release board"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/kanban-board/",
+        "en": "https://motion-lexicon.pages.dev/en/components/kanban-board/",
+        "registry": "https://motion-lexicon.pages.dev/r/kanban-board.json"
+      }
+    },
+    {
+      "id": "pricing-calculator",
+      "category": "data-commerce",
+      "name": {
+        "zh": "价格计算器",
+        "en": "Pricing calculator"
+      },
+      "description": {
+        "zh": "通过数量、套餐和计费周期解释连续变化的价格。",
+        "en": "Explains changing price through quantity, tier, and billing interval."
+      },
+      "primitiveIds": [
+        "number-ticker",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "light",
+      "signature": {
+        "zh": "控件、明细和总价一起更新",
+        "en": "Controls, breakdown, and total update together"
+      },
+      "sceneFamily": "product-mono",
+      "motionRole": "ui",
+      "primaryState": {
+        "zh": "年度工作室套餐明细",
+        "en": "Annual studio-plan breakdown"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/pricing-calculator/",
+        "en": "https://motion-lexicon.pages.dev/en/components/pricing-calculator/",
+        "registry": "https://motion-lexicon.pages.dev/r/pricing-calculator.json"
+      }
+    },
+    {
+      "id": "add-to-cart-morph",
+      "category": "data-commerce",
+      "name": {
+        "zh": "加入购物车变形",
+        "en": "Add-to-cart morph"
+      },
+      "description": {
+        "zh": "将产品选择连续连接到持久的购物车确认状态。",
+        "en": "Connects product selection continuously to a persistent cart confirmation state."
+      },
+      "primitiveIds": [
+        "morph",
+        "press-tap-feedback"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "选中商品收束为购物车确认",
+        "en": "Selected product resolves into cart confirmation"
+      },
+      "sceneFamily": "editorial-warm",
+      "motionRole": "lively",
+      "primaryState": {
+        "zh": "书籍商品与加入入口",
+        "en": "Book product with add entry"
+      },
+      "assetProvenance": "local-asset",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/add-to-cart-morph/",
+        "en": "https://motion-lexicon.pages.dev/en/components/add-to-cart-morph/",
+        "registry": "https://motion-lexicon.pages.dev/r/add-to-cart-morph.json"
+      }
+    },
+    {
+      "id": "aurora-canvas",
+      "category": "visual-ambient",
+      "name": {
+        "zh": "极光画布",
+        "en": "Aurora canvas"
+      },
+      "description": {
+        "zh": "提供会在可见区域内缓慢呼吸的品牌环境光场。",
+        "en": "Provides a branded atmospheric field that breathes slowly while visible."
+      },
+      "primitiveIds": [
+        "idle-animation",
+        "compositing"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion",
+        "css"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "分层光色在画布中安静流动",
+        "en": "Layered color moves quietly across the canvas"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "静止的深色极光场",
+        "en": "Still dark aurora field"
+      },
+      "assetProvenance": "generated",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/aurora-canvas/",
+        "en": "https://motion-lexicon.pages.dev/en/components/aurora-canvas/",
+        "registry": "https://motion-lexicon.pages.dev/r/aurora-canvas.json"
+      }
+    },
+    {
+      "id": "grid-distortion",
+      "category": "visual-ambient",
+      "name": {
+        "zh": "网格扭曲",
+        "en": "Grid distortion"
+      },
+      "description": {
+        "zh": "让网格或媒体表面围绕输入弯曲并平滑返回。",
+        "en": "Bends a grid or media surface around input and returns it smoothly."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "compositing"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion",
+        "css"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "场域围绕交互弯曲后回正",
+        "en": "Field bends around interaction and returns without snapping"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "静止的紫色网格媒体",
+        "en": "Still violet grid media"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/grid-distortion/",
+        "en": "https://motion-lexicon.pages.dev/en/components/grid-distortion/",
+        "registry": "https://motion-lexicon.pages.dev/r/grid-distortion.json"
+      }
+    },
+    {
+      "id": "fluid-glass-surface",
+      "category": "visual-ambient",
+      "name": {
+        "zh": "流体玻璃表面",
+        "en": "Fluid glass surface"
+      },
+      "description": {
+        "zh": "为聚焦控制或产品媒体提供保持可读的折射玻璃表面。",
+        "en": "Creates a refractive glass surface for focused controls or media while preserving legibility."
+      },
+      "primitiveIds": [
+        "hover-effect",
+        "blur"
+      ],
+      "dependencies": [
+        "motion"
+      ],
+      "engines": [
+        "motion",
+        "css"
+      ],
+      "runtimeCost": "medium",
+      "signature": {
+        "zh": "高光和折射跟随焦点并保持内容清晰",
+        "en": "Highlight and refraction follow focus while content stays clear"
+      },
+      "sceneFamily": "spatial-dark",
+      "motionRole": "ambient",
+      "primaryState": {
+        "zh": "静止的半透明玻璃表面",
+        "en": "Still translucent glass surface"
+      },
+      "assetProvenance": "self-contained",
+      "urls": {
+        "zh": "https://motion-lexicon.pages.dev/zh/components/fluid-glass-surface/",
+        "en": "https://motion-lexicon.pages.dev/en/components/fluid-glass-surface/",
+        "registry": "https://motion-lexicon.pages.dev/r/fluid-glass-surface.json"
       }
     }
   ],

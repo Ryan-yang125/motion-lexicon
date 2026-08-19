@@ -31,7 +31,7 @@ export function ToastStackDemo({ locale = "en" }: DemoLocaleProps = {}) {
   };
 
   return (
-    <div role="group" aria-label={demoText("toast-stack", locale)} className="mx-auto flex h-[250px] w-full max-w-[440px] flex-col items-center gap-3">
+    <div role="group" aria-label={demoText("toast-stack", locale)} className="mx-auto flex h-[250px] w-full max-w-[440px] flex-col items-center gap-3 rounded-[16px] bg-[#edf3f2] p-3">
       <button
         type="button"
         onClick={add}

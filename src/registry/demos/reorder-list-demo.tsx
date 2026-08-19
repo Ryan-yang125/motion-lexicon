@@ -17,7 +17,7 @@ export function ReorderListDemo({ locale = "en" }: DemoLocaleProps = {}) {
   ]);
 
   return (
-    <div role="group" aria-label={demoText("reorder-list", locale)} className="grid w-full place-items-center">
+    <div role="group" aria-label={demoText("reorder-list", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#edf3f2] p-3">
       <div className="w-full max-w-[320px]">
         <ReorderList
         items={agenda}

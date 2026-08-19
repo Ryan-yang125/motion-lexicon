@@ -22,7 +22,7 @@ export function CommandPaletteDemo({ locale = "en" }: DemoLocaleProps = {}) {
   ];
 
   return (
-    <div role="group" aria-label={demoText("command-palette", locale)} className="grid w-full place-items-center">
+    <div role="group" aria-label={demoText("command-palette", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#1b2730] p-10">
       <button
         type="button"
         onClick={() => setOpen(true)}

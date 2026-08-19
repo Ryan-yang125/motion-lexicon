@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "agent"
+    "agent-ui"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/diff-review/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Diff decisions resolve directly inside each row"
+    "signature": "Diff decisions resolve directly inside each row",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Field diff with per-change decisions",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

@@ -2,6 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { InlineEdit } from "@/registry/components/inline-edit";
+import { MetricTicker } from "@/registry/components/metric-ticker";
+import { PromptComposer } from "@/registry/components/prompt-composer";
 
 type Locale = "zh" | "en";
 type RunState = "ready" | "thinking" | "working" | "approval" | "complete";
@@ -17,13 +20,11 @@ export function AgentWorkspaceBlock({
   const copy = locale === "zh" ? zh : en;
   const [mission, setMission] = useState(0);
   const [state, setState] = useState<RunState>("ready");
-  const [prompt, setPrompt] = useState("");
   const timers = useRef<number[]>([]);
   useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
   const run = () => {
     timers.current.forEach(window.clearTimeout);
     timers.current = [];
-    setPrompt("");
     setState("thinking");
     const stages: Array<[RunState, number]> = [
       ["working", reduced ? 0 : 850],
@@ -39,10 +40,10 @@ export function AgentWorkspaceBlock({
 
   return (
     <section
-      className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
+      className={`min-h-[720px] w-full overflow-hidden rounded-[18px] border border-[#b8cbd1]/45 bg-[#edf3f2] text-neutral-950 shadow-[0_28px_60px_-42px_rgba(18,46,51,.46)] dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
       data-page-block="agent-workspace"
     >
-      <header className="flex min-h-14 items-center gap-3 border-b border-neutral-200 bg-white px-4 dark:border-white/10 dark:bg-[#1b1b1b]">
+      <header className="flex min-h-14 items-center gap-3 border-b border-[#b8cbd1]/45 bg-[#f9fdfc] px-4 dark:border-white/10 dark:bg-[#1b1b1b]">
         <a
           href="#relay-workspace"
           className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-.02em] outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
@@ -110,7 +111,7 @@ export function AgentWorkspaceBlock({
             <span className="text-[9px] text-neutral-400">{copy.teamMeta}</span>
           </div>
         </aside>
-        <main className="flex min-w-0 flex-col bg-white dark:bg-[#1b1b1b]">
+        <div className="flex min-w-0 flex-col bg-white dark:bg-[#1b1b1b]">
           <div className="border-b border-neutral-200 px-5 py-6 sm:px-7 dark:border-white/10">
             <code className="text-[10px] text-neutral-500 dark:text-neutral-400">
               {active.kicker}
@@ -121,6 +122,11 @@ export function AgentWorkspaceBlock({
             <p className="mt-3 max-w-[620px] text-[12px] leading-5 text-neutral-500 dark:text-neutral-400">
               {active.description}
             </p>
+            <InlineEdit
+              value={active.title}
+              label={locale === "zh" ? "任务标题" : "Mission title"}
+              className="mt-4 max-w-md"
+            />
           </div>
           <div className="grid min-h-14 grid-cols-[74px_1fr] items-center border-b border-neutral-200 px-5 text-[11px] sm:px-7 dark:border-white/10">
             <span className="text-neutral-400">{copy.requestLabel}</span>
@@ -238,40 +244,27 @@ export function AgentWorkspaceBlock({
               </motion.div>
             </AnimatePresence>
           </div>
-          <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                if (prompt.trim()) run();
-              }}
-              className="m-4 mt-0 flex min-h-13 items-center gap-2 rounded-[10px] border border-neutral-200 bg-white p-1.5 focus-within:border-neutral-950 focus-within:ring-2 focus-within:ring-blue-600/20 sm:mx-7 dark:border-white/10 dark:bg-[#202020] dark:focus-within:border-neutral-50"
-            >
-              <button
-                type="button"
-                aria-label={copy.attach}
-                className="grid size-11 shrink-0 place-items-center rounded-lg text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/5"
-              >
-                ＋
-              </button>
-              <input
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                placeholder={copy.placeholder}
-                aria-label={copy.placeholder}
-                className="min-w-0 flex-1 bg-transparent text-[12px] outline-none placeholder:text-neutral-400"
-              />
-              <button
-                type="submit"
-                disabled={!prompt.trim()}
-                className="grid size-11 shrink-0 place-items-center rounded-lg bg-neutral-950 text-white disabled:opacity-30 dark:bg-neutral-50 dark:text-neutral-950"
-              >
-                ↑
-              </button>
-          </form>
-        </main>
+          <PromptComposer
+            className="m-4 mt-0 sm:mx-7"
+            placeholder={copy.placeholder}
+            sendLabel={copy.start}
+            addSourcesLabel={copy.attach}
+            sources={[{ id: "brief", label: active.kicker, type: "file", connected: true }]}
+            onSubmit={() => run()}
+          />
+        </div>
         <aside className="hidden border-l border-neutral-200 bg-[#fafafa] p-4 lg:block dark:border-white/10 dark:bg-[#181818]">
           <span className="text-[10px] font-medium text-neutral-500 dark:text-neutral-400">
             {copy.evidence}
           </span>
+          <MetricTicker
+            label={locale === "zh" ? "完成度" : "Mission completion"}
+            value={state === "complete" ? 100 : state === "approval" ? 75 : state === "working" ? 50 : state === "thinking" ? 25 : 0}
+            format={(value) => `${value}%`}
+            delta={state === "complete" ? 100 : 0}
+            period={locale === "zh" ? "当前任务" : "this mission"}
+            className="mt-4"
+          />
           <div className="mt-4 border-t border-neutral-200 dark:border-white/10">
             {active.evidence.map((item, index) => (
               <div
