@@ -14,30 +14,19 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 
 test("landing page presents live components, primitives, and the Skill entry", async ({ page }, testInfo) => {
   await page.goto("/zh/");
-  await expect(page.getByRole("heading", { level: 1, name: "把好动效，直接带进产品。" })).toBeVisible();
-  await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
-  const firstTab = page.getByRole("tab", { name: "拖拽排序列表" });
-  for (const tab of await page.getByRole("tab").all()) {
-    await expect(tab).toHaveAttribute("aria-controls", "landing-stage-panel");
-  }
-  await expect(page.locator("#landing-stage-panel")).toBeVisible();
-  await firstTab.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
-  await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.locator('[data-component="tabs"]')).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByRole("tabpanel", { name: "标签页" })).toBeVisible();
-  await expect(page.locator(".landing-component-card")).toHaveCount(4);
-  await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
-  for (const [index, id] of [[1, "loading-button"], [3, "value-flash"]] as const) {
-    const card = page.locator(".landing-component-card").nth(index);
-    await card.scrollIntoViewIfNeeded();
-    await expect(card.locator(`[data-component="${id}"]`)).toBeVisible();
-    for (const control of await card.locator("button, a, input, select, textarea, [role='button']").all()) {
-      const box = await control.boundingBox();
-      expect(box?.width).toBeGreaterThanOrEqual(44);
-      expect(box?.height).toBeGreaterThanOrEqual(44);
-    }
-  }
+  await expect(page.getByRole("heading", { level: 1, name: "100 个可直接复制的 React 动效组件" })).toBeVisible();
+  const stage = page.getByRole("region", { name: "旗舰组件预览" });
+  await expect(stage.locator('[data-component="image-lightbox"]')).toBeVisible();
+  await expect(stage.getByRole("tab")).toHaveCount(4);
+  await stage.getByRole("tab", { name: "滚动产品叙事" }).click();
+  await expect(stage.getByRole("tab", { name: "滚动产品叙事" })).toHaveAttribute("aria-selected", "true");
+  await expect(stage.locator('[data-component="scroll-story"]')).toBeVisible({ timeout: 15_000 });
+  await expect(stage.getByRole("link", { name: /滚动产品叙事 scroll-story/ })).toBeVisible();
+  await expect(page.locator(".v6-feature-card")).toHaveCount(12);
+  await expect(page.locator(".v6-scene-card")).toHaveCount(3);
+  await expect(page.locator(".v6-category-grid > a")).toHaveCount(11);
+  await expect(page.locator(".v6-block-grid > a")).toHaveCount(registryBlocks.length);
+  await expect(page.getByRole("link", { name: /44 个动效原子/ })).toHaveAttribute("href", "/zh/primitives/");
   const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
   await expect(skill).toHaveAttribute("href", "/zh/skill/");
   const github = page.locator(".library-shell-header").getByRole("link", { name: "GitHub" });
@@ -67,9 +56,9 @@ test("landing preview switches instantly with reduced motion", async ({ page }, 
   test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion landing contract runs once.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/");
-  await page.getByRole("tab", { name: "标签页" }).click();
-  const runningTransitions = await page.locator(".landing-stage-motion").evaluate((node) =>
-    node.getAnimations().filter((animation) => animation.playState === "running").length
+  await page.getByRole("tab", { name: "滚动产品叙事" }).click();
+  const runningTransitions = await page.locator(".v6-stage-canvas").evaluate((node) =>
+    node.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running").length
   );
   expect(runningTransitions).toBe(0);
 });
@@ -177,7 +166,7 @@ test("agent collection exposes a complete workspace and implementation brief", a
   await expect(page.getByRole("heading", { level: 1, name: "Agent 产品工作台" })).toBeVisible();
   const workspace = page.locator('.block-detail-stage [data-page-block="agent-workspace"]');
   await expect(workspace).toBeVisible();
-  await workspace.getByRole("button", { name: "开始任务" }).click();
+  await workspace.getByRole("button", { name: "开始任务" }).filter({ hasText: "开始任务" }).click();
   await expect(workspace.getByText("正在读取需求")).toBeVisible();
   await expect(page.getByRole("button", { name: "复制给 Agent" })).toBeVisible();
   await page.getByRole("radio", { name: "代码" }).click();
