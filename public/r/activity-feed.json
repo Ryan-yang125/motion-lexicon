@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "data"
+    "data-commerce"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/activity-feed/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Live insertion feed with an unread boundary"
+    "signature": "Live insertion feed with an unread boundary",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Live activity feed with an unread boundary",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

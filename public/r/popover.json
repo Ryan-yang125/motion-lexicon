@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/popover/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Derives its reveal origin from the trigger and available space."
+    "signature": "Popover derives its reveal origin from the trigger and available space",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Supporting popover positioned at its trigger",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

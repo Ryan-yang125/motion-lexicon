@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "product-orbit-hero",
+  "type": "registry:ui",
+  "title": "Product orbit hero",
+  "description": "Arranges capabilities around a central product object with synchronized focus copy.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "hero-story"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/product-orbit-hero/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Orbit position and capability copy change together",
+    "sceneFamily": "spatial-dark",
+    "motionRole": "gentle",
+    "primaryState": "Capability orbit around a central object",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/product-orbit-hero.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/product-orbit-hero.tsx",
+      "content": "\"use client\";\nimport { useState, type ReactNode } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\nexport type ProductOrbitHeroItem = { id: string; label: string; title: string; description?: string; icon?: ReactNode; tone?: string };\nexport type ProductOrbitHeroProps = { items: readonly ProductOrbitHeroItem[]; label?: string; center: ReactNode; defaultId?: string; onChange?: (item: ProductOrbitHeroItem, index: number) => void; className?: string };\nexport function ProductOrbitHero({ items, center, label = \"Product orbit\", defaultId, onChange, className = \"\" }: ProductOrbitHeroProps) { const [activeId, setActiveId] = useState(defaultId ?? items[0]?.id ?? \"\"); const activeIndex = Math.max(0, items.findIndex((item) => item.id === activeId)); const active = items[activeIndex]; const reduced = useReducedMotion() === true; if (!active) return null; const select = (index: number) => { const normalized = (index + items.length) % items.length; const item = items[normalized]; setActiveId(item.id); onChange?.(item, normalized); }; return <section aria-label={label} className={`w-full overflow-hidden rounded-[22px] border border-[#b8d6e1]/20 bg-[#071218] p-4 text-[#ecfbff] shadow-[0_28px_62px_-40px_rgba(0,0,0,.95)] ${className}`}><div className=\"flex items-start justify-between\"><div><span className=\"font-mono text-[9px] tracking-[.16em] text-[#bde7e8]/58\">CAPABILITY ORBIT</span><h2 className=\"mt-1 text-[16px] font-medium tracking-[-.03em]\">{label}</h2></div><span className=\"font-mono text-[9px] text-[#bde7e8]/58\">{String(activeIndex + 1).padStart(2, \"0\")}</span></div><div className=\"relative mt-3 min-h-[290px] overflow-hidden rounded-[16px] bg-[radial-gradient(circle_at_50%_50%,rgba(67,156,164,.28),transparent_28%),radial-gradient(circle_at_15%_85%,rgba(231,120,72,.2),transparent_30%),#0a1d24]\" onKeyDown={(event) => { if (event.key === \"ArrowLeft\") { event.preventDefault(); select(activeIndex - 1); } if (event.key === \"ArrowRight\") { event.preventDefault(); select(activeIndex + 1); } }} tabIndex={0}><div aria-hidden className=\"absolute left-1/2 top-1/2 size-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#bce8e3]/20\" /><div aria-hidden className=\"absolute left-1/2 top-1/2 size-[49%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#bce8e3]/16\" /><motion.div initial={false} animate={{ rotate: reduced ? 0 : activeIndex * -6 }} transition={{ type: \"spring\", stiffness: 170, damping: 22 }} className=\"absolute left-1/2 top-1/2 grid size-[118px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-[#d9f3e9]/35 bg-[#16343a] shadow-[0_0_0_12px_rgba(153,228,216,.05),0_22px_48px_-24px_rgba(0,0,0,.9)]\">{center}</motion.div>{items.map((item, index) => { const angle = (index / items.length) * Math.PI * 2 - Math.PI / 2; const x = 50 + Math.cos(angle) * 37; const y = 50 + Math.sin(angle) * 35; const selected = index === activeIndex; return <button key={item.id} type=\"button\" aria-pressed={selected} onClick={() => select(index)} className={`absolute grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-[#a7eced] ${selected ? \"border-[#f4cb8c] bg-[#f0dac1] text-[#153037]\" : \"border-white/15 bg-[#0d242b] text-[#d9f4eb]\"}`} style={{ left: `${x}%`, top: `${y}%` }}><span className=\"sr-only\">{item.label}</span>{item.icon ?? <span className=\"size-2 rounded-full\" style={{ background: item.tone ?? \"#a7eced\" }} />}</button>; })}<div className=\"absolute inset-x-5 bottom-5 rounded-xl border border-white/15 bg-[#071318]/72 p-3 backdrop-blur-sm\"><span className=\"font-mono text-[8px] tracking-[.15em] text-[#bde7e8]/58\">{active.label}</span><strong className=\"mt-1 block text-[16px] tracking-[-.03em]\">{active.title}</strong>{active.description ? <span className=\"mt-1 block text-[10px] leading-relaxed text-[#d2edeb]/68\">{active.description}</span> : null}</div></div></section>; }\n"
+    }
+  ]
+}

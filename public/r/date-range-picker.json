@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-range-picker",
+  "type": "registry:ui",
+  "title": "Date range picker",
+  "description": "Distinguishes hover, provisional, confirmed range, and presets inside a calendar grid.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "forms-input"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/date-range-picker/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Range selection extends continuously through calendar space",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Confirmed weekly range",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/date-range-picker.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/date-range-picker.tsx",
+      "content": "\"use client\";\n\nimport { useId, useMemo, useState } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport type DateRange = { start: string | null; end: string | null };\nexport type DateRangePickerProps = { month?: string; value?: DateRange; onChange?: (range: DateRange) => void; label?: string; className?: string };\nconst iso = (date: Date) => date.toISOString().slice(0, 10);\nconst compare = (a: string, b: string) => a.localeCompare(b);\n\nexport function DateRangePicker({ month = \"2026-04\", value, onChange, label = \"Date range\", className = \"\" }: DateRangePickerProps) {\n  const reduced = useReducedMotion() === true; const labelId = useId(); const [internal, setInternal] = useState<DateRange>({ start: null, end: null }); const selected = value ?? internal; const [cursor, setCursor] = useState(`${month}-01`); const [hover, setHover] = useState<string | null>(null);\n  const days = useMemo(() => { const [year, monthNumber] = month.split(\"-\").map(Number); const first = new Date(Date.UTC(year, monthNumber - 1, 1)); const firstDay = first.getUTCDay(); return Array.from({ length: 42 }, (_, index) => { const date = new Date(Date.UTC(year, monthNumber - 1, index - firstDay + 1)); return { key: iso(date), day: date.getUTCDate(), current: date.getUTCMonth() === monthNumber - 1 }; }); }, [month]);\n  const update = (next: DateRange) => { if (!value) setInternal(next); onChange?.(next); };\n  const choose = (date: string) => { if (!selected.start || selected.end) { update({ start: date, end: null }); return; } update(compare(date, selected.start) < 0 ? { start: date, end: selected.start } : { start: selected.start, end: date }); };\n  const inRange = (date: string) => { const end = selected.end ?? hover; return Boolean(selected.start && end && compare(date, selected.start) >= 0 && compare(date, end) <= 0); };\n  const monthName = new Intl.DateTimeFormat(\"en\", { month: \"long\", year: \"numeric\", timeZone: \"UTC\" }).format(new Date(`${month}-01T00:00:00Z`));\n  return <section aria-labelledby={labelId} className={`rounded-[16px] border border-black/[.1] bg-white p-4 shadow-[0_15px_38px_-29px_rgba(34,34,34,.45)] ${className}`}><div className=\"flex items-center justify-between\"><div><span className=\"font-mono text-[10px] uppercase tracking-[.16em] text-neutral-500\">{label}</span><h3 id={labelId} className=\"mt-1 text-[15px] font-medium text-[#292929]\">{monthName}</h3></div><span className=\"rounded-full bg-neutral-100 px-2.5 py-1 font-mono text-[9px] text-neutral-600\">{selected.start ?? \"Start\"} — {selected.end ?? \"End\"}</span></div><div role=\"grid\" aria-label={label} className=\"mt-4 grid grid-cols-7 gap-1\">{\"SMTWTFS\".split(\"\").map((day, index) => <span key={`${day}-${index}`} className=\"grid h-7 place-items-center font-mono text-[9px] text-neutral-400\">{day}</span>)}{days.map((day) => { const edge = day.key === selected.start || day.key === selected.end; return <button key={day.key} type=\"button\" role=\"gridcell\" tabIndex={day.key === cursor ? 0 : -1} aria-selected={edge} onMouseEnter={() => setHover(day.key)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(day.key)} onBlur={() => setHover(null)} onClick={() => choose(day.key)} onKeyDown={(event) => { const date = new Date(`${cursor}T00:00:00Z`); const delta = event.key === \"ArrowRight\" ? 1 : event.key === \"ArrowLeft\" ? -1 : event.key === \"ArrowDown\" ? 7 : event.key === \"ArrowUp\" ? -7 : 0; if (delta) { event.preventDefault(); const next = new Date(date.getTime() + delta * 86400000); setCursor(iso(next)); document.querySelector<HTMLButtonElement>(`[data-date='${iso(next)}']`)?.focus(); } if (event.key === \"Enter\" || event.key === \" \") { event.preventDefault(); choose(day.key); } }} data-date={day.key} className={`relative grid min-h-10 place-items-center rounded-lg text-[11px] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] ${day.current ? \"text-[#292929]\" : \"text-neutral-300\"} ${inRange(day.key) ? \"bg-[#edf0ff]\" : \"hover:bg-neutral-100\"} ${edge ? \"bg-[#242424] text-white hover:bg-[#242424]\" : \"\"}`}><motion.span animate={reduced ? { scale: 1 } : { scale: edge ? 1 : .96 }} transition={{ duration: reduced ? 0 : .16 }}>{day.day}</motion.span></button>; })}</div><div className=\"mt-3 flex gap-1.5\"><button type=\"button\" onClick={() => update({ start: `${month}-01`, end: `${month}-07` })} className=\"min-h-11 rounded-full border border-black/[.1] px-3 text-[11px] outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-[#4568FF]\">First week</button><button type=\"button\" onClick={() => update({ start: null, end: null })} className=\"min-h-11 rounded-full px-3 text-[11px] text-neutral-500 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-[#4568FF]\">Clear</button></div></section>;\n}\n"
+    }
+  ]
+}

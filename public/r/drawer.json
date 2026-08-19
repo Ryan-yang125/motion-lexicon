@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/drawer/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Includes focus containment, drag dismissal, and interruptible spring motion."
+    "signature": "Drawer, backdrop, and focus enter and leave as one layer",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Open side panel for a focused task",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

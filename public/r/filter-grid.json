@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "data"
+    "data-commerce"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Preserves spatial continuity as filtered results rearrange."
+    "signature": "Results rearrange while preserving spatial relationships",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Compact result grid after filtering",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

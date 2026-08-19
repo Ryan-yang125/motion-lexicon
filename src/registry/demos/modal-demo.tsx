@@ -27,7 +27,7 @@ export function ModalDemo({ locale = "en" }: DemoLocaleProps = {}) {
   };
 
   return (
-    <div role="group" aria-label={demoText("modal", locale)} className="grid w-full place-items-center">
+    <div role="group" aria-label={demoText("modal", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#f5ead9] p-8">
       <button
         type="button"
         onClick={() => setOpen(true)}

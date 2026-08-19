@@ -1,0 +1,4 @@
+"use client";
+import { demoValue, type DemoLocaleProps } from "../demo-locale";
+import { HoverPreview } from "@/registry/components/hover-preview";
+export function HoverPreviewDemo({ locale = "en" }: DemoLocaleProps = {}) { return <HoverPreview label={demoValue(locale, "项目预览", "Project previews")} items={[{ id: "coast", label: demoValue(locale, "沿海读本", "Coastal reader"), title: demoValue(locale, "编辑故事", "Editorial story"), detail: demoValue(locale, "一段关于风、石头和时间的视觉记录。", "A visual record of wind, stone, and time."), image: "/assets/editorial/scroll-lighthouse.jpg", imageAlt: demoValue(locale, "海岸上的灯塔", "Lighthouse on the coast") }, { id: "studio", label: demoValue(locale, "春季工作室", "Spring atelier"), title: demoValue(locale, "材料研究", "Material study"), detail: demoValue(locale, "温暖的光线与沉静的制作过程。", "Warm light and a quiet making process."), image: "/assets/editorial/hover-studio.jpg", imageAlt: demoValue(locale, "正在协作的工作室", "Collaborative studio") }]} />; }

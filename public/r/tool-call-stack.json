@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "agent"
+    "agent-ui"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Execution records expand and resolve by tool state"
+    "signature": "Execution records expand and resolve by tool state",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded tool execution record",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

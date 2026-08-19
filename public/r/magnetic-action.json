@@ -16,7 +16,11 @@
       "gsap"
     ],
     "runtimeCost": "light",
-    "signature": "GSAP pointer tracking with a clean return"
+    "signature": "GSAP pointer tracking with a clean return",
+    "sceneFamily": "product-mono",
+    "motionRole": "snap",
+    "primaryState": "Primary action responding to a nearby pointer",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

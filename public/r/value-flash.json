@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Explains value changes with direction and brief color feedback."
+    "signature": "Value change is explained through direction and brief color",
+    "sceneFamily": "product-mono",
+    "motionRole": "lively",
+    "primaryState": "Updated value with directional feedback",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

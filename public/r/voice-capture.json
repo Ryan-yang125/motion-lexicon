@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "inputs"
+    "forms-input"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/voice-capture/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Voice capture flow with responsive levels"
+    "signature": "Voice capture flow with responsive levels",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Voice input showing the current level",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

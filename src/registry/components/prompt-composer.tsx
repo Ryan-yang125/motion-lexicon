@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type ComposerSource = {
   id: string;
@@ -35,19 +35,24 @@ export function PromptComposer({
   const [selected, setSelected] = useState<string[]>([]);
   const [sent, setSent] = useState(false);
   const area = useRef<HTMLTextAreaElement>(null);
+  const sentTimer = useRef<number | null>(null);
   const reduced = useReducedMotion();
+  useEffect(() => () => {
+    if (sentTimer.current !== null) window.clearTimeout(sentTimer.current);
+  }, []);
   const send = () => {
     const value = prompt.trim();
     if (!value) return;
     onSubmit?.(value, selected);
     setPrompt("");
     setSent(true);
-    window.setTimeout(() => setSent(false), 1200);
+    if (sentTimer.current !== null) window.clearTimeout(sentTimer.current);
+    sentTimer.current = window.setTimeout(() => setSent(false), 1200);
   };
 
   return (
     <section
-      className={`relative w-full rounded-[10px] border border-neutral-200 bg-white p-2 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
+      className={`relative w-full rounded-[14px] border border-neutral-200 bg-white p-2 text-neutral-950 shadow-[0_18px_48px_-40px_rgba(15,23,42,.55)] dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       {selected.length ? (
         <div className="flex flex-wrap gap-1.5 px-2 pt-2">

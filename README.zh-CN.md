@@ -7,7 +7,8 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>可直接复制的 React 页面 Block、动效组件与原子动效。</strong>
+  <strong>为有记忆点的产品准备、可直接复制的 React 动效组件。</strong><br />
+  100 个组件 · 10 个页面 Block · 实时预览 · shadcn Registry · 减弱动效。
 </p>
 
 <p align="center">
@@ -17,40 +18,59 @@
 <p align="center">
   <a href="https://motion-lexicon.pages.dev/zh/"><strong>官网</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/components/"><strong>组件</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/blocks/"><strong>页面 Block</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/primitives/"><strong>原子动效</strong></a> ·
-  <a href="https://motion-lexicon.pages.dev/zh/skill/"><strong>Agent Skill</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/zh/skill/"><strong>Motion Lexicon Skill</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/zh/guides/"><strong>场景指南</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
+  <img src="https://img.shields.io/badge/components-100-292929.svg" alt="100 components" />
+  <img src="https://img.shields.io/badge/page_blocks-10-111111.svg" alt="10 page blocks" />
+  <img src="https://img.shields.io/badge/primitives-44-737373.svg" alt="44 primitives" />
 </p>
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon 组件目录](docs/assets/readme-v5-components.png)
+## 从组件开始
 
-## 按需要选择层级
+Motion Lexicon 是一个面向产品交互的 React 组件库。每个组件都有清晰的静态首帧、
+可辨识的动效签名、真实内容和可安装的交付路径。组件是发现入口；页面 Block、原子动效
+和 Skill 在同一系统上延展。
 
 | 内容 | 适合场景 | 交付 |
 | --- | --- | --- |
-| [页面 Blocks](https://motion-lexicon.pages.dev/zh/components/) | 想预览并直接安装一张完整产品页面 | 通过 shadcn Registry 安装的单文件 TypeScript 页面 |
-| [组件](https://motion-lexicon.pages.dev/zh/components/) | 想把一个精致的产品交互直接放进 React 项目 | 通过 shadcn Registry 安装的单文件 TypeScript 组件 |
-| [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 需要精确的行为、节奏或动效规则 | React + Motion 实时预览、Props 调节、源码与 Registry 安装 |
-| [Agent Skill](https://motion-lexicon.pages.dev/zh/skill/) | 在 Agent 工作流中构建完整页面并完成动效决策 | 页面计划、已发布组件组合、生产实现与验收记录 |
+| [组件](https://motion-lexicon.pages.dev/zh/components/) | 一个完整的产品交互 | 实时预览、源码、类型化 API 与 shadcn Registry 安装 |
+| [页面 Block](https://motion-lexicon.pages.dev/zh/blocks/) | 由组件组合而成的一张响应式产品页面 | 独立 React 页面、视口预览、源码与 Registry 安装 |
+| [原子动效](https://motion-lexicon.pages.dev/zh/primitives/) | 一条可复用的动效规则或节奏决策 | 覆盖 91 个源术语的 44 个规范工作台 |
+| [Motion Lexicon Skill](https://motion-lexicon.pages.dev/zh/skill/) | 基于产品任务完成组件编排和实现 | 组件选择、页面计划、实现与审查工作流 |
 
-组件与原子动效是并列内容。一个组件可以组合多个原子动效，组件详情页会标出对应的底层动效。
+100 个组件覆盖 11 个分类：Agent UI、操作、浮层与界面、表单与输入、导航、数据与商业、
+反馈、卡片与媒体、视觉与环境、主视觉与叙事、文字与排版。
 
-V5 将网站主体、5 个页面 Block、Agent UI 集合和初版之后新增的组件统一到同一套黑白灰明暗主题中。
+## 三种场景
 
-![Motion Lexicon 原子动效目录](docs/assets/readme-v5-primitives.png)
+- **Product Mono**：精确呈现产品状态、数据、表单、导航与反馈。
+- **Editorial Warm**：用图像叙事、材质细节、舒展排版和文化气质建立记忆点。
+- **Spatial Dark**：用立体产品世界、技术深度和克制光线组织视觉焦点。
 
-## 安装页面 Block、组件与原子动效
+每个场景都从有意设计的静态首帧开始。动效用于解释用户操作或关键状态变化；减弱动效
+保留相同的信息和结果。
 
-每个预览 Demo 都直接导入对应 Primitive；源码展示与 Registry 发布同一份 Primitive 实现，中间没有字符串源码生成层。
+## 安装
+
+每个组件和页面 Block 都遵循同一条源码链路：
+
+```text
+实现源码 → 直接导入 Demo → 预览与代码视图 → /r/:id.json
+```
 
 ```bash
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/product-landing.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-workspace.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-thinking-trace.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/cinematic-hero.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/focus-gallery.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/onboarding-flow.json
 ```
 
 也可以在 `components.json` 中配置命名空间：
@@ -64,18 +84,16 @@ npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
 ```
 
 ```bash
-npx shadcn@latest add @motion-lexicon/product-landing
+npx shadcn@latest add @motion-lexicon/cinematic-hero
 ```
 
-Registry 包含 5 个完整页面 Block 与 59 个产品、Agent 和网站组件，覆盖 Motion、GSAP、Three.js、原生 WebGL、SVG 与 CSS；同时提供 40 个可运行原子动效，另外 4 个原子条目保留为设计指南。每个可安装条目都包含 TypeScript 类型、真实依赖和减弱动效方案。
+Registry 条目会声明实际运行时依赖。组件按任务使用 React、Motion、GSAP、Three.js、
+WebGL、SVG 与 CSS；重型场景在视口内启动，并在卸载时释放图形资源。
 
-Agent UI 集合覆盖思考轨迹、流式回答、工具调用、审批、任务队列、Prompt 输入、上下文来源、Diff 审阅、建议、多 Agent 交接与状态。每个详情页还提供“复制给 Agent”，其中包含预览地址、源码地址、接入要求与验收标准。
+## Motion Lexicon Skill 4.2.0
 
-![Agent 产品工作台组件页](docs/assets/readme-v5-component.png)
-
-![滑入原子动效工作台](docs/assets/readme-v5-primitive.png)
-
-## Agent Skill
+Skill 与网站包独立发版。它适合为 Agent 提供页面计划、准确的 Registry 组件选择、
+实现约束和动效与无障碍审查。
 
 ```bash
 # 安装到当前项目
@@ -89,34 +107,23 @@ npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --agent codex
 ```
 
 使用 `npx skills list` 检查项目安装，使用 `npx skills list --global`
-检查用户级安装。项目安装会链接到所选 Agent 的项目 Skill 目录，用户级安装可供
-该 Agent 在多个项目中使用。
-
-Skill 支持六种工作模式：
-
-- **构建页面**：从产品任务、精确 Registry 组件与页面计划产出完整页面。
-- **推荐**：根据产品事件选择合适的原子动效或组件。
-- **编排**：把多个行为组合成完整的产品交互。
-- **实现**：输出 React、HTML、CSS 或 JavaScript。
-- **审查**：检查节奏、连续性、打断、性能和无障碍。
-- **贡献**：把真实产品需求整理成新的内容候选。
+检查用户级安装。
 
 ## 开发
 
 ```text
-src/registry/blocks/            5 个 React 页面 Block 源码
-src/registry/block-demos/       页面 Block 真实交互预览
-src/registry/components/        59 个 React 组件源码
-src/registry/demos/             组件真实交互预览
-src/registry/primitives/        40 个独立 React + Motion 原子动效
-src/registry/primitive-demos/   40 个直接使用原子动效的产品 Demo
-src/registry/primitive-preview-map.tsx  懒加载 Demo Registry
-src/data/                       组件、原子动效、指南和 SEO 内容
-skills/motion-lexicon/          Agent Skill 与动效参考
-scripts/                        Registry、预渲染与质量检查
+src/registry/components/       100 个 React 组件实现
+src/registry/demos/            直接导入组件的真实产品 Demo
+src/registry/blocks/           10 个 React 页面 Block 实现
+src/registry/block-demos/      直接导入 Block 的响应式 Demo
+src/registry/primitives/       44 个规范原子动效
+src/data/                      目录、路由、i18n 与 SEO 源数据
+skills/motion-lexicon/         独立版本的 Skill 4.2.0
+scripts/                       Registry、预渲染与质量检查
 ```
 
-项目是静态 React + TypeScript 应用。`npm run build` 会生成网站、中英文静态页面、sitemap、公开数据，以及 `/r/` 下兼容 shadcn 的 Registry。
+项目是静态 React + TypeScript 应用。`npm run build` 会生成网站、本地化预渲染页面、
+sitemap、公开目录数据，以及 `/r/` 下兼容 shadcn 的 Registry。
 
 ```bash
 npm ci
@@ -143,6 +150,11 @@ npm run bundle:check
 npm run crawl:dist
 npm run test:visual
 ```
+
+## 发布资产
+
+V6 截图、社交图片、机器可读目录输出与公开 Registry JSON 会在目录和视觉审查完成后，
+由发布验收阶段重新生成。
 
 ## 许可与来源
 

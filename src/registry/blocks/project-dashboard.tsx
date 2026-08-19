@@ -2,6 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
+import { InlineEdit } from "@/registry/components/inline-edit";
+import { KanbanBoard } from "@/registry/components/kanban-board";
+import { LoadingButton } from "@/registry/components/loading-button";
 
 type Locale = "zh" | "en";
 
@@ -30,20 +33,20 @@ export function ProjectDashboardBlock({ locale = "en", className = "" }: Project
   }
 
   return (
-    <section className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="project-dashboard">
-      <header className="flex min-h-14 items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 sm:px-6 dark:border-white/10 dark:bg-[#1b1b1b]">
+    <section className={`min-h-[720px] w-full overflow-hidden rounded-[18px] border border-[#c3d4cd]/55 bg-[#f0f5f1] text-neutral-950 shadow-[0_28px_60px_-42px_rgba(28,57,43,.4)] dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="project-dashboard">
+      <header className="flex min-h-14 items-center justify-between gap-4 border-b border-[#c3d4cd]/55 bg-[#f9fdfa] px-4 sm:px-6 dark:border-white/10 dark:bg-[#1b1b1b]">
         <a className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#arc-project">
           <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true"><svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.8"><path d="M5 18V9l7-4 7 4v9l-7 3-7-3Z" /><path d="m5 9 7 4 7-4M12 13v8" /></svg></span>
           Arc
         </a>
         <div className="hidden min-w-0 flex-1 justify-center md:flex"><button className="flex min-h-11 w-full max-w-sm items-center gap-2 rounded-lg border border-neutral-900/10 bg-white px-3 text-left text-[11px] text-neutral-400 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-white/10 dark:bg-white/5" type="button"><span aria-hidden="true">⌕</span><span className="truncate">{copy.search}</span><kbd className="ml-auto font-mono text-[9px]">⌘ K</kbd></button></div>
-        <button className="min-h-11 rounded-lg bg-neutral-950 px-4 text-[12px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" type="button" onClick={completeNext}>{nextTask ? copy.complete : copy.restart}</button>
+        <LoadingButton className="min-h-11 bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" onAction={completeNext} pendingLabel={locale === "zh" ? "更新中" : "Updating"} successLabel={copy.done}>{nextTask ? copy.complete : copy.restart}</LoadingButton>
       </header>
 
-      <main className="grid min-h-[655px] gap-4 p-4 sm:p-6 lg:grid-cols-[minmax(0,1.5fr)_300px]" id="arc-project">
+      <div className="grid min-h-[655px] gap-4 p-4 sm:p-6 lg:grid-cols-[minmax(0,1.5fr)_300px]" id="arc-project">
         <div className="min-w-0">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <div><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{copy.eyebrow}</span><h1 className="mt-2 text-[26px] font-semibold tracking-[-.03em]">{copy.title}</h1></div>
+            <div><span className="text-[10px] text-neutral-500 dark:text-neutral-400">{copy.eyebrow}</span><h1 className="mt-2 text-[26px] font-semibold tracking-[-.03em]">{copy.title}</h1><InlineEdit value={copy.milestoneName} label={locale === "zh" ? "里程碑名称" : "Milestone name"} className="mt-4 max-w-md" /></div>
             <div className="grid grid-cols-2 gap-1 rounded-lg bg-neutral-900/5 p-1 dark:bg-white/7" role="tablist" aria-label={copy.filterLabel}>
               {(["all", "mine"] as const).map((item) => <button aria-selected={filter === item} className={`relative min-h-11 min-w-20 rounded-lg px-3 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${filter === item ? "text-neutral-950 dark:text-white" : "text-neutral-500"}`} key={item} onClick={() => setFilter(item)} role="tab" type="button">{filter === item ? <motion.span className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-white/9" layoutId="project-filter" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 34 }} /> : null}<span className="relative">{copy.filters[item]}</span></button>)}
             </div>
@@ -77,6 +80,12 @@ export function ProjectDashboardBlock({ locale = "en", className = "" }: Project
               })}
             </div>
           </article>
+          <KanbanBoard
+            className="mt-4"
+            label={locale === "zh" ? "任务看板" : "Task board"}
+            columns={copy.columns.map((column) => ({ id: column.id, title: column.label }))}
+            cards={visibleTasks.map((task) => ({ id: task.id, title: task.title, detail: task.owner, columnId: task.column }))}
+          />
         </div>
 
         <aside className="grid content-start gap-3">
@@ -86,7 +95,7 @@ export function ProjectDashboardBlock({ locale = "en", className = "" }: Project
               <motion.div key={nextTask?.id ?? "complete"} initial={{ opacity: 0, x: reduced ? 0 : 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: reduced ? 0 : -8 }} transition={{ duration: reduced ? 0 : .22, ease }}>
                 <strong className="mt-5 block text-[22px] leading-7 tracking-[-.04em]">{nextTask?.title ?? copy.allDone}</strong>
                 <p className="mt-3 text-[11px] leading-5 opacity-65">{nextTask?.detail ?? copy.doneDetail}</p>
-                <button className="mt-6 min-h-11 w-full rounded-lg bg-white px-4 text-[11px] font-semibold text-neutral-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 dark:bg-neutral-950 dark:text-white" type="button" onClick={completeNext}>{nextTask ? copy.complete : copy.restart}</button>
+                <LoadingButton className="mt-6 min-h-11 w-full bg-white dark:bg-neutral-950" onAction={completeNext} pendingLabel={locale === "zh" ? "更新中" : "Updating"} successLabel={copy.done}>{nextTask ? copy.complete : copy.restart}</LoadingButton>
               </motion.div>
             </AnimatePresence>
           </article>
@@ -98,7 +107,7 @@ export function ProjectDashboardBlock({ locale = "en", className = "" }: Project
             </div>
           </article>
         </aside>
-      </main>
+      </div>
     </section>
   );
 }

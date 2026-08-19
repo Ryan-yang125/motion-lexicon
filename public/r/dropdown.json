@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/dropdown/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Moves selection continuously with full keyboard behavior."
+    "signature": "The highlight settles continuously across options",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded selector with the current option highlighted",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

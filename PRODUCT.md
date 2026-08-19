@@ -1,123 +1,129 @@
-# Motion Lexicon V5 Product Strategy
+# Motion Lexicon V6 Product Strategy
 
 ## Product promise
 
-Motion Lexicon gives builders production-ready motion at two useful levels:
+**Copy-ready React motion components for memorable products.**
 
-- **Page Blocks:** complete React product pages that can be previewed responsively, copied, or installed through a shadcn registry.
-- **Components:** complete React interactions that can be previewed, copied, or installed through a shadcn registry.
-- **Primitives:** focused React + Motion behaviors that can be previewed, tuned, copied, or installed.
-
-The Agent Skill sits beside the website and builds complete product pages,
-recommends and composes motion, implements interactions, reviews code, and
-contributes candidates from a real product job.
+Motion Lexicon delivers 100 production-quality React Components, 10 responsive
+Page Blocks, live previews, shadcn Registry installs, and meaningful
+reduced-motion states. Components are the primary product surface; Page Blocks,
+Primitives, and the Motion Lexicon Skill deepen the same workflow.
 
 ```text
-Browse → Preview → Copy or install → Adapt → Review
+Discover → Judge the static frame → Interact → Copy or install → Adapt → Review
 ```
 
 ## Audience
 
-- Product builders who want a polished interaction without designing every state from scratch.
-- Designers who need a working reference for timing, continuity, focus, and state feedback.
-- Engineers who want React source, a registry install command, or portable primitive output.
-- AI agents that need explicit motion constraints and a repeatable review method.
+- Product builders who need a finished interaction with real states and a focused API.
+- Designers who need working references for visual character, timing, focus, and continuity.
+- Engineers who want React source and an installable Registry item.
+- Agents that need exact component selection, composition rules, and acceptance criteria.
 
-## Product structure
+## Public system
 
-| Surface | Job | Public scope |
+| Surface | Job | V6 scope |
 | --- | --- | --- |
-| Landing | Let builders judge the library through working interactions | Live component stage, featured components and primitives, direct collection entry points |
-| Components | Deliver complete pages and focused product interactions | 5 React page blocks and 59 components, including a dedicated Agent UI collection, across Motion, GSAP, Three.js, WebGL, SVG, and CSS |
-| Primitives | Deliver and explain one behavior | 40 installable React + Motion primitives, 4 design guides, and 91 bilingual terms |
-| Agent Skill | Build and refine from product context | Build Page, Recommend, Compose, Implement, Review, Contribute |
-| Guides | Teach decisions through real scenarios | 8 bilingual long-form illustrated articles |
+| Components | Deliver one recognizable product job | 100 components across 11 categories |
+| Page Blocks | Demonstrate a complete responsive product page | 10 Blocks composed from published Components |
+| Primitives | Explain reusable motion decisions | 44 canonical Primitives and 91 source terms |
+| Guides | Turn a visual or product context into a decision | Bilingual scenarios, review guidance, and vocabulary |
+| Motion Lexicon Skill | Bring the library into an implementation workflow | Independently versioned Skill 4.2.0 |
 
-Components and Primitives are equal first-level directories. Page Blocks lead
-the Components directory. Search spans both collections. Components link to the primitives that explain their behavior;
-primitive workspaces link back to relevant components.
+Components lead landing-page and directory discovery. Page Blocks hold complete
+reference compositions. Primitives remain a stable vocabulary layer that helps
+users understand and tune the motion language inside a Component.
 
-## Page Block and component quality bar
+## Component categories
 
-Every published component includes:
+| Category | Count | Core product jobs |
+| --- | ---: | --- |
+| Agent UI | 9 | reasoning, tool execution, approval, and handoff |
+| Actions | 5 | deliberate primary and high-consequence actions |
+| Overlays & Surfaces | 13 | focused temporary work surfaces |
+| Forms & Input | 15 | data entry, validation, selection, and completion |
+| Navigation | 6 | orientation, command access, and location changes |
+| Data & Commerce | 11 | records, metrics, planning, pricing, and purchase |
+| Feedback | 5 | progress, status, notification, and completion |
+| Cards & Media | 15 | image, media, comparison, and product-story views |
+| Visual & Ambient | 7 | visual texture, spatial context, and environmental motion |
+| Hero & Story | 8 | product openings and narrative transitions |
+| Text & Type | 6 | expressive and stateful typography |
 
-- one realistic product state and a clear trigger;
-- live React preview and the exact source used by that preview;
-- shadcn-compatible registry JSON;
-- keyboard and focus behavior;
-- a reduced-motion result that preserves meaning;
-- interruption, repeat action, failure, and recovery handling where applicable;
-- compositor-friendly motion and stable layout;
-- TypeScript types and a focused public API.
+## Scene families
 
-The interaction language combines Interior's material discipline with the
-zero-chroma product restraint seen in strong contemporary interface libraries:
-neutral page layers, crisp boundaries, compact travel, stable resting states,
-and precise feedback.
+- **Product Mono** gives product states, data, forms, navigation, and feedback a
+  precise, compact, high-contrast working surface.
+- **Editorial Warm** gives image-led stories, media, and typography material
+  depth, comfortable pacing, and a human visual character.
+- **Spatial Dark** gives technical product worlds, dimensional media, and
+  ambient visuals depth without obscuring primary actions.
 
-## Shared architecture quality bar
+A component must establish a strong static primary state before motion begins.
+Motion communicates an action or meaningful state transition. Reduced motion
+keeps the same content, outcome, focus path, and controls.
 
-Components and Primitives use the same delivery architecture:
+## Quality bar
 
-- one typed React implementation with explicit runtime dependencies per public item;
-- one realistic, interactive product demo that imports that implementation;
-- one lazy preview entry used by directory cards and detail workbenches;
-- one source view and one shadcn Registry response generated from the implementation file;
-- one parameter contract connected to the demo's real props;
-- one reduced-motion result, keyboard path, and interruption policy.
+Every public Component and Page Block provides:
 
-Primitives keep a narrower behavioral scope. Their implementation, product
-scene, material language, code quality, and delivery chain meet the same bar as
-Components.
+- real content or a documented local/generated asset provenance;
+- a direct-import React demo and the exact implementation used by preview, code,
+  and Registry delivery;
+- a clear trigger, primary state, recovery state where relevant, and focused API;
+- keyboard, touch, and narrow-container behavior;
+- reduced-motion behavior that preserves meaning;
+- responsive visual hierarchy without page-level horizontal overflow;
+- viewport gating and disposal for heavy canvas, WebGL, and Three.js work.
 
-## Content loop
+The delivery chain stays explicit:
 
 ```text
-Real product request
-  → Agent Skill recommendation or composition
-  → Working component or primitive
-  → Automated and editorial review
-  → Registry publication
-  → Better references for the next request
+implementation → direct-import demo → preview and code view → Registry JSON
 ```
 
-Repeated complete interactions become Components. Repeated reusable behaviors
-become Primitives after they appear across several product contexts.
+## Page Blocks
+
+The ten Blocks apply the same contract at page scale:
+
+- Agent Workspace
+- Product Landing
+- Analytics Dashboard
+- Project Dashboard
+- Support Inbox
+- Creative Portfolio
+- Commerce Storefront
+- Developer Docs
+- Media Editorial
+- Onboarding Flow
+
+Each Block combines published Components where they satisfy a product job. It
+keeps desktop, tablet, mobile, keyboard, and reduced-motion flows in one
+self-contained implementation.
 
 ## Static product boundary
 
-The website remains a static React application. Content, routes, block and component
-source, registry JSON, localized metadata, and guides build into static files.
-No account, server, API key, or paid tier is required.
+Motion Lexicon remains a static React + TypeScript application. Catalog data,
+localized content, source views, Registry JSON, route metadata, sitemap, and
+social assets build into static files. The public experience requires no
+account, server, API key, or paid tier.
 
-## Discoverability
+## Release acceptance
 
-The build publishes 246 localized canonical pages, reciprocal hreflang,
-structured data, Open Graph images, a sitemap, `llms.txt`, a V4 JSON catalog,
-and the shadcn registry index.
+V6 is ready for release when:
 
-## V5 acceptance
+- the public catalog reports exactly 100 Components, 10 Page Blocks, and all 11 categories;
+- Components lead landing-page and directory discovery;
+- all public items use the same source for demo, preview, code view, and Registry delivery;
+- all Components have an intentional static primary state, reduced-motion path,
+  relevant keyboard behavior, and narrow-container behavior;
+- heavy scenes are lazy-loaded, viewport-gated, and disposed correctly;
+- the 44 canonical Primitives and 91 source terms remain available;
+- localized routes, hreflang, structured data, social images, sitemap, robots,
+  machine-readable catalog, and Registry artifacts are generated successfully;
+- representative Component and Block installs succeed with `shadcn@latest`;
+- full quality checks, browser review, visual review, and production crawl pass.
 
-V5 is complete when:
-
-- Components and Primitives are the only primary product directories.
-- Five responsive Page Blocks lead the Components directory and expose desktop, tablet, mobile, fullscreen, source, and install views.
-- Every Page Block uses one source file for its website preview, code view, root registry catalog, and public Registry JSON.
-- Each locale root presents both directories through real, interactive previews.
-- All 59 component previews use the same source delivered by code view and registry JSON.
-- The Agent UI collection covers the core state, input, tool, approval, evidence, review, recommendation, handoff, and status patterns used by agent products.
-- Agent Workspace combines the collection into one responsive, installable product surface with a complete run-state flow.
-- The website shell, five Page Blocks, and every component added after the initial 28-component collection use one zero-chroma light and dark system.
-- Black primary actions, gray hierarchy, thin borders, compact radii, and restrained elevation replace decorative gradients, tinted surfaces, and ornamental glow.
-- Blue appears for keyboard focus and explicit selection; green, amber, and red appear only for semantic status.
-- Every Block, Component, and Primitive detail page can copy a self-contained brief for an implementation agent.
-- All 44 primitive workspaces use direct `/primitives/:id/` routes.
-- All 40 executable primitives use the same React + Motion preview, source, and registry delivery chain.
-- Every executable primitive owns an independent implementation and an independent real-product demo.
-- Primitive source views and Registry files read the implementation file directly; generated source strings are absent.
-- All 9 parameter tools drive the same typed props used by their live previews.
-- Global search, desktop sidebar, and mobile navigation cover both collections.
-- The Agent Skill builds complete React pages with the same component, primitive, token, responsive, theme, and accessibility language.
-- Old Finder, Pack, Catalog, Director, Playground, and Lab routes are removed.
-- Desktop and mobile layouts have no page-level horizontal overflow.
-- Lint, typecheck, unit, i18n, SEO, motion, accessibility, build, bundle, crawl, browser, and official shadcn install checks pass.
+The V6 release phase owns generation and verification of screenshots, social
+images, public Registry JSON, machine-readable catalog output, and deployment
+artifacts.

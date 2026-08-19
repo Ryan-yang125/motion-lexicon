@@ -49,7 +49,7 @@ export function SkeletonRevealDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div role="group" aria-label={demoText("skeleton-reveal", locale)} className="mx-auto w-full max-w-[380px]">
+    <div role="group" aria-label={demoText("skeleton-reveal", locale)} className="mx-auto w-full max-w-[380px] rounded-[16px] bg-[#f5ead9] p-3">
       <div className="mb-3 flex justify-end">
         <button type="button" onClick={() => setLoading((value) => !value)} className="mat-cap press h-11 rounded-[9px] px-3.5 text-[12.5px] font-medium text-ink">
           {loading ? demoValue(locale, "显示内容", "Show content") : demoValue(locale, "重新加载", "Reload")}

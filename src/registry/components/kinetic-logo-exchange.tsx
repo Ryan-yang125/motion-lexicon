@@ -30,9 +30,9 @@ export type KineticLogoExchangeProps = {
 };
 
 const toneClass = {
-  blue: "bg-neutral-100 text-neutral-950 dark:bg-neutral-800 dark:text-neutral-100",
-  clay: "bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100",
-  moss: "bg-neutral-300 text-neutral-800 dark:bg-neutral-600 dark:text-white",
+  blue: "bg-[#dce9ff] text-[#174496] dark:bg-[#1c3d82] dark:text-[#e3edff]",
+  clay: "bg-[#ffe4cb] text-[#85410e] dark:bg-[#6b3517] dark:text-[#ffe8d2]",
+  moss: "bg-[#d9f0df] text-[#1d6741] dark:bg-[#1b5334] dark:text-[#ddf6e6]",
   ink: "bg-neutral-950 text-white dark:bg-neutral-100 dark:text-neutral-950",
 } as const;
 

@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "data"
+    "data-commerce"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Provides clear drop position for pointer and keyboard reordering."
+    "signature": "Pointer and keyboard reordering share one drop-position signal",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Reorderable list with a clear drop position",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

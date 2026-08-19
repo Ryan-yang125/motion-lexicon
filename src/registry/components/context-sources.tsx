@@ -28,7 +28,7 @@ export function ContextSources({
   const reduced = useReducedMotion();
   return (
     <section
-      className={`w-full rounded-[10px] border border-neutral-200 bg-white p-3 text-neutral-950 dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
+      className={`w-full rounded-[14px] border border-neutral-200 bg-white p-3 text-neutral-950 shadow-[0_18px_48px_-40px_rgba(15,23,42,.55)] dark:border-white/10 dark:bg-[#1b1b1b] dark:text-neutral-50 ${className}`}
     >
       <header className="flex min-h-10 items-center gap-2 px-1">
         <span className="text-[11px] font-medium text-neutral-600 dark:text-neutral-300">
@@ -47,6 +47,7 @@ export function ContextSources({
               key={source.id}
               className={`relative overflow-hidden rounded-lg border p-3 ${open ? "border-neutral-400 bg-neutral-50 sm:col-span-2 dark:border-white/25 dark:bg-white/[.03]" : "border-neutral-100 dark:border-white/8"}`}
             >
+              {open ? <span aria-hidden className="absolute inset-y-3 left-0 w-0.5 rounded-full bg-blue-600" /> : null}
               <button
                 type="button"
                 aria-expanded={open}

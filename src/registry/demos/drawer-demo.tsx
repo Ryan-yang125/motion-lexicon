@@ -15,7 +15,7 @@ export function DrawerDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div role="group" aria-label={demoText("drawer", locale)} className="grid w-full place-items-center">
+    <div role="group" aria-label={demoText("drawer", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#eff4f2] p-8">
       <button
         type="button"
         onClick={() => setOpen(true)}

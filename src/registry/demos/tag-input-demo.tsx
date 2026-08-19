@@ -6,7 +6,7 @@ import { TagInput } from "@/registry/components/tag-input";
 
 export function TagInputDemo({ locale = "en" }: DemoLocaleProps = {}) {
   return (
-    <div role="group" aria-label={demoText("tag-input", locale)} className="mx-auto h-[150px] w-full max-w-[420px]">
+    <div role="group" aria-label={demoText("tag-input", locale)} className="mx-auto h-[150px] w-full max-w-[420px] rounded-[16px] bg-[#eef4f8] p-3">
       <TagInput
         defaultValue={locale === "zh" ? ["动效", "焦点顺序"] : ["motion", "focus order"]}
         max={6}

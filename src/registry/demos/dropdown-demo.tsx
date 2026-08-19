@@ -9,7 +9,7 @@ export function DropdownDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [visibility, setVisibility] = useState("private");
 
   return (
-    <div role="group" aria-label={demoText("dropdown", locale)} className="grid w-full place-items-center pb-[96px]">
+    <div role="group" aria-label={demoText("dropdown", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#ecf3f4] pb-[96px] pt-8">
       <Dropdown
         label={demoValue(locale, "可见范围", "Visibility")}
         items={[

@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Keeps pending, success, and error feedback inside one action."
+    "signature": "Pending, success, and failure hand off inside one button",
+    "sceneFamily": "product-mono",
+    "motionRole": "snap",
+    "primaryState": "Submit button with in-place progress feedback",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

@@ -23,7 +23,7 @@ export function TabsDemo({ locale = "en" }: DemoLocaleProps = {}) {
   };
 
   return (
-    <div role="group" aria-label={demoText("tabs", locale)} className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("tabs", locale)} className="mx-auto w-full max-w-[440px] rounded-[16px] bg-[#f1f4f8] p-3">
       <Tabs
         items={items}
         value={tab}

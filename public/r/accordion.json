@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Keeps content height and disclosure state visually continuous."
+    "signature": "Content height and disclosure state hand off in place",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded content group",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

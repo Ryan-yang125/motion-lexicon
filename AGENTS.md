@@ -21,10 +21,10 @@ Use these files as the current project context:
 
 - Keep this as a static frontend application unless the user adds a server-side requirement.
 - Store content, assets, categories, recipes, and i18n data on the frontend.
-- Preserve the production component-library system: chroma-zero light and dark neutrals, black primary actions, a restrained blue state color, thin borders, compact radii, small mono metadata, dominant preview canvases, and dense documentation structure.
+- Preserve the V6 component-library system: a quiet chroma-zero shell, expressive Product Mono, Editorial Warm, and Spatial Dark scenes, black primary actions, a restrained blue state color, thin borders, compact radii, small mono metadata, dominant preview canvases, and dense documentation structure.
 - Keep the product workflow centered on browsing motion, previewing behavior, tuning parameters, copying prompt/code, and reading review guidance.
 - Treat React as the site implementation. User-facing exports are portable Prompt, HTML, CSS, and framework-independent JavaScript where interaction requires it.
-- Keep 44 canonical catalog units as the public discovery surface. Preserve all 91 source terms through canonical mappings and redirects.
+- Keep the V6 release contract at exactly 100 Components across 11 categories and 10 Page Blocks. Preserve 44 canonical Primitives and all 91 source terms through canonical mappings and redirects; the Motion Lexicon Skill remains independently versioned at 4.2.0.
 
 ## Technical Stack
 

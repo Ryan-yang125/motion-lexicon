@@ -7,7 +7,8 @@
 <h1 align="center">Motion Lexicon</h1>
 
 <p align="center">
-  <strong>Copy-ready React page blocks, motion components, and primitives.</strong>
+  <strong>Copy-ready React motion components for memorable products.</strong><br />
+  100 components · 10 Page Blocks · live previews · shadcn Registry · reduced motion.
 </p>
 
 <p align="center">
@@ -17,55 +18,64 @@
 <p align="center">
   <a href="https://motion-lexicon.pages.dev/en/"><strong>Website</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/components/"><strong>Components</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/blocks/"><strong>Page Blocks</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/primitives/"><strong>Primitives</strong></a> ·
-  <a href="https://motion-lexicon.pages.dev/en/skill/"><strong>Agent Skill</strong></a> ·
+  <a href="https://motion-lexicon.pages.dev/en/skill/"><strong>Motion Lexicon Skill</strong></a> ·
   <a href="https://motion-lexicon.pages.dev/en/guides/"><strong>Guides</strong></a>
 </p>
 
 <p align="center">
   <a href="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml"><img src="https://github.com/Ryan-yang125/motion-lexicon/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/code-MIT-292929.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/page_blocks-5-111111.svg" alt="5 page blocks" />
-  <img src="https://img.shields.io/badge/components-59-292929.svg" alt="59 components" />
+  <img src="https://img.shields.io/badge/components-100-292929.svg" alt="100 components" />
+  <img src="https://img.shields.io/badge/page_blocks-10-111111.svg" alt="10 page blocks" />
   <img src="https://img.shields.io/badge/primitives-44-737373.svg" alt="44 primitives" />
 </p>
 
 <!-- markdownlint-enable MD013 MD033 MD041 -->
 
-![Motion Lexicon component directory](docs/assets/readme-v5-components.png)
+## Start with Components
 
-## Start from the level you need
+Motion Lexicon is a React component library for product interactions with a
+clear resting frame, a recognizable motion signature, real content, and an
+installation path. Components lead discovery; Page Blocks, Primitives, and the
+Skill extend the same system.
 
-| Collection | Use it for | Output |
+| Collection | Use it for | Delivery |
 | --- | --- | --- |
-| [Page Blocks](https://motion-lexicon.pages.dev/en/components/) | A complete product page you can preview at desktop, tablet, and mobile sizes | One self-contained TypeScript page through the shadcn registry |
-| [Components](https://motion-lexicon.pages.dev/en/components/) | A polished product interaction you can place into a React app | One self-contained TypeScript file through the shadcn registry |
-| [Primitives](https://motion-lexicon.pages.dev/en/primitives/) | A precise behavior, timing curve, or motion rule | Live React + Motion preview, tunable props, source, and registry install |
-| [Agent Skill](https://motion-lexicon.pages.dev/en/skill/) | Complete page construction and motion decisions inside an agent workflow | A page plan, published component composition, production implementation, and acceptance evidence |
+| [Components](https://motion-lexicon.pages.dev/en/components/) | One complete product interaction | Live preview, source, typed API, and shadcn Registry install |
+| [Page Blocks](https://motion-lexicon.pages.dev/en/blocks/) | One responsive product page assembled from Components | Self-contained React page, viewport preview, source, and Registry install |
+| [Primitives](https://motion-lexicon.pages.dev/en/primitives/) | A reusable motion rule or timing decision | 44 canonical workbenches covering all 91 source terms |
+| [Motion Lexicon Skill](https://motion-lexicon.pages.dev/en/skill/) | Product-aware composition and implementation guidance | Component selection, page plan, implementation, and review workflow |
 
-Components and Primitives are parallel collections. A component can combine
-several primitives; each component page links back to the underlying motion
-decisions.
+The 100 Components span 11 categories: Agent UI, Actions, Overlays & Surfaces,
+Forms & Input, Navigation, Data & Commerce, Feedback, Cards & Media, Visual &
+Ambient, Hero & Story, and Text & Type.
 
-V5 gives the website shell, all five Page Blocks, the Agent UI collection, and
-the post-launch component set one zero-chroma light and dark design system.
+## Three scene families
 
-![Motion Lexicon primitive directory](docs/assets/readme-v5-primitives.png)
+- **Product Mono** — precise product states, data, forms, navigation, and feedback.
+- **Editorial Warm** — image-led stories, material detail, generous type, and cultural character.
+- **Spatial Dark** — dimensional product worlds, technical depth, and restrained light.
 
-## Install page blocks, components, and primitives
+Each scene begins with an intentional static frame. Motion explains a user
+action or meaningful state change; reduced motion preserves the same outcome.
 
-Every preview demo imports the same Primitive implementation published by the
-source view and registry response. There is no generated source-string layer.
+## Install
 
-```bash
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/product-landing.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-workspace.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/agent-thinking-trace.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/copy-button.json
-npx shadcn@latest add https://motion-lexicon.pages.dev/r/primitive-slide-in.json
+Every Component and Page Block follows one source chain:
+
+```text
+implementation → direct-import demo → preview and code view → /r/:id.json
 ```
 
-Add the project registry once to `components.json` for shorter commands:
+```bash
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/cinematic-hero.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/focus-gallery.json
+npx shadcn@latest add https://motion-lexicon.pages.dev/r/onboarding-flow.json
+```
+
+Add the registry once to `components.json` for shorter commands:
 
 ```json
 {
@@ -76,25 +86,19 @@ Add the project registry once to `components.json` for shorter commands:
 ```
 
 ```bash
-npx shadcn@latest add @motion-lexicon/product-landing
+npx shadcn@latest add @motion-lexicon/cinematic-hero
 ```
 
-The registry includes 5 complete page blocks and 59 product, agent, and website components spanning
-Motion, GSAP, Three.js, native WebGL, SVG, and CSS, plus 40 executable motion
-primitives. Four editorial primitives remain design guides. Every installable
-item includes TypeScript types, real dependencies, and a reduced-motion path.
+Registry items declare their runtime dependencies. The library uses React,
+Motion, GSAP, Three.js, WebGL, SVG, and CSS where they suit the component job.
+Heavy scenes gate work to the viewport and release graphics resources on
+unmount.
 
-The Agent UI collection covers thinking traces, streaming answers, tool calls,
-approval, task queues, prompt composition, context sources, diff review,
-recommendations, multi-agent handoff, and agent status. Every detail page also
-offers a Copy for Agent brief with the preview URL, source URL, integration
-requirements, and acceptance criteria.
+## Motion Lexicon Skill 4.2.0
 
-![Agent Workspace component page](docs/assets/readme-v5-component.png)
-
-![Slide-in primitive workbench](docs/assets/readme-v5-primitive.png)
-
-## Agent Skill
+The Skill is versioned independently from the website package. Install it when
+an agent needs a page plan, exact Registry component selection, implementation
+guidance, or motion and accessibility review.
 
 ```bash
 # Install for the current project
@@ -107,38 +111,25 @@ npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --global
 npx skills add Ryan-yang125/motion-lexicon --skill motion-lexicon --agent codex
 ```
 
-Verify project installs with `npx skills list` and user-scope installs with
-`npx skills list --global`. Project installs are linked under the selected
-agent's project Skill directory; user-scope installs are available across
-projects for the selected agent.
+Use `npx skills list` for a project install and `npx skills list --global` for
+a user-scope install.
 
-The Skill works in six modes:
-
-- **Build Page** from a product job, exact Registry components, and a compact page plan.
-- **Recommend** a fitting primitive or component for a product event.
-- **Compose** several behaviors into a complete product interaction.
-- **Implement** React, HTML, CSS, or JavaScript.
-- **Review** rhythm, continuity, interruption, performance, and accessibility.
-- **Contribute** a real product request back as a library candidate.
-
-## Project structure
+## Development
 
 ```text
-src/registry/blocks/      React page block source of truth
-src/registry/block-demos/ Live page block previews
-src/registry/components/  React component source of truth
-src/registry/demos/       Live product demos
-src/registry/primitives/        40 independent React + Motion primitives
-src/registry/primitive-demos/   40 real product demos using those primitives
-src/registry/primitive-preview-map.tsx  Lazy demo registry
-src/data/                 Component, primitive, guide, and SEO content
-skills/motion-lexicon/    Agent Skill and motion references
-scripts/                  Registry, prerender, SEO, and quality checks
+src/registry/components/       100 React Component implementations
+src/registry/demos/            Direct-import, real-product Component demos
+src/registry/blocks/           10 React Page Block implementations
+src/registry/block-demos/      Direct-import, responsive Block demos
+src/registry/primitives/       44 canonical motion primitives
+src/data/                      Catalog, routing, i18n, and SEO source
+skills/motion-lexicon/         Independently versioned Skill 4.2.0
+scripts/                       Registry, prerender, and quality checks
 ```
 
 Motion Lexicon is a static React + TypeScript application. `npm run build`
-generates the app, bilingual prerendered pages, sitemap, public data, and the
-shadcn-compatible registry under `/r/`.
+generates the application, localized prerendered pages, sitemap, public catalog,
+and the shadcn-compatible registry under `/r/`.
 
 ```bash
 npm ci
@@ -166,11 +157,17 @@ npm run crawl:dist
 npm run test:visual
 ```
 
+## Release assets
+
+V6 screenshots, social images, machine-readable catalog output, and public
+Registry JSON are regenerated during release acceptance after catalog and visual
+review are complete.
+
 ## License and attribution
 
 - Application and component code: [MIT](./LICENSE)
 - Project-authored content: [CC BY 4.0](./CONTENT-LICENSE)
 - Interior-derived interaction work: [MIT attribution](./NOTICE)
 
-The component collection builds on interaction principles and MIT-licensed
+The collection builds on interaction principles and MIT-licensed
 implementations from [Interior](https://github.com/ddoemonn/interior).

@@ -67,6 +67,7 @@ function ShellLink({
 function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; pathname: string; onNavigate?: () => void }) {
   const activeLinkRef = useRef<HTMLAnchorElement>(null);
   const activeComponent = pathname.match(/\/components\/([^/]+)/)?.[1];
+  const activeBlock = pathname.match(/\/blocks\/([^/]+)/)?.[1];
   const activePrimitive = pathname.match(/\/primitives\/([^/]+)/)?.[1];
   const componentLabel = locale === "zh" ? "组件" : "Components";
   const primitiveLabel = locale === "zh" ? "原子动效" : "Primitives";
@@ -95,21 +96,8 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
           >
             <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
             <span>{componentLabel}</span>
-            <small>{registryComponents.length + registryBlocks.length}</small>
+            <small>{registryComponents.length}</small>
           </ShellLink>
-          <div className="shell-nav-group">
-            <span className="shell-nav-group-label">{locale === "zh" ? "页面 Blocks" : "Page Blocks"}</span>
-            {registryBlocks.map((entry) => (
-              <ShellLink
-                href={pathFor(locale, ["components", entry.id])}
-                current={activeComponent === entry.id}
-                activeRef={activeLinkRef}
-                key={entry.id}
-              >
-                {text(entry.name, locale)}
-              </ShellLink>
-            ))}
-          </div>
           {componentCategories.map((category) => {
             const entries = registryComponents.filter((entry) => entry.category === category.id);
             return (
@@ -128,6 +116,31 @@ function LibrarySidebar({ locale, pathname, onNavigate }: { locale: Locale; path
               </div>
             );
           })}
+        </section>
+
+        <section className="shell-nav-section">
+          <ShellLink
+            href={pathFor(locale, ["blocks"])}
+            current={pathname === pathFor(locale, ["blocks"])}
+            className="shell-nav-heading"
+            activeRef={activeLinkRef}
+          >
+            <ComponentLibraryGlyph size={15} strokeWidth={1.45} aria-hidden="true" />
+            <span>{locale === "zh" ? "页面 Blocks" : "Page Blocks"}</span>
+            <small>{registryBlocks.length}</small>
+          </ShellLink>
+          <div className="shell-nav-group">
+            {registryBlocks.map((entry) => (
+              <ShellLink
+                href={pathFor(locale, ["blocks", entry.id])}
+                current={activeBlock === entry.id}
+                activeRef={activeLinkRef}
+                key={entry.id}
+              >
+                {text(entry.name, locale)}
+              </ShellLink>
+            ))}
+          </div>
         </section>
 
         <section className="shell-nav-section">
@@ -303,7 +316,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
 
   function selectSearch(item: CommandItem) {
     const [kind, id] = item.id.split(":");
-    const href = pathFor(locale, [kind === "component" || kind === "block" ? "components" : "primitives", id]);
+    const href = pathFor(locale, [kind === "component" ? "components" : kind === "block" ? "blocks" : "primitives", id]);
     setSearchOpen(false);
     void navigate({ href });
   }
@@ -337,6 +350,7 @@ export function LibraryShell({ locale }: { locale: Locale }) {
             </div>
             <nav className="shell-landing-nav" aria-label={locale === "zh" ? "主要导航" : "Primary navigation"}>
               <Link to="/$locale/components/" params={{ locale }}>{locale === "zh" ? "组件" : "Components"}</Link>
+              <Link to="/$locale/blocks/" params={{ locale }}>{locale === "zh" ? "页面 Blocks" : "Page Blocks"}</Link>
               <Link to="/$locale/primitives/" params={{ locale }}>{locale === "zh" ? "原子动效" : "Primitives"}</Link>
               <Link to="/$locale/vocabulary/" params={{ locale }}>{locale === "zh" ? "动效词汇" : "Vocabulary"}</Link>
               <Link to="/$locale/guides/" params={{ locale }}>{locale === "zh" ? "指南" : "Guides"}</Link>

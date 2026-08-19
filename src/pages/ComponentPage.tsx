@@ -46,20 +46,23 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         events: "适用事件",
         foundations: "基础动效",
         runtime: "运行信息",
+        scene: "场景",
         engine: "动效引擎",
         runtimeCost: "运行成本",
         dependencies: "依赖",
         registrySource: "打开公开 Registry JSON",
         eventCopy: {
-          agent: "适合 Agent 思考、工具执行、审批、回答、任务协作与上下文交接。",
+          "agent-ui": "适合 Agent 思考、工具执行、审批、回答、任务协作与上下文交接。",
           actions: "适合点击、提交、复制与高风险确认等直接操作。",
-          overlays: "适合打开、定位和关闭浮层，以及键盘焦点切换。",
-          inputs: "适合输入、校验、选择与字段状态变化。",
-          navigation: "适合视图切换、分页、层级导航与当前位置变化。",
-          data: "适合排序、筛选、更新与数据状态变化。",
+          "overlays-surfaces": "适合打开、定位和关闭浮层，以及键盘焦点切换。",
+          "forms-input": "适合输入、校验、选择与字段状态变化。",
+          navigation: "适合视图切换、层级导航与当前位置变化。",
+          "data-commerce": "适合排序、筛选、更新与交易状态变化。",
           feedback: "适合等待、成功、失败与进度反馈。",
-          media: "适合浏览、聚焦、滚动与拖拽媒体内容。",
-          visual: "适合品牌展示、空间探索与高信息量视觉叙事。"
+          "cards-media": "适合浏览、聚焦、滚动与拖拽媒体内容。",
+          "visual-ambient": "适合品牌展示、空间探索与高信息量视觉叙事。",
+          "hero-story": "适合产品介绍、滚动叙事与主视觉场景。",
+          "text-type": "适合文字强调、节奏和排版转换。"
         },
         cost: { light: "轻量", medium: "中等", heavy: "较高" }
       }
@@ -80,20 +83,23 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
         events: "Suitable events",
         foundations: "Motion foundations",
         runtime: "Runtime information",
+        scene: "Scene",
         engine: "Motion engine",
         runtimeCost: "Runtime cost",
         dependencies: "Dependencies",
         registrySource: "Open public Registry JSON",
         eventCopy: {
-          agent: "Use for agent reasoning, tool execution, approval, answers, task collaboration, and context handoff.",
+          "agent-ui": "Use for agent reasoning, tool execution, approval, answers, task collaboration, and context handoff.",
           actions: "Use for direct actions such as clicks, submissions, copying, and high-risk confirmation.",
-          overlays: "Use for opening, positioning, and closing overlays, including keyboard focus transitions.",
-          inputs: "Use for input, validation, selection, and field-state changes.",
-          navigation: "Use for view changes, pagination, hierarchy navigation, and current-location updates.",
-          data: "Use for sorting, filtering, updates, and data-state changes.",
+          "overlays-surfaces": "Use for opening, positioning, and closing overlays, including keyboard focus transitions.",
+          "forms-input": "Use for input, validation, selection, and field-state changes.",
+          navigation: "Use for view changes, hierarchy navigation, and current-location updates.",
+          "data-commerce": "Use for sorting, filtering, updates, and transactional state changes.",
           feedback: "Use for pending, success, failure, and progress feedback.",
-          media: "Use for browsing, focusing, scrolling, and dragging media.",
-          visual: "Use for brand presentation, spatial exploration, and information-rich visual storytelling."
+          "cards-media": "Use for browsing, focusing, scrolling, and dragging media.",
+          "visual-ambient": "Use for brand presentation, spatial exploration, and information-rich visual storytelling.",
+          "hero-story": "Use for product introductions, scroll storytelling, and hero scenes.",
+          "text-type": "Use for typographic emphasis, rhythm, and transformation."
         },
         cost: { light: "Light", medium: "Medium", heavy: "Heavy" }
       };
@@ -162,6 +168,11 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
           <ul className="component-quality-list" aria-label={locale === "zh" ? "组件能力" : "Component capabilities"}>
             {copy.access.map((item) => <li key={item}><CheckIcon size={13} aria-hidden="true" />{item}</li>)}
           </ul>
+          <dl className="v6-workbench-meta" aria-label={copy.runtime}>
+            <div><dt>{copy.scene}</dt><dd>{entry.sceneFamily.replace("-", " · ")}</dd></div>
+            <div><dt>{copy.runtimeCost}</dt><dd>{copy.cost[runtimeCost]}</dd></div>
+            <div><dt>{copy.engine}</dt><dd>{engines.join(" + ")}</dd></div>
+          </dl>
         </header>
 
         <section className="component-workbench" aria-label={text(entry.name, locale)}>
@@ -180,7 +191,7 @@ export function ComponentPage({ locale, componentId }: { locale: Locale; compone
             ) : null}
           </div>
           {view === "preview" ? (
-            <div className="component-detail-stage">
+            <div className={`component-detail-stage v6-detail-stage is-${entry.sceneFamily}`}>
               <RegistryPreview id={entry.id} locale={locale} />
             </div>
           ) : sourceState.status === "ready" ? (

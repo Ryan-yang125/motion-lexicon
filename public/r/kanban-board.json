@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kanban-board",
+  "type": "registry:ui",
+  "title": "Kanban board",
+  "description": "Moves work across columns while responding through destination, count, and surrounding cards.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "data-commerce"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/kanban-board/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Destination column, count, and cards respond together",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Three-column release board",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/kanban-board.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/kanban-board.tsx",
+      "content": "\"use client\";\n\nimport { useId, useState } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport type KanbanColumn = { id: string; title: string };\nexport type KanbanCard = { id: string; title: string; detail?: string; columnId: string };\nexport type KanbanBoardProps = { columns: readonly KanbanColumn[]; cards: readonly KanbanCard[]; label?: string; onChange?: (cards: KanbanCard[]) => void; className?: string };\n\nexport function KanbanBoard({ columns, cards, label = \"Project board\", onChange, className = \"\" }: KanbanBoardProps) {\n  const reduced = useReducedMotion() === true; const labelId = useId(); const [items, setItems] = useState(cards); const [dragging, setDragging] = useState<string | null>(null); const move = (id: string, columnId: string) => { setItems((current) => { const next = current.map((card) => card.id === id ? { ...card, columnId } : card); onChange?.(next); return next; }); setDragging(null); };\n  return <section aria-labelledby={labelId} className={`overflow-x-auto rounded-[16px] bg-[#edeeec] p-3 shadow-[0_15px_34px_-28px_rgba(32,38,34,.42)] ${className}`}><h3 id={labelId} className=\"px-1 font-mono text-[10px] uppercase tracking-[.16em] text-[#68706b]\">{label}</h3><div className=\"mt-3 grid min-w-[620px] grid-cols-3 gap-2\">{columns.map((column, columnIndex) => <div key={column.id} onDragOver={(event) => event.preventDefault()} onDrop={() => { if (dragging) move(dragging, column.id); }} className=\"rounded-[12px] bg-white/72 p-2\"><div className=\"flex items-center justify-between px-1 pb-2\"><strong className=\"text-[11px] text-[#303632]\">{column.title}</strong><span className=\"font-mono text-[10px] text-neutral-400\">{items.filter((item) => item.columnId === column.id).length}</span></div><div className=\"min-h-[142px] space-y-1.5\">{items.filter((item) => item.columnId === column.id).map((card) => <motion.button layout key={card.id} draggable onDragStart={() => setDragging(card.id)} onDragEnd={() => setDragging(null)} type=\"button\" aria-label={`${card.title}, ${column.title}`} aria-grabbed={dragging === card.id} onPointerDown={() => setDragging(card.id)} onPointerUp={() => setDragging(null)} onKeyDown={(event) => { if (event.key === \" \" || event.key === \"Enter\") { event.preventDefault(); setDragging((current) => current === card.id ? null : card.id); } if (dragging === card.id && (event.key === \"ArrowLeft\" || event.key === \"ArrowRight\")) { event.preventDefault(); const next = Math.max(0, Math.min(columns.length - 1, columnIndex + (event.key === \"ArrowRight\" ? 1 : -1))); move(card.id, columns[next].id); } }} transition={{ duration: reduced ? 0 : .22 }} className={`block min-h-11 w-full rounded-[9px] border p-2.5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-[#4568FF] ${dragging === card.id ? \"border-[#4568FF] bg-[#edf0ff]\" : \"border-black/[.09] bg-white hover:border-black/[.18]\"}`}><strong className=\"block text-[11px] text-[#292929]\">{card.title}</strong>{card.detail ? <span className=\"mt-1 block text-[10px] text-neutral-500\">{card.detail}</span> : null}</motion.button>)}</div></div>)}</div>{dragging ? <p aria-live=\"polite\" className=\"sr-only\">Moving card. Use left or right arrow keys to choose a column, then space to release.</p> : null}</section>;\n}\n"
+    }
+  ]
+}

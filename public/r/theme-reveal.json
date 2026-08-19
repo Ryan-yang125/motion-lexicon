@@ -14,7 +14,11 @@
       "css"
     ],
     "runtimeCost": "light",
-    "signature": "Circular View Transition theme reveal"
+    "signature": "Circular View Transition theme reveal",
+    "sceneFamily": "product-mono",
+    "motionRole": "lively",
+    "primaryState": "Stable interface after a theme transition",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

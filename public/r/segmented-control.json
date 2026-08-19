@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Carries one shared highlight between options."
+    "signature": "One shared highlight moves continuously between options",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Shared highlight settled on the current segment",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

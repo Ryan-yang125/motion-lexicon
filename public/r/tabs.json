@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Coordinates the indicator, direction, and panel change."
+    "signature": "Indicator, direction, and content panel change together",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Active tab with its corresponding panel",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

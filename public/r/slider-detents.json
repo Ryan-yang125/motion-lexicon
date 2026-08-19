@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "inputs"
+    "forms-input"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Snaps to meaningful detents while preserving continuous input."
+    "signature": "Continuous drag settles at meaningful detents",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Slider settled on a semantic detent",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

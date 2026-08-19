@@ -12,7 +12,9 @@ export type ApprovalOption = {
 export type ApprovalFlowProps = {
   question: string;
   options: readonly ApprovalOption[];
+  evidence?: readonly string[];
   eyebrow?: string;
+  evidenceLabel?: string;
   approveLabel?: string;
   dismissLabel?: string;
   customPlaceholder?: string;
@@ -27,7 +29,9 @@ export type ApprovalFlowProps = {
 export function ApprovalFlow({
   question,
   options,
+  evidence = [],
   eyebrow = "Approval required",
+  evidenceLabel = "Evidence",
   approveLabel = "Approve",
   dismissLabel = "Dismiss",
   customPlaceholder = "Add instructions",
@@ -85,6 +89,14 @@ export function ApprovalFlow({
             <h3 className="mt-2 text-[16px] font-semibold tracking-[-.025em]">
               {question}
             </h3>
+            {evidence.length ? (
+              <div className="mt-3 rounded-lg border border-neutral-200 bg-neutral-50 p-2.5 dark:border-white/10 dark:bg-white/[.03]">
+                <span className="text-[9px] font-medium uppercase tracking-[.12em] text-neutral-500">{evidenceLabel}</span>
+                <ul className="mt-1.5 grid gap-1" aria-label={evidenceLabel}>
+                  {evidence.map((item) => <li className="text-[10px] text-neutral-600 dark:text-neutral-300" key={item}>• {item}</li>)}
+                </ul>
+              </div>
+            ) : null}
             <div className="mt-4 grid gap-2" role="radiogroup">
               {options.map((option) => (
                 <button

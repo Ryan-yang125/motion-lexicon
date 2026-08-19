@@ -10,7 +10,7 @@ function publish() {
 
 export function LoadingButtonDemo({ locale = "en" }: DemoLocaleProps = {}) {
   return (
-    <div role="group" aria-label={demoText("loading-button", locale)} className="flex justify-center">
+    <div role="group" aria-label={demoText("loading-button", locale)} className="flex justify-center rounded-[16px] bg-[#183442] p-8">
       <LoadingButton
         onAction={publish}
         pendingLabel={demoValue(locale, "发布中", "Publishing")}

@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Skeleton-to-content handoff on stable geometry"
+    "signature": "Skeleton-to-content handoff on stable geometry",
+    "sceneFamily": "product-mono",
+    "motionRole": "gentle",
+    "primaryState": "Reading surface handing off from skeleton to content",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

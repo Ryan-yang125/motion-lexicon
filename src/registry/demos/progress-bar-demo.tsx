@@ -22,7 +22,7 @@ export function ProgressBarDemo({ locale = "en" }: DemoLocaleProps = {}) {
   }, [value]);
 
   return (
-    <div role="group" aria-label={demoText("progress-bar", locale)} className="mx-auto w-full max-w-[360px]">
+    <div role="group" aria-label={demoText("progress-bar", locale)} className="mx-auto w-full max-w-[360px] rounded-[16px] bg-[#eef4f1] p-5">
       <ProgressBar
         value={value}
         label={demoValue(locale, "正在索引产品上下文", "Indexing product context")}

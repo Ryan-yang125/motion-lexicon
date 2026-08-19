@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Hides and restores a toolbar in response to scroll direction."
+    "signature": "Toolbar yields to scroll direction and returns on reversal",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Top toolbar settled into its reading state",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

@@ -11,16 +11,28 @@
       "dependencies": [
         "motion"
       ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/inline-edit.json",
+        "https://motion-lexicon.pages.dev/r/metric-ticker.json",
+        "https://motion-lexicon.pages.dev/r/prompt-composer.json"
+      ],
       "categories": [
         "page-block"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/agent-workspace/",
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/agent-workspace/",
       "meta": {
         "engines": [
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "A mission moves from request through visible execution and human approval into evidence-backed completion."
+        "signature": "A mission moves from request through visible execution and human approval into evidence-backed completion.",
+        "sceneFamily": "product-mono",
+        "primaryState": "Agent workspace with execution rail and approval nodes",
+        "componentIds": [
+          "inline-edit",
+          "metric-ticker",
+          "prompt-composer"
+        ]
       },
       "files": [
         {
@@ -38,16 +50,28 @@
       "dependencies": [
         "motion"
       ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/cinematic-hero.json",
+        "https://motion-lexicon.pages.dev/r/media-carousel.json",
+        "https://motion-lexicon.pages.dev/r/split-text-reveal.json"
+      ],
       "categories": [
         "page-block"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/product-landing/",
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/product-landing/",
       "meta": {
         "engines": [
           "motion"
         ],
-        "runtimeCost": "light",
-        "signature": "Release stages hand content and progress forward inside one stable workspace."
+        "runtimeCost": "medium",
+        "signature": "Release stages hand content and progress forward inside one stable workspace.",
+        "sceneFamily": "editorial-warm",
+        "primaryState": "Positioning and release-stage workspace",
+        "componentIds": [
+          "cinematic-hero",
+          "media-carousel",
+          "split-text-reveal"
+        ]
       },
       "files": [
         {
@@ -65,16 +89,28 @@
       "dependencies": [
         "motion"
       ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/animated-chart.json",
+        "https://motion-lexicon.pages.dev/r/metric-ticker.json",
+        "https://motion-lexicon.pages.dev/r/segmented-control.json"
+      ],
       "categories": [
         "page-block"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/analytics-dashboard/",
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/analytics-dashboard/",
       "meta": {
         "engines": [
           "motion"
         ],
-        "runtimeCost": "light",
-        "signature": "A range change updates metrics, trend geometry, and channel contribution together."
+        "runtimeCost": "medium",
+        "signature": "A range change updates metrics, trend geometry, and channel contribution together.",
+        "sceneFamily": "product-mono",
+        "primaryState": "Data dashboard with metrics and trend comparison",
+        "componentIds": [
+          "animated-chart",
+          "metric-ticker",
+          "segmented-control"
+        ]
       },
       "files": [
         {
@@ -92,16 +128,28 @@
       "dependencies": [
         "motion"
       ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/inline-edit.json",
+        "https://motion-lexicon.pages.dev/r/kanban-board.json",
+        "https://motion-lexicon.pages.dev/r/loading-button.json"
+      ],
       "categories": [
         "page-block"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/project-dashboard/",
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/project-dashboard/",
       "meta": {
         "engines": [
           "motion"
         ],
-        "runtimeCost": "light",
-        "signature": "Completing work advances the next task and the milestone progress in one transition."
+        "runtimeCost": "medium",
+        "signature": "Completing work advances the next task and the milestone progress in one transition.",
+        "sceneFamily": "product-mono",
+        "primaryState": "Actionable project milestones and task dashboard",
+        "componentIds": [
+          "inline-edit",
+          "kanban-board",
+          "loading-button"
+        ]
       },
       "files": [
         {
@@ -119,22 +167,249 @@
       "dependencies": [
         "motion"
       ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/drawer.json",
+        "https://motion-lexicon.pages.dev/r/inline-edit.json",
+        "https://motion-lexicon.pages.dev/r/loading-button.json",
+        "https://motion-lexicon.pages.dev/r/metric-ticker.json"
+      ],
       "categories": [
         "page-block"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/support-inbox/",
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/support-inbox/",
       "meta": {
         "engines": [
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Conversation selection, reply delivery, and queue state share one handling context."
+        "signature": "Conversation selection, reply delivery, and queue state share one handling context.",
+        "sceneFamily": "product-mono",
+        "primaryState": "Support workspace with queue, conversation, and customer context",
+        "componentIds": [
+          "drawer",
+          "inline-edit",
+          "loading-button",
+          "metric-ticker"
+        ]
       },
       "files": [
         {
           "path": "src/registry/blocks/support-inbox.tsx",
           "type": "registry:component",
           "target": "components/motion-lexicon/blocks/support-inbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "creative-portfolio",
+      "type": "registry:block",
+      "title": "Creative portfolio",
+      "description": "Presents an independent creative practice through work, material studies, and case-story transitions.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/dither-reveal-card.json",
+        "https://motion-lexicon.pages.dev/r/image-lightbox.json",
+        "https://motion-lexicon.pages.dev/r/media-carousel.json",
+        "https://motion-lexicon.pages.dev/r/scroll-media-expansion.json",
+        "https://motion-lexicon.pages.dev/r/text-morph.json"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/creative-portfolio/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "heavy",
+        "signature": "Work moves continuously between material reveal, focused viewing, and case-study browsing.",
+        "sceneFamily": "editorial-warm",
+        "primaryState": "Selected work and case-study entry points in a warm material setting",
+        "componentIds": [
+          "dither-reveal-card",
+          "image-lightbox",
+          "media-carousel",
+          "scroll-media-expansion",
+          "text-morph"
+        ]
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/creative-portfolio.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/creative-portfolio.tsx"
+        }
+      ]
+    },
+    {
+      "name": "commerce-storefront",
+      "type": "registry:block",
+      "title": "Commerce storefront",
+      "description": "Organizes product story, detail browsing, volume pricing, and cart confirmation into a complete purchase path.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/add-to-cart-morph.json",
+        "https://motion-lexicon.pages.dev/r/animated-combobox.json",
+        "https://motion-lexicon.pages.dev/r/cinematic-hero.json",
+        "https://motion-lexicon.pages.dev/r/media-carousel.json",
+        "https://motion-lexicon.pages.dev/r/pricing-calculator.json"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/commerce-storefront/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Product browsing, price configuration, and cart state resolve along one purchase path.",
+        "sceneFamily": "editorial-warm",
+        "primaryState": "Hero product, material details, and a confirmable purchase panel",
+        "componentIds": [
+          "add-to-cart-morph",
+          "animated-combobox",
+          "cinematic-hero",
+          "media-carousel",
+          "pricing-calculator"
+        ]
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/commerce-storefront.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/commerce-storefront.tsx"
+        }
+      ]
+    },
+    {
+      "name": "developer-docs",
+      "type": "registry:block",
+      "title": "Developer docs",
+      "description": "Organizes installation, code comparison, command search, and preview output into navigable developer documentation.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/code-comparison.json",
+        "https://motion-lexicon.pages.dev/r/command-palette.json",
+        "https://motion-lexicon.pages.dev/r/mega-menu.json",
+        "https://motion-lexicon.pages.dev/r/split-text-reveal.json"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/developer-docs/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Navigation, command search, and content sections hand off inside a stable documentation frame.",
+        "sceneFamily": "product-mono",
+        "primaryState": "Navigable installation and API documentation workspace",
+        "componentIds": [
+          "code-comparison",
+          "command-palette",
+          "mega-menu",
+          "split-text-reveal"
+        ]
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/developer-docs.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/developer-docs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "media-editorial",
+      "type": "registry:block",
+      "title": "Media editorial",
+      "description": "Browses a complete visual feature through chapters, focus galleries, and scroll-led storytelling.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/cinematic-hero.json",
+        "https://motion-lexicon.pages.dev/r/focus-gallery.json",
+        "https://motion-lexicon.pages.dev/r/kinetic-heading.json",
+        "https://motion-lexicon.pages.dev/r/scroll-story.json"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/media-editorial/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Chapter navigation connects a cinematic lead, gallery focus, and scroll story into one feature.",
+        "sceneFamily": "editorial-warm",
+        "primaryState": "Visual feature lead with chapter navigation",
+        "componentIds": [
+          "cinematic-hero",
+          "focus-gallery",
+          "kinetic-heading",
+          "scroll-story"
+        ]
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/media-editorial.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/media-editorial.tsx"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-flow",
+      "type": "registry:block",
+      "title": "Onboarding flow",
+      "description": "Organizes account setup, file import, and completion checklist into a successful first-workspace path.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "https://motion-lexicon.pages.dev/r/drawer.json",
+        "https://motion-lexicon.pages.dev/r/file-dropzone.json",
+        "https://motion-lexicon.pages.dev/r/multi-step-form.json",
+        "https://motion-lexicon.pages.dev/r/onboarding-checklist.json",
+        "https://motion-lexicon.pages.dev/r/progress-bar.json",
+        "https://motion-lexicon.pages.dev/r/tabs.json"
+      ],
+      "categories": [
+        "page-block"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/blocks/onboarding-flow/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Form, import, and checklist completion progress continuously toward the first successful state.",
+        "sceneFamily": "product-mono",
+        "primaryState": "In-progress account setup and import steps",
+        "componentIds": [
+          "drawer",
+          "file-dropzone",
+          "multi-step-form",
+          "onboarding-checklist",
+          "progress-bar",
+          "tabs"
+        ]
+      },
+      "files": [
+        {
+          "path": "src/registry/blocks/onboarding-flow.tsx",
+          "type": "registry:component",
+          "target": "components/motion-lexicon/blocks/onboarding-flow.tsx"
         }
       ]
     },
@@ -147,7 +422,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/",
       "meta": {
@@ -155,7 +430,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Thinking stages revealed along a signal rail"
+        "signature": "Thinking stages revealed along a signal rail",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Active reasoning phase on an evidence rail",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -174,7 +453,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/streaming-answer/",
       "meta": {
@@ -182,7 +461,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Sources and follow-ups resolve after the streamed answer"
+        "signature": "Sources and follow-ups resolve after the streamed answer",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Resolved answer with expandable sources",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -201,7 +484,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/tool-call-stack/",
       "meta": {
@@ -209,7 +492,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Execution records expand and resolve by tool state"
+        "signature": "Execution records expand and resolve by tool state",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded tool execution record",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -228,7 +515,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/approval-flow/",
       "meta": {
@@ -236,7 +523,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "The selected path resolves in place into approval"
+        "signature": "The selected path resolves in place into approval",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Approval-ready recommendation with evidence and alternatives",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -247,29 +538,33 @@
       ]
     },
     {
-      "name": "agent-task-queue",
+      "name": "task-progress",
       "type": "registry:ui",
-      "title": "Agent task queue",
-      "description": "Shows queued, running, complete, and failed work across two useful densities.",
+      "title": "Task progress",
+      "description": "Presents queued, active, blocked, failed, recovered, and complete work across compact and expanded layouts.",
       "dependencies": [
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/agent-task-queue/",
+      "docs": "https://motion-lexicon.pages.dev/en/components/task-progress/",
       "meta": {
         "engines": [
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Task state stays continuous across density changes"
+        "signature": "Task state advances continuously along one progress rail",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Active task progress rail",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
-          "path": "src/registry/components/agent-task-queue.tsx",
+          "path": "src/registry/components/task-progress.tsx",
           "type": "registry:ui",
-          "target": "components/motion-lexicon/agent-task-queue.tsx"
+          "target": "components/motion-lexicon/task-progress.tsx"
         }
       ]
     },
@@ -282,7 +577,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/prompt-composer/",
       "meta": {
@@ -290,7 +585,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "The source menu reveals from the composer anchor"
+        "signature": "The source menu reveals from the composer anchor",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Focused prompt composer with source chips",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -309,7 +608,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/context-sources/",
       "meta": {
@@ -317,7 +616,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "A selected source expands across the reading surface"
+        "signature": "A selected source expands across the reading surface",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded retrieved source with relevance",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -336,7 +639,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/diff-review/",
       "meta": {
@@ -344,40 +647,17 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Diff decisions resolve directly inside each row"
+        "signature": "Diff decisions resolve directly inside each row",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Field diff with per-change decisions",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/diff-review.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/diff-review.tsx"
-        }
-      ]
-    },
-    {
-      "name": "agent-recommendation",
-      "type": "registry:ui",
-      "title": "Agent recommendation",
-      "description": "Frames a recommendation through confidence, rationale, alternatives, and acceptance.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "agent"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/agent-recommendation/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Confidence and alternative paths complete the decision"
-      },
-      "files": [
-        {
-          "path": "src/registry/components/agent-recommendation.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/agent-recommendation.tsx"
         }
       ]
     },
@@ -390,7 +670,7 @@
         "motion"
       ],
       "categories": [
-        "agent"
+        "agent-ui"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/multi-agent-handoff/",
       "meta": {
@@ -398,40 +678,17 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Task ownership travels along an agent relay rail"
+        "signature": "Task ownership travels along an agent relay rail",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Task handoff between current owners",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/multi-agent-handoff.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/multi-agent-handoff.tsx"
-        }
-      ]
-    },
-    {
-      "name": "agent-status-orbit",
-      "type": "registry:ui",
-      "title": "Agent status orbit",
-      "description": "Expresses idle, thinking, working, waiting, and complete states through a compact orbit.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "agent"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/agent-status-orbit/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Orbit count and speed encode agent status"
-      },
-      "files": [
-        {
-          "path": "src/registry/components/agent-status-orbit.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/agent-status-orbit.tsx"
         }
       ]
     },
@@ -452,7 +709,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Reports clipboard state in place without shifting nearby content."
+        "signature": "Button label resolves in place to copied",
+        "sceneFamily": "product-mono",
+        "motionRole": "snap",
+        "primaryState": "Copy action in its confirmed state",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -479,7 +740,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Keeps pending, success, and error feedback inside one action."
+        "signature": "Pending, success, and failure hand off inside one button",
+        "sceneFamily": "product-mono",
+        "motionRole": "snap",
+        "primaryState": "Submit button with in-place progress feedback",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -490,56 +755,33 @@
       ]
     },
     {
-      "name": "hold-to-confirm",
+      "name": "hold-action",
       "type": "registry:ui",
-      "title": "Hold to confirm",
-      "description": "Protects destructive actions with cancellable hold progress.",
+      "title": "Hold action",
+      "description": "Protects high-risk actions with cancellable touch, pointer, and keyboard progress.",
       "dependencies": [
         "motion"
       ],
       "categories": [
         "actions"
       ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/hold-to-confirm/",
+      "docs": "https://motion-lexicon.pages.dev/en/components/hold-action/",
       "meta": {
         "engines": [
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Protects destructive actions with cancellable hold progress."
+        "signature": "Hold progress completes in place or returns smoothly",
+        "sceneFamily": "product-mono",
+        "motionRole": "snap",
+        "primaryState": "Hold-to-confirm button with active fill",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
-          "path": "src/registry/components/hold-to-confirm.tsx",
+          "path": "src/registry/components/hold-action.tsx",
           "type": "registry:ui",
-          "target": "components/motion-lexicon/hold-to-confirm.tsx"
-        }
-      ]
-    },
-    {
-      "name": "long-press",
-      "type": "registry:ui",
-      "title": "Long press",
-      "description": "A long-press gesture that works across touch, pointer, and keyboard.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "actions"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/long-press/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "A long-press gesture that works across touch, pointer, and keyboard."
-      },
-      "files": [
-        {
-          "path": "src/registry/components/long-press.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/long-press.tsx"
+          "target": "components/motion-lexicon/hold-action.tsx"
         }
       ]
     },
@@ -552,7 +794,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/command-palette/",
       "meta": {
@@ -560,7 +802,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Combines search, keyboard navigation, and deliberate focus management."
+        "signature": "Search results and keyboard focus move continuously inside the palette",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Command results with active keyboard focus",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -579,7 +825,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/context-menu/",
       "meta": {
@@ -587,7 +833,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Opens from the trigger coordinate and stays inside the viewport."
+        "signature": "Menu opens from the trigger coordinate and avoids viewport edges",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Context menu anchored to its trigger",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -606,7 +856,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/drawer/",
       "meta": {
@@ -614,7 +864,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Includes focus containment, drag dismissal, and interruptible spring motion."
+        "signature": "Drawer, backdrop, and focus enter and leave as one layer",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Open side panel for a focused task",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -633,7 +887,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/dropdown/",
       "meta": {
@@ -641,7 +895,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Moves selection continuously with full keyboard behavior."
+        "signature": "The highlight settles continuously across options",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded selector with the current option highlighted",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -660,7 +918,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/modal/",
       "meta": {
@@ -668,7 +926,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Handles focus, backdrop, exit, and async confirmation as one flow."
+        "signature": "Dialog, backdrop, and focus scope transition together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Modal with a clear confirmation action",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -687,7 +949,7 @@
         "motion"
       ],
       "categories": [
-        "overlays"
+        "overlays-surfaces"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/popover/",
       "meta": {
@@ -695,7 +957,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Derives its reveal origin from the trigger and available space."
+        "signature": "Popover derives its reveal origin from the trigger and available space",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Supporting popover positioned at its trigger",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -714,7 +980,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/expanding-search/",
       "meta": {
@@ -722,40 +988,17 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Expands from a toolbar action into a focused search field."
+        "signature": "Toolbar action expands continuously into an input field",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded toolbar search field with focus",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/expanding-search.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/expanding-search.tsx"
-        }
-      ]
-    },
-    {
-      "name": "floating-label",
-      "type": "registry:ui",
-      "title": "Floating label",
-      "description": "Keeps the field label and context visible while typing.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "inputs"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/floating-label/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Keeps the field label and context visible while typing."
-      },
-      "files": [
-        {
-          "path": "src/registry/components/floating-label.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/floating-label.tsx"
         }
       ]
     },
@@ -768,7 +1011,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/inline-validation/",
       "meta": {
@@ -776,7 +1019,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Places pending, error, and success states next to the input."
+        "signature": "Pending, error, and success feedback transitions beside the field",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Clear validation result beside the input",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -795,7 +1042,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/otp-input/",
       "meta": {
@@ -803,7 +1050,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Coordinates typing, paste, error, and success feedback."
+        "signature": "Typing, paste, and validation feedback share one rhythm",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Completed OTP entry with confirmation state",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -822,7 +1073,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/password-strength/",
       "meta": {
@@ -830,7 +1081,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Makes rule checks and strength changes legible as one response."
+        "signature": "Rule status and strength indicator update together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Password field showing rule completion",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -849,7 +1104,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/slider-detents/",
       "meta": {
@@ -857,7 +1112,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Snaps to meaningful detents while preserving continuous input."
+        "signature": "Continuous drag settles at meaningful detents",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Slider settled on a semantic detent",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -876,7 +1135,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/tag-input/",
       "meta": {
@@ -884,7 +1143,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Gives clear feedback for adding, removing, and rejecting tags."
+        "signature": "Tag add, remove, and reject feedback resolves at the input",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Input field with selected tags",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -911,7 +1174,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Keeps content height and disclosure state visually continuous."
+        "signature": "Content height and disclosure state hand off in place",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded content group",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -938,40 +1205,17 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Hides and restores a toolbar in response to scroll direction."
+        "signature": "Toolbar yields to scroll direction and returns on reversal",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Top toolbar settled into its reading state",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/hide-on-scroll.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/hide-on-scroll.tsx"
-        }
-      ]
-    },
-    {
-      "name": "pagination",
-      "type": "registry:ui",
-      "title": "Pagination",
-      "description": "Keeps the current page legible while the visible range changes.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "navigation"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/pagination/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Keeps the current page legible while the visible range changes."
-      },
-      "files": [
-        {
-          "path": "src/registry/components/pagination.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/pagination.tsx"
         }
       ]
     },
@@ -992,7 +1236,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Carries one shared highlight between options."
+        "signature": "One shared highlight moves continuously between options",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Shared highlight settled on the current segment",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1019,7 +1267,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Coordinates the indicator, direction, and panel change."
+        "signature": "Indicator, direction, and content panel change together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Active tab with its corresponding panel",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1038,7 +1290,7 @@
         "motion"
       ],
       "categories": [
-        "data"
+        "data-commerce"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/filter-grid/",
       "meta": {
@@ -1046,7 +1298,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Preserves spatial continuity as filtered results rearrange."
+        "signature": "Results rearrange while preserving spatial relationships",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Compact result grid after filtering",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1065,7 +1321,7 @@
         "motion"
       ],
       "categories": [
-        "data"
+        "data-commerce"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/reorder-list/",
       "meta": {
@@ -1073,7 +1329,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Provides clear drop position for pointer and keyboard reordering."
+        "signature": "Pointer and keyboard reordering share one drop-position signal",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Reorderable list with a clear drop position",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1092,7 +1352,7 @@
         "motion"
       ],
       "categories": [
-        "data"
+        "data-commerce"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/sortable-table/",
       "meta": {
@@ -1100,7 +1360,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Explains sorting through row position while keeping data readable."
+        "signature": "Sorting is expressed through row position and direction",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Data table sorted by its active field",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1127,40 +1391,17 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Covers pending, determinate, and complete progress states."
+        "signature": "Pending, progress, and completion resolve along one bar",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Task bar at a determinate progress value",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/progress-bar.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/progress-bar.tsx"
-        }
-      ]
-    },
-    {
-      "name": "task-steps",
-      "type": "registry:ui",
-      "title": "Task steps",
-      "description": "Connects queued, active, complete, and failed states into one flow.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "feedback"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/task-steps/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Connects queued, active, complete, and failed states into one flow."
-      },
-      "files": [
-        {
-          "path": "src/registry/components/task-steps.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/task-steps.tsx"
         }
       ]
     },
@@ -1181,7 +1422,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Explains value changes with direction and brief color feedback."
+        "signature": "Value change is explained through direction and brief color",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Updated value with directional feedback",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1208,40 +1453,17 @@
           "gsap"
         ],
         "runtimeCost": "light",
-        "signature": "GSAP pointer tracking with a clean return"
+        "signature": "GSAP pointer tracking with a clean return",
+        "sceneFamily": "product-mono",
+        "motionRole": "snap",
+        "primaryState": "Primary action responding to a nearby pointer",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/magnetic-action.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/magnetic-action.tsx"
-        }
-      ]
-    },
-    {
-      "name": "radial-actions",
-      "type": "registry:ui",
-      "title": "Radial actions",
-      "description": "Fans a compact set of shortcuts around one anchored action.",
-      "dependencies": [
-        "motion"
-      ],
-      "categories": [
-        "actions"
-      ],
-      "docs": "https://motion-lexicon.pages.dev/en/components/radial-actions/",
-      "meta": {
-        "engines": [
-          "motion"
-        ],
-        "runtimeCost": "light",
-        "signature": "Radial reveal anchored to the primary action"
-      },
-      "files": [
-        {
-          "path": "src/registry/components/radial-actions.tsx",
-          "type": "registry:ui",
-          "target": "components/motion-lexicon/radial-actions.tsx"
         }
       ]
     },
@@ -1260,7 +1482,11 @@
           "css"
         ],
         "runtimeCost": "light",
-        "signature": "Circular View Transition theme reveal"
+        "signature": "Circular View Transition theme reveal",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Stable interface after a theme transition",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1287,7 +1513,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Mega menu driven by a shared highlight"
+        "signature": "Mega menu driven by a shared highlight",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded navigation panel with active highlight",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1314,7 +1544,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Distance-aware spring dock"
+        "signature": "Distance-aware spring dock",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Floating dock with a focused destination",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1333,7 +1567,7 @@
         "motion"
       ],
       "categories": [
-        "inputs"
+        "forms-input"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/voice-capture/",
       "meta": {
@@ -1341,7 +1575,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Voice capture flow with responsive levels"
+        "signature": "Voice capture flow with responsive levels",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Voice input showing the current level",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1368,7 +1606,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Expandable notification queue with swipe dismissal"
+        "signature": "Expandable notification queue with swipe dismissal",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Expanded notification queue",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1395,7 +1637,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Per-file upload flow that resolves into completion"
+        "signature": "Per-file upload flow that resolves into completion",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Upload queue advancing item by item",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1422,7 +1668,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Skeleton-to-content handoff on stable geometry"
+        "signature": "Skeleton-to-content handoff on stable geometry",
+        "sceneFamily": "product-mono",
+        "motionRole": "gentle",
+        "primaryState": "Reading surface handing off from skeleton to content",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1441,7 +1691,7 @@
         "motion"
       ],
       "categories": [
-        "data"
+        "data-commerce"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/activity-feed/",
       "meta": {
@@ -1449,7 +1699,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Live insertion feed with an unread boundary"
+        "signature": "Live insertion feed with an unread boundary",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Live activity feed with an unread boundary",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1468,7 +1722,7 @@
         "motion"
       ],
       "categories": [
-        "data"
+        "data-commerce"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/integration-map/",
       "meta": {
@@ -1476,7 +1730,11 @@
           "motion"
         ],
         "runtimeCost": "medium",
-        "signature": "Integration topology connected by SVG paths"
+        "signature": "Integration topology connected by SVG paths",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Integration topology with active paths",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1495,7 +1753,7 @@
         "motion"
       ],
       "categories": [
-        "media"
+        "cards-media"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/cursor-lens/",
       "meta": {
@@ -1503,7 +1761,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Pointer and keyboard controlled comparison lens"
+        "signature": "Pointer and keyboard controlled comparison lens",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Comparison lens settled on media detail",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1522,7 +1784,7 @@
         "motion"
       ],
       "categories": [
-        "media"
+        "cards-media"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/media-carousel/",
       "meta": {
@@ -1530,7 +1792,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Media rail driven by native scroll inertia and snap"
+        "signature": "Media rail driven by native scroll inertia and snap",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Media carousel with a centered focal card",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1549,7 +1815,7 @@
         "motion"
       ],
       "categories": [
-        "media"
+        "cards-media"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/image-lightbox/",
       "meta": {
@@ -1557,7 +1823,11 @@
           "motion"
         ],
         "runtimeCost": "medium",
-        "signature": "Shared-element transition from thumbnail to gallery"
+        "signature": "Shared-element transition from thumbnail to gallery",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Immersive gallery with thumbnail context",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1576,7 +1846,7 @@
         "gsap"
       ],
       "categories": [
-        "media"
+        "cards-media"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/scroll-story/",
       "meta": {
@@ -1584,7 +1854,11 @@
           "gsap"
         ],
         "runtimeCost": "medium",
-        "signature": "Chaptered product scene driven by ScrollTrigger"
+        "signature": "Chaptered product scene driven by ScrollTrigger",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Story scene synchronized with chapter progress",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1607,7 +1881,7 @@
         "@types/three"
       ],
       "categories": [
-        "media"
+        "cards-media"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/procedural-product-viewer/",
       "meta": {
@@ -1616,7 +1890,11 @@
           "three"
         ],
         "runtimeCost": "heavy",
-        "signature": "Drag-inspectable Three.js product model"
+        "signature": "Drag-inspectable Three.js product model",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "gentle",
+        "primaryState": "Dark 3D product ready for drag inspection",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1635,7 +1913,7 @@
         "motion"
       ],
       "categories": [
-        "visual"
+        "visual-ambient"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/dither-reveal-card/",
       "meta": {
@@ -1644,7 +1922,11 @@
           "webgl"
         ],
         "runtimeCost": "heavy",
-        "signature": "Native WebGL Bayer-threshold reveal"
+        "signature": "Native WebGL Bayer-threshold reveal",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Still WebGL dither-reveal card",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1667,7 +1949,7 @@
         "@types/three"
       ],
       "categories": [
-        "visual"
+        "visual-ambient"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/network-globe/",
       "meta": {
@@ -1676,7 +1958,11 @@
           "three"
         ],
         "runtimeCost": "heavy",
-        "signature": "Three.js globe with routed network arcs"
+        "signature": "Three.js globe with routed network arcs",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Dark network globe focused on a selected node",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1695,7 +1981,7 @@
         "motion"
       ],
       "categories": [
-        "visual"
+        "visual-ambient"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/kinetic-logo-exchange/",
       "meta": {
@@ -1703,7 +1989,11 @@
           "motion"
         ],
         "runtimeCost": "light",
-        "signature": "Brand queue with layout exchange and masked reveal"
+        "signature": "Brand queue with layout exchange and masked reveal",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Kinetic brand queue settled on its selection",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
@@ -1722,7 +2012,7 @@
         "motion"
       ],
       "categories": [
-        "visual"
+        "visual-ambient"
       ],
       "docs": "https://motion-lexicon.pages.dev/en/components/spotlight-bento/",
       "meta": {
@@ -1730,13 +2020,1509 @@
           "motion"
         ],
         "runtimeCost": "medium",
-        "signature": "Continuous spotlight sharing coordinates across tiles"
+        "signature": "Continuous spotlight sharing coordinates across tiles",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Connected bento with the spotlight on its active tile",
+        "assetProvenance": "self-contained"
       },
       "files": [
         {
           "path": "src/registry/components/spotlight-bento.tsx",
           "type": "registry:ui",
           "target": "components/motion-lexicon/spotlight-bento.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-media-expansion",
+      "type": "registry:ui",
+      "title": "Scroll media expansion",
+      "description": "Expands contained media into an immersive hero through chapter scrolling.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/scroll-media-expansion/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Media and viewport resolve into one continuous frame",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Full-bleed coastal media with chapter rail",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/scroll-media-expansion.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/scroll-media-expansion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "device-scroll-reveal",
+      "type": "registry:ui",
+      "title": "Device scroll reveal",
+      "description": "Advances product screens, chapter copy, and product state inside a device frame.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/device-scroll-reveal/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Device chrome and screen content advance together",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Product step inside a device frame",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/device-scroll-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/device-scroll-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "cinematic-hero",
+      "type": "registry:ui",
+      "title": "Cinematic hero",
+      "description": "Uses image, typography, and action to establish a paced brand opening.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/cinematic-hero/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Media, title, and action arrive in deliberate sequence",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "lively",
+        "primaryState": "Warm graphic field with display title",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/cinematic-hero.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/cinematic-hero.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shader-hero",
+      "type": "registry:ui",
+      "title": "Shader hero",
+      "description": "Uses a low-power WebGL field that reshapes around pointer intent.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/shader-hero/",
+      "meta": {
+        "engines": [
+          "motion",
+          "webgl"
+        ],
+        "runtimeCost": "heavy",
+        "signature": "Pointer input reshapes the focal wave field",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Still dark light field with legible heading",
+        "assetProvenance": "generated"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/shader-hero.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/shader-hero.tsx"
+        }
+      ]
+    },
+    {
+      "name": "split-screen-reveal",
+      "type": "registry:ui",
+      "title": "Split screen reveal",
+      "description": "Connects two product states or story perspectives with a draggable boundary.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/split-screen-reveal/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "The split boundary becomes the narrative transition",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "ui",
+        "primaryState": "Two juxtaposed scenes with centered slider",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/split-screen-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/split-screen-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "screenshot-stack",
+      "type": "registry:ui",
+      "title": "Screenshot stack",
+      "description": "Presents multiple product surfaces in depth while retaining the active focus.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/screenshot-stack/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Active screenshot moves forward while context stays visible",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "gentle",
+        "primaryState": "Product screenshot stack in dark space",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/screenshot-stack.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/screenshot-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "terminal-hero",
+      "type": "registry:ui",
+      "title": "Terminal hero",
+      "description": "Demonstrates a developer workflow and result through progressive commands.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/terminal-hero/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Command, output, and completion form one loop",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ui",
+        "primaryState": "Terminal workflow ready to run",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/terminal-hero.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/terminal-hero.tsx"
+        }
+      ]
+    },
+    {
+      "name": "product-orbit-hero",
+      "type": "registry:ui",
+      "title": "Product orbit hero",
+      "description": "Arranges capabilities around a central product object with synchronized focus copy.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "hero-story"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/product-orbit-hero/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Orbit position and capability copy change together",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "gentle",
+        "primaryState": "Capability orbit around a central object",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/product-orbit-hero.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/product-orbit-hero.tsx"
+        }
+      ]
+    },
+    {
+      "name": "expandable-card",
+      "type": "registry:ui",
+      "title": "Expandable card",
+      "description": "Expands a compact story card in place into a full reading surface.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/expandable-card/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Shared geometry preserves the card origin and context",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Warm editorial image card",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/expandable-card.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/expandable-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "focus-gallery",
+      "type": "registry:ui",
+      "title": "Focus gallery",
+      "description": "Lets one image gain focus while neighboring media yields.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/focus-gallery/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Focus, crop, and caption change together",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Centered focus image with neighboring media",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/focus-gallery.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/focus-gallery.tsx"
+        }
+      ]
+    },
+    {
+      "name": "card-stack",
+      "type": "registry:ui",
+      "title": "Card stack",
+      "description": "Browses stacked records or stories in a compact space.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/card-stack/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Current card exits to expose the next layer",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Top card ready for continued browsing",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/card-stack.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/card-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-testimonials",
+      "type": "registry:ui",
+      "title": "Animated testimonials",
+      "description": "Transitions portrait, quote, attribution, and progress as one evidence unit.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/animated-testimonials/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Portrait and quote hand off in one rhythm",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Portrait photography with complete customer quote",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/animated-testimonials.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/animated-testimonials.tsx"
+        }
+      ]
+    },
+    {
+      "name": "coverflow-gallery",
+      "type": "registry:ui",
+      "title": "Coverflow gallery",
+      "description": "Browses media with depth, snapping, and keyboard control.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/coverflow-gallery/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Active media rotates into a stable frontal position",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Frontal media with angled adjacent previews",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/coverflow-gallery.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/coverflow-gallery.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-trail",
+      "type": "registry:ui",
+      "title": "Image trail",
+      "description": "Generates and retires restrained image fragments along pointer or drag paths.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/image-trail/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Images appear along the path and retire cleanly",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "lively",
+        "primaryState": "Forest lead image with still trail frame",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/image-trail.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/image-trail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixelated-image",
+      "type": "registry:ui",
+      "title": "Pixelated image",
+      "description": "Uses image resolution as a controllable reveal and transition material.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/pixelated-image/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Pixel structure resolves into a complete image",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Resolved editorial image",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/pixelated-image.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/pixelated-image.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chromatic-image",
+      "type": "registry:ui",
+      "title": "Chromatic image",
+      "description": "Adds controlled color-channel displacement to editorial media on focus.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/chromatic-image/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Color displacement follows focus and settles cleanly",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "ui",
+        "primaryState": "Still chromatic editorial image",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/chromatic-image.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/chromatic-image.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-comparison",
+      "type": "registry:ui",
+      "title": "Code comparison",
+      "description": "Binds implementation differences and rendered output inside one switchable comparison surface.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/code-comparison/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Selected difference updates code and preview together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Side-by-side code and result comparison",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/code-comparison.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/code-comparison.tsx"
+        }
+      ]
+    },
+    {
+      "name": "before-after-comparison",
+      "type": "registry:ui",
+      "title": "Before and after comparison",
+      "description": "Compares two complete image states through a stable boundary.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "cards-media"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/before-after-comparison/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Stable boundary reveals both states without layout shift",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "ui",
+        "primaryState": "Centered comparison boundary",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/before-after-comparison.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/before-after-comparison.tsx"
+        }
+      ]
+    },
+    {
+      "name": "split-text-reveal",
+      "type": "registry:ui",
+      "title": "Split text reveal",
+      "description": "Reveals a heading by word or character while retaining complete static legibility.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/split-text-reveal/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Text segments assemble into a stable heading",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Fully assembled editorial display heading",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/split-text-reveal.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/split-text-reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-scramble",
+      "type": "registry:ui",
+      "title": "Text scramble",
+      "description": "Transitions technical labels and status through quick character substitution.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/text-scramble/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Noisy characters resolve quickly into readable state",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Stable technical status output",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/text-scramble.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/text-scramble.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-morph",
+      "type": "registry:ui",
+      "title": "Text morph",
+      "description": "Moves between related phrases within a fixed reading rhythm and stable width.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/text-morph/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Surrounding layout stays stable as phrases hand off",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "ui",
+        "primaryState": "Centered phrase state",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/text-morph.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/text-morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-loop",
+      "type": "registry:ui",
+      "title": "Text loop",
+      "description": "Cycles compact, operable messages inside a badge or inline space.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/text-loop/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Entry and exit direction explains message sequence",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Still status badge",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/text-loop.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/text-loop.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-velocity",
+      "type": "registry:ui",
+      "title": "Scroll velocity",
+      "description": "Lets background typography respond briefly to page velocity and settle readable at rest.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/scroll-velocity/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Velocity shifts type while rest returns to baseline",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Readable typography rail at rest",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/scroll-velocity.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/scroll-velocity.tsx"
+        }
+      ]
+    },
+    {
+      "name": "kinetic-heading",
+      "type": "registry:ui",
+      "title": "Kinetic heading",
+      "description": "Changes display-heading spacing, weight, and tension through pointer or keyboard input.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "text-type"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/kinetic-heading/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Heading responds to input tension as one object",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "gentle",
+        "primaryState": "Still green variable heading",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/kinetic-heading.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/kinetic-heading.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-toolbar",
+      "type": "registry:ui",
+      "title": "Dynamic toolbar",
+      "description": "Expands compact actions around the current task while retaining a clear primary entry.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/dynamic-toolbar/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Tools reorganize around a compact primary action",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Collapsed circular primary tool",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/dynamic-toolbar.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/dynamic-toolbar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "resizable-sidebar",
+      "type": "registry:ui",
+      "title": "Resizable sidebar",
+      "description": "Preserves navigation context while a product sidebar resizes or collapses.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/resizable-sidebar/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Labels, icons, and content width transition continuously",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded project navigation sidebar",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/resizable-sidebar.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/resizable-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "notification-center",
+      "type": "registry:ui",
+      "title": "Notification center",
+      "description": "Expands transient notices into a readable, actionable grouped history.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/notification-center/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Notification stack expands into readable history",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Two recent notifications with unread count",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/notification-center.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/notification-center.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mobile-bottom-sheet",
+      "type": "registry:ui",
+      "title": "Mobile bottom sheet",
+      "description": "Presents mobile actions and detail in a draggable, focus-managed bottom sheet.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/mobile-bottom-sheet/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Snap, backdrop, focus, and dismissal stay coordinated",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Action trigger in closed state",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/mobile-bottom-sheet.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/mobile-bottom-sheet.tsx"
+        }
+      ]
+    },
+    {
+      "name": "page-transition-stack",
+      "type": "registry:ui",
+      "title": "Page transition stack",
+      "description": "Preserves route origin and destination meaning through layered page depth.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/page-transition-stack/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Outgoing page becomes spatial context for incoming page",
+        "sceneFamily": "product-mono",
+        "motionRole": "gentle",
+        "primaryState": "Foreground page with background context",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/page-transition-stack.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/page-transition-stack.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hover-preview",
+      "type": "registry:ui",
+      "title": "Hover preview",
+      "description": "Previews a destination without leaving place, with keyboard and touch pinning support.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/hover-preview/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Preview emerges beside the focused anchor",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "ui",
+        "primaryState": "Pinned preview for first destination",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/hover-preview.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/hover-preview.tsx"
+        }
+      ]
+    },
+    {
+      "name": "workspace-switcher",
+      "type": "registry:ui",
+      "title": "Workspace switcher",
+      "description": "Manages workspace identity, recent state, and selection changes in a compact control.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "overlays-surfaces"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/workspace-switcher/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Identity and selection hand off inside one control",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Current workspace switcher button",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/workspace-switcher.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/workspace-switcher.tsx"
+        }
+      ]
+    },
+    {
+      "name": "file-dropzone",
+      "type": "registry:ui",
+      "title": "File dropzone",
+      "description": "Accepts files through drag, picker, and paste with clear intake feedback.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/file-dropzone/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "File intake hands off into a reversible queue",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "File intake surface with browse entry",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/file-dropzone.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/file-dropzone.tsx"
+        }
+      ]
+    },
+    {
+      "name": "multi-step-form",
+      "type": "registry:ui",
+      "title": "Multi-step form",
+      "description": "Maintains step direction, validation, pending state, and saved progress in a short flow.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/multi-step-form/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Steps, validation, and saved state stay continuous",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "First-step form with reserved layout space",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/multi-step-form.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/multi-step-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sign-in-flow",
+      "type": "registry:ui",
+      "title": "Sign-in flow",
+      "description": "Coordinates identity input, pending, error, and success while retaining entered context.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/sign-in-flow/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Sign-in card keeps one geometry through states",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Complete email and password sign-in card",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/sign-in-flow.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/sign-in-flow.tsx"
+        }
+      ]
+    },
+    {
+      "name": "onboarding-checklist",
+      "type": "registry:ui",
+      "title": "Onboarding checklist",
+      "description": "Turns setup tasks into a product surface with progress and next-step clarity.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/onboarding-checklist/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Completed items advance the overall progress",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Partially complete onboarding tasks",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/onboarding-checklist.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/onboarding-checklist.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:ui",
+      "title": "Date range picker",
+      "description": "Distinguishes hover, provisional, confirmed range, and presets inside a calendar grid.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/date-range-picker/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Range selection extends continuously through calendar space",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Confirmed weekly range",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/date-range-picker.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/date-range-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-combobox",
+      "type": "registry:ui",
+      "title": "Animated combobox",
+      "description": "Searches and selects a changing result set while preserving keyboard position.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/animated-combobox/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Highlight and result ordering preserve focus continuity",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Expanded project search results",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/animated-combobox.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/animated-combobox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inline-edit",
+      "type": "registry:ui",
+      "title": "Inline edit",
+      "description": "Handles read, edit, save, error, and commit states inside shared geometry.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/inline-edit/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Displayed value becomes a savable field in place",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Editable project name",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/inline-edit.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/inline-edit.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-empty-state",
+      "type": "registry:ui",
+      "title": "Animated empty state",
+      "description": "Moves a valid empty state directly toward one clear first action and result.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "forms-input"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/animated-empty-state/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Context, illustration, and action arrive as one sequence",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "lively",
+        "primaryState": "Empty working surface with clear action",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/animated-empty-state.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/animated-empty-state.tsx"
+        }
+      ]
+    },
+    {
+      "name": "metric-ticker",
+      "type": "registry:ui",
+      "title": "Metric ticker",
+      "description": "Presents KPI, direction, and comparison period as one readable update.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/metric-ticker/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Number, delta, and period update together",
+        "sceneFamily": "product-mono",
+        "motionRole": "lively",
+        "primaryState": "Settled subscriber metric",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/metric-ticker.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/metric-ticker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-chart",
+      "type": "registry:ui",
+      "title": "Animated chart",
+      "description": "Compares data ranges and series changes while keeping labels and focus stable.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/animated-chart/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Geometry morphs while labels remain readable",
+        "sceneFamily": "product-mono",
+        "motionRole": "gentle",
+        "primaryState": "Reader-series line chart",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/animated-chart.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/animated-chart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "changelog-timeline",
+      "type": "registry:ui",
+      "title": "Changelog timeline",
+      "description": "Presents product or project history with progressive focus.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/changelog-timeline/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Active entry connects date, version, and detail",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Complete update card for current release",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/changelog-timeline.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/changelog-timeline.tsx"
+        }
+      ]
+    },
+    {
+      "name": "kanban-board",
+      "type": "registry:ui",
+      "title": "Kanban board",
+      "description": "Moves work across columns while responding through destination, count, and surrounding cards.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/kanban-board/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Destination column, count, and cards respond together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Three-column release board",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/kanban-board.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/kanban-board.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pricing-calculator",
+      "type": "registry:ui",
+      "title": "Pricing calculator",
+      "description": "Explains changing price through quantity, tier, and billing interval.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/pricing-calculator/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "light",
+        "signature": "Controls, breakdown, and total update together",
+        "sceneFamily": "product-mono",
+        "motionRole": "ui",
+        "primaryState": "Annual studio-plan breakdown",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/pricing-calculator.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/pricing-calculator.tsx"
+        }
+      ]
+    },
+    {
+      "name": "add-to-cart-morph",
+      "type": "registry:ui",
+      "title": "Add-to-cart morph",
+      "description": "Connects product selection continuously to a persistent cart confirmation state.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "data-commerce"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/add-to-cart-morph/",
+      "meta": {
+        "engines": [
+          "motion"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Selected product resolves into cart confirmation",
+        "sceneFamily": "editorial-warm",
+        "motionRole": "lively",
+        "primaryState": "Book product with add entry",
+        "assetProvenance": "local-asset"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/add-to-cart-morph.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/add-to-cart-morph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "aurora-canvas",
+      "type": "registry:ui",
+      "title": "Aurora canvas",
+      "description": "Provides a branded atmospheric field that breathes slowly while visible.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual-ambient"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/aurora-canvas/",
+      "meta": {
+        "engines": [
+          "motion",
+          "css"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Layered color moves quietly across the canvas",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Still dark aurora field",
+        "assetProvenance": "generated"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/aurora-canvas.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/aurora-canvas.tsx"
+        }
+      ]
+    },
+    {
+      "name": "grid-distortion",
+      "type": "registry:ui",
+      "title": "Grid distortion",
+      "description": "Bends a grid or media surface around input and returns it smoothly.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual-ambient"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/grid-distortion/",
+      "meta": {
+        "engines": [
+          "motion",
+          "css"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Field bends around interaction and returns without snapping",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Still violet grid media",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/grid-distortion.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/grid-distortion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fluid-glass-surface",
+      "type": "registry:ui",
+      "title": "Fluid glass surface",
+      "description": "Creates a refractive glass surface for focused controls or media while preserving legibility.",
+      "dependencies": [
+        "motion"
+      ],
+      "categories": [
+        "visual-ambient"
+      ],
+      "docs": "https://motion-lexicon.pages.dev/en/components/fluid-glass-surface/",
+      "meta": {
+        "engines": [
+          "motion",
+          "css"
+        ],
+        "runtimeCost": "medium",
+        "signature": "Highlight and refraction follow focus while content stays clear",
+        "sceneFamily": "spatial-dark",
+        "motionRole": "ambient",
+        "primaryState": "Still translucent glass surface",
+        "assetProvenance": "self-contained"
+      },
+      "files": [
+        {
+          "path": "src/registry/components/fluid-glass-surface.tsx",
+          "type": "registry:ui",
+          "target": "components/motion-lexicon/fluid-glass-surface.tsx"
         }
       ]
     },

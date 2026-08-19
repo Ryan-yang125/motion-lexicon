@@ -1,0 +1,34 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fluid-glass-surface",
+  "type": "registry:ui",
+  "title": "Fluid glass surface",
+  "description": "Creates a refractive glass surface for focused controls or media while preserving legibility.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "visual-ambient"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/fluid-glass-surface/",
+  "meta": {
+    "engines": [
+      "motion",
+      "css"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Highlight and refraction follow focus while content stays clear",
+    "sceneFamily": "spatial-dark",
+    "motionRole": "ambient",
+    "primaryState": "Still translucent glass surface",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/fluid-glass-surface.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/fluid-glass-surface.tsx",
+      "content": "\"use client\";\nimport { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from \"react\";\nimport { useReducedMotion } from \"motion/react\";\nexport type FluidGlassSurfaceProps = { children: ReactNode; label?: string; className?: string; onFocusChange?: (focused: boolean) => void };\nexport function FluidGlassSurface({ children, label = \"Fluid glass surface\", className = \"\", onFocusChange }: FluidGlassSurfaceProps) { const root = useRef<HTMLDivElement>(null); const [focused, setFocused] = useState(false); const reduced = useReducedMotion() === true; const move = (event: ReactPointerEvent<HTMLDivElement>) => { if (reduced) return; const node = root.current; if (!node) return; const rect = node.getBoundingClientRect(); node.style.setProperty(\"--glass-x\", `${((event.clientX - rect.left) / rect.width) * 100}%`); node.style.setProperty(\"--glass-y\", `${((event.clientY - rect.top) / rect.height) * 100}%`); }; const change = (value: boolean) => { setFocused(value); onFocusChange?.(value); }; return <section ref={root} aria-label={label} tabIndex={0} onPointerMove={move} onPointerEnter={() => change(true)} onPointerLeave={() => change(false)} onFocus={() => change(true)} onBlur={() => change(false)} className={`relative isolate overflow-hidden rounded-[22px] border border-white/35 bg-[#183540] p-3 outline-none shadow-[0_26px_60px_-38px_rgba(0,0,0,.9)] focus-visible:ring-2 focus-visible:ring-[#9deef1] ${className}`} style={{ \"--glass-x\": \"72%\", \"--glass-y\": \"20%\" } as CSSProperties}><div aria-hidden className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_var(--glass-x)_var(--glass-y),rgba(255,255,255,.55),transparent_26%),linear-gradient(135deg,rgba(255,255,255,.16),transparent_42%,rgba(112,210,219,.24))] ${focused && !reduced ? \"opacity-100\" : \"opacity-70\"}`} /><div aria-hidden className=\"pointer-events-none absolute inset-[7px] rounded-[16px] border border-white/25 bg-white/[0.08] backdrop-blur-xl\" /><div className=\"relative z-10\">{children}</div></section>; }\n"
+    }
+  ]
+}

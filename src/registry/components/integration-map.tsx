@@ -36,9 +36,9 @@ export type IntegrationMapProps = {
 };
 
 const tone: Record<IntegrationNodeTone, { node: string; text: string }> = {
-  blue: { node: "fill-[#fafafa] stroke-[#a3a3a3] dark:fill-[#262626] dark:stroke-[#737373]", text: "fill-[#262626] dark:fill-[#e5e5e5]" },
-  clay: { node: "fill-[#f5f5f5] stroke-[#b5b5b5] dark:fill-[#303030] dark:stroke-[#666]", text: "fill-[#404040] dark:fill-[#d4d4d4]" },
-  moss: { node: "fill-[#ededed] stroke-[#9a9a9a] dark:fill-[#383838] dark:stroke-[#7a7a7a]", text: "fill-[#333] dark:fill-[#e5e5e5]" },
+  blue: { node: "fill-[#e5efff] stroke-[#477ae8] dark:fill-[#16316b] dark:stroke-[#7da7ff]", text: "fill-[#1c3e91] dark:fill-[#dbe8ff]" },
+  clay: { node: "fill-[#fff0e3] stroke-[#d98545] dark:fill-[#5b2f17] dark:stroke-[#f0ad70]", text: "fill-[#8a4513] dark:fill-[#ffe4c8]" },
+  moss: { node: "fill-[#e3f2e8] stroke-[#4c9b6a] dark:fill-[#163d2a] dark:stroke-[#80c69a]", text: "fill-[#1d613d] dark:fill-[#d9f5e2]" },
   neutral: { node: "fill-[#fff] stroke-[#d4d4d4] dark:fill-[#202020] dark:stroke-[#525252]", text: "fill-[#525252] dark:fill-[#d4d4d4]" },
 };
 

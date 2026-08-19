@@ -11,7 +11,7 @@ export function SliderDetentsDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [value, setValue] = useState(1.35);
 
   return (
-    <div role="group" aria-label={demoText("slider-detents", locale)} className="grid w-full place-items-center">
+    <div role="group" aria-label={demoText("slider-detents", locale)} className="grid w-full place-items-center rounded-[16px] bg-[#f4ead9] p-6">
       <div className="w-full max-w-[340px]">
         <SliderDetents
           label={demoValue(locale, "播放速度", "Playback speed")}

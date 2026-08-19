@@ -28,12 +28,38 @@ function packageName(specifier: string) {
   return specifier.split("/", 1)[0];
 }
 
-function externalImports(source: string, sourcePath: string) {
+const blockComponentImportPrefix = "@/registry/components/";
+
+function blockComponentImports(source: string, sourcePath: string) {
   const sourceFile = ts.createSourceFile(sourcePath, source, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
-  const imports = new Set<string>();
+  const componentIds = new Set<string>();
   for (const statement of sourceFile.statements) {
     if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier)) continue;
     const specifier = statement.moduleSpecifier.text;
+    if (!specifier.startsWith(blockComponentImportPrefix)) continue;
+    const componentId = specifier.slice(blockComponentImportPrefix.length);
+    if (!registryComponents.some((entry) => entry.id === componentId)) {
+      throw new Error(`${sourcePath} imports an unknown registry component: ${specifier}`);
+    }
+    componentIds.add(componentId);
+  }
+  return [...componentIds].sort();
+}
+
+function externalImports(source: string, sourcePath: string, allowedBlockComponents: readonly string[] = []) {
+  const sourceFile = ts.createSourceFile(sourcePath, source, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
+  const imports = new Set<string>();
+  const allowedComponents = new Set(allowedBlockComponents);
+  for (const statement of sourceFile.statements) {
+    if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier)) continue;
+    const specifier = statement.moduleSpecifier.text;
+    if (specifier.startsWith(blockComponentImportPrefix)) {
+      const componentId = specifier.slice(blockComponentImportPrefix.length);
+      if (!allowedComponents.has(componentId)) {
+        throw new Error(`${sourcePath} imports an undeclared registry component: ${specifier}`);
+      }
+      continue;
+    }
     if (specifier.startsWith(".") || specifier.startsWith("@/")) {
       throw new Error(`Registry source must be independently copyable: ${sourcePath} imports ${specifier}`);
     }
@@ -43,13 +69,28 @@ function externalImports(source: string, sourcePath: string) {
   return imports;
 }
 
-function assertDependencies(source: string, sourcePath: string, dependencies: readonly string[]) {
+function assertDependencies(source: string, sourcePath: string, dependencies: readonly string[], allowedBlockComponents: readonly string[] = []) {
   const declared = new Set(dependencies.map(dependencyName));
-  for (const dependency of externalImports(source, sourcePath)) {
+  for (const dependency of externalImports(source, sourcePath, allowedBlockComponents)) {
     if (!declared.has(dependency)) {
       throw new Error(`${sourcePath} imports ${dependency}, but its registry dependencies do not declare it`);
     }
   }
+}
+
+function rewriteBlockComponentImports(source: string) {
+  return source.replace(/(["'])@\/registry\/components\/([a-z0-9-]+)\1/g, "$1@/components/motion-lexicon/$2$1");
+}
+
+function blockRuntimeCost(componentIds: readonly string[]) {
+  const costs = componentIds.map((componentId) => {
+    const component = registryComponents.find((entry) => entry.id === componentId);
+    if (!component) throw new Error(`Unknown block component ${componentId}`);
+    return registryComponentRuntimeCost(component);
+  });
+  if (costs.includes("heavy")) return "heavy";
+  if (costs.includes("medium")) return "medium";
+  return "light";
 }
 
 await rm(outputDir, { recursive: true, force: true });
@@ -81,7 +122,11 @@ const componentBuilds = await Promise.all(registryComponents.map(async (entry) =
     meta: {
       engines: registryComponentEngines(entry),
       runtimeCost: registryComponentRuntimeCost(entry),
-      signature: registryComponentSignature(entry).en
+      signature: registryComponentSignature(entry).en,
+      sceneFamily: entry.sceneFamily,
+      motionRole: entry.motionRole,
+      primaryState: entry.primaryState.en,
+      assetProvenance: entry.assetProvenance
     },
     files: [{
       path: sourcePath,
@@ -152,19 +197,31 @@ const blockBuilds = await Promise.all(registryBlocks.map(async (entry) => {
   if (!new RegExp(`export\\s+(?:(?:async|default)\\s+)?(?:function|const|class)\\s+${entry.exportName}\\b`).test(source)) {
     throw new Error(`${entry.id} must export ${entry.exportName}`);
   }
-  assertDependencies(source, sourcePath, entry.dependencies);
+  const importedComponentIds = blockComponentImports(source, sourcePath);
+  const declaredComponentIds = [...entry.componentIds].sort();
+  if (JSON.stringify(importedComponentIds) !== JSON.stringify(declaredComponentIds)) {
+    throw new Error(`${entry.id} componentIds must exactly match its registry component imports`);
+  }
+  assertDependencies(source, sourcePath, entry.dependencies, importedComponentIds);
+  const installSource = rewriteBlockComponentImports(source);
+  const registryDependencies = importedComponentIds.map((componentId) => `${site}/r/${componentId}.json`);
+  const runtimeCost = blockRuntimeCost(importedComponentIds);
   const meta = {
     name: entry.id,
     type: "registry:block" as const,
     title: entry.name.en,
     description: entry.description.en,
     dependencies: entry.dependencies,
+    ...(registryDependencies.length > 0 ? { registryDependencies } : {}),
     categories: ["page-block"],
-    docs: `${site}/en/components/${entry.id}/`,
+    docs: `${site}/en/blocks/${entry.id}/`,
     meta: {
       engines: ["motion"],
-      runtimeCost: "light",
-      signature: entry.signature.en
+      runtimeCost,
+      signature: entry.signature.en,
+      sceneFamily: entry.sceneFamily,
+      primaryState: entry.primaryState.en,
+      componentIds: entry.componentIds
     },
     files: [{
       path: sourcePath,
@@ -178,7 +235,7 @@ const blockBuilds = await Promise.all(registryBlocks.map(async (entry) => {
     `${JSON.stringify({
       $schema: itemSchema,
       ...meta,
-      files: [{ ...meta.files[0], content: source }]
+      files: [{ ...meta.files[0], content: installSource }]
     }, null, 2)}\n`,
     "utf8"
   );
@@ -189,12 +246,14 @@ const blockItems = blockBuilds.map(({ meta }) => meta);
 
 const compilerOptions: ts.CompilerOptions = {
   allowSyntheticDefaultImports: true,
+  baseUrl: ".",
   esModuleInterop: true,
   jsx: ts.JsxEmit.ReactJSX,
   lib: ["lib.es2023.d.ts", "lib.dom.d.ts", "lib.dom.iterable.d.ts"],
   module: ts.ModuleKind.ESNext,
   moduleResolution: ts.ModuleResolutionKind.Bundler,
   noEmit: true,
+  paths: { "@/*": ["src/*"] },
   skipLibCheck: true,
   strict: true,
   target: ts.ScriptTarget.ES2023

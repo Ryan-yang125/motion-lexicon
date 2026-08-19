@@ -13,7 +13,7 @@ export function UploadQueueDemo({ locale = "en" }: DemoLocaleProps = {}) {
   ]);
 
   return (
-    <div role="group" aria-label={demoText("upload-queue", locale)} className="mx-auto h-[250px] w-full max-w-[440px] overflow-y-auto pr-1">
+    <div role="group" aria-label={demoText("upload-queue", locale)} className="mx-auto h-[250px] w-full max-w-[440px] overflow-y-auto rounded-[16px] bg-[#eef4f8] p-3 pr-1">
       <UploadQueue
         items={items}
         label={demoValue(locale, "上传文件", "Upload files")}

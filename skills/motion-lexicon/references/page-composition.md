@@ -1,16 +1,16 @@
-# Compose a complete product page
+# Compose a V6 product page
 
-Use this reference for Build Page mode. It turns a product job into a coherent
-page, then connects published Motion Lexicon components to the regions where
-they genuinely help.
+Use this reference for Build Page mode. Motion Lexicon V6 starts with published
+Components, then uses Page Blocks as complete composition references and
+Primitives as motion vocabulary.
 
 ## Contents
 
 1. Inspect the host
 2. Define the page job
-3. Choose an archetype
+3. Choose a scene family and archetype
 4. Plan regions
-5. Select Registry components
+5. Select Registry Components
 6. Implement and verify
 
 ## Inspect the host
@@ -35,13 +35,6 @@ Record the inspection before editing and repeat it in the final handoff:
 | Dependencies | reused packages and versions — `package.json` |
 ```
 
-Every row needs an observed value and a real host path. An assumption or a
-generic framework description leaves host inspection incomplete.
-
-For a greenfield page, default to React and TypeScript. Use CSS variables or
-the host's Tailwind tokens for the page system. Add an animation dependency
-only when a selected published component requires it.
-
 ## Define the page job
 
 Write one sentence for each item:
@@ -49,146 +42,126 @@ Write one sentence for each item:
 - **User:** who arrives here.
 - **Job:** what they need to finish.
 - **Primary action:** the one action the layout should make easiest.
-- **Primary state change:** the page event that deserves the strongest motion.
+- **Primary state change:** the event that deserves the strongest motion.
 - **Evidence of completion:** what the user can see or do when the job is done.
 
-Use real labels and plausible data. Keep helper text only where it explains a
-constraint, consequence, or recovery path.
+Use real labels and plausible data. Keep supporting copy only where it explains
+a constraint, consequence, or recovery path.
 
-## Choose an archetype
+## Choose a scene family and archetype
 
-### Product landing
+### Product Mono
 
-Order: concise promise, live product proof, primary action, focused capability
-groups, installation or next step. Use one interactive hero and two or three
-supporting proofs. Useful components include `spotlight-bento`,
-`media-carousel`, `magnetic-action`, and `kinetic-logo-exchange`.
+Use for operations, dashboards, forms, settings, developer tools, and onboarding.
+Choose compact hierarchy, precise data, clear controls, and stable surfaces.
+Useful components include `command-palette`, `animated-combobox`,
+`inline-validation`, `animated-chart`, `kanban-board`, and `toast-stack`.
 
-### Library or workbench
+### Editorial Warm
 
-Order: navigation context, search or filters, active workspace, source or
-details, related items. Keep the active workflow ahead of the directory on
-narrow screens. Useful components include `command-palette`, `filter-grid`,
-`tabs`, `segmented-control`, `sortable-table`, and `skeleton-reveal`.
+Use for brand stories, media features, portfolios, commerce, and image-led
+experiences. Choose meaningful media, material contrast, expressive type, and a
+strong static lead. Useful components include `cinematic-hero`,
+`focus-gallery`, `coverflow-gallery`, `scroll-story`, and
+`kinetic-heading`.
 
-### Dashboard or operations surface
+### Spatial Dark
 
-Order: current status, primary action, actionable records, progress or
-exceptions, history. Give data changes stable geometry. Useful components
-include `activity-feed`, `value-flash`, `task-steps`, `toast-stack`,
-`upload-queue`, and `integration-map`.
+Use for technical product stories, ambient visual systems, and dimensional
+product demonstrations. Keep primary controls and text legible over the scene.
+Useful components include `product-orbit-hero`, `screenshot-stack`,
+`aurora-canvas`, `grid-distortion`, `fluid-glass-surface`, and
+`network-globe`.
 
-### Form or settings surface
+### Page Block references
 
-Order: one clear section title, grouped fields, consequences near risky
-choices, sticky or stable save action, inline result. Useful components include
-`floating-label`, `inline-validation`, `password-strength`, `tag-input`,
-`loading-button`, `hold-to-confirm`, and `theme-reveal`.
+Use the ten Blocks as complete product-flow references:
 
-### Media or visual surface
+| Product job | Reference Block |
+| --- | --- |
+| Agent execution and approval | `agent-workspace` |
+| Product launch collaboration | `product-landing` |
+| Metrics and time-range analysis | `analytics-dashboard` |
+| Project delivery | `project-dashboard` |
+| Customer conversations | `support-inbox` |
+| Creative work showcase | `creative-portfolio` |
+| Product discovery and checkout | `commerce-storefront` |
+| Developer documentation | `developer-docs` |
+| Visual reporting | `media-editorial` |
+| First-workspace setup | `onboarding-flow` |
 
-Order: active subject, compact navigation, contextual controls, details and
-fallback. Useful components include `media-carousel`, `image-lightbox`,
-`cursor-lens`, `procedural-product-viewer`, `network-globe`, and
-`dither-reveal-card`. Heavy WebGL or Three.js components wait for explicit
-intent before initializing.
+## Page plan
 
-## Page Plan
-
-Use four to seven meaningful regions. Each region has one purpose and one
-primary state. A region can use plain semantic UI when no published component
-improves it. Output this plan before the first file edit. General intent prose
-does not replace the table or the Registry lines.
+Use four to seven meaningful regions. Each region has one purpose, one primary
+state, and an exact published Component ID or a plain semantic UI decision.
 
 ```md
 ## Page Plan
 
 Job: …
+Scene: Product Mono / Editorial Warm / Spatial Dark
 Archetype: …
 Primary action: …
 Primary state: idle → pending → success/error
 
-| Region | Product purpose | Published component | State or motion |
+| Region | Product purpose | Published Component | State or motion |
 | --- | --- | --- | --- |
-| Header | orient and expose the primary action | `none` | sticky on desktop, compact on mobile |
+| Header | orient and expose the primary action | `none` | compact on mobile |
 | Workspace | complete the user's current task | `component-id` | idle → pending → success/error |
 
 Registry:
 - `component-id` — https://motion-lexicon.pages.dev/r/component-id.json —
-  `target/file.tsx` — dependencies: `package` / none
+  `target/file.tsx` — dependencies: package / none
 
-Responsive: 320/390 …; 768 …; 1440 …
-Theme: light …; dark …; reduced motion …
+Responsive: 320 / 390 / 768 / 1440
+Theme: light / dark / reduced motion
 ```
 
-Use `Registry: none` when every region uses plain semantic UI. The plan is
-incomplete when it omits a region, an exact ID-or-none decision, a state
-boundary, or the responsive/theme rows.
+## Select Registry Components
 
-Choose hierarchy through placement, type, material, and spacing before adding
-motion. Keep the page title, primary action, and active work surface visible
-without a decorative hero paragraph.
+Read [components.md](components.md) and choose by product job and public API.
 
-## Select Registry components
+- Fetch the exact Registry JSON before editing. Record files, dependencies, and
+  runtime cost.
+- Install the delivered source and adapt props, data, callbacks, and placement.
+- Use one to three Components on a normal page. Add more when independent user
+  jobs require them.
+- Keep plain semantic UI for static headings, navigation, and content that gains
+  no product value from an installed interaction.
+- Keep 44px targets on rendered interactive nodes.
+- Start heavy Canvas, WebGL, and Three.js work only when visible or explicitly
+  requested. Pause offscreen work, react to resize, and release resources.
+- Respect the Component's static first frame and reduced-motion path.
 
-Read [components.md](components.md). Choose published components by product
-event and public API.
+## Registry integration gate
 
-- Fetch the exact JSON from
-  `https://motion-lexicon.pages.dev/r/<component-id>.json`; record its target
-  file from `files`, dependencies, and runtime before editing code.
-- Install the source as delivered. Adapt its public props, data, callbacks, and
-  placement; do not rebuild its behavior or CSS from the catalog description.
-- All current Registry source files use Tailwind utility classes. Verify the
-  host's Tailwind compilation before choosing an ID. Add the supported Tailwind
-  setup only when toolchain work is in scope. A host that cannot compile those
-  utilities uses `none` for that region and a plain semantic control instead.
-- Apply the 44 px target rule to the actual interactive node after installation.
-  When the component accepts `className`, pass a host class with `min-width:
-  44px` and `min-height: 44px`; a minimum size safely expands a smaller default
-  height without changing Registry source. Choose another component or plain
-  semantic UI when the source has no such styling hook.
-- Use one to three published components on a normal page. Add more only when
-  independent product jobs require them.
-- Keep the host's plain controls for static navigation, headings, and content.
-- Use foundations to tune a component. Do not reconstruct a published
-  component from primitive names.
-- Mark an unmatched pattern as a candidate; keep it out of the published list.
+- Fetch `https://motion-lexicon.pages.dev/r/<component-id>.json` and verify its
+  files, dependencies, engine, and runtime cost before integration.
+- Keep every interactive target at least 44 px. When CSS owns the target size,
+  use `min-height: 44px` or an equivalent token.
+- Run browser checks at the required viewports for every visible `button`,
+  link, input, and disclosure control.
+- Record undersized, clipped, inaccessible, or overflowing controls as
+  offenders, fix every offender, and mark acceptance incomplete while any
+  offender remains.
 
 ## Implement and verify
 
-Build the complete route with production state ownership. Use the component's
-source as delivered by the Registry and adapt labels, data, and callbacks.
+Build the complete route with production state ownership. Verify:
 
-Verify:
-
-1. Primary action and completion result work with keyboard, touch, and pointer.
-2. Focus enters overlays and returns to a valid control.
-3. Loading, empty, success, failure, retry, cancellation, and dynamic list
-   changes remain coherent where they apply.
-4. Reduced motion preserves the same information and action path.
-5. Light and dark themes preserve hierarchy and readable contrast.
-6. 320, 390, 768, and 1440 px layouts keep every region inside the viewport.
-7. Interactive targets are at least 44 px on the rendered interactive node,
-   including installed Registry components.
+1. The primary action and completion result work with keyboard, touch, and pointer.
+2. Focus enters and returns correctly for overlays.
+3. Loading, empty, success, failure, retry, cancellation, and list changes stay
+   coherent where applicable.
+4. Reduced motion preserves information, focus, controls, and outcome.
+5. The selected scene family keeps readable contrast in the host theme.
+6. 320, 390, 768, and 1440px layouts keep every region inside the viewport.
+7. Interactive targets are at least 44px on the rendered control.
 8. The console has no runtime, hydration, or accessibility errors.
-9. Heavy engines initialize from intent, pause offscreen, and release resources.
-10. The final handoff names installed component IDs, files changed, commands
-    run, and observable results. It repeats the complete Host inspection and
-    Page Plan tables so their evidence remains visible after intermediate
-    messages collapse.
+9. Heavy engines are viewport-gated, resize-aware, and disposed on unmount.
+10. The final handoff lists Component IDs, files, commands, browser evidence,
+    Host inspection, and Page Plan.
 
-Run the host's lint, typecheck, unit, and build checks when they exist. Page
-acceptance also requires a running local app or production preview plus actual
-browser checks. A repository can omit Playwright and still be verified with an
-available browser automation tool against that preview. Exercise the primary
-action, inspect 320, 390, 768, and 1440 px layouts, test both themes and reduced
-motion, follow the keyboard focus path, check document overflow, and record
-console errors. At each required viewport, enumerate every visible `button`,
-link, input, select, textarea, and custom interactive node. Record the minimum
-rendered width and height plus an `offenders` list for every node below 44 px in
-either dimension. Fix every offender and rerun all four viewport audits. The
-final Acceptance table uses one row per viewport with its document width,
-minimum target dimensions, and offender count. If the environment truly
-exposes no browser-capable tool, mark acceptance incomplete and state the exact
-missing capability; do not replace observed evidence with a manual checklist.
+Run the host's relevant lint, typecheck, unit, and build checks. Browser
+acceptance covers the primary action, focus path, reduced motion, required
+viewports, document overflow, and console errors.

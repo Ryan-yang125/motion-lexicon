@@ -2,6 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
+import { AnimatedChart } from "@/registry/components/animated-chart";
+import { MetricTicker } from "@/registry/components/metric-ticker";
+import { SegmentedControl } from "@/registry/components/segmented-control";
 
 type Locale = "zh" | "en";
 type Range = "7d" | "30d" | "90d";
@@ -21,9 +24,9 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
   const snapshot = copy.snapshots[range];
 
   return (
-    <section className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="analytics-dashboard">
+    <section className={`min-h-[720px] w-full overflow-hidden rounded-[18px] border border-[#b7c8d7]/45 bg-[#eef4f8] text-neutral-950 shadow-[0_28px_60px_-42px_rgba(22,48,71,.42)] dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`} data-page-block="analytics-dashboard">
       <div className="grid min-h-[720px] md:grid-cols-[196px_minmax(0,1fr)]">
-        <aside className="hidden border-r border-neutral-200 bg-[#fafafa] p-4 md:flex md:flex-col dark:border-white/10 dark:bg-[#181818]">
+        <aside className="hidden border-r border-[#c8d8e4]/55 bg-[#e5eef4] p-4 md:flex md:flex-col dark:border-white/10 dark:bg-[#181818]">
           <a className="flex min-h-11 items-center gap-2.5 rounded-lg px-2 font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#northstar-dashboard">
             <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true">
               <svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.7"><path d="M4 17 9 12l4 3 7-8" /><path d="M16 7h4v4" /></svg>
@@ -40,7 +43,7 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
           </div>
         </aside>
 
-        <main className="min-w-0" id="northstar-dashboard">
+        <div className="min-w-0" id="northstar-dashboard">
           <header className="flex min-h-14 items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 sm:px-6 dark:border-white/10 dark:bg-[#1b1b1b]">
             <div className="flex min-w-0 items-center gap-3">
               <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-neutral-950 text-[11px] font-bold text-white md:hidden dark:bg-neutral-50 dark:text-neutral-950">N</span>
@@ -55,6 +58,10 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
               <div className="grid grid-cols-3 gap-1 rounded-lg bg-neutral-900/5 p-1 dark:bg-white/7" role="tablist" aria-label={copy.rangeLabel}>
                 {ranges.map((item) => <button aria-selected={range === item} className={`relative min-h-11 min-w-14 rounded-lg px-3 text-[11px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${range === item ? "text-neutral-950 dark:text-white" : "text-neutral-500"}`} key={item} onClick={() => setRange(item)} role="tab" type="button">{range === item ? <motion.span className="absolute inset-0 rounded-lg bg-white shadow-sm dark:bg-white/9" layoutId="analytics-range" transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 34 }} /> : null}<span className="relative">{copy.rangeNames[item]}</span></button>)}
               </div>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <MetricTicker label={snapshot.metrics[0].label} value={Number.parseFloat(snapshot.metrics[0].value) * 1000} format={(value) => `${(value / 1000).toFixed(1)}k`} delta={Number.parseFloat(snapshot.metrics[0].change)} period={copy.rangeNames[range]} className="w-full sm:max-w-[280px]" />
+              <SegmentedControl options={ranges.map((item) => ({ value: item, label: copy.rangeNames[item] }))} value={range} onValueChange={(value) => setRange(value as Range)} label={copy.rangeLabel} />
             </div>
 
             <AnimatePresence mode="wait" initial={false}>
@@ -72,6 +79,12 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
                         <motion.path d={snapshot.path} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" initial={{ pathLength: reduced ? 1 : 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduced ? 0 : .65, ease }} />
                       </svg>
                     </div>
+                    <AnimatedChart
+                      className="mt-4"
+                      label={snapshot.trafficLabel}
+                      labels={copy.rangeNames[range].split(" ")}
+                      series={[{ id: range, label: copy.traffic, values: snapshot.metrics.map((_, index) => [42, 65, 51, 79][index]), color: "#2563eb" }]}
+                    />
                   </article>
 
                   <article className="rounded-[10px] border border-neutral-900/10 bg-neutral-950 p-4 text-white dark:border-white/10 dark:bg-neutral-50 dark:text-neutral-950">
@@ -91,7 +104,7 @@ export function AnalyticsDashboardBlock({ locale = "en", className = "" }: Analy
               </motion.div>
             </AnimatePresence>
           </div>
-        </main>
+        </div>
       </div>
     </section>
   );

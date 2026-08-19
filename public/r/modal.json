@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/modal/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Handles focus, backdrop, exit, and async confirmation as one flow."
+    "signature": "Dialog, backdrop, and focus scope transition together",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Modal with a clear confirmation action",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

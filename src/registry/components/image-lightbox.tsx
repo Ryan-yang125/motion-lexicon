@@ -227,22 +227,22 @@ export function ImageLightbox({
 
   return (
     <LayoutGroup id={layoutGroupId}>
-      <section aria-labelledby={titleId} className={`w-full ${className}`}>
-        <header className="mb-2 flex min-h-11 items-end justify-between gap-4 px-1">
+      <section aria-labelledby={titleId} className={`w-full rounded-[18px] border border-[#3a3025]/15 bg-[#eee1cb] p-3 shadow-[0_18px_45px_-34px_rgba(51,37,21,.7)] dark:border-white/10 dark:bg-[#1c1814] ${className}`}>
+        <header className="mb-3 flex min-h-11 items-end justify-between gap-4 px-1">
           <div className="min-w-0">
-            <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
+            <span className="block font-mono text-[9px] tracking-[.16em] text-[#746452] dark:text-[#e6cda8]/60">
               {copy.gallery}
             </span>
-            <h3 id={titleId} className="mt-0.5 text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100">
+            <h3 id={titleId} className="mt-0.5 font-serif text-[18px] leading-none tracking-[-0.04em] text-[#29231c] dark:text-[#fff1dc]">
               {label}
             </h3>
           </div>
-          <span className="shrink-0 font-mono text-[9px] text-neutral-600 dark:text-neutral-400">
+          <span className="shrink-0 font-mono text-[9px] tracking-[.1em] text-[#746452] dark:text-[#e6cda8]/60">
             {copy.works(items.length)}
           </span>
         </header>
         {items.length === 0 ? (
-          <div role="status" className="grid min-h-28 place-items-center rounded-lg border border-black/[0.08] bg-white px-4 text-center text-[12px] text-neutral-600 dark:border-white/[0.12] dark:bg-[#181818] dark:text-neutral-300">
+          <div role="status" className="grid min-h-28 place-items-center rounded-xl border border-[#3a3025]/15 bg-[#fff6e8] px-4 text-center text-[12px] text-[#6e5d49] dark:border-white/[0.12] dark:bg-[#181818] dark:text-neutral-300">
             {copy.empty}
           </div>
         ) : <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -262,20 +262,20 @@ export function ImageLightbox({
                   event.detail === 0 ? "keyboard" : "pointer",
                 )
               }
-              className="group overflow-hidden rounded-lg border border-black/[0.08] bg-white text-left outline-none transition-[border-color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.12] dark:bg-[#181818]"
+              className="group overflow-hidden rounded-xl border border-[#3a3025]/15 bg-[#fff6e8] text-left outline-none transition-[border-color,box-shadow,transform] duration-200 focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#eee1cb] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_16px_24px_-20px_rgba(53,36,17,.75)] dark:border-white/[0.12] dark:bg-[#181818]"
             >
               <motion.span
                 layoutId={`${layoutGroupId}-${item.id}`}
                 transition={sharedTransition}
-                className="block aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-white/[0.04]"
+                className="block aspect-[4/3] overflow-hidden bg-[#d3c2ab] dark:bg-white/[0.04]"
               >
                 {item.art}
               </motion.span>
-              <span className="flex min-h-[52px] items-center justify-between gap-2 border-t border-black/[0.07] px-2.5 dark:border-white/[0.1]">
-                <span className="truncate text-[11px] font-medium text-[#292929] dark:text-neutral-100">
+              <span className="flex min-h-[52px] items-center justify-between gap-2 border-t border-[#3a3025]/10 px-2.5 dark:border-white/[0.1]">
+                <span className="truncate text-[11px] font-medium text-[#29231c] dark:text-neutral-100">
                   {item.title}
                 </span>
-                <span className="font-mono text-[8.5px] text-neutral-600 dark:text-neutral-400">
+                <span className="font-mono text-[8.5px] tracking-[.1em] text-[#7a6750] dark:text-neutral-400">
                   {item.meta ?? String(index + 1).padStart(2, "0")}
                 </span>
               </span>
@@ -316,16 +316,16 @@ export function ImageLightbox({
                     animate={{ opacity: 1, transform: "translateY(0px) scale(1)" }}
                     exit={instant ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px) scale(0.985)" }}
                     transition={{ duration: instant ? 0 : 0.24, ease: EASE_OUT }}
-                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[10px] border border-black/[0.08] bg-[#f5f5f5] outline-none dark:border-white/[0.14] dark:bg-[#181818] sm:max-h-[calc(100dvh-48px)]"
+                    className="grid max-h-[calc(100dvh-24px)] w-full max-w-[980px] grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden rounded-[18px] border border-[#f3d7ad]/20 bg-[#17130f] outline-none sm:max-h-[calc(100dvh-48px)]"
                   >
-                    <header className="flex min-h-14 items-center justify-between gap-4 border-b border-black/[0.08] px-3 dark:border-white/[0.1]">
+                    <header className="flex min-h-14 items-center justify-between gap-4 border-b border-white/10 px-3">
                       <div className="min-w-0">
                         <span className="block font-mono text-[8.5px] text-neutral-500 dark:text-neutral-400">
                           {String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
                         </span>
                         <h3
                           id={`${layoutGroupId}-dialog-title`}
-                          className="truncate text-[13px] font-medium tracking-[-0.015em] text-[#292929] dark:text-neutral-100"
+                          className="truncate font-serif text-[18px] leading-none tracking-[-0.04em] text-[#fff0db]"
                         >
                           {activeItem.title}
                         </h3>
@@ -335,13 +335,13 @@ export function ImageLightbox({
                         type="button"
                         aria-label={copy.close}
                         onClick={() => close("pointer")}
-                        className={`grid size-11 shrink-0 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 shrink-0 place-items-center rounded-full border border-white/15 bg-[#fff0db] text-[#292016] outline-none focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17130f] ${controlPressClass}`}
                       >
                         {CLOSE_ICON}
                       </button>
                     </header>
 
-                    <div className="relative grid min-h-0 place-items-center overflow-hidden p-3 sm:p-5">
+                    <div className="relative grid min-h-0 place-items-center overflow-hidden bg-[radial-gradient(circle_at_22%_18%,rgba(205,115,69,.18),transparent_32%),radial-gradient(circle_at_82%_78%,rgba(77,117,108,.2),transparent_40%)] p-3 sm:p-5">
                       <AnimatePresence initial={false} mode="popLayout">
                         <motion.div
                           key={activeItem.id}
@@ -352,26 +352,26 @@ export function ImageLightbox({
                           animate={{ opacity: 1, filter: "blur(0px)", transform: "scale(1)" }}
                           exit={instant ? { opacity: 0 } : { opacity: 0, filter: "blur(2px)", transform: "scale(0.99)" }}
                           transition={sharedTransition}
-                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-lg border border-black/[0.08] bg-neutral-100 dark:border-white/[0.12] dark:bg-black/20"
+                          className="aspect-[4/3] max-h-full w-full max-w-[760px] overflow-hidden rounded-xl border border-[#f6dcc0]/20 bg-[#3a2c22] shadow-[0_28px_70px_-34px_rgba(0,0,0,.9)]"
                         >
                           {activeItem.art}
                         </motion.div>
                       </AnimatePresence>
                     </div>
 
-                    <footer className="grid min-h-[68px] grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-3 border-t border-black/[0.08] px-3 dark:border-white/[0.1]">
+                    <footer className="grid min-h-[68px] grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-3 border-t border-white/10 px-3">
                       <button
                         type="button"
                         aria-label={copy.previous}
                         onClick={() => move(-1, "pointer")}
                         disabled={items.length < 2}
-                        className={`grid size-11 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 place-items-center rounded-full border border-white/15 bg-white/10 text-[#fff0db] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17130f] ${controlPressClass}`}
                       >
                         <span className="rotate-180">{ARROW_ICON}</span>
                       </button>
                       <p
                         id={`${layoutGroupId}-dialog-caption`}
-                        className="min-w-0 text-center text-[11px] leading-[1.45] text-neutral-600 [overflow-wrap:anywhere] dark:text-neutral-400"
+                        className="min-w-0 text-center text-[11px] leading-[1.45] text-[#ead6bb]/68 [overflow-wrap:anywhere]"
                       >
                         {activeItem.caption ?? activeItem.title}
                       </p>
@@ -380,7 +380,7 @@ export function ImageLightbox({
                         aria-label={copy.next}
                         onClick={() => move(1, "pointer")}
                         disabled={items.length < 2}
-                        className={`grid size-11 place-items-center rounded-lg border border-black/[0.09] bg-white text-[#292929] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#4568FF] dark:border-white/[0.13] dark:bg-[#202020] dark:text-white ${controlPressClass}`}
+                        className={`grid size-11 place-items-center rounded-full border border-white/15 bg-white/10 text-[#fff0db] outline-none disabled:opacity-35 focus-visible:ring-2 focus-visible:ring-[#8eb9ff] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17130f] ${controlPressClass}`}
                       >
                         {ARROW_ICON}
                       </button>

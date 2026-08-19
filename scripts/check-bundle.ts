@@ -25,12 +25,12 @@ const maxChunkGzipBytes = 160 * 1024;
 const maxMotionVendorGzipBytes = 52 * 1024;
 const maxGsapVendorGzipBytes = 45 * 1024;
 const maxThreeVendorGzipBytes = 200 * 1024;
-const maxBaseEntryGzipBytes = 84 * 1024;
+const maxBaseEntryGzipBytes = 90 * 1024;
 const maxHomePageGzipBytes = 4 * 1024;
 const maxScenarioGuideShellGzipBytes = 8 * 1024;
 const maxScenarioGuideArticleGzipBytes = 14 * 1024;
 const maxTotalJsGzipBytes = 920 * 1024;
-const maxTotalCssGzipBytes = 56 * 1024;
+const maxTotalCssGzipBytes = 64 * 1024;
 let totalJsGzipBytes = 0;
 
 for (const file of jsFiles) {

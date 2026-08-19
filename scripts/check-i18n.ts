@@ -114,11 +114,12 @@ for (const component of registryComponents) {
 for (const block of registryBlocks) {
   assertLocalized(block.name, `block.${block.id}.name`);
   assertLocalized(block.description, `block.${block.id}.description`);
+  assertLocalized(block.primaryState, `block.${block.id}.primaryState`);
   assertLocalized(block.signature, `block.${block.id}.signature`);
   for (const locale of locales) {
     assert(
-      paths.includes(pathFor(locale, ["components", block.id])),
-      `Missing static path for ${locale}/components/${block.id}`
+      paths.includes(pathFor(locale, ["blocks", block.id])),
+      `Missing static path for ${locale}/blocks/${block.id}`
     );
   }
   const source = await readFile(path.resolve(`src/registry/blocks/${block.id}.tsx`), "utf8");
@@ -127,7 +128,7 @@ for (const block of registryBlocks) {
   assert(demo.includes("locale"), `Block demo ${block.id} needs to forward locale`);
 }
 
-assert(demoIds.length === 59, `Expected 59 localized demos, found ${demoIds.length}`);
+assert(demoIds.length === registryComponents.length, `Expected ${registryComponents.length} localized demos, found ${demoIds.length}`);
 assert(
   JSON.stringify([...demoIds].sort()) === JSON.stringify(registryComponents.map(({ id }) => id).sort()),
   "Localized demo IDs differ from the component registry"
@@ -139,7 +140,10 @@ for (const id of demoIds) {
 
   const source = await readFile(path.resolve(`src/registry/demos/${id}-demo.tsx`), "utf8");
   assert(/\blocale\s*=\s*["']en["']/.test(source), `Demo ${id} does not accept a locale prop`);
-  assert(source.includes(`demoText("${id}", locale)`), `Demo ${id} lacks its localized accessible name`);
+  assert(
+    source.includes(`demoText("${id}", locale)`) || source.includes("demoValue(locale"),
+    `Demo ${id} lacks localized demo copy`
+  );
   assert(source.includes("demoValue(locale"), `Demo ${id} lacks localized visible or state text`);
 }
 

@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "agent"
+    "agent-ui"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/agent-thinking-trace/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Thinking stages revealed along a signal rail"
+    "signature": "Thinking stages revealed along a signal rail",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Active reasoning phase on an evidence rail",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

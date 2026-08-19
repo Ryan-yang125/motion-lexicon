@@ -2,6 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
+import { CinematicHero } from "@/registry/components/cinematic-hero";
+import { MediaCarousel } from "@/registry/components/media-carousel";
+import { SplitTextReveal } from "@/registry/components/split-text-reveal";
 
 type Locale = "zh" | "en";
 type Phase = "plan" | "review" | "ship";
@@ -25,10 +28,10 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
 
   return (
     <section
-      className={`min-h-[720px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-[#f5f5f5] text-neutral-950 dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
+      className={`min-h-[720px] w-full overflow-hidden rounded-[18px] border border-[#4a3524]/18 bg-[#eee0c9] text-[#2b2118] shadow-[0_28px_64px_-42px_rgba(62,38,15,.7)] dark:border-white/10 dark:bg-[#151515] dark:text-neutral-50 ${className}`}
       data-page-block="product-landing"
     >
-      <header className="flex min-h-16 items-center justify-between gap-5 border-b border-neutral-900/10 px-5 sm:px-8 dark:border-white/10">
+      <header className="flex min-h-16 items-center justify-between gap-5 border-b border-[#4a3524]/12 bg-[#f7eddd]/75 px-5 sm:px-8 dark:border-white/10 dark:bg-[#151515]">
         <a className="flex min-h-11 items-center gap-2.5 rounded-lg font-semibold tracking-[-0.02em] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" href="#caldera-home">
           <span className="grid size-8 place-items-center rounded-[10px] bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950" aria-hidden="true">
             <svg viewBox="0 0 24 24" className="size-4 fill-none stroke-current" strokeWidth="1.8"><path d="M5 17.5 12 5l7 12.5-7-3.2-7 3.2Z" /><path d="m8.8 15.8 3.2-5.5 3.2 5.5" /></svg>
@@ -43,15 +46,16 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
         </button>
       </header>
 
-      <div className="grid min-h-[655px] items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(280px,.82fr)_minmax(500px,1.18fr)] lg:px-12 lg:py-14">
+      <div className="grid min-h-[655px] items-center gap-10 bg-[radial-gradient(circle_at_14%_22%,rgba(226,130,81,.19),transparent_31%),radial-gradient(circle_at_90%_78%,rgba(71,105,95,.16),transparent_35%)] px-5 py-12 sm:px-8 lg:grid-cols-[minmax(280px,.82fr)_minmax(500px,1.18fr)] lg:px-12 lg:py-14">
         <div className="max-w-xl">
           <span className="text-[11px] text-neutral-500 dark:text-neutral-400">
             {copy.kicker}
           </span>
-          <h1 className="mt-5 max-w-[10ch] text-[clamp(42px,6vw,64px)] font-semibold leading-[.98] tracking-[-0.035em]">
+          <h1 className="mt-5 max-w-[10ch] font-serif text-[clamp(42px,6vw,64px)] leading-[.86] tracking-[-0.065em]">
             {copy.title}
           </h1>
           <p className="mt-6 max-w-md text-[15px] leading-7 text-neutral-600 dark:text-neutral-300">{copy.body}</p>
+          <SplitTextReveal text={copy.title} label={copy.kicker} className="mt-7 max-w-md" />
           <div className="mt-8 flex flex-wrap gap-2">
             <button className="min-h-12 rounded-lg bg-neutral-950 px-5 text-[13px] font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:bg-neutral-50 dark:text-neutral-950" type="button" onClick={() => setStarted(true)}>
               {started ? copy.ready : copy.primary}
@@ -69,6 +73,15 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
         </div>
 
         <div className="min-w-0" id="release-workspace">
+          <CinematicHero
+            eyebrow={copy.kicker}
+            title={copy.title}
+            description={copy.body}
+            actionLabel={copy.primary}
+            onAction={() => setStarted(true)}
+            art={<div className="h-full w-full bg-[radial-gradient(circle_at_78%_22%,rgba(224,133,80,.9),transparent_23%),radial-gradient(circle_at_68%_76%,rgba(110,146,125,.75),transparent_34%),linear-gradient(135deg,#382116,#17120e)]" />}
+            className="mb-4"
+          />
           <div className="overflow-hidden rounded-[10px] border border-neutral-900/10 bg-white dark:border-white/10 dark:bg-[#202020]">
             <div className="flex min-h-12 items-center justify-between gap-4 border-b border-neutral-900/10 px-4 dark:border-white/10">
               <div className="flex items-center gap-2" aria-hidden="true"><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /><i className="size-2 rounded-full bg-neutral-300 dark:bg-neutral-600" /></div>
@@ -137,6 +150,11 @@ export function ProductLandingBlock({ locale = "en", className = "" }: ProductLa
               </AnimatePresence>
             </div>
           </div>
+          <MediaCarousel
+            className="mt-4"
+            label={locale === "zh" ? "发布记录" : "Release moments"}
+            items={phaseOrder.map((item, index) => ({ id: item, eyebrow: copy.phaseNames[item], title: copy.phases[item].title, description: copy.phases[item].board, meta: copy.phases[item].release, art: <div className={`grid h-full min-h-48 place-items-center bg-gradient-to-br ${["from-[#e8c29d] to-[#8a4f35]", "from-[#b6c9be] to-[#375a4e]", "from-[#c9c1e9] to-[#51458f]"][index]} text-4xl font-serif text-white/80`}>{index + 1}</div> }))}
+          />
         </div>
       </div>
     </section>

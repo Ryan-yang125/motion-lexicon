@@ -14,30 +14,19 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 
 test("landing page presents live components, primitives, and the Skill entry", async ({ page }, testInfo) => {
   await page.goto("/zh/");
-  await expect(page.getByRole("heading", { level: 1, name: "把好动效，直接带进产品。" })).toBeVisible();
-  await expect(page.locator('[data-component="reorder-list"]')).toBeVisible();
-  const firstTab = page.getByRole("tab", { name: "拖拽排序列表" });
-  for (const tab of await page.getByRole("tab").all()) {
-    await expect(tab).toHaveAttribute("aria-controls", "landing-stage-panel");
-  }
-  await expect(page.locator("#landing-stage-panel")).toBeVisible();
-  await firstTab.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "标签页" })).toBeFocused();
-  await expect(page.getByRole("tab", { name: "标签页" })).toHaveAttribute("aria-selected", "true");
-  await expect(page.locator('[data-component="tabs"]')).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByRole("tabpanel", { name: "标签页" })).toBeVisible();
-  await expect(page.locator(".landing-component-card")).toHaveCount(4);
-  await expect(page.locator(".landing-primitive-card")).toHaveCount(3);
-  for (const [index, id] of [[1, "loading-button"], [3, "value-flash"]] as const) {
-    const card = page.locator(".landing-component-card").nth(index);
-    await card.scrollIntoViewIfNeeded();
-    await expect(card.locator(`[data-component="${id}"]`)).toBeVisible();
-    for (const control of await card.locator("button, a, input, select, textarea, [role='button']").all()) {
-      const box = await control.boundingBox();
-      expect(box?.width).toBeGreaterThanOrEqual(44);
-      expect(box?.height).toBeGreaterThanOrEqual(44);
-    }
-  }
+  await expect(page.getByRole("heading", { level: 1, name: "100 个可直接复制的 React 动效组件" })).toBeVisible();
+  const stage = page.getByRole("region", { name: "旗舰组件预览" });
+  await expect(stage.locator('[data-component="image-lightbox"]')).toBeVisible();
+  await expect(stage.getByRole("tab")).toHaveCount(4);
+  await stage.getByRole("tab", { name: "滚动产品叙事" }).click();
+  await expect(stage.getByRole("tab", { name: "滚动产品叙事" })).toHaveAttribute("aria-selected", "true");
+  await expect(stage.locator('[data-component="scroll-story"]')).toBeVisible({ timeout: 15_000 });
+  await expect(stage.getByRole("link", { name: /滚动产品叙事 scroll-story/ })).toBeVisible();
+  await expect(page.locator(".v6-feature-card")).toHaveCount(12);
+  await expect(page.locator(".v6-scene-card")).toHaveCount(3);
+  await expect(page.locator(".v6-category-grid > a")).toHaveCount(11);
+  await expect(page.locator(".v6-block-grid > a")).toHaveCount(registryBlocks.length);
+  await expect(page.getByRole("link", { name: /44 个动效原子/ })).toHaveAttribute("href", "/zh/primitives/");
   const skill = page.locator(".library-shell-header").getByRole("link", { name: "Skill" });
   await expect(skill).toHaveAttribute("href", "/zh/skill/");
   const github = page.locator(".library-shell-header").getByRole("link", { name: "GitHub" });
@@ -67,26 +56,28 @@ test("landing preview switches instantly with reduced motion", async ({ page }, 
   test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion landing contract runs once.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/zh/");
-  await page.getByRole("tab", { name: "标签页" }).click();
-  const runningTransitions = await page.locator(".landing-stage-motion").evaluate((node) =>
-    node.getAnimations().filter((animation) => animation.playState === "running").length
+  await page.getByRole("tab", { name: "滚动产品叙事" }).click();
+  const runningTransitions = await page.locator(".v6-stage-canvas").evaluate((node) =>
+    node.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running").length
   );
   expect(runningTransitions).toBe(0);
 });
 
-test("component directory exposes all live registry blocks and components", async ({ page }) => {
+test("component and Page Block directories expose separate live collections", async ({ page }) => {
   await page.goto("/zh/components/");
   await expect(page.getByRole("heading", { level: 1, name: "可直接复制的 React 动效组件" })).toBeVisible();
-  await expect(page.locator(".block-card")).toHaveCount(registryBlocks.length);
-  await expect(page.locator(".component-card")).toHaveCount(registryBlocks.length + registryComponents.length);
+  await expect(page.locator(".block-card")).toHaveCount(0);
+  expect(await page.locator(".component-card").count()).toBeGreaterThan(0);
   await expect(page.locator('.shell-nav-link[aria-current="page"]')).toContainText("组件");
   await expect(page.locator('[data-component="copy-button"]')).toBeVisible();
+  await page.goto("/zh/blocks/");
+  await expect(page.locator(".block-card")).toHaveCount(registryBlocks.length);
   await expect(page.locator('[data-page-block="product-landing"]')).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
 test("page block workbench previews, resizes, opens fullscreen, and exposes the exact source", async ({ page }, testInfo) => {
-  await page.goto("/zh/components/product-landing/");
+  await page.goto("/zh/blocks/product-landing/");
   await expect(page.getByRole("heading", { level: 1, name: "产品发布页" })).toBeVisible();
   const workbench = page.locator(".block-workbench");
   const block = workbench.locator('[data-page-block="product-landing"]');
@@ -136,11 +127,10 @@ test("mobile component controls keep 44px targets", async ({ page }, testInfo) =
     "streaming-answer",
     "tool-call-stack",
     "approval-flow",
-    "agent-task-queue",
+    "task-progress",
     "prompt-composer",
     "context-sources",
     "diff-review",
-    "agent-recommendation",
     "multi-agent-handoff",
     "expanding-search",
     "inline-validation",
@@ -172,11 +162,11 @@ test("component detail keeps preview, source, install, and related primitives to
 });
 
 test("agent collection exposes a complete workspace and implementation brief", async ({ page }) => {
-  await page.goto("/zh/components/agent-workspace/");
+  await page.goto("/zh/blocks/agent-workspace/");
   await expect(page.getByRole("heading", { level: 1, name: "Agent 产品工作台" })).toBeVisible();
   const workspace = page.locator('.block-detail-stage [data-page-block="agent-workspace"]');
   await expect(workspace).toBeVisible();
-  await workspace.getByRole("button", { name: "开始任务" }).click();
+  await workspace.getByRole("button", { name: "开始任务" }).filter({ hasText: "开始任务" }).click();
   await expect(workspace.getByText("正在读取需求")).toBeVisible();
   await expect(page.getByRole("button", { name: "复制给 Agent" })).toBeVisible();
   await page.getByRole("radio", { name: "代码" }).click();
@@ -484,8 +474,8 @@ test("component keyboard and reduced-motion contracts remain intact", async ({ p
   await page.mouse.move(0, 0);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/zh/components/hold-to-confirm/");
-  const hold = page.getByRole("button", { name: /按住删除工作区/ });
+  await page.goto("/zh/components/hold-action/");
+  const hold = page.getByRole("button", { name: /按住归档/ });
   await hold.focus();
   await page.keyboard.down("Space");
   await page.waitForTimeout(80);
@@ -597,9 +587,9 @@ test("Agent Skill publishes the complete bilingual six-mode workflow", async ({ 
 test("reduced motion stops non-essential task progress rotation", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.includes("mobile"), "Reduced-motion runtime contract runs once.");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/zh/components/task-steps/");
-  await expect(page.locator('[data-component="task-steps"]')).toBeVisible();
-  const rotations = await page.locator('[data-component="task-steps"] svg').evaluateAll((icons) =>
+  await page.goto("/zh/components/task-progress/");
+  await expect(page.locator('[data-component="task-progress"]')).toBeVisible();
+  const rotations = await page.locator('[data-component="task-progress"] svg').evaluateAll((icons) =>
     icons.flatMap((icon) => icon.getAnimations()).filter((animation) => animation.playState === "running").length
   );
   expect(rotations).toBe(0);

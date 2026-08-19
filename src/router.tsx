@@ -64,6 +64,16 @@ const componentRoute = createRoute({
   path: "$locale/components/$componentId"
 }).lazy(() => import("./routes/component.lazy").then((module) => module.Route));
 
+const blocksRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/blocks"
+}).lazy(() => import("./routes/blocks.lazy").then((module) => module.Route));
+
+const blockRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "$locale/blocks/$blockId"
+}).lazy(() => import("./routes/block.lazy").then((module) => module.Route));
+
 const primitivesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "$locale/primitives"
@@ -105,6 +115,8 @@ const routeTree = rootRoute.addChildren([
   localeRoute,
   componentsRoute,
   componentRoute,
+  blocksRoute,
+  blockRoute,
   primitivesRoute,
   primitiveRoute,
   guidesRoute,

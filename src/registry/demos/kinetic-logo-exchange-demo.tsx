@@ -34,7 +34,7 @@ const logos: readonly KineticLogoItem[] = [
 
 export function KineticLogoExchangeDemo({ locale = "en" }: DemoLocaleProps = {}) {
   return (
-    <div role="group" aria-label={demoText("kinetic-logo-exchange", locale)} className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("kinetic-logo-exchange", locale)} className="dark mx-auto w-full max-w-[440px] rounded-[18px] bg-[#0c1017] p-3">
       <KineticLogoExchange items={logos} label={demoValue(locale, "已连接的工作区", "Connected workspace")} eyebrow={demoValue(locale, "连接", "Connections")} pauseLabel={demoValue(locale, "暂停标志轮换", "Pause logo exchange")} resumeLabel={demoValue(locale, "继续标志轮换", "Resume logo exchange")} emptyLabel={demoValue(locale, "暂无已连接工具", "No connected tools")} />
     </div>
   );

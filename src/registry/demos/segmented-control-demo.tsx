@@ -9,7 +9,7 @@ export function SegmentedControlDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const [range, setRange] = useState("day");
 
   return (
-    <div role="group" aria-label={demoText("segmented-control", locale)} className="flex w-full justify-center">
+    <div role="group" aria-label={demoText("segmented-control", locale)} className="flex w-full justify-center rounded-[16px] bg-[#edf3f2] p-6">
       <SegmentedControl
         label={demoValue(locale, "报告周期", "Report range")}
         options={[

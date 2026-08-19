@@ -121,8 +121,8 @@ describe("DitherRevealCard WebGL fallback", () => {
     );
     expect(screen.getByRole("button", { name: "Reveal card" })).toHaveClass(
       "border",
-      "border-neutral-200",
-      "bg-[#f5f5f5]",
+      "border-[#f9e3bd]/25",
+      "bg-[#1d1e19]",
     );
     expect(screen.getByRole("button", { name: "Reveal card" }).className).not.toContain("shadow-");
     await waitFor(() =>
@@ -266,7 +266,7 @@ describe("DitherRevealCard WebGL fallback", () => {
     );
 
     await waitFor(() =>
-      expect(fallback).toHaveStyle({ backgroundColor: "rgb(238, 236, 229)" }),
+      expect(fallback).toHaveStyle({ backgroundColor: "rgb(29, 30, 25)" }),
     );
     expect(fallback).not.toHaveStyle({ backgroundColor: "rgb(190, 20, 30)" });
     act(() => {
@@ -488,7 +488,7 @@ describe("DitherRevealCard WebGL fallback", () => {
       '[data-webgl-fallback="dither-reveal-card"]',
     );
     await waitFor(() =>
-      expect(fallback).toHaveStyle({ backgroundColor: "rgb(238, 236, 229)" }),
+      expect(fallback).toHaveStyle({ backgroundColor: "rgb(29, 30, 25)" }),
     );
   });
 });

@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "media"
+    "cards-media"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/media-carousel/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Media rail driven by native scroll inertia and snap"
+    "signature": "Media rail driven by native scroll inertia and snap",
+    "sceneFamily": "editorial-warm",
+    "motionRole": "gentle",
+    "primaryState": "Media carousel with a centered focal card",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

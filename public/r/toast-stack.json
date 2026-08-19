@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Expandable notification queue with swipe dismissal"
+    "signature": "Expandable notification queue with swipe dismissal",
+    "sceneFamily": "product-mono",
+    "motionRole": "lively",
+    "primaryState": "Expanded notification queue",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

@@ -1,0 +1,6 @@
+"use client";
+
+import { demoText, demoValue, type DemoLocaleProps } from "../demo-locale";
+import { BeforeAfterComparison } from "@/registry/components/before-after-comparison";
+
+export function BeforeAfterComparisonDemo({ locale = "en" }: DemoLocaleProps = {}) { return <div role="group" aria-label={demoText("before-after-comparison", locale)} className="mx-auto w-full max-w-[560px]"><BeforeAfterComparison label={demoValue(locale, "调色前后对比", "Colour grading comparison")} alt={demoValue(locale, "港口场景的调色前后对比", "A harbour scene before and after colour grading")} beforeLabel={demoValue(locale, "原始", "Original")} afterLabel={demoValue(locale, "调色后", "Graded")} before={<div aria-hidden className="relative size-full overflow-hidden bg-[#7f8c83]"><span className="absolute inset-x-0 bottom-[25%] h-[26%] bg-[#65766e]" /><span className="absolute right-[25%] top-[18%] size-[26%] rounded-full bg-[#bac1af]" /></div>} after={<div aria-hidden className="relative size-full overflow-hidden bg-[#245166]"><span className="absolute inset-x-0 bottom-[25%] h-[26%] bg-[#163e4a]" /><span className="absolute right-[25%] top-[18%] size-[26%] rounded-full bg-[#efb668]" /><span className="absolute inset-x-0 bottom-[25%] h-px bg-[#ffcf82]/70" /></div>} /></div>; }

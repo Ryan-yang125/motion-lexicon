@@ -8,7 +8,7 @@
     "motion"
   ],
   "categories": [
-    "overlays"
+    "overlays-surfaces"
   ],
   "docs": "https://motion-lexicon.pages.dev/en/components/command-palette/",
   "meta": {
@@ -16,7 +16,11 @@
       "motion"
     ],
     "runtimeCost": "light",
-    "signature": "Combines search, keyboard navigation, and deliberate focus management."
+    "signature": "Search results and keyboard focus move continuously inside the palette",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Command results with active keyboard focus",
+    "assetProvenance": "self-contained"
   },
   "files": [
     {

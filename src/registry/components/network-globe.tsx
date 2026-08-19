@@ -257,10 +257,10 @@ export function NetworkGlobe({
     const sphereGeometry = track(new THREE.SphereGeometry(1.55, 28, 20));
     const sphereMaterial = track(
       new THREE.MeshBasicMaterial({
-        color: 0x77756f,
+        color: 0x80b4c7,
         wireframe: true,
         transparent: true,
-        opacity: 0.2,
+        opacity: 0.26,
       }),
     );
     globe.add(new THREE.Mesh(sphereGeometry, sphereMaterial));
@@ -268,9 +268,9 @@ export function NetworkGlobe({
     const innerGeometry = track(new THREE.SphereGeometry(1.515, 40, 28));
     const innerMaterial = track(
       new THREE.MeshBasicMaterial({
-        color: 0xe8e5dd,
+        color: 0x0e1a21,
         transparent: true,
-        opacity: 0.82,
+        opacity: 0.9,
       }),
     );
     globe.add(new THREE.Mesh(innerGeometry, innerMaterial));
@@ -283,7 +283,7 @@ export function NetworkGlobe({
       const geometry = track(new THREE.SphereGeometry(index === 0 ? 0.075 : 0.055, 18, 12));
       const material = track(
         new THREE.MeshBasicMaterial({
-          color: node.color ?? (index === 0 ? "#171717" : "#737373"),
+          color: node.color ?? (index === 0 ? "#ffb05e" : "#76d0db"),
           transparent: true,
           opacity: 0.72,
         }),
@@ -301,7 +301,7 @@ export function NetworkGlobe({
         );
         const arcMaterial = track(
           new THREE.LineBasicMaterial({
-            color: node.color ?? "#7B8A72",
+            color: node.color ?? "#76d0db",
             transparent: true,
             opacity: 0.4,
           }),
@@ -453,25 +453,26 @@ export function NetworkGlobe({
             }
           : undefined
       }
-      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-100 outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 dark:border-white/[0.14] dark:bg-[#181818] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
+      className={`relative isolate min-h-[250px] w-full overflow-hidden rounded-[18px] border border-[#8ec8d4]/25 bg-[#081216] outline-none focus-visible:ring-2 focus-visible:ring-[#8ec8d4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#081216] ${rendererReady ? "touch-none" : "touch-pan-y"} ${className}`}
     >
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_20%,rgba(38,127,153,.3),transparent_30%),radial-gradient(circle_at_24%_84%,rgba(238,128,73,.18),transparent_36%)]" />
       <div
         data-webgl-fallback="network-globe"
         aria-hidden
         className={`pointer-events-none absolute inset-0 grid place-items-center ${rendererReady ? "opacity-0" : "opacity-100"}`}
       >
-        <div className="relative size-40 rounded-full border border-neutral-400/35 bg-neutral-200 dark:border-white/20 dark:bg-neutral-800">
-          <span className="absolute inset-[18%] rounded-full border border-neutral-500/20" />
-          <span className="absolute inset-x-2 top-1/2 border-t border-neutral-500/20" />
-          <span className="absolute inset-y-2 left-1/2 border-l border-neutral-500/20" />
+        <div className="relative size-40 rounded-full border border-[#a5e1e5]/35 bg-[#10272f] shadow-[0_24px_48px_-26px_rgba(0,0,0,.92)]">
+          <span className="absolute inset-[18%] rounded-full border border-[#a5e1e5]/25" />
+          <span className="absolute inset-x-2 top-1/2 border-t border-[#a5e1e5]/20" />
+          <span className="absolute inset-y-2 left-1/2 border-l border-[#a5e1e5]/20" />
           {nodes.slice(0, 6).map((node, index) => (
             <span
               key={node.id}
-              className="absolute size-2 rounded-full border border-white/80 shadow-[0_2px_8px_rgba(41,41,41,.3)]"
+              className="absolute size-2 rounded-full border border-white/80 shadow-[0_2px_10px_rgba(126,222,230,.45)]"
               style={{
                 left: `${20 + ((node.longitude + 180) / 360) * 60}%`,
                 top: `${18 + ((90 - node.latitude) / 180) * 64}%`,
-                background: node.color ?? (index === 0 ? "#171717" : "#737373"),
+                background: node.color ?? (index === 0 ? "#ffb05e" : "#76d0db"),
               }}
             />
           ))}
@@ -487,32 +488,32 @@ export function NetworkGlobe({
             focusAfterActivationRef.current = true;
             setActivationRequested(true);
           }}
-          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-black/10 bg-white px-4 text-[12px] font-semibold text-[#292929] outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] focus-visible:ring-offset-2 disabled:opacity-60 dark:border-white/15 dark:bg-[#202020] dark:text-white"
+          className="absolute left-1/2 top-1/2 z-30 min-h-11 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#b4e8e5]/35 bg-[#dff3e8] px-4 text-[12px] font-semibold text-[#102127] shadow-[0_12px_30px_-14px_rgba(0,0,0,.8)] outline-none focus-visible:ring-2 focus-visible:ring-[#8ec8d4] focus-visible:ring-offset-2 focus-visible:ring-offset-[#081216] disabled:opacity-60"
         >
           {activateLabel}
         </button>
       ) : null}
 
       {nodes.length === 0 ? (
-        <p role="status" className="absolute inset-x-4 top-1/2 z-20 -translate-y-1/2 text-center text-[12px] font-medium text-neutral-700 dark:text-neutral-200">
+        <p role="status" className="absolute inset-x-4 top-1/2 z-20 -translate-y-1/2 text-center text-[12px] font-medium text-[#def6ed]">
           {emptyLabel}
         </p>
       ) : null}
 
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start justify-between p-4">
         <span>
-          <span className="block font-mono text-[9px] text-neutral-500 dark:text-neutral-400">
+          <span className="block font-mono text-[9px] tracking-[.15em] text-[#b5e6df]/58">
             {rendererReady ? liveLabel : staticLabel}
           </span>
-          <strong className="mt-1 block text-[14px] font-medium tracking-[-0.02em] text-[#292929] dark:text-neutral-100">{label}</strong>
+          <strong className="mt-1 block text-[15px] font-medium tracking-[-0.03em] text-[#ebfff5]">{label}</strong>
         </span>
         {focused ? <span className="text-right">
-          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#292929] dark:text-neutral-100">{focused?.value ?? onlineLabel}</strong>
-          <span className="mt-0.5 block text-[10px] text-neutral-600 dark:text-neutral-300">{focused.label}</span>
+          <strong className="block font-mono text-[12px] font-medium tabular-nums text-[#ffd49f]">{focused?.value ?? onlineLabel}</strong>
+          <span className="mt-0.5 block text-[10px] text-[#c5ece5]/70">{focused.label}</span>
         </span> : null}
       </div>
 
-      {nodes.length > 0 ? <div className="absolute inset-x-3 bottom-3 z-20 grid grid-cols-3 gap-1.5 rounded-lg border border-black/[0.08] bg-white p-1.5 dark:border-white/[0.12] dark:bg-[#202020]">
+      {nodes.length > 0 ? <div className="absolute inset-x-3 bottom-3 z-20 grid grid-cols-3 gap-1.5 rounded-xl border border-white/15 bg-[#071013]/74 p-1.5 backdrop-blur-md">
         {nodes.map((node) => {
           const selected = node.id === focused?.id;
           return (
@@ -521,10 +522,10 @@ export function NetworkGlobe({
               type="button"
               aria-pressed={selected}
               onClick={() => focusNode(node)}
-              className={`min-h-11 min-w-0 truncate rounded-[9px] px-2 text-[11px] font-medium outline-none transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#4568FF] ${
+              className={`min-h-11 min-w-0 truncate rounded-[9px] px-2 text-[11px] font-medium outline-none transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[#8ec8d4] ${
                 selected
-                  ? "bg-neutral-950 text-white dark:bg-neutral-50 dark:text-neutral-950"
-                  : "text-neutral-600 hover:bg-black/[0.05] dark:text-neutral-300 dark:hover:bg-white/[0.08]"
+                  ? "bg-[#dff3e8] text-[#102127]"
+                  : "text-[#c5ece5]/75 hover:bg-white/[0.1]"
               }`}
             >
               {node.label}

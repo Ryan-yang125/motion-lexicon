@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-sidebar",
+  "type": "registry:ui",
+  "title": "Resizable sidebar",
+  "description": "Preserves navigation context while a product sidebar resizes or collapses.",
+  "dependencies": [
+    "motion"
+  ],
+  "categories": [
+    "overlays-surfaces"
+  ],
+  "docs": "https://motion-lexicon.pages.dev/en/components/resizable-sidebar/",
+  "meta": {
+    "engines": [
+      "motion"
+    ],
+    "runtimeCost": "medium",
+    "signature": "Labels, icons, and content width transition continuously",
+    "sceneFamily": "product-mono",
+    "motionRole": "ui",
+    "primaryState": "Expanded project navigation sidebar",
+    "assetProvenance": "self-contained"
+  },
+  "files": [
+    {
+      "path": "src/registry/components/resizable-sidebar.tsx",
+      "type": "registry:ui",
+      "target": "components/motion-lexicon/resizable-sidebar.tsx",
+      "content": "\"use client\";\n\nimport { useId, useRef, useState, type PointerEvent as ReactPointerEvent } from \"react\";\nimport { motion, useReducedMotion } from \"motion/react\";\n\nexport type ResizableSidebarItem = { id: string; label: string; icon?: string };\nexport type ResizableSidebarProps = { items: readonly ResizableSidebarItem[]; label?: string; defaultWidth?: number; onSelect?: (item: ResizableSidebarItem) => void; className?: string };\n\nexport function ResizableSidebar({ items, label = \"Workspace navigation\", defaultWidth = 220, onSelect, className = \"\" }: ResizableSidebarProps) {\n  const reduced = useReducedMotion() === true; const titleId = useId(); const [width, setWidth] = useState(defaultWidth); const [collapsed, setCollapsed] = useState(false); const [active, setActive] = useState(0); const drag = useRef<{ x: number; width: number } | null>(null);\n  const move = (event: ReactPointerEvent<HTMLButtonElement>) => { if (!drag.current) return; setWidth(Math.max(164, Math.min(330, drag.current.width + event.clientX - drag.current.x))); };\n  const actual = collapsed ? 64 : width;\n  return <section aria-labelledby={titleId} className={`overflow-hidden rounded-[16px] border border-black/[.1] bg-white shadow-[0_14px_34px_-26px_rgba(28,28,28,.35)] ${className}`}><div className=\"flex min-h-[290px]\"><motion.aside animate={{ width: actual }} transition={{ duration: reduced ? 0 : .24 }} className=\"relative shrink-0 overflow-hidden border-r border-black/[.09] bg-[#f3f4f1] p-2\"><div className=\"flex min-h-11 items-center justify-between\"><span id={titleId} className={`font-mono text-[10px] uppercase tracking-[.15em] text-neutral-500 ${collapsed ? \"sr-only\" : \"\"}`}>{label}</span><button type=\"button\" aria-label={collapsed ? \"Expand sidebar\" : \"Collapse sidebar\"} onClick={() => setCollapsed((value) => !value)} className=\"grid size-9 place-items-center rounded-lg outline-none hover:bg-white focus-visible:ring-2 focus-visible:ring-[#4568FF]\">{collapsed ? \"→\" : \"←\"}</button></div><nav className=\"mt-3 space-y-1\">{items.map((item, index) => <button key={item.id} type=\"button\" aria-current={index === active ? \"page\" : undefined} onClick={() => { setActive(index); onSelect?.(item); }} className={`flex min-h-11 w-full items-center gap-2 rounded-lg px-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4568FF] ${index === active ? \"bg-[#252827] text-white\" : \"text-neutral-600 hover:bg-white\"}`}><span className=\"grid size-6 shrink-0 place-items-center text-[11px]\">{item.icon ?? item.label.slice(0, 1)}</span><span className={`truncate text-[11px] ${collapsed ? \"sr-only\" : \"\"}`}>{item.label}</span></button>)}</nav><button type=\"button\" aria-label=\"Resize sidebar\" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); drag.current = { x: event.clientX, width }; }} onPointerMove={move} onPointerUp={() => { drag.current = null; }} onKeyDown={(event) => { if (event.key === \"ArrowRight\") setWidth((value) => Math.min(330, value + 16)); if (event.key === \"ArrowLeft\") setWidth((value) => Math.max(164, value - 16)); if (event.key === \"Home\") setWidth(164); if (event.key === \"End\") setWidth(330); }} className=\"absolute inset-y-0 -right-2 w-4 cursor-col-resize outline-none focus-visible:bg-[#4568FF]/20\" /></motion.aside><div className=\"min-w-0 flex-1 p-5\"><span className=\"font-mono text-[10px] uppercase tracking-[.15em] text-neutral-400\">Current section</span><h3 className=\"mt-2 text-xl font-medium tracking-[-.04em] text-[#292929]\">{items[active]?.label ?? \"Overview\"}</h3></div></div></section>;\n}\n"
+    }
+  ]
+}

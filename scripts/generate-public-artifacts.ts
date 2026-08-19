@@ -44,10 +44,13 @@ const catalog = {
     description: block.description,
     primitiveIds: block.primitiveIds,
     dependencies: block.dependencies,
+    componentIds: block.componentIds,
+    sceneFamily: block.sceneFamily,
+    primaryState: block.primaryState,
     signature: block.signature,
     urls: {
-      zh: absolute(pathFor("zh", ["components", block.id])),
-      en: absolute(pathFor("en", ["components", block.id])),
+      zh: absolute(pathFor("zh", ["blocks", block.id])),
+      en: absolute(pathFor("en", ["blocks", block.id])),
       registry: `${siteUrl}/r/${block.id}.json`
     }
   })),
@@ -64,6 +67,10 @@ const catalog = {
     engines: registryComponentEngines(component),
     runtimeCost: registryComponentRuntimeCost(component),
     signature: registryComponentSignature(component),
+    sceneFamily: component.sceneFamily,
+    motionRole: component.motionRole,
+    primaryState: component.primaryState,
+    assetProvenance: component.assetProvenance,
     urls: {
       zh: absolute(pathFor("zh", ["components", component.id])),
       en: absolute(pathFor("en", ["components", component.id])),
@@ -130,13 +137,13 @@ const llmsFull = [
   "## English page blocks",
   "",
   ...registryBlocks.map((block) =>
-    `- [${block.name.en}](${absolute(pathFor("en", ["components", block.id]))}): ${block.description.en} [Registry](${siteUrl}/r/${block.id}.json)`
+    `- [${block.name.en}](${absolute(pathFor("en", ["blocks", block.id]))}): ${block.description.en} [Registry](${siteUrl}/r/${block.id}.json)`
   ),
   "",
   "## 中文页面 Blocks",
   "",
   ...registryBlocks.map((block) =>
-    `- [${block.name.zh}](${absolute(pathFor("zh", ["components", block.id]))}): ${block.description.zh} [Registry](${siteUrl}/r/${block.id}.json)`
+    `- [${block.name.zh}](${absolute(pathFor("zh", ["blocks", block.id]))}): ${block.description.zh} [Registry](${siteUrl}/r/${block.id}.json)`
   ),
   "",
   "## English components",

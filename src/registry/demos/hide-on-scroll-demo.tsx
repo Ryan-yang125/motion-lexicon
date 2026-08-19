@@ -29,7 +29,7 @@ export function HideOnScrollDemo({ locale = "en" }: DemoLocaleProps = {}) {
   const article = locale === "zh" ? articleZh : articleEn;
 
   return (
-    <div role="group" aria-label={demoText("hide-on-scroll", locale)} className="mx-auto w-full max-w-[440px]">
+    <div role="group" aria-label={demoText("hide-on-scroll", locale)} className="mx-auto w-full max-w-[440px] rounded-[18px] bg-[#e5ddd0] p-3 dark:bg-[#211d1a]">
       <HideOnScroll
         maxHeight={268}
         label={demoValue(locale, "经度", "Longitude")}
@@ -61,7 +61,7 @@ export function HideOnScrollDemo({ locale = "en" }: DemoLocaleProps = {}) {
           </>
         }
       >
-        <div className="space-y-3 px-3.5 pb-4 pt-1">
+        <div className="border-b border-stone-200 px-3.5 pb-4 pt-2"><p className="font-mono text-[9px] uppercase tracking-[.16em] text-stone-500">Field journal / 1761</p><h2 className="mt-2 font-serif text-[24px] leading-none tracking-[-.04em] text-stone-800">{demoValue(locale, "寻找经度", "Finding longitude")}</h2></div><div className="space-y-3 px-3.5 pb-4 pt-4">
           {article.map((line, i) => (
             <p key={i} className="text-[13px] leading-relaxed text-ink-2">
               {line}

@@ -8,7 +8,6 @@ import { MediaCarousel } from "@/registry/components/media-carousel";
 import { MegaMenu } from "@/registry/components/mega-menu";
 import { NetworkGlobe } from "@/registry/components/network-globe";
 import { ProceduralProductViewer } from "@/registry/components/procedural-product-viewer";
-import { RadialActions } from "@/registry/components/radial-actions";
 import { ScrollStory } from "@/registry/components/scroll-story";
 
 const gsapHarness = vi.hoisted(() => ({
@@ -66,7 +65,7 @@ describe("V4.1 group B audit regressions", () => {
     const { rerender } = render(<NetworkGlobe nodes={nodes} />);
     const selected = screen.getByRole("button", { name: "San Francisco" });
     expect(selected).toHaveAttribute("aria-pressed", "true");
-    expect(selected).toHaveClass("bg-neutral-950", "text-white", "dark:bg-neutral-50", "dark:text-neutral-950");
+    expect(selected).toHaveClass("bg-[#dff3e8]", "text-[#102127]");
 
     rerender(<NetworkGlobe nodes={[]} emptyLabel="No regions yet" />);
     expect(screen.getByRole("status")).toHaveTextContent("No regions yet");
@@ -110,8 +109,8 @@ describe("V4.1 group B audit regressions", () => {
     expect(panel).not.toBeNull();
     if (!panel) throw new Error("Detail panel was not rendered");
     expect(trigger).toHaveAttribute("aria-controls", panel.id);
-    expect(panel).toHaveClass("bg-white", "dark:bg-[#202020]");
-    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("dark:text-neutral-300");
+    expect(panel).toHaveClass("bg-[#1b1d18]/92", "backdrop-blur-sm");
+    expect(screen.getByText("Machined control with a quiet detent.")).toHaveClass("text-[#ead7ba]/65");
   });
 
   it("dismisses menus on an outside pointer action", async () => {
@@ -128,19 +127,6 @@ describe("V4.1 group B audit regressions", () => {
     fireEvent.pointerDown(document.body);
     await waitFor(() => expect(screen.queryByRole("menu", { name: "Product" })).not.toBeInTheDocument());
 
-    render(
-      <RadialActions
-        label="Canvas actions"
-        trigger={<span>+</span>}
-        actions={[{ id: "note", label: "Add note", icon: <span>N</span>, onSelect: vi.fn() }]}
-      />,
-    );
-    const radialTrigger = screen.getByRole("button", { name: "Canvas actions" });
-    expect(radialTrigger).toHaveAttribute("aria-haspopup", "menu");
-    fireEvent.click(radialTrigger);
-    expect(screen.getByRole("menu", { name: "Canvas actions" })).toBeInTheDocument();
-    fireEvent.pointerDown(document.body);
-    await waitFor(() => expect(screen.queryByRole("menu", { name: "Canvas actions" })).not.toBeInTheDocument());
   });
 
   it("keeps normal component text on AA contrast tokens", () => {
