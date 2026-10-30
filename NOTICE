@@ -1,72 +1,14 @@
-Motion Lexicon
-Copyright (c) 2026 Motion Lexicon contributors
+Motionboard
+Copyright (c) 2026 Motionboard
 
-PROJECT INSPIRATION
+Motionboard is released under the MIT License (see LICENSE).
 
-Motion Lexicon was inspired in part by Sam Kalo's public Animation Vocabulary:
+THIRD-PARTY SOFTWARE
 
-https://animations.samkalok.com/
+- HyperFrames (https://github.com/heygen-com/hyperframes): renders the HTML compositions in skills/motionboard/source to video. Each source project runs on it through npx.
+- GSAP (https://gsap.com): drives the motion in every composition and on the website. GSAP is distributed under the GreenSock Standard "no charge" license: https://gsap.com/standard-license/
+- Other packages used by the website keep their own licenses, listed in package.json and package-lock.json.
 
-That reference helped demonstrate the value of a shared animation vocabulary. Motion Lexicon independently authors and maintains its current English definitions, canonical mappings, Chinese translations, close-term distinctions, summaries, guidance, previews, prompts, generated outputs, and project code. The linked project does not sponsor or endorse Motion Lexicon.
+ORIGINAL FILMS
 
-LICENSE BOUNDARIES
-
-- Project source code: MIT, as stated in LICENSE.
-- Project-authored content and data: CC BY 4.0, as stated in CONTENT-LICENSE.
-- Generated HTML, CSS, and JavaScript fragments: 0BSD, as stated in CONTENT-LICENSE.
-- Third-party packages and assets: their respective licenses and notices continue to apply.
-
-Common animation technique names are used as technical vocabulary. Product names and trademarks remain the property of their respective owners.
-
-ICONOIR ICONS
-
-Shared utility icons are sourced from Iconoir:
-
-https://iconoir.com/
-https://github.com/iconoir-icons/iconoir
-
-Copyright (c) 2021 Luca Burgio
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-INTERIOR COMPONENTS
-
-Interaction components in src/registry/components and their demos are derived from interior:
-
-https://github.com/ddoemonn/interior
-
-Copyright (c) 2026 ozzy
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Each recipe is a recreation built in code. The launch films that the recipes refer to, and every product, name, logo and trademark shown in them, belong to their respective owners. Motionboard stores none of those films. The website shows short reference clips of them next to the recreations for comparison and study, and links to the originals on YouTube.

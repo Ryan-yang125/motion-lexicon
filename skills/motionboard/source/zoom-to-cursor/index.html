@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #1a1a1f;
+        --sub: #5f5f6b;
+        --mut: #9a9aa6;
+        --line: #e8e8ec;
+        --line2: #f0f0f3;
+        --brand: #3b5bfd;
+        --side: #f6f6f8;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #dfe0f2; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #dfe0f2;
+        font-family: var(--font-ui); color: var(--ink); -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .a { position: absolute; }
+      svg { display: block; }
+
+      /* ---------- desktop ---------- */
+      #wall {
+        opacity: 0;
+        background:
+          radial-gradient(ellipse 60% 70% at 8% 100%, rgba(255, 190, 160, 0.95) 0%, rgba(255, 190, 160, 0) 70%),
+          radial-gradient(ellipse 55% 65% at 96% 8%, rgba(140, 170, 255, 0.95) 0%, rgba(140, 170, 255, 0) 70%),
+          radial-gradient(ellipse 50% 55% at 60% 105%, rgba(255, 170, 200, 0.7) 0%, rgba(255, 170, 200, 0) 70%),
+          radial-gradient(ellipse 45% 50% at 30% 0%, rgba(190, 170, 255, 0.75) 0%, rgba(190, 170, 255, 0) 70%),
+          linear-gradient(150deg, #d9dcf7 0%, #e9dcf1 100%);
+      }
+      #menubar {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 30px; opacity: 0; z-index: 2;
+        background: rgba(240, 238, 250, 0.55); font-size: 13.5px; font-weight: 500; color: #1d1d24; white-space: nowrap;
+        display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+      }
+      #menubar .l, #menubar .r { display: flex; align-items: center; gap: 22px; }
+      #menubar .l b { font-weight: 700; }
+      #mbNext { display: inline-grid; }
+      #mbNext span { grid-area: 1 / 1; }
+      #mbB { opacity: 0; }
+
+      /* ---------- app window ---------- */
+      #win {
+        position: absolute; left: 110px; top: 66px; width: 1700px; height: 930px;
+        border-radius: 12px; overflow: hidden; background: #fff; opacity: 0;
+        box-shadow: 0 0 0 1px rgba(20, 20, 40, 0.14), 0 2px 6px rgba(20, 20, 40, 0.12), 0 30px 70px rgba(30, 30, 80, 0.26), 0 80px 160px rgba(30, 30, 80, 0.22);
+      }
+      .tl { position: absolute; top: 19px; width: 12px; height: 12px; border-radius: 50%; }
+
+      /* sidebar */
+      #side { position: absolute; left: 0; top: 0; width: 248px; height: 930px; background: var(--side); border-right: 1px solid var(--line); }
+      .mh { font-size: 13px; font-weight: 600; }
+      .mh span { color: var(--mut); font-weight: 500; }
+      .mw { width: 30.857px; text-align: center; font-size: 10.5px; font-weight: 500; color: var(--mut); line-height: 16px; }
+      .md { display: flex; align-items: center; justify-content: center; width: 30.857px; height: 26px; font-size: 12px; color: var(--ink); font-weight: 450; }
+      .md.o { color: #b4b4bd; }
+      .md.t { color: #fff; font-weight: 600; }
+      .md.t i { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); }
+      .md.t span { position: relative; }
+      .sh { font-size: 12px; font-weight: 600; color: var(--sub); display: flex; align-items: center; gap: 4px; }
+      .cal { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 450; color: #2b2b33; height: 24px; white-space: nowrap; }
+      .cb { display: flex; align-items: center; justify-content: center; width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid; }
+      .cb svg { width: 10px; height: 10px; }
+      .upc { background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+      .upc .tt { font-size: 13px; font-weight: 600; line-height: 18px; white-space: nowrap; }
+      .upc .tm { font-size: 12px; color: var(--sub); line-height: 17px; margin-top: 1px; white-space: nowrap; }
+      .join { display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 6px; background: var(--brand); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; }
+      .joinsub { font-size: 12px; color: var(--sub); line-height: 26px; white-space: nowrap; }
+
+      /* toolbar */
+      #tbar { position: absolute; left: 248px; top: 0; width: 1112px; height: 52px; border-bottom: 1px solid var(--line); background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 20px; }
+      #tbar .ttl { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+      #tbar .ttl span { color: var(--mut); font-weight: 500; }
+      #tbar .ctl { display: flex; align-items: center; gap: 8px; }
+      .btn { display: flex; align-items: center; justify-content: center; gap: 6px; height: 30px; padding: 0 11px; border: 1px solid #e0e0e6; border-radius: 7px; background: #fff; font-size: 13px; font-weight: 500; color: #25252c; }
+      .btn.ic { width: 30px; padding: 0; }
+      .btn svg { color: #6a6a76; }
+
+      /* calendar grid */
+      .vl { position: absolute; top: 52px; width: 1px; height: 878px; background: var(--line2); }
+      .hl { position: absolute; left: 300px; width: 1060px; height: 1px; background: var(--line2); }
+      .hlab { position: absolute; left: 248px; width: 44px; text-align: right; font-size: 10.5px; color: var(--mut); line-height: 14px; font-weight: 500; }
+      .dh { position: absolute; top: 52px; height: 56px; display: flex; align-items: center; gap: 8px; padding-left: 12px; }
+      .dh .wd { font-size: 12.5px; font-weight: 500; color: var(--sub); }
+      .dh .dn { display: flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border-radius: 13px; font-size: 15px; font-weight: 600; color: var(--ink); }
+      .dh.today .wd { color: var(--brand); }
+      .dh.today .dn { background: var(--brand); color: #fff; }
+
+      .ev { overflow: hidden; border-radius: 5px; padding: 4px 6px 0 10px; z-index: 2; }
+      .ev .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+      .ev b { display: block; font-size: 12px; line-height: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .ev .tm { display: block; font-size: 11px; line-height: 14px; font-weight: 500; opacity: 0.72; white-space: nowrap; }
+      .ev.ad { padding-top: 3px; z-index: 2; }
+      #cDR { z-index: 6; box-shadow: 0 0 0 1.5px rgba(139, 92, 246, 1), 0 0 0 0 rgba(30, 20, 80, 0); }
+      #ghost { border: 1.5px dashed rgba(139, 92, 246, 0.7); border-radius: 5px; opacity: 0; z-index: 1; }
+      #slot { border: 1.5px dashed rgba(139, 92, 246, 0.7); background: rgba(139, 92, 246, 0.07); border-radius: 5px; opacity: 0; z-index: 1; }
+
+      #cNew { z-index: 5; opacity: 0; box-shadow: 0 0 0 1.5px rgba(59, 130, 246, 1), 0 6px 18px rgba(30, 60, 160, 0.18); }
+      #cNew b { position: relative; min-height: 16px; }
+      #nPh { position: absolute; left: 0; top: 0; color: rgba(27, 58, 138, 0.45); font-weight: 500; }
+      #cNew b .c { display: none; }
+      #car { display: inline-block; width: 1.5px; height: 14px; margin-left: 1px; vertical-align: -2px; background: #1b3a8a; opacity: 0; }
+      #nTime { opacity: 0; }
+      #nAv { position: absolute; left: 10px; top: 38px; display: flex; opacity: 0; }
+      .av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 600; flex: none; }
+      #nAv .av { width: 20px; height: 20px; font-size: 8.5px; margin-right: -5px; box-shadow: 0 0 0 1.5px #dce8fd; }
+
+      #now1 { left: 300px; top: 337px; width: 1060px; height: 1px; background: rgba(240, 70, 70, 0.32); z-index: 4; }
+      #now2 { left: 724px; top: 336px; width: 212px; height: 2px; background: #f04646; z-index: 4; }
+      #now3 { left: 719px; top: 332px; width: 10px; height: 10px; border-radius: 50%; background: #f04646; z-index: 4; }
+      #now4 { left: 252px; top: 328px; height: 18px; padding: 0 5px; border-radius: 9px; background: #f04646; color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; z-index: 4; }
+
+      /* detail panel */
+      #pan { position: absolute; left: 1360px; top: 0; width: 340px; height: 930px; background: #fff; border-left: 1px solid var(--line); }
+      .pt { font-size: 21px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; white-space: nowrap; }
+      .pi { color: #8b8b97; }
+      .p1 { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+      .p2 { font-size: 13px; line-height: 18px; color: var(--sub); white-space: nowrap; }
+      .p3 { font-size: 11.5px; line-height: 16px; color: var(--mut); white-space: nowrap; }
+      .pd { font-size: 12.5px; line-height: 17px; color: var(--sub); width: 268px; }
+      .pd u { text-decoration: none; color: var(--brand); }
+      .gr { display: flex; align-items: center; gap: 8px; height: 28px; width: 300px; font-size: 13px; color: #2b2b33; }
+      .gr .av { width: 22px; height: 22px; font-size: 9px; }
+      .gr .rt { margin-left: auto; font-size: 11.5px; color: var(--mut); display: flex; align-items: center; gap: 4px; }
+      .gr .ok { color: #2fa763; }
+      .pb { display: flex; align-items: center; gap: 7px; height: 28px; padding: 0 11px; border-radius: 6px; font-size: 12.5px; font-weight: 500; white-space: nowrap; }
+      .pb.pri { background: var(--brand); color: #fff; }
+      .pb.out { border: 1px solid #e0e0e6; color: var(--sub); background: #fff; }
+      .act { display: flex; align-items: center; gap: 8px; height: 22px; width: 300px; font-size: 12px; color: var(--sub); white-space: nowrap; }
+      .act .av { width: 18px; height: 18px; font-size: 7.5px; }
+      .act .rt { margin-left: auto; font-size: 11.5px; color: var(--mut); }
+      #pB { opacity: 0; }
+      #dHi, #bHi { background: rgba(59, 91, 253, 0.11); border-radius: 6px; opacity: 0; }
+      #dB { opacity: 0; }
+      #actNew { opacity: 0; }
+
+      .toast {
+        position: absolute; z-index: 9; opacity: 0; height: 40px; padding: 0 8px 0 12px; border-radius: 10px;
+        display: flex; align-items: center; gap: 10px; white-space: nowrap;
+        background: #1c1c22; color: #fff; font-size: 13px; font-weight: 500;
+        box-shadow: 0 12px 30px rgba(20, 20, 50, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      }
+      .toast .sep { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.18); }
+      .toast .un { color: #b9c4ff; font-weight: 600; }
+      .toast kbd { font-family: var(--font-ui); font-size: 11px; color: #a9a9b6; background: rgba(255, 255, 255, 0.1); border-radius: 4px; padding: 2px 5px; }
+
+      /* ---------- cursor ---------- */
+      #cur { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; z-index: 20; }
+      #curi { position: absolute; left: -2px; top: -2px; width: 24px; height: 28px; }
+      #curi svg { width: 24px; height: 28px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3)); }
+      #rip { position: absolute; left: -23px; top: -23px; width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--brand); opacity: 0; z-index: 19; }
+
+      /* ---------- finish ---------- */
+      #vig { pointer-events: none; z-index: 5; background: radial-gradient(ellipse at 50% 48%, rgba(20, 20, 50, 0) 60%, rgba(20, 20, 50, 0.2) 100%); }
+      #end { opacity: 0; z-index: 4; background: #f7f7fa; }
+      #lockup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; gap: 40px; padding-bottom: 60px; }
+      #lockup .wm { font-size: 188px; line-height: 200px; font-weight: 600; letter-spacing: -0.055em; color: var(--ink); padding-bottom: 14px; }
+      #wsub { position: absolute; left: 0; width: 1920px; top: 664px; text-align: center; font-size: 30px; line-height: 40px; font-weight: 500; color: #8a8a96; letter-spacing: -0.01em; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="scene" class="clip full" data-start="0" data-duration="11" data-track-index="0">
+        <div id="drift" class="full" data-layout-allow-overlap>
+          <div id="cam" class="full" data-layout-allow-overlap>
+            <div id="wall" class="full"></div>
+            <div id="menubar">
+              <div class="l">
+                <svg width="14" height="16" viewBox="0 0 24 24" fill="#1d1d24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+                <b>Lune</b><span>File</span><span>Edit</span><span>View</span><span>Calendar</span><span>Window</span><span>Help</span>
+              </div>
+              <div class="r">
+                <span id="mbNext"><span id="mbA">Design review in 14 min</span><span id="mbB">Lunch · Team in 1 hr 44 min</span></span>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1d1d24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
+                <svg width="22" height="17" viewBox="0 0 26 24" fill="none" stroke="#1d1d24" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="19" height="12" rx="3"/><path d="M24 10v4"/><rect x="4.5" y="8.5" width="12" height="7" rx="1.2" fill="#1d1d24" stroke="none"/></svg>
+                <span>Wed Nov 4&nbsp;&nbsp;10:46 AM</span>
+              </div>
+            </div>
+
+            <div id="win" data-layout-allow-overlap></div>
+
+            <div id="rip"></div>
+            <div id="cur">
+              <div id="curi">
+                <svg viewBox="0 0 24 28"><path d="M2 2 L2 22.5 L7.4 17.6 L11.4 26.4 L15 24.8 L11 16.2 L18.6 16.2 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vig" class="clip full" data-start="0" data-duration="11" data-track-index="1"></div>
+
+      <div id="end" class="clip full" data-start="0" data-duration="11" data-track-index="2">
+        <div id="lockup" data-layout-allow-overlap>
+          <div id="mark">
+            <svg width="176" height="176" viewBox="0 0 100 100">
+              <defs>
+                <mask id="cm"><rect width="100" height="100" fill="#fff"/><circle cx="62" cy="40" r="30" fill="#000"/></mask>
+              </defs>
+              <rect width="100" height="100" rx="23" fill="#3b5bfd"/>
+              <circle cx="46" cy="54" r="29" fill="#fff" mask="url(#cm)"/>
+            </svg>
+          </div>
+          <div id="wm" class="wm">lune</div>
+        </div>
+        <div id="wsub">Calendar for teams</div>
+      </div>
+    </div>
+
+    <script>
+      const EIO = "power3.inOut";
+      const EXPO = "expo.out";
+      const BACK = "back.out(1.7)";
+
+      /* ---------- icons (lucide-style, 1.5px strokes) ---------- */
+      const ICON = {
+        chL: '<path d="m15 18-6-6 6-6"/>',
+        chR: '<path d="m9 18 6-6-6-6"/>',
+        chD: '<path d="m6 9 6 6 6-6"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        video: '<path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
+        users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+        pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+        text: '<path d="M17 6H3"/><path d="M21 12H3"/><path d="M15 18H3"/>',
+        cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+        link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+        trash: '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>',
+        x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+        sliders: '<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+        more: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+        side: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
+        checkC: '<circle cx="12" cy="12" r="10" fill="#34c77b" stroke="none"/><path d="m8 12.5 3 3 5-6" stroke="#0b2a1a"/>'
+      };
+      const ic = (n, s, sw, st) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.5) +
+        '" stroke-linecap="round" stroke-linejoin="round"' + (st ? ' style="' + st + '"' : "") + ">" + ICON[n] + "</svg>";
+
+      /* ---------- people and colours ---------- */
+      const P = {
+        maya: ["Maya Chen", "MC", "#d9577f"],
+        liam: ["Liam Ortiz", "LO", "#3b82f6"],
+        priya: ["Priya Nair", "PN", "#8b5cf6"],
+        alex: ["Alex Rivera", "AR", "#4b5563"],
+        dana: ["Dana Whitfield", "DW", "#e8803a"],
+        ravi: ["Ravi Patel", "RP", "#2fa763"],
+        sofia: ["Sofia Reyes", "SR", "#1fa5a5"]
+      };
+      const av = (k, s, f, extra) =>
+        '<span class="av" data-layout-ignore style="width:' + s + "px;height:" + s + "px;font-size:" + f + "px;background:" + P[k][2] + (extra || "") + '">' + P[k][1] + "</span>";
+
+      const COL = {
+        blue: { bg: "#dce8fd", bar: "#3b82f6", tx: "#1b3a8a" },
+        violet: { bg: "#e9e1fb", bar: "#8b5cf6", tx: "#4a2a9a" },
+        orange: { bg: "#fde5d1", bar: "#f08c3c", tx: "#85410f" },
+        green: { bg: "#d8f0df", bar: "#2fa763", tx: "#185a34" },
+        pink: { bg: "#fadce8", bar: "#e0568b", tx: "#8a2247" },
+        yellow: { bg: "#faefc2", bar: "#d9a514", tx: "#6a4f05" },
+        teal: { bg: "#d2eeee", bar: "#1fa5a5", tx: "#0e5a5a" },
+        gray: { bg: "#e8e8ec", bar: "#8b8b96", tx: "#43434c" }
+      };
+
+      /* ---------- calendar geometry (window coordinates) ---------- */
+      const HPX = 64, Y0 = 160, X0 = 300, CW = 212;
+      const yOf = (t) => { const p = t.split(":").map(Number); return Y0 + (p[0] + p[1] / 60 - 8) * HPX; };
+      const rng = (start, dur) => {
+        const p = start.split(":").map(Number); const s = p[0] * 60 + p[1], e = s + dur;
+        const f = (x) => { let H = Math.floor(x / 60); const M = x % 60; const ap = H >= 12 ? "PM" : "AM"; H = H % 12 || 12; return [H + ":" + String(M).padStart(2, "0"), ap]; };
+        const a = f(s), b = f(e);
+        return a[1] === b[1] ? a[0] + " – " + b[0] + " " + b[1] : a[0] + " " + a[1] + " – " + b[0] + " " + b[1];
+      };
+      function evHtml(d, start, dur, title, color, col, n, id) {
+        const c = COL[color]; col = col || 0; n = n || 1;
+        const w = (CW - 4) / n;
+        const left = X0 + CW * d + 2 + col * w;
+        const width = n > 1 ? w - 2 : w;
+        const top = yOf(start) + 1, h = dur / 60 * HPX - 2;
+        return '<div class="a ev"' + (id ? ' id="' + id + '"' : "") + ' style="left:' + left + "px;top:" + top + "px;width:" + width + "px;height:" + h +
+          "px;background:" + c.bg + ";color:" + c.tx + '"><i class="bar" style="background:' + c.bar + '"></i><b data-layout-allow-overflow data-layout-allow-occlusion>' + title + "</b>" +
+          (dur >= 60 ? '<span class="tm">' + rng(start, dur) + "</span>" : "") + "</div>";
+      }
+      function adHtml(d0, d1, row, title, color) {
+        const c = COL[color];
+        return '<div class="a ev ad" style="left:' + (X0 + CW * d0 + 2) + "px;top:" + (111 + row * 24) + "px;width:" + (CW * (d1 - d0 + 1) - 4) + "px;height:22px;background:" + c.bg + ";color:" + c.tx +
+          '"><i class="bar" style="background:' + c.bar + '"></i><b>' + title + "</b></div>";
+      }
+
+      const EV = [
+        [0, "9:00", 30, "Team standup", "green"],
+        [0, "10:00", 60, "Roadmap review", "orange"],
+        [0, "11:30", 30, "1:1 Alex / Dana", "blue"],
+        [0, "12:30", 60, "Lunch · Dana", "pink"],
+        [0, "14:00", 90, "Focus time", "yellow"],
+        [0, "16:00", 60, "Onboarding sync · Ravi", "teal"],
+
+        [1, "9:00", 30, "Team standup", "green"],
+        [1, "10:00", 60, "Pricing review", "orange", 0, 2],
+        [1, "10:30", 60, "Q4 OKR draft", "blue", 1, 2],
+        [1, "12:00", 60, "Lunch · Priya", "pink"],
+        [1, "13:30", 60, "Customer call · Acme", "teal"],
+        [1, "15:00", 60, "Design QA · Sofia", "violet"],
+        [1, "16:30", 60, "Sprint demo prep", "green"],
+
+        [2, "9:00", 30, "Team standup", "green"],
+        [2, "9:30", 60, "Hiring sync · Sofia", "blue"],
+        [2, "11:00", 60, "Design review · Maya", "violet", 0, 1, "cDR"],
+        [2, "12:30", 60, "Lunch · Team", "pink"],
+        [2, "14:00", 60, "1:1 Liam / Priya", "blue", 0, 2],
+        [2, "14:30", 30, "Eng sync", "green", 1, 2],
+        [2, "15:30", 60, "Pricing sync", "orange"],
+
+        [3, "9:00", 30, "Team standup", "green"],
+        [3, "10:00", 60, "Eng planning", "green", 0, 2],
+        [3, "10:30", 30, "Customer interview · Northgate", "teal", 1, 2],
+        [3, "12:30", 60, "Brand sync · Hana", "violet"],
+        [3, "14:00", 30, "Legal review · NDA", "gray"],
+        [3, "15:30", 60, "Sprint demo", "green"],
+        [3, "17:30", 60, "Team happy hour", "pink"],
+
+        [4, "9:00", 30, "Team standup", "green"],
+        [4, "10:00", 60, "Weekly retro", "blue"],
+        [4, "13:00", 60, "Lunch & learn", "pink"],
+        [4, "14:30", 30, "Release checklist", "green"],
+        [4, "15:00", 60, "Q4 board prep", "blue"],
+        [4, "16:30", 60, "Pricing sync · Finance", "orange"],
+        [4, "17:30", 60, "Dentist", "gray"]
+      ];
+
+      /* ---------- build the window ---------- */
+      const S = [];
+
+      /* sidebar */
+      S.push('<div id="side">');
+      S.push('<i class="tl" style="left:19px;background:#ff5f57"></i><i class="tl" style="left:39px;background:#febc2e"></i><i class="tl" style="left:59px;background:#28c840"></i>');
+      S.push('<div class="a pi" style="left:214px;top:17px">' + ic("side", 17, 1.5) + "</div>");
+      S.push('<div class="a mh" style="left:20px;top:58px">November <span>2026</span></div>');
+      S.push('<div class="a pi" style="left:176px;top:57px">' + ic("chL", 16) + '</div><div class="a pi" style="left:200px;top:57px">' + ic("chR", 16) + "</div>");
+      "MTWTFSS".split("").forEach((ch, i) => {
+        S.push('<div class="a mw" style="left:' + (16 + i * 30.857) + 'px;top:84px">' + ch + "</div>");
+      });
+      S.push('<div class="a" style="left:16px;top:126px;width:216px;height:26px;border-radius:7px;background:#e9ebf6"></div>');
+      for (let i = 0; i < 42; i++) {
+        const dd = i < 6 ? 26 + i : i < 36 ? i - 5 : i - 35;
+        const out = i < 6 || i >= 36;
+        const today = i === 9;
+        S.push('<div class="a md' + (out ? " o" : "") + (today ? " t" : "") + '" style="left:' + (16 + (i % 7) * 30.857) + "px;top:" + (100 + Math.floor(i / 7) * 26) + 'px">' + (today ? "<i></i><span>" + dd + "</span>" : dd) + "</div>");
+      }
+      const calRow = (label, color, y, on) =>
+        '<div class="a cal" style="left:18px;top:' + y + 'px"><span class="cb" style="border-color:' + color + ";background:" + (on ? color : "transparent") + '">' +
+        (on ? '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' : "") + "</span>" + label + "</div>";
+      S.push('<div class="a sh" style="left:18px;top:282px">' + ic("chD", 14, 1.8) + "alex@northwind.co</div>");
+      S.push(calRow("Work", "#3b82f6", 312, true), calRow("Design", "#8b5cf6", 340, true), calRow("Product", "#f08c3c", 368, true),
+        calRow("Engineering", "#2fa763", 396, true), calRow("Customers", "#1fa5a5", 424, true), calRow("Focus time", "#d9a514", 452, true));
+      S.push('<div class="a sh" style="left:18px;top:498px">' + ic("chD", 14, 1.8) + "alex.rivera@gmail.com</div>");
+      S.push(calRow("Personal", "#e0568b", 528, true), calRow("Birthdays", "#8b8b96", 556, false), calRow("US Holidays", "#8b8b96", 584, true));
+      S.push('<div class="a cal" style="left:18px;top:632px;color:var(--sub)"><span class="pi" style="margin-left:-1px;margin-right:-1px">' + ic("plus", 16) + "</span>Add calendar account</div>");
+      /* up next card */
+      S.push('<div class="a sh" style="left:18px;top:740px">Up next</div>');
+      S.push('<div class="a upc" style="left:12px;top:766px;width:224px;height:96px">' +
+        '<div id="upA" class="a" style="left:12px;top:10px;width:200px"><div class="tt">Design review · Maya</div><div class="tm">11:00 AM – 12:00 PM</div>' +
+        '<div class="a join" style="left:0;top:48px">' + ic("video", 14, 1.7) + 'Join<span style="opacity:.7;font-weight:450">· in 14 min</span></div></div>' +
+        '<div id="upB" class="a" style="left:12px;top:10px;width:200px;opacity:0"><div class="tt">Lunch · Team</div><div class="tm">12:30 – 1:30 PM</div>' +
+        '<div class="a joinsub" style="left:0;top:48px">in 1 hr 44 min</div></div></div>');
+      S.push('<div class="a" style="left:0;top:872px;width:248px;height:1px;background:var(--line)"></div>');
+      S.push('<div class="a" style="left:16px;top:886px">' + av("alex", 28, 10.5) + '</div><div class="a p1" style="left:52px;top:891px">Alex Rivera</div>');
+      S.push('<div class="a pi" style="left:208px;top:890px">' + ic("sliders", 18, 1.5) + "</div>");
+      S.push("</div>");
+
+      /* toolbar */
+      S.push('<div id="tbar"><div class="ttl">November <span>2026</span></div><div class="ctl">' +
+        '<div class="btn ic">' + ic("search", 16) + "</div>" +
+        '<div class="btn" style="padding:0 9px 0 12px">Week' + ic("chD", 15, 1.8) + "</div>" +
+        '<div class="btn">Today</div><div class="btn ic">' + ic("chL", 16) + '</div><div class="btn ic">' + ic("chR", 16) + "</div></div></div>");
+
+      /* grid lines */
+      for (let d = 0; d <= 5; d++) S.push('<div class="vl" style="left:' + (X0 + CW * d) + 'px"></div>');
+      S.push('<div class="a" style="left:248px;top:160px;width:1112px;height:1px;background:var(--line)"></div>');
+      S.push('<div class="a" style="left:300px;top:108px;width:1060px;height:1px;background:var(--line2)"></div>');
+      for (let h = 9; h <= 19; h++) {
+        const y = Y0 + (h - 8) * HPX;
+        S.push('<div class="hl" style="top:' + y + 'px"></div>');
+        S.push('<div class="hlab" style="top:' + (y - 7) + 'px">' + (h % 12 || 12) + (h >= 12 ? " PM" : " AM") + "</div>");
+      }
+      S.push('<div class="a" style="left:252px;top:80px;width:40px;text-align:right;font-size:10.5px;font-weight:500;color:var(--mut)">EST</div>');
+      S.push('<div class="a" style="left:248px;top:128px;width:44px;text-align:right;font-size:10.5px;font-weight:500;color:var(--mut)">all-day</div>');
+      const DN = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+      DN.forEach((n, d) => {
+        S.push('<div class="dh' + (d === 2 ? " today" : "") + '" style="left:' + (X0 + CW * d) + 'px;width:212px"><span class="wd">' + n + '</span><span class="dn">' + (d + 2) + "</span></div>");
+      });
+
+      /* all-day */
+      S.push(adHtml(0, 2, 0, "Q4 planning week", "blue"), adHtml(3, 4, 0, "Liam OOO", "gray"),
+        adHtml(1, 1, 1, "Election Day (US)", "gray"), adHtml(4, 4, 1, "Dana’s birthday", "pink"));
+
+      /* timed events */
+      EV.forEach((e) => S.push(evHtml(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7])));
+
+      /* ghost + drop slot */
+      S.push('<div id="ghost" class="a" style="left:726px;top:353px;width:208px;height:62px"></div>');
+      S.push('<div id="slot" class="a" style="left:938px;top:353px;width:208px;height:62px"></div>');
+
+      /* new event (Fri 11:30) */
+      const NL = X0 + CW * 4 + 2, NT = yOf("11:30") + 1;
+      S.push('<div id="cNew" class="a ev" style="left:' + NL + "px;top:" + NT + 'px;width:208px;height:62px;background:#dce8fd;color:#1b3a8a">' +
+        '<i class="bar" style="background:#3b82f6"></i>' +
+        '<b><span id="nPh">New event</span>' + "Q4 kickoff prep".split("").map((c, i) => '<span class="c" id="ch' + i + '">' + (c === " " ? "&nbsp;" : c) + "</span>").join("") + '<i id="car"></i></b>' +
+        '<span id="nTime" class="tm">' + rng("11:30", 60) + "</span>" +
+        '<div id="nAv">' + av("dana", 20, 8.5) + av("ravi", 20, 8.5) + av("sofia", 20, 8.5) + "</div></div>");
+
+      /* now line */
+      S.push('<div id="now1" class="a"></div><div id="now2" class="a"></div><div id="now3" class="a"></div><div id="now4" class="a">10:46</div>');
+
+      /* detail panel */
+      const prow = (y, icon, inner) => '<div class="a pi" style="left:20px;top:' + (y + 1) + 'px">' + ic(icon, 17, 1.5) + "</div>" + inner;
+      const topbar = (dot, label) =>
+        '<div class="a" style="left:20px;top:17px;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--sub);font-weight:500"><span style="width:8px;height:8px;border-radius:3px;background:' + dot + '"></span>' + label + "</div>" +
+        '<div class="a pi" style="left:196px;top:16px">' + ic("link", 17) + '</div><div class="a pi" style="left:226px;top:16px">' + ic("trash", 17) + '</div><div class="a pi" style="left:256px;top:16px">' + ic("more", 17) + '</div><div class="a pi" style="left:290px;top:16px">' + ic("x", 17) + "</div>";
+      const guests = (rows) => rows.map((g, i) => '<div class="a gr" style="left:52px;top:' + (250 + i * 28) + 'px;width:268px">' + av(g[0], 22, 9) + P[g[0]][0] + '<span class="rt" data-layout-ignore>' + g[1] + "</span></div>").join("");
+      const okI = '<span class="ok">' + ic("check", 14, 2) + "</span>";
+
+      S.push('<div id="pan">');
+      /* panel A: Design review */
+      S.push('<div id="pA" class="a" style="left:0;top:0;width:340px;height:930px">' +
+        topbar("#8b5cf6", "Design") +
+        '<div class="a pt" style="left:20px;top:64px">Design review · Maya</div>' +
+        '<div id="dHi" class="a" style="left:10px;top:104px;width:320px;height:50px"></div>' +
+        prow(110, "clock", '<div id="dA" class="a p1" style="left:52px;top:110px">Wed, Nov 4</div><div id="dB" class="a p1" style="left:52px;top:110px">Thu, Nov 5</div><div class="a p2" style="left:52px;top:130px">11:00 AM – 12:00 PM</div><div class="a p3" data-layout-ignore style="right:20px;top:112px">1 hr</div>') +
+        prow(168, "video", '<div class="a pb pri" style="left:52px;top:164px">' + ic("video", 14, 1.7) + 'Join Google Meet</div><div class="a p3" data-layout-ignore style="left:52px;top:198px">meet.google.com/kqx-vtna-ohd</div>') +
+        prow(226, "users", '<div class="a p1" style="left:52px;top:226px">4 guests<span data-layout-ignore style="font-weight:400;color:var(--mut)"> · 3 yes, 1 maybe</span></div>') +
+        guests([["maya", "Organizer"], ["liam", okI], ["priya", "Maybe"], ["alex", okI]]) +
+        prow(374, "pin", '<div class="a p1" style="left:52px;top:374px">Studio B · 2nd floor</div>') +
+        prow(404, "cal", '<div class="a p1" style="left:52px;top:404px">Design</div><div class="a p3" data-layout-ignore style="right:20px;top:406px">alex@northwind.co</div>') +
+        prow(438, "text", '<div class="a pd" style="left:52px;top:438px">Walk through the new onboarding flow and settle the empty state. Figma: <u>figma.com/design/Qk3xTz/Onboarding-v3</u></div>') +
+        '<div class="a" style="left:20px;top:500px;width:300px;height:1px;background:var(--line)"></div>' +
+        '<div class="a p3" data-layout-ignore style="left:20px;top:512px;font-weight:500">Activity</div>' +
+        '<div id="actOld" class="a act" style="left:20px;top:538px">' + av("maya", 18, 7.5) + 'Maya Chen created this event<span class="rt" data-layout-ignore>Oct 28</span></div>' +
+        '<div id="actNew" class="a act" style="left:20px;top:538px">' + av("alex", 18, 7.5) + 'You moved this event to Thu, Nov 5<span class="rt" data-layout-ignore>Just now</span></div>' +
+        "</div>");
+      /* panel B: new event */
+      S.push('<div id="pB" class="a" style="left:0;top:0;width:340px;height:930px">' +
+        topbar("#3b82f6", "Work") +
+        '<div class="a pt" style="left:20px;top:64px">Q4 kickoff prep</div>' +
+        '<div id="bHi" class="a" style="left:10px;top:104px;width:320px;height:50px"></div>' +
+        prow(110, "clock", '<div class="a p1" style="left:52px;top:110px">Fri, Nov 6</div><div class="a p2" style="left:52px;top:130px">11:30 AM – 12:30 PM</div><div class="a p3" data-layout-ignore style="right:20px;top:112px">1 hr</div>') +
+        prow(168, "video", '<div class="a pb out" style="left:52px;top:164px">' + ic("video", 14, 1.7) + 'Add Google Meet</div>') +
+        prow(226, "users", '<div class="a p1" style="left:52px;top:226px">4 guests<span data-layout-ignore style="font-weight:400;color:var(--mut)"> · invites sent</span></div>') +
+        guests([["alex", "Organizer"], ["dana", "Pending"], ["ravi", "Pending"], ["sofia", "Pending"]]) +
+        prow(374, "pin", '<div class="a p2" data-layout-ignore style="left:52px;top:374px;color:var(--mut)">Add location</div>') +
+        prow(404, "cal", '<div class="a p1" style="left:52px;top:404px">Work</div><div class="a p3" data-layout-ignore style="right:20px;top:406px">alex@northwind.co</div>') +
+        prow(438, "text", '<div class="a pd" data-layout-ignore style="left:52px;top:438px;color:var(--mut)">Add description</div>') +
+        '<div class="a" style="left:20px;top:500px;width:300px;height:1px;background:var(--line)"></div>' +
+        '<div class="a p3" data-layout-ignore style="left:20px;top:512px;font-weight:500">Activity</div>' +
+        '<div class="a act" style="left:20px;top:538px">' + av("alex", 18, 7.5) + 'You created this event<span class="rt" data-layout-ignore>Just now</span></div>' +
+        "</div>");
+      S.push("</div>");
+
+      /* toasts */
+      S.push('<div id="toast1" class="toast" style="left:930px;top:76px">' + ic("checkC", 18, 1.8) + 'Moved to Thu, Nov 5<span class="sep"></span><span class="un">Undo</span><kbd>⌘Z</kbd></div>');
+      S.push('<div id="toast2" class="toast" style="left:840px;top:76px">' + ic("checkC", 18, 1.8) + 'Event created · Fri, Nov 6, 11:30 AM<span class="sep"></span><span class="un">Undo</span><kbd>⌘Z</kbd></div>');
+
+      document.getElementById("win").insertAdjacentHTML("beforeend", S.join(""));
+
+      /* ---------- camera ---------- */
+      // transform-origin is the world top-left; world point (px,py) lands at screen (sx,sy) at scale s
+      const Z = (px, py, sx, sy, s) => ({ x: sx - s * px, y: sy - s * py, scale: s });
+      const FULL = { x: 0, y: 0, scale: 1 };
+      const Z1 = Z(1282, 390, 960, 540, 2);
+      const Z2 = Z(1380, 390, 960, 540, 2);
+
+      // world = window (110,66) + window coordinates
+      const R0 = [1180, 600];
+      const GRAB = [1006, 452];
+      const DROP = [GRAB[0] + 212, GRAB[1]];
+      const CLICK = [110 + NL + 170, 66 + NT + 14];
+      const RING = "0 0 0 1.5px rgba(139,92,246,1), 0 0 0 0 rgba(30,20,80,0)";
+      const LIFT = "0 0 0 1.5px rgba(139,92,246,1), 0 14px 30px rgba(30,20,80,0.3)";
+
+      gsap.set("#cam", { transformOrigin: "0px 0px", x: 0, y: 0, scale: 1 });
+      gsap.set("#drift", { transformOrigin: "50% 50%" });
+      gsap.set("#cur", { x: R0[0], y: R0[1] });
+      gsap.set("#curi", { transformOrigin: "2px 2px" });
+
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      function camMove(from, to, at, dur, blur) {
+        F("#cam", from, Object.assign({ duration: dur, ease: EXPO }, to), at);
+        F("#cam", { filter: "blur(0px)" }, { filter: "blur(" + blur + "px)", duration: 0.12, ease: "power1.out" }, at);
+        tl.to("#cam", { filter: "blur(0px)", duration: 0.3, ease: "power1.in" }, at + 0.12);
+      }
+      function press(at) { F("#curi", { scale: 1 }, { scale: 0.86, duration: 0.08, ease: "power2.out" }, at); }
+      function release(at) { F("#curi", { scale: 0.86 }, { scale: 1, duration: 0.22, ease: BACK }, at); }
+
+      /* 1. desktop and window arrive (0 - 1.0) */
+      F(["#wall", "#menubar"], { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
+      F("#win", { opacity: 0, y: 50, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EXPO }, 0.1);
+      F("#drift", { scale: 1 }, { scale: 1.035, duration: 9.2, ease: "none" }, 0);
+      F("#cur", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0.8);
+
+      /* 2. push in on the card and the day it will move to (1.1 - 1.7) */
+      camMove(FULL, Z1, 1.1, 0.6, 3);
+
+      /* 3. cursor takes the card (1.8 - 2.4) */
+      F("#cur", { x: R0[0], y: R0[1] }, { x: GRAB[0], y: GRAB[1], duration: 0.5, ease: "power2.inOut" }, 1.8);
+      press(2.4);
+      F("#cDR", { scale: 1, y: 0, boxShadow: RING }, { scale: 1.03, y: -3, boxShadow: LIFT, duration: 0.18, ease: EXPO }, 2.4);
+      tl.set("#ghost", { opacity: 1 }, 2.4);
+
+      /* 4. drag to Thursday; drop, panel and toast change on the same frame (2.55 - 3.2) */
+      F("#cur", { x: GRAB[0], y: GRAB[1] }, { x: DROP[0], y: DROP[1], duration: 0.6, ease: "power2.inOut" }, 2.55);
+      F("#cDR", { x: 0 }, { x: 212, duration: 0.6, ease: "power2.inOut" }, 2.55);
+      F("#slot", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 2.85);
+      release(3.2);
+      F("#cDR", { scale: 1.03, y: -3, boxShadow: LIFT }, { scale: 1, y: 0, boxShadow: RING, duration: 0.3, ease: EXPO }, 3.2);
+      tl.set("#slot", { opacity: 0 }, 3.2);
+      tl.set("#ghost", { opacity: 0 }, 3.2);
+      tl.set("#dA", { opacity: 0 }, 3.2);
+      tl.set("#dB", { opacity: 1 }, 3.2);
+      tl.set("#dHi", { opacity: 1 }, 3.2);
+      tl.to("#dHi", { opacity: 0, duration: 1.0, ease: "power2.out" }, 3.25);
+      tl.set("#actOld", { y: 28 }, 3.2);
+      tl.set("#actNew", { opacity: 1 }, 3.2);
+      tl.set("#upA", { opacity: 0 }, 3.2);
+      tl.set("#upB", { opacity: 1 }, 3.2);
+      tl.set("#mbA", { opacity: 0 }, 3.2);
+      tl.set("#mbB", { opacity: 1 }, 3.2);
+      F("#toast1", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.35, ease: EXPO }, 3.2);
+      tl.to("#toast1", { opacity: 0, y: -4, duration: 0.25, ease: "power2.in" }, 3.9);
+
+      /* 5. pull back to the full window (4.05 - 4.75) */
+      camMove(Z1, FULL, 4.05, 0.7, 2);
+
+      /* 6. push in on Friday and the panel (5.0 - 5.6) */
+      camMove(FULL, Z2, 5.0, 0.6, 3);
+
+      /* 7. click the empty slot; a draft card opens (5.7 - 6.3) */
+      F("#cur", { x: DROP[0], y: DROP[1] }, { x: CLICK[0], y: CLICK[1], duration: 0.5, ease: "power2.inOut" }, 5.7);
+      press(6.25);
+      release(6.33);
+      tl.set("#rip", { opacity: 0.7, scale: 0.3, x: CLICK[0], y: CLICK[1] }, 6.25);
+      tl.to("#rip", { opacity: 0, scale: 1.5, duration: 0.5, ease: "power2.out" }, 6.25);
+      tl.set("#cNew", { opacity: 1 }, 6.25);
+      tl.set("#car", { opacity: 1 }, 6.25);
+      tl.to("#cDR", { boxShadow: "0 0 0 0px rgba(139,92,246,0), 0 0 0 0 rgba(30,20,80,0)", duration: 0.2, ease: "power2.out" }, 6.25);
+
+      /* 8. type the title (6.45 - 7.45) */
+      const TY = [0, 0.07, 0.15, 0.22, 0.28, 0.35, 0.43, 0.5, 0.56, 0.62, 0.71, 0.79, 0.85, 0.92, 1.0].map((v) => 6.45 + v);
+      TY.forEach((t, i) => {
+        tl.set("#ch" + i, { display: "inline" }, t);
+      });
+      tl.set("#nPh", { opacity: 0 }, TY[0]);
+
+      /* 9. Enter: time, guests and panel change on the same frame (7.65) */
+      tl.set("#car", { opacity: 0 }, 7.65);
+      F("#nTime", { opacity: 0 }, { opacity: 0.72, duration: 0.2, ease: EXPO }, 7.65);
+      F("#nAv", { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.3, ease: EXPO }, 7.65);
+      tl.set("#pA", { opacity: 0 }, 7.65);
+      tl.set("#pB", { opacity: 1 }, 7.65);
+      tl.set("#bHi", { opacity: 1 }, 7.65);
+      tl.to("#bHi", { opacity: 0, duration: 1.0, ease: "power2.out" }, 7.7);
+      F("#toast2", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.35, ease: EXPO }, 7.65);
+      tl.to("#toast2", { opacity: 0, y: -4, duration: 0.25, ease: "power2.in" }, 8.3);
+
+      /* 10. pull back (8.35 - 9.05) */
+      camMove(Z2, FULL, 8.35, 0.7, 2);
+      tl.to("#cur", { opacity: 0, duration: 0.3, ease: "power2.in" }, 9.0);
+
+      /* 11. window leaves, the wordmark takes the frame (9.25 - 11) */
+      tl.to("#cam", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 9.25);
+      F("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 9.25);
+      F("#mark", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: EXPO }, 9.55);
+      F("#wm", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.6, ease: EXPO }, 9.65);
+      F("#wsub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 9.95);
+      F("#lockup", { scale: 1 }, { scale: 1.03, duration: 1.5, ease: "none" }, 9.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #070708;
+        --ink: #f5f5f7;
+        --muted: #8b8b94;
+        --accent: #ff4a2b;
+        --font-ui: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+        --font-serif: "Playfair Display", "EB Garamond", Georgia, serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: radial-gradient(ellipse at 68% 38%, #17171d 0%, #0b0b0e 46%, #060607 100%);
+        font-family: var(--font-ui); color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+      #stage { z-index: 1; }
+      #gl { display: block; width: 1920px; height: 1080px; }
+
+      /* ---------- type ---------- */
+      #type { z-index: 3; }
+      .grp { opacity: 0; }
+      .w { position: absolute; white-space: nowrap; line-height: 1; opacity: 0; }
+      .ui { font-family: var(--font-ui); font-weight: 400; font-size: 66px; letter-spacing: -0.015em; color: var(--ink); }
+      .it { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 74px; letter-spacing: 0; color: var(--ink); }
+      .hero { font-family: var(--font-ui); font-weight: 300; font-size: 128px; letter-spacing: -0.04em; color: var(--ink); }
+      .dim { color: var(--muted); font-size: 40px; }
+      .w .ch { display: inline-block; opacity: 0; }
+
+      #wmWrap { z-index: 3; }
+      #wm { position: absolute; left: 0; top: 0; width: 1920px; text-align: center; font-weight: 600; font-size: 212px; line-height: 1; letter-spacing: -0.05em; color: var(--ink); white-space: nowrap; }
+      #wm .ch { display: inline-block; opacity: 0; }
+      #tagRow { position: absolute; left: 0; top: 720px; width: 1920px; display: flex; justify-content: center; align-items: center; gap: 18px; opacity: 0; }
+      #tagDot { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
+      #tagRow .a { font-family: var(--font-serif); font-style: italic; font-size: 66px; line-height: 1; color: var(--ink); }
+      #tagRow .b { font-family: var(--font-ui); font-size: 52px; line-height: 1; letter-spacing: -0.012em; color: var(--muted); }
+
+      #vig { z-index: 5; pointer-events: none;
+        background: radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.6) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip full" data-start="0" data-duration="11" data-track-index="0">
+        <canvas id="gl" width="1920" height="1080"></canvas>
+      </div>
+
+      <div id="type" class="clip full" data-start="0" data-duration="8.3" data-track-index="1">
+        <div id="g1" class="grp full" data-layout-allow-overlap></div>
+        <div id="g2" class="grp full" data-layout-allow-overlap></div>
+        <div id="g3" class="grp full" data-layout-allow-overlap></div>
+        <div id="g4" class="grp full" data-layout-allow-overlap></div>
+      </div>
+
+      <div id="wmWrap" class="clip full" data-start="8.3" data-duration="2.7" data-track-index="2">
+        <div id="wm" data-layout-allow-overlap></div>
+        <div id="tagRow"><div id="tagDot"></div><div class="a">Available</div><div class="b">October 30</div></div>
+      </div>
+
+      <div id="vig" class="clip full" data-start="0" data-duration="11" data-track-index="3"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+      const q = (t) => Math.round(t * 30) / 30;
+      const BASE = { ui: 0.864, it: 0.9155, hero: 0.864 };
+      const SIZE = { ui: 66, it: 74, hero: 128 };
+
+      /* word placed by its left edge and baseline; letters become spans when split */
+      function word(host, text, x, base, cls, opt) {
+        opt = opt || {};
+        const el = document.createElement("div");
+        el.className = "w " + cls;
+        const k = cls.split(" ")[0];
+        const size = opt.size || SIZE[k];
+        el.style.left = x + "px";
+        el.style.top = base - BASE[k] * size + "px";
+        if (opt.size) el.style.fontSize = opt.size + "px";
+        if (opt.split) {
+          el.style.opacity = 1;
+          el.innerHTML = [...text].map((c) => '<span class="ch">' + c + "</span>").join("");
+          el._letters = [...el.querySelectorAll(".ch")];
+        } else {
+          el.textContent = text;
+        }
+        host.appendChild(el);
+        return el;
+      }
+
+      /* hard appear */
+      const show = (el, t) => tl.set(el, { opacity: 1 }, q(t));
+
+      /* letters appear at staircase offsets on an uneven beat (offs = seconds after t0);
+         settleAt collapses the stair to one line with expo.out */
+      function stair(el, t0, offs, gx, gy, settleAt) {
+        el._letters.forEach((l, i) => {
+          tl.set(l, { opacity: 1, x: i * gx, y: -i * gy }, q(t0 + offs[i]));
+        });
+        if (settleAt !== undefined) {
+          tl.to(el._letters, { x: 0, y: 0, duration: 0.4, ease: EXPO }, q(settleAt));
+        }
+      }
+
+      const g1 = document.getElementById("g1");
+      const g2 = document.getElementById("g2");
+      const g3 = document.getElementById("g3");
+      const g4 = document.getElementById("g4");
+
+      const T1 = 0.1, T2 = 2.15, T3 = 4.2, T4 = 6.25, T5 = 8.3;
+      const grp = (g, t0, t1) => {
+        tl.set(g, { opacity: 1 }, q(t0));
+        tl.set(g, { opacity: 0 }, q(t1));
+      };
+
+      /* ---------- 1  Now with 48 megapixels ---------- */
+      {
+        const a = word(g1, "Now", 160, 300, "it");
+        const b = word(g1, "with", 330, 470, "ui", { split: true });
+        const c = word(g1, "48", 470, 640, "hero");
+        const d = word(g1, "megapixels", 660, 720, "ui");
+        show(a, T1);
+        stair(b, T1 + 0.14, [0, 0.14, 0.25, 0.32], 24, 30);
+        show(c, T1 + 0.56);
+        show(d, T1 + 0.76);
+        grp(g1, T1, T2);
+      }
+
+      /* ---------- 2  Constant f/1.8 aperture from 24–70mm ---------- */
+      {
+        const a = word(g2, "Constant", 1040, 300, "it");
+        const b = word(g2, "f/1.8", 1000, 560, "hero");
+        const c = word(g2, "aperture", 1450, 640, "ui");
+        const d = word(g2, "from", 1030, 800, "ui", { split: true });
+        const e = word(g2, "24–70mm", 1260, 880, "ui");
+        show(a, T2);
+        show(b, T2 + 0.16);
+        show(c, T2 + 0.36);
+        stair(d, T2 + 0.54, [0, 0.07, 0.26, 0.33], 26, 30, T2 + 1.05);
+        show(e, T2 + 0.86);
+        grp(g2, T2, T3);
+      }
+
+      /* ---------- 3  Up to 18 hours per charge ---------- */
+      {
+        const a = word(g3, "Up", 160, 250, "ui");
+        const b = word(g3, "to", 300, 312, "ui");
+        const c = word(g3, "18", 260, 570, "hero");
+        const d = word(g3, "hours", 470, 650, "ui");
+        const e = word(g3, "per", 300, 850, "ui", { split: true });
+        const f = word(g3, "charge", 560, 810, "it");
+        show(a, T3);
+        show(b, T3 + 0.12);
+        show(c, T3 + 0.32);
+        show(d, T3 + 0.5);
+        stair(e, T3 + 0.68, [0, 0.16, 0.25], 24, 28);
+        show(f, T3 + 1.04);
+        grp(g3, T3, T4);
+      }
+
+      /* ---------- 4  Weighs just 312 grams, lens included ---------- */
+      {
+        const a = word(g4, "Weighs", 160, 214, "ui");
+        const b = word(g4, "just", 440, 300, "ui", { split: true });
+        const c = word(g4, "312", 1080, 560, "hero");
+        const d = word(g4, "grams", 1350, 640, "it");
+        const e = word(g4, "lens included", 1110, 730, "ui", { size: 40 });
+        e.classList.add("dim");
+        show(a, T4);
+        stair(b, T4 + 0.16, [0, 0.08, 0.24, 0.3], 26, 30, T4 + 0.9);
+        show(c, T4 + 0.54);
+        show(d, T4 + 0.74);
+        show(e, T4 + 1.0);
+        grp(g4, T4, T5);
+      }
+
+      /* ---------- end: the wordmark scatters, then settles into one line ---------- */
+      {
+        const wm = document.getElementById("wm");
+        wm.style.top = 560 - 0.864 * 212 + "px";
+        const letters = [...("Quarry")].map((c) => {
+          const s = document.createElement("span");
+          s.className = "ch";
+          s.textContent = c;
+          wm.appendChild(s);
+          return s;
+        });
+        const off = [[-150, -110], [70, 90], [-50, -140], [160, 60], [-100, 100], [120, -90]];
+        const at = [0.05, 0.14, 0.2, 0.34, 0.42, 0.5];
+        letters.forEach((l, i) => tl.set(l, { opacity: 1, x: off[i][0], y: off[i][1] }, q(T5 + at[i])));
+        tl.to(letters, { x: 0, y: 0, duration: 0.55, ease: EXPO }, q(T5 + 0.66));
+        tl.set("#tagRow", { opacity: 1 }, q(T5 + 0.66));
+        tl.set("#stage", { opacity: 0.34 }, q(T5));
+      }
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+
+      /* ================= camera moves: one lens, a new framing per group ================= */
+      const T = [0.1, 2.15, 4.2, 6.25, 8.3, 11];
+      const CAMS = [
+        { x: 640, y: 30, r: 0, s: 1.0, dx: 14, dy: 0, dr: 0, k: 1.04, tx: 0.1, ty: -0.2, dtx: 0.02, dty: 0.05, env: 0.0 },
+        { x: -640, y: 30, r: 6, s: 1.15, dx: -10, dy: -6, dr: 0, k: 1.04, tx: -0.08, ty: 0.28, dtx: 0.03, dty: -0.05, env: 0.9 },
+        { x: 560, y: -300, r: -10, s: 1.2, dx: 0, dy: 10, dr: 0, k: 1.04, tx: 0.16, ty: 0.1, dtx: -0.03, dty: 0.04, env: -0.8 },
+        { x: -520, y: 420, r: 0, s: 1.1, dx: 0, dy: -8, dr: 0, k: 1.04, tx: -0.06, ty: -0.24, dtx: 0.02, dty: 0.05, env: 1.6 },
+        { x: 0, y: 0, r: 0, s: 1.35, dx: 0, dy: 0, dr: 0, k: 1.04, tx: 0.0, ty: 0.0, dtx: 0.02, dty: 0.02, env: 0.4 },
+      ];
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+
+      /* ================= renderer ================= */
+      const OW = 1920, OH = 1080;
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1);
+      renderer.setSize(OW, OH, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.transmissionResolutionScale = 1;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x060607);
+      const FOV = 20;
+      const camera = new THREE.PerspectiveCamera(FOV, OW / OH, 0.5, 200);
+      const CAMD = 5.4 / Math.tan((FOV / 2) * Math.PI / 180); // 1 world unit = 100 px at z = 0
+      camera.position.set(0, 0, CAMD);
+      camera.lookAt(0, 0, 0);
+
+      let lastT = window.__hfThreeTime || 0;
+      let ready = false;
+      window.addEventListener("hf-seek", (e) => { lastT = e.detail.time; if (ready) renderAt(lastT); });
+
+      /* ================= helpers ================= */
+      const rng = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      function canvasTex(w, h, draw, srgb) {
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        const g = c.getContext("2d");
+        draw(g, w, h);
+        const t = new THREE.CanvasTexture(c);
+        t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+        t.anisotropy = 8;
+        t.needsUpdate = true;
+        t.userData = { draw, w, h, canvas: c };
+        return t;
+      }
+      const lathe = (pts, seg = 192) => {
+        const g = new THREE.LatheGeometry(pts.map(([r, z]) => new THREE.Vector2(r, z)), seg);
+        g.rotateX(Math.PI / 2);
+        return g;
+      };
+      const cap = (Rs, rb, zb, ws = 128) => {
+        const th = Math.asin(rb / Rs);
+        const g = new THREE.SphereGeometry(Rs, ws, 64, 0, Math.PI * 2, 0, th);
+        g.rotateX(Math.PI / 2);
+        g.translate(0, 0, zb - Rs * Math.cos(th));
+        return g;
+      };
+
+      /* ================= environment: studio softboxes, a window with mullions, strips ================= */
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const softTex = (soft) => canvasTex(256, 256, (g, w, h) => {
+        const img = g.createImageData(w, h);
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+          const u = Math.abs(x / (w - 1) * 2 - 1), v = Math.abs(y / (h - 1) * 2 - 1);
+          const f = (a) => { const e = clamp01((1 - a) / soft); return e * e * (3 - 2 * e); };
+          const val = Math.round(255 * f(u) * f(v));
+          const k = (y * w + x) * 4;
+          img.data[k] = img.data[k + 1] = img.data[k + 2] = val; img.data[k + 3] = 255;
+        }
+        g.putImageData(img, 0, 0);
+      }, true);
+      const SOFT = { hard: softTex(0.05), med: softTex(0.35), soft: softTex(0.9) };
+      SOFT.win = canvasTex(256, 384, (g, w, h) => {
+        g.fillStyle = "#fff"; g.fillRect(0, 0, w, h);
+        g.fillStyle = "#101010";
+        g.fillRect(0, 0, w, 10); g.fillRect(0, h - 10, w, 10); g.fillRect(0, 0, 10, h); g.fillRect(w - 10, 0, 10, h);
+        g.fillRect(w / 2 - 5, 0, 10, h); g.fillRect(0, h / 3 - 5, w, 10); g.fillRect(0, 2 * h / 3 - 5, w, 10);
+      }, true);
+      function makeEnv(panels) {
+        const s = new THREE.Scene();
+        s.background = new THREE.Color(0x020203);
+        for (const p of panels) {
+          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(...(p.c || [1, 1, 1])).multiplyScalar(p.i), map: SOFT[p.soft || "hard"], side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(p.w, p.h), m);
+          mesh.position.set(...p.p);
+          mesh.lookAt(0, 0, 0);
+          if (p.rot) mesh.rotateZ(p.rot);
+          s.add(mesh);
+        }
+        return pmrem.fromScene(s, 0, 0.1, 100).texture;
+      }
+      scene.environment = makeEnv([
+        { p: [-6, 8, 11], w: 15, h: 9, i: 4.2, soft: "soft" },
+        { p: [10, 3, 9], w: 3.4, h: 5, i: 2.2, soft: "soft" },
+        { p: [13, -2, 3], w: 1.2, h: 14, i: 5, soft: "med" },
+        { p: [0, 12, 5], w: 18, h: 1.2, i: 3.6, soft: "med" },
+        { p: [-12, -3, 6], w: 2.2, h: 9, i: 1.8, c: [1, 0.72, 0.45], soft: "soft" },
+        { p: [-3, -3, 17], w: 12, h: 6, i: 0.7, c: [0.7, 0.82, 1], soft: "soft" },
+        { p: [0, -10, 6], w: 18, h: 6, i: 0.35, soft: "soft" },
+        { p: [-6, -4, 15], w: 9, h: 6, i: 0.9, c: [0.2, 0.8, 1], soft: "soft" },
+        { p: [5, -6, 15], w: 9, h: 6, i: 0.9, c: [0.8, 0.3, 1], soft: "soft" },
+        { p: [1, 6, 17], w: 10, h: 5, i: 0.7, c: [0.3, 1, 0.5], soft: "soft" },
+      ]);
+      scene.environmentIntensity = 1;
+
+      /* ================= background ================= */
+      {
+        const t = canvasTex(512, 288, (g, w, h) => {
+          const gr = g.createRadialGradient(w * 0.68, h * 0.38, 0, w * 0.5, h * 0.5, w * 0.7);
+          gr.addColorStop(0, "#1a1a20"); gr.addColorStop(0.5, "#0c0c0f"); gr.addColorStop(1, "#050506");
+          g.fillStyle = gr; g.fillRect(0, 0, w, h);
+        }, true);
+        const bg = new THREE.Mesh(new THREE.PlaneGeometry(26, 14.6), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }));
+        bg.position.z = -12;
+        scene.add(bg);
+      }
+
+      /* ================= engraved ring textures ================= */
+      const RING_R = 4.86; // outer radius of the engraved ring, maps to half the canvas
+      function drawRing(g, w, h, mode) {
+        const C = w / 2, PPU = C / RING_R;
+        const rnd = rng(7);
+        if (mode === "color") { g.fillStyle = "#0b0b0d"; g.fillRect(0, 0, w, h); }
+        else { g.fillStyle = "#cfcfcf"; g.fillRect(0, 0, w, h); }
+        // fine concentric machining grooves
+        for (let r = 4.1; r < RING_R; r += 0.012) {
+          const a = 0.04 + 0.08 * rnd();
+          g.strokeStyle = mode === "color" ? "rgba(255,255,255," + a * 0.5 + ")" : "rgba(0,0,0," + a + ")";
+          g.lineWidth = 1.2;
+          g.beginPath(); g.arc(C, C, r * PPU, 0, Math.PI * 2); g.stroke();
+        }
+        // index ticks
+        g.save();
+        g.translate(C, C);
+        for (let d = 0; d < 360; d += 5) {
+          const major = d % 30 === 0;
+          g.save();
+          g.rotate((d * Math.PI) / 180);
+          g.lineWidth = major ? 7 : 4;
+          g.strokeStyle = mode === "color" ? (major ? "#9a9aa2" : "#55555b") : "#202020";
+          g.beginPath(); g.moveTo(0, -4.2 * PPU); g.lineTo(0, -(major ? 4.4 : 4.3) * PPU); g.stroke();
+          g.restore();
+        }
+        // engraved text on the ring
+        const rad = 4.58 * PPU;
+        const fs = 0.3 * PPU;
+        g.font = "500 " + fs + "px Inter, Helvetica, Arial, sans-serif";
+        g.textBaseline = "middle";
+        const unit = "QUARRY Q1  24–70mm  1:1.8  Ø 82mm  ";
+        const reps = 3;
+        const chars = [...unit];
+        const sp = 0.16 * fs;
+        const widths = chars.map((c) => g.measureText(c).width + sp);
+        const total = widths.reduce((a, b) => a + b, 0);
+        const arcPer = (2 * Math.PI * rad) / reps;
+        const extra = (arcPer - total) / chars.length;
+        let ang = -0.08;
+        g.fillStyle = mode === "color" ? "#b4b4bc" : "#101010";
+        for (let rp = 0; rp < reps; rp++) {
+          for (let i = 0; i < chars.length; i++) {
+            const adv = widths[i] + extra;
+            const a0 = ang + (adv / 2) / rad;
+            g.save();
+            g.rotate(a0);
+            g.fillText(chars[i], -(adv - sp - extra) / 2, -rad);
+            g.restore();
+            ang += adv / rad;
+          }
+        }
+        g.restore();
+        if (mode !== "color") {
+          const tmp = document.createElement("canvas");
+          tmp.width = w; tmp.height = h;
+          tmp.getContext("2d").drawImage(g.canvas, 0, 0);
+          g.filter = "blur(2.2px)";
+          g.drawImage(tmp, 0, 0);
+          g.filter = "none";
+        }
+      }
+      const RING_COLOR = canvasTex(4096, 4096, (g, w, h) => drawRing(g, w, h, "color"), true);
+      const RING_BUMP = canvasTex(4096, 4096, (g, w, h) => drawRing(g, w, h, "bump"), false);
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load("500 100px Inter").then(() => {
+          for (const t of [RING_COLOR, RING_BUMP]) {
+            const { draw, w, h, canvas: c } = t.userData;
+            c.getContext("2d").clearRect(0, 0, w, h);
+            draw(c.getContext("2d"), w, h);
+            t.needsUpdate = true;
+          }
+          if (ready) renderAt(lastT);
+        }).catch(() => {});
+      }
+
+      /* dust: fixed seed specks, hairs and one faint smudge */
+      const DUST = canvasTex(2048, 2048, (g, w, h) => {
+        const rnd = rng(1234);
+        g.clearRect(0, 0, w, h);
+        const sm = g.createRadialGradient(w * 0.62, h * 0.35, 0, w * 0.62, h * 0.35, w * 0.22);
+        sm.addColorStop(0, "rgba(255,255,255,0.06)"); sm.addColorStop(1, "rgba(255,255,255,0)");
+        g.fillStyle = sm; g.fillRect(0, 0, w, h);
+        for (let i = 0; i < 170; i++) {
+          const x = rnd() * w, y = rnd() * h, r = 0.7 + Math.pow(rnd(), 3) * 3.2;
+          g.fillStyle = "rgba(235,240,255," + (0.05 + rnd() * 0.2) + ")";
+          g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+        }
+        for (let i = 0; i < 7; i++) {
+          const x = rnd() * w, y = rnd() * h, a = rnd() * Math.PI * 2, l = 30 + rnd() * 70;
+          g.strokeStyle = "rgba(230,235,255," + (0.08 + rnd() * 0.1) + ")"; g.lineWidth = 1.2;
+          g.beginPath(); g.moveTo(x, y);
+          g.quadraticCurveTo(x + Math.cos(a) * l * 0.5 + (rnd() - 0.5) * 30, y + Math.sin(a) * l * 0.5 + (rnd() - 0.5) * 30, x + Math.cos(a) * l, y + Math.sin(a) * l);
+          g.stroke();
+        }
+      }, true);
+
+      /* ================= the lens ================= */
+      const lens = new THREE.Group();
+      scene.add(lens);
+      const metal = (c, r, extra) => new THREE.MeshPhysicalMaterial(Object.assign({ color: c, metalness: 1, roughness: r }, extra || {}));
+
+      // outer body shell
+      lens.add(new THREE.Mesh(lathe([[5.33, 0.26], [5.48, 0.29], [5.57, 0.22], [5.6, 0.08], [5.6, -0.3], [5.6, -2.5]]),
+        metal(0x2e2e33, 0.3, { clearcoat: 0.4, clearcoatRoughness: 0.2, side: THREE.DoubleSide })));
+
+      // knurled ring: real ridges
+      {
+        const R0 = 4.9, R1 = 5.33, N = 168, seg = N * 4, Z0 = 0.22, H = 0.075;
+        const tri = (a) => { const f = ((a * N) / (2 * Math.PI)) % 1; return f < 0.5 ? f * 2 : 2 - f * 2; };
+        const pos = [];
+        const P = (r, a) => [r * Math.cos(a), r * Math.sin(a), Z0 + H * tri(a)];
+        for (let i = 0; i < seg; i++) {
+          const a0 = (i / seg) * Math.PI * 2, a1 = ((i + 1) / seg) * Math.PI * 2;
+          const i0 = P(R0, a0), o0 = P(R1, a0), o1 = P(R1, a1), i1 = P(R0, a1);
+          pos.push(...i0, ...o0, ...o1, ...i0, ...o1, ...i1);
+        }
+        const g = new THREE.BufferGeometry();
+        g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+        g.computeVertexNormals();
+        lens.add(new THREE.Mesh(g, metal(0x4a4a52, 0.34, { flatShading: true, side: THREE.DoubleSide })));
+      }
+
+      // engraved ring
+      {
+        const ring = new THREE.Mesh(new THREE.RingGeometry(4.14, RING_R + 0.02, 256, 1),
+          new THREE.MeshPhysicalMaterial({ color: 0xffffff, map: RING_COLOR, bumpMap: RING_BUMP, bumpScale: 3.2, metalness: 0.75, roughness: 0.42, side: THREE.DoubleSide }));
+        ring.position.z = 0.28;
+        lens.add(ring);
+        // red index dot
+        const dot = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.05, 48),
+          new THREE.MeshPhysicalMaterial({ color: 0xff4a2b, roughness: 0.35, metalness: 0.1, emissive: 0xff2a10, emissiveIntensity: 0.25 }));
+        dot.rotation.x = Math.PI / 2;
+        const a = (Math.PI * 125) / 180;
+        dot.position.set(4.55 * Math.cos(a), 4.55 * Math.sin(a), 0.3);
+        lens.add(dot);
+      }
+
+      // polished retaining bevel and inner mount
+      {
+        const tor = new THREE.Mesh(new THREE.TorusGeometry(4.1, 0.07, 24, 256), metal(0xb8bac0, 0.1));
+        tor.position.z = 0.29;
+        lens.add(tor);
+        const mount = new THREE.Mesh(new THREE.RingGeometry(3.8, 4.07, 192, 1), metal(0x15151a, 0.38, { side: THREE.DoubleSide }));
+        mount.position.z = 0.2;
+        lens.add(mount);
+        lens.add(new THREE.Mesh(lathe([[3.9, 0.2], [3.9, -3.2]]), new THREE.MeshStandardMaterial({ color: 0x010101, roughness: 0.95, side: THREE.DoubleSide })));
+      }
+
+      // inner optics visible through the front glass: three elements with different coatings, rings and aperture blades
+      const coat = (lo, hi, ior) => new THREE.MeshPhysicalMaterial({ color: 0x070a12, metalness: 0, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.03, iridescence: 1, iridescenceIOR: ior, iridescenceThicknessRange: [lo, hi], ior: 1.9, envMapIntensity: 3 });
+      lens.add(new THREE.Mesh(cap(12, 3.5, -0.7), coat(280, 620, 2.0)));
+      lens.add(new THREE.Mesh(cap(9, 2.7, -1.6), coat(420, 820, 2.1)));
+      lens.add(new THREE.Mesh(cap(7, 2.0, -2.5), coat(560, 980, 2.2)));
+      for (const [r, z, lo, hi] of [[3.5, -0.7, 300, 560], [2.7, -1.6, 430, 760], [2.0, -2.5, 560, 920]]) {
+        const t = new THREE.Mesh(new THREE.TorusGeometry(r, 0.09, 16, 192),
+          new THREE.MeshPhysicalMaterial({ color: 0x3a3a42, metalness: 1, roughness: 0.22, iridescence: 1, iridescenceIOR: 1.9, iridescenceThicknessRange: [lo, hi] }));
+        t.position.z = z;
+        lens.add(t);
+      }
+      {
+        // 9 aperture blades behind the second element
+        const blades = new THREE.Group();
+        const n = 9, ri = 1.15, ro = 2.4;
+        for (let i = 0; i < n; i++) {
+          const a0 = (i / n) * Math.PI * 2, a1 = ((i + 1) / n) * Math.PI * 2;
+          const sh = new THREE.Shape();
+          sh.moveTo(ri * Math.cos(a0), ri * Math.sin(a0));
+          sh.lineTo(ri * Math.cos(a1), ri * Math.sin(a1));
+          sh.lineTo(ro * Math.cos(a1 + 0.45), ro * Math.sin(a1 + 0.45));
+          sh.lineTo(ro * Math.cos(a0 + 0.45), ro * Math.sin(a0 + 0.45));
+          const m = new THREE.Mesh(new THREE.ShapeGeometry(sh), metal(0x24242a, 0.34, { side: THREE.DoubleSide }));
+          m.position.z = i * 0.006;
+          blades.add(m);
+        }
+        blades.position.z = -2.9;
+        lens.add(blades);
+        const back = new THREE.Mesh(new THREE.CircleGeometry(2.6, 64), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+        back.position.z = -3.2;
+        lens.add(back);
+      }
+
+      // reflections of the rear groups: additive coating rings at three depths, they slide against each other as the lens tilts
+      {
+        const mk = (draw) => canvasTex(768, 768, (g, w, h) => { g.clearRect(0, 0, w, h); draw(g, w / 2); }, true);
+        // eccentric crescent of coloured light: a disc minus an offset disc, softened
+        const moon = (g, C, deg, dist, r, cut, rgb, a, blur) => {
+          const t = document.createElement("canvas");
+          t.width = t.height = C * 2;
+          const k = t.getContext("2d");
+          const ca = Math.cos((deg * Math.PI) / 180), sa = Math.sin((deg * Math.PI) / 180);
+          k.fillStyle = "rgba(" + rgb + "," + a + ")";
+          k.beginPath(); k.arc(C + ca * dist * C, C + sa * dist * C, r * C, 0, Math.PI * 2); k.fill();
+          k.globalCompositeOperation = "destination-out";
+          k.fillStyle = "#000";
+          k.beginPath(); k.arc(C + (ca * dist - ca * cut * 1.9) * C, C + (sa * dist - sa * cut * 1.9) * C, r * C, 0, Math.PI * 2); k.fill();
+          g.save(); g.filter = "blur(" + (blur + 3) + "px)"; g.drawImage(t, 0, 0); g.restore();
+        };
+        const spot = (g, C, deg, dist, r, rgb, a) => {
+          const x = C + Math.cos((deg * Math.PI) / 180) * dist * C, y = C + Math.sin((deg * Math.PI) / 180) * dist * C;
+          const gr = g.createRadialGradient(x, y, 0, x, y, r * C);
+          gr.addColorStop(0, "rgba(" + rgb + "," + a + ")"); gr.addColorStop(1, "rgba(" + rgb + ",0)");
+          g.fillStyle = gr; g.fillRect(0, 0, C * 2, C * 2);
+        };
+        const A = mk((g, C) => { moon(g, C, 38, 0.42, 0.52, 0.06, "95,180,200", 0.7, 7); moon(g, C, 215, 0.55, 0.34, 0.035, "120,190,210", 0.45, 6); spot(g, C, 150, 0.45, 0.1, "110,190,205", 0.3); });
+        const B = mk((g, C) => { moon(g, C, 205, 0.4, 0.5, 0.07, "150,115,200", 0.65, 7); moon(g, C, 330, 0.5, 0.3, 0.04, "180,120,190", 0.4, 5); spot(g, C, 80, 0.4, 0.09, "170,130,210", 0.28); });
+        const Cc = mk((g, C) => { moon(g, C, 300, 0.36, 0.44, 0.06, "115,190,145", 0.6, 6); moon(g, C, 120, 0.46, 0.3, 0.04, "140,200,160", 0.4, 5); spot(g, C, 20, 0.3, 0.08, "130,190,170", 0.3); });
+        [[A, 3.55, -0.7], [B, 2.8, -1.6], [Cc, 2.1, -2.5]].forEach(([t, r, z], i) => {
+          const m = new THREE.Mesh(new THREE.PlaneGeometry(r * 2, r * 2), new THREE.MeshBasicMaterial({ map: t, transparent: true, blending: THREE.AdditiveBlending, depthTest: false, depthWrite: false, toneMapped: false, opacity: 0.8 }));
+          m.position.z = z;
+          m.renderOrder = 10 + i;
+          lens.add(m);
+        });
+      }
+
+      // front glass: transmissive convex element with a thin-film coating
+      {
+        const front = new THREE.Mesh(cap(9, 3.9, 0.18, 192), new THREE.MeshPhysicalMaterial({
+          color: 0xffffff, metalness: 0, roughness: 0.02, transmission: 1, thickness: 1.6, ior: 1.5,
+          iridescence: 1, iridescenceIOR: 1.6, iridescenceThicknessRange: [200, 700],
+          clearcoat: 1, clearcoatRoughness: 0.02, specularIntensity: 1, envMapIntensity: 1.5,
+          attenuationColor: new THREE.Color(0xa8b6ff), attenuationDistance: 12,
+        }));
+        lens.add(front);
+        const dust = new THREE.Mesh(new THREE.CircleGeometry(3.9, 96), new THREE.MeshBasicMaterial({ map: DUST, transparent: true, depthWrite: false, toneMapped: false }));
+        // CircleGeometry uv is planar: remap to 0..1 over the disc
+        const uv = dust.geometry.attributes.uv;
+        for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i), uv.getY(i));
+        dust.position.z = 0.18 + 9 - 9 * Math.cos(Math.asin(3.9 / 9)) + 0.03;
+        lens.add(dust);
+      }
+
+      /* ================= render from time ================= */
+      function camState(t) {
+        let i = 0;
+        while (i < 4 && t >= T[i + 1]) i++;
+        const c = CAMS[i];
+        const u = clamp01((t - T[i]) / (T[i + 1] - T[i]));
+        return { c, u };
+      }
+      function renderAt(t) {
+        const { c, u } = camState(t);
+        lens.position.set((c.x - c.dx * u) / 100, -(c.y - c.dy * u) / 100, 0);
+        lens.rotation.set(c.tx + c.dtx * u, c.ty + c.dty * u, -((c.r + c.dr * u) * Math.PI) / 180);
+        lens.scale.setScalar(c.s * (1 + (c.k - 1) * u));
+        scene.environmentRotation.set(0, c.env + 0.14 * u, 0);
+        renderer.render(scene, camera);
+      }
+      ready = true;
+      renderAt(lastT);
+    </script>
+  </body>
+</html>

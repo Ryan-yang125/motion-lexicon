@@ -1,0 +1,41 @@
+/* Recipe actions: copy, like, save, wish. Tokens come from base.css. */
+
+/* copy */
+.act-copy-btn { min-width: 188px; }
+:root:lang(zh) .act-copy-btn { min-width: 160px; }
+
+/* shared icon sizing for compact controls */
+.act-mini, .act-mini-like { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 36px; min-width: 36px; padding: 0 9px; border: 0; border-radius: 8px; background: color-mix(in srgb, var(--bg) 62%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--ink); font: 500 12px var(--mono); cursor: pointer; box-shadow: inset 0 0 0 1px var(--line-2); transition: background .2s, color .2s, transform .2s var(--expo); }
+.act-mini::after, .act-mini-like::after { content: ""; position: absolute; inset: -4px; }
+.act-mini:hover, .act-mini-like:hover { background: color-mix(in srgb, var(--bg) 82%, transparent); }
+.act-mini:active, .act-mini-like:active { transform: scale(.94); }
+.act-mini svg, .act-mini-like svg { width: 16px; height: 16px; flex: none; }
+.act-mini .burst, .act-copy-btn .burst { overflow: visible; }
+
+/* like */
+.act-like { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; min-width: 44px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: inset 0 0 0 1px var(--line-2); transition: background .2s, color .2s, transform .2s var(--expo); }
+.act-like:hover { background: var(--raise); }
+.act-like:active { transform: scale(.96); }
+.act-like svg { width: 16px; height: 16px; flex: none; }
+.act-count { font: 500 12px var(--mono); font-variant-numeric: tabular-nums; }
+.act-like[data-liked] { color: var(--heart); }
+.act-like[data-liked] svg { animation: act-pop .45s var(--expo); }
+.act-mini-like[data-liked] { color: var(--heart); }
+@keyframes act-pop { 0% { transform: scale(.7); } 55% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+/* save */
+.act-save { display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.act-save[data-saved] svg { color: var(--ink); }
+.act-full { min-height: 44px; min-width: 44px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font-size: 14px; font-weight: 500; box-shadow: inset 0 0 0 1px var(--line-2); transition: background .2s, transform .2s var(--expo); }
+.act-full:hover { background: var(--raise); }
+.act-full:active { transform: scale(.96); }
+.act-full svg { width: 16px; height: 16px; flex: none; }
+
+/* wish */
+.act-wish { position: relative; display: inline-block; }
+.act-pop { position: absolute; left: 0; top: calc(100% + 8px); z-index: 20; width: max-content; max-width: min(280px, calc(100vw - 32px)); padding: 10px 14px; border-radius: 8px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--line-2), 0 8px 24px rgba(0, 0, 0, .4); font-size: 13px; color: var(--ink); animation: act-in .25s var(--expo); }
+@keyframes act-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 560px) {
+  .act-copy-btn { flex: 1; min-width: 0; }
+}

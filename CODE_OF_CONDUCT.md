@@ -1,23 +1,41 @@
-# Community Code of Conduct
+# Contributor Covenant Code of Conduct
 
-## Our commitment
+## Our Pledge
 
-Motion Lexicon is an open, welcoming project for contributors with different backgrounds, roles, languages, and levels of experience. Every participant deserves a respectful and productive environment.
+We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation.
 
-## Expected behavior
+We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
 
-- Discuss ideas and implementation evidence with care and precision.
-- Give actionable feedback and acknowledge the work behind a contribution.
-- Respect accessibility needs, language differences, and personal boundaries.
-- Keep project spaces focused on shared product and community goals.
-- Accept moderator guidance and help repair harm when problems occur.
+## Our Standards
 
-Harassment, discrimination, threats, unwanted sexual attention, sustained personal attacks, deliberate disruption, and publication of private information are unacceptable in project spaces.
+Examples of behavior that contributes to a positive environment for our community include:
 
-## Scope and enforcement
+- Demonstrating empathy and kindness toward other people
+- Being respectful of differing opinions, viewpoints, and experiences
+- Giving and gracefully accepting constructive feedback
+- Accepting responsibility and apologizing to those affected by our mistakes, and learning from the experience
+- Focusing on what is best not just for us as individuals, but for the overall community
 
-This policy applies in repository discussions, issues, pull requests, reviews, community events, and public representation of the project.
+Examples of unacceptable behavior include:
 
-Report conduct concerns privately through the repository's maintainer contact or moderation channel. Maintainers will protect reporter privacy, review the available evidence, and choose a proportionate response. Responses may include a private correction, content removal, a temporary participation limit, or a permanent ban.
+- The use of sexualized language or imagery, and sexual attention or advances of any kind
+- Trolling, insulting or derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others' private information, such as a physical or email address, without their explicit permission
+- Other conduct which could reasonably be considered inappropriate in a professional setting
 
-Maintainers with a conflict of interest will step away from the relevant decision. Good-faith reports receive protection from retaliation.
+## Enforcement Responsibilities
+
+Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.
+
+## Scope
+
+This Code of Conduct applies within all community spaces of Motionboard (the repository, its issues, pull requests and discussions), and also when an individual is officially representing the community in public spaces.
+
+## Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the maintainers through a private GitHub security advisory on https://github.com/krisyangdev/motionboard, or by contacting the maintainer [krisyangdev](https://github.com/krisyangdev) on GitHub. All complaints will be reviewed and investigated promptly and fairly, and the privacy and security of the reporter will be respected.
+
+## Attribution
+
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1, available at https://www.contributor-covenant.org/version/2/1/code_of_conduct.html.

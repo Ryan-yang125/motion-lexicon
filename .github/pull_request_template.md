@@ -1,23 +1,7 @@
-## Outcome
+## 改了什么
 
-Describe the user-visible result and the affected routes, recipes, commands, or data.
+## 验证
 
-## Evidence
-
-- Linked issue or proposal:
-- Screenshots or recording:
-- Reduced-motion and keyboard review:
-
-## Verification
-
-- [ ] Relevant unit or static checks pass.
-- [ ] Full quality gate passes, or the omitted checks are explained below.
-- [ ] New written content is original and third-party assets include license evidence.
-- [ ] The 48 component IDs, 44 primitive IDs, and 91 vocabulary IDs remain stable, or an accepted proposal covers the change.
-- [ ] Documentation and bilingual copy are updated where needed.
-
-Commands run:
-
-```text
-
-```
+- [ ] `npm run typecheck`
+- [ ] `npm run build`
+- [ ] 在电脑和手机宽度看过首页和受影响的配方页

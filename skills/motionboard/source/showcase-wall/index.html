@@ -1,0 +1,1364 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* ---------- fonts: OS-bundled ---------- */
+      @font-face { font-family: "Didot"; src: local("Didot"); }
+      @font-face { font-family: "Bodoni 72"; src: local("Bodoni 72 Book"); }
+      @font-face { font-family: "Gill Sans"; src: local("Gill Sans"); }
+      @font-face { font-family: "Baskerville"; src: local("Baskerville"); }
+      @font-face { font-family: "Iowan Old Style"; src: local("Iowan Old Style Roman"); }
+      @font-face { font-family: "DIN Condensed"; src: local("DIN Condensed Bold"); }
+      /* ---------- fonts: bundled with this project ---------- */
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif.woff2") format("woff2"); font-style: normal; }
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); font-style: italic; }
+      @font-face { font-family: "Fraunces"; src: url("assets/fonts/fraunces.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+      @font-face { font-family: "Fraunces"; src: url("assets/fonts/fraunces-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+      @font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/space-grotesk.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Syne"; src: url("assets/fonts/syne.woff2") format("woff2"); font-weight: 400 800; }
+      @font-face { font-family: "Unbounded"; src: url("assets/fonts/unbounded.woff2") format("woff2"); font-weight: 200 900; }
+      @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/cormorant.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
+      @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/cormorant-italic.woff2") format("woff2"); font-weight: 300 700; font-style: italic; }
+      @font-face { font-family: "DM Sans"; src: url("assets/fonts/dm-sans.woff2") format("woff2"); font-weight: 100 1000; }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0c; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0c;
+        font-family: "Inter", system-ui, sans-serif; color: #111; -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #hold, #push, #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #wall { position: absolute; left: 0; top: 0; width: 2400px; height: 1600px; }
+      .ic { display: block; flex: none; }
+
+      /* ---------- wall cards ---------- */
+      .card { position: absolute; overflow: hidden; border-radius: 10px; background: #1a1a1c; }
+      .site { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: hidden; font-family: "Inter", sans-serif; color: #111; }
+      .site div, .site span { white-space: nowrap; }
+      .ab { position: absolute; }
+      .r { display: flex; align-items: center; }
+      .cl { display: flex; flex-direction: column; }
+      .sb { justify-content: space-between; }
+      .cc { justify-content: center; }
+      .site .w, .site .w span { white-space: normal; }
+      .btn { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+      .av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 600; flex: none; }
+
+      /* ---------- font classes (fonts must be declared in CSS rules) ---------- */
+      .f-inter { font-family: "Inter", sans-serif; }
+      .f-mono { font-family: "JetBrains Mono", monospace; }
+      .f-play { font-family: "Playfair Display", serif; }
+      .f-gar { font-family: "EB Garamond", serif; }
+      .f-osw { font-family: "Oswald", sans-serif; }
+      .f-lg { font-family: "League Gothic", sans-serif; }
+      .f-arch { font-family: "Archivo Black", sans-serif; }
+      .f-mont { font-family: "Montserrat", sans-serif; }
+      .f-didot { font-family: "Didot", serif; }
+      .f-bod { font-family: "Bodoni 72", serif; }
+      .f-gill { font-family: "Gill Sans", sans-serif; }
+      .f-bask { font-family: "Baskerville", serif; }
+      .f-iowan { font-family: "Iowan Old Style", serif; }
+      .f-din { font-family: "DIN Condensed", sans-serif; }
+      .f-inst { font-family: "Instrument Serif", serif; }
+      .f-frau { font-family: "Fraunces", serif; }
+      .f-bric { font-family: "Bricolage Grotesque", sans-serif; }
+      .f-sg { font-family: "Space Grotesk", sans-serif; }
+      .f-syne { font-family: "Syne", sans-serif; }
+      .f-unb { font-family: "Unbounded", sans-serif; }
+      .f-corm { font-family: "Cormorant Garamond", serif; }
+      .f-dm { font-family: "DM Sans", sans-serif; }
+
+      /* ---------- Orrery template bar ---------- */
+      #bar {
+        position: absolute; left: 360px; top: 952px; width: 1200px; height: 84px; opacity: 0;
+        background: #111113; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+        display: flex; align-items: center; padding: 0 14px 0 14px; color: #fff; font-family: "Inter", sans-serif;
+      }
+      #bar .th { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; position: relative; flex: none; background: #15112e; }
+      #bar .nm { margin-left: 14px; display: flex; flex-direction: column; gap: 3px; width: 250px; }
+      #bar .nm b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+      #bar .nm span { font-size: 13.5px; color: #9a9aa3; white-space: nowrap; }
+      #bar .sep { width: 1px; height: 36px; background: rgba(255, 255, 255, 0.12); margin: 0 22px 0 6px; flex: none; }
+      #bar .st { display: flex; align-items: center; gap: 22px; font-size: 14px; color: #c9c9d1; white-space: nowrap; }
+      #bar .st span { display: flex; align-items: center; gap: 6px; }
+      #bar .st b { color: #fff; font-weight: 600; }
+      #bar .bts { margin-left: auto; display: flex; gap: 10px; }
+      #bar .b1, #bar .b2 { height: 46px; padding: 0 18px; border-radius: 11px; font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+      #bar .b1 { border: 1px solid rgba(255, 255, 255, 0.16); color: #fff; }
+      #bar .b2 { background: #fff; color: #111; font-weight: 600; }
+      #bar .b2 small { font-size: 15px; font-weight: 500; color: #6b6b73; }
+
+      /* ---------- end card ---------- */
+      #dim { background: radial-gradient(ellipse 60% 56% at 50% 48%, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.89) 58%, rgba(10, 10, 12, 0.78) 100%); opacity: 0; }
+      #halo { background: radial-gradient(ellipse 760px 330px at 50% 46%, rgba(10, 10, 12, 0.98) 0%, rgba(10, 10, 12, 0.94) 50%, rgba(10, 10, 12, 0) 100%); opacity: 0; }
+      #endwrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #lockup { position: absolute; left: 0; top: 380px; width: 1920px; height: 170px; display: flex; align-items: center; justify-content: center; gap: 34px; }
+      #logo { width: 140px; height: 140px; flex: none; }
+      #wm { height: 170px; overflow: hidden; font-size: 136px; line-height: 170px; font-weight: 600; letter-spacing: -0.052em; color: #fff; white-space: nowrap; padding-right: 8px; }
+      #wm .ch { display: inline-block; }
+      #wmsub { position: absolute; left: 0; top: 584px; width: 1920px; text-align: center; font-size: 30px; line-height: 40px; color: #9a9aa4; letter-spacing: -0.01em; white-space: nowrap; }
+      #fade { background: #000; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="scene" class="clip full" data-start="0" data-duration="11" data-track-index="0" data-layout-allow-overlap>
+        <div id="hold">
+          <div id="push">
+            <div id="cam">
+              <div id="wall" data-layout-allow-overlap data-layout-ignore></div>
+            </div>
+          </div>
+        </div>
+        <div id="dim" class="full"></div>
+        <div id="halo" class="full"></div>
+        <div id="bar">
+          <div class="th" id="barThumb"></div>
+          <div class="nm"><b>Clearbook</b><span>SaaS template by Studio Ferro</span></div>
+          <div class="sep"></div>
+          <div class="st" id="barStats"></div>
+          <div class="bts"><div class="b1" id="barPrev"></div><div class="b2" id="barRemix"></div></div>
+        </div>
+        <div id="fade" class="full"></div>
+      </div>
+
+      <div id="end" class="clip full" data-start="8.25" data-duration="2.75" data-track-index="1">
+        <div id="endwrap">
+          <div id="lockup"><div id="logo"></div><div id="wm"><span class="ch">O</span><span class="ch">r</span><span class="ch">r</span><span class="ch">e</span><span class="ch">r</span><span class="ch">y</span></div></div>
+          <div id="wmsub">4,200 site templates from independent designers</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+
+      /* ---------- icons (lucide-style) ---------- */
+      const IC = {
+        search: '<circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/>',
+        user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-1a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v1"/>',
+        bag: '<path d="M5.5 7h13l1 13.5h-15z"/><path d="M8.5 9.5V6.5a3.5 3.5 0 0 1 7 0v3"/>',
+        chev: '<path d="m6 9 6 6 6-6"/>',
+        chevr: '<path d="m9 18 6-6-6-6"/>',
+        arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+        upright: '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
+        up: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>',
+        plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+        check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+        star: '<path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2 6.3 20.3l1.2-6.4L2.8 9.5l6.4-.8z" fill="currentColor" stroke="none"/>',
+        play: '<path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/>',
+        pause: '<path d="M8 5v14M16 5v14"/>',
+        copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+        home: '<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/>',
+        inbox: '<path d="M3.5 13.5h5l1.5 3h4l1.5-3h5"/><path d="M5.5 5h13l2 8.5V19a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-5.5z"/>',
+        check2: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.5 3 3 5-6"/>',
+        layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+        list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
+        clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+        chart: '<path d="M4 20V4"/><path d="M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+        file: '<path d="M14 3.5H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M14 3.5v5h5"/>',
+        users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20v-1a5 5 0 0 0-3-4.6"/>',
+        building: '<rect x="5" y="3.5" width="14" height="17" rx="1"/><path d="M9 7.5h2M13 7.5h2M9 11.5h2M13 11.5h2M10 20.5v-4h4v4"/>',
+        settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+        bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+        lock: '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>',
+        globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z"/>',
+        cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+        send: '<path d="M21 3 10.5 13.5"/><path d="m21 3-6.5 18-4-7.5L3 9.5z"/>',
+        spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+        heart: '<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/>',
+        card: '<rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19M6 15h4"/>',
+        swap: '<path d="M7 4 3.5 7.5 7 11"/><path d="M3.5 7.5h14"/><path d="m17 13 3.5 3.5L17 20"/><path d="M20.5 16.5h-14"/>',
+        down: '<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>',
+        flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        pin: '<path d="M19.5 10c0 6-7.5 11.5-7.5 11.5S4.5 16 4.5 10a7.5 7.5 0 0 1 15 0z"/><circle cx="12" cy="10" r="2.5"/>',
+        mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+        leaf: '<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19 13 11"/>',
+        eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+        repeat: '<path d="m17 2.5 3.5 3.5L17 9.5"/><path d="M3.5 11V10a4 4 0 0 1 4-4h13"/><path d="m7 21.5-3.5-3.5L7 14.5"/><path d="M20.5 13v1a4 4 0 0 1-4 4h-13"/>',
+        git: '<circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7M18 10.5c0 4-6 3-10.5 6"/>',
+        terminal: '<path d="m5 7 5 5-5 5"/><path d="M12 18h7"/>',
+        filter: '<path d="M3.5 5h17l-6.5 8v6l-4-2v-4z"/>',
+        more: '<circle cx="5.5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="18.5" cy="12" r="1" fill="currentColor"/>',
+        menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+        wifi: '<path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M9 16a4.5 4.5 0 0 1 6 0"/><circle cx="12" cy="19" r=".8" fill="currentColor"/>',
+        target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+        bolt: '<path d="M13 2.5 4.5 13.5H12l-1 8 8.5-11H12z"/>',
+        shield: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/>',
+      };
+      const ic = (n, s, extra) =>
+        '<svg class="ic" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"' +
+        (extra ? ' style="' + extra + '"' : "") + ">" + IC[n] + "</svg>";
+      const av = (t, bg, s, fg) =>
+        '<span class="av" style="width:' + s + "px;height:" + s + "px;background:" + bg + ";font-size:" + Math.round(s * 0.4) + "px" + (fg ? ";color:" + fg : "") + '">' + t + "</span>";
+      const stars = (n, s, c) => '<span class="r" style="gap:2px;color:' + c + '">' + Array(n).fill(ic("star", s)).join("") + "</span>";
+      // absolute block
+      const A = (x, y, w, h, st, inner) =>
+        '<div class="ab" style="left:' + x + "px;top:" + y + "px;" + (w ? "width:" + w + "px;" : "") + (h ? "height:" + h + "px;" : "") + (st || "") + '">' + (inner || "") + "</div>";
+
+      const SITES = {};
+
+      /* =====================================================================
+         HERO: Clearbook, written at full 1920 x 1080 so the push-in lands on real detail
+         ===================================================================== */
+      const CB_MARK = (s) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#ff6a3d"/><path d="M9 9.5h9.5a4.5 4.5 0 0 1 0 9H9z" fill="none" stroke="#fff" stroke-width="2.6"/><path d="M9 18.5h11a4 4 0 0 1 0 8H9z" fill="#fff"/></svg>';
+      SITES.hero = () => {
+        const navL = ["Product", "Solutions", "Customers", "Pricing", "Changelog"];
+        const side = [
+          ["home", "Home"], ["inbox", "Inbox", "4"], ["check2", "Close", "", 1], ["repeat", "Reconciliation"],
+          ["list", "Transactions"], ["clock", "Accruals"], ["chart", "Reports"], ["building", "Vendors"],
+        ];
+        const ent = [["#4f6bed", "Ferro Labs Inc.", "US"], ["#2fa36b", "Ferro Labs Ltd", "UK"], ["#d9822b", "Ferro GmbH", "DE"]];
+        const rows = [
+          ["Bank rec: Chase operating 4471", "MC", "#8b5cf6", "Maya Chen", "Nov 2", "Done", "$1,284,310.22", 1],
+          ["Stripe payouts vs. deferred revenue", "LO", "#0ea5e9", "Liam Ortiz", "Nov 2", "Done", "$412,908.40", 1],
+          ["Accrue cloud usage, AWS and GCP", "PS", "#f43f5e", "Priya Shah", "Nov 3", "In review", "$38,120.00", 2],
+          ["Prepaid insurance amortization", "DK", "#10b981", "Dan Kowalski", "Nov 3", "In progress", "$4,750.00", 3],
+          ["Intercompany: Ferro Ltd to Ferro Inc.", "MC", "#8b5cf6", "Maya Chen", "Nov 3", "Blocked", "$96,400.00", 4],
+          ["Payroll journal, October cycle 2", "LO", "#0ea5e9", "Liam Ortiz", "Nov 4", "Not started", "$268,532.18", 5],
+        ];
+        const pill = {
+          1: "background:#e7f6ee;color:#13804b", 2: "background:#efeafe;color:#6d3fd8", 3: "background:#e8f1fd;color:#2563c9",
+          4: "background:#fdecec;color:#c13030", 5: "background:#f1f1f3;color:#6b6b76",
+        };
+        const kpi = [
+          ["Tasks complete", "42", " / 48", "87%", "#ff6a3d"],
+          ["Auto-reconciled", "91.4%", "", "+6.2 pts vs Sep", "#13804b"],
+          ["Open exceptions", "6", "", "2 need approval", "#c27a12"],
+          ["Cash variance", "$0.00", "", "All 14 accounts tie out", "#13804b"],
+        ];
+        return {
+          bg: "#15112e",
+          html:
+            // lighting
+            A(0, 0, 1920, 1080, "background:radial-gradient(ellipse 55% 60% at 50% -8%, rgba(132,104,255,.42) 0%, rgba(132,104,255,0) 70%),radial-gradient(ellipse 40% 40% at 50% 100%, rgba(255,106,61,.16) 0%, rgba(255,106,61,0) 70%)") +
+            // nav
+            A(72, 0, 1776, 80, "", '<div class="r sb" style="height:80px">' +
+              '<div class="r" style="gap:56px"><div class="r" style="gap:11px;font-size:22px;font-weight:600;letter-spacing:-.02em;color:#fff">' + CB_MARK(30) + "Clearbook</div>" +
+              '<div class="r" style="gap:34px;font-size:15.5px;color:#bdb7dc">' + navL.map((t, i) => '<span class="r" style="gap:4px">' + t + (i < 2 ? ic("chev", 15, "opacity:.6") : "") + "</span>").join("") + "</div></div>" +
+              '<div class="r" style="gap:22px;font-size:15.5px;color:#e9e6f7"><span>Sign in</span><span class="btn" style="height:42px;padding:0 18px;border-radius:10px;background:#ff6a3d;color:#fff;font-weight:600">Book a demo</span></div></div>') +
+            A(0, 80, 1920, 1, "background:rgba(255,255,255,.07)") +
+            // announcement pill
+            A(0, 124, 1920, 36, "", '<div class="r cc"><div class="r" style="gap:10px;height:36px;padding:0 16px 0 5px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-size:14.5px;color:#d9d5ef">' +
+              '<span style="height:26px;line-height:26px;padding:0 10px;border-radius:13px;background:#ff6a3d;color:#fff;font-weight:600;font-size:13px">New</span>Close Agent now reconciles 91% of transactions on its own' + ic("arrow", 15, "opacity:.7") + "</div></div>") +
+            // headline
+            A(0, 186, 1920, 0, "text-align:center;font-size:84px;line-height:90px;font-weight:600;letter-spacing:-.04em;color:#fff",
+              'Close the books in <span class="f-inst" style="font-style:italic;font-weight:400;font-size:98px;letter-spacing:-.02em;color:#ffb08f">two days,</span><br>not two weeks.') +
+            A(580, 384, 760, 0, "text-align:center;font-size:20px;line-height:31px;color:#b4aed3", '<div class="w">Clearbook connects your bank feeds, cards and ERP, then reconciles, accrues and flags exceptions so your team can lock the period on day two.</div>') +
+            A(0, 470, 1920, 52, "", '<div class="r cc" style="gap:12px;font-size:16px;font-weight:600">' +
+              '<span class="btn" style="height:52px;padding:0 24px;border-radius:12px;background:#fff;color:#15112e">Start free trial' + ic("arrow", 17) + "</span>" +
+              '<span class="btn" style="height:52px;padding:0 22px;border-radius:12px;border:1px solid rgba(255,255,255,.2);color:#fff;font-weight:500">' + ic("play", 14) + "Watch the 2-minute demo</span></div>") +
+            A(0, 540, 1920, 0, "text-align:center;font-size:13.5px;color:#8b84b3", '<span class="r cc" style="gap:18px"><span class="r" style="gap:6px">' + ic("shield", 15) + 'SOC 2 Type II</span><span>Syncs with NetSuite, QuickBooks and Xero</span><span>No credit card required</span></span>') +
+            // product frame
+            A(222, 590, 1476, 520, "border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)") +
+            A(232, 600, 1456, 520, "border-radius:13px;background:#fff;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)",
+              // sidebar
+              A(0, 0, 236, 520, "background:#f8f8fa;border-right:1px solid #ececf1") +
+              A(16, 14, 204, 34, "", '<div class="r sb"><div class="r" style="gap:9px;font-size:14px;font-weight:600">' + av("F", "#15112e", 24) + 'Ferro Labs' + ic("chev", 14, "color:#999") + '</div><span style="color:#888">' + ic("bell", 17) + "</span></div>") +
+              A(16, 58, 204, 32, "border:1px solid #e6e6ec;border-radius:8px;background:#fff;padding:0 10px;font-size:13px;color:#999", '<div class="r sb" style="height:30px"><span class="r" style="gap:7px">' + ic("search", 14) + 'Search</span><span style="font-size:11.5px;border:1px solid #e4e4ea;border-radius:4px;padding:1px 5px">&#8984;K</span></div>') +
+              A(10, 104, 216, 0, "", side.map((s) =>
+                '<div class="r sb" style="height:32px;padding:0 10px;border-radius:7px;font-size:13.5px;' + (s[3] ? "background:#ffece5;color:#c2410c;font-weight:600" : "color:#3d3d48") + '"><span class="r" style="gap:10px">' + ic(s[0], 16) + s[1] + "</span>" +
+                (s[2] ? '<span style="font-size:11.5px;background:#ff6a3d;color:#fff;border-radius:9px;padding:0 7px;line-height:18px;font-weight:600">' + s[2] + "</span>" : "") + "</div>").join("")) +
+              A(20, 378, 0, 0, "font-size:11.5px;font-weight:600;color:#9a9aa6;letter-spacing:.02em", "Entities") +
+              A(10, 398, 216, 0, "", ent.map((e) => '<div class="r sb" style="height:30px;padding:0 10px;font-size:13px;color:#3d3d48"><span class="r" style="gap:9px"><i style="width:9px;height:9px;border-radius:3px;background:' + e[0] + '"></i>' + e[1] + '</span><span style="font-size:11.5px;color:#9a9aa6">' + e[2] + "</span></div>").join("")) +
+              // header
+              A(260, 16, 1172, 0, "", '<div class="r sb"><div><div style="font-size:12.5px;color:#9a9aa6" class="r">Close' + ic("chevr", 13) + 'October 2026</div>' +
+                '<div class="r" style="gap:12px;margin-top:4px"><span style="font-size:23px;font-weight:600;letter-spacing:-.02em">October close</span><span style="font-size:12.5px;font-weight:600;background:#e7f6ee;color:#13804b;border-radius:10px;padding:2px 9px">Day 2 of 3</span><span style="font-size:13px;color:#9a9aa6">Due Nov 4</span></div></div>' +
+                '<div class="r" style="gap:10px"><span class="r" style="margin-right:6px">' + [["MC", "#8b5cf6"], ["LO", "#0ea5e9"], ["PS", "#f43f5e"], ["DK", "#10b981"]].map((a, i) => '<span style="margin-left:' + (i ? -7 : 0) + 'px;border:2px solid #fff;border-radius:50%;display:flex">' + av(a[0], a[1], 26) + "</span>").join("") + "</span>" +
+                '<span class="btn" style="height:36px;padding:0 14px;border-radius:9px;border:1px solid #e3e3ea;font-size:14px;font-weight:500">' + ic("upright", 15) + 'Export</span><span class="btn" style="height:36px;padding:0 14px;border-radius:9px;background:#15112e;color:#fff;font-size:14px;font-weight:500">' + ic("lock", 15) + "Lock period</span></div></div>") +
+              // KPI row
+              A(260, 88, 1172, 96, "", '<div class="r" style="gap:14px">' + kpi.map((k, i) =>
+                '<div style="flex:1;height:96px;border:1px solid #ececf1;border-radius:11px;padding:13px 16px;position:relative"><div style="font-size:13px;color:#6b6b76">' + k[0] + "</div>" +
+                '<div style="margin-top:6px;font-size:27px;font-weight:600;letter-spacing:-.03em">' + k[1] + '<span style="font-size:16px;color:#9a9aa6;font-weight:500">' + k[2] + "</span></div>" +
+                (i === 0 ? '<div style="position:absolute;left:16px;right:16px;bottom:14px;height:5px;border-radius:3px;background:#f1f1f4"><div style="width:87%;height:5px;border-radius:3px;background:#ff6a3d"></div></div>'
+                  : '<div style="position:absolute;right:16px;top:15px;font-size:12px;font-weight:500;color:' + k[4] + '">' + k[3] + "</div>") + "</div>").join("") + "</div>") +
+              // tabs
+              A(260, 204, 1172, 36, "border-bottom:1px solid #ececf1", '<div class="r sb" style="height:36px"><div class="r" style="gap:24px;font-size:14px;height:36px">' +
+                '<span style="height:36px;line-height:34px;border-bottom:2px solid #15112e;font-weight:600">Checklist <span style="color:#9a9aa6;font-weight:500">48</span></span><span style="color:#6b6b76">Mine <span style="color:#9a9aa6">9</span></span><span style="color:#6b6b76">Blocked <span style="color:#9a9aa6">2</span></span><span style="color:#6b6b76">Exceptions <span style="color:#9a9aa6">6</span></span></div>' +
+                '<div class="r" style="gap:14px;font-size:13px;color:#6b6b76"><span class="r" style="gap:6px">' + ic("filter", 14) + 'Filter</span><span class="r" style="gap:6px">' + ic("list", 14) + "Group by owner</span></div></div>") +
+              // table head
+              A(260, 248, 1172, 30, "font-size:12px;color:#9a9aa6;font-weight:500", '<div class="r" style="height:30px"><span style="width:470px;padding-left:34px">Task</span><span style="width:210px">Owner</span><span style="width:110px">Due</span><span style="width:170px">Status</span><span style="width:212px;text-align:right">Amount</span></div>') +
+              A(260, 278, 1172, 0, "", rows.map((r) =>
+                '<div class="r" style="height:44px;border-top:1px solid #f1f1f4;font-size:14px">' +
+                '<span class="r" style="width:470px;gap:12px"><span style="width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;' + (r[7] === 1 ? "background:#13804b;color:#fff" : "border:1.5px solid #d4d4dc") + '">' + (r[7] === 1 ? ic("check", 13) : "") + "</span>" +
+                '<span style="' + (r[7] === 1 ? "color:#6b6b76" : "font-weight:500") + '">' + r[0] + "</span></span>" +
+                '<span class="r" style="width:210px;gap:9px;color:#3d3d48">' + av(r[1], r[2], 24) + r[3] + "</span>" +
+                '<span style="width:110px;color:#6b6b76">' + r[4] + "</span>" +
+                '<span style="width:170px"><span style="font-size:12.5px;font-weight:600;border-radius:7px;padding:3px 9px;' + pill[r[7]] + '">' + r[5] + "</span></span>" +
+                '<span style="width:212px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500">' + r[6] + "</span></div>").join(""))),
+        };
+      };
+
+      /* =====================================================================
+         WALL SITES, written at 1280 px wide (desktop) and scaled into the cards
+         ===================================================================== */
+
+      // A. Tally: habit app download page (portrait, yellow)
+      SITES.tally = () => {
+        const habit = (t, sub, done, prog) =>
+          '<div class="r" style="height:76px;margin:0 22px 12px;padding:0 18px;border-radius:18px;background:#fff;gap:16px;box-shadow:0 1px 0 rgba(0,0,0,.04)">' +
+          '<span style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;' + (done ? "background:#111;color:#ffd84a" : "border:2.5px solid #e2e2e2") + '">' + (done ? ic("check", 20) : "") + "</span>" +
+          '<div style="flex:1"><div style="font-size:21px;font-weight:600;' + (done ? "color:#9a9a9a;text-decoration:line-through" : "") + '">' + t + '</div><div style="font-size:15px;color:#9a9a9a;margin-top:2px">' + sub + "</div></div>" +
+          (prog ? '<span style="font-size:17px;font-weight:700">' + prog + "</span>" : "") + "</div>";
+        return {
+          bg: "#ffd84a",
+          html:
+            A(64, 44, 1152, 60, "", '<div class="r sb" style="height:60px"><div class="r f-bric" style="gap:12px;font-size:34px;font-weight:800;letter-spacing:-.04em"><span style="width:40px;height:40px;border-radius:12px;background:#111;color:#ffd84a;display:flex;align-items:center;justify-content:center">' + ic("check", 24) + "</span>Tally</div>" +
+              '<div class="r" style="gap:40px;font-size:20px;font-weight:500;color:#3d3300"><span>Features</span><span>Pricing</span><span>Stories</span><span>Blog</span><span class="btn" style="height:52px;padding:0 26px;border-radius:26px;background:#111;color:#fff;font-weight:600">Download</span></div></div>') +
+            A(64, 186, 1152, 0, "font-size:164px;line-height:150px;font-weight:800;letter-spacing:-.06em", '<div class="f-bric">Build habits<br>that stick.</div>') +
+            A(64, 520, 620, 0, "font-size:25px;line-height:37px;color:#4a3f00", '<div class="w">Tally turns small daily actions into streaks you actually keep. Free on iPhone and Android, with widgets and Apple Watch.</div>') +
+            A(64, 664, 0, 0, "", '<div class="r" style="gap:14px">' +
+              '<div style="width:220px;height:70px;border-radius:14px;background:#111;color:#fff;padding:12px 22px"><div style="font-size:14px;opacity:.75">Download on the</div><div style="font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:-2px">App Store</div></div>' +
+              '<div style="width:220px;height:70px;border-radius:14px;background:#111;color:#fff;padding:12px 22px"><div style="font-size:14px;opacity:.75">GET IT ON</div><div style="font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:-2px">Google Play</div></div></div>') +
+            A(64, 770, 0, 0, "font-size:19px;color:#3d3300", '<div class="r" style="gap:12px">' + stars(5, 20, "#111") + "<b>4.8</b> &middot; 120K ratings &middot; Editors&rsquo; Choice</div>") +
+            A(760, 560, 0, 0, "font-size:19px;color:#3d3300;line-height:30px", '<div style="font-family:inherit"><b style="font-size:64px;letter-spacing:-.04em;line-height:70px">2.1M</b><br>people checked in today</div>') +
+            // phone
+            A(372, 880, 536, 1100, "border-radius:84px;background:#111;box-shadow:0 40px 90px rgba(80,60,0,.35)",
+              A(14, 14, 508, 1072, "border-radius:72px;background:#f6f5f1;overflow:hidden",
+                A(0, 0, 508, 60, "", '<div class="r sb" style="height:60px;padding:0 44px;font-size:19px;font-weight:600"><span>9:41</span><span style="width:130px;height:36px;border-radius:18px;background:#111"></span><span class="r" style="gap:6px">' + ic("wifi", 18) + '<span style="width:28px;height:13px;border-radius:4px;border:2px solid #111"></span></span></div>') +
+                A(34, 84, 0, 0, "", '<div class="f-bric" style="font-size:50px;font-weight:800;letter-spacing:-.04em">Today</div><div style="font-size:18px;color:#8a8a8a;margin-top:2px">Thursday, November 5</div>') +
+                A(352, 82, 120, 120, "", '<svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" fill="none" stroke="#ece9df" stroke-width="13"/><circle cx="60" cy="60" r="48" fill="none" stroke="#111" stroke-width="13" stroke-linecap="round" stroke-dasharray="181 302" transform="rotate(-90 60 60)"/></svg>') +
+                A(352, 124, 120, 0, "text-align:center;font-size:26px;font-weight:800", "3/5") +
+                A(0, 226, 508, 0, "", habit("Meditate 10 min", "Morning &middot; 12 day streak", 1) + habit("Read 20 pages", "The Overstory &middot; p. 214", 1) + habit("Drink water", "6 of 8 glasses", 0, "6/8") + habit("Run 5 km", "Evening &middot; 3x a week", 0) + habit("Journal", "Before bed", 0) + habit("Stretch", "10 min", 1)))) +
+            A(120, 1150, 280, 112, "border-radius:22px;background:#fff;box-shadow:0 20px 50px rgba(80,60,0,.18);padding:20px 22px", '<div class="r" style="gap:14px"><span style="width:52px;height:52px;border-radius:14px;background:#ffecd6;color:#f06a00;display:flex;align-items:center;justify-content:center">' + ic("flame", 28) + '</span><div><div style="font-size:30px;font-weight:800;letter-spacing:-.03em">12 days</div><div style="font-size:16px;color:#8a8a8a">Longest streak yet</div></div></div>') +
+            A(880, 1290, 320, 170, "border-radius:22px;background:#fff;box-shadow:0 20px 50px rgba(80,60,0,.18);padding:20px 22px",
+              '<div style="font-size:16px;color:#8a8a8a">This week</div><div style="font-size:30px;font-weight:800;letter-spacing:-.03em">86% done</div>' +
+              '<div class="r" style="gap:10px;align-items:flex-end;height:64px;margin-top:10px">' + [40, 58, 30, 64, 52, 64, 22].map((h, i) => '<span style="flex:1;height:' + h + "px;border-radius:6px;background:" + (i === 5 ? "#111" : "#ece9df") + '"></span>').join("") + "</div>"),
+        };
+      };
+
+      // B. Kodo: build tool, dark terminal hero
+      SITES.kodo = () => {
+        const L = (t, c) => '<div style="white-space:pre;color:' + (c || "#d4d4d4") + '">' + t + "</div>";
+        return {
+          bg: "#0a0a0a",
+          html:
+            A(0, 0, 1280, 800, "background:radial-gradient(ellipse 50% 60% at 78% 40%, rgba(74,222,128,.12) 0%, rgba(74,222,128,0) 70%)") +
+            A(56, 0, 1168, 70, "border-bottom:1px solid #1f1f1f", '<div class="r sb" style="height:70px"><div class="r" style="gap:44px"><div class="r f-mono" style="gap:10px;font-size:21px;font-weight:700;color:#fff"><span style="color:#4ade80">&gt;_</span>kodo</div>' +
+              '<div class="r" style="gap:28px;font-size:14.5px;color:#9a9a9a"><span>Docs</span><span>Remote cache</span><span>Pricing</span><span>Changelog</span><span>Blog</span></div></div>' +
+              '<div class="r" style="gap:18px;font-size:14.5px;color:#d4d4d4"><span class="r" style="gap:7px">' + ic("git", 16) + 'Star <span style="color:#777">18.2k</span></span><span class="btn" style="height:36px;padding:0 14px;border-radius:7px;background:#fff;color:#0a0a0a;font-weight:600">Deploy cache</span></div></div>') +
+            A(56, 140, 0, 0, "", '<div class="r f-mono" style="gap:10px;height:30px;padding:0 12px;border-radius:15px;border:1px solid #2a2a2a;font-size:13px;color:#a3a3a3"><span style="width:7px;height:7px;border-radius:50%;background:#4ade80"></span>v3.2 &middot; remote caching is GA</div>') +
+            A(56, 196, 0, 0, "font-size:62px;line-height:66px;font-weight:600;letter-spacing:-.045em;color:#fafafa", "Builds that finish<br>before your coffee.") +
+            A(56, 346, 520, 0, "font-size:17px;line-height:27px;color:#8f8f8f", '<div class="w">Kodo caches every task across your monorepo and your CI, so the second build on any machine takes seconds.</div>') +
+            A(56, 446, 0, 0, "", '<div class="r" style="gap:12px"><span class="btn f-mono" style="height:46px;padding:0 16px;border-radius:9px;border:1px solid #2e2e2e;background:#141414;color:#e5e5e5;font-size:15px"><span style="color:#4ade80">$</span> npm i -g kodo' + ic("copy", 16, "color:#777;margin-left:10px") + '</span><span class="btn" style="height:46px;padding:0 18px;border-radius:9px;background:#4ade80;color:#052e12;font-size:15px;font-weight:600">Read the docs' + ic("arrow", 16) + "</span></div>") +
+            A(56, 560, 520, 0, "", '<div class="r" style="gap:46px">' + [["94%", "faster CI"], ["3.1M", "builds per day"], ["0", "config files"]].map((s) => '<div><div style="font-size:34px;font-weight:600;letter-spacing:-.03em;color:#fff">' + s[0] + '</div><div style="font-size:14px;color:#777;margin-top:2px">' + s[1] + "</div></div>").join("") + "</div>") +
+            A(56, 690, 1168, 0, "font-size:13px;color:#555", '<div class="r" style="gap:54px"><span>Used by engineering teams at</span><b style="color:#8a8a8a;font-size:19px;letter-spacing:-.02em">Northfold</b><b style="color:#8a8a8a;font-size:19px" class="f-mono">quill</b><b style="color:#8a8a8a;font-size:19px;letter-spacing:.08em">HEXWAY</b><b style="color:#8a8a8a;font-size:19px">Brightwave</b><b style="color:#8a8a8a;font-size:19px;font-style:italic">plumline</b></div>') +
+            A(650, 132, 574, 490, "border-radius:14px;background:#111;border:1px solid #262626;box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden",
+              A(0, 0, 574, 40, "border-bottom:1px solid #222;background:#161616", '<div class="r" style="height:40px;padding:0 14px;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:#3a3a3a"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3a3a"></i><i style="width:11px;height:11px;border-radius:50%;background:#3a3a3a"></i><span class="f-mono" style="margin-left:150px;font-size:12.5px;color:#777">~/acme/monorepo</span></div>') +
+              A(22, 58, 530, 0, "font-size:14px;line-height:25px", '<div class="f-mono">' +
+                L('<span style="color:#4ade80">$</span> kodo build --all', "#fff") + L("  resolved 1,284 packages in 0.41s", "#8a8a8a") + L("  connected to remote cache (iad1)", "#8a8a8a") +
+                L('<span style="color:#4ade80">&check;</span> @acme/ui:build       <span style="color:#777">cached</span>   0.02s') +
+                L('<span style="color:#4ade80">&check;</span> @acme/api:typecheck  <span style="color:#777">cached</span>   0.03s') +
+                L('<span style="color:#4ade80">&check;</span> @acme/db:generate    <span style="color:#777">cached</span>   0.01s') +
+                L('<span style="color:#facc15">&#9679;</span> @acme/web:build      <span style="color:#facc15">running</span>  3.12s') +
+                L('<span style="color:#4ade80">&check;</span> @acme/docs:build     <span style="color:#777">cached</span>   0.04s') + L('<span style="color:#4ade80">&check;</span> @acme/email:build    <span style="color:#777">cached</span>   0.02s') +
+                L("") + L("  Tasks:  412 successful, 418 total", "#8a8a8a") + L("  Cached: 406 of 418 (97%)", "#8a8a8a") +
+                L("  Remote: 4m 05s saved on this run", "#8a8a8a") + L('  Time:   <span style="color:#4ade80;font-weight:700">6.8s</span> <span style="color:#666">(was 4m 12s)</span>') + L('<span style="color:#4ade80">$</span> <span style="background:#d4d4d4">&nbsp;</span>', "#fff") + "</div>")),
+        };
+      };
+
+      // C. Daybreak: music festival, poster typography on hot pink
+      SITES.daybreak = () => ({
+        bg: "#ff4d8d",
+        html:
+          A(880, 80, 520, 520, "", '<svg width="520" height="520" viewBox="0 0 520 520">' + [250, 210, 170, 130, 90].map((r, i) => '<circle cx="260" cy="260" r="' + r + '" fill="' + ["#ff8a3d", "#ffb13b", "#ffd84a", "#fff07a", "#fffbe0"][i] + '"/>').join("") + "</svg>") +
+          A(48, 34, 1184, 70, "", '<div class="r sb f-lg" style="height:70px;color:#1d0610"><span style="font-size:52px;letter-spacing:.02em">DAYBREAK</span><span class="r" style="gap:38px;font-size:30px;letter-spacing:.05em"><span>LINEUP</span><span>TICKETS</span><span>TRAVEL</span><span>FAQ</span><span style="background:#1d0610;color:#ff4d8d;padding:6px 26px 4px;border-radius:30px">BUY TICKETS</span></span></div>') +
+          A(44, 130, 0, 0, "font-size:330px;line-height:270px;color:#1d0610;letter-spacing:-.005em", '<div class="f-lg">DAYBREAK<br>FESTIVAL 27</div>') +
+          A(52, 690, 1176, 0, "border-top:4px solid #1d0610;padding-top:16px", '<div class="r sb f-osw" style="font-size:34px;font-weight:600;letter-spacing:.06em;color:#1d0610"><span>JULY 16 &ndash; 18, 2027</span><span>OJAI, CALIFORNIA</span><span>3 STAGES &middot; 64 ARTISTS</span></div>') +
+          A(52, 790, 1176, 0, "color:#1d0610;line-height:1", '<div class="f-lg" style="font-size:96px;letter-spacing:.01em">FLORA KENT &middot; THE MERIDIANS &middot; OKO</div>' +
+            '<div class="f-lg" style="font-size:62px;margin-top:14px;letter-spacing:.02em">JUNE HARBOR &middot; SILVERLAKE YOUTH &middot; MARA VEGA &middot; DUSK CLUB</div>' +
+            '<div class="f-lg" style="font-size:44px;margin-top:14px;letter-spacing:.03em;opacity:.8">PALOMA RAE &middot; NIGHT SWIMMING &middot; ARLO &amp; THE TIDES &middot; KAI MORENO &middot; + 41 MORE</div>') +
+          A(52, 1070, 1176, 160, "", '<div class="r" style="gap:16px">' + [["GA 3-DAY PASS", "$289", "SELLING FAST"], ["VIP 3-DAY PASS", "$649", "SHADED LOUNGE"], ["CAMPING ADD-ON", "+$120", "4 NIGHTS"]].map((t) =>
+            '<div style="flex:1;height:160px;background:#1d0610;color:#ff4d8d;border-radius:14px;padding:20px 26px;position:relative"><div class="f-osw" style="font-size:24px;letter-spacing:.08em;font-weight:500">' + t[0] + '</div><div class="f-lg" style="font-size:88px;line-height:90px;color:#fff">' + t[1] + '</div><div class="f-osw" style="position:absolute;right:22px;top:22px;font-size:16px;letter-spacing:.1em;border:1.5px solid #ff4d8d;border-radius:14px;padding:2px 10px">' + t[2] + "</div></div>").join("") + "</div>"),
+      });
+
+      // D. Casa Albar: boutique hotel, sand and serif
+      SITES.albar = () => ({
+        bg: "#ece3d4",
+        html:
+          A(56, 0, 1168, 76, "border-bottom:1px solid rgba(47,42,36,.18)", '<div class="r sb f-gill" style="height:76px;font-size:15px;letter-spacing:.14em;color:#2f2a24"><span class="r" style="gap:34px"><span>ROOMS</span><span>DINING</span><span>SPA</span><span>JOURNAL</span></span>' +
+            '<span class="r" style="gap:26px"><span>EN / PT</span><span style="background:#2f2a24;color:#ece3d4;padding:11px 22px;letter-spacing:.14em">BOOK A STAY</span></span></div>') +
+          A(0, 22, 1280, 0, "text-align:center;font-size:30px;letter-spacing:.34em;color:#2f2a24", '<span class="f-corm" style="font-weight:600">CASA ALBAR</span>') +
+          A(64, 150, 0, 0, "font-size:14px;letter-spacing:.24em;color:#8a7a62", '<span class="f-gill">COMPORTA, PORTUGAL &middot; 14 ROOMS</span>') +
+          A(60, 184, 0, 0, "font-size:88px;line-height:86px;color:#2f2a24;letter-spacing:-.01em", '<div class="f-corm" style="font-weight:500">A quiet house<br><i>by the sea.</i></div>') +
+          A(64, 384, 470, 0, "font-size:20px;line-height:31px;color:#5c5246", '<div class="w f-corm" style="font-size:22px">Fourteen rooms among the pines and rice fields, ten minutes from the dunes of Pego beach. Breakfast from the garden, dinner by the fire.</div>') +
+          A(64, 530, 0, 0, "", '<div class="r f-gill" style="gap:40px;font-size:14px;letter-spacing:.1em;color:#2f2a24">' + [["9.6", "GUEST RATING"], ["2 HRS", "FROM LISBON"], ["APR&ndash;OCT", "POOL OPEN"]].map((s) => '<div><div class="f-corm" style="font-size:38px;letter-spacing:0;font-weight:500">' + s[0] + '</div><div style="margin-top:2px;color:#8a7a62">' + s[1] + "</div></div>").join("") + "</div>") +
+          A(660, 120, 270, 470, "border-radius:135px 135px 0 0;overflow:hidden", PH.tag("albarRoom", 270, 470)) +
+          A(950, 200, 230, 390, "border-radius:115px 115px 0 0;overflow:hidden", PH.tag("albarFacade", 230, 390)) +
+          A(660, 604, 520, 0, "font-size:13px;letter-spacing:.14em;color:#8a7a62", '<div class="r sb f-gill"><span>THE GARDEN SUITE</span><span>FROM &euro;420 / NIGHT</span></div>') +
+          A(64, 670, 1152, 88, "background:#f7f2e9;border:1px solid rgba(47,42,36,.14)", '<div class="r f-gill" style="height:86px;color:#2f2a24">' + [["CHECK IN", "Fri, Nov 13"], ["CHECK OUT", "Mon, Nov 16"], ["GUESTS", "2 adults"], ["ROOM", "Any room"]].map((f) =>
+            '<div style="flex:1;padding:0 28px;border-right:1px solid rgba(47,42,36,.14)"><div style="font-size:12px;letter-spacing:.16em;color:#8a7a62">' + f[0] + '</div><div class="f-corm" style="font-size:24px;font-weight:500;margin-top:2px">' + f[1] + "</div></div>").join("") +
+            '<div style="width:260px;height:86px;background:#2f2a24;color:#ece3d4;display:flex;align-items:center;justify-content:center;font-size:14px;letter-spacing:.16em">CHECK AVAILABILITY</div></div>'),
+      });
+
+      // E. Common Thread: streetwear drop on acid lime
+      SITES.thread = () => ({
+        bg: "#d4ff3d",
+        html:
+          A(0, 0, 1280, 46, "background:#111;color:#d4ff3d;font-size:17px;letter-spacing:.06em;line-height:46px", '<span class="f-arch">&nbsp;&nbsp;FREE SHIPPING OVER $100 &nbsp;&#10033;&nbsp; DROP 07 IS LIVE &nbsp;&#10033;&nbsp; 30-DAY RETURNS &nbsp;&#10033;&nbsp; FREE SHIPPING OVER $100 &nbsp;&#10033;&nbsp; DROP 07 IS LIVE</span>') +
+          A(48, 46, 1184, 90, "", '<div class="r sb" style="height:90px;color:#111"><span class="f-arch" style="font-size:32px;letter-spacing:-.02em">COMMON THREAD</span><span class="r f-arch" style="gap:34px;font-size:17px"><span>SHOP</span><span style="text-decoration:underline;text-underline-offset:6px">NEW</span><span>LOOKBOOK</span><span>ABOUT</span></span><span class="r" style="gap:22px">' + ic("search", 26) + ic("user", 26) + '<span class="r f-arch" style="gap:6px;font-size:17px">' + ic("bag", 26) + "2</span></span></div>") +
+          A(40, 150, 0, 0, "font-size:212px;line-height:190px;letter-spacing:-.05em;color:#111", '<div class="f-arch">DROP 07<br><span style="color:#d4ff3d;-webkit-text-stroke:5px #111">OUT NOW</span></div>') +
+          A(48, 560, 1184, 60, "", '<div class="r sb"><div class="w f-inter" style="width:560px;font-size:20px;line-height:29px;font-weight:500;color:#111">Heavyweight cotton, cut boxy and dyed in small runs in Los Angeles. When it&rsquo;s gone, it&rsquo;s gone.</div><div class="r" style="gap:14px"><span class="f-inter" style="font-size:16px;font-weight:600;color:#111">Restocks Friday 10am PT</span><span class="f-arch" style="background:#111;color:#d4ff3d;padding:16px 28px;font-size:17px">SHOP THE DROP &rarr;</span></div></div>') +
+          A(48, 664, 1184, 0, "", '<div class="r" style="gap:20px;align-items:flex-start">' + [
+            [PH.tag("tee", 382, 420, "width:100%"), "HEAVYWEIGHT TEE", "Black", "$48", "NEW"],
+            [PH.tag("hoodie", 382, 420, "width:100%"), "BOXY HOODIE", "Clay", "$118", "LOW STOCK"],
+            [PH.tag("pant", 382, 420, "width:100%"), "CARGO PANT", "Olive", "$128", "NEW"],
+          ].map((p) =>
+            '<div style="flex:1"><div style="height:420px;background:#f4f4ee;position:relative;display:flex;align-items:center;justify-content:center">' + p[0] +
+            '<span class="f-arch" style="position:absolute;left:16px;top:16px;font-size:14px;background:#111;color:#d4ff3d;padding:5px 10px">' + p[4] + "</span>" +
+            '<span style="position:absolute;right:16px;top:14px;color:#111">' + ic("heart", 24) + "</span></div>" +
+            '<div class="r sb f-arch" style="margin-top:14px;font-size:19px;color:#111"><span>' + p[1] + "</span><span>" + p[3] + '</span></div><div class="f-inter" style="font-size:16px;color:#3a4a10;margin-top:4px">' + p[2] + " &middot; 4 colors</div></div>").join("") + "</div>"),
+      });
+
+      // F. The Atlas Review: magazine, long page
+      SITES.atlas = () => {
+        const kick = (t) => '<div class="f-inter" style="font-size:12px;font-weight:700;letter-spacing:.14em;color:#c0291e">' + t + "</div>";
+        const story = (k, h, d, b) => '<div style="flex:1">' + kick(k) + '<div class="w f-play" style="font-size:31px;line-height:36px;font-weight:600;margin-top:10px;color:#141210">' + h + '</div><div class="w f-iowan" style="font-size:17px;line-height:26px;color:#5a544a;margin-top:12px">' + d + '</div><div class="f-inter" style="font-size:13px;color:#8a8478;margin-top:12px">' + b + "</div></div>";
+        return {
+          bg: "#f5f1e8",
+          html:
+            A(56, 0, 1168, 48, "border-bottom:1px solid #d9d2c3", '<div class="r sb f-inter" style="height:48px;font-size:13.5px;color:#5a544a"><span>Thursday, November 5, 2026</span><span class="r" style="gap:22px"><span>Newsletters</span><span>Sign in</span><span style="background:#c0291e;color:#fff;padding:7px 14px;font-weight:600">Subscribe for $1/week</span></span></div>') +
+            A(0, 70, 1280, 0, "text-align:center;font-size:132px;line-height:140px;color:#141210;letter-spacing:-.02em", '<div class="f-didot">The Atlas Review</div>') +
+            A(56, 228, 1168, 50, "border-top:3px solid #141210;border-bottom:1px solid #141210", '<div class="r cc f-inter" style="height:48px;gap:34px;font-size:14.5px;font-weight:600;color:#141210"><span>World</span><span>Politics</span><span>Culture</span><span>Science</span><span>Design</span><span>Books</span><span>Ideas</span><span>Travel</span><span>Podcasts</span><span>The Print Edition</span></div>') +
+            // lead
+            A(56, 316, 660, 0, "", kick("TRAVEL &middot; THE LONG READ") +
+              '<div class="w f-didot" style="font-size:66px;line-height:68px;margin-top:16px;color:#141210">The quiet return of the night train</div>' +
+              '<div class="w f-iowan" style="font-size:21px;line-height:32px;margin-top:20px;color:#3d3830">Twenty years after Europe tore up its sleeper routes, a new generation of operators is betting that travellers will trade four hours in an airport for a bunk, a book and a sunrise over the Alps.</div>' +
+              '<div class="r f-inter" style="gap:10px;margin-top:22px;font-size:14px;color:#5a544a">' + av("CW", "#7a5c3e", 30) + "By <b style='color:#141210'>Clara Weiss</b> &middot; Photographs by Jonas Lind &middot; 22 min read</div>" +
+              '<div style="margin-top:34px;border-top:1px solid #d9d2c3">' + [["Opinion", "Europe should run its sleepers like airlines, not museums", "Henrik Dahl"], ["Travel", "Paris to Berlin in a cabin for two: a night on the new line", "Maud Leclerc"], ["Data", "How many flights could rail replace by 2030? Our analysis", "The Atlas Data Desk"]].map((r) =>
+                '<div class="r" style="gap:16px;padding:14px 0;border-bottom:1px solid #d9d2c3;align-items:flex-start"><span class="f-inter" style="width:76px;font-size:12px;font-weight:700;letter-spacing:.1em;color:#c0291e;padding-top:5px">' + r[0].toUpperCase() + '</span><div><div class="w f-play" style="font-size:20px;line-height:26px;font-weight:600;color:#141210">' + r[1] + '</div><div class="f-inter" style="font-size:13px;color:#8a8478;margin-top:4px">' + r[2] + "</div></div></div>").join("") + "</div>") +
+            // cover of the print issue
+            A(760, 316, 464, 600, "background:#1f3c5c;color:#f5f1e8", PH.tag("atlasCover", 464, 600) +
+              '<div style="position:absolute;left:32px;top:30px;right:32px;bottom:30px;display:flex;flex-direction:column">' +
+              '<div class="r sb f-inter" style="font-size:12px;letter-spacing:.14em;font-weight:600"><span>WINTER 2026</span><span>No. 214</span></div>' +
+              '<div class="f-didot" style="font-size:112px;line-height:110px;margin-top:14px;letter-spacing:-.02em">Atlas</div>' +
+              '<div style="margin-top:auto">' +
+              '<div class="w f-iowan" style="font-size:22px;line-height:30px;margin-top:0;font-style:italic">Night trains, slow roads and the case for taking the long way</div>' +
+              '<div class="w f-inter" style="font-size:13px;line-height:19px;margin-top:16px;opacity:.75">Inside: Lagos after dark &middot; The last glassblowers of Murano &middot; Fiction by Ana Ruiz</div>' + "</div></div>") +
+            A(56, 960, 1168, 0, "border-top:1px solid #141210") +
+            A(56, 990, 1168, 0, "", '<div class="r" style="gap:40px;align-items:flex-start">' +
+              story("SCIENCE", "What octopuses know about pain", "New experiments suggest the animals feel far more than we assumed, and that changes how we farm them.", "Ravi Menon &middot; 11 min") +
+              story("DESIGN", "The typeface that runs every airport", "How one Dutch studio quietly shaped the signs that tell ninety million travellers where to go.", "Elise Moreau &middot; 9 min") +
+              story("BOOKS", "Ana Ruiz on writing the sea", "The novelist talks about tides, her grandmother&rsquo;s boat and the four drafts she threw away.", "Interview by Tom Haas &middot; 14 min") + "</div>") +
+            A(56, 1290, 1168, 0, "border-top:1px solid #d9d2c3") +
+            A(56, 1316, 0, 0, "", kick("MOST READ THIS WEEK")) +
+            A(56, 1356, 1168, 0, "", '<div class="r" style="gap:36px;align-items:flex-start">' + [
+              "Why every city is suddenly building gondolas", "The man who maps forgotten footpaths", "A field guide to the new British pub", "Inside the race to save the Arctic seed vault",
+            ].map((t, i) => '<div class="r" style="flex:1;gap:14px;align-items:flex-start"><span class="f-didot" style="font-size:56px;line-height:52px;color:#c0291e">' + (i + 1) + '</span><span class="w f-play" style="font-size:21px;line-height:28px;font-weight:600;color:#141210">' + t + "</span></div>").join("") + "</div>"),
+        };
+      };
+
+      // G. Pulse: product analytics SaaS, white
+      SITES.pulse = () => ({
+        bg: "#ffffff",
+        html:
+          A(0, 0, 1280, 800, "background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(91,91,214,.08) 0%, rgba(91,91,214,0) 70%)") +
+          A(48, 0, 1184, 64, "", '<div class="r sb" style="height:64px"><div class="r" style="gap:44px"><div class="r" style="gap:9px;font-size:20px;font-weight:700;letter-spacing:-.03em"><svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" rx="7" fill="#5b5bd6"/><path d="M5 13h3l2-5 4 9 2-4h3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pulse</div>' +
+            '<div class="r" style="gap:28px;font-size:14.5px;color:#55555f"><span>Product</span><span>Customers</span><span>Pricing</span><span>Docs</span><span>Changelog</span></div></div>' +
+            '<div class="r" style="gap:18px;font-size:14.5px"><span style="color:#55555f">Log in</span><span class="btn" style="height:38px;padding:0 16px;border-radius:8px;background:#111;color:#fff;font-weight:500">Get started</span></div></div>') +
+          A(0, 100, 1280, 30, "", '<div class="r cc"><div class="r" style="gap:8px;height:30px;padding:0 12px 0 4px;border:1px solid #e6e6ee;border-radius:15px;font-size:13px;color:#55555f"><span style="background:#eeeefc;color:#5b5bd6;font-weight:600;border-radius:11px;padding:2px 8px">New</span>Funnels 2.0: break down by any property' + ic("arrow", 13) + "</div></div>") +
+          A(0, 150, 1280, 0, "text-align:center;font-size:62px;line-height:66px;font-weight:600;letter-spacing:-.045em", "Product analytics your<br>whole team will use") +
+          A(0, 298, 1280, 0, "text-align:center;font-size:18px;line-height:28px;color:#6b6b76", "Track events, funnels and retention without writing SQL. Set up in ten minutes.") +
+          A(0, 352, 1280, 44, "", '<div class="r cc" style="gap:10px;font-size:15px;font-weight:500"><span class="btn" style="height:44px;padding:0 20px;border-radius:9px;background:#5b5bd6;color:#fff">Start for free</span><span class="btn" style="height:44px;padding:0 20px;border-radius:9px;border:1px solid #e0e0e8">Book a demo</span></div>') +
+          A(150, 440, 980, 420, "border-radius:12px;border:1px solid #e6e6ee;background:#fff;box-shadow:0 20px 50px rgba(30,30,90,.10);overflow:hidden",
+            A(0, 0, 190, 420, "background:#f8f8fb;border-right:1px solid #eeeef3;padding:16px 12px", '<div class="r" style="gap:8px;font-size:13px;font-weight:600;margin-bottom:14px">' + av("A", "#111", 20) + "Acme Inc.</div>" +
+              [["home", "Overview", 1], ["bolt", "Events"], ["filter", "Funnels"], ["repeat", "Retention"], ["users", "Users"], ["chart", "Dashboards"], ["settings", "Settings"]].map((s) =>
+                '<div class="r" style="gap:9px;height:30px;padding:0 8px;border-radius:6px;font-size:13px;' + (s[2] ? "background:#eeeefc;color:#5b5bd6;font-weight:600" : "color:#55555f") + '">' + ic(s[0], 15) + s[1] + "</div>").join("")) +
+            A(212, 16, 0, 0, "font-size:17px;font-weight:600", 'Overview <span style="font-size:13px;color:#9a9aa6;font-weight:400;margin-left:8px">Last 30 days</span>') +
+            A(212, 52, 750, 84, "", '<div class="r" style="gap:12px">' + [["Active users", "24,812", "+12.4%"], ["Conversion", "3.81%", "+0.6%"], ["D30 retention", "41.2%", "+2.1%"], ["Avg. session", "6m 12s", "+18s"]].map((k) =>
+              '<div style="flex:1;height:84px;border:1px solid #eeeef3;border-radius:9px;padding:12px 14px"><div style="font-size:12px;color:#6b6b76">' + k[0] + '</div><div class="r" style="gap:8px;margin-top:6px"><span style="font-size:24px;font-weight:600;letter-spacing:-.03em">' + k[1] + '</span><span style="font-size:12px;color:#16a34a;font-weight:600">' + k[2] + "</span></div></div>").join("") + "</div>") +
+            A(212, 154, 750, 200, "", '<svg width="750" height="200" viewBox="0 0 750 200">' + [40, 90, 140].map((y) => '<line x1="0" x2="750" y1="' + y + '" y2="' + y + '" stroke="#f1f1f5"/>').join("") +
+              '<path d="M0 150 C40 140 70 146 110 128 S180 132 220 110 S300 118 340 96 S420 104 460 80 S540 86 580 62 S680 52 750 30 L750 200 L0 200Z" fill="rgba(91,91,214,.10)"/><path d="M0 150 C40 140 70 146 110 128 S180 132 220 110 S300 118 340 96 S420 104 460 80 S540 86 580 62 S680 52 750 30" fill="none" stroke="#5b5bd6" stroke-width="2.5"/>' +
+              '<path d="M0 170 C60 168 120 160 180 158 S300 150 360 146 S480 140 540 132 S660 126 750 116" fill="none" stroke="#c9c9f2" stroke-width="2" stroke-dasharray="5 5"/></svg>')),
+      });
+
+      // H. Meridian: AI research assistant, deep purple
+      SITES.meridian = () => ({
+        bg: "#140a30",
+        html:
+          A(0, 0, 1280, 1707, "background:radial-gradient(ellipse 70% 40% at 50% 0%, rgba(150,96,255,.45) 0%, rgba(150,96,255,0) 70%),radial-gradient(ellipse 50% 30% at 80% 60%, rgba(255,92,180,.14) 0%, rgba(255,92,180,0) 70%)") +
+          A(64, 40, 1152, 60, "", '<div class="r sb" style="height:60px"><div class="r" style="gap:12px;font-size:26px;font-weight:600;letter-spacing:-.03em;color:#fff"><svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="15" fill="none" stroke="#b79cff" stroke-width="2.4"/><path d="M2 17h30M17 2c6 4 6 26 0 30" fill="none" stroke="#b79cff" stroke-width="2.4"/></svg>Meridian</div>' +
+            '<div class="r" style="gap:36px;font-size:19px;color:#b9addb"><span>Product</span><span>Research</span><span>Teams</span><span>Pricing</span></div>' +
+            '<div class="r" style="gap:22px;font-size:19px;color:#fff"><span>Sign in</span><span class="btn" style="height:50px;padding:0 24px;border-radius:25px;background:#fff;color:#140a30;font-weight:600">Try Meridian free</span></div></div>') +
+          A(0, 190, 1280, 0, "text-align:center", '<span style="display:inline-block;font-size:17px;color:#d6c9ff;border:1px solid rgba(183,156,255,.35);border-radius:20px;padding:7px 18px">Now reading 2.4M open-access papers</span>') +
+          A(0, 262, 1280, 0, "text-align:center;font-size:104px;line-height:106px;font-weight:600;letter-spacing:-.05em;color:#fff", "Research that<br>cites its sources.") +
+          A(240, 506, 800, 0, "text-align:center;font-size:23px;line-height:35px;color:#b9addb", '<div class="w">Upload papers or point Meridian at a field. Every answer links to the exact paragraph it came from.</div>') +
+          A(120, 640, 1040, 170, "border-radius:26px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);padding:26px 30px",
+            '<div class="w" style="font-size:24px;line-height:34px;color:#fff">Compare the retrieval methods in these 12 papers and flag where their results disagree<span style="display:inline-block;width:2px;height:28px;background:#b79cff;vertical-align:-5px;margin-left:3px"></span></div>' +
+            '<div class="r sb" style="margin-top:26px"><div class="r" style="gap:10px;font-size:16px;color:#d6c9ff"><span class="r" style="gap:7px;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:6px 12px">' + ic("file", 17) + '12 PDFs</span><span class="r" style="gap:7px;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:6px 12px">' + ic("globe", 17) + "Search the web</span></div>" +
+            '<span style="width:48px;height:48px;border-radius:50%;background:#fff;color:#140a30;display:flex;align-items:center;justify-content:center">' + ic("up", 24) + "</span></div>") +
+          A(120, 840, 1040, 40, "", '<div class="r" style="gap:12px;font-size:17px;color:#b9addb">' + ["Summarize a paper", "Find contradictions", "Draft a related-work section", "Explain a method"].map((t) => '<span style="border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:8px 16px">' + t + "</span>").join("") + "</div>") +
+          A(120, 930, 1040, 820, "border-radius:26px;background:#1f1445;border:1px solid rgba(255,255,255,.1);padding:30px 34px",
+            '<div class="r sb" style="font-size:16px;color:#9d90c7"><span class="r" style="gap:10px"><span style="width:30px;height:30px;border-radius:50%;background:#b79cff;display:flex;align-items:center;justify-content:center;color:#140a30">' + ic("spark", 17) + '</span><b style="color:#fff;font-size:18px">Answer</b> &middot; 12 sources &middot; 18s</span><span class="r" style="gap:14px">' + ic("copy", 19) + ic("repeat", 19) + "</span></div>" +
+            '<div class="w" style="font-size:21px;line-height:34px;color:#e4dcff;margin-top:22px">Nine of the twelve papers use dense retrieval with a learned bi-encoder <span style="background:#3b2a78;border-radius:5px;padding:0 7px;font-size:15px">1</span> <span style="background:#3b2a78;border-radius:5px;padding:0 7px;font-size:15px">4</span>, while three rely on sparse BM25 with re-ranking <span style="background:#3b2a78;border-radius:5px;padding:0 7px;font-size:15px">7</span>. Results agree on short queries but split on multi-hop questions.</div>' +
+            '<div style="font-size:19px;font-weight:600;color:#fff;margin-top:26px">Where results disagree</div>' +
+            '<div class="w" style="font-size:19px;line-height:31px;color:#cfc4f2;margin-top:10px">&bull; Kim et al. report a 9.2 point gain on HotpotQA that Alvarez et al. could not reproduce <span style="background:#3b2a78;border-radius:5px;padding:0 7px;font-size:15px">2</span><br>&bull; Two papers evaluate on a test split that overlaps training data <span style="background:#3b2a78;border-radius:5px;padding:0 7px;font-size:15px">9</span></div>' +
+            '<div class="r" style="gap:12px;margin-top:28px">' + [["Kim et al. 2025", "Dense retrieval at scale"], ["Alvarez et al. 2026", "A replication study"], ["Osei, Tran 2025", "Sparse is not dead"]].map((s, i) =>
+              '<div style="flex:1;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.03)"><div class="r" style="gap:8px;font-size:14px;color:#9d90c7">' + ic("file", 16) + "PDF &middot; p. " + [4, 7, 12][i] + '</div><div style="font-size:17px;font-weight:600;color:#fff;margin-top:6px">' + s[0] + '</div><div style="font-size:15px;color:#b9addb;margin-top:2px">' + s[1] + "</div></div>").join("") + "</div>"),
+      });
+
+      // I. Signal/27: applied AI conference, navy and lime
+      SITES.signal = () => {
+        const ses = (t, tt, sp, c, room, live) =>
+          '<div class="r" style="gap:16px;height:74px;border-top:1px solid rgba(255,255,255,.08);padding:0 20px">' +
+          '<span class="f-unb" style="width:62px;font-size:15px;color:' + (live ? "#c6f432" : "#8d9ac0") + '">' + t + "</span>" + av(sp.split(" ").map((w) => w[0]).join(""), c, 34, "#0b1530") +
+          '<div style="flex:1"><div style="font-size:16px;font-weight:600;color:#fff">' + tt + '</div><div style="font-size:13px;color:#8d9ac0;margin-top:2px">' + sp + " &middot; " + room + "</div></div>" +
+          (live ? '<span style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#0b1530;background:#c6f432;border-radius:4px;padding:3px 7px">LIVE</span>' : "") + "</div>";
+        return {
+          bg: "#0b1530",
+          html:
+            A(0, 0, 1280, 800, "background:repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, rgba(255,255,255,0) 1px 64px),repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, rgba(255,255,255,0) 1px 64px)") +
+            A(56, 0, 1168, 74, "border-bottom:1px solid rgba(255,255,255,.1)", '<div class="r sb" style="height:74px"><span class="f-unb" style="font-size:24px;font-weight:700;color:#fff;letter-spacing:-.02em">SIGNAL<span style="color:#c6f432">/</span>27</span>' +
+              '<span class="r" style="gap:32px;font-size:14.5px;color:#aab4d4;font-weight:500"><span>Agenda</span><span>Speakers</span><span>Workshops</span><span>Venue</span><span>Sponsors</span></span>' +
+              '<span class="btn f-unb" style="height:42px;padding:0 20px;border-radius:21px;background:#c6f432;color:#0b1530;font-size:14px;font-weight:600">Get tickets</span></div>') +
+            A(56, 128, 0, 0, "font-size:14px;letter-spacing:.14em;color:#c6f432;font-weight:600", "MARCH 18 &ndash; 20, 2027 &middot; PIER 27, SAN FRANCISCO") +
+            A(52, 170, 0, 0, "font-size:66px;line-height:76px;font-weight:700;letter-spacing:-.04em;color:#fff", '<div class="f-unb">The applied<br>AI conference.</div>') +
+            A(56, 360, 560, 0, "font-size:18px;line-height:29px;color:#aab4d4", '<div class="w">Three days of talks from the teams shipping AI in production: evals, agents, inference cost and the parts nobody puts in the demo.</div>') +
+            A(56, 470, 0, 0, "", '<div class="r" style="gap:12px;font-size:15px;font-weight:600"><span class="btn" style="height:48px;padding:0 22px;border-radius:24px;background:#c6f432;color:#0b1530">Register from $499</span><span class="btn" style="height:48px;padding:0 22px;border-radius:24px;border:1px solid rgba(255,255,255,.25);color:#fff">View agenda</span></div>') +
+            A(56, 580, 560, 0, "", '<div class="r" style="gap:44px">' + [["2,400", "attendees"], ["86", "speakers"], ["14", "workshops"]].map((s) => '<div><div class="f-unb" style="font-size:34px;font-weight:600;color:#fff">' + s[0] + '</div><div style="font-size:14px;color:#8d9ac0;margin-top:4px">' + s[1] + "</div></div>").join("") + "</div>") +
+            A(56, 700, 560, 0, "font-size:13px;color:#6f7ca3", "Early-bird pricing ends in 12 days") +
+            A(700, 118, 524, 640, "border-radius:16px;background:#101d3f;border:1px solid rgba(255,255,255,.1);overflow:hidden",
+              '<div class="r sb" style="height:64px;padding:0 20px"><span style="font-size:18px;font-weight:600;color:#fff">Agenda</span><span class="r" style="gap:4px;font-size:13px;background:rgba(255,255,255,.06);border-radius:9px;padding:4px"><span style="background:#c6f432;color:#0b1530;border-radius:6px;padding:5px 10px;font-weight:600">Day 1</span><span style="color:#aab4d4;padding:5px 10px">Day 2</span><span style="color:#aab4d4;padding:5px 10px">Day 3</span></span></div>' +
+              ses("09:00", "Opening keynote: evals are the product", "Priya Shah", "#c6f432", "Main stage", 1) +
+              ses("10:15", "Running agents on a budget", "Daniel Okafor", "#7fd1ff", "Hall B") +
+              ses("11:30", "What broke when we shipped RAG to 4M users", "Elena Voss", "#ffb35c", "Main stage") +
+              ses("13:30", "Inference cost, line by line", "Tom Nguyen", "#ff8fb1", "Hall A") +
+              ses("14:45", "Designing for model uncertainty", "Aiko Tanaka", "#b8a5ff", "Hall B") +
+              ses("16:00", "Panel: the second year of AI products", "Marcus Bell", "#7fe0b8", "Main stage") +
+              ses("17:30", "Rooftop drinks", "Sponsored by Graphline", "#ffffff", "Pier deck")),
+        };
+      };
+
+      // J. Twist: productized design agency, orange
+      SITES.twist = () => ({
+        bg: "#ff5b24",
+        html:
+          A(64, 44, 1152, 64, "", '<div class="r sb" style="height:64px;color:#fff"><span class="f-syne" style="font-size:40px;font-weight:800;letter-spacing:-.03em">&#10033; twist</span><span class="r" style="gap:36px;font-size:20px;font-weight:500"><span>Work</span><span>Process</span><span>Pricing</span><span>FAQ</span></span><span class="btn" style="height:56px;padding:0 28px;border-radius:28px;background:#160b06;color:#fff;font-size:19px;font-weight:600">Book a call</span></div>') +
+          A(64, 196, 0, 0, "", '<span class="r" style="gap:10px;font-size:19px;color:#fff;background:rgba(0,0,0,.14);border-radius:22px;padding:9px 18px"><i style="width:10px;height:10px;border-radius:50%;background:#7dff9b"></i>2 spots left for December</span>') +
+          A(60, 272, 0, 0, "font-size:116px;line-height:112px;font-weight:800;letter-spacing:-.05em;color:#fff", '<div class="f-syne">Unlimited<br>design for<br>one flat fee.</div>') +
+          A(64, 652, 760, 0, "font-size:25px;line-height:37px;color:#ffe3d8", '<div class="w">Brand, product and Framer sites from a senior team. Send requests on Slack, get designs back in 48 hours. Pause or cancel any month.</div>') +
+          A(64, 860, 560, 700, "border-radius:28px;background:#fff;padding:40px 40px",
+            '<div class="r sb"><span style="font-size:24px;font-weight:600">Monthly club</span><span style="font-size:15px;font-weight:600;background:#ffe6dc;color:#d63f08;border-radius:14px;padding:5px 12px">Most popular</span></div>' +
+            '<div style="margin-top:22px"><span class="f-syne" style="font-size:84px;font-weight:800;letter-spacing:-.05em">$5,995</span><span style="font-size:22px;color:#77706b">/mo</span></div>' +
+            '<div style="font-size:18px;color:#77706b;margin-top:4px">Pause or cancel anytime</div>' +
+            '<div style="margin-top:28px;font-size:19px;line-height:46px;color:#1f1814">' + ["One request at a time", "48-hour average delivery", "Unlimited brands and users", "Framer and Webflow development", "Async updates in Slack and Linear"].map((f) => '<div class="r" style="gap:14px"><span style="width:26px;height:26px;border-radius:50%;background:#ff5b24;color:#fff;display:flex;align-items:center;justify-content:center">' + ic("check", 16) + "</span>" + f + "</div>").join("") + "</div>" +
+            '<div style="margin-top:30px;height:66px;border-radius:33px;background:#160b06;color:#fff;font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:center">Join today</div>') +
+          A(656, 860, 560, 700, "border-radius:28px;background:#160b06;padding:36px 36px;color:#fff",
+            '<div style="font-size:18px;color:#c8b9b1">Recent work</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">' + [["#c6f432", "#0b1530", "Signal"], ["#f3efe6", "#1f3c5c", "Atlas"], ["#5b5bd6", "#fff", "Pulse"], ["#ffd84a", "#111", "Tally"]].map((w) =>
+              '<div style="height:150px;border-radius:16px;background:' + w[0] + ';color:' + w[1] + ';display:flex;align-items:flex-end;padding:16px;font-size:26px;font-weight:700;letter-spacing:-.03em" class="f-syne">' + w[2] + "</div>").join("") + "</div>" +
+            '<div class="w" style="font-size:24px;line-height:34px;margin-top:30px">&ldquo;Twist replaced a design hire for us. We shipped a new site and two product launches in one quarter.&rdquo;</div>' +
+            '<div class="r" style="gap:14px;margin-top:22px">' + av("JR", "#ff5b24", 48) + '<div><div style="font-size:18px;font-weight:600">Jordan Reyes</div><div style="font-size:15px;color:#c8b9b1">COO, Northfold</div></div></div>'),
+      });
+
+      // K. Ironhouse: strength gym, black and orange
+      SITES.ironhouse = () => {
+        const cls = (tm, n, c, sp, full) =>
+          '<div class="r" style="height:62px;border-top:1px solid #2a2a2a;padding:0 20px;gap:16px"><span style="width:60px;font-size:17px;font-weight:600;color:#fff">' + tm + "</span>" +
+          '<div style="flex:1"><div class="f-lg" style="font-size:26px;letter-spacing:.04em;color:#fff;line-height:26px">' + n + '</div><div style="font-size:13px;color:#888;margin-top:2px">' + c + " &middot; " + sp + "</div></div>" +
+          '<span style="font-size:13px;font-weight:600;padding:6px 14px;border-radius:3px;' + (full ? "color:#666;border:1px solid #333" : "color:#ff5a1f;border:1px solid #ff5a1f") + '">' + (full ? "Waitlist" : "Book") + "</span></div>";
+        return {
+          bg: "#0c0c0c",
+          html:
+            A(48, 0, 1184, 70, "border-bottom:1px solid #222", '<div class="r sb" style="height:70px"><span class="r f-lg" style="gap:10px;font-size:40px;letter-spacing:.06em;color:#fff"><i style="width:18px;height:18px;background:#ff5a1f"></i>IRONHOUSE</span>' +
+              '<span class="r" style="gap:30px;font-size:14.5px;color:#aaa;font-weight:500"><span>Classes</span><span>Schedule</span><span>Coaches</span><span>Pricing</span><span>Locations</span></span>' +
+              '<span class="btn" style="height:42px;padding:0 18px;border-radius:3px;background:#ff5a1f;color:#0c0c0c;font-size:14.5px;font-weight:700">Free trial week</span></div>') +
+            A(52, 122, 0, 0, "font-size:15px;letter-spacing:.16em;color:#ff5a1f;font-weight:700", "SMALL-GROUP STRENGTH COACHING &middot; AUSTIN") +
+            A(48, 156, 0, 0, "font-size:150px;line-height:136px;color:#fff;letter-spacing:.005em", '<div class="f-lg">BUILT FOR<br>REAL STRENGTH.</div>') +
+            A(52, 448, 520, 0, "font-size:17px;line-height:27px;color:#a8a8a8", '<div class="w">Programmed classes, certified coaches and a floor that never feels crowded. Three studios, open 5am to 10pm.</div>') +
+            A(52, 548, 0, 0, "", '<div class="r" style="gap:12px;font-size:15px;font-weight:700"><span class="btn" style="height:50px;padding:0 24px;border-radius:3px;background:#ff5a1f;color:#0c0c0c">Book a free class</span><span class="btn" style="height:50px;padding:0 24px;border-radius:3px;border:1px solid #444;color:#fff">See memberships</span></div>') +
+            A(52, 660, 600, 0, "", '<div class="r" style="gap:40px;color:#888;font-size:14px">' + [["4.9", "on Google, 1,200 reviews"], ["12", "coaches"], ["3", "studios"]].map((s) => '<span><b class="f-lg" style="color:#fff;font-size:40px;font-weight:400;margin-right:8px">' + s[0] + "</b>" + s[1] + "</span>").join("") + "</div>") +
+            A(760, 120, 472, 620, "background:#151515;border:1px solid #2a2a2a;border-radius:6px;overflow:hidden",
+              '<div class="r sb" style="height:72px;padding:0 20px"><div><div style="font-size:18px;font-weight:600;color:#fff">Today&rsquo;s classes</div><div style="font-size:13px;color:#888;margin-top:2px">Ironhouse East &middot; Thursday, Nov 5</div></div><span class="r" style="gap:6px;font-size:13px;color:#aaa">' + ic("cal", 16) + "Change</span></div>" +
+              cls("6:00", "STRENGTH 45", "Coach Dan", "3 spots left") + cls("7:30", "HIIT 30", "Coach Mia", "Full", 1) + cls("9:00", "OLYMPIC LIFTING", "Coach Rafa", "5 spots left") + cls("12:15", "MOBILITY", "Coach Sam", "8 spots left") +
+              cls("17:30", "POWERLIFTING", "Coach Dan", "2 spots left") + cls("18:45", "STRENGTH 60", "Coach Lee", "Full", 1) + cls("20:00", "CORE 20", "Coach Mia", "9 spots left") + cls("21:00", "OPEN GYM", "Front desk", "Members")),
+        };
+      };
+
+      // L. Postline: API docs, white
+      SITES.postline = () => {
+        const nav = (t, on) => '<div style="height:30px;line-height:30px;padding:0 10px;border-radius:6px;font-size:14px;' + (on ? "background:#fff1e6;color:#d9480f;font-weight:600" : "color:#4b4b55") + '">' + t + "</div>";
+        const grp = (t) => '<div style="font-size:12px;font-weight:600;color:#9a9aa6;letter-spacing:.04em;margin:18px 10px 6px">' + t + "</div>";
+        return {
+          bg: "#ffffff",
+          html:
+            A(0, 0, 1280, 60, "border-bottom:1px solid #ececf0", '<div class="r sb" style="height:60px;padding:0 28px"><div class="r" style="gap:40px"><span class="r" style="gap:9px;font-size:18px;font-weight:700;letter-spacing:-.02em"><span style="width:24px;height:24px;border-radius:6px;background:#ff6b1a;color:#fff;display:flex;align-items:center;justify-content:center">' + ic("send", 14) + '</span>Postline <span style="font-weight:400;color:#9a9aa6">Docs</span></span>' +
+              '<span class="r sb" style="width:340px;height:36px;border:1px solid #e4e4ea;border-radius:8px;background:#f8f8fa;padding:0 12px;font-size:14px;color:#9a9aa6"><span class="r" style="gap:8px">' + ic("search", 15) + 'Search documentation</span><span style="font-size:12px;border:1px solid #ddd;border-radius:4px;padding:1px 5px">&#8984;K</span></span></div>' +
+              '<div class="r" style="gap:26px;font-size:14px;color:#4b4b55"><span style="color:#111;font-weight:600">Guides</span><span>API reference</span><span>SDKs</span><span>Changelog</span><span class="r" style="gap:4px;border:1px solid #e4e4ea;border-radius:6px;padding:4px 9px">v2.4' + ic("chev", 13) + '</span><span class="btn" style="height:34px;padding:0 14px;border-radius:7px;background:#111;color:#fff;font-weight:500">Dashboard</span></div></div>') +
+            A(0, 60, 250, 740, "border-right:1px solid #f0f0f3;background:#fbfbfc;padding:6px 14px", grp("GETTING STARTED") + nav("Introduction") + nav("Quickstart", 1) + nav("Authentication") + nav("Sending domains") + grp("GUIDES") + nav("Templates") + nav("Webhooks") + nav("Batch sending") + nav("Idempotency") + grp("API REFERENCE") + nav("Emails") + nav("Domains") + nav("Audiences")) +
+            A(300, 92, 0, 0, "font-size:13.5px;color:#9a9aa6", '<span class="r" style="gap:4px">Guides' + ic("chevr", 13) + "Getting started</span>") +
+            A(300, 122, 0, 0, "font-size:38px;font-weight:700;letter-spacing:-.03em", "Quickstart") +
+            A(300, 182, 640, 0, "font-size:16px;line-height:26px;color:#4b4b55", '<div class="w">Send your first transactional email in under five minutes. You will need an API key from the dashboard and a verified sending domain.</div>') +
+            A(300, 262, 0, 0, "font-size:21px;font-weight:600", "1. Install the SDK") +
+            A(300, 302, 640, 50, "border:1px solid #ececf0;border-radius:9px;background:#fafafb;padding:0 16px;font-size:14.5px", '<div class="r sb f-mono" style="height:48px"><span><span style="color:#9a9aa6">$</span> npm install @postline/node</span><span style="color:#9a9aa6">' + ic("copy", 16) + "</span></div>") +
+            A(300, 382, 0, 0, "font-size:21px;font-weight:600", "2. Send an email") +
+            A(300, 422, 640, 230, "border-radius:10px;background:#0f1117;overflow:hidden",
+              '<div class="r f-inter" style="height:38px;gap:18px;padding:0 16px;border-bottom:1px solid #22252e;font-size:13px;color:#8b8fa0"><span style="color:#fff;border-bottom:2px solid #ff6b1a;line-height:36px">Node.js</span><span>Python</span><span>Go</span><span>cURL</span></div>' +
+              '<div class="f-mono" style="padding:14px 18px;font-size:14px;line-height:23px;color:#e6edf3;white-space:pre"><span style="color:#ff7b72">import</span> { Postline } <span style="color:#ff7b72">from</span> <span style="color:#a5d6ff">&apos;@postline/node&apos;</span>\n\n<span style="color:#ff7b72">const</span> postline = <span style="color:#ff7b72">new</span> <span style="color:#d2a8ff">Postline</span>(process.env.POSTLINE_KEY)\n\n<span style="color:#ff7b72">await</span> postline.emails.<span style="color:#d2a8ff">send</span>({\n  from: <span style="color:#a5d6ff">&apos;receipts@getfern.com&apos;</span>,\n  to: <span style="color:#a5d6ff">&apos;maya@northfold.io&apos;</span>,\n  template: <span style="color:#a5d6ff">&apos;receipt-v3&apos;</span>,\n})</div>') +
+            A(300, 680, 640, 70, "border:1px solid #fde2cf;background:#fff7f0;border-radius:9px;padding:14px 16px;font-size:14.5px;line-height:22px;color:#7a3a10", '<div class="w"><b>Tip:</b> use a test key that starts with <span class="f-mono" style="background:#fde2cf;border-radius:4px;padding:1px 5px">pl_test_</span> to send to the sandbox inbox without touching real recipients.</div>') +
+            A(1010, 92, 230, 0, "", '<div style="font-size:12px;font-weight:600;color:#9a9aa6;letter-spacing:.04em">ON THIS PAGE</div><div style="margin-top:12px;border-left:1px solid #ececf0;font-size:14px;line-height:30px;color:#6b6b76;padding-left:14px"><div style="color:#d9480f;font-weight:600">Install the SDK</div><div>Send an email</div><div>Check delivery</div><div>Handle bounces</div><div>Next steps</div></div>' +
+              '<div style="margin-top:30px;border:1px solid #ececf0;border-radius:10px;padding:14px;font-size:13.5px;line-height:20px;color:#4b4b55"><div class="r" style="gap:8px;font-weight:600;color:#111">' + ic("bolt", 15) + 'API status</div><div class="r" style="gap:8px;margin-top:8px"><i style="width:8px;height:8px;border-radius:50%;background:#16a34a"></i>All systems normal</div><div style="color:#9a9aa6;margin-top:2px">p50 latency 84 ms</div></div>'),
+        };
+      };
+
+      // M. Osteria Lume: restaurant, dark green and brass
+      SITES.osteria = () => {
+        const slot = (t, on) => '<span style="display:inline-block;width:72px;text-align:center;padding:8px 0;border-radius:4px;font-size:15px;' + (on ? "background:#14231d;color:#f0e8d6" : "border:1px solid #d9d0bd") + '">' + t + "</span>";
+        return {
+          bg: "#14231d",
+          html:
+            A(56, 0, 1168, 74, "border-bottom:1px solid rgba(240,232,214,.14)", '<div class="r sb" style="height:74px;font-size:14.5px;color:#cfc7b2"><span class="r" style="gap:30px"><span>Menu</span><span>Wine</span><span>Private dining</span><span>Gift cards</span></span><span style="color:#c9a45c;border:1px solid #c9a45c;padding:9px 22px;border-radius:24px">Reserve</span></div>') +
+            A(0, 16, 1280, 0, "text-align:center;font-size:34px;font-style:italic;color:#f0e8d6", '<span class="f-play">Osteria Lume</span>') +
+            A(56, 128, 0, 0, "font-size:13px;letter-spacing:.2em;color:#c9a45c", "184 COURT STREET &middot; BROOKLYN") +
+            A(52, 160, 0, 0, "font-size:84px;line-height:88px;color:#f0e8d6;letter-spacing:-.01em", '<div class="f-play">Wood-fired Italian<br><i>in Cobble Hill.</i></div>') +
+            A(56, 362, 480, 0, "font-size:18px;line-height:29px;color:#b9b19c", '<div class="w">Handmade pasta, a forty-bottle natural wine list and a corner room that has been full every night since 2019.</div>') +
+            A(56, 470, 0, 0, "", '<span class="btn" style="height:50px;padding:0 24px;border-radius:3px;background:#c9a45c;color:#14231d;font-size:15px;font-weight:600">Reserve a table</span><span style="margin-left:22px;font-size:15px;color:#cfc7b2;text-decoration:underline;text-underline-offset:5px">View the menu</span>') +
+            A(56, 590, 600, 0, "font-size:15px;line-height:24px;color:#e6dec9", '<div class="w f-play" style="font-style:italic;font-size:22px;line-height:32px">&ldquo;The cacio e pepe alone is worth the wait for a table.&rdquo;</div><div style="font-size:13px;letter-spacing:.14em;color:#c9a45c;margin-top:10px">THE NEW YORK TIMES</div>') +
+            A(760, 110, 464, 600, "background:#f0e8d6;border-radius:6px;color:#14231d;padding:30px 32px;box-shadow:0 20px 50px rgba(0,0,0,.35)",
+              '<div class="f-play" style="font-size:30px">Reserve a table</div><div style="font-size:14px;color:#7a735f;margin-top:4px">Tables for up to 6. Larger parties, call us.</div>' +
+              '<div style="margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:12px">' + [["DATE", "Fri, Nov 13"], ["GUESTS", "2 guests"]].map((f) => '<div style="border:1px solid #d9d0bd;border-radius:4px;background:#fbf7ec;padding:10px 14px"><div style="font-size:11px;letter-spacing:.14em;color:#7a735f">' + f[0] + '</div><div style="font-size:17px;margin-top:2px">' + f[1] + "</div></div>").join("") + "</div>" +
+              '<div style="font-size:12px;letter-spacing:.14em;color:#7a735f;margin-top:24px">AVAILABLE TIMES</div>' +
+              '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px">' + slot("5:30") + slot("6:00") + slot("6:15") + slot("7:00") + slot("7:30", 1) + slot("8:00") + slot("8:45") + slot("9:15") + "</div>" +
+              '<div style="margin-top:22px;height:54px;border-radius:4px;background:#14231d;color:#f0e8d6;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center">Book 7:30 for 2</div>' +
+              '<div style="margin-top:22px;border-top:1px solid #d9d0bd;padding-top:16px;font-size:14px;line-height:24px;color:#4a4436"><b>Tonight&rsquo;s special</b><br>Agnolotti del plin, brown butter, sage &middot; $29<br>Whole branzino from the wood oven &middot; $42</div>'),
+        };
+      };
+
+      // N. Fieldnote: pricing page, warm light
+      SITES.fieldnote = () => {
+        const tier = (n, p, per, d, feats, hi, cta) =>
+          '<div style="flex:1;height:520px;border-radius:18px;padding:28px 28px;position:relative;' + (hi ? "background:#1f2a24;color:#f4f1ea" : "background:#fff;border:1px solid #e6e2d8;color:#1f2a24") + '">' +
+          (hi ? '<span style="position:absolute;right:22px;top:24px;font-size:13px;font-weight:600;background:#d6f36b;color:#1f2a24;border-radius:12px;padding:4px 10px">Most popular</span>' : "") +
+          '<div style="font-size:20px;font-weight:600">' + n + '</div><div class="w" style="font-size:15px;line-height:22px;margin-top:6px;opacity:.65;height:44px">' + d + "</div>" +
+          '<div style="margin-top:18px"><span style="font-size:52px;font-weight:700;letter-spacing:-.04em">' + p + '</span><span style="font-size:16px;opacity:.6"> ' + per + "</span></div>" +
+          '<div style="margin-top:20px;height:48px;border-radius:10px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;' + (hi ? "background:#d6f36b;color:#1f2a24" : "border:1px solid #d9d4c7") + '">' + cta + "</div>" +
+          '<div style="margin-top:22px;font-size:15px;line-height:36px">' + feats.map((f) => '<div class="r" style="gap:10px">' + ic("check", 17, "opacity:.8") + f + "</div>").join("") + "</div></div>";
+        return {
+          bg: "#f6f4ee",
+          html:
+            A(56, 0, 1168, 64, "", '<div class="r sb f-dm" style="height:64px;color:#1f2a24"><span class="r" style="gap:9px;font-size:22px;font-weight:700;letter-spacing:-.03em"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 3.5h10l4 4v13H5z" fill="#1f2a24"/><path d="M8.5 11h7M8.5 15h5" stroke="#d6f36b" stroke-width="2"/></svg>Fieldnote</span>' +
+              '<span class="r" style="gap:30px;font-size:15px;color:#4d574f"><span>Product</span><span>Templates</span><span>Customers</span><span style="color:#1f2a24;font-weight:600">Pricing</span></span><span class="r" style="gap:16px;font-size:15px"><span>Log in</span><span class="btn" style="height:40px;padding:0 16px;border-radius:9px;background:#1f2a24;color:#fff;font-weight:600">Try it free</span></span></div>') +
+            A(0, 104, 1280, 0, "text-align:center;font-size:56px;line-height:60px;font-weight:700;letter-spacing:-.045em;color:#1f2a24", '<div class="f-dm">Simple pricing for<br>teams of every size</div>') +
+            A(0, 240, 1280, 40, "", '<div class="r cc f-dm"><span class="r" style="gap:4px;background:#ebe7dc;border-radius:10px;padding:4px;font-size:14.5px"><span style="padding:7px 16px;color:#4d574f">Monthly</span><span style="padding:7px 16px;background:#fff;border-radius:7px;font-weight:600;color:#1f2a24">Yearly <span style="color:#3d8b37">save 20%</span></span></span></div>') +
+            A(56, 316, 1168, 0, "", '<div class="r f-dm" style="gap:18px;align-items:flex-start">' +
+              tier("Starter", "$0", "forever", "For personal notes and small side projects.", ["Up to 3 members", "1 GB of uploads", "7-day page history", "Web clipper"], 0, "Get started") +
+              tier("Team", "$10", "per user / mo", "For teams that write and plan together.", ["Unlimited members", "Unlimited uploads", "90-day page history", "Shared templates", "Guest access"], 1, "Start 14-day trial") +
+              tier("Business", "$18", "per user / mo", "For companies that need controls and SSO.", ["Everything in Team", "SAML SSO and SCIM", "Audit log", "Unlimited history"], 0, "Contact sales") + "</div>"),
+        };
+      };
+
+      // O. Halo: self-custody wallet, white and electric blue
+      SITES.halo = () => {
+        const asset = (sym, c, n, amt, usd, ch, up, path) =>
+          '<div class="r" style="height:62px;gap:14px;border-top:1px solid #f0f1f6;padding:0 20px"><span style="width:38px;height:38px;border-radius:50%;background:' + c + ';color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">' + sym + "</span>" +
+          '<div style="flex:1"><div style="font-size:16px;font-weight:600">' + n + '</div><div style="font-size:13px;color:#8a8fa3">' + amt + "</div></div>" +
+          '<svg width="70" height="26" viewBox="0 0 70 26"><path d="' + path + '" fill="none" stroke="' + (up ? "#16a34a" : "#e5484d") + '" stroke-width="2"/></svg>' +
+          '<div style="text-align:right;width:110px"><div style="font-size:16px;font-weight:600">' + usd + '</div><div style="font-size:13px;color:' + (up ? "#16a34a" : "#e5484d") + '">' + ch + "</div></div></div>";
+        return {
+          bg: "#f4f6ff",
+          html:
+            A(56, 0, 1168, 70, "", '<div class="r sb f-sg" style="height:70px"><span class="r" style="gap:10px;font-size:24px;font-weight:700;letter-spacing:-.03em"><svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="none" stroke="#2f5bff" stroke-width="4"/></svg>halo</span>' +
+              '<span class="r" style="gap:30px;font-size:15px;color:#4a4f66"><span>Wallet</span><span>Security</span><span>Developers</span><span>Learn</span></span><span class="btn" style="height:42px;padding:0 18px;border-radius:21px;background:#2f5bff;color:#fff;font-size:15px;font-weight:600">Download Halo</span></div>') +
+            A(56, 150, 0, 0, "", '<span class="r f-sg" style="gap:8px;font-size:14px;color:#2f5bff;font-weight:600;background:#e4eaff;border-radius:16px;padding:6px 14px">' + ic("shield", 16) + "Audited by Trail of Bits, 2026</span>") +
+            A(54, 202, 0, 0, "font-size:68px;line-height:72px;font-weight:600;letter-spacing:-.045em;color:#0d1233", '<div class="f-sg">Self-custody,<br>without the<br>seed-phrase panic.</div>') +
+            A(56, 446, 470, 0, "font-size:18px;line-height:29px;color:#4a4f66", '<div class="w f-sg">Recover your wallet with your face and a trusted friend. Halo splits your key across three devices, so no single loss can lock you out.</div>') +
+            A(56, 560, 0, 0, "", '<div class="r f-sg" style="gap:12px;font-size:16px;font-weight:600"><span class="btn" style="height:52px;padding:0 24px;border-radius:26px;background:#0d1233;color:#fff">Get Halo for iPhone</span><span class="btn" style="height:52px;padding:0 24px;border-radius:26px;border:1px solid #cfd5ec;color:#0d1233">Chrome extension</span></div>') +
+            A(56, 670, 0, 0, "font-size:14px;color:#8a8fa3", '<span class="f-sg">1.8M wallets &middot; $4.2B secured &middot; Open source</span>') +
+            A(680, 96, 470, 650, "border-radius:28px;background:#fff;box-shadow:0 30px 80px rgba(30,50,140,.16);overflow:hidden;color:#0d1233",
+              '<div class="r sb f-sg" style="padding:22px 22px 0"><span class="r" style="gap:10px;font-size:15px;font-weight:600">' + av("MC", "#2f5bff", 34) + 'maya.halo<span style="color:#8a8fa3;font-weight:400">' + ic("chev", 14) + "</span></span>" + '<span style="color:#8a8fa3">' + ic("settings", 20) + "</span></div>" +
+              '<div class="f-sg" style="padding:22px 22px 0"><div style="font-size:14px;color:#8a8fa3">Total balance</div><div style="font-size:48px;font-weight:600;letter-spacing:-.04em;margin-top:2px">$24,810<span style="color:#b4b9cc">.42</span></div><div style="font-size:14px;color:#16a34a;font-weight:600">+$612.30 (2.5%) today</div></div>' +
+              '<div class="r f-sg" style="gap:10px;padding:22px 22px 18px">' + [["up", "Send"], ["down", "Receive"], ["swap", "Swap"], ["card", "Buy"]].map((b, i) => '<div style="flex:1;height:70px;border-radius:16px;' + (i === 0 ? "background:#2f5bff;color:#fff" : "background:#f2f4fb") + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:600">' + ic(b[0], 20) + b[1] + "</div>").join("") + "</div>" +
+              '<div class="f-sg">' + asset("ETH", "#627eea", "Ethereum", "4.21 ETH", "$13,904.10", "+3.1%", 1, "M0 20 L10 18 L20 21 L30 14 L40 15 L50 9 L60 10 L70 4") +
+              asset("BTC", "#f7931a", "Bitcoin", "0.084 BTC", "$7,212.66", "+1.4%", 1, "M0 16 L10 18 L20 12 L30 14 L40 10 L50 12 L60 7 L70 8") +
+              asset("USDC", "#2775ca", "USD Coin", "3,120.00 USDC", "$3,120.00", "0.0%", 1, "M0 13 L70 13") +
+              asset("SOL", "#14b8a6", "Solana", "3.6 SOL", "$573.66", "-2.2%", 0, "M0 6 L10 8 L20 7 L30 12 L40 11 L50 16 L60 15 L70 20") + "</div>"),
+        };
+      };
+
+      // P. Lena Park: product designer portfolio, long page
+      SITES.lena = () => {
+        const proj = (bg, fg, inner, name, meta) =>
+          '<div style="flex:1"><div style="height:400px;border-radius:6px;background:' + bg + ';color:' + fg + ';position:relative;overflow:hidden">' + inner + "</div>" +
+          '<div class="r sb" style="margin-top:14px;font-size:17px"><span style="font-weight:500">' + name + '</span><span style="color:#8a8a85">' + meta + "</span></div></div>";
+        const mini = (w, h, x, y, st, c) => '<div style="position:absolute;left:' + x + "px;top:" + y + "px;width:" + w + "px;height:" + h + "px;" + st + '">' + (c || "") + "</div>";
+        return {
+          bg: "#fbfaf7",
+          html:
+            A(56, 0, 1168, 80, "", '<div class="r sb" style="height:80px;font-size:16px"><span style="font-weight:600;letter-spacing:-.01em">Lena Park</span><span class="r" style="gap:32px;color:#55554f"><span>Work</span><span>Writing</span><span>About</span><span class="r" style="gap:8px;color:#111"><i style="width:8px;height:8px;border-radius:50%;background:#2fa34f"></i>Available from January</span></span></div>') +
+            A(52, 140, 1120, 0, "font-size:86px;line-height:88px;letter-spacing:-.025em;color:#111", '<div class="w f-inst">Lena Park designs calm, useful software for teams who <i>ship every week.</i></div>') +
+            A(56, 380, 0, 0, "", '<div class="r" style="gap:60px;font-size:16px;line-height:26px;color:#55554f"><div>Design lead at Fieldnote<br>Previously Stripe, Airbnb</div><div>Based in Lisbon<br>Working worldwide</div><div style="color:#111;text-decoration:underline;text-underline-offset:5px">hello@lenapark.design<br>Read.cv &middot; LinkedIn</div></div>') +
+            A(56, 520, 1168, 0, "border-top:1px solid #e6e4dd;padding-top:18px", '<div class="r sb" style="font-size:14px;color:#8a8a85;letter-spacing:.06em"><span>SELECTED WORK</span><span>2022 &ndash; 2026</span></div>') +
+            A(56, 572, 1168, 0, "", '<div class="r" style="gap:24px">' +
+              proj("#e7ddcb", "#2b2418",
+                mini(220, 360, 80, 60, "border-radius:34px;background:#2b2418;padding:8px", '<div style="width:204px;height:344px;border-radius:27px;background:#fbf7ef;padding:30px 16px 0"><div class="f-inst" style="font-size:34px;line-height:34px">Notes</div><div style="margin-top:14px;font-size:11px;line-height:28px;color:#6b6152;border-top:1px solid #e6dccb">Q4 planning<br>Interview: Ana<br>Pricing ideas<br>Reading list<br>Trip to Porto</div></div>') +
+                mini(200, 120, 330, 220, "border-radius:14px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.1);padding:16px", '<div style="font-size:12px;color:#8a8a85">Today</div><div class="w" style="font-size:15px;line-height:20px;margin-top:6px;font-weight:500">Draft the onboarding checklist before Friday</div>'),
+                "Fieldnote", "Mobile app, 2026") +
+              proj("#1f3a34", "#e9efe6",
+                mini(460, 280, 50, 70, "border-radius:10px;background:#f4f1ea;color:#1f3a34;padding:22px", '<div class="r sb" style="font-size:12px"><b>arbor</b><span>Shop &nbsp; Care &nbsp; Journal</span></div><div class="f-inst" style="font-size:44px;line-height:44px;margin-top:30px">Plants that<br>outlive trends.</div><div style="margin-top:20px;display:inline-block;background:#1f3a34;color:#fff;font-size:12px;padding:8px 14px;border-radius:16px">Shop plants</div>') +
+                mini(130, 130, 400, 230, "border-radius:50%;background:#c9d9a6"),
+                "Arbor", "Brand and web, 2025") + "</div>") +
+            A(56, 1034, 1168, 0, "", '<div class="r" style="gap:24px">' +
+              proj("#e8573c", "#fff2ec",
+                mini(470, 260, 45, 80, "border-radius:10px;background:#fff;color:#111;padding:18px;box-shadow:0 20px 40px rgba(0,0,0,.15)", '<div style="font-size:13px;font-weight:600">Shipments</div><div class="r" style="gap:10px;margin-top:12px">' + ["412", "38", "6"].map((n, i) => '<div style="flex:1;border:1px solid #eee;border-radius:8px;padding:10px"><div style="font-size:11px;color:#888">' + ["In transit", "Delayed", "Lost"][i] + '</div><div style="font-size:24px;font-weight:600">' + n + "</div></div>").join("") + '</div><svg width="434" height="90" viewBox="0 0 434 90" style="margin-top:14px"><path d="M0 70 L60 56 L120 62 L180 40 L240 46 L300 26 L360 30 L434 12" fill="none" stroke="#e8573c" stroke-width="3"/></svg>'),
+                "Parcel", "Logistics dashboard, 2024") +
+              proj("#d9dce8", "#1c2340",
+                '<div class="f-inst" style="position:absolute;left:44px;top:60px;font-size:150px;line-height:140px;letter-spacing:-.03em">Kin<br>&amp; Co.</div><div style="position:absolute;right:40px;bottom:36px;font-size:14px;letter-spacing:.1em">IDENTITY SYSTEM</div>',
+                "Kin &amp; Co.", "Identity, 2023") + "</div>") +
+            A(56, 1500, 1168, 0, "border-top:1px solid #e6e4dd;padding-top:24px", '<div class="r sb" style="font-size:15px;color:#8a8a85"><span>&copy; 2026 Lena Park</span><span>Last updated November 2026</span></div>'),
+        };
+      };
+
+      // Q. Halden: architecture studio, elevation drawing and project index
+      SITES.halden = () => {
+        const rows = [
+          ["01", "Cedar House", "Hudson Valley, NY", "Residential", "2026", "Under construction"],
+          ["02", "Lakeside Pavilion", "Lake Placid, NY", "Cultural", "2025", "Completed"],
+          ["03", "Mill Street Lofts", "Kingston, NY", "Adaptive reuse", "2024", "Completed"],
+          ["04", "Harbor Library", "Portland, ME", "Civic", "2023", "Completed"],
+          ["05", "Two Barns", "Ghent, NY", "Residential", "2022", "Completed"],
+          ["06", "North Fork Studio", "Southold, NY", "Workplace", "2021", "Completed"],
+        ];
+        let draw = '<svg width="1168" height="560" viewBox="0 0 1168 560" fill="none" stroke="#1a1a1a" stroke-width="1.4">';
+        draw += '<line x1="0" y1="470" x2="1168" y2="470" stroke-width="2"/>';
+        draw += '<path d="M180 470 V250 L420 110 L660 250 V470"/><path d="M660 300 H1000 V470"/><path d="M640 300 H1020" stroke-width="2"/>';
+        for (let i = 0; i < 9; i++) draw += '<line x1="' + (200 + i * 50) + '" y1="' + (238 - Math.max(0, 4 - Math.abs(i - 4)) * 0) + '" x2="' + (200 + i * 50) + '" y2="470" stroke="#9a9a94" stroke-width=".8"/>';
+        draw += '<rect x="260" y="330" width="120" height="140" fill="#ecebe7"/><rect x="460" y="330" width="120" height="140" fill="#ecebe7"/><rect x="345" y="210" width="150" height="70" fill="#ecebe7"/>';
+        draw += '<rect x="700" y="340" width="260" height="100" fill="#ecebe7"/><line x1="830" y1="340" x2="830" y2="440"/>';
+        draw += '<path d="M60 470 c10-60 30-90 40-90 s30 30 40 90" stroke="#6b6b66"/><path d="M1060 470 c6-80 22-120 34-120 s28 40 34 120" stroke="#6b6b66"/>';
+        draw += '<line x1="180" y1="510" x2="1000" y2="510" stroke="#9a9a94" stroke-width=".8"/><line x1="180" y1="502" x2="180" y2="518" stroke="#9a9a94"/><line x1="1000" y1="502" x2="1000" y2="518" stroke="#9a9a94"/>';
+        draw += '<text x="560" y="532" font-size="13" fill="#6b6b66" stroke="none" text-anchor="middle" font-family="Gill Sans">24.6 m</text>';
+        draw += '<text x="0" y="40" font-size="13" fill="#6b6b66" stroke="none" font-family="Gill Sans" letter-spacing="2">SOUTH ELEVATION 1:200</text></svg>';
+        return {
+          bg: "#ecebe7",
+          html:
+            A(56, 0, 1168, 84, "", '<div class="r sb f-gill" style="height:84px;color:#1a1a1a"><span style="font-size:26px;letter-spacing:.42em">HALDEN</span><span class="r" style="gap:34px;font-size:14px;letter-spacing:.18em;color:#55554f"><span style="color:#1a1a1a;border-bottom:1px solid #1a1a1a">PROJECTS</span><span>STUDIO</span><span>JOURNAL</span><span>CONTACT</span></span></div>') +
+            A(56, 128, 760, 0, "font-size:44px;line-height:54px;color:#1a1a1a", '<div class="w f-gill" style="font-weight:300">Halden is an architecture studio in Hudson, New York, designing houses and public buildings in timber, stone and light.</div>') +
+            A(56, 360, 1168, 0, "", draw) +
+            A(56, 932, 1168, 0, "", '<div class="r sb f-gill" style="font-size:15px;color:#1a1a1a"><span><b style="font-weight:600">Cedar House</b> &nbsp;Hudson Valley, New York &middot; 2026</span><span style="color:#6b6b66">01 / 12 &nbsp; &larr; &nbsp; &rarr;</span></div>') +
+            A(56, 1010, 1168, 0, "", '<div class="f-gill" style="font-size:13px;letter-spacing:.18em;color:#6b6b66;display:flex;padding-bottom:12px;border-bottom:1px solid #1a1a1a"><span style="width:70px">NO.</span><span style="width:340px">PROJECT</span><span style="width:280px">LOCATION</span><span style="width:220px">TYPE</span><span style="width:110px">YEAR</span><span>STATUS</span></div>' +
+              rows.map((r) => '<div class="r f-gill" style="height:64px;border-bottom:1px solid #c9c8c2;font-size:19px;color:#1a1a1a"><span style="width:70px;color:#6b6b66">' + r[0] + '</span><span style="width:340px">' + r[1] + '</span><span style="width:280px;color:#55554f">' + r[2] + '</span><span style="width:220px;color:#55554f">' + r[3] + '</span><span style="width:110px;color:#55554f">' + r[4] + '</span><span style="color:#55554f">' + r[5] + "</span></div>").join("")) +
+            A(56, 1480, 1168, 0, "", '<div class="r sb f-gill" style="font-size:14px;letter-spacing:.14em;color:#6b6b66"><span>STUDIO@HALDEN.ARCH</span><span>412 WARREN STREET, HUDSON NY</span><span>INSTAGRAM</span></div>'),
+        };
+      };
+
+      // R. The Margin Note: personal newsletter, blush paper
+      SITES.margin = () => {
+        const post = (d, t, e, m) =>
+          '<div style="padding:26px 0;border-top:1px solid #e3c2b5"><div class="f-inter" style="font-size:13px;letter-spacing:.12em;color:#a3352a;font-weight:600">' + d + '</div><div class="f-iowan" style="font-size:34px;line-height:42px;margin-top:8px;color:#2a1714">' + t + '</div><div class="w f-iowan" style="font-size:19px;line-height:30px;color:#6e4f47;margin-top:8px">' + e + '</div><div class="f-inter" style="font-size:14px;color:#9c7a70;margin-top:10px">' + m + "</div></div>";
+        return {
+          bg: "#f6e1d8",
+          html:
+            A(56, 0, 1168, 70, "border-bottom:1px solid #e3c2b5", '<div class="r sb f-inter" style="height:70px;font-size:15px;color:#6e4f47"><span class="r" style="gap:28px"><span>Archive</span><span>About</span><span>Podcast</span></span><span class="r" style="gap:18px"><span>Sign in</span><span style="background:#a3352a;color:#fff;border-radius:6px;padding:9px 16px;font-weight:600">Subscribe</span></span></div>') +
+            A(0, 130, 1280, 0, "text-align:center", '<span style="display:inline-block">' + av("RA", "#a3352a", 84) + "</span>") +
+            A(0, 240, 1280, 0, "text-align:center;font-size:92px;line-height:96px;font-style:italic;color:#2a1714;letter-spacing:-.01em", '<div class="f-bask">The Margin Note</div>') +
+            A(0, 356, 1280, 0, "text-align:center;font-size:24px;color:#6e4f47", '<div class="f-iowan">Weekly essays on design, money and attention. By Ruth Amsel.</div>') +
+            A(380, 430, 520, 60, "", '<div class="r f-inter" style="gap:10px"><span style="flex:1;height:58px;border:1px solid #d9b1a3;border-radius:8px;background:#fffaf7;font-size:17px;color:#9c7a70;display:flex;align-items:center;padding:0 18px">you@example.com</span><span style="height:58px;padding:0 24px;border-radius:8px;background:#a3352a;color:#fff;font-size:17px;font-weight:600;display:flex;align-items:center">Subscribe</span></div>') +
+            A(0, 512, 1280, 0, "text-align:center;font-size:15px;color:#9c7a70", '<span class="f-inter">Join 48,000 readers &middot; Free, every Sunday morning</span>') +
+            A(200, 600, 880, 0, "", '<div class="r f-inter" style="gap:30px;font-size:15px;font-weight:600;color:#2a1714;border-bottom:2px solid #2a1714;padding-bottom:12px"><span>Latest</span><span style="color:#9c7a70;font-weight:500">Most read</span><span style="color:#9c7a70;font-weight:500">Essays</span><span style="color:#9c7a70;font-weight:500">Notes</span></div>' +
+              post("NOV 1, 2026", "The case for boring software", "Why the best tools disappear, and what that means for how we judge the ones we pay for.", "9 min read &middot; 412 comments") +
+              post("OCT 25, 2026", "Pricing is a story you tell", "Three rewrites of a pricing page and what each one taught us about anchoring.", "7 min read &middot; 188 comments") +
+              post("OCT 18, 2026", "Notes on slow attention", "A month without a feed: what came back, what did not, and the one app I reinstalled.", "11 min read &middot; 603 comments") +
+              post("OCT 11, 2026", "The receipt is the product", "On the small artifacts companies forget to design.", "5 min read &middot; 97 comments") +
+              post("OCT 4, 2026", "What I learned from 1,000 cold emails", "Most of them failed. The ones that worked had one thing in common.", "8 min read &middot; 254 comments")),
+        };
+      };
+
+      // S. Groundwork: reforestation nonprofit, forest green
+      SITES.groundwork = () => {
+        const proj = (n, loc, pct, trees, c) =>
+          '<div style="flex:1;border-radius:18px;background:#24453a;padding:22px 24px"><div style="height:150px;border-radius:12px;background:' + c + ';position:relative;overflow:hidden"><svg width="100%" height="150" viewBox="0 0 330 150" preserveAspectRatio="none" style="position:absolute;left:0;bottom:0"><path d="M0 150 V90 Q40 60 80 84 T160 70 T240 82 T330 64 V150Z" fill="rgba(0,0,0,.18)"/><path d="M0 150 V112 Q50 96 100 110 T200 100 T330 108 V150Z" fill="rgba(0,0,0,.22)"/></svg></div>' +
+          '<div class="f-frau" style="font-size:26px;margin-top:16px;color:#f2ead8">' + n + '</div><div style="font-size:15px;color:#a9bfae;margin-top:2px">' + loc + "</div>" +
+          '<div style="height:8px;border-radius:4px;background:rgba(255,255,255,.12);margin-top:18px"><div style="width:' + pct + '%;height:8px;border-radius:4px;background:#e8c35a"></div></div>' +
+          '<div class="r sb" style="font-size:14px;color:#cdd9cf;margin-top:8px"><span>' + pct + '% funded</span><span>' + trees + " trees</span></div></div>";
+        return {
+          bg: "#1c3a2e",
+          html:
+            A(56, 0, 1168, 80, "", '<div class="r sb" style="height:80px;color:#f2ead8"><span class="r f-frau" style="gap:10px;font-size:28px;font-weight:600">' + ic("leaf", 28, "color:#e8c35a") + "Groundwork</span>" +
+              '<span class="r" style="gap:32px;font-size:16px;color:#cdd9cf"><span>Our projects</span><span>Science</span><span>Reports</span><span>For companies</span></span><span class="btn" style="height:48px;padding:0 24px;border-radius:24px;background:#e8c35a;color:#1c3a2e;font-size:16px;font-weight:700">Donate</span></div>') +
+            A(52, 160, 0, 0, "font-size:116px;line-height:110px;letter-spacing:-.03em;color:#f2ead8", '<div class="f-frau" style="font-weight:400">We plant forests<br>that <i style="color:#e8c35a">outlive us.</i></div>') +
+            A(56, 420, 600, 0, "font-size:21px;line-height:33px;color:#cdd9cf", '<div class="w">Native trees, planted with local communities and monitored by satellite for 20 years. 100% of public donations go to planting.</div>') +
+            A(56, 570, 1168, 120, "border-top:1px solid rgba(242,234,216,.18);border-bottom:1px solid rgba(242,234,216,.18)", '<div class="r" style="height:120px">' + [["2.4M", "trees planted"], ["38", "active projects"], ["11", "countries"], ["94%", "survival after 3 years"]].map((s) => '<div style="flex:1"><div class="f-frau" style="font-size:52px;color:#f2ead8">' + s[0] + '</div><div style="font-size:15px;color:#a9bfae">' + s[1] + "</div></div>").join("") + "</div>") +
+            A(56, 750, 560, 380, "border-radius:22px;background:#f2ead8;color:#1c3a2e;padding:30px 32px",
+              '<div class="f-frau" style="font-size:32px;font-weight:600">Plant with us</div><div style="font-size:16px;color:#5b6b60;margin-top:4px">$1 plants one native tree.</div>' +
+              '<div class="r" style="gap:6px;margin-top:22px;background:#e2d9c4;border-radius:12px;padding:5px;font-size:16px;font-weight:600"><span style="flex:1;text-align:center;padding:10px;background:#1c3a2e;color:#f2ead8;border-radius:9px">Monthly</span><span style="flex:1;text-align:center;padding:10px">One time</span></div>' +
+              '<div class="r" style="gap:10px;margin-top:16px">' + ["$10", "$25", "$50", "$100"].map((a, i) => '<span style="flex:1;text-align:center;padding:14px 0;border-radius:10px;font-size:20px;font-weight:600;' + (i === 1 ? "border:2px solid #1c3a2e" : "border:1px solid #cfc5ae") + '">' + a + "</span>").join("") + "</div>" +
+              '<div style="margin-top:22px;height:58px;border-radius:29px;background:#1c3a2e;color:#f2ead8;font-size:18px;font-weight:600;display:flex;align-items:center;justify-content:center">Plant 25 trees a month</div>') +
+            A(656, 750, 568, 380, "", '<div class="f-frau" style="font-size:30px;color:#f2ead8">Where your trees go</div>' +
+              '<div style="margin-top:18px;font-size:17px;line-height:44px;color:#cdd9cf">' + [["Atlantic Forest, Brazil", "412,000"], ["Mount Kenya, Kenya", "286,500"], ["Sumatra, Indonesia", "198,200"], ["Oaxaca, Mexico", "144,900"], ["Madagascar highlands", "96,300"]].map((r) => '<div class="r sb" style="border-bottom:1px solid rgba(242,234,216,.12)"><span class="r" style="gap:10px">' + ic("pin", 17, "color:#e8c35a") + r[0] + "</span><span>" + r[1] + "</span></div>").join("") + "</div>") +
+            A(56, 1180, 1168, 0, "", '<div class="r" style="gap:20px">' + proj("Atlantic Forest", "Bahia, Brazil", 82, "412K", "#3f7a52") + proj("Mount Kenya", "Nyeri County, Kenya", 64, "286K", "#7a8f3f") + proj("Sierra Norte", "Oaxaca, Mexico", 41, "145K", "#4e7f86") + "</div>"),
+        };
+      };
+
+      // shared phone frame for app pages (screen 390 x 844 design, scaled by s)
+      const PHONE = (x, y, s, screenBg, inner, rot) =>
+        '<div class="ab" style="left:' + x + "px;top:" + y + "px;width:" + 414 * s + "px;height:" + 868 * s + "px;" + (rot ? "transform:rotate(" + rot + "deg);" : "") + '">' +
+        '<div style="width:414px;height:868px;transform:scale(' + s + ');transform-origin:0 0;border-radius:64px;background:#0e0e10;padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.28)">' +
+        '<div style="position:relative;width:390px;height:844px;border-radius:52px;overflow:hidden;background:' + screenBg + '">' +
+        '<div class="r sb" style="position:absolute;left:0;top:0;width:390px;height:54px;padding:0 34px;font-size:16px;font-weight:600;z-index:2"><span>9:41</span><span style="width:120px;height:34px;border-radius:17px;background:#0e0e10"></span><span class="r" style="gap:5px">' + ic("wifi", 16) + '<span style="width:24px;height:11px;border-radius:3px;border:1.5px solid currentColor"></span></span></div>' + inner + "</div></div></div>";
+
+      // T. Fern: mobile banking app, mint
+      SITES.fern = () => {
+        const tx = (n, d, a, c, ic2) => '<div class="r" style="gap:12px;height:62px;border-top:1px solid #eef2ef"><span style="width:38px;height:38px;border-radius:12px;background:' + c + ';display:flex;align-items:center;justify-content:center;color:#0f2a1d">' + ic(ic2, 18) + '</span><div style="flex:1"><div style="font-size:15px;font-weight:600">' + n + '</div><div style="font-size:12.5px;color:#7b8a80">' + d + '</div></div><span style="font-size:15px;font-weight:600;' + (a[0] === "+" ? "color:#14804a" : "") + '">' + a + "</span></div>";
+        const s1 =
+          '<div style="position:absolute;left:22px;top:72px;width:346px;color:#0f2a1d"><div class="r sb"><span style="font-size:15px;color:#7b8a80">Good morning, Maya</span>' + av("MC", "#0f2a1d", 34) + "</div>" +
+          '<div style="font-size:14px;color:#7b8a80;margin-top:22px">Spending account</div><div style="font-size:44px;font-weight:700;letter-spacing:-.04em">$8,240<span style="color:#9fb0a5">.16</span></div>' +
+          '<div style="margin-top:18px;height:190px;border-radius:22px;background:#0f2a1d;color:#d9f7c4;padding:20px;position:relative"><div class="r sb" style="font-size:15px;font-weight:700"><span>fern</span><span style="font-size:13px;opacity:.7">DEBIT</span></div><div class="f-mono" style="position:absolute;left:20px;bottom:46px;font-size:17px;letter-spacing:.12em">&bull;&bull;&bull;&bull; 4471</div><div style="position:absolute;left:20px;bottom:20px;font-size:13px;opacity:.7">Maya Chen &middot; 09/29</div><svg width="56" height="36" viewBox="0 0 56 36" style="position:absolute;right:18px;bottom:18px"><circle cx="18" cy="18" r="16" fill="#d9f7c4" opacity=".85"/><circle cx="38" cy="18" r="16" fill="#7ee0a1" opacity=".85"/></svg></div>' +
+          '<div class="r" style="gap:10px;margin-top:18px">' + [["plus", "Add"], ["send", "Send"], ["card", "Card"], ["more", "More"]].map((b) => '<div style="flex:1;height:64px;border-radius:16px;background:#eef6f0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:600">' + ic(b[0], 18) + b[1] + "</div>").join("") + "</div>" +
+          '<div style="font-size:16px;font-weight:700;margin-top:20px;margin-bottom:6px">Today</div>' + tx("Corner Coffee", "Card &middot; 8:12 AM", "-$6.50", "#ffe6c7", "bag") + tx("Payroll, Northfold", "Direct deposit", "+$4,120.00", "#d9f7c4", "building") + tx("Lyra Rent", "Autopay", "-$1,850.00", "#e4e9ff", "home") + "</div>";
+        const s2 =
+          '<div style="position:absolute;left:22px;top:72px;width:346px;color:#0f2a1d"><div style="font-size:26px;font-weight:700;letter-spacing:-.03em">Goals</div><div style="font-size:14px;color:#7b8a80;margin-top:2px">Round-ups saved $41.80 this month</div>' +
+          [["Japan trip", "$2,140 of $4,000", 54, "#7ee0a1"], ["Emergency fund", "$9,600 of $12,000", 80, "#0f2a1d"], ["New laptop", "$420 of $1,800", 23, "#f6b26b"]].map((g) =>
+            '<div style="margin-top:16px;border-radius:18px;background:#fff;padding:18px;box-shadow:0 1px 0 rgba(0,0,0,.04)"><div class="r sb"><span style="font-size:16px;font-weight:700">' + g[0] + '</span><span style="font-size:14px;font-weight:700">' + g[2] + '%</span></div><div style="font-size:13px;color:#7b8a80;margin-top:2px">' + g[1] + '</div><div style="height:8px;border-radius:4px;background:#eef2ef;margin-top:12px"><div style="width:' + g[2] + "%;height:8px;border-radius:4px;background:" + g[3] + '"></div></div></div>').join("") + "</div>";
+        return {
+          bg: "#c6f0d5",
+          html:
+            A(64, 56, 1152, 60, "", '<div class="r sb" style="height:60px;color:#0f2a1d"><span class="f-bric" style="font-size:40px;font-weight:800;letter-spacing:-.05em">fern</span><span class="r" style="gap:34px;font-size:20px;font-weight:500"><span>Personal</span><span>Business</span><span>Card</span><span>Help</span><span class="btn" style="height:54px;padding:0 26px;border-radius:27px;background:#0f2a1d;color:#d9f7c4;font-weight:600">Open an account</span></span></div>') +
+            A(64, 186, 600, 0, "font-size:80px;line-height:82px;font-weight:800;letter-spacing:-.05em;color:#0f2a1d", '<div class="f-bric">Banking that<br>grows with you.</div>') +
+            A(64, 412, 500, 0, "font-size:23px;line-height:34px;color:#2f5a42", '<div class="w">No monthly fees, 4.10% APY on savings and paychecks up to two days early. FDIC insured through Lakeline Bank.</div>') +
+            A(64, 560, 0, 0, "", '<div class="r" style="gap:12px;font-size:19px;font-weight:600;color:#0f2a1d"><span class="r" style="gap:10px">' + stars(5, 22, "#0f2a1d") + "4.9</span><span style=\"opacity:.6\">&middot; 210K reviews</span></div>") +
+            A(64, 640, 520, 0, "", '<div class="r" style="gap:16px">' + [["4.10%", "APY on savings"], ["$0", "monthly fees"]].map((s) => '<div style="flex:1;border-radius:20px;background:rgba(255,255,255,.55);padding:20px 22px;color:#0f2a1d"><div class="f-bric" style="font-size:46px;font-weight:800;letter-spacing:-.04em">' + s[0] + '</div><div style="font-size:17px;opacity:.7">' + s[1] + "</div></div>").join("") + "</div>") +
+            PHONE(660, 200, 1.14, "#f6faf7", s1) + PHONE(980, 400, 1.0, "#f6faf7", s2),
+        };
+      };
+
+      // U. The Long Game: interview podcast, cobalt and yellow
+      SITES.longgame = () => {
+        const ep = (n, t, g, d, on) =>
+          '<div class="r" style="height:96px;border-top:1px solid rgba(255,255,255,.18);gap:22px"><span class="f-arch" style="width:60px;font-size:22px;color:#ffd84a">' + n + "</span>" +
+          '<span style="width:52px;height:52px;border-radius:50%;' + (on ? "background:#ffd84a;color:#1631d6" : "border:2px solid rgba(255,255,255,.4);color:#fff") + ';display:flex;align-items:center;justify-content:center">' + ic(on ? "pause" : "play", 20) + "</span>" +
+          '<div style="flex:1"><div style="font-size:23px;font-weight:600;color:#fff">' + t + '</div><div style="font-size:16px;color:#b9c4ff;margin-top:3px">' + g + "</div></div>" +
+          '<span style="font-size:17px;color:#b9c4ff">' + d + "</span></div>";
+        return {
+          bg: "#1f3df0",
+          html:
+            A(64, 44, 1152, 60, "", '<div class="r sb" style="height:60px;color:#fff"><span class="f-arch" style="font-size:30px;letter-spacing:-.01em">THE LONG GAME</span><span class="r" style="gap:34px;font-size:19px;font-weight:500"><span>Episodes</span><span>Hosts</span><span>Newsletter</span><span class="btn" style="height:52px;padding:0 26px;border-radius:26px;background:#ffd84a;color:#111;font-weight:700">Subscribe</span></span></div>') +
+            A(64, 170, 500, 500, "background:#ffd84a;color:#111;padding:32px;position:relative",
+              '<div style="font-size:17px;font-weight:700;letter-spacing:.14em">A PODCAST ABOUT HIRING</div><div class="f-arch" style="font-size:112px;line-height:100px;margin-top:44px;letter-spacing:-.02em">THE<br>LONG<br>GAME</div><div style="position:absolute;left:32px;bottom:30px;font-size:19px;font-weight:600">with Maya Chen</div><svg width="96" height="96" viewBox="0 0 120 120" style="position:absolute;right:28px;bottom:28px"><circle cx="60" cy="60" r="56" fill="none" stroke="#111" stroke-width="5"/><circle cx="60" cy="60" r="34" fill="none" stroke="#111" stroke-width="5"/><circle cx="60" cy="60" r="12" fill="#111"/></svg>') +
+            A(610, 176, 606, 0, "color:#fff", '<div style="font-size:16px;font-weight:700;letter-spacing:.14em;color:#ffd84a">LATEST EPISODE &middot; EP. 142</div><div class="w" style="font-size:52px;line-height:58px;font-weight:700;letter-spacing:-.035em;margin-top:16px">How a 40-person startup hired its first VP of Sales</div>' +
+              '<div style="font-size:18px;color:#b9c4ff;margin-top:18px">with Dana Whitfield, CRO at Lattice &middot; 54 min &middot; Nov 4</div>' +
+              '<div class="r" style="gap:18px;margin-top:34px"><span style="width:70px;height:70px;border-radius:50%;background:#ffd84a;color:#1631d6;display:flex;align-items:center;justify-content:center">' + ic("play", 28) + '</span><div style="flex:1"><div style="height:6px;border-radius:3px;background:rgba(255,255,255,.25)"><div style="width:34%;height:6px;border-radius:3px;background:#ffd84a"></div></div><div class="r sb" style="font-size:15px;color:#b9c4ff;margin-top:8px"><span>18:22</span><span>54:10</span></div></div></div>' +
+              '<div class="r" style="gap:10px;margin-top:26px;font-size:16px;font-weight:600">' + ["Spotify", "Apple Podcasts", "YouTube", "RSS"].map((p) => '<span style="border:1.5px solid rgba(255,255,255,.4);border-radius:20px;padding:8px 16px">' + p + "</span>").join("") + "</div>") +
+            A(64, 760, 1152, 0, "", '<div class="r sb" style="margin-bottom:18px"><span style="font-size:30px;font-weight:700;color:#fff;letter-spacing:-.02em">All episodes</span><span class="r" style="gap:10px;font-size:16px;color:#b9c4ff">' + ic("search", 18) + "Search 142 episodes</span></div>" +
+              ep("142", "How a 40-person startup hired its first VP of Sales", "Dana Whitfield, Lattice", "54 min", 1) + ep("141", "Pricing seats, with the founder of Quill", "Owen Harte, Quill", "48 min") +
+              ep("140", "The first ten hires nobody tells you about", "Priya Shah, Meridian", "61 min") + ep("139", "Founder mode, one year later", "Solo episode", "39 min") +
+              ep("138", "Interviewing for curiosity", "Leah Brandt, Northfold", "52 min") + ep("137", "Why we stopped doing take-home tests", "Sam Okoye, Hexway", "44 min") +
+              ep("136", "Hiring your replacement as CEO", "Mara Lind, Plumline", "58 min")),
+        };
+      };
+
+      // V. clay&co: ceramics shop, warm white
+      const MUG = (c, s) => '<svg width="' + 150 * s + '" height="' + 130 * s + '" viewBox="0 0 150 130"><path d="M108 40h14a20 20 0 0 1 0 40h-14" fill="none" stroke="' + c + '" stroke-width="12"/><path d="M14 18h96v84a22 22 0 0 1-22 22H36a22 22 0 0 1-22-22z" fill="' + c + '"/><ellipse cx="62" cy="18" rx="48" ry="8" fill="rgba(0,0,0,.22)"/><rect x="26" y="34" width="8" height="66" rx="4" fill="rgba(255,255,255,.2)"/></svg>';
+      SITES.clay = () => {
+        const prod = (c, n, p, tag) =>
+          '<div style="flex:1"><div style="height:250px;background:#ede4d6;border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative">' + MUG(c, 1.15) + (tag ? '<span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:600;background:#fff;border-radius:3px;padding:3px 8px;color:#2b2118">' + tag + "</span>" : "") + "</div>" +
+          '<div style="font-size:15px;font-weight:500;margin-top:12px;color:#2b2118">' + n + '</div><div class="r" style="gap:8px;font-size:14px;color:#7a6c5d;margin-top:3px">' + p + "</div></div>";
+        return {
+          bg: "#f7f1e8",
+          html:
+            A(0, 0, 1280, 38, "background:#2b2118;color:#efe4d2;font-size:13.5px;text-align:center;line-height:38px", "Free shipping on orders over $75 &middot; Holiday orders ship until Dec 16") +
+            A(48, 38, 1184, 76, "", '<div class="r sb" style="height:76px;color:#2b2118"><span style="font-size:30px;font-weight:700;letter-spacing:-.04em" class="f-frau">clay&amp;co</span>' +
+              '<span class="r" style="gap:30px;font-size:15px;color:#4a3f35"><span>Shop all</span><span style="color:#111;font-weight:600;border-bottom:1.5px solid #111">Mugs</span><span>Plates</span><span>Vases</span><span>Gift sets</span><span>Studio</span></span>' +
+              '<span class="r" style="gap:20px">' + ic("search", 21) + ic("user", 21) + '<span class="r" style="gap:5px;font-size:15px">' + ic("bag", 21) + "2</span></span></div>") +
+            A(48, 114, 1184, 1, "background:#e3d8c6") +
+            A(48, 140, 0, 0, "font-size:13.5px;color:#8a7d6c", '<span class="r" style="gap:4px">Shop' + ic("chevr", 13) + "Mugs</span>") +
+            A(48, 166, 0, 0, "", '<span class="f-frau" style="font-size:44px;font-weight:500;letter-spacing:-.02em;color:#2b2118">Mugs</span><span style="font-size:15px;color:#8a7d6c;margin-left:12px">24 products</span>') +
+            A(48, 186, 1184, 0, "", '<div class="r" style="justify-content:flex-end;gap:10px;font-size:14px;color:#4a3f35">' + ["Glaze", "Size", "In stock"].map((f) => '<span class="r" style="gap:6px;border:1px solid #dccfbb;border-radius:18px;padding:7px 14px">' + f + ic("chev", 13) + "</span>").join("") + '<span class="r" style="gap:6px;padding:7px 4px">Sort: Featured' + ic("chev", 13) + "</span></div>") +
+            A(48, 260, 1184, 0, "", '<div class="r" style="gap:20px">' + prod("#c8573a", "Stoneware mug, rust", "$28 &middot; 4 glazes", "Bestseller") + prod("#2e5d6e", "Stoneware mug, lagoon", "$28") + prod("#dccaa2", "Tall latte mug, oat", "$32", "New") + prod("#3a3a3a", "Espresso cup, charcoal", "$24") + "</div>") +
+            A(48, 576, 1184, 0, "", '<div class="r" style="gap:20px">' + prod("#a9b48c", "Stoneware mug, sage", "$28") + prod("#e0a24a", "Stoneware mug, honey", "$28", "Low stock") + prod("#6b4a3a", "Tall latte mug, clay", "$32") + prod("#d9847a", "Espresso cup, blush", "$24") + "</div>"),
+        };
+      };
+
+      // W. Wren: language learning app, sky blue
+      SITES.wren = () => {
+        const opt = (t, st) => '<div style="height:58px;border-radius:16px;margin-top:12px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;font-size:18px;font-weight:600;' +
+          (st === 1 ? "background:#e5f8ea;border:2px solid #22a55a;color:#147a3f" : "background:#fff;border:2px solid #e3e8f0;color:#1b2440") + '">' + t + (st === 1 ? '<span style="width:28px;height:28px;border-radius:50%;background:#22a55a;color:#fff;display:flex;align-items:center;justify-content:center">' + ic("check", 16) + "</span>" : "") + "</div>";
+        const scr =
+          '<div style="position:absolute;left:24px;top:68px;width:342px;color:#1b2440"><div class="r" style="gap:12px"><span style="color:#9aa3b8">' + ic("menu", 22) + '</span><div style="flex:1;height:12px;border-radius:6px;background:#e3e8f0"><div style="width:62%;height:12px;border-radius:6px;background:#ff8a3d"></div></div><span class="r" style="gap:4px;font-size:15px;font-weight:700;color:#ff6a3d">' + ic("flame", 18) + "23</span></div>" +
+          '<div style="font-size:14px;font-weight:700;color:#3b82f6;letter-spacing:.06em;margin-top:30px">SPANISH &middot; UNIT 4 &middot; AT THE CAF&Eacute;</div>' +
+          '<div class="w f-bric" style="font-size:28px;line-height:34px;font-weight:700;margin-top:12px;letter-spacing:-.02em">How do you ask for the bill?</div>' +
+          '<div class="r" style="gap:12px;margin-top:22px"><span style="width:88px;height:88px;border-radius:24px;background:#ffe9c7;display:flex;align-items:center;justify-content:center;color:#b5651d">' + ic("mic", 40) + '</span><div style="flex:1;border-radius:18px;border:2px solid #e3e8f0;padding:12px 14px;font-size:16px;line-height:22px;color:#4b5675" class="w">Tap to hear the waiter, then choose the best reply.</div></div>' +
+          opt("La cuenta, por favor.", 1) + opt("El men&uacute;, por favor.") + opt("Una mesa para dos.") + opt("&iquest;D&oacute;nde est&aacute; el ba&ntilde;o?") +
+          '<div style="margin-top:28px;height:60px;border-radius:18px;background:#22a55a;color:#fff;font-size:19px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 #17803f">Continue</div></div>';
+        return {
+          bg: "#8fd0ff",
+          html:
+            A(64, 56, 1152, 60, "", '<div class="r sb" style="height:60px;color:#0c2340"><span class="r f-bric" style="gap:10px;font-size:40px;font-weight:800;letter-spacing:-.04em"><svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#0c2340"/><path d="M11 24c6-1 10-6 12-12 2 7 6 11 11 12-6 2-10 5-12 10-2-5-5-8-11-10z" fill="#ffd84a"/></svg>wren</span><span class="r" style="gap:34px;font-size:20px;font-weight:600"><span>Languages</span><span>Schools</span><span>Pricing</span><span class="btn" style="height:56px;padding:0 28px;border-radius:28px;background:#0c2340;color:#fff">Start learning</span></span></div>') +
+            A(64, 200, 640, 0, "font-size:84px;line-height:84px;font-weight:800;letter-spacing:-.05em;color:#0c2340", '<div class="f-bric">Speak Spanish<br>in 15 minutes<br>a day.</div>') +
+            A(64, 490, 540, 0, "font-size:24px;line-height:35px;color:#1d4466", '<div class="w">Real conversations from day one, with a tutor that listens to your accent and corrects it out loud.</div>') +
+            A(64, 650, 560, 0, "", '<div class="r" style="gap:10px;flex-wrap:wrap;width:560px">' + [["ES", "Spanish"], ["FR", "French"], ["JP", "Japanese"], ["IT", "Italian"], ["DE", "German"], ["KR", "Korean"]].map((l) => '<span class="r" style="gap:10px;background:#fff;border-radius:30px;padding:10px 20px 10px 10px;font-size:19px;font-weight:600;color:#0c2340;margin-bottom:10px"><span style="width:38px;height:38px;border-radius:50%;background:#0c2340;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center">' + l[0] + "</span>" + l[1] + "</span>").join("") + "</div>") +
+            A(64, 900, 0, 0, "font-size:19px;color:#0c2340;font-weight:600", '<span class="r" style="gap:10px">' + stars(5, 22, "#0c2340") + "4.8 &middot; 3.2M learners</span>") +
+            PHONE(720, 150, 1.22, "#f7f9fc", scr) +
+            A(620, 900, 250, 104, "border-radius:22px;background:#fff;box-shadow:0 20px 50px rgba(12,35,64,.2);padding:18px 20px", '<div style="font-size:15px;color:#6b7690">Accent score</div><div class="r" style="gap:10px;margin-top:4px"><span style="font-size:36px;font-weight:800;letter-spacing:-.03em;color:#0c2340">92</span><span style="font-size:15px;color:#22a55a;font-weight:700">+7 this week</span></div>'),
+        };
+      };
+
+      // X. Aurora-8: synthesizer product page, violet
+      SITES.aurora = () => {
+        const synthLabels =
+          '<div class="f-mono" style="position:absolute;left:66px;top:50px;font-size:14px;letter-spacing:.04em;color:#b5a8ff">PATCH 042 &middot; GLASSY PAD</div>' +
+          ["CUTOFF", "RES", "ATTACK", "DECAY", "SUSTAIN", "RELEASE", "LFO", "MIX"].map((t, i) => '<div class="f-sg" style="position:absolute;left:' + (292 + i * 96) + 'px;top:110px;width:96px;text-align:center;font-size:12px;letter-spacing:.06em;color:#6b6780">' + t + "</div>").join("");
+        return {
+          bg: "#6a4cff",
+          html:
+            A(64, 44, 1152, 60, "", '<div class="r sb f-sg" style="height:60px;color:#fff"><span style="font-size:32px;font-weight:700;letter-spacing:-.03em">aurora</span><span class="r" style="gap:34px;font-size:19px;font-weight:500;color:#e2dbff"><span>Instruments</span><span>Sounds</span><span>Artists</span><span>Support</span></span><span class="r" style="gap:14px;font-size:19px"><span>' + ic("bag", 24) + '</span><span class="btn" style="height:52px;padding:0 24px;border-radius:26px;background:#fff;color:#2a1a8a;font-weight:600">Pre-order</span></span></div>') +
+            A(64, 190, 0, 0, "font-size:18px;letter-spacing:.16em;color:#d4caff;font-weight:600", '<span class="f-sg">NEW &middot; SHIPS FEBRUARY 2027</span>') +
+            A(58, 230, 0, 0, "font-size:200px;line-height:180px;font-weight:700;letter-spacing:-.06em;color:#fff", '<div class="f-sg">Aurora-8</div>') +
+            A(64, 440, 640, 0, "font-size:26px;line-height:38px;color:#e2dbff", '<div class="w f-sg">An eight-voice analog polysynth with a sequencer you can play like an instrument.</div>') +
+            A(64, 580, 0, 0, "", '<div class="r f-sg" style="gap:16px;font-size:20px;font-weight:600"><span class="btn" style="height:62px;padding:0 30px;border-radius:31px;background:#ff7a3d;color:#1c0e00">Pre-order $899</span><span class="btn" style="height:62px;padding:0 30px;border-radius:31px;border:1.5px solid rgba(255,255,255,.5);color:#fff">' + ic("play", 18) + "Hear it</span></div>") +
+            A(80, 740, 1120, 520, "transform:rotate(-4deg);filter:drop-shadow(0 40px 60px rgba(20,0,90,.45))", PH.tag("synth", 1120, 520) + synthLabels) +
+            A(64, 1360, 1152, 0, "", '<div class="f-sg" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;color:#fff">' + [["8", "analog voices"], ["37", "velocity keys"], ["64", "step sequencer"], ["4.2 kg", "with USB-C power"]].map((s) => '<div style="border-top:1.5px solid rgba(255,255,255,.35);padding-top:18px"><div style="font-size:56px;font-weight:700;letter-spacing:-.04em">' + s[0] + '</div><div style="font-size:19px;color:#d4caff">' + s[1] + "</div></div>").join("") + "</div>") +
+            A(64, 1560, 1152, 0, "", '<div class="r sb f-sg" style="font-size:18px;color:#d4caff"><span>&ldquo;The most playable synth of the year.&rdquo; &mdash; Sound on Sound</span><span>Free 2-day shipping &middot; 3-year warranty</span></div>'),
+        };
+      };
+
+      /* =====================================================================
+         PROCEDURAL PHOTOGRAPHS: seeded canvas paintings drawn once at load
+         (layered light, depth-of-field blur, material texture, film grain)
+         ===================================================================== */
+      const PH = (() => {
+        function rng(seed) {
+          let s = seed >>> 0;
+          return () => {
+            s = (s + 0x6d2b79f5) >>> 0;
+            let t = s;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        const LG = (c, x0, y0, x1, y1, st) => { const g = c.createLinearGradient(x0, y0, x1, y1); st.forEach((s) => g.addColorStop(s[0], s[1])); return g; };
+        const RG = (c, x, y, r0, r1, st) => { const g = c.createRadialGradient(x, y, r0, x, y, r1); st.forEach((s) => g.addColorStop(s[0], s[1])); return g; };
+        function layer(c, opts, fn) {
+          c.save();
+          if (opts.blur) c.filter = "blur(" + opts.blur + "px)";
+          if (opts.op) c.globalCompositeOperation = opts.op;
+          if (opts.alpha != null) c.globalAlpha = opts.alpha;
+          fn(c);
+          c.restore();
+        }
+        function poly(c, pts, fill) { c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); c.fillStyle = fill; c.fill(); }
+        function grain(c, w, h, amt, seed) {
+          const R = rng(seed), d = c.getImageData(0, 0, w, h), p = d.data;
+          for (let i = 0; i < p.length; i += 4) {
+            if (p[i + 3] === 0) continue;
+            const n = (R() + R() - 1) * amt;
+            p[i] += n; p[i + 1] += n; p[i + 2] += n;
+          }
+          c.putImageData(d, 0, 0);
+        }
+        function vignette(c, w, h, a) {
+          c.fillStyle = RG(c, w / 2, h / 2, Math.min(w, h) * 0.32, Math.hypot(w, h) * 0.56, [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0," + a + ")"]]);
+          c.fillRect(0, 0, w, h);
+        }
+        function arch(c, x, y, w, h) { const r = w / 2; c.beginPath(); c.moveTo(x, y + h); c.lineTo(x, y + r); c.arc(x + r, y + r, r, Math.PI, 0); c.lineTo(x + w, y + h); c.closePath(); }
+        function rrect(c, x, y, w, h, r) { c.beginPath(); c.roundRect(x, y, w, h, r); }
+
+        /* ---- Casa Albar 1: looking through a corridor to a bright arched window ---- */
+        function albarRoom(c, w, h) {
+          const R = rng(11);
+          const vx0 = 78, vx1 = 192, vy0 = 168, vy1 = 336; // far wall
+          c.fillStyle = "#d4ab82"; c.fillRect(0, 0, w, h);
+          poly(c, [[0, 0], [w, 0], [vx1, vy0], [vx0, vy0]], LG(c, 0, 0, 0, vy0, [[0, "#c9a07a"], [1, "#e8cfad"]]));
+          poly(c, [[0, 0], [vx0, vy0], [vx0, vy1], [0, h]], LG(c, 0, 0, vx0, 0, [[0, "#b98d66"], [1, "#ead2b0"]]));
+          poly(c, [[w, 0], [vx1, vy0], [vx1, vy1], [w, h]], LG(c, w, 0, vx1, 0, [[0, "#8d6446"], [1, "#d1aa83"]]));
+          poly(c, [[0, h], [vx0, vy1], [vx1, vy1], [w, h]], LG(c, 0, vy1, 0, h, [[0, "#c08a62"], [1, "#7d4632"]]));
+          // terracotta tile joints converging on the far wall
+          layer(c, { alpha: 0.16 }, () => {
+            c.strokeStyle = "#4a2618"; c.lineWidth = 1;
+            for (let i = 0; i <= 8; i++) { const fx = vx0 + (vx1 - vx0) * i / 8, nx = -60 + (w + 120) * i / 8; c.beginPath(); c.moveTo(fx, vy1); c.lineTo(nx, h); c.stroke(); }
+            for (let i = 1; i < 8; i++) { const t = i / 8, y = vy1 + (h - vy1) * t * t, xl = vx0 * (1 - t * t), xr = vx1 + (w - vx1) * t * t; c.beginPath(); c.moveTo(xl, y); c.lineTo(xr, y); c.stroke(); }
+          });
+          // far wall and the arched window
+          c.fillStyle = LG(c, 0, vy0, 0, vy1, [[0, "#f1dcbc"], [1, "#e4c49e"]]); c.fillRect(vx0, vy0, vx1 - vx0, vy1 - vy0);
+          arch(c, 106, 196, 58, 112); c.fillStyle = "#b08a66"; c.fill();
+          arch(c, 109, 199, 52, 109);
+          c.fillStyle = LG(c, 0, 199, 0, 308, [[0, "#fdf3e0"], [0.55, "#f6e9d2"], [0.62, "#bcd3d0"], [0.8, "#7fa6a8"], [1, "#5f8a8d"]]); c.fill();
+          layer(c, { blur: 1.2, alpha: 0.7 }, () => { c.fillStyle = "#3f5a3a"; c.beginPath(); c.ellipse(118, 282, 16, 9, 0, 0, Math.PI * 2); c.ellipse(152, 286, 14, 7, 0, 0, Math.PI * 2); c.fill(); });
+          // window light: bloom, shaft on the floor, warm interior grade
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, 135, 250, 0, 150, [[0, "rgba(255,244,222,.85)"], [0.35, "rgba(255,226,186,.35)"], [1, "rgba(255,220,180,0)"]]); c.fillRect(0, 0, w, h); });
+          layer(c, { op: "screen", blur: 7, alpha: 0.55 }, () => poly(c, [[110, vy1], [160, vy1], [236, h], [44, h]], LG(c, 0, vy1, 0, h, [[0, "rgba(255,236,204,.9)"], [1, "rgba(255,214,170,.2)"]])));
+          // linen bench under the window, slightly soft
+          layer(c, { blur: 1.4 }, () => {
+            c.fillStyle = "rgba(60,36,22,.35)"; c.beginPath(); c.ellipse(135, 342, 50, 6, 0, 0, Math.PI * 2); c.fill();
+            rrect(c, 92, 312, 86, 26, 5); c.fillStyle = LG(c, 0, 312, 0, 338, [[0, "#f7efe2"], [1, "#d5c3a8"]]); c.fill();
+          });
+          // pendant lamp
+          c.strokeStyle = "rgba(60,40,28,.6)"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(135, 0); c.lineTo(135, 128); c.stroke();
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, 135, 140, 0, 90, [[0, "rgba(255,214,150,.9)"], [0.25, "rgba(255,190,120,.35)"], [1, "rgba(255,170,90,0)"]]); c.fillRect(0, 0, w, h); });
+          c.fillStyle = RG(c, 132, 136, 2, 14, [[0, "#fff6e2"], [1, "#f0b878"]]); c.beginPath(); c.arc(135, 140, 12, 0, Math.PI * 2); c.fill();
+          // out-of-focus foreground: olive branch at left, fern at right
+          layer(c, { blur: 7 }, () => {
+            c.fillStyle = "#33402a";
+            for (let i = 0; i < 9; i++) { c.beginPath(); c.ellipse(-6 + i * 10 + R() * 10, 360 + i * 12 + R() * 10, 34, 11, -0.7 + R() * 0.5, 0, Math.PI * 2); c.fill(); }
+            c.fillStyle = "#2a3322";
+            for (let i = 0; i < 6; i++) { c.beginPath(); c.ellipse(258 - i * 6, 40 + i * 30, 30, 9, 0.9 + R() * 0.4, 0, Math.PI * 2); c.fill(); }
+          });
+          layer(c, { op: "soft-light" }, () => { c.fillStyle = "rgba(255,160,80,.35)"; c.fillRect(0, 0, w, h); });
+          vignette(c, w, h, 0.42);
+          grain(c, w, h, 16, 12);
+        }
+
+        /* ---- Casa Albar 2: whitewashed facade at blue hour, arched window lit from inside ---- */
+        function albarFacade(c, w, h) {
+          const R = rng(21);
+          c.fillStyle = LG(c, 0, 0, 0, h, [[0, "#c9c3c4"], [1, "#8f8a94"]]); c.fillRect(0, 0, w, h);
+          layer(c, { blur: 4 }, () => {
+            for (let i = 0; i < 70; i++) { c.fillStyle = R() < 0.5 ? "rgba(255,255,255,.07)" : "rgba(40,30,40,.07)"; c.beginPath(); c.ellipse(R() * w, R() * h, 6 + R() * 22, 4 + R() * 12, R() * 3, 0, Math.PI * 2); c.fill(); }
+          });
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, w, 0, 0, 300, [[0, "rgba(255,186,140,.55)"], [1, "rgba(255,186,140,0)"]]); c.fillRect(0, 0, w, h); });
+          // deep reveal of the opening
+          arch(c, 34, 112, 162, 300); c.fillStyle = "#6c6470"; c.fill();
+          arch(c, 46, 124, 138, 290);
+          c.save(); c.clip();
+          c.fillStyle = LG(c, 0, 124, 0, h, [[0, "#ffd9a0"], [0.45, "#eaa25e"], [1, "#6b3a20"]]); c.fillRect(0, 0, w, h);
+          layer(c, { blur: 2.5 }, () => {
+            c.fillStyle = "rgba(110,60,30,.55)"; c.fillRect(46, 300, 138, 6);
+            c.fillStyle = "#4a2a18"; rrect(c, 60, 300, 70, 70, 10); c.fill();
+            c.fillStyle = "#5c3420"; rrect(c, 66, 286, 58, 30, 12); c.fill();
+            c.fillStyle = "#3b2214"; c.fillRect(140, 250, 4, 110); c.beginPath(); c.ellipse(142, 246, 22, 14, 0, Math.PI, 0); c.fill();
+            c.fillStyle = "rgba(255,240,210,.5)"; c.fillRect(56, 196, 60, 3);
+            c.fillStyle = "#7a4a2a"; c.fillRect(60, 172, 14, 24); c.fillRect(80, 178, 10, 18); c.fillRect(96, 168, 16, 28);
+          });
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, 142, 238, 0, 110, [[0, "rgba(255,240,200,.95)"], [0.3, "rgba(255,200,130,.4)"], [1, "rgba(255,180,100,0)"]]); c.fillRect(0, 0, w, h); });
+          c.fillStyle = LG(c, 46, 0, 76, 0, [[0, "rgba(30,16,8,.55)"], [1, "rgba(30,16,8,0)"]]); c.fillRect(46, 124, 30, 290);
+          c.restore();
+          // muntins and sill
+          c.strokeStyle = "rgba(48,32,24,.85)"; c.lineWidth = 3;
+          c.beginPath(); c.moveTo(115, 124); c.lineTo(115, h); c.moveTo(46, 262); c.lineTo(184, 262); c.stroke();
+          // warm spill on the wall
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, 115, 280, 60, 200, [[0, "rgba(255,170,90,.32)"], [1, "rgba(255,170,90,0)"]]); c.fillRect(0, 0, w, h); });
+          // blurred pine needles across the top corner
+          layer(c, { blur: 5 }, () => {
+            c.strokeStyle = "#1f2a20"; c.lineCap = "round";
+            for (let i = 0; i < 26; i++) { const a = -0.4 + R() * 1.2, x = R() * 120 - 20, y = R() * 70 - 10; c.lineWidth = 3 + R() * 4; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * 60, y + Math.sin(a) * 60); c.stroke(); }
+          });
+          vignette(c, w, h, 0.4);
+          grain(c, w, h, 15, 22);
+        }
+
+        /* ---- Common Thread: studio flat-lay product shots ---- */
+        const G = {
+          tee: { box: [300, 280], s: 1.12, path: "M105 22C120 46 180 46 195 22L238 34C262 44 284 70 296 102L252 124C246 116 240 108 234 104C236 170 238 220 240 268C190 275 110 275 60 268C62 220 64 170 66 104C60 108 54 116 48 124L4 102C16 70 38 44 62 34Z" },
+          hoodie: { box: [300, 320], s: 1.08, path: "M100 44C96 12 204 12 200 44L244 58C262 66 276 90 284 130L298 268L262 274L238 132L240 300C190 306 110 306 60 300L62 132L38 274L2 268L16 130C24 90 38 66 56 58Z" },
+          pant: { box: [220, 320], s: 1.12, path: "M40 14L180 14L184 40C192 120 200 220 206 310L132 312L111 112L88 312L14 310C20 220 28 120 36 40Z" },
+        };
+        function garment(kind, color, seed, fa) {
+          return (c, w, h) => {
+            const R = rng(seed), g = G[kind], path = new Path2D(g.path);
+            c.fillStyle = LG(c, 0, 0, 0, h, [[0, "#f3f2ec"], [1, "#dddbd0"]]); c.fillRect(0, 0, w, h);
+            layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, w * 0.25, h * 0.1, 0, w, [[0, "rgba(255,255,255,.7)"], [1, "rgba(255,255,255,0)"]]); c.fillRect(0, 0, w, h); });
+            const ox = (w - g.box[0] * g.s) / 2, oy = (h - g.box[1] * g.s) / 2 + 6;
+            c.save(); c.translate(ox, oy); c.scale(g.s, g.s);
+            // soft contact shadow
+            c.save(); c.shadowColor = "rgba(40,36,24,.34)"; c.shadowBlur = 26; c.shadowOffsetX = 6; c.shadowOffsetY = 14; c.fillStyle = color; c.fill(path); c.restore();
+            c.save(); c.clip(path);
+            c.fillStyle = color; c.fillRect(0, 0, g.box[0], g.box[1]);
+            // key light from the upper left
+            c.fillStyle = LG(c, 0, 0, g.box[0], g.box[1], [[0, "rgba(255,255,255,.22)"], [0.5, "rgba(255,255,255,0)"], [1, "rgba(0,0,0,.28)"]]); c.fillRect(0, 0, g.box[0], g.box[1]);
+            // cotton twill
+            layer(c, { alpha: 0.07 }, () => { c.strokeStyle = "#fff"; c.lineWidth = 0.6; for (let x = -g.box[1]; x < g.box[0]; x += 2.4) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x + g.box[1] * 0.6, g.box[1]); c.stroke(); } });
+            // folds: a shadow trough with a highlight ridge beside it
+            for (let i = 0; i < 13; i++) {
+              const x = 20 + R() * (g.box[0] - 40), y = 30 + R() * (g.box[1] - 70), len = 70 + R() * 120, a = Math.PI / 2 + (R() - 0.5) * 0.8, bend = (R() - 0.5) * 36, lw = 4 + R() * 9;
+              const x2 = x + Math.cos(a) * len, y2 = y + Math.sin(a) * len, cx = (x + x2) / 2 + bend, cy = (y + y2) / 2;
+              layer(c, { blur: lw * 0.55 }, () => {
+                c.lineCap = "round";
+                c.strokeStyle = "rgba(0,0,0," + fa + ")"; c.lineWidth = lw; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(cx, cy, x2, y2); c.stroke();
+                c.strokeStyle = "rgba(255,255,255," + fa * 0.55 + ")"; c.lineWidth = lw * 0.7; c.beginPath(); c.moveTo(x + lw * 0.8, y); c.quadraticCurveTo(cx + lw * 0.8, cy, x2 + lw * 0.8, y2); c.stroke();
+              });
+            }
+            c.lineCap = "round";
+            if (kind === "tee") {
+              layer(c, { blur: 1 }, () => { c.strokeStyle = "rgba(0,0,0,.45)"; c.lineWidth = 9; c.beginPath(); c.moveTo(105, 22); c.bezierCurveTo(120, 46, 180, 46, 195, 22); c.stroke(); });
+              c.strokeStyle = "rgba(255,255,255,.14)"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(108, 30); c.bezierCurveTo(122, 52, 178, 52, 192, 30); c.stroke();
+              c.setLineDash([2.5, 2.5]); c.strokeStyle = "rgba(255,255,255,.18)"; c.beginPath(); c.moveTo(62, 258); c.bezierCurveTo(110, 264, 190, 264, 238, 258); c.stroke(); c.setLineDash([]);
+            }
+            if (kind === "hoodie") {
+              layer(c, { blur: 3 }, () => { c.fillStyle = "rgba(0,0,0,.45)"; c.beginPath(); c.moveTo(116, 44); c.bezierCurveTo(116, 22, 184, 22, 184, 44); c.bezierCurveTo(176, 76, 124, 76, 116, 44); c.fill(); });
+              layer(c, { blur: 2 }, () => { c.strokeStyle = "rgba(0,0,0,.28)"; c.lineWidth = 3; c.beginPath(); c.moveTo(92, 208); c.lineTo(208, 208); c.lineTo(222, 262); c.moveTo(92, 208); c.lineTo(78, 262); c.stroke(); });
+              c.fillStyle = "rgba(0,0,0,.18)"; c.fillRect(60, 284, 180, 18); c.fillRect(38, 258, 30, 16); c.fillRect(232, 258, 30, 16);
+              c.strokeStyle = "#efe6da"; c.lineWidth = 3; c.beginPath(); c.moveTo(138, 64); c.quadraticCurveTo(132, 104, 136, 142); c.moveTo(162, 64); c.quadraticCurveTo(170, 106, 165, 144); c.stroke();
+              c.fillStyle = "#c9c2b6"; c.fillRect(133, 140, 6, 10); c.fillRect(162, 142, 6, 10);
+            }
+            if (kind === "pant") {
+              c.fillStyle = "rgba(0,0,0,.22)"; c.fillRect(36, 14, 150, 22);
+              c.fillStyle = "rgba(0,0,0,.3)"; [52, 82, 138, 168].forEach((x) => c.fillRect(x, 12, 5, 26));
+              layer(c, { blur: 1.5 }, () => {
+                c.strokeStyle = "rgba(0,0,0,.3)"; c.lineWidth = 2;
+                [[22, 150], [154, 150]].forEach(([x, y]) => { c.strokeRect(x, y, 44, 58); c.fillStyle = "rgba(0,0,0,.16)"; c.fillRect(x - 1, y - 1, 46, 16); });
+                c.beginPath(); c.moveTo(111, 36); c.lineTo(111, 100); c.stroke();
+              });
+              layer(c, { blur: 4 }, () => { c.strokeStyle = "rgba(0,0,0,.25)"; c.lineWidth = 5; for (let k = 0; k < 3; k++) { c.beginPath(); c.moveTo(24, 236 + k * 9); c.quadraticCurveTo(50, 230 + k * 9, 82, 240 + k * 9); c.moveTo(140, 240 + k * 9); c.quadraticCurveTo(168, 230 + k * 9, 198, 238 + k * 9); c.stroke(); } });
+            }
+            c.restore();
+            c.restore();
+            vignette(c, w, h, 0.16);
+            grain(c, w, h, 9, seed + 1);
+          };
+        }
+
+        /* ---- The Atlas Review cover: portrait by a night-train window ---- */
+        const HEAD = "M318 168C280 166 254 192 250 228L246 246C244 254 236 262 232 270L224 290C222 296 228 300 236 300C236 306 232 310 234 314C236 318 234 322 236 326C238 332 240 340 248 348C256 354 268 352 278 350C282 370 284 392 280 412C276 430 268 450 262 470C254 520 250 560 248 600L464 600L464 470C450 448 430 432 400 420C376 412 362 400 356 380C352 360 356 340 368 322C392 312 420 286 424 254C446 252 458 226 448 204C438 182 410 176 396 186C390 182 386 181 380 180C362 170 340 166 318 168Z";
+        function atlasCover(c, w, h) {
+          const R = rng(31), head = new Path2D(HEAD);
+          c.fillStyle = LG(c, 0, 0, w, h, [[0, "#0e2236"], [0.6, "#1a3651"], [1, "#0a1522"]]); c.fillRect(0, 0, w, h);
+          // the window: passing lights, far out of focus
+          layer(c, { op: "lighter" }, () => {
+            for (let i = 0; i < 46; i++) {
+              const x = R() * w * 0.78, y = 120 + R() * 360, r = 6 + R() * 26, warm = R() < 0.7;
+              layer(c, { blur: 1.5 + R() * 4 }, () => {
+                c.fillStyle = warm ? "rgba(255," + (150 + R() * 60 | 0) + ",80," + (0.18 + R() * 0.4) + ")" : "rgba(140,190,255," + (0.15 + R() * 0.3) + ")";
+                c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+              });
+            }
+            layer(c, { blur: 6, alpha: 0.35 }, () => { for (let i = 0; i < 5; i++) { c.fillStyle = "#ffb070"; c.fillRect(-20, 210 + R() * 220, 260 + R() * 120, 2 + R() * 3); } });
+          });
+          // window frame, soft
+          layer(c, { blur: 5 }, () => { c.strokeStyle = "#060c14"; c.lineWidth = 26; rrect(c, -40, 96, 330, 420, 46); c.stroke(); });
+          // cabin lamp from the right
+          layer(c, { op: "screen" }, () => { c.fillStyle = RG(c, 470, 330, 0, 300, [[0, "rgba(255,170,100,.5)"], [1, "rgba(255,170,100,0)"]]); c.fillRect(0, 0, w, h); });
+          // subject
+          c.fillStyle = LG(c, 0, 160, 0, h, [[0, "#0c1420"], [1, "#05090f"]]); c.fill(head);
+          c.save(); c.clip(head);
+          c.fillStyle = RG(c, 262, 286, 0, 90, [[0, "rgba(232,170,130,.38)"], [1, "rgba(232,170,130,0)"]]); c.fillRect(0, 0, w, h);
+          c.fillStyle = RG(c, 420, 470, 0, 160, [[0, "rgba(255,170,110,.22)"], [1, "rgba(255,170,110,0)"]]); c.fillRect(0, 0, w, h);
+          layer(c, { alpha: 0.07, blur: 0.6 }, () => { c.strokeStyle = "#c9a888"; c.lineWidth = 1; for (let i = 0; i < 40; i++) { const y = 176 + R() * 40; c.beginPath(); c.moveTo(270 + R() * 30, y + 30); c.quadraticCurveTo(330, y - 10, 400 + R() * 20, y + 20 + R() * 20); c.stroke(); } });
+          c.restore();
+          // rim lights: cool from the window on the profile, warm from the lamp on the nape
+          const rim = (dx, dy, col, blur) => {
+            const o = document.createElement("canvas"); o.width = w; o.height = h; const oc = o.getContext("2d");
+            oc.fillStyle = col; oc.fill(head);
+            oc.globalCompositeOperation = "destination-out"; oc.translate(dx, dy); oc.fill(head);
+            layer(c, { op: "screen", blur }, () => c.drawImage(o, 0, 0));
+          };
+          rim(6, 2, "rgba(170,205,255,.9)", 2.2);
+          rim(-9, 0, "rgba(255,176,110,.75)", 4);
+          c.fillStyle = "#ffe6c0"; c.beginPath(); c.arc(330, 330, 2.6, 0, Math.PI * 2); c.fill();
+          layer(c, { op: "screen", blur: 4 }, () => { c.fillStyle = "rgba(255,220,170,.6)"; c.beginPath(); c.arc(330, 330, 7, 0, Math.PI * 2); c.fill(); });
+          // scrims for the cover type
+          c.fillStyle = LG(c, 0, 0, 0, 190, [[0, "rgba(4,10,18,.55)"], [1, "rgba(4,10,18,0)"]]); c.fillRect(0, 0, w, 190);
+          c.fillStyle = LG(c, 0, 400, 0, h, [[0, "rgba(4,10,18,0)"], [1, "rgba(4,10,18,.88)"]]); c.fillRect(0, 400, w, h - 400);
+          vignette(c, w, h, 0.35);
+          grain(c, w, h, 18, 32);
+        }
+
+        /* ---- Aurora-8: studio product shot, brushed aluminium and machined knobs ---- */
+        function synth(c, w, h) {
+          const R = rng(41);
+          c.save(); rrect(c, 0, 0, w, h, 26); c.clip();
+          c.fillStyle = LG(c, 0, 0, 0, h, [[0, "#f3f0f9"], [1, "#d3cee2"]]); c.fillRect(0, 0, w, h);
+          layer(c, { alpha: 1 }, () => { for (let i = 0; i < 900; i++) { const y = R() * h, x = R() * w; c.fillStyle = R() < 0.5 ? "rgba(255,255,255,.22)" : "rgba(60,50,90,.07)"; c.fillRect(x, y, 40 + R() * 240, 1); } });
+          c.fillStyle = LG(c, 0, 0, w, h, [[0.18, "rgba(255,255,255,0)"], [0.32, "rgba(255,255,255,.42)"], [0.46, "rgba(255,255,255,0)"]]); c.fillRect(0, 0, w, h);
+          // walnut end cheeks
+          [[0, 30], [w - 30, 30]].forEach(([x, cw]) => {
+            c.fillStyle = LG(c, x, 0, x + cw, 0, [[0, "#3c2215"], [0.5, "#6b3f25"], [1, "#4a2a19"]]); c.fillRect(x, 0, cw, h);
+            layer(c, { alpha: 0.25 }, () => { c.strokeStyle = "#1e0f08"; c.lineWidth = 1; for (let k = 0; k < 9; k++) { c.beginPath(); c.moveTo(x + 2 + k * 3.2, 0); for (let y = 0; y <= h; y += 26) c.lineTo(x + 2 + k * 3.2 + Math.sin(y / 40 + k) * 1.6, y); c.stroke(); } });
+          });
+          // OLED screen
+          c.save(); c.shadowColor = "rgba(30,20,60,.35)"; c.shadowBlur = 8; c.shadowOffsetY = 2; rrect(c, 46, 36, 240, 120, 10); c.fillStyle = "#0e0d14"; c.fill(); c.restore();
+          rrect(c, 46, 36, 240, 120, 10); c.fillStyle = LG(c, 0, 36, 0, 156, [[0, "#1d1b27"], [1, "#0b0a10"]]); c.fill();
+          c.save(); c.shadowColor = "#ff7a3d"; c.shadowBlur = 10; c.strokeStyle = "#ff8a4d"; c.lineWidth = 3; c.beginPath(); c.moveTo(66, 118); c.quadraticCurveTo(96, 58, 126, 108); c.quadraticCurveTo(156, 150, 186, 98); c.quadraticCurveTo(216, 70, 266, 88); c.stroke(); c.restore();
+          c.fillStyle = LG(c, 46, 36, 200, 156, [[0, "rgba(255,255,255,.14)"], [0.45, "rgba(255,255,255,.03)"], [0.46, "rgba(255,255,255,0)"]]); rrect(c, 46, 36, 240, 120, 10); c.fill();
+          // machined knobs
+          const body = ["#1b1924", "#1b1924", "#6a4cff", "#1b1924", "#ff7a3d", "#1b1924", "#1b1924", "#6a4cff"];
+          for (let i = 0; i < 8; i++) {
+            const cx = 340 + i * 96, cy = 72, a = -2.4 + i * 0.55;
+            c.save(); c.shadowColor = "rgba(30,20,60,.45)"; c.shadowBlur = 12; c.shadowOffsetX = 4; c.shadowOffsetY = 7; c.beginPath(); c.arc(cx, cy, 29, 0, Math.PI * 2); c.fillStyle = body[i]; c.fill(); c.restore();
+            c.beginPath(); c.arc(cx, cy, 29, 0, Math.PI * 2); c.fillStyle = RG(c, cx - 10, cy - 12, 2, 34, [[0, "rgba(255,255,255,.35)"], [0.5, "rgba(255,255,255,.05)"], [1, "rgba(0,0,0,.35)"]]); c.fill();
+            const cg = c.createConicGradient(a, cx, cy);
+            [[0, "#fbfbfd"], [0.12, "#8e8c99"], [0.25, "#e9e8ef"], [0.38, "#6c6a78"], [0.5, "#f6f6f9"], [0.62, "#85838f"], [0.75, "#e2e1ea"], [0.88, "#6f6d7b"], [1, "#fbfbfd"]].forEach((s) => cg.addColorStop(s[0], s[1]));
+            c.beginPath(); c.arc(cx, cy, 19, 0, Math.PI * 2); c.fillStyle = cg; c.fill();
+            c.beginPath(); c.arc(cx, cy, 19, 0, Math.PI * 2); c.fillStyle = RG(c, cx - 6, cy - 8, 0, 20, [[0, "rgba(255,255,255,.55)"], [1, "rgba(255,255,255,0)"]]); c.fill();
+            c.strokeStyle = "rgba(0,0,0,.35)"; c.lineWidth = 1; c.beginPath(); c.arc(cx, cy, 19, 0, Math.PI * 2); c.stroke();
+            c.strokeStyle = "#16141e"; c.lineWidth = 3; c.lineCap = "round"; c.beginPath(); c.moveTo(cx + Math.cos(a) * 8, cy + Math.sin(a) * 8); c.lineTo(cx + Math.cos(a) * 17, cy + Math.sin(a) * 17); c.stroke();
+          }
+          // step buttons
+          for (let i = 0; i < 16; i++) {
+            const x = 50 + i * 65.5, y = 172, on = [0, 4, 6, 10, 12].includes(i);
+            c.save(); c.shadowColor = on ? "rgba(255,122,61,.85)" : "rgba(30,20,60,.3)"; c.shadowBlur = on ? 16 : 5; c.shadowOffsetY = on ? 0 : 3;
+            rrect(c, x, y, 54, 34, 6); c.fillStyle = on ? "#ff7a3d" : "#d7d3e3"; c.fill(); c.restore();
+            rrect(c, x, y, 54, 34, 6); c.fillStyle = LG(c, 0, y, 0, y + 34, on ? [[0, "rgba(255,230,190,.7)"], [0.4, "rgba(255,150,80,0)"], [1, "rgba(160,50,0,.35)"]] : [[0, "rgba(255,255,255,.75)"], [0.3, "rgba(255,255,255,0)"], [1, "rgba(40,30,70,.18)"]]); c.fill();
+          }
+          // keybed: recess shadow, white keys, black keys
+          c.fillStyle = "#24212e"; c.fillRect(42, 226, w - 84, 274);
+          for (let i = 0; i < 22; i++) {
+            const x = 46 + i * 47.4;
+            rrect(c, x, 230, 45, 262, [0, 0, 6, 6]); c.fillStyle = LG(c, 0, 230, 0, 492, [[0, "#d9d6e2"], [0.08, "#fdfcff"], [0.85, "#f1eff6"], [1, "#c9c5d4"]]); c.fill();
+            c.fillStyle = "rgba(40,30,70,.12)"; c.fillRect(x, 230, 2, 262);
+          }
+          [0, 1, 3, 4, 5, 7, 8, 10, 11, 12, 14, 15, 17, 18, 19].forEach((i) => {
+            const x = 46 + i * 47.4 + 31;
+            c.save(); c.shadowColor = "rgba(10,5,30,.55)"; c.shadowBlur = 10; c.shadowOffsetX = 3; c.shadowOffsetY = 8; rrect(c, x, 230, 30, 162, [0, 0, 4, 4]); c.fillStyle = "#121018"; c.fill(); c.restore();
+            rrect(c, x, 230, 30, 162, [0, 0, 4, 4]); c.fillStyle = LG(c, x, 0, x + 30, 0, [[0, "#2d2a38"], [0.22, "#4a4658"], [0.3, "#1a1822"], [1, "#0e0c13"]]); c.fill();
+            c.fillStyle = LG(c, 0, 360, 0, 392, [[0, "rgba(255,255,255,0)"], [1, "rgba(255,255,255,.16)"]]); c.fillRect(x + 3, 360, 24, 30);
+          });
+          c.fillStyle = LG(c, 0, 226, 0, 250, [[0, "rgba(10,5,30,.45)"], [1, "rgba(10,5,30,0)"]]); c.fillRect(42, 226, w - 84, 24);
+          // studio light falloff
+          c.fillStyle = LG(c, 0, 0, w, h, [[0, "rgba(255,255,255,.1)"], [1, "rgba(30,10,80,.22)"]]); c.fillRect(0, 0, w, h);
+          c.restore();
+          // shallow depth of field: soften the far (top) edge
+          const o = document.createElement("canvas"); o.width = w; o.height = h; const oc = o.getContext("2d");
+          oc.filter = "blur(3px)"; oc.drawImage(c.canvas, 0, 0); oc.filter = "none";
+          oc.globalCompositeOperation = "destination-in"; oc.fillStyle = LG(oc, 0, 0, 0, h * 0.42, [[0, "rgba(0,0,0,1)"], [1, "rgba(0,0,0,0)"]]); oc.fillRect(0, 0, w, h);
+          c.drawImage(o, 0, 0);
+          grain(c, w, h, 8, 42);
+        }
+
+        const DRAW = {
+          albarRoom, albarFacade, atlasCover, synth,
+          tee: garment("tee", "#18181a", 51, 0.34),
+          hoodie: garment("hoodie", "#b9553a", 61, 0.16),
+          pant: garment("pant", "#5a6638", 71, 0.16),
+        };
+        return {
+          tag: (k, w, h, style) => '<canvas data-photo="' + k + '" width="' + w + '" height="' + h + '" style="position:absolute;left:0;top:0;width:' + w + "px;height:" + h + "px;" + (style || "") + '"></canvas>',
+          paint: (scope) => (scope || document).querySelectorAll("canvas[data-photo]").forEach((cv) => DRAW[cv.dataset.photo](cv.getContext("2d", { willReadFrequently: true }), cv.width, cv.height)),
+        };
+      })();
+
+      /* =====================================================================
+         WALL LAYOUT: six masonry columns, card width 360, gap 22 (wall coordinates)
+         ===================================================================== */
+      const K = 360 / 1280;
+      const CH = { L: 225, T: 450, S: 360, P: 480, H: 202.5 };
+      const COLS = [
+        [-20, -90, [["tally", "P"], ["kodo", "L"], ["daybreak", "S"], ["albar", "L"]]],
+        [362, -200, [["thread", "S"], ["atlas", "T"], ["pulse", "L"], ["meridian", "P"]]],
+        [744, -40, [["signal", "L"], ["twist", "P"], ["ironhouse", "L"], ["lena", "T"]]],
+        [1126, -110, [["halden", "T"], ["postline", "L"], ["hero", "H"], ["longgame", "P"]]],
+        [1508, -260, [["fern", "S"], ["osteria", "L"], ["margin", "T"], ["fieldnote", "L"], ["wren", "S"]]],
+        [1890, -120, [["halo", "L"], ["clay", "L"], ["groundwork", "T"], ["aurora", "P"]]],
+      ];
+      const HERO = {};
+      const wallEl = $("wall");
+      COLS.forEach(([x, y0, list]) => {
+        let y = y0;
+        list.forEach(([name, t]) => {
+          const h = CH[t];
+          const isHero = name === "hero";
+          const sc = isHero ? 360 / 1920 : K;
+          const s = SITES[name]();
+          const el = document.createElement("div");
+          el.className = "card";
+          el.id = "card-" + name;
+          el.style.cssText = "left:" + x + "px;top:" + y + "px;width:360px;height:" + h + "px;background:" + s.bg;
+          el.innerHTML = '<div class="site" style="width:' + (isHero ? 1920 : 1280) + "px;height:" + Math.ceil(h / sc) + "px;background:" + s.bg + ";transform:scale(" + sc + ')">' + s.html + "</div>";
+          wallEl.appendChild(el);
+          if (isHero) Object.assign(HERO, { x, y, w: 360, h });
+          y += h + 22;
+        });
+      });
+      PH.paint();
+
+      /* ---------- Orrery template bar ---------- */
+      $("barThumb").innerHTML = '<div style="position:absolute;left:0;top:0;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 70% at 50% 0%, rgba(132,104,255,.6), rgba(132,104,255,0) 70%)">' + CB_MARK(26) + "</div>";
+      $("barStats").innerHTML =
+        '<span style="color:#ffcf5a">' + ic("star", 15) + '<b>4.9</b><span style="color:#8b8b94">(312)</span></span>' +
+        "<span>" + ic("repeat", 15) + "<b>3,108</b> remixes</span>" +
+        "<span>" + ic("layers", 15) + "14 pages</span>" +
+        "<span>" + ic("clock", 15) + "Updated Oct 22</span>";
+      $("barPrev").innerHTML = ic("eye", 17) + "Preview";
+      $("barRemix").innerHTML = ic("copy", 17) + "Remix template <small>$79</small>";
+
+      /* ---------- end lockup: an orrery, two planets on rings ---------- */
+      $("logo").innerHTML =
+        '<svg width="140" height="140" viewBox="0 0 140 140"><defs><radialGradient id="sunG" cx="40%" cy="36%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffcf8a"/></radialGradient></defs>' +
+        '<circle id="ring1" cx="70" cy="70" r="34" fill="none" stroke="rgba(255,255,255,.34)" stroke-width="1.6" stroke-dasharray="213.6" transform="rotate(-90 70 70)"/>' +
+        '<circle id="ring2" cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.6" stroke-dasharray="364.5" transform="rotate(-90 70 70)"/>' +
+        '<circle id="sun" cx="70" cy="70" r="13" fill="url(#sunG)"/>' +
+        '<g id="p1"><rect class="pb" x="97" y="65" width="14" height="10" rx="2.5" fill="#8468ff"/></g>' +
+        '<g id="p2"><rect class="pb" x="61" y="5.5" width="18" height="13" rx="3" fill="#d4ff3d"/></g>' +
+        '<g id="p3"><circle class="pb" cx="15.5" cy="50.2" r="5" fill="#ffb347"/></g></svg>';
+
+      /* =====================================================================
+         CAMERA
+         ===================================================================== */
+      const EXPO = "expo.out";
+      const T_DRIFT = 5.9; // drift runs 0 - 5.9 s at constant speed
+      const TX = -440, TY = -260, S_END = 1.15; // about 4% of frame width per second, scale 1 -> 1.15
+      const T_PUSH = 5.35; // push-in 5.35 - 5.9 s, expo.in = cubic-bezier(0.7, 0, 0.84, 0)
+
+      // where the hero card sits on screen when the drift ends
+      const hx = 960 + S_END * (HERO.x + TX - 960);
+      const hy = 540 + S_END * (HERO.y + TY - 540);
+      const P = 1920 / (HERO.w * S_END);
+
+      gsap.set("#cam", { transformOrigin: "960px 540px" });
+      gsap.set("#push", { transformOrigin: "0px 0px" });
+      gsap.set("#hold", { transformOrigin: "960px 540px" });
+
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+
+      /* 0. lockup starts hidden so nothing shows before its entrance */
+      tl.set("#wm .ch", { yPercent: 105 }, 0);
+      tl.set("#wmsub", { opacity: 0 }, 0);
+      tl.set(".pb, #sun", { scale: 0, transformOrigin: "50% 50%" }, 0);
+      tl.set("#ring1", { strokeDashoffset: 213.6 }, 0);
+      tl.set("#ring2", { strokeDashoffset: 364.5 }, 0);
+
+      /* 1. open from black while the wall is already moving */
+      tl.to("#fade", { opacity: 0, duration: 0.5, ease: "power1.out" }, 0);
+
+      /* 2. constant drift up-left and slow scale-up (0 - 5.9) */
+      F("#wall", { x: 0, y: 0 }, { x: TX, y: TY, duration: T_DRIFT, ease: "none" }, 0);
+      F("#cam", { scale: 1 }, { scale: S_END, duration: T_DRIFT, ease: "none" }, 0);
+
+      /* 3. push into Clearbook (5.35 - 6.0): expo.in acceleration, then a velocity-matched
+            cubic ease-out over the last ~5.5 frames so the card lands softly */
+      const T_LAND = 6.0, PD = T_LAND - T_PUSH, LA = 0.72;
+      const EXPO_END = (10 * Math.LN2) / (1 - Math.pow(2, -10)); // slope of normalized expo.in at p = 1
+      const LY = 3 / (3 + EXPO_END * (1 - LA) / LA); // progress at the hand-off, slopes match
+      const land = (p) => p < LA
+        ? LY * (Math.pow(2, 10 * p / LA - 10) - Math.pow(2, -10)) / (1 - Math.pow(2, -10))
+        : LY + (1 - LY) * (1 - Math.pow(1 - (p - LA) / (1 - LA), 3));
+      F("#push", { x: 0, y: 0, scale: 1 }, { x: -P * hx, y: -P * hy, scale: P, duration: PD, ease: land }, T_PUSH);
+      F("#card-hero", { borderRadius: 10 }, { borderRadius: 0, duration: PD, ease: land }, T_PUSH);
+
+      /* 4. landed: residual slow push, Orrery template bar rises (6.0 - 7.7) */
+      const T_BACK = 7.65, BD = 1.0;
+      F("#hold", { scale: 1 }, { scale: 1.03, duration: T_BACK - T_LAND, ease: "none" }, T_LAND);
+      F("#bar", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.7, ease: EXPO }, 6.3);
+      tl.to("#bar", { opacity: 0, y: 24, duration: 0.3, ease: "power2.in" }, 7.45);
+
+      /* 5. pull back out of Clearbook to the whole wall, which dims and keeps drifting (7.7 - 11) */
+      let bx0 = Infinity, bx1 = -Infinity, by0 = -Infinity, by1 = Infinity;
+      COLS.forEach(([x, y0, list]) => {
+        const y1 = list.reduce((y, [, t]) => y + CH[t] + 22, y0) - 22;
+        bx0 = Math.min(bx0, x); bx1 = Math.max(bx1, x + 360); by0 = Math.max(by0, y0); by1 = Math.min(by1, y1);
+      });
+      const camX = (x) => 960 + S_END * (x + TX - 960), camY = (y) => 540 + S_END * (y + TY - 540);
+      const Q = Math.max(1920 / (camX(bx1) - camX(bx0)), 1080 / (camY(by1) - camY(by0)));
+      const qx = 960 - Q * (camX(bx0) + camX(bx1)) / 2, qy = 540 - Q * (camY(by0) + camY(by1)) / 2;
+      F("#push", { x: -P * hx, y: -P * hy, scale: P }, { x: qx, y: qy, scale: Q, duration: BD, ease: "power3.inOut" }, T_BACK);
+      F("#card-hero", { borderRadius: 0 }, { borderRadius: 10, duration: BD, ease: "power3.inOut" }, T_BACK);
+      F("#hold", { x: 0, y: 0, scale: 1.03 }, { x: -50, y: -30, scale: 1.075, duration: 11 - T_BACK, ease: "none" }, T_BACK);
+      F("#dim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 8.0);
+      F("#halo", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 8.1);
+
+      /* 6. Orrery lockup over the dimmed wall (8.3 - 11) */
+      F("#ring1", { strokeDashoffset: 213.6 }, { strokeDashoffset: 0, duration: 1.1, ease: EXPO }, 8.3);
+      F("#ring2", { strokeDashoffset: 364.5 }, { strokeDashoffset: 0, duration: 1.2, ease: EXPO }, 8.36);
+      F("#sun", { scale: 0 }, { scale: 1, duration: 0.7, ease: "back.out(2)", svgOrigin: "70 70" }, 8.3);
+      F("#p1", { rotation: -150 }, { rotation: 30, duration: 2.7, ease: "none", svgOrigin: "70 70" }, 8.3);
+      F("#p2", { rotation: -70 }, { rotation: 18, duration: 2.7, ease: "none", svgOrigin: "70 70" }, 8.3);
+      F("#p3", { rotation: -50 }, { rotation: 12, duration: 2.7, ease: "none", svgOrigin: "70 70" }, 8.3);
+      F(".pb", { scale: 0 }, { scale: 1, duration: 0.6, ease: "back.out(2.2)", transformOrigin: "50% 50%", stagger: 0.08 }, 8.55);
+      F("#wm .ch", { yPercent: 105 }, { yPercent: 0, duration: 0.9, ease: EXPO, stagger: 0.045 }, 8.4);
+      F("#wmsub", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: EXPO }, 8.75);
+      F("#endwrap", { scale: 1 }, { scale: 1.03, duration: 2.7, ease: "none" }, 8.3);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

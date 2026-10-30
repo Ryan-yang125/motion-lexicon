@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --paper: #e3d5b5;
+        --ink: #1d1b18;
+        --green: #3cc24a;
+        --font-ui: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #cv { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+      #vig { pointer-events: none; background: radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 56%, rgba(30,18,4,0.2) 100%); }
+
+      /* label chips on graph nodes (positioned from the render function) */
+      #chips { z-index: 2; }
+      .chip { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; }
+      .chip .in { position: absolute; top: -27px; display: flex; align-items: center; gap: 11px; height: 54px; padding: 0 20px 0 15px; white-space: nowrap;
+        font-family: var(--font-ui); font-weight: 500; font-size: 28px; letter-spacing: -0.012em; color: #1f1d18;
+        background: #f3ead0; border: 1px solid rgba(40, 34, 20, 0.5); border-radius: 7px; box-shadow: 0 1px 0 rgba(40, 34, 20, 0.18); }
+      .chip.r .in { left: 20px; }
+      .chip.l .in { right: 20px; }
+      .chip svg { width: 24px; height: 24px; fill: none; stroke: #1f1d18; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+      /* end slate */
+      #slate { z-index: 3; }
+      #wm { position: absolute; left: 744px; top: 420px; font-weight: 600; font-size: 168px; line-height: 1; letter-spacing: -0.045em; color: #181611; white-space: nowrap; }
+      #wm .ch { display: inline-block; opacity: 0; }
+      #tag { position: absolute; left: 0; top: 646px; width: 1920px; text-align: center; font-weight: 400; font-size: 30px; letter-spacing: -0.005em; color: #6b5e3f; opacity: 0; }
+      #fontwarm { position: absolute; left: 0; top: 0; opacity: 0; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="11" data-track-index="0">
+        <canvas id="cv" width="1920" height="1080"></canvas>
+        <div id="chips" class="full" data-layout-allow-overlap></div>
+        <div id="slate" class="full" data-layout-allow-overlap>
+          <div id="wm"></div>
+          <div id="tag">Every note, connected.</div>
+        </div>
+        <div id="vig" class="full"></div>
+        <div id="fontwarm"><span style="font-weight:400">Inter 400</span><span style="font-weight:500">Inter 500</span><span style="font-weight:600">Inter 600</span><span style="font-family:'JetBrains Mono';font-weight:400">mono</span></div>
+      </div>
+    </div>
+
+    <script>
+      /* =====================================================================
+         Branching growth. One canvas, one render(t). Everything is a pure
+         function of t: the tree is generated from a fixed seed, the paper is
+         painted from a fixed seed, the camera is a closed-form curve.
+         0.00–4.60  pencil tree grows on paper, camera pulls back linearly,
+                    six nodes light up green, the camera dives into one
+         4.60–8.90  doubling beat on dark: 1 → 2 → 4 → 8 → 16 → 32 → 63 docs,
+                    positions re-deal at 8fps
+         8.90–10.8  paper slate, tree mark grows, Thicket wordmark
+         ===================================================================== */
+      const DUR = 11, W = 1920, H = 1080;
+      const T_PULL0 = 0.45, T_PULL1 = 3.45, T_DIVE0 = 3.95, T_CUT = 4.35, T_SLATE = 8.4;
+      const INK = "#1d1b18", GREEN = "#3cc24a";
+      const cv = document.getElementById("cv");
+      const ctx = cv.getContext("2d");
+      const FONT = '"Inter", -apple-system, "Helvetica Neue", sans-serif';
+
+      function mulberry(a) {
+        return function () {
+          a |= 0; a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function Hh(a, b, c) {
+        const x = Math.sin(a * 127.1 + b * 311.7 + (c || 0) * 74.7 + a * b * 0.013) * 43758.5453;
+        return x - Math.floor(x);
+      }
+      const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+      const lerp = (a, b, k) => a + (b - a) * k;
+
+      /* cubic-bezier(0.34,1.56,0.64,1): node pop */
+      function bezier(x1, y1, x2, y2) {
+        const bx = (s) => 3 * (1 - s) * (1 - s) * s * x1 + 3 * (1 - s) * s * s * x2 + s * s * s;
+        const by = (s) => 3 * (1 - s) * (1 - s) * s * y1 + 3 * (1 - s) * s * s * y2 + s * s * s;
+        return (x) => {
+          if (x <= 0) return 0;
+          if (x >= 1) return 1;
+          let lo = 0, hi = 1, s = x;
+          for (let i = 0; i < 30; i++) { s = (lo + hi) / 2; if (bx(s) < x) lo = s; else hi = s; }
+          return by(s);
+        };
+      }
+      const POP = bezier(0.34, 1.56, 0.64, 1);
+      const easeOut = (p) => 1 - Math.pow(1 - p, 2.4);
+      const expoOut = (p) => (p >= 1 ? 1 : 1 - Math.pow(2, -10 * p));
+
+      /* ---------- seeded paper and dark grain, painted once ---------- */
+      function makeTexture(kind) {
+        const c = document.createElement("canvas");
+        c.width = W; c.height = H;
+        const x = c.getContext("2d");
+        const r = mulberry(kind === "paper" ? 101 : 202);
+        const mk = (cs) => {
+          const gw = Math.ceil(W / cs) + 2, gh = Math.ceil(H / cs) + 2, g = new Float32Array(gw * gh);
+          for (let i = 0; i < g.length; i++) g[i] = r();
+          return { cs, gw, g };
+        };
+        const sm = (t) => t * t * (3 - 2 * t);
+        const samp = (L, px, py) => {
+          const fx = px / L.cs, fy = py / L.cs, ix = fx | 0, iy = fy | 0, tx = sm(fx - ix), ty = sm(fy - iy);
+          const a = L.g[iy * L.gw + ix], b = L.g[iy * L.gw + ix + 1], c2 = L.g[(iy + 1) * L.gw + ix], d = L.g[(iy + 1) * L.gw + ix + 1];
+          return (a + (b - a) * tx) * (1 - ty) + (c2 + (d - c2) * tx) * ty;
+        };
+        const L1 = mk(300), L2 = mk(80), L3 = mk(20), L4 = mk(5);
+        const img = x.createImageData(W, H), d = img.data;
+        for (let py = 0; py < H; py++) {
+          for (let px = 0; px < W; px++) {
+            const n = 0.36 * samp(L1, px, py) + 0.28 * samp(L2, px, py) + 0.2 * samp(L3, px, py) + 0.16 * samp(L4, px, py);
+            const g = r() - 0.5;
+            const o = (py * W + px) * 4;
+            if (kind === "paper") {
+              const dx = (px - 960) / 960, dy = (py - 540) / 540;
+              const vig = 0.1 * (dx * dx * 0.55 + dy * dy * 0.45);
+              const warm = Math.max(0, (1 - px / W) * (py / H) - 0.25) * 14;
+              const v = (n - 0.5) * 0.17 + g * 0.05 - vig;
+              d[o] = 227 * (1 + v) + warm;
+              d[o + 1] = 213 * (1 + v) + warm * 0.35;
+              d[o + 2] = 181 * (1 + v) - warm * 0.8;
+            } else {
+              const v = (n - 0.5) * 9 + g * 6;
+              d[o] = 13 + v; d[o + 1] = 13 + v; d[o + 2] = 12 + v;
+            }
+            d[o + 3] = 255;
+          }
+        }
+        x.putImageData(img, 0, 0);
+        x.lineCap = "round";
+        const fibers = kind === "paper" ? 1500 : 500;
+        for (let i = 0; i < fibers; i++) {
+          const fx = r() * W, fy = r() * H, a = r() * Math.PI * 2, l = 5 + r() * 20;
+          x.strokeStyle = kind === "paper" ? (r() < 0.55 ? "rgba(95,72,38,0.07)" : "rgba(255,248,226,0.1)") : "rgba(255,255,255,0.028)";
+          x.lineWidth = 0.5 + r() * 0.5;
+          x.beginPath(); x.moveTo(fx, fy);
+          x.quadraticCurveTo(fx + Math.cos(a + 0.6) * l * 0.5, fy + Math.sin(a + 0.6) * l * 0.5, fx + Math.cos(a) * l, fy + Math.sin(a) * l);
+          x.stroke();
+        }
+        const specks = kind === "paper" ? 700 : 260;
+        for (let i = 0; i < specks; i++) {
+          const fx = r() * W, fy = r() * H, rr = 0.35 + r() * 0.8;
+          x.fillStyle = kind === "paper" ? "rgba(70,50,25," + (0.12 + r() * 0.3).toFixed(2) + ")" : "rgba(255,255,255," + (0.04 + r() * 0.1).toFixed(2) + ")";
+          x.beginPath(); x.arc(fx, fy, rr, 0, 6.2832); x.fill();
+        }
+        return c;
+      }
+      const PAPER = makeTexture("paper");
+      const DARK = makeTexture("dark");
+
+      /* ---------- pencil primitives (screen space) ---------- */
+      const TINT_I = "236,226,200", TINT_G = "255,255,255";
+      function dashes(r, n, onMin, onMax, offMin, offMax) {
+        const a = [];
+        for (let i = 0; i < n; i++) { a.push(onMin + r() * (onMax - onMin)); a.push(offMin + r() * (offMax - offMin)); }
+        return a;
+      }
+      function makeEdge(x0, y0, x1, y1, r) {
+        const len = Math.hypot(x1 - x0, y1 - y0);
+        const K = len > 160 ? 10 : len > 70 ? 7 : 4;
+        const nx = -(y1 - y0) / len, ny = (x1 - x0) / len;
+        const a1 = 1 + r() * 2, a2 = 2 + r() * 3, p1 = r() * 6.28, p2 = r() * 6.28;
+        const amp = Math.min(3.2, len * 0.012);
+        const pts = new Float32Array((K + 1) * 2);
+        for (let i = 0; i <= K; i++) {
+          const f = i / K;
+          const w = (Math.sin(f * a1 * 3.14 + p1) * 0.65 + Math.sin(f * a2 * 3.14 + p2) * 0.35) * amp * Math.sin(f * 3.14);
+          pts[i * 2] = x0 + (x1 - x0) * f + nx * w;
+          pts[i * 2 + 1] = y0 + (y1 - y0) * f + ny * w;
+        }
+        /* graphite tooth: gaps where the pencil skips paper, plus two sparse burr strokes beside the line */
+        return { pts, K, gap: dashes(r, 14, 0.7, 3.0, 5, 20), gap2: dashes(r, 10, 0.4, 1.4, 3, 9), b1: dashes(r, 9, 3, 13, 9, 40), b2: dashes(r, 9, 2, 9, 11, 50) };
+      }
+      function strokeEdge(E, frac, cam, lw, col, alpha, ox, oy, dash) {
+        if (frac <= 0) return;
+        const { pts, K } = E;
+        const up = frac * K, full = Math.floor(up);
+        const X = (v) => (v - cam.cx) * cam.s + 960 + ox;
+        const Y = (v) => (v - cam.cy) * cam.s + 540 + oy;
+        ctx.beginPath();
+        ctx.moveTo(X(pts[0]), Y(pts[1]));
+        for (let i = 1; i <= full && i <= K; i++) ctx.lineTo(X(pts[i * 2]), Y(pts[i * 2 + 1]));
+        if (full < K) {
+          const f = up - full, a = full * 2, b = a + 2;
+          ctx.lineTo(X(lerp(pts[a], pts[b], f)), Y(lerp(pts[a + 1], pts[b + 1], f)));
+        }
+        ctx.strokeStyle = col; ctx.globalAlpha = alpha; ctx.lineWidth = lw;
+        if (dash) ctx.setLineDash(dash.map((v) => v * cam.s));
+        ctx.stroke();
+        if (dash) ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+      function pencilEdge(E, frac, cam, lwWorld) {
+        const lw = Math.max(1.05, lwWorld * cam.s);
+        strokeEdge(E, frac, cam, lw, "#25221e", 0.9, 0, 0, null);
+        strokeEdge(E, frac, cam, lw * 0.55, "#4a443a", 0.5, 0.8, -0.6, E.b1);
+        strokeEdge(E, frac, cam, lw * 0.5, "#4a443a", 0.42, -0.8, 0.7, E.b2);
+        strokeEdge(E, frac, cam, lw * 0.6, "#e4d6b6", 0.38, 0.15, 0, E.gap);
+        strokeEdge(E, frac, cam, lw * 0.45, "#e4d6b6", 0.34, 0.2, 0.1, E.gap2);
+      }
+      function makeBlob(r) {
+        const w = new Float32Array(28);
+        for (let i = 0; i < 28; i++) w[i] = 0.95 + r() * 0.09;
+        const hat = [];
+        for (let i = 0; i < 9; i++) hat.push([r() * 6.28, (r() - 0.5) * 1.5, 0.5 + r() * 0.4]);
+        const sp = [];
+        for (let i = 0; i < 40; i++) sp.push([r() * 6.28, Math.sqrt(r()) * 0.93, 0.5 + r() * 0.9, 0.1 + r() * 0.3]);
+        const burr = [];
+        for (let i = 0; i < 14; i++) burr.push([r() * 6.28, 0.05 + r() * 0.1]);
+        return { w, hat, sp, burr, dx: (r() - 0.5) * 0.06, dy: (r() - 0.5) * 0.06 };
+      }
+      function drawBlob(x, y, rs, blob, color, tint) {
+        if (rs < 0.3) return;
+        ctx.fillStyle = color;
+        if (rs < 2.4) {
+          ctx.beginPath(); ctx.arc(x, y, rs, 0, 6.2832); ctx.fill();
+          return;
+        }
+        const n = blob.w.length;
+        const poly = (k, ox, oy) => {
+          ctx.beginPath();
+          for (let i = 0; i < n; i++) {
+            const a = (i / n) * 6.2832, rr = rs * blob.w[i] * k;
+            const px = x + ox + Math.cos(a) * rr, py = y + oy + Math.sin(a) * rr;
+            if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+        };
+        poly(1, 0, 0); ctx.fill();
+        if (rs > 5) {
+          /* second, offset outline like a re-traced pencil circle, and short burrs on the rim */
+          poly(1.04, blob.dx * rs, blob.dy * rs);
+          ctx.strokeStyle = color; ctx.globalAlpha = 0.4; ctx.lineWidth = Math.max(0.8, rs * 0.025); ctx.stroke(); ctx.globalAlpha = 1;
+          ctx.strokeStyle = color; ctx.globalAlpha = 0.6; ctx.lineWidth = Math.max(0.7, rs * 0.02);
+          ctx.beginPath();
+          for (const b of blob.burr) {
+            const ca = Math.cos(b[0]), sa = Math.sin(b[0]);
+            ctx.moveTo(x + ca * rs * 0.97, y + sa * rs * 0.97);
+            ctx.lineTo(x + ca * rs * (1 + b[1]), y + sa * rs * (1 + b[1]));
+          }
+          ctx.stroke(); ctx.globalAlpha = 1;
+        }
+        if (rs > 8) {
+          ctx.save();
+          poly(1, 0, 0);
+          ctx.clip();
+          ctx.strokeStyle = "rgba(" + tint + ",0.2)"; ctx.lineWidth = Math.max(0.9, rs * 0.03);
+          for (const h of blob.hat) {
+            const ca = Math.cos(h[0]), sa = Math.sin(h[0]);
+            const ox = -sa * h[1] * rs, oy = ca * h[1] * rs, L = rs * 1.1;
+            ctx.beginPath();
+            ctx.moveTo(x + ox - ca * L, y + oy - sa * L);
+            ctx.lineTo(x + ox + ca * L, y + oy + sa * L);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        if (rs >= 3) {
+          /* graphite grain inside the dot: light specks where the paper tooth shows through */
+          const cnt = rs > 14 ? 40 : rs > 8 ? 28 : rs > 5 ? 14 : 6;
+          for (let i = 0; i < cnt; i++) {
+            const s = blob.sp[i];
+            ctx.fillStyle = "rgba(" + tint + "," + s[3].toFixed(2) + ")";
+            const sz = Math.max(0.45, s[2] * Math.min(1.6, rs * 0.06 + 0.4));
+            ctx.fillRect(x + Math.cos(s[0]) * s[1] * rs, y + Math.sin(s[0]) * s[1] * rs, sz, sz);
+          }
+        }
+      }
+
+      /* ---------- the tree ---------- */
+      const RAD = [34, 24, 17, 12, 8, 5.6, 3.6, 1.9];
+      const LEN = [0, 300, 235, 195, 150, 110, 80, 42];
+      const LWW = [0, 1.9, 1.7, 1.5, 1.3, 1.2, 1.1, 1.0];
+      const WIN = [null, [0.45, 0.95], [0.95, 1.45], [1.45, 1.95], [1.95, 2.283], [2.283, 2.617], [2.617, 2.95], [2.8, 3.2]];
+      const PIVOT_Y = -150;
+      const rt = mulberry(7);
+      const nodes = [];
+      {
+        const root = { id: 0, d: 0, x: 0, y: 0, ang: -Math.PI / 2, par: null, r: RAD[0], blob: makeBlob(rt), tp: 0.05, pd: 0.4, t0: 0, tl: 0 };
+        nodes.push(root);
+        const grow = (p) => {
+          const d = p.d + 1;
+          if (d > 7) return;
+          let n;
+          if (d === 1) n = 2;
+          else if (d === 7) n = rt() < 0.5 ? 2 : 3;
+          else n = rt() < 0.45 ? 3 : 2;
+          const S = d === 1 ? 31 : d <= 3 ? 38 : d === 7 ? 38 : 34;
+          for (let k = 0; k < n; k++) {
+            const base = n === 1 ? 0 : -S + (2 * S * k) / (n - 1);
+            const off = ((base + (d === 1 ? 0 : (rt() - 0.5) * 11)) * Math.PI) / 180;
+            let ang = p.ang + off;
+            if (d >= 2) {
+              const rho = Math.atan2(p.y - PIVOT_Y, p.x), kk = d >= 3 ? 0.36 : 0.16;
+              const vx = Math.cos(ang) * (1 - kk) + Math.cos(rho) * kk, vy = Math.sin(ang) * (1 - kk) + Math.sin(rho) * kk;
+              ang = Math.atan2(vy, vx);
+            }
+            const len = LEN[d] * (0.88 + 0.24 * rt());
+            const nd = { id: nodes.length, d, x: p.x + Math.cos(ang) * len, y: p.y + Math.sin(ang) * len, ang, par: p, r: RAD[d], blob: makeBlob(rt), act: null };
+            nd.edge = makeEdge(p.x, p.y, nd.x, nd.y, rt);
+            const [a, b] = WIN[d], wl = b - a;
+            let t0 = a + rt() * 0.3 * wl;
+            if (p.d > 0) t0 = Math.max(t0, p.tp + p.pd * 0.45);
+            nd.t0 = t0; nd.tl = d === 7 ? 0.22 : 0.6 * wl;
+            nd.tp = t0 + nd.tl * 0.92; nd.pd = d === 7 ? 0.16 : Math.max(0.16, 0.4 * wl);
+            nd.stub = d <= 6 && rt() < 0.3 ? 0.06 + rt() * 0.07 : 0;
+            nodes.push(nd);
+            grow(nd);
+          }
+        };
+        grow(root);
+      }
+      let BB = { minX: 0, maxX: 0, minY: 0 };
+      for (const n of nodes) {
+        BB.minX = Math.min(BB.minX, n.x - n.r); BB.maxX = Math.max(BB.maxX, n.x + n.r); BB.minY = Math.min(BB.minY, n.y - n.r);
+      }
+      const S0 = 2.0;
+      const S_END = Math.min((0.8 * W) / (BB.maxX - BB.minX), 940 / (-BB.minY + 60));
+      const LN0 = Math.log(S0), LNE = Math.log(S_END);
+
+      /* label nodes: pick depth 3–5 nodes near target polar positions */
+      const LABELS = [
+        { phi: -62, rf: 0.6, text: "Customer interviews", at: 3.3 },
+        { phi: -33, rf: 0.5, text: "Pricing v2", at: 3.1 },
+        { phi: -6, rf: 0.42, text: "Q3 roadmap", at: 2.9, dive: true },
+        { phi: 24, rf: 0.8, text: "Onboarding notes", at: 3.4 },
+        { phi: 44, rf: 0.5, text: "API rate limits", at: 3.0 },
+        { phi: 67, rf: 0.6, text: "Launch checklist", at: 3.2 },
+      ];
+      {
+        let maxR = 0;
+        for (const n of nodes) maxR = Math.max(maxR, Math.hypot(n.x, n.y - PIVOT_Y));
+        const taken = [];
+        for (const L of LABELS) {
+          let best = null, bs = 1e9;
+          for (const n of nodes) {
+            if (n.d < 3 || n.d > 5 || taken.includes(n)) continue;
+            const phi = (Math.atan2(n.x, -(n.y - PIVOT_Y)) * 180) / Math.PI, rho = Math.hypot(n.x, n.y - PIVOT_Y);
+            const sc = Math.abs(phi - L.phi) * 9 + Math.abs(rho - L.rf * maxR) * 0.9 + (n.d === 5 ? 60 : 0);
+            if (sc < bs) { bs = sc; best = n; }
+          }
+          taken.push(best);
+          best.act = L.at; best.label = L;
+          L.node = best;
+        }
+      }
+      const DIVE = LABELS.find((l) => l.dive).node;
+      const ACT_K = 1.3;
+      const S_DIVE = 44 / (DIVE.r * ACT_K);
+
+      /* camera on the paper scene */
+      function camBase(t) {
+        const u = (t - T_PULL0) / (T_PULL1 - T_PULL0);
+        const p = u <= 0 ? 0 : u <= 1 ? u : 1 + (u - 1) * 0.1;
+        const s = Math.exp(lerp(LN0, LNE, p));
+        let topY = -RAD[0], minX = 0, maxX = 0;
+        for (let i = 1; i < nodes.length; i++) {
+          const n = nodes[i];
+          const k = (t - n.t0) / n.tl;
+          if (k <= 0) continue;
+          const f = easeOut(Math.min(1, k));
+          const tx = lerp(n.par.x, n.x, f), ty = lerp(n.par.y, n.y, f);
+          if (ty < topY) topY = ty;
+          if (tx < minX) minX = tx;
+          if (tx > maxX) maxX = tx;
+        }
+        const bias = 330 * (1 - clamp01(p));
+        return { s, cx: (minX + maxX) / 2, cy: topY / 2 - bias / s };
+      }
+      function camAt(t) {
+        if (t < T_DIVE0) return camBase(t);
+        const h = camBase(T_DIVE0);
+        const e = Math.pow(clamp01((t - T_DIVE0) / (T_CUT - T_DIVE0)), 3);
+        const e2 = Math.pow(clamp01((t - T_DIVE0) / (T_CUT - T_DIVE0)), 2);
+        return { s: Math.exp(lerp(Math.log(h.s), Math.log(S_DIVE), e)), cx: lerp(h.cx, DIVE.x, e2), cy: lerp(h.cy, DIVE.y, e2) };
+      }
+
+      function drawTree(t, cam) {
+        const X = (v) => (v - cam.cx) * cam.s + 960, Y = (v) => (v - cam.cy) * cam.s + 540;
+        for (let i = 1; i < nodes.length; i++) {
+          const n = nodes[i];
+          const k = (t - n.t0) / n.tl;
+          if (k <= 0) continue;
+          pencilEdge(n.edge, easeOut(Math.min(1, k)), cam, LWW[n.d]);
+        }
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          if (t < n.tp) continue;
+          const pop = POP((t - n.tp) / n.pd);
+          const on = n.act !== null && n.act !== undefined && t >= n.act;
+          let rm = pop;
+          if (on) rm = pop * (1 + (ACT_K - 1) * 0.0) * lerp(1, ACT_K, POP(clamp01((t - n.act) / 0.3)));
+          const sx = X(n.x), sy = Y(n.y);
+          if (sx < -80 || sx > 2000 || sy < -80 || sy > 1160) continue;
+          drawBlob(sx, sy, n.r * cam.s * rm, n.blob, on ? GREEN : INK, on ? TINT_G : TINT_I);
+          if (on) {
+            const q = (t - n.act) / 0.7;
+            if (q > 0 && q < 1) {
+              ctx.strokeStyle = GREEN; ctx.globalAlpha = 0.55 * (1 - q); ctx.lineWidth = 1.6;
+              ctx.beginPath(); ctx.arc(sx, sy, n.r * cam.s * ACT_K * (1.15 + 1.9 * expoOut(q)), 0, 6.2832); ctx.stroke();
+              ctx.globalAlpha = 1;
+            }
+          }
+        }
+      }
+
+      /* ---------- label chips ---------- */
+      const chipsEl = document.getElementById("chips");
+      const ICON = '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>';
+      for (const L of LABELS) {
+        const el = document.createElement("div");
+        el.className = "chip " + (L.node.x > 0 || L.dive ? "r" : "l");
+        el.innerHTML = '<div class="in">' + ICON + "<span>" + L.text + "</span></div>";
+        chipsEl.appendChild(el);
+        L.el = el;
+      }
+      function updateChips(t, cam) {
+        for (const L of LABELS) {
+          let a = 0;
+          if (t < T_CUT && cam) {
+            a = clamp01((t - L.at - 0.08) / 0.2) * (1 - clamp01((t - T_DIVE0) / 0.12));
+          }
+          if (a <= 0) { L.el.style.opacity = "0"; continue; }
+          const n = L.node;
+          const sx = (n.x - cam.cx) * cam.s + 960, sy = (n.y - cam.cy) * cam.s + 540;
+          L.el.style.opacity = a.toFixed(3);
+          L.el.style.transform = "translate(" + sx.toFixed(1) + "px," + (sy + (1 - a) * 9).toFixed(1) + "px)";
+        }
+      }
+
+      /* ---------- scene B: doubling documents ---------- */
+      const T_BG = 4 / 30;
+      const BEATS = [
+        { n: 1, t: T_CUT + T_BG, cols: 1, rows: 1, px: 0, py: 0, sc: 2.0, st: 0 },
+        { n: 2, t: 4.95, cols: 2, rows: 1, px: 640, py: 0, sc: 1.9, st: 0 },
+        { n: 4, t: 5.5, cols: 2, rows: 2, px: 560, py: 380, sc: 1.7, st: 0 },
+        { n: 8, t: 6.1, cols: 4, rows: 2, px: 430, py: 320, sc: 1.25, st: 1 },
+        { n: 16, t: 6.7, cols: 5, rows: 4, px: 330, py: 235, sc: 1.0, st: 1 },
+        { n: 32, t: 7.3, cols: 7, rows: 5, px: 255, py: 190, sc: 0.78, st: 1 },
+        { n: 77, t: 7.9, cols: 11, rows: 7, px: 200, py: 160, sc: 0.64, st: 1 },
+      ];
+      for (const B of BEATS) {
+        const cells = [];
+        for (let r = 0; r < B.rows; r++) for (let c = 0; c < B.cols; c++) {
+          const dx = c - (B.cols - 1) / 2, dy = r - (B.rows - 1) / 2;
+          const sh = B.st ? (r % 2 ? B.px / 4 : -B.px / 4) : 0;
+          cells.push({ x: 960 + dx * B.px + sh, y: 540 + dy * B.py, d: Math.hypot(dx / Math.max(B.cols / 2, 0.5), dy / Math.max(B.rows / 2, 0.5)) + Hh(c, r, B.n) * 0.06 });
+        }
+        cells.sort((a, b) => a.d - b.d);
+        B.cells = cells.slice(0, B.n);
+      }
+
+      /* card kinds: 0 doc, 1 table, 2 chart, 3 checklist, 4 meeting, 5 kanban, 6 quote, 7 figure, 8 code, 9 calendar */
+      const POOL = [
+        ["Q3 roadmap", "Pricing v2", "Onboarding notes", "Launch plan", "Hiring plan", "Brand guidelines", "Security audit", "Migration plan"],
+        ["Customer accounts", "Pricing tiers", "Seat usage", "Billing edge cases", "Churn analysis", "Vendor costs"],
+        ["Weekly metrics", "ARR growth", "Search latency", "Signups", "Retention", "Support volume"],
+        ["Launch checklist", "Release 3.2 tasks", "Onboarding QA", "Beta cohort 3"],
+        ["Roadmap sync", "Product weekly", "Design review", "Incident 0912 review", "Sprint 42 retro", "Partner call"],
+        ["Sprint 42 board", "Import tool", "SSO rollout", "Q4 planning board"],
+        ["Customer interviews", "Research synthesis", "Support highlights", "Beta feedback"],
+        ["Graph view mock", "Onboarding flow", "Link suggestions", "Workspace map"],
+        ["webhook.ts", "rate-limit.go", "embed.py", "schema.sql"],
+        ["October launch plan", "Release calendar", "Team offsite", "Q4 milestones"],
+      ];
+      const PERM = [];
+      {
+        const rr = mulberry(55);
+        for (let c = 0; c < 9; c++) {
+          const a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+          for (let i = 9; i > 0; i--) { const j = Math.floor(rr() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+          PERM.push(a);
+        }
+      }
+      const kindOf = (i) => (i === 0 ? 0 : PERM[Math.floor((i - 1) / 10)][(i - 1) % 10]);
+      const titleOf = (i) => {
+        const pool = POOL[kindOf(i)];
+        return i === 0 ? "Q3 roadmap" : pool[Math.floor(Hh(i, 9) * pool.length)];
+      };
+      const SENT = [
+        "Ship the new onboarding flow before the Sept 30 freeze.",
+        "Open question: tiered pricing for teams above 50 seats.",
+        "Maya to confirm the vendor SLA by Friday.",
+        "Weekly active workspaces up 18% since the August release.",
+        "Linked from Customer interviews and Pricing v2.",
+        "Decision: move billing to usage-based in Q4.",
+        "Sync with design on empty states and import errors.",
+        "Search latency p95 down from 420ms to 180ms.",
+        "Draft the migration guide for Notion and Confluence imports.",
+        "Follow up with 12 design partners on beta feedback.",
+        "Rate limit: 600 requests per minute per workspace.",
+        "Risks: SSO rollout depends on the Okta security review.",
+        "Graph view opens on the most recently edited note.",
+        "Backfill embeddings for 1.2M existing documents.",
+      ];
+      const ITEMS = ["Review pricing page copy", "Update webhook docs", "Invite beta cohort 3", "Fix import timeout", "Record onboarding demo", "Sign off security audit", "Archive Q2 notes", "Confirm launch date"];
+      const META = ["2h ago", "Yesterday", "Oct 24", "Mon", "Oct 19", "3d ago", "Sep 30", "Just now"];
+      const PLAN = ["Free", "Team", "Business", "Enterprise"];
+      const TASKS = ["Fix import timeout", "SSO metadata", "Rate limit docs", "Embedding backfill", "Webhook retries", "Empty states", "Billing edge cases", "Mobile search", "Status page"];
+      const QUOTES = [
+        ["“We lost two days a week copying", "notes between tools. Thicket", "links them on its own.”", "Priya N. · Head of Ops, Northwind"],
+        ["“Search finally finds the doc", "I meant, not the one I", "typed the most words in.”", "Dan K. · PM, Brightline"],
+        ["“The graph showed us three teams", "writing the same spec. We", "merged them in an afternoon.”", "Sofia R. · CTO, Tallow"],
+        ["“Onboarding a new hire went", "from two weeks of reading to", "one guided path.”", "Marcus L. · VP People, Fernhill"],
+      ];
+      const CODE = [
+        [[["export async function ", "k"], ["sync", "f"], ["(doc) {", "t"]], [["  const ", "k"], ["links", "t"], [" = await ", "k"], ["embed", "f"], ["(doc)", "t"]], [["  for (const l of links) {", "t"]], [["    await ", "k"], ["graph.connect", "f"], ["(doc.id, l.id)", "t"]], [["  }", "t"]], [["  // 600 req/min per workspace", "c"]], [["  return ", "k"], ["links.length", "t"]], [["}", "t"]]],
+        [[["func ", "k"], ["Allow", "f"], ["(ws string) bool {", "t"]], [["  n := ", "t"], ["counter.Incr", "f"], ["(ws)", "t"]], [["  if n > ", "k"], ["600", "s"], [" {", "t"]], [["    return false", "k"]], [["  }", "t"]], [["  // resets every 60s", "c"]], [["  return true", "k"]], [["}", "t"]]],
+        [[["def ", "k"], ["backfill", "f"], ["(batch):", "t"]], [["  vecs = ", "t"], ["model.encode", "f"], ["(batch.text)", "t"]], [["  index.", "t"], ["upsert", "f"], ["(batch.ids, vecs)", "t"]], [["  # 1.2M docs, 500 per batch", "c"]], [["  log.", "t"], ["info", "f"], ["(", "t"], ["\"done\"", "s"], [")", "t"]]],
+        [[["CREATE TABLE ", "k"], ["links", "t"], [" (", "t"]], [["  src_id  ", "t"], ["uuid", "k"], [" NOT NULL,", "t"]], [["  dst_id  ", "t"], ["uuid", "k"], [" NOT NULL,", "t"]], [["  score   ", "t"], ["real", "k"], [",", "t"]], [["  created ", "t"], ["timestamptz", "k"]], [[");", "t"]], [["CREATE INDEX ", "k"], ["links_src", "t"], [" ON links(src_id);", "t"]]],
+      ];
+      const CCOL = { k: "#e0a561", f: "#8fb3d1", s: "#a3cc84", c: "#7f7a6b", t: "#ddd7c6" };
+      const MONO = '"JetBrains Mono", ui-monospace, monospace';
+
+      function docIcon(x, y, c) {
+        ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.lineJoin = "round";
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 9, y); ctx.lineTo(x + 14, y + 5); ctx.lineTo(x + 14, y + 18); ctx.lineTo(x, y + 18); ctx.closePath();
+        ctx.moveTo(x + 9, y); ctx.lineTo(x + 9, y + 5); ctx.lineTo(x + 14, y + 5);
+        ctx.stroke();
+      }
+      function tx(s, x, y, font, col, mw, al) {
+        ctx.font = font; ctx.fillStyle = col; ctx.textAlign = al || "left";
+        if (mw) ctx.fillText(s, x, y, mw); else ctx.fillText(s, x, y);
+      }
+      const F = (w, sz) => w + " " + sz + "px " + FONT;
+      const AV = ["#c9784a", "#6f8fa8", "#8a7ca8", "#7c9a6b", "#b08a4a"];
+
+      function drawChart(i) {
+        const v = Math.floor(Hh(i, 12) * 4);
+        tx(["ARR by quarter", "Weekly active workspaces", "Search latency p95", "Signups by week"][v], 16, 64, F(500, 10.5), "#6e6a5c");
+        if (v === 0) {
+          for (let g = 0; g < 4; g++) { ctx.fillStyle = "rgba(20,16,8,0.1)"; ctx.fillRect(16, 84 + g * 28, 268, 1); }
+          for (let b = 0; b < 7; b++) {
+            const h = 20 + b * 12 + Hh(i, 40 + b) * 16;
+            ctx.fillStyle = b === 6 ? "#1b1a17" : "#a39d8a";
+            ctx.fillRect(24 + b * 37, 190 - h, 24, h);
+          }
+          ctx.fillStyle = "rgba(20,16,8,0.4)"; ctx.fillRect(16, 190, 268, 1);
+          for (let b = 0; b < 7; b++) tx("Q" + ((b % 4) + 1), 28 + b * 37, 203, F(400, 9.5), "#6e6a5c");
+        } else if (v === 1) {
+          for (let g = 0; g < 4; g++) { ctx.fillStyle = "rgba(20,16,8,0.1)"; ctx.fillRect(16, 82 + g * 30, 268, 1); }
+          const pts = [];
+          for (let b = 0; b < 9; b++) pts.push([24 + b * 31, 176 - b * 9 - Hh(i, 50 + b) * 26 + (b % 2) * 6]);
+          ctx.beginPath(); ctx.moveTo(pts[0][0], 172);
+          for (const p of pts) ctx.lineTo(p[0], p[1]);
+          ctx.lineTo(pts[8][0], 172); ctx.closePath(); ctx.fillStyle = "rgba(27,26,23,0.09)"; ctx.fill();
+          ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+          for (const p of pts) ctx.lineTo(p[0], p[1]);
+          ctx.strokeStyle = "#1b1a17"; ctx.lineWidth = 1.8; ctx.lineJoin = "round"; ctx.stroke();
+          ctx.fillStyle = "#1b1a17"; ctx.beginPath(); ctx.arc(pts[8][0], pts[8][1], 3.4, 0, 6.2832); ctx.fill();
+          ctx.fillStyle = "rgba(20,16,8,0.4)"; ctx.fillRect(16, 172, 268, 1);
+          for (let b = 0; b < 5; b++) tx("W" + (b * 2 + 1), 24 + b * 62, 190, F(400, 9.5), "#6e6a5c");
+        } else if (v === 2) {
+          const cols = ["#1b1a17", "#6e6a5c", "#a39d8a", "#cfc8b4"];
+          const vals = [0.42, 0.27, 0.19, 0.12], lab = ["Teams", "Docs", "Projects", "Other"];
+          let a0 = -Math.PI / 2;
+          for (let s = 0; s < 4; s++) {
+            const a1 = a0 + vals[s] * Math.PI * 2;
+            ctx.beginPath(); ctx.arc(92, 132, 54, a0, a1); ctx.arc(92, 132, 30, a1, a0, true); ctx.closePath();
+            ctx.fillStyle = cols[s]; ctx.fill(); a0 = a1;
+          }
+          for (let s = 0; s < 4; s++) {
+            ctx.fillStyle = cols[s]; ctx.fillRect(174, 96 + s * 24, 10, 10);
+            tx(lab[s], 192, 105 + s * 24, F(400, 11), "#3a362e");
+            tx(Math.round(vals[s] * 100) + "%", 280, 105 + s * 24, F(500, 11), "#3a362e", 0, "right");
+          }
+        } else {
+          const lab = ["Search", "Import", "Graph", "Share", "Sync"];
+          for (let s = 0; s < 5; s++) {
+            const w = 60 + Hh(i, 60 + s) * 150 - s * 14;
+            tx(lab[s], 16, 92 + s * 21, F(400, 10.5), "#4a463d");
+            ctx.fillStyle = s === 0 ? "#1b1a17" : "#a39d8a";
+            ctx.fillRect(66, 82 + s * 21, w, 13);
+            tx(Math.round(w / 2.2) + "", 70 + w, 92 + s * 21, F(500, 10), "#4a463d");
+          }
+        }
+      }
+
+      function drawCardBody(i) {
+        const kind = kindOf(i);
+        ctx.fillStyle = "#ece6d6";
+        ctx.fillRect(0, 0, 300, 210);
+        ctx.strokeStyle = "rgba(20,16,8,0.4)"; ctx.lineWidth = 1;
+        ctx.strokeRect(0.5, 0.5, 299, 209);
+        docIcon(16, 15, "#3a362e");
+        ctx.textBaseline = "alphabetic";
+        tx(titleOf(i), 40, 29, F(600, 15), "#1b1a17", 170);
+        tx(META[Math.floor(Hh(i, 8) * META.length)], 262, 28, F(400, 10.5), "#8a8372", 0, "right");
+        ctx.fillStyle = "rgba(20,16,8,0.16)"; ctx.fillRect(0, 44, 300, 1);
+        if (kind === 0) {
+          tx(i === 0 ? "Goals for next quarter" : "Summary", 16, 68, F(600, 12.5), "#2a2822");
+          for (let l = 0; l < 7; l++) tx(SENT[(Math.floor(Hh(i, 20) * SENT.length) + l * 5) % SENT.length], 16, 92 + l * 17, F(400, 11.5), "#4a463d", 268);
+        } else if (kind === 1) {
+          const cw = [92, 60, 70, 56], hd = ["Plan", "Seats", "MRR", "Churn"];
+          ctx.fillStyle = "#d8d1bd"; ctx.fillRect(14, 56, 272, 22);
+          let cx = 14;
+          for (let c = 0; c < 4; c++) { tx(hd[c], cx + 8, 71, F(600, 10.5), "#3a362e"); cx += cw[c]; }
+          for (let r = 0; r < 6; r++) {
+            const y = 78 + r * 21;
+            ctx.fillStyle = "rgba(20,16,8,0.13)"; ctx.fillRect(14, y, 272, 1);
+            const vals = [PLAN[(r + i) % 4], String(40 + Math.floor(Hh(i, r) * 900)), "$" + (1 + Math.floor(Hh(i, r + 9) * 48)) + "." + Math.floor(Hh(i, r + 5) * 9) + "k", (Hh(i, r + 2) * 4).toFixed(1) + "%"];
+            cx = 14;
+            for (let c = 0; c < 4; c++) { tx(vals[c], cx + 8, y + 15, F(400, 11), "#4a463d"); cx += cw[c]; }
+          }
+          ctx.fillStyle = "rgba(20,16,8,0.13)"; ctx.fillRect(14, 204, 272, 1); ctx.fillRect(14, 56, 1, 148); ctx.fillRect(285, 56, 1, 148);
+        } else if (kind === 2) {
+          drawChart(i);
+        } else if (kind === 3) {
+          tx("To do", 16, 68, F(600, 12.5), "#2a2822");
+          for (let l = 0; l < 6; l++) {
+            const y = 84 + l * 20, done = Hh(i, 60 + l) < 0.4;
+            ctx.strokeStyle = "#5a554a"; ctx.lineWidth = 1.2; ctx.strokeRect(17, y, 11, 11);
+            if (done) { ctx.beginPath(); ctx.moveTo(19.5, y + 5.5); ctx.lineTo(22, y + 8.5); ctx.lineTo(26, y + 3); ctx.stroke(); }
+            tx(ITEMS[Math.floor(Hh(i, 70 + l) * ITEMS.length)], 36, y + 10, F(400, 11.5), done ? "#8a8372" : "#3a362e", 240);
+          }
+        } else if (kind === 4) {
+          tx("Attendees", 16, 64, F(500, 10), "#8a8372");
+          const ini = ["M", "L", "A", "J", "P"];
+          for (let a = 0; a < 5; a++) {
+            ctx.fillStyle = AV[a]; ctx.beginPath(); ctx.arc(28 + a * 24, 82, 10, 0, 6.2832); ctx.fill();
+            tx(ini[a], 28 + a * 24, 86, F(600, 10), "#fff", 0, "center");
+          }
+          tx("Oct 21 · 10:00–10:45", 284, 86, F(400, 10.5), "#8a8372", 0, "right");
+          tx("Agenda", 16, 116, F(600, 12), "#2a2822");
+          const ag = ["Roadmap review", "Pricing v2 open questions", "Launch checklist owners"];
+          for (let a = 0; a < 3; a++) { tx(String(a + 1), 18, 135 + a * 16, F(500, 11), "#8a8372"); tx(ag[a], 34, 135 + a * 16, F(400, 11.5), "#3a362e", 240); }
+          ctx.fillStyle = "rgba(20,16,8,0.13)"; ctx.fillRect(16, 172, 268, 1);
+          tx("Action", 16, 190, F(600, 10.5), "#2a2822");
+          tx("Maya → confirm vendor SLA by Fri", 62, 190, F(400, 11), "#4a463d", 220);
+        } else if (kind === 5) {
+          const heads = [["To do", 3], ["In progress", 2], ["Done", 3]];
+          for (let c = 0; c < 3; c++) {
+            const x = 14 + c * 92;
+            ctx.fillStyle = "rgba(20,16,8,0.06)"; ctx.fillRect(x, 54, 86, 150);
+            tx(heads[c][0], x + 6, 68, F(600, 10), "#3a362e");
+            tx(String(heads[c][1]), x + 80, 68, F(500, 10), "#8a8372", 0, "right");
+            for (let j = 0; j < heads[c][1]; j++) {
+              const y = 76 + j * 42;
+              ctx.fillStyle = "#f4efe2"; ctx.fillRect(x + 4, y, 78, 36);
+              ctx.strokeStyle = "rgba(20,16,8,0.22)"; ctx.lineWidth = 1; ctx.strokeRect(x + 4.5, y + 0.5, 77, 35);
+              tx(TASKS[Math.floor(Hh(i, 80 + c * 3 + j) * TASKS.length)], x + 9, y + 15, F(500, 9.5), "#2a2822", 68);
+              ctx.fillStyle = AV[(c + j + i) % 5]; ctx.beginPath(); ctx.arc(x + 14, y + 26, 4.5, 0, 6.2832); ctx.fill();
+              tx("ENG-" + (2100 + Math.floor(Hh(i, 90 + c * 3 + j) * 90)), x + 24, y + 29, F(400, 8.5), "#8a8372");
+            }
+          }
+        } else if (kind === 6) {
+          const q = QUOTES[Math.floor(Hh(i, 14) * QUOTES.length)];
+          ctx.fillStyle = "#1b1a17"; ctx.fillRect(16, 62, 3, 118);
+          for (let l = 0; l < 3; l++) tx(q[l], 30, 82 + l * 24, F(500, 14.5), "#1f1d18", 262);
+          tx(q[3], 30, 170, F(400, 10.5), "#8a8372", 250);
+        } else if (kind === 7) {
+          ctx.fillStyle = "#d9d2bf"; ctx.fillRect(14, 54, 272, 118);
+          const rg = mulberry(700 + i), pts = [];
+          for (let p = 0; p < 15; p++) pts.push([30 + rg() * 240, 66 + rg() * 94, 2.5 + rg() * 3.5]);
+          ctx.strokeStyle = "rgba(27,26,23,0.55)"; ctx.lineWidth = 1;
+          for (let p = 1; p < pts.length; p++) {
+            ctx.beginPath(); ctx.moveTo(pts[p][0], pts[p][1]); const q2 = pts[Math.floor(rg() * p)]; ctx.lineTo(q2[0], q2[1]); ctx.stroke();
+          }
+          for (let p = 0; p < pts.length; p++) { ctx.fillStyle = p === 3 ? GREEN : "#1b1a17"; ctx.beginPath(); ctx.arc(pts[p][0], pts[p][1], pts[p][2], 0, 6.2832); ctx.fill(); }
+          tx("Fig. 2", 16, 190, F(600, 10.5), "#2a2822");
+          tx("Graph view · 1,204 linked notes", 56, 190, F(400, 10.5), "#6e6a5c", 220);
+        } else if (kind === 8) {
+          ctx.fillStyle = "#262420"; ctx.fillRect(14, 54, 272, 148);
+          const code = CODE[Math.floor(Hh(i, 16) * CODE.length)];
+          for (let l = 0; l < code.length; l++) {
+            let x = 24;
+            for (const [s, c] of code[l]) {
+              ctx.font = "400 10.5px " + MONO;
+              ctx.fillStyle = CCOL[c]; ctx.textAlign = "left";
+              ctx.fillText(s, x, 76 + l * 16);
+              x += ctx.measureText(s).width;
+            }
+          }
+        } else {
+          tx("October 2026", 16, 66, F(600, 12), "#2a2822");
+          const dn = ["M", "T", "W", "T", "F", "S", "S"];
+          for (let d = 0; d < 7; d++) tx(dn[d], 28 + d * 38, 86, F(500, 9.5), "#8a8372", 0, "center");
+          const ev = [8, 15, 21, 28];
+          for (let day = 1; day <= 31; day++) {
+            const idx = day + 2, col = idx % 7, row = Math.floor(idx / 7);
+            const cx = 28 + col * 38, cy = 108 + row * 21;
+            const isEv = ev.includes(day);
+            if (isEv) { ctx.fillStyle = "#1b1a17"; ctx.beginPath(); ctx.arc(cx, cy - 4, 9.5, 0, 6.2832); ctx.fill(); }
+            tx(String(day), cx, cy, F(500, 10.5), isEv ? "#efe9db" : "#4a463d", 0, "center");
+          }
+        }
+      }
+      const dotBlobs = [DIVE.blob];
+      for (let i = 1; i < 90; i++) dotBlobs.push(makeBlob(mulberry(300 + i)));
+      const DOT_X = 281, DOT_Y = 22, DOT_R = 5.5;
+      const hasDot = (i) => i === 0 || Hh(i, 77) < 0.4;
+
+      function renderB(t) {
+        const B0 = BEATS[0];
+        if (t < B0.t) {
+          /* the camera has landed on the green dot: paper darkens over 4 frames, dot stays put */
+          ctx.drawImage(PAPER, 0, 0);
+          drawTree(T_CUT, camAt(T_CUT));
+          const f = Math.floor((t - T_CUT) * 30 + 1e-6);
+          ctx.globalAlpha = Math.min(1, (f + 1) / 4);
+          ctx.drawImage(DARK, 0, 0);
+          ctx.globalAlpha = 1;
+          drawBlob(960, 540, 44, DIVE.blob, GREEN, TINT_G);
+          return;
+        }
+        ctx.drawImage(DARK, 0, 0);
+        let k = 0;
+        for (let j = 0; j < BEATS.length; j++) if (t >= BEATS[j].t) k = j;
+        const B = BEATS[k], prevN = k ? BEATS[k - 1].n : 0;
+        const st = Math.floor(t * 8 + 1e-6), age = Math.floor((t - B.t) * 8 + 1e-6);
+        if (k === 0 && age < 1) {
+          drawBlob(960, 540, 44, DIVE.blob, GREEN, TINT_G);
+          return;
+        }
+        for (let i = 0; i < B.n; i++) {
+          const cell = B.cells[i];
+          let pop = 1;
+          if (i >= prevN) {
+            const a = age - (k === 0 ? 1 : Math.floor(Hh(i, k) * 2));
+            if (a < 0) continue;
+            pop = a === 0 ? 0.8 : a === 1 ? 1.05 : 1;
+          }
+          const jx = (Hh(i, st, 1) - 0.5) * 3.2 + (Hh(i, B.n, 2) - 0.5) * 4;
+          const jy = (Hh(i, st, 3) - 0.5) * 3.2 + (Hh(i, B.n, 4) - 0.5) * 4;
+          const rot = ((Hh(i, 5) - 0.5) * 2.2 + (Hh(i, st, 6) - 0.5) * 0.5) * (Math.PI / 180);
+          ctx.save();
+          ctx.translate(cell.x + jx, cell.y + jy);
+          ctx.rotate(rot);
+          ctx.scale(B.sc * pop, B.sc * pop);
+          ctx.translate(-150, -105);
+          drawCardBody(i);
+          if (hasDot(i) && !(i === 0 && k === 0 && age < 3)) drawBlob(DOT_X, DOT_Y, DOT_R, dotBlobs[i], GREEN, TINT_G);
+          ctx.restore();
+        }
+        if (k === 0 && age >= 1 && age < 3) {
+          /* the activation dot travels from the centre to the card's status position, stepping at 8fps */
+          const f = age / 3, cell = B.cells[0];
+          const fx = cell.x + (DOT_X - 150) * B.sc, fy = cell.y + (DOT_Y - 105) * B.sc;
+          drawBlob(lerp(960, fx, f), lerp(540, fy, f), lerp(44, DOT_R * B.sc, f), DIVE.blob, GREEN, TINT_G);
+        }
+      }
+
+      /* ---------- scene C: slate ---------- */
+      const MARK_PTS = [
+        [0, 0, 15, 0], [-42, -50, 10, 1], [42, -50, 10, 1], [-68, -108, 6.4, 2], [-17, -112, 6.4, 2], [17, -112, 6.4, 2], [68, -108, 6.4, 2],
+      ];
+      const MARK_PAR = [-1, 0, 0, 1, 1, 2, 2];
+      const rm = mulberry(31);
+      const mark = MARK_PTS.map((p, i) => {
+        const par = MARK_PAR[i];
+        const n = { x: p[0], y: p[1], r: p[2], d: p[3], blob: makeBlob(rm) };
+        if (par >= 0) n.edge = makeEdge(MARK_PTS[par][0], MARK_PTS[par][1], p[0], p[1], rm);
+        return n;
+      });
+      const MARK_CAM = { s: 1.28, cx: 0, cy: 0 };
+      MARK_CAM.cx = -(623 - 960) / 1.28;
+      MARK_CAM.cy = -52 - (520 - 540) / 1.28;
+      function renderSlate(t) {
+        ctx.drawImage(PAPER, 0, 0);
+        const u = t - T_SLATE;
+        const D = [0.05, 0.18, 0.18, 0.34, 0.34, 0.34, 0.5];
+        for (let i = 1; i < mark.length; i++) {
+          const n = mark[i], k = (u - D[i]) / 0.26;
+          if (k > 0) pencilEdge(n.edge, easeOut(Math.min(1, k)), MARK_CAM, 2.0);
+        }
+        for (let i = 0; i < mark.length; i++) {
+          const n = mark[i];
+          const tp = i === 0 ? 0.05 : D[i] + 0.24;
+          if (u < tp) continue;
+          const pop = POP((u - tp) / 0.3);
+          const g = i === 6;
+          drawBlob((n.x - MARK_CAM.cx) * MARK_CAM.s + 960, (n.y - MARK_CAM.cy) * MARK_CAM.s + 540, n.r * MARK_CAM.s * pop * (g ? 1.25 : 1), n.blob, g ? GREEN : INK, g ? TINT_G : TINT_I);
+          if (g) {
+            const q = (u - tp) / 0.8;
+            if (q > 0 && q < 1) {
+              ctx.strokeStyle = GREEN; ctx.globalAlpha = 0.55 * (1 - q); ctx.lineWidth = 1.6;
+              ctx.beginPath(); ctx.arc((n.x - MARK_CAM.cx) * MARK_CAM.s + 960, (n.y - MARK_CAM.cy) * MARK_CAM.s + 540, n.r * MARK_CAM.s * 1.25 * (1.15 + 1.9 * expoOut(q)), 0, 6.2832); ctx.stroke();
+              ctx.globalAlpha = 1;
+            }
+          }
+        }
+      }
+
+      /* ---------- frame ---------- */
+      function render(t) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
+        let cam = null;
+        if (t >= T_SLATE) renderSlate(t);
+        else if (t >= T_CUT) renderB(t);
+        else {
+          ctx.drawImage(PAPER, 0, 0);
+          cam = camAt(t);
+          drawTree(t, cam);
+        }
+        updateChips(t, cam);
+      }
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+      const wm = document.getElementById("wm");
+      const letters = [..."Thicket"].map((c) => {
+        const s = document.createElement("span");
+        s.className = "ch"; s.textContent = c; wm.appendChild(s);
+        return s;
+      });
+      letters.forEach((l, i) => {
+        tl.set(l, { opacity: 0, y: 26 }, 0);
+        tl.to(l, { opacity: 1, y: 0, duration: 0.4, ease: EXPO }, T_SLATE + 0.05 + i * 0.02);
+      });
+      tl.set("#tag", { opacity: 0, y: 10 }, 0);
+      tl.to("#tag", { opacity: 1, y: 0, duration: 0.7, ease: EXPO }, T_SLATE + 0.3);
+      tl.to("#slate", { scale: 1.035, duration: DUR - T_SLATE, ease: "none", transformOrigin: "960px 540px" }, T_SLATE);
+
+      render(0);
+      tl.to({ v: 0 }, { v: 1, duration: DUR, ease: "none", onUpdate: () => render(tl.time()) }, 0);
+      window.addEventListener("hf-seek", (e) => render(e.detail.time));
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

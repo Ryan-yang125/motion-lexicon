@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #f4f4f6;
+        --sub: #6e6e73;
+        --font-ui: "Inter", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        font-family: var(--font-ui); -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #bg { background: var(--bg); }
+      #cv { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+
+      /* canvas text faces: the same families and weights the canvas draws, so the fonts get bundled */
+      #faces { position: absolute; left: 0; top: 0; width: 1920px; opacity: 0; pointer-events: none; }
+      #faces span { display: block; font-family: "Inter", sans-serif; font-size: 20px; line-height: 1.2; white-space: nowrap; }
+      #faces .w3 { font-weight: 300; }
+      #faces .w4 { font-weight: 400; }
+      #faces .w5 { font-weight: 500; }
+      #faces .w6 { font-weight: 600; }
+
+      #tag {
+        position: absolute; left: 0; top: 664px; width: 1920px; text-align: center;
+        font-family: "Inter", sans-serif; font-size: 30px; line-height: 1.3; font-weight: 400;
+        letter-spacing: -0.012em; color: var(--sub); opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.5" data-width="1920" data-height="1080">
+      <div id="bg" class="full"></div>
+      <div id="stage" class="clip full" data-start="0" data-duration="10.5" data-track-index="0" data-layout-allow-overlap>
+        <div id="faces" aria-hidden="true">
+          <span class="w5">Ember</span>
+          <span class="w3">Pro</span>
+          <span class="w6">Up to 48 dB quieter. 10 hours per charge.</span>
+          <span class="w4">Adaptive ANC re-tunes to your ear 200 times a second. 40 hours with the case. Five minutes in the case gives you an hour.</span>
+        </div>
+        <canvas id="cv" width="1920" height="1080"></canvas>
+        <div id="tag">Available November 4. From $249.</div>
+      </div>
+    </div>
+
+    <script>
+      /* ============================================================
+         Chromatic Stretch
+         Each text block is rasterised once into a white ink mask.
+         Per frame, the mask is cut into 2px columns and redrawn with a
+         horizontal warp (one letter segment stretched up to ~4x, the
+         rest squeezed), separately for R, G and B with slightly
+         different stretch / offset. The three channels are added on a
+         black ink buffer and subtracted from the light background
+         (difference), so a misaligned channel shows as cyan, magenta
+         or yellow on #F4F4F6. Every step holds for 1–2 frames; nothing
+         is tweened between steps.
+         ============================================================ */
+      const FPS = 30;
+      const DUR = 10.5;
+      const W = 1920, H = 1080;
+      const MS = 2;          // mask supersampling
+      const SL = 2;          // column width in css px
+      const BG = "#f4f4f6";
+
+      const cv = document.getElementById("cv");
+      const ctx = cv.getContext("2d");
+      function mk() { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; }
+      const inkC = mk(), inkX = inkC.getContext("2d");
+      const tmpC = mk(), tmpX = tmpC.getContext("2d");
+      const trlC = mk(), trlX = trlC.getContext("2d");
+      [inkX, tmpX, trlX].forEach((x) => { x.imageSmoothingEnabled = true; x.imageSmoothingQuality = "high"; });
+
+      /* ---------- text blocks ---------- */
+      const BLOCKS = {
+        mark: {
+          cy: 520,
+          lines: [
+            { size: 214, ls: -0.034, runs: [{ t: "Ember", wt: 500 }, { t: "Pro", wt: 300, gap: 0.2 }] },
+          ],
+        },
+        l1: {
+          cy: 532,
+          lines: [
+            { size: 104, ls: -0.032, runs: [{ t: "Up to 48 dB quieter.", wt: 600 }] },
+            { size: 34, ls: -0.008, mt: 30, runs: [{ t: "Adaptive ANC re-tunes to your ear 200 times a second.", wt: 400, a: 0.47 }] },
+          ],
+        },
+        l2: {
+          cy: 532,
+          lines: [
+            { size: 104, ls: -0.032, runs: [{ t: "10 hours per charge.", wt: 600 }] },
+            { size: 34, ls: -0.008, mt: 30, runs: [{ t: "40 hours with the case. Five minutes in the case gives you an hour.", wt: 400, a: 0.47 }] },
+          ],
+        },
+      };
+
+      let builtWithFonts = false;
+      function fontsOk() {
+        return document.fonts.check("500 40px Inter") && document.fonts.check("600 40px Inter") &&
+               document.fonts.check("300 40px Inter") && document.fonts.check("400 40px Inter");
+      }
+
+      function buildMask(b) {
+        const c = document.createElement("canvas");
+        const x = c.getContext("2d");
+        const font = (wt, size) => wt + " " + size + "px Inter, sans-serif";
+        const pad = 24;
+        // measure
+        let maxW = 0, totH = 0;
+        b.lines.forEach((ln, li) => {
+          x.letterSpacing = (ln.ls * ln.size).toFixed(2) + "px";
+          ln.edges = [0];
+          let w = 0;
+          ln.runs.forEach((r, ri) => {
+            if (ri > 0) w += (r.gap || 0) * ln.size;
+            x.font = font(r.wt, ln.size);
+            r.x = w;
+            for (let i = 1; i <= r.t.length; i++) ln.edges.push(w + x.measureText(r.t.slice(0, i)).width);
+            w += x.measureText(r.t).width;
+            if (ri === 0) ln.edges.pop(), ln.edges.push(w);
+          });
+          ln.w = w;
+          ln.h = ln.size * 1.18;
+          maxW = Math.max(maxW, w);
+          totH += (li ? ln.mt || 0 : 0) + ln.h;
+        });
+        b.mw = Math.ceil(maxW + pad * 2);
+        b.mh = Math.ceil(totH + pad * 2);
+        c.width = b.mw * MS; c.height = b.mh * MS;
+        x.scale(MS, MS);
+        x.textBaseline = "alphabetic";
+        x.fontKerning = "normal";
+        let y = pad;
+        b.lines.forEach((ln, li) => {
+          if (li) y += ln.mt || 0;
+          const left = (b.mw - ln.w) / 2;
+          ln.left = left;
+          x.letterSpacing = (ln.ls * ln.size).toFixed(2) + "px";
+          ln.runs.forEach((r) => {
+            x.font = font(r.wt, ln.size);
+            x.fillStyle = "rgba(255,255,255," + (r.a == null ? 1 : r.a) + ")";
+            x.fillText(r.t, left + r.x, y + ln.size * 0.93);
+          });
+          y += ln.h;
+        });
+        b.mask = c;
+        b.left = (W - b.mw) / 2;
+        b.top = b.cy - b.mh / 2;
+      }
+      function ensureMasks() {
+        if (builtWithFonts) return;
+        const ok = fontsOk();
+        if (BLOCKS.mark.mask && !ok) return;
+        Object.values(BLOCKS).forEach(buildMask);
+        builtWithFonts = ok;
+      }
+
+      /* letter-segment -> bump centre / half-width, as fractions of the mask width */
+      function seg(b, i0, i1) {
+        const ln = b.lines[0];
+        const x0 = ln.left + ln.edges[Math.min(i0, ln.edges.length - 1)];
+        const x1 = ln.left + ln.edges[Math.min(i1, ln.edges.length - 1)];
+        return { c: (x0 + x1) / 2 / b.mw, w: Math.max(0.03, (x1 - x0) / 2 / b.mw * 1.08) };
+      }
+
+      /* ---------- step schedule ----------
+         Each row: [frame, params]. A row holds until the next row (steps(1)).
+         s   letter segment [i0, i1) in line 1 (spaces count)
+         cs  extra centre shift (fraction of block width)
+         S   stretch inside the segment      sq  squeeze outside it
+         V   extra vertical scale in segment arc baseline bend in px (edges)
+         ch  RGB split 0..1                 dx  block x offset px
+         an  anchor 0 left / .5 centre / 1 right
+         echo leftward smear trail 0..1     a   alpha (0 hides)               */
+      const CLEAN = {};
+      const HIDE = { a: 0 };
+      const TRACKS = [
+        { b: "mark", f0: 0, f1: 84, steps: [
+          [0, HIDE],
+          [3, { s: [1, 3], S: 4.4, sq: 0.6, V: 0.55, arc: -28, ch: 1 }],
+          [5, { s: [1, 3], cs: 0.03, S: 3.7, sq: 0.68, V: 0.42, arc: -20, ch: 1 }],
+          [7, { s: [1, 3], cs: 0.07, S: 2.9, sq: 0.8, V: 0.28, arc: -11, ch: 0.85 }],
+          [9, { s: [1, 3], cs: 0.09, S: 1.8, sq: 0.93, V: 0.12, arc: -4, ch: 0.6 }],
+          [11, { ch: 0.32 }],
+          [12, CLEAN],
+          [22, { s: [3, 5], S: 3.1, sq: 0.86, V: 0.2, arc: 10, ch: 0.9 }],
+          [24, { s: [3, 5], cs: 0.03, S: 3.8, sq: 0.82, V: 0.27, arc: 14, ch: 1 }],
+          [26, { s: [3, 5], cs: 0.05, S: 2.2, sq: 0.93, V: 0.1, arc: 5, ch: 0.68 }],
+          [28, { ch: 0.3 }],
+          [29, CLEAN],
+          [39, { s: [5, 8], S: 2.9, sq: 0.88, V: 0.3, arc: -12, ch: 0.9 }],
+          [41, { s: [5, 8], cs: -0.03, S: 3.6, sq: 0.84, V: 0.36, arc: -16, ch: 1 }],
+          [43, { s: [5, 8], cs: -0.05, S: 2.0, sq: 0.94, V: 0.14, arc: -5, ch: 0.62 }],
+          [45, { ch: 0.28 }],
+          [46, CLEAN],
+          [72, { an: 1, s: [0, 2], S: 2.6, sq: 0.92, V: 0.1, arc: -6, ch: 0.6, dx: -8, echo: 0.3 }],
+          [74, { an: 1, s: [0, 3], S: 4.8, sq: 0.86, V: 0.18, arc: -10, ch: 0.9, dx: -30, echo: 0.6 }],
+          [76, { an: 1, s: [0, 5], S: 7.5, sq: 0.8, V: 0.2, arc: -12, ch: 1, dx: -90, echo: 1, a: 0.85 }],
+          [78, { an: 1, s: [0, 7], S: 11, sq: 0.72, V: 0.14, arc: -8, ch: 1, dx: -220, echo: 1, a: 0.6 }],
+          [80, { an: 1, s: [0, 8], S: 16, sq: 0.6, V: 0.08, ch: 1, dx: -420, echo: 1, a: 0.3 }],
+          [82, HIDE],
+        ] },
+        { b: "l1", f0: 84, f1: 156, steps: [
+          [84, { s: [0, 9], cs: -0.04, S: 3.3, sq: 0.7, V: 0.34, arc: -14, ch: 1 }],
+          [86, { s: [6, 14], S: 3.7, sq: 0.72, V: 0.3, arc: -8, ch: 1 }],
+          [88, { s: [9, 20], S: 2.4, sq: 0.86, V: 0.16, arc: -3, ch: 0.75 }],
+          [90, { s: [12, 20], S: 1.6, sq: 0.95, V: 0.06, ch: 0.5 }],
+          [92, { ch: 0.3 }],
+          [93, CLEAN],
+          [120, { s: [6, 11], S: 2.7, sq: 0.94, V: 0.2, arc: 6, ch: 0.9 }],
+          [122, { s: [6, 11], cs: 0.015, S: 2.0, sq: 0.96, V: 0.1, arc: 3, ch: 0.65 }],
+          [124, { ch: 0.3 }],
+          [125, CLEAN],
+          [146, { an: 1, s: [0, 4], S: 3, sq: 0.9, ch: 0.7, dx: -20, echo: 0.4 }],
+          [148, { an: 1, s: [0, 8], S: 6, sq: 0.82, V: 0.1, ch: 1, dx: -70, echo: 0.8, a: 0.8 }],
+          [150, { an: 1, s: [0, 14], S: 10, sq: 0.7, ch: 1, dx: -200, echo: 1, a: 0.5 }],
+          [152, { an: 1, s: [0, 20], S: 14, sq: 0.6, ch: 1, dx: -400, echo: 1, a: 0.24 }],
+          [154, HIDE],
+        ] },
+        { b: "l2", f0: 156, f1: 228, steps: [
+          [154, HIDE],
+          [156, { s: [9, 20], S: 3.4, sq: 0.7, V: 0.34, arc: 14, ch: 1 }],
+          [158, { s: [3, 12], S: 3.7, sq: 0.74, V: 0.28, arc: 8, ch: 1 }],
+          [160, { s: [0, 8], S: 2.3, sq: 0.87, V: 0.15, arc: 3, ch: 0.75 }],
+          [162, { s: [0, 3], S: 1.6, sq: 0.95, V: 0.06, ch: 0.5 }],
+          [164, { ch: 0.3 }],
+          [165, CLEAN],
+          [192, { s: [0, 8], S: 2.6, sq: 0.94, V: 0.2, arc: -6, ch: 0.9 }],
+          [194, { s: [0, 8], cs: 0.015, S: 1.9, sq: 0.96, V: 0.1, arc: -3, ch: 0.62 }],
+          [196, { ch: 0.3 }],
+          [197, CLEAN],
+          [218, { an: 1, s: [0, 4], S: 3, sq: 0.9, ch: 0.7, dx: -20, echo: 0.4 }],
+          [220, { an: 1, s: [0, 8], S: 6, sq: 0.82, V: 0.1, ch: 1, dx: -70, echo: 0.8, a: 0.8 }],
+          [222, { an: 1, s: [0, 14], S: 10, sq: 0.7, ch: 1, dx: -200, echo: 1, a: 0.5 }],
+          [224, { an: 1, s: [0, 20], S: 14, sq: 0.6, ch: 1, dx: -400, echo: 1, a: 0.24 }],
+          [226, HIDE],
+        ] },
+        { b: "mark", f0: 228, f1: 315, steps: [
+          [226, HIDE],
+          [228, { s: [0, 3], S: 4.6, sq: 0.6, V: 0.5, arc: 22, ch: 1 }],
+          [230, { s: [1, 4], S: 3.8, sq: 0.68, V: 0.38, arc: 15, ch: 1 }],
+          [232, { s: [2, 5], S: 2.6, sq: 0.82, V: 0.22, arc: 8, ch: 0.8 }],
+          [234, { s: [3, 6], S: 1.7, sq: 0.94, V: 0.08, ch: 0.55 }],
+          [236, { ch: 0.3 }],
+          [237, CLEAN],
+          [244, { s: [1, 3], S: 3.4, sq: 0.8, V: 0.4, arc: -16, ch: 1 }],
+          [246, { s: [1, 3], cs: 0.03, S: 4.2, sq: 0.72, V: 0.5, arc: -22, ch: 1 }],
+          [248, { s: [1, 3], cs: 0.06, S: 2.4, sq: 0.9, V: 0.2, arc: -6, ch: 0.7 }],
+          [250, { ch: 0.35 }],
+          [251, { ch: 0.15 }],
+          [252, CLEAN],
+        ] },
+      ];
+
+      function stateAt(tr, f) {
+        if (f < tr.steps[0][0]) return null;
+        let p = null;
+        for (const row of tr.steps) { if (row[0] <= f) p = row[1]; else break; }
+        if (!p || p.a === 0) return null;
+        return p;
+      }
+
+      /* ---------- drawing ---------- */
+      const xs = new Float64Array(2048), gs = new Float64Array(2048), xk = new Float64Array(2048);
+      const CH_OFF = [-1, 0, 1];        // and R leads left, B trails right
+      const CH_FILL = ["#ff0000", "#00ff00", "#0000ff"];
+
+      function warpChannel(x, b, st, k, z) {
+        const m = b.mask, mw = b.mw, mh = b.mh;
+        const split = st.ch || 0;
+        const S = st.S || 1, sq = st.sq == null ? 1 : st.sq;
+        const sg = st.s ? seg(b, st.s[0], st.s[1]) : null;
+        const c = sg ? sg.c + (st.cs || 0) : 0.5, w = sg ? sg.w : 0.1;
+        const N = Math.ceil(mw / SL);
+        // shared (green) layout: column boundaries
+        let cum = 0;
+        xs[0] = 0;
+        for (let i = 0; i < N; i++) {
+          const u = ((i + 0.5) * SL / mw - c) / w;
+          const g = sg ? Math.exp(-(u * u * u * u)) : 0;
+          gs[i] = g;
+          const sw = Math.min(SL, mw - i * SL);
+          cum += (sq + (S - sq) * g) * sw;
+          xs[i + 1] = cum;
+        }
+        const an = st.an == null ? 0.5 : st.an;
+        const ox = b.left + an * mw - an * cum + (st.dx || 0);
+        // per-channel divergence lives around the stretched segment:
+        // R fans out wider, B narrower, so colour spreads where the stretch is
+        const e = CH_OFF[k] * split * 0.075;
+        const jc = Math.max(0, Math.min(N, Math.round(c * mw / SL)));
+        const xcB = xs[jc];
+        const base = CH_OFF[k] * split * b.lines[0].size * 0.022;
+        for (let j = 0; j <= N; j++) {
+          const u = (Math.min(j * SL, mw) / mw - c) / (w * 1.25);
+          const h = sg ? Math.exp(-(u * u * u * u)) : 0;
+          xk[j] = xs[j] + (xs[j] - xcB) * e * h + base;
+        }
+        const V = (st.V || 0) * (1 + CH_OFF[k] * split * 0.1), arc = st.arc || 0;
+        const cx = W / 2, cy = b.cy;
+        for (let i = 0; i < N; i++) {
+          const sw = Math.min(SL, mw - i * SL);
+          const dx0 = ox + xk[i], dw = Math.max(0.05, xk[i + 1] - xk[i]);
+          if (dx0 + dw < -40 || dx0 > W + 40) continue;
+          const u = ((i + 0.5) * SL / mw - 0.5) * 2;
+          const hh = mh * (1 + V * gs[i]);
+          const yy = b.cy - hh / 2 + arc * u * u;
+          x.drawImage(m, i * SL * MS, 0, sw * MS, m.height,
+            cx + (dx0 - cx) * z, cy + (yy - cy) * z, dw * z + 0.75, hh * z);
+        }
+      }
+
+      function drawBlock(b, st, z) {
+        const clean = !(st.S > 1) && !st.ch && !st.V && !st.arc && !st.echo && !st.dx;
+        inkX.globalCompositeOperation = "lighter";
+        inkX.globalAlpha = st.a == null ? 1 : st.a;
+        if (clean) {
+          const cx = W / 2, cy = b.cy;
+          inkX.drawImage(b.mask, cx + (b.left - cx) * z, cy + (b.top - cy) * z, b.mw * z, b.mh * z);
+          inkX.globalAlpha = 1;
+          return;
+        }
+        for (let k = 0; k < 3; k++) {
+          tmpX.globalCompositeOperation = "source-over";
+          tmpX.clearRect(0, 0, W, H);
+          warpChannel(tmpX, b, st, k, z);
+          // horizontal box blur (average of taps, additive): soft colour edges along the stretch axis
+          const hb = (st.ch || 0) * (k === 1 ? 3 : 12);
+          let src = tmpC, sx = tmpX;
+          if (hb > 0.6) {
+            trlX.globalCompositeOperation = "source-over";
+            trlX.clearRect(0, 0, W, H);
+            trlX.globalCompositeOperation = "lighter";
+            const n = 7;
+            trlX.globalAlpha = 1 / n;
+            for (let j = 0; j < n; j++) trlX.drawImage(tmpC, -hb + (2 * hb * j) / (n - 1), 0);
+            trlX.globalAlpha = 1;
+            trlX.globalCompositeOperation = "source-over";
+            src = trlC; sx = trlX;
+          }
+          if (st.echo) {
+            // leftward smear: trailing copies to the right, fading
+            const from = src === trlC ? trlC : tmpC;
+            const to = from === trlC ? tmpX : trlX;
+            to.globalCompositeOperation = "source-over";
+            to.clearRect(0, 0, W, H);
+            const n = 22, step = 7 * st.echo * (1 + k * 0.15);
+            for (let j = n; j >= 1; j--) {
+              to.globalAlpha = 0.16 * Math.pow(0.9, j);
+              to.drawImage(from, j * step, 0);
+            }
+            to.globalAlpha = 1;
+            to.drawImage(from, 0, 0);
+            sx = to; src = to.canvas;
+          }
+          sx.globalCompositeOperation = "source-in";
+          sx.fillStyle = CH_FILL[k];
+          sx.fillRect(0, 0, W, H);
+          sx.globalCompositeOperation = "source-over";
+          const blur = (st.ch || 0) * (k === 1 ? 0.6 : 1.4);
+          inkX.filter = blur > 0.05 ? "blur(" + blur.toFixed(2) + "px)" : "none";
+          inkX.drawImage(src, 0, 0);
+          inkX.filter = "none";
+        }
+        inkX.globalAlpha = 1;
+      }
+
+      function render(t) {
+        ensureMasks();
+        const f = Math.min(Math.round(t * FPS), DUR * FPS - 1);
+        inkX.globalCompositeOperation = "source-over";
+        inkX.globalAlpha = 1;
+        inkX.fillStyle = "#000";
+        inkX.fillRect(0, 0, W, H);
+        for (const tr of TRACKS) {
+          if (f < tr.f0 - 2 || f >= tr.f1) continue;
+          const st = stateAt(tr, f);
+          if (!st) continue;
+          const life = Math.max(0, Math.min(1, (f - tr.f0) / (tr.f1 - tr.f0)));
+          const z = 1 + 0.03 * life;   // slow push while the block is on screen
+          drawBlock(BLOCKS[tr.b], st, z);
+        }
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = BG;
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalCompositeOperation = "difference";
+        ctx.drawImage(inkC, 0, 0);
+        ctx.globalCompositeOperation = "source-over";
+      }
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      render(0);
+      tl.to({ v: 0 }, { v: 1, duration: DUR, ease: "none", onUpdate: () => render(tl.time()) }, 0);
+      F("#tag", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 8.42);
+
+      document.fonts.ready.then(() => { builtWithFonts = false; Object.values(BLOCKS).forEach((b) => (b.mask = null)); render(tl.time()); });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

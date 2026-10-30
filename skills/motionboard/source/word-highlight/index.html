@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #000;
+        --lit: #fff;
+        --dim: #666;
+        --font-ui: "Inter", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: var(--bg); font-family: var(--font-ui);
+        -webkit-font-smoothing: antialiased; font-feature-settings: "ss01", "cv11";
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+      /* ---------- product layer ---------- */
+      #gl { position: absolute; left: 0; top: 0; display: block; width: 1920px; height: 1080px; }
+
+      /* ---------- card: running copy ---------- */
+      #copy {
+        position: absolute; left: 460px; top: 58px; width: 1000px; height: 200px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      #copy p {
+        width: 1000px; text-align: center; text-wrap: balance;
+        font-size: 33px; line-height: 1.42; font-weight: 500; letter-spacing: -0.012em;
+        color: #fff;
+      }
+      #copy .w { color: #fff; opacity: 0; }
+
+      /* ---------- card: wordmark ---------- */
+      #lock {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+        display: flex; align-items: center; justify-content: center; gap: 30px;
+        padding-bottom: 40px;
+      }
+      #mk { width: 100px; height: 100px; flex: none; display: block; overflow: visible; }
+      #wm { font-size: 124px; line-height: 1; font-weight: 600; letter-spacing: -0.04em; white-space: nowrap; }
+      #wm .lt { display: inline-block; color: #fff; opacity: 0; }
+      #tag {
+        position: absolute; left: 0; top: 620px; width: 1920px; text-align: center;
+        font-size: 28px; line-height: 1.3; font-weight: 500; letter-spacing: -0.01em; color: #6b6b6b; opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip full" data-start="0" data-duration="8.3" data-track-index="0">
+        <canvas id="gl" width="1920" height="1080"></canvas>
+      </div>
+      <div id="s1" class="clip full" data-start="0" data-duration="8.3" data-track-index="1">
+        <div id="copy"><p id="txt"></p></div>
+      </div>
+      <div id="s2" class="clip full" data-start="8.3" data-duration="2.7" data-track-index="2">
+        <div id="lock" data-layout-allow-overlap>
+          <svg id="mk" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" fill="#fff" />
+            <ellipse id="mer" cx="50" cy="50" rx="20" ry="46" fill="none" stroke="#000" stroke-width="4.5" />
+          </svg>
+          <div id="wm"></div>
+        </div>
+        <div id="tag">From $1,499. Available November 14.</div>
+      </div>
+    </div>
+    <script>
+      const COPY = "Meet Meridian. A 14-inch laptop machined from a single block of aluminum, just 11.2 millimeters thin. The new Atlas 3 chip is 40 percent faster, with up to 22 hours of battery life and a 1,600-nit display.";
+      const words = COPY.split(" ");
+      const p = document.getElementById("txt");
+      p.innerHTML = words.map((w, i) => '<span class="w" id="w' + i + '">' + w + "</span>").join(" ");
+
+      const wm = document.getElementById("wm");
+      wm.innerHTML = "Meridian".split("").map((c) => '<span class="lt">' + c + "</span>").join("");
+
+      const tl = gsap.timeline({ paused: true });
+
+      /* reading rhythm: gap scales with word length, punctuation adds a pause */
+      let t = 0;
+      const LIT = 0.42;
+      words.forEach((w, i) => {
+        tl.set("#w" + i, { color: "#666666", opacity: 1 }, t);
+        tl.to("#w" + i, { color: "#ffffff", duration: LIT, ease: "none" }, t);
+        const len = w.replace(/[.,]/g, "").length;
+        let gap = 0.075 + 0.0125 * len;
+        if (/\.$/.test(w)) gap += 0.42;
+        else if (/,$/.test(w)) gap += 0.22;
+        t += gap;
+      });
+      const lastLit = t;                 // time the last word has finished lighting
+      const CUT = 8.3;                   // hard cut to wordmark
+
+      /* ---------- wordmark ---------- */
+      const mk = "#mk";
+            tl.fromTo("#mer", { attr: { rx: 20 } }, { attr: { rx: 0.6 }, duration: 1.4, ease: "expo.out", immediateRender: false }, CUT);
+      tl.fromTo("#mk", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none", immediateRender: false }, CUT);
+      tl.fromTo("#mk", { rotation: -40, transformOrigin: "50% 50%" }, { rotation: 0, transformOrigin: "50% 50%", duration: 1.4, ease: "expo.out", immediateRender: false }, CUT);
+      // the same gray-to-white step, letter by letter
+      "Meridian".split("").forEach((c, i) => {
+        const at = CUT + 0.12 + i * 0.07;
+        tl.set(".lt:nth-child(" + (i + 1) + ")", { color: "#666666", opacity: 1 }, at);
+        tl.to(".lt:nth-child(" + (i + 1) + ")", { color: "#ffffff", duration: 0.3, ease: "none" }, at);
+      });
+      tl.fromTo("#tag", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out", immediateRender: false }, CUT + 0.5);
+      // slow residual push on the hold
+      gsap.set("#lock", { transformOrigin: "960px 500px" });
+      tl.fromTo("#lock", { scale: 1 }, { scale: 1.04, duration: 2.7, ease: "none", immediateRender: false }, CUT);
+
+      tl.set({}, {}, 11);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+      import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+      import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+      import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+      import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+      const sineInOut = (k) => -(Math.cos(Math.PI * k) - 1) / 2;
+
+      /* ================= renderer: 2x supersample ================= */
+      const OW = 1920, OH = 1080, SS = 2;
+      const RW = OW * SS, RH = OH * SS;
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1);
+      renderer.setSize(OW, OH, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+      const camera = new THREE.PerspectiveCamera(19, OW / OH, 1, 600);
+
+      /* ================= procedural geometry ================= */
+      function rrOutline(w, h, r, arcSeg = 24) {
+        const pts = [];
+        const cs = [[w / 2 - r, h / 2 - r, 0], [-w / 2 + r, h / 2 - r, 0.5], [-w / 2 + r, -h / 2 + r, 1], [w / 2 - r, -h / 2 + r, 1.5]];
+        for (const [cx, cy, a0] of cs) {
+          for (let i = 0; i <= arcSeg; i++) {
+            const a = (a0 + (i / arcSeg) * 0.5) * Math.PI;
+            const nx = Math.cos(a), ny = Math.sin(a);
+            pts.push({ x: cx + nx * r, y: cy + ny * r, nx, ny });
+          }
+        }
+        return pts;
+      }
+      // rounded-rect slab: +z cap at zb with fillet (rbo x rbz), -z cap at zf with fillet (rfo x rfz).
+      // UVs are the planar xy projection, so one top-down texture covers the cap.
+      function slab(w, h, r, zf, zb, rbo, rbz, rfo, rfz) {
+        const out = rrOutline(w, h, r, 32);
+        const N = out.length;
+        const prof = [];
+        const S = 12;
+        for (let i = 0; i <= S; i++) {
+          const th = (i / S) * Math.PI / 2;
+          const n = [rbz * Math.sin(th), rbo * Math.cos(th)];
+          const l = Math.hypot(n[0], n[1]) || 1;
+          prof.push({ o: rbo * (1 - Math.sin(th)), z: zb - rbz * (1 - Math.cos(th)), nr: n[0] / l, nz: n[1] / l });
+        }
+        for (let i = 0; i <= S; i++) {
+          const ph = (i / S) * Math.PI / 2;
+          const n = [rfz * Math.cos(ph), -rfo * Math.sin(ph)];
+          const l = Math.hypot(n[0], n[1]) || 1;
+          prof.push({ o: rfo * (1 - Math.cos(ph)), z: zf + rfz * (1 - Math.sin(ph)), nr: n[0] / l, nz: n[1] / l });
+        }
+        const P = prof.length;
+        const pos = [], nor = [], uv = [], idx = [];
+        const U = (x, y) => [x / w + 0.5, y / h + 0.5];
+        for (let j = 0; j < P; j++) {
+          const pr = prof[j];
+          for (let i = 0; i < N; i++) {
+            const q = out[i];
+            const x = q.x - q.nx * pr.o, y = q.y - q.ny * pr.o;
+            pos.push(x, y, pr.z);
+            const nx = q.nx * pr.nr, ny = q.ny * pr.nr, nz = pr.nz;
+            const l = Math.hypot(nx, ny, nz);
+            nor.push(nx / l, ny / l, nz / l);
+            uv.push(...U(x, y));
+          }
+        }
+        for (let j = 0; j < P - 1; j++) {
+          for (let i = 0; i < N; i++) {
+            const a = j * N + i, b = j * N + ((i + 1) % N), c = (j + 1) * N + i, d = (j + 1) * N + ((i + 1) % N);
+            idx.push(a, c, b, b, c, d);
+          }
+        }
+        const cap = (ring, z, nz) => {
+          const base = pos.length / 3;
+          pos.push(0, 0, z); nor.push(0, 0, nz); uv.push(...U(0, 0));
+          for (let i = 0; i < N; i++) {
+            const k = (ring * N + i) * 3;
+            pos.push(pos[k], pos[k + 1], z); nor.push(0, 0, nz); uv.push(...U(pos[k], pos[k + 1]));
+          }
+          for (let i = 0; i < N; i++) {
+            const a = base + 1 + i, b = base + 1 + ((i + 1) % N);
+            if (nz > 0) idx.push(base, a, b); else idx.push(base, b, a);
+          }
+        };
+        cap(0, zb, 1);
+        cap(P - 1, zf, -1);
+        const g = new THREE.BufferGeometry();
+        g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+        g.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+        g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+        g.setIndex(idx);
+        return g;
+      }
+      // flat rounded rect in xy with normalized UVs
+      function rrPlane(w, h, r) {
+        const s = new THREE.Shape();
+        s.moveTo(-w / 2 + r, -h / 2);
+        s.lineTo(w / 2 - r, -h / 2); s.absarc(w / 2 - r, -h / 2 + r, r, -Math.PI / 2, 0);
+        s.lineTo(w / 2, h / 2 - r); s.absarc(w / 2 - r, h / 2 - r, r, 0, Math.PI / 2);
+        s.lineTo(-w / 2 + r, h / 2); s.absarc(-w / 2 + r, h / 2 - r, r, Math.PI / 2, Math.PI);
+        s.lineTo(-w / 2, -h / 2 + r); s.absarc(-w / 2 + r, -h / 2 + r, r, Math.PI, Math.PI * 1.5);
+        const g = new THREE.ShapeGeometry(s, 24);
+        const p = g.attributes.position, uv = g.attributes.uv;
+        for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / w + 0.5, p.getY(i) / h + 0.5);
+        return g;
+      }
+
+      /* ================= procedural textures ================= */
+      function canvasTex(w, h, draw, srgb = false) {
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        draw(c.getContext("2d"), w, h);
+        const t = new THREE.CanvasTexture(c);
+        t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+        t.anisotropy = 8;
+        t.needsUpdate = true;
+        return t;
+      }
+      function rrPath(g, x, y, w, h, r) {
+        g.beginPath();
+        g.moveTo(x + r, y);
+        g.arcTo(x + w, y, x + w, y + h, r);
+        g.arcTo(x + w, y + h, x, y + h, r);
+        g.arcTo(x, y + h, x, y, r);
+        g.arcTo(x, y, x + w, y, r);
+        g.closePath();
+      }
+
+      /* ================= MERIDIAN 14: dimensions in cm ================= */
+      const W = 31.26, D = 22.12;          // footprint
+      const TB = 0.66;                     // base thickness
+      const LH = 21.5, TL = 0.46;          // lid height / thickness  (closed: 11.2 mm)
+      const OPEN = (20 * Math.PI) / 180;   // lid tilted 20 deg past vertical
+      const PITCH = 1.89;                  // key pitch
+      const KW = 14.5 * PITCH, KD = 5.6 * PITCH;
+      const KZ0 = -D / 2 + 1.45;           // keyboard top edge (hinge side)
+      const TPW = 14.2, TPD = 8.6;         // trackpad
+      const TPZ = KZ0 + KD + 0.75 + TPD / 2;
+
+      // deck: albedo (keyboard well, trackpad groove, speaker grilles) — canvas top = hinge side
+      const DS = 2048 / W;
+      const toC = (x, z) => [(x + W / 2) * DS, (z + D / 2) * DS];
+      const DECK_H = Math.round(D * DS);
+      const deckAlbedo = canvasTex(2048, DECK_H, (g, w, h) => {
+        g.fillStyle = "#ffffff"; g.fillRect(0, 0, w, h);
+        // keyboard well
+        const [wx, wy] = toC(-KW / 2 - 0.22, KZ0 - 0.22);
+        g.filter = "blur(3px)";
+        g.fillStyle = "#6f6f6f";
+        rrPath(g, wx, wy, (KW + 0.44) * DS, (KD + 0.44) * DS, 0.5 * DS); g.fill();
+        g.filter = "none";
+        // speaker grilles
+        g.fillStyle = "#2a2a2a";
+        for (const side of [-1, 1]) {
+          const x0 = side < 0 ? -W / 2 + 0.75 : KW / 2 + 0.6;
+          const x1 = side < 0 ? -KW / 2 - 0.6 : W / 2 - 0.75;
+          for (let z = KZ0 + 0.1; z < KZ0 + KD - 0.1; z += 0.13) {
+            for (let x = x0; x < x1; x += 0.13) {
+              const [cx, cy] = toC(x, z);
+              g.beginPath(); g.arc(cx, cy, 2.1, 0, Math.PI * 2); g.fill();
+            }
+          }
+        }
+        // trackpad seam
+        const [tx, ty] = toC(-TPW / 2, TPZ - TPD / 2);
+        g.strokeStyle = "rgba(40,40,40,0.9)"; g.lineWidth = 2.4;
+        rrPath(g, tx, ty, TPW * DS, TPD * DS, 0.55 * DS); g.stroke();
+        // front-edge thumb scoop
+        const [sx, sy] = toC(0, D / 2 - 0.1);
+        const rg = g.createRadialGradient(sx, sy + 40, 10, sx, sy + 40, 3.4 * DS);
+        rg.addColorStop(0, "rgba(0,0,0,0.25)"); rg.addColorStop(1, "rgba(0,0,0,0)");
+        g.fillStyle = rg; g.fillRect(sx - 4 * DS, sy - 3 * DS, 8 * DS, 4 * DS);
+      }, true);
+      const deckRough = canvasTex(2048, DECK_H, (g, w, h) => {
+        g.fillStyle = "#ffffff"; g.fillRect(0, 0, w, h);
+        const [tx, ty] = toC(-TPW / 2, TPZ - TPD / 2);
+        g.fillStyle = "#c4c4c4";
+        rrPath(g, tx, ty, TPW * DS, TPD * DS, 0.55 * DS); g.fill();
+      });
+
+      // lid back: polished Meridian mark (circle cut by a meridian line) on blasted aluminum
+      const LS = 2048 / W;
+      const lidRough = canvasTex(2048, Math.round(LH * LS), (g, w, h) => {
+        g.fillStyle = "#ffffff"; g.fillRect(0, 0, w, h);
+        const cx = w / 2, cy = h / 2, R = 1.55 * LS;
+        g.fillStyle = "#2a2a2a";
+        g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+        g.strokeStyle = "#ffffff"; g.lineWidth = 0.075 * LS;
+        g.beginPath(); g.ellipse(cx, cy, R * 0.43, R, 0, 0, Math.PI * 2); g.stroke();
+      });
+
+      // display bezel glass with chin wordmark
+      const GLW = W - 0.12, GLH = LH - 0.12;
+      const bezelTex = canvasTex(2048, Math.round(GLH * (2048 / GLW)), (g, w, h) => {
+        g.fillStyle = "#0b0b0c"; g.fillRect(0, 0, w, h);
+        const s = w / GLW;
+        g.fillStyle = "#4a4a4c";
+        g.font = "500 " + Math.round(0.36 * s) + "px Inter, Helvetica, Arial, sans-serif";
+        g.textAlign = "center"; g.textBaseline = "middle";
+        g.fillText("Meridian", w / 2, h - 0.62 * s);
+        // camera
+        g.fillStyle = "#1c1c20";
+        g.beginPath(); g.arc(w / 2, 0.38 * s, 0.09 * s, 0, Math.PI * 2); g.fill();
+        g.fillStyle = "#050507";
+        g.beginPath(); g.arc(w / 2, 0.38 * s, 0.045 * s, 0, Math.PI * 2); g.fill();
+      }, true);
+
+      // screen: desktop wallpaper, menu bar, dock and one window
+      const SW = GLW - 1.0, SH = GLH - 0.72 - 1.28;
+      const screenTex = canvasTex(2400, Math.round(2400 * SH / SW), (g, w, h) => {
+        const bg = g.createLinearGradient(0, 0, w, h);
+        bg.addColorStop(0, "#0a1230"); bg.addColorStop(0.55, "#120d2a"); bg.addColorStop(1, "#05060e");
+        g.fillStyle = bg; g.fillRect(0, 0, w, h);
+        const blob = (x, y, r, c) => {
+          const rg = g.createRadialGradient(x, y, 0, x, y, r);
+          rg.addColorStop(0, c); rg.addColorStop(1, "rgba(0,0,0,0)");
+          g.fillStyle = rg; g.fillRect(0, 0, w, h);
+        };
+        blob(w * 0.28, h * 0.82, w * 0.55, "rgba(46,92,220,0.85)");
+        blob(w * 0.74, h * 0.3, w * 0.45, "rgba(120,62,210,0.7)");
+        blob(w * 0.55, h * 0.95, w * 0.3, "rgba(30,170,210,0.45)");
+        // sweeping ribbon
+        g.save();
+        g.globalCompositeOperation = "lighter";
+        for (let i = 0; i < 26; i++) {
+          g.strokeStyle = "rgba(150,170,255," + (0.05 - i * 0.0015) + ")";
+          g.lineWidth = 6;
+          g.beginPath();
+          g.moveTo(-50, h * (0.62 + i * 0.012));
+          g.bezierCurveTo(w * 0.3, h * (0.3 + i * 0.01), w * 0.62, h * (1.0 - i * 0.004), w + 50, h * (0.42 + i * 0.012));
+          g.stroke();
+        }
+        g.restore();
+        // menu bar
+        const mb = h * 0.024;
+        g.fillStyle = "rgba(10,10,20,0.45)"; g.fillRect(0, 0, w, mb);
+        g.fillStyle = "rgba(255,255,255,0.88)";
+        g.font = "600 " + Math.round(mb * 0.56) + "px Inter, Helvetica, sans-serif";
+        g.textBaseline = "middle";
+        let x = mb * 1.6;
+        g.beginPath(); g.arc(mb * 0.8, mb / 2, mb * 0.28, 0, Math.PI * 2); g.fill();
+        g.fillText("Finder", x, mb / 2); x += mb * 3.4;
+        g.font = "400 " + Math.round(mb * 0.56) + "px Inter, Helvetica, sans-serif";
+        for (const it of ["File", "Edit", "View", "Go", "Window", "Help"]) { g.fillText(it, x, mb / 2); x += g.measureText(it).width + mb * 1.1; }
+        g.textAlign = "right";
+        g.fillText("Wed Nov 14   9:41 AM", w - mb * 0.9, mb / 2);
+        g.textAlign = "left";
+        // dock
+        const dn = 12, ds = h * 0.044, dw = dn * ds * 1.18 + ds * 0.4;
+        const dx = (w - dw) / 2, dy = h - ds * 1.42;
+        g.fillStyle = "rgba(255,255,255,0.14)";
+        rrPath(g, dx, dy, dw, ds * 1.3, ds * 0.36); g.fill();
+        for (let i = 0; i < dn; i++) {
+          const hue = [210, 0, 30, 48, 130, 180, 262, 300, 340, 200, 160, 20][i];
+          const lg = g.createLinearGradient(0, dy, 0, dy + ds);
+          lg.addColorStop(0, "hsl(" + hue + ",42%,66%)"); lg.addColorStop(1, "hsl(" + hue + ",38%,42%)");
+          g.fillStyle = lg;
+          rrPath(g, dx + ds * 0.2 + i * ds * 1.18, dy + ds * 0.15, ds, ds, ds * 0.24); g.fill();
+        }
+      }, true);
+
+      /* ================= materials ================= */
+      const ALU = 0xc6c8cb;
+      const M = {
+        base: new THREE.MeshPhysicalMaterial({ color: ALU, metalness: 1, roughness: 0.34, map: deckAlbedo, roughnessMap: deckRough, clearcoat: 0.15, clearcoatRoughness: 0.3 }),
+        lid: new THREE.MeshPhysicalMaterial({ color: ALU, metalness: 1, roughness: 0.34, roughnessMap: lidRough, clearcoat: 0.15, clearcoatRoughness: 0.3 }),
+        key: new THREE.MeshPhysicalMaterial({ color: 0x141416, metalness: 0, roughness: 0.62, clearcoat: 0.12, clearcoatRoughness: 0.5 }),
+        bezel: new THREE.MeshPhysicalMaterial({ color: 0xffffff, map: bezelTex, metalness: 0, roughness: 0.06, clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 0.2 }),
+        screen: new THREE.MeshPhysicalMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: screenTex, emissiveIntensity: 0.85, metalness: 0, roughness: 0.04, specularIntensity: 0.35, clearcoat: 0.3, clearcoatRoughness: 0.02, envMapIntensity: 0.1 }),
+        hinge: new THREE.MeshPhysicalMaterial({ color: 0x2a2b2e, metalness: 1, roughness: 0.38 }),
+        port: new THREE.MeshPhysicalMaterial({ color: 0x050506, metalness: 0, roughness: 0.7 }),
+        portRim: new THREE.MeshPhysicalMaterial({ color: 0xaeb0b3, metalness: 1, roughness: 0.18 }),
+      };
+
+      /* ================= assembly ================= */
+      // turntable pivot sits under the visual centre (between deck and lid), not the base centre
+      const turntable = new THREE.Group();
+      scene.add(turntable);
+      const laptop = new THREE.Group();
+      laptop.position.z = 3.6;
+      turntable.add(laptop);
+
+      // base: slab built in xy, rotated so +z -> +y (deck up), +y -> -z (hinge back)
+      const baseGeo = slab(W, D, 1.05, 0, TB, 0.07, 0.07, 0.24, 0.28);
+      baseGeo.rotateX(-Math.PI / 2);
+      laptop.add(new THREE.Mesh(baseGeo, M.base));
+
+      // keyboard
+      const ROWS = [
+        { h: 0.6, keys: [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] },
+        { h: 1, keys: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5] },
+        { h: 1, keys: [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] },
+        { h: 1, keys: [1.75, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.75] },
+        { h: 1, keys: [2.25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.25] },
+        { h: 1, keys: [1, 1, 1, 1.25, 5, 1.25, 1, 1, "ud", 1] },
+      ];
+      const keyGeos = {};
+      const keyGeo = (w, d) => {
+        const k = w.toFixed(3) + "x" + d.toFixed(3);
+        if (!keyGeos[k]) keyGeos[k] = new RoundedBoxGeometry(w, 0.16, d, 3, 0.07);
+        return keyGeos[k];
+      };
+      const GAP = 0.27;
+      let rz = KZ0;
+      for (const row of ROWS) {
+        const rd = row.h * PITCH;
+        let x = -KW / 2;
+        for (const k of row.keys) {
+          if (k === "ud") {
+            for (const s of [-1, 1]) {
+              const m = new THREE.Mesh(keyGeo(PITCH - GAP, rd / 2 - GAP * 0.75), M.key);
+              m.position.set(x + PITCH / 2, TB + 0.02, rz + rd / 2 + s * rd / 4);
+              laptop.add(m);
+            }
+            x += PITCH;
+            continue;
+          }
+          const kw = k * PITCH;
+          const m = new THREE.Mesh(keyGeo(kw - GAP, rd - GAP), M.key);
+          m.position.set(x + kw / 2, TB + 0.02, rz + rd / 2);
+          laptop.add(m);
+          x += kw;
+        }
+        rz += rd;
+      }
+
+      // left-side ports: MagSafe slot, two USB-C, headphone jack
+      const portY = TB * 0.42;
+      const PORTS = [{ z: -7.4, w: 1.55, h: 0.2 }, { z: -4.9, w: 0.84, h: 0.25 }, { z: -3.5, w: 0.84, h: 0.25 }, { z: 1.6, w: 0.36, h: 0.36 }];
+      for (const pdef of PORTS) {
+        const r = Math.min(pdef.h, pdef.w) / 2 - 0.005;
+        const hole = new THREE.Mesh(new RoundedBoxGeometry(0.06, pdef.h, pdef.w, 3, r), M.port);
+        hole.position.set(-W / 2 + 0.02, portY, pdef.z);
+        laptop.add(hole);
+        const rim = new THREE.Mesh(new RoundedBoxGeometry(0.03, pdef.h + 0.05, pdef.w + 0.05, 3, r + 0.02), M.portRim);
+        rim.position.set(-W / 2 + 0.002, portY, pdef.z);
+        laptop.add(rim);
+      }
+      // right side: HDMI + SDXC + USB-C
+      for (const pdef of [{ z: -6.2, w: 1.45, h: 0.32 }, { z: -3.9, w: 2.3, h: 0.16 }, { z: -1.6, w: 0.84, h: 0.25 }]) {
+        const r = Math.min(pdef.h, pdef.w) / 2 - 0.005;
+        const hole = new THREE.Mesh(new RoundedBoxGeometry(0.06, pdef.h, pdef.w, 3, r), M.port);
+        hole.position.set(W / 2 - 0.02, portY, pdef.z);
+        laptop.add(hole);
+      }
+
+      // hinge barrel
+      const hingeZ = -D / 2 + 0.42, hingeY = TB + 0.24;
+      const hinge = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.27, W - 6.4, 48), M.hinge);
+      hinge.rotation.z = Math.PI / 2;
+      hinge.position.set(0, hingeY, hingeZ);
+      laptop.add(hinge);
+
+      // lid: display face +z, logo face -z; pivot at the hinge, tilted back
+      const lid = new THREE.Group();
+      lid.position.set(0, hingeY, hingeZ);
+      lid.rotation.x = -OPEN;
+      laptop.add(lid);
+      const lidBody = new THREE.Mesh(slab(W, LH, 0.95, -TL / 2, TL / 2, 0.05, 0.05, 0.16, 0.16), M.lid);
+      lidBody.position.y = LH / 2 + 0.1;
+      lid.add(lidBody);
+      const bezel = new THREE.Mesh(rrPlane(GLW, GLH, 0.9), M.bezel);
+      bezel.position.set(0, LH / 2 + 0.1, TL / 2 + 0.004);
+      lid.add(bezel);
+      const screen = new THREE.Mesh(rrPlane(SW, SH, 0.28), M.screen);
+      screen.position.set(0, LH / 2 + 0.1 + (1.28 - 0.72) / 2, TL / 2 + 0.008);
+      lid.add(screen);
+
+      /* ================= studio environment (PMREM) ================= */
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      function softTex(soft) {
+        return canvasTex(256, 256, (g, w, h) => {
+          const img = g.createImageData(w, h);
+          for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+            const u = Math.abs(x / (w - 1) * 2 - 1), v = Math.abs(y / (h - 1) * 2 - 1);
+            const f = (a) => { const e = clamp01((1 - a) / soft); return e * e * (3 - 2 * e); };
+            const val = Math.round(255 * f(u) * f(v));
+            const k = (y * w + x) * 4;
+            img.data[k] = img.data[k + 1] = img.data[k + 2] = val; img.data[k + 3] = 255;
+          }
+          g.putImageData(img, 0, 0);
+        }, true);
+      }
+      const SOFT = { hard: softTex(0.06), med: softTex(0.35), soft: softTex(0.9) };
+      function makeEnv(panels) {
+        const s = new THREE.Scene();
+        s.background = new THREE.Color(0x000000);
+        for (const pn of panels) {
+          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(...pn.c).multiplyScalar(pn.i), map: SOFT[pn.soft || "hard"], side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(pn.w, pn.h), m);
+          mesh.position.set(...pn.p);
+          mesh.lookAt(0, 0, 0);
+          s.add(mesh);
+        }
+        return pmrem.fromScene(s, 0, 0.1, 100).texture;
+      }
+      const WHITE = [1, 1, 1];
+      const PANELS = [
+        { p: [0, 7, -12], w: 26, h: 9, i: 2.4, c: WHITE, soft: "soft" },          // big backlight softbox: lights the deck
+        { p: [0, 12, 1], w: 16, h: 12, i: 1.4, c: WHITE, soft: "soft" },          // overhead
+        { p: [-9, 11.5, 4.5], w: 8, h: 7, i: 2.6, c: [1, 0.99, 0.97], soft: "soft" }, // key, high front-left (above the screen's reflection path)
+        { p: [12, 1.5, 1], w: 0.5, h: 12, i: 15, c: [0.95, 0.97, 1], soft: "med" }, // edge strip right (narrow: thin sweep on the screen)
+        { p: [-12, 1.5, -1], w: 0.5, h: 12, i: 12, c: WHITE, soft: "med" },       // edge strip left
+        { p: [0, -8, 6], w: 18, h: 5, i: 0.12, c: WHITE, soft: "soft" },          // floor bounce
+      ];
+      scene.environment = makeEnv(PANELS);
+      // explicit envMap so envMapIntensity applies (scene.environment ignores it): display glass reflects only faintly
+      M.screen.envMap = scene.environment;
+      M.bezel.envMap = scene.environment;
+      // the floor reflection sees the studio upside down
+      const ENV_MIRROR = makeEnv(PANELS.map((pn) => ({ ...pn, p: [pn.p[0], -pn.p[1], pn.p[2]] })));
+      scene.environmentIntensity = 1;
+
+      /* ================= product stand: contact shadow + faint reflection ================= */
+      // reflection: a mirrored copy of the laptop under y = 0, lit by the mirrored studio, fading with depth
+      const REFL_K = 0.15, REFL_FALL = 6.0;
+      const reflMats = new Map();
+      function reflMat(m) {
+        if (!reflMats.has(m)) {
+          const c = m.clone();
+          c.envMap = ENV_MIRROR;
+          c.onBeforeCompile = (sh) => {
+            sh.uniforms.uK = { value: REFL_K };
+            sh.uniforms.uFall = { value: REFL_FALL };
+            sh.vertexShader = "varying float vWY;\n" + sh.vertexShader.replace("#include <project_vertex>", "#include <project_vertex>\n vWY = (modelMatrix * vec4(transformed, 1.0)).y;");
+            sh.fragmentShader = "uniform float uK; uniform float uFall; varying float vWY;\n" + sh.fragmentShader.replace("#include <dithering_fragment>", "#include <dithering_fragment>\n gl_FragColor.rgb *= uK * exp(min(vWY, 0.0) / uFall);");
+          };
+          c.customProgramCacheKey = () => "refl";
+          reflMats.set(m, c);
+        }
+        return reflMats.get(m);
+      }
+      const reflTurn = new THREE.Group();
+      reflTurn.scale.y = -1;
+      const reflLaptop = laptop.clone(true);
+      reflLaptop.traverse((o) => { if (o.isMesh) o.material = reflMat(o.material); });
+      reflTurn.add(reflLaptop);
+      scene.add(reflTurn);
+
+      // floor: no edges — a soft sheen pool around the turntable plus a contact shadow that turns with the laptop
+      const floorMat = new THREE.ShaderMaterial({
+        uniforms: { uAng: { value: 0 }, uOff: { value: laptop.position.z }, uHalf: { value: new THREE.Vector2(W / 2, D / 2) } },
+        vertexShader: `varying vec2 vXZ; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vXZ = w.xz; gl_Position = projectionMatrix * viewMatrix * w; }`,
+        fragmentShader: `uniform float uAng; uniform float uOff; uniform vec2 uHalf; varying vec2 vXZ;
+          float sdRR(vec2 p, vec2 b, float r){ vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
+          void main(){
+            // laptop-local footprint coordinates
+            float c = cos(uAng), s = sin(uAng);
+            vec2 l = vec2(c * vXZ.x - s * vXZ.y, s * vXZ.x + c * vXZ.y) - vec2(0.0, uOff);
+            float d = sdRR(l, uHalf, 1.05);
+            float shadow = 0.92 * (1.0 - smoothstep(-0.6, 1.2, d)) + 0.55 * (1.0 - smoothstep(0.0, 7.0, d));
+            shadow = clamp(shadow, 0.0, 0.95);
+            // sheen pool: elliptical, gone long before the plane edge
+            vec2 e = vXZ / vec2(34.0, 24.0);
+            float sheen = 0.026 * exp(-dot(e, e) * 1.5);
+            gl_FragColor = vec4(vec3(sheen) * (1.0 - shadow), shadow);
+          }`,
+        transparent: true, depthWrite: false,
+        blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
+      });
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = -0.005;
+      floor.renderOrder = 1;   // after the reflection, before nothing else needs it
+      scene.add(floor);
+
+      /* ================= post: scene -> bloom -> tonemap -> 2x resolve + grain ================= */
+      const rtScene = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType, samples: 4, colorSpace: THREE.LinearSRGBColorSpace });
+      const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType }));
+      composer.renderToScreen = false;
+      composer.setPixelRatio(SS);
+      const copy = new ShaderPass({
+        uniforms: { tDiffuse: { value: null }, tSrc: { value: null }, gain: { value: 1 } },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+        fragmentShader: `uniform sampler2D tSrc; uniform float gain; varying vec2 vUv;
+          void main(){ vec3 c = gain * texture2D(tSrc, vUv).rgb; c = clamp(c, vec3(0.0), vec3(64.0)); gl_FragColor = vec4(c, 1.0); }`,
+      });
+      copy.uniforms.tSrc.value = rtScene.texture;
+      composer.addPass(copy);
+      composer.addPass(new UnrealBloomPass(new THREE.Vector2(RW, RH), 0.22, 0.4, 1.4));
+      composer.addPass(new OutputPass());
+      composer.setPixelRatio(SS);
+
+      const finalMat = new THREE.ShaderMaterial({
+        uniforms: { tSrc: { value: null }, texel: { value: new THREE.Vector2(1 / RW, 1 / RH) }, frame: { value: 0 }, grain: { value: 0.012 }, vig: { value: 0.3 } },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+        fragmentShader: `uniform sampler2D tSrc; uniform vec2 texel; uniform float frame; uniform float grain; uniform float vig; varying vec2 vUv;
+          float h12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+          void main(){
+            vec3 c = vec3(0.0);
+            c += texture2D(tSrc, vUv + texel * vec2(-0.75, -0.75)).rgb;
+            c += texture2D(tSrc, vUv + texel * vec2( 0.75, -0.75)).rgb;
+            c += texture2D(tSrc, vUv + texel * vec2(-0.75,  0.75)).rgb;
+            c += texture2D(tSrc, vUv + texel * vec2( 0.75,  0.75)).rgb;
+            c *= 0.25;
+            vec2 q = vUv - vec2(0.5, 0.42); q.x *= 1.777;
+            c *= 1.0 - vig * smoothstep(0.4, 1.1, length(q));
+            vec2 px = floor(gl_FragCoord.xy);
+            float n = (h12(px + frame * 17.31) + h12(px * 1.37 + frame * 3.7 + 11.0)) - 1.0;
+            float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+            c += n * grain * (0.25 + 0.75 * sqrt(clamp(lum, 0.0, 1.0)));
+            gl_FragColor = vec4(c, 1.0);
+          }`,
+        depthTest: false, depthWrite: false,
+      });
+      const fsScene = new THREE.Scene();
+      const fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      fsScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), finalMat));
+
+      /* ================= direction ================= */
+      // turntable: constant 13 deg/s, left 3/4 profile -> front -> right 3/4
+      const SPIN0 = 68, SPIN_RATE = -13;
+      const EL = (17 * Math.PI) / 180, DIST = 152;
+      const TARGET = new THREE.Vector3(0, 6.2, 0);
+      camera.setViewOffset(OW, OH, 0, -172, OW, OH);   // product sits low, copy owns the top band
+
+      function renderAt(time) {
+        const t = Math.max(0, time);
+        turntable.rotation.y = ((SPIN0 + SPIN_RATE * t) * Math.PI) / 180;
+        reflTurn.rotation.y = turntable.rotation.y;
+        floorMat.uniforms.uAng.value = turntable.rotation.y;
+        const push = 1 + 0.025 * (t / 8.3);
+        camera.position.set(0, TARGET.y + Math.sin(EL) * DIST / push, TARGET.z + Math.cos(EL) * DIST / push);
+        camera.lookAt(TARGET);
+        renderer.setRenderTarget(rtScene);
+        renderer.clear();
+        renderer.render(scene, camera);
+        copy.uniforms.gain.value = sineInOut(clamp01(t / 0.7));
+        composer.render();
+        finalMat.uniforms.tSrc.value = composer.readBuffer.texture;
+        finalMat.uniforms.frame.value = Math.round(t * 30);
+        renderer.setRenderTarget(null);
+        renderer.render(fsScene, fsCam);
+      }
+
+      window.__wh = { renderAt };
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>

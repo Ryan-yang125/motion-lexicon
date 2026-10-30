@@ -1,0 +1,12 @@
+CREATE TABLE stats (
+  slug TEXT PRIMARY KEY,
+  copies INTEGER NOT NULL DEFAULT 0,
+  likes INTEGER NOT NULL DEFAULT 0,
+  wishes INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE likes (
+  slug TEXT NOT NULL,
+  uid TEXT NOT NULL,
+  PRIMARY KEY (slug, uid)
+);

@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #ffffff; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #ffffff; }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #cv { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="11" data-track-index="0">
+        <canvas id="cv" width="1920" height="1080"></canvas>
+      </div>
+    </div>
+
+    <script>
+      /* =====================================================================
+         Line boil. Every drawing is a list of hand strokes. The trace is
+         re-generated from the boil index k = floor(t * 7.5): one new trace
+         every 4 frames at 30fps, 1–2px displacement, no randomness.
+         Poses, flights, labels and clears are all keyed to the same k,
+         so action steps at the boil rate and every change is a hard cut.
+         ===================================================================== */
+      const DUR = 11;
+      const FPS_BOIL = 7.5;
+      const cv = document.getElementById("cv");
+      const ctx = cv.getContext("2d");
+
+      const INK = "#1c1a21";
+      const C = {
+        violet: "#7a58ff",
+        red: "#e3352b",
+        orange: "#ff7a1c",
+        green: "#16a35a",
+        vip: "#ffc417",
+        team: "#2f6bff",
+        bill: "#ff7a1c",
+        news: "#f04e98",
+        wood: "#c98b52",
+        lid: "#d8d9df",
+        base: "#b9bbc4",
+        pot: "#dc6a43",
+        mug: "#fbe7c6",
+        paper: "#ffffff",
+        dark: "#2a1d1f",
+        sub: "#6d6872",
+      };
+
+      /* ---------- deterministic hash + smooth displacement field ---------- */
+      function H(a, b) {
+        const x = Math.sin(a * 127.1 + b * 311.7 + a * b * 0.013) * 43758.5453;
+        return x - Math.floor(x);
+      }
+      function field(x, y, seed, amp, sc) {
+        const p1 = H(seed, 1) * 6.283, p2 = H(seed, 2) * 6.283, p3 = H(seed, 3) * 6.283, p4 = H(seed, 4) * 6.283;
+        const u = x / sc, v = y / sc;
+        return [
+          amp * (0.62 * Math.sin(u * 1.0 + v * 0.63 + p1) + 0.38 * Math.sin(u * 1.93 - v * 1.31 + p2)),
+          amp * (0.62 * Math.sin(v * 1.07 - u * 0.52 + p3) + 0.38 * Math.sin(v * 2.11 + u * 1.37 + p4)),
+        ];
+      }
+
+      /* ---------- frame state ---------- */
+      let K = 0;          // boil index
+      let ITEMS = [];     // display list for this frame
+      let SID = 0;        // stroke id counter (stable within a layout)
+      let TF = [1, 0, 0, 1, 0, 0]; // affine a b c d e f
+      const STACK = [];
+
+      function push(x, y, s = 1, rDeg = 0) {
+        STACK.push(TF);
+        const r = (rDeg * Math.PI) / 180, cs = Math.cos(r) * s, sn = Math.sin(r) * s;
+        const [a, b, c, d, e, f] = TF;
+        TF = [a * cs + c * sn, b * cs + d * sn, a * -sn + c * cs, b * -sn + d * cs, a * x + c * y + e, b * x + d * y + f];
+      }
+      function pop() { TF = STACK.pop(); }
+      function scaleOf() { return Math.hypot(TF[0], TF[1]); }
+      function map(p) { return [TF[0] * p[0] + TF[2] * p[1] + TF[4], TF[1] * p[0] + TF[3] * p[1] + TF[5]]; }
+
+      /* ---------- point helpers (local coords) ---------- */
+      function arc(cx, cy, rx, ry, a0, a1, step = 10) {
+        const n = Math.max(3, Math.ceil(Math.abs(a1 - a0) / step));
+        const out = [];
+        for (let i = 0; i <= n; i++) {
+          const a = ((a0 + ((a1 - a0) * i) / n) * Math.PI) / 180;
+          out.push([cx + rx * Math.cos(a), cy + ry * Math.sin(a)]);
+        }
+        return out;
+      }
+      const cat = (...parts) => parts.flat();
+      function ell(cx, cy, rx, ry) { return arc(cx, cy, rx, ry, -90, 270, 8).slice(0, -1); }
+      function rrect(x0, y0, x1, y1, r) {
+        return cat(
+          arc(x1 - r, y0 + r, r, r, -90, 0, 15),
+          arc(x1 - r, y1 - r, r, r, 0, 90, 15),
+          arc(x0 + r, y1 - r, r, r, 90, 180, 15),
+          arc(x0 + r, y0 + r, r, r, 180, 270, 15)
+        );
+      }
+
+      /* ---------- display list API ---------- */
+      function ink(pts, o = {}) {
+        ITEMS.push({ t: "ink", id: SID++, pts: pts.map(map), w: (o.w || 4.4) * scaleOf(), color: o.color || INK, closed: !!o.closed, smooth: !!o.smooth, nib: o.nib || "round" });
+      }
+      function fill(pts, color, o = {}) {
+        ITEMS.push({ t: "fill", id: SID++, pts: pts.map(map), color, smooth: !!o.smooth, streak: o.streak !== false, mis: o.mis === undefined ? 2.2 : o.mis });
+      }
+      function shape(pts, color, o = {}) {
+        fill(pts, color, o);
+        ink(pts, Object.assign({ closed: true }, o));
+      }
+
+      /* ---------- geometry pipeline ---------- */
+      function crPt(p0, p1, p2, p3, t) {
+        const t2 = t * t, t3 = t2 * t;
+        return [
+          0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+          0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
+        ];
+      }
+      function densify(P, closed, smooth, step) {
+        const n = P.length, out = [];
+        const segs = closed ? n : n - 1;
+        for (let i = 0; i < segs; i++) {
+          const p1 = P[i], p2 = P[(i + 1) % n];
+          const p0 = closed ? P[(i - 1 + n) % n] : P[Math.max(0, i - 1)];
+          const p3 = closed ? P[(i + 2) % n] : P[Math.min(n - 1, i + 2)];
+          const len = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+          const m = Math.max(1, Math.ceil(len / step));
+          for (let j = 0; j < m; j++) {
+            const t = j / m;
+            out.push(smooth ? crPt(p0, p1, p2, p3, t) : [p1[0] + (p2[0] - p1[0]) * t, p1[1] + (p2[1] - p1[1]) * t]);
+          }
+        }
+        out.push(closed ? [...P[0]] : [...P[n - 1]]);
+        return out;
+      }
+      function displace(P, id, kind) {
+        const bs = K * 13 + (kind === "fill" ? 501 : 1);
+        const ox = (H(K + 0.37, id) - 0.5) * 1.3, oy = (H(K + 0.71, id) - 0.5) * 1.3;
+        return P.map(([x, y]) => {
+          const h = field(x, y, 7, 1.9, 62);
+          const b = field(x, y, bs, 1.05, 34);
+          return [x + h[0] + b[0] + ox, y + h[1] + b[1] + oy];
+        });
+      }
+
+      function drawInk(it) {
+        let P = densify(it.pts, it.closed, it.smooth, 3);
+        if (P.length < 2) return;
+        // hand overshoot / undershoot at the ends, re-rolled each trace
+        if (!it.closed) {
+          const L0 = Math.hypot(P[P.length - 1][0] - P[0][0], P[P.length - 1][1] - P[0][1]);
+          const ext = Math.min(3, L0 * 0.05);
+          const e0 = (H(K + 0.13, it.id) - 0.35) * ext, e1 = (H(K + 0.57, it.id) - 0.35) * ext;
+          const a = P[0], b = P[1], c = P[P.length - 1], d = P[P.length - 2];
+          const la = Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, lc = Math.hypot(c[0] - d[0], c[1] - d[1]) || 1;
+          P[0] = [a[0] + ((a[0] - b[0]) / la) * e0, a[1] + ((a[1] - b[1]) / la) * e0];
+          P[P.length - 1] = [c[0] + ((c[0] - d[0]) / lc) * e1, c[1] + ((c[1] - d[1]) / lc) * e1];
+        }
+        P = displace(P, it.id, "ink");
+        let L = 0;
+        const S = [0];
+        for (let i = 1; i < P.length; i++) { L += Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]); S.push(L); }
+        const ph = H(it.id, K + 0.5) * 6.283, ph2 = H(it.id, K + 0.9) * 6.283;
+        const ta = Math.min(16, L * 0.28), tb = Math.min(22, L * 0.32);
+        ctx.strokeStyle = it.color;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        for (let i = 1; i < P.length; i++) {
+          const s = S[i];
+          let taper = 1;
+          if (!it.closed && L > 10) taper = Math.pow(Math.min(1, (s + 1.5) / ta), 0.55) * Math.pow(Math.min(1, (L - s + 1.5) / tb), 0.45);
+          const press = 1 + 0.16 * Math.sin(s / 26 + ph) + 0.07 * Math.sin(s / 7.7 + ph2);
+          let wf;
+          if (it.nib === "chisel") {
+            // broad marker nib held at 45deg: width follows stroke direction, blunt ends
+            const a = Math.atan2(P[i][1] - P[i - 1][1], P[i][0] - P[i - 1][0]);
+            wf = (0.82 + 0.18 * taper) * (0.5 + 0.62 * Math.abs(Math.sin(a - 0.785)));
+          } else if (it.nib === "fine") {
+            wf = 0.3 + 0.7 * taper;
+          } else {
+            wf = 0.5 + 0.5 * taper;
+          }
+          ctx.lineWidth = Math.max(1.1, it.w * wf * press);
+          ctx.beginPath();
+          ctx.moveTo(P[i - 1][0], P[i - 1][1]);
+          ctx.lineTo(P[i][0], P[i][1]);
+          ctx.stroke();
+        }
+      }
+
+      function shade(hex, k) {
+        const n = parseInt(hex.slice(1), 16);
+        const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+        return `rgb(${Math.round(r * k)},${Math.round(g * k)},${Math.round(b * k)})`;
+      }
+      function drawFill(it) {
+        let P = densify(it.pts, true, it.smooth, 4);
+        const mx = (H(it.id % 97, 5.1) - 0.5) * it.mis * 2, my = (H(it.id % 97, 6.3) - 0.5) * it.mis * 2;
+        P = displace(P, it.id, "fill").map(([x, y]) => [x + mx, y + my]);
+        ctx.beginPath();
+        ctx.moveTo(P[0][0], P[0][1]);
+        for (let i = 1; i < P.length; i++) ctx.lineTo(P[i][0], P[i][1]);
+        ctx.closePath();
+        ctx.fillStyle = it.color;
+        ctx.fill();
+        if (!it.streak || it.color === "#ffffff") return;
+        // marker streaks: overlapping passes of the same pen, clipped to the fill
+        let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+        for (const [x, y] of P) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+        ctx.save();
+        ctx.clip();
+        ctx.strokeStyle = shade(it.color, 0.8);
+        ctx.lineCap = "round";
+        const dx = Math.cos(1.05), dy = Math.sin(1.05);
+        const span = (x1 - x0) + (y1 - y0);
+        let n = 0;
+        for (let o = -span; o < span; o += 15) {
+          const j = H(n++, it.pts.length);
+          if (j < 0.38) continue;
+          const cx = (x0 + x1) / 2 + o + j * 5, cy = (y0 + y1) / 2;
+          ctx.globalAlpha = 0.07 + 0.11 * j;
+          ctx.lineWidth = 6 + j * 7;
+          ctx.beginPath();
+          ctx.moveTo(cx - dx * span, cy - dy * span);
+          ctx.lineTo(cx + dx * span, cy + dy * span);
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.globalAlpha = 1;
+      }
+
+      /* =====================================================================
+         Hand-lettering: single-stroke caps on a 0..1 cap box (y down).
+         ===================================================================== */
+      const G = {};
+      const g = (ch, w, ...strokes) => (G[ch] = { w, s: strokes });
+      g("A", 0.66, [[0, 1], [0.33, 0], [0.66, 1]], [[0.13, 0.64], [0.54, 0.64]]);
+      g("B", 0.58, cat([[0, 1], [0, 0], [0.3, 0]], arc(0.3, 0.24, 0.22, 0.24, -90, 90), [[0.3, 0.48], [0.04, 0.48], [0.34, 0.48]], arc(0.34, 0.74, 0.24, 0.26, -90, 90), [[0.34, 1], [0, 1]]));
+      g("C", 0.62, arc(0.36, 0.5, 0.34, 0.5, -38, -322));
+      g("D", 0.64, cat([[0, 1], [0, 0], [0.22, 0]], arc(0.22, 0.5, 0.4, 0.5, -90, 90), [[0.22, 1], [0, 1]]));
+      g("E", 0.52, [[0.52, 0], [0, 0], [0, 1], [0.52, 1]], [[0, 0.48], [0.42, 0.48]]);
+      g("F", 0.5, [[0.5, 0], [0, 0], [0, 1]], [[0, 0.48], [0.4, 0.48]]);
+      g("G", 0.68, arc(0.36, 0.5, 0.35, 0.5, -38, -342), [[0.7, 1], [0.7, 0.56], [0.42, 0.56]]);
+      g("H", 0.6, [[0, 0], [0, 1]], [[0.6, 0], [0.6, 1]], [[0, 0.5], [0.6, 0.5]]);
+      g("I", 0.3, [[0.15, 0], [0.15, 1]], [[0, 0], [0.3, 0]], [[0, 1], [0.3, 1]]);
+      g("J", 0.5, cat([[0.5, 0], [0.5, 0.7]], arc(0.26, 0.7, 0.24, 0.3, 0, 170)));
+      g("K", 0.58, [[0, 0], [0, 1]], [[0.56, 0], [0, 0.6]], [[0.2, 0.42], [0.6, 1]]);
+      g("L", 0.5, [[0, 0], [0, 1], [0.5, 1]]);
+      g("M", 0.76, [[0, 1], [0.05, 0], [0.38, 0.64], [0.71, 0], [0.76, 1]]);
+      g("N", 0.6, [[0, 1], [0, 0], [0.6, 1], [0.6, 0]]);
+      g("O", 0.74, arc(0.37, 0.5, 0.37, 0.5, -100, 262));
+      g("P", 0.56, cat([[0, 1], [0, 0], [0.3, 0]], arc(0.3, 0.26, 0.25, 0.26, -90, 90), [[0.3, 0.52], [0, 0.52]]));
+      g("Q", 0.74, arc(0.37, 0.5, 0.37, 0.5, -100, 262), [[0.44, 0.72], [0.8, 1.06]]);
+      g("R", 0.58, cat([[0, 1], [0, 0], [0.3, 0]], arc(0.3, 0.26, 0.25, 0.26, -90, 90), [[0.3, 0.52], [0, 0.52]]), [[0.26, 0.52], [0.6, 1]]);
+      g("S", 0.56, cat(arc(0.29, 0.25, 0.26, 0.25, -25, -270), arc(0.29, 0.75, 0.28, 0.25, -90, 155)));
+      g("T", 0.6, [[0, 0], [0.6, 0]], [[0.3, 0], [0.3, 1]]);
+      g("U", 0.6, cat([[0, 0], [0, 0.66]], arc(0.3, 0.66, 0.3, 0.34, 180, 0), [[0.6, 0.66], [0.6, 0]]));
+      g("V", 0.64, [[0, 0], [0.32, 1], [0.64, 0]]);
+      g("W", 0.86, [[0, 0], [0.2, 1], [0.43, 0.32], [0.66, 1], [0.86, 0]]);
+      g("X", 0.6, [[0, 0], [0.6, 1]], [[0.6, 0], [0, 1]]);
+      g("Y", 0.6, [[0, 0], [0.3, 0.5], [0.6, 0]], [[0.3, 0.5], [0.3, 1]]);
+      g("Z", 0.58, [[0, 0], [0.58, 0], [0, 1], [0.6, 1]]);
+      g("0", 0.58, arc(0.29, 0.5, 0.29, 0.5, -100, 262));
+      g("1", 0.4, [[0.02, 0.2], [0.22, 0], [0.22, 1]], [[0.02, 1], [0.42, 1]]);
+      g("2", 0.56, cat(arc(0.28, 0.28, 0.27, 0.28, -165, 25), [[0.04, 1], [0.58, 1]]));
+      g("3", 0.54, cat(arc(0.26, 0.25, 0.25, 0.24, -160, 90), arc(0.26, 0.74, 0.29, 0.26, -90, 160)));
+      g("4", 0.6, [[0.44, 1], [0.44, 0], [0, 0.68], [0.6, 0.68]]);
+      g("5", 0.56, cat([[0.52, 0], [0.08, 0], [0.04, 0.44]], arc(0.27, 0.68, 0.29, 0.32, -128, 150)));
+      g("6", 0.58, cat([[0.48, 0.02], [0.2, 0.2], [0.04, 0.55]], arc(0.3, 0.69, 0.27, 0.3, -170, 190)));
+      g("7", 0.56, [[0, 0], [0.56, 0], [0.18, 1]]);
+      g("8", 0.58, arc(0.29, 0.25, 0.23, 0.25, 90, 450), arc(0.29, 0.74, 0.28, 0.26, -90, 270));
+      g("9", 0.58, cat(arc(0.29, 0.3, 0.27, 0.3, 10, 370), [[0.56, 0.32], [0.52, 0.7], [0.36, 1]]));
+      g(".", 0.1, arc(0.05, 0.95, 0.035, 0.035, 0, 360, 30));
+      g(",", 0.1, [[0.07, 0.9], [0.02, 1.12]]);
+      g(":", 0.1, arc(0.05, 0.38, 0.035, 0.035, 0, 360, 30), arc(0.05, 0.95, 0.035, 0.035, 0, 360, 30));
+      g("'", 0.08, [[0.06, 0], [0.02, 0.26]]);
+      g("-", 0.36, [[0, 0.52], [0.36, 0.52]]);
+      g("—", 0.62, [[0, 0.52], [0.62, 0.52]]);
+      g("#", 0.62, [[0.24, 0.08], [0.16, 0.94]], [[0.48, 0.08], [0.4, 0.94]], [[0.02, 0.34], [0.62, 0.34]], [[0, 0.68], [0.6, 0.68]]);
+      g("(", 0.26, arc(0.42, 0.5, 0.36, 0.62, 236, 124));
+      g(")", 0.26, arc(-0.16, 0.5, 0.36, 0.62, -56, 56));
+      g(" ", 0.42);
+      g("@", 0.86, arc(0.42, 0.56, 0.15, 0.19, -180, 180), cat([[0.57, 0.38], [0.57, 0.7]], arc(0.68, 0.7, 0.11, 0.08, 180, 30), arc(0.43, 0.54, 0.4, 0.48, 10, -290)));
+      g("→", 0.68, [[0, 0.56], [0.66, 0.56]], [[0.44, 0.36], [0.67, 0.56], [0.44, 0.76]]);
+      // lowercase for the wordmark: x-height from y = 0.4 to 1
+      g("s", 0.46, cat(arc(0.23, 0.55, 0.2, 0.15, -25, -270), arc(0.23, 0.85, 0.23, 0.15, -90, 160)));
+      g("o", 0.6, arc(0.3, 0.7, 0.3, 0.3, -100, 262));
+      g("r", 0.4, [[0, 0.4], [0, 1]], [[0, 0.68], [0.08, 0.52], [0.2, 0.43], [0.4, 0.42]]);
+      g("e", 0.58, cat([[0.03, 0.7], [0.58, 0.7]], arc(0.3, 0.7, 0.28, 0.3, 0, -308)));
+      g("l", 0.22, cat([[0.05, 0], [0.05, 0.86]], arc(0.17, 0.86, 0.12, 0.14, 180, 90)));
+
+      function textWidth(str, cap, track = 0.3) {
+        let w = 0;
+        for (const ch of str) w += ((G[ch] || G[" "]).w + track) * cap;
+        return w - track * cap;
+      }
+      // Three hand variants per letter (fixed seeds). Variant 0 is the base form; 1 and 2 shift the
+      // waist (crossbars, bowls), skew, width and add a slow wobble, like the same hand writing it again.
+      function variantPt(ch, v, px, py, gw) {
+        if (v === 0) return [px, py];
+        const s = ch.charCodeAt(0) * 7.3 + v * 13.1;
+        const skew = (H(s, 1) - 0.5) * 0.16;
+        const waist = (H(s, 2) - 0.5) * 0.14;
+        const xs = 1 + (H(s, 3) - 0.5) * 0.14;
+        const ny = py + waist * Math.sin(Math.PI * Math.min(1, Math.max(0, py)));
+        const nx = gw / 2 + (px - gw / 2) * xs + skew * (0.5 - ny);
+        return [nx + 0.03 * Math.sin(ny * 5.3 + H(s, 4) * 6.28), ny + 0.025 * Math.sin(px * 6.1 + H(s, 5) * 6.28)];
+      }
+      // Two pens: "marker" (broad chisel, titles and labels) and "fine" (fineliner, body copy).
+      // y is the baseline. Every glyph gets a fixed tilt, baseline drift and size drift.
+      function text(str, x, y, cap, color, o = {}) {
+        const track = o.track === undefined ? 0.3 : o.track;
+        const pen = o.pen || (cap >= 34 ? "marker" : "fine");
+        const w = o.w || cap * (pen === "marker" ? 0.13 : 0.085);
+        const nib = pen === "marker" ? "chisel" : "fine";
+        const tw = textWidth(str, cap, track);
+        let cx = o.align === "center" ? x - tw / 2 : o.align === "right" ? x - tw : x;
+        let i = 0;
+        const occ = {};
+        for (const ch of str) {
+          const gl = G[ch] || G[" "];
+          const seed = ch.charCodeAt(0) * 3.1 + i * 7.7 + (o.seed || 0);
+          occ[ch] = (occ[ch] || 0) + 1;
+          const v = (occ[ch] - 1 + Math.floor(H(ch.charCodeAt(0), (o.seed || 0) + 0.5) * 3)) % 3;
+          const rot = (H(seed, 1.7) - 0.5) * (o.tilt === undefined ? 7 : o.tilt);
+          const dy = (H(seed, 2.9) - 0.5) * cap * 0.08;
+          const sc = 1 + (H(seed, 3.3) - 0.5) * 0.11;
+          const dx = (H(seed, 4.1) - 0.5) * cap * 0.05;
+          push(cx + (gl.w * cap) / 2 + dx, y - cap / 2 + dy, sc, rot);
+          for (const st of gl.s) {
+            const pts = st.map(([px, py]) => variantPt(ch, v, px, py, gl.w));
+            ink(pts.map(([px, py]) => [(px - gl.w / 2) * cap, (py - 0.5) * cap]), { w, color, nib });
+          }
+          pop();
+          cx += (gl.w + track) * cap;
+          i++;
+        }
+        return tw;
+      }
+
+      /* =====================================================================
+         Drawings
+         ===================================================================== */
+      // sorrel leaf: spear tip, two backward lobes. size = tip-to-notch length
+      function leaf(x, y, size, rot, color = C.green, o = {}) {
+        push(x, y, size / 100, rot);
+        const P = [[0, -100], [19, -80], [33, -50], [38, -18], [33, 6], [42, 22], [26, 22], [0, 16], [-26, 22], [-42, 22], [-33, 6], [-38, -18], [-33, -50], [-19, -80]];
+        const lw = o.w || 4.4;
+        if (o.stem !== false) ink([[0, 14], [2, 40], [7, 62]], { w: lw, smooth: true });
+        shape(P, color, { smooth: true, w: lw });
+        ink([[0, 12], [1, -40], [0, -86]], { w: lw * 0.7, smooth: true });
+        if (o.veins === undefined ? size >= 80 : o.veins) {
+          ink([[1, -10], [14, -22], [25, -36]], { w: lw * 0.5, smooth: true });
+          ink([[1, -10], [-13, -22], [-24, -36]], { w: lw * 0.5, smooth: true });
+          ink([[1, -46], [11, -56], [19, -68]], { w: lw * 0.5, smooth: true });
+          ink([[1, -46], [-10, -56], [-18, -68]], { w: lw * 0.5, smooth: true });
+        }
+        pop();
+      }
+
+      function envelope(x, y, w, rot, fillColor = C.paper) {
+        const h = w * 0.62;
+        push(x, y, 1, rot);
+        shape(rrect(-w / 2, -h / 2, w / 2, h / 2, 3), fillColor, { w: 3.4, streak: false, mis: 0.6 });
+        ink([[-w / 2 + 3, -h / 2 + 3], [0, h * 0.1], [w / 2 - 3, -h / 2 + 3]], { w: 3 });
+        pop();
+      }
+
+      // the desk set, local origin = floor under the desk centre
+      C.skin = "#f6b98e";
+      C.hair = "#3a2748";
+      C.pants = "#2c3150";
+      C.hood2 = "#6343e0";
+      C.mouth = "#8a2b3c";
+      C.blush = "#ff8fa6";
+      C.sweat = "#8fd3ff";
+
+      // closed outline of a sleeve / leg around a centreline, half-width a -> b
+      function tube(C0, a, b) {
+        const P = densify(C0, false, true, 6);
+        const L = [], Rr = [];
+        for (let i = 0; i < P.length; i++) {
+          const p = P[i], q = P[Math.min(P.length - 1, i + 1)], r = P[Math.max(0, i - 1)];
+          let dx = q[0] - r[0], dy = q[1] - r[1];
+          const d = Math.hypot(dx, dy) || 1;
+          dx /= d; dy /= d;
+          const w = a + (b - a) * (i / (P.length - 1));
+          L.push([p[0] - dy * w, p[1] + dx * w]);
+          Rr.push([p[0] + dy * w, p[1] - dx * w]);
+        }
+        return L.concat(Rr.reverse());
+      }
+      const unit = (a, b) => { const d = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [(b[0] - a[0]) / d, (b[1] - a[1]) / d]; };
+
+      // hand seen from above, resting on the desk; fingers point toward the laptop (dir = -1 left, +1 right)
+      function handRest(x, y, dir, lift) {
+        push(x, y - lift, 1, 0);
+        for (let f = 0; f < 4; f++) shape(ell(dir * 15, -7 + f * 5.2, 6.4, 3.6), C.skin, { w: 2.6, streak: false, mis: 0.6 });
+        shape(ell(-dir * 2, 0, 15, 12.5), C.skin, { w: 3.6, streak: false, mis: 0.8 });
+        shape(ell(dir * 6, -12, 7, 4.2), C.skin, { w: 2.6, streak: false, mis: 0.5 });
+        ink([[dir * 4, -3], [dir * 9, -2]], { w: 2 });
+        pop();
+      }
+      // open hand, palm out, fingers continue the forearm direction
+      function handOpen(x, y, angDeg, side) {
+        push(x, y, 1, angDeg);
+        const fing = [[-9, -22, 16], [-3, -6, 21], [3, 7, 20], [9, 20, 15]];
+        for (const [fx, fa, fl] of fing) {
+          push(fx, -9, 1, fa);
+          shape(rrect(-4.4, -fl, 4.4, 3, 4.4), C.skin, { w: 2.6, streak: false, mis: 0.5 });
+          pop();
+        }
+        push(side * -12, 2, 1, side * -58);
+        shape(rrect(-4.6, -15, 4.6, 3, 4.6), C.skin, { w: 2.6, streak: false, mis: 0.5 });
+        pop();
+        shape(rrect(-13, -12, 13, 12, 9), C.skin, { w: 3.4, streak: false, mis: 0.6 });
+        ink([[-6, 3], [0, 6], [6, 3]], { w: 1.8 });
+        pop();
+      }
+
+      function face(mood) {
+        // ears, head, hair, features; head-local, centre (0,0)
+        shape(ell(-43, 6, 8, 11), C.skin, { w: 3.4, streak: false, mis: 0.5 });
+        shape(ell(43, 6, 8, 11), C.skin, { w: 3.4, streak: false, mis: 0.5 });
+        shape(ell(0, 0, 42, 47), C.skin, { w: 4.6, streak: false, mis: 1.2 });
+        shape([[-46, 0], [-47, -28], [-36, -50], [-12, -60], [16, -58], [38, -46], [48, -22], [46, 2], [40, -12], [30, -24], [12, -30], [-6, -24], [-26, -14], [-38, -2]], C.hair, { smooth: true, w: 4.4, mis: 1.4 });
+        ink([[-24, -46], [-8, -36]], { w: 2.2, color: "#6b5486" });
+        ink([[8, -50], [24, -38]], { w: 2.2, color: "#6b5486" });
+        ink([[3, 4], [-2, 16], [4, 18]], { w: 2.6 });
+        if (mood === "anxious") {
+          ink([[-27, -12], [-9, -5]], { w: 3.6 });
+          ink([[9, -5], [27, -12]], { w: 3.6 });
+          ink([[-1, -14], [0, -6]], { w: 2 });
+          fill(ell(-16, 6, 4, 5.4), INK, { streak: false, mis: 0 });
+          fill(ell(16, 6, 4, 5.4), INK, { streak: false, mis: 0 });
+          ink([[-23, 13], [-16, 15], [-9, 13]], { w: 1.8 });
+          ink([[9, 13], [16, 15], [23, 13]], { w: 1.8 });
+          ink([[-13, 33], [-5, 27], [5, 27], [13, 33]], { w: 3.2, smooth: true });
+          shape([[46, -30], [40, -16], [44, -10], [51, -14], [50, -22]], C.sweat, { smooth: true, w: 2.6, streak: false, mis: 0.5 });
+        } else if (mood === "calm") {
+          ink([[-26, -13], [-17, -16], [-8, -13]], { w: 3.2, smooth: true });
+          ink([[8, -13], [17, -16], [26, -13]], { w: 3.2, smooth: true });
+          fill(ell(-16, 6, 4, 5.4), INK, { streak: false, mis: 0 });
+          fill(ell(16, 6, 4, 5.4), INK, { streak: false, mis: 0 });
+          ink([[-10, 28], [0, 32], [10, 28]], { w: 3, smooth: true });
+          fill(ell(-27, 20, 7, 3.6), C.blush, { streak: false, mis: 0 });
+          fill(ell(27, 20, 7, 3.6), C.blush, { streak: false, mis: 0 });
+        } else {
+          ink([[-28, -16], [-18, -22], [-7, -19]], { w: 3.2, smooth: true });
+          ink([[7, -19], [18, -22], [28, -16]], { w: 3.2, smooth: true });
+          ink(arc(-16, 9, 7.5, 6.5, 195, 345, 15), { w: 3.4 });
+          ink(arc(16, 9, 7.5, 6.5, 195, 345, 15), { w: 3.4 });
+          shape([[-18, 22], [18, 22], [13, 35], [0, 40], [-13, 35]], C.mouth, { smooth: true, w: 3.2, streak: false, mis: 0 });
+          fill([[-7, 34], [7, 34], [4, 38], [-4, 38]], "#ff8597", { smooth: true, streak: false, mis: 0 });
+          fill(ell(-28, 20, 8, 4), C.blush, { streak: false, mis: 0 });
+          fill(ell(28, 20, 8, 4), C.blush, { streak: false, mis: 0 });
+        }
+      }
+
+      // per pose: lean (tilt deg around the hip, shoulder lift, head drop, head tilt), arms (elbow, wrist), hand kind, mood
+      const POSES = {
+        type:   { tilt: 0, sh: -6, hd: 16, ht: 0, arms: [[-104, -386, -114, -338], [104, -386, 114, -338]], hand: "rest" },
+        up1:    { tilt: 0, sh: -4, hd: 0, ht: 0, arms: [[-108, -432, -132, -486], [108, -432, 132, -486]], hand: "open" },
+        up2:    { tilt: 0, sh: -8, hd: -6, ht: 0, arms: [[-106, -484, -124, -556], [106, -484, 124, -556]], hand: "open" },
+        up3:    { tilt: 0, sh: -10, hd: -5, ht: 0, arms: [[-94, -526, -104, -610], [94, -526, 104, -610]], hand: "open" },
+        cheerA: { tilt: -4, sh: -10, hd: -6, ht: -7, arms: [[-96, -530, -110, -616], [104, -512, 134, -588]], hand: "open" },
+        cheerB: { tilt: 4, sh: -10, hd: -6, ht: 7, arms: [[-104, -512, -134, -588], [96, -530, 110, -616]], hand: "open" },
+      };
+      function person(poseName, mood) {
+        const P = POSES[poseName];
+        const HIP = [0, -214];
+        const lean = ([x, y], dyAmt) => {
+          const f = Math.max(0, Math.min(1, (-y - 300) / 160));
+          const r = (P.tilt * f * Math.PI) / 180;
+          const rx = x - HIP[0], ry = y - HIP[1];
+          return [HIP[0] + rx * Math.cos(r) - ry * Math.sin(r), HIP[1] + rx * Math.sin(r) + ry * Math.cos(r) + dyAmt * f];
+        };
+        // legs, shoes
+        shape(tube([[-24, -200], [-26, -110], [-28, -30]], 15, 12), C.pants, { w: 4.2, mis: 1.2 });
+        shape(tube([[24, -200], [26, -110], [28, -30]], 15, 12), C.pants, { w: 4.2, mis: 1.2 });
+        ink([[-20, -150], [-30, -146]], { w: 2.2 });
+        ink([[22, -96], [32, -92]], { w: 2.2 });
+        for (const sx of [-1, 1]) {
+          shape([[sx * 8, -16], [sx * 12, -34], [sx * 30, -38], [sx * 50, -26], [sx * 54, -10], [sx * 30, -4], [sx * 10, -6]], "#ffffff", { smooth: true, w: 3.8, streak: false, mis: 0 });
+          ink([[sx * 10, -9], [sx * 52, -12]], { w: 2.4 });
+          ink([[sx * 24, -32], [sx * 30, -26]], { w: 2 });
+          ink([[sx * 32, -34], [sx * 38, -28]], { w: 2 });
+        }
+        shape(rrect(-50, -212, 50, -186, 12), C.pants, { w: 4, mis: 1 });
+        // hoodie body
+        const torso = [[-46, -214], [-50, -320], [-56, -398], [-70, -434], [-58, -456], [-26, -468], [0, -470], [26, -468], [58, -456], [70, -434], [56, -398], [50, -320], [46, -214]].map((p) => lean(p, P.sh));
+        shape(torso, C.violet, { smooth: true, w: 4.6 });
+        shape(rrect(-50, -236, 50, -212, 9), C.hood2, { w: 3.8, mis: 1 });
+        ink([[-30, -232], [-28, -216]], { w: 1.8 });
+        ink([[30, -232], [28, -216]], { w: 1.8 });
+        // hood resting on the shoulders, neck, drawstrings, folds
+        shape([[-46, -452], [-38, -480], [-14, -490], [14, -490], [38, -480], [46, -452], [22, -462], [0, -466], [-22, -462]].map((p) => lean(p, P.sh)), C.hood2, { smooth: true, w: 4 });
+        const N = lean([0, -470], P.sh);
+        const HC0 = lean([0, -540], P.sh);
+        const neckTop = HC0[1] + P.hd + 30;
+        shape(rrect(N[0] - 11, Math.min(neckTop, N[1] - 8), N[0] + 11, N[1] + 4, 5), C.skin, { w: 3.4, streak: false, mis: 0.5 });
+        ink([[-24, -462], [0, -450], [24, -462]].map((p) => lean(p, P.sh)), { w: 3.6, smooth: true });
+        ink([[-9, -454], [-12, -426]].map((p) => lean(p, P.sh)), { w: 2.6 });
+        ink([[9, -454], [13, -428]].map((p) => lean(p, P.sh)), { w: 2.6 });
+        ink([[-12, -428], [-12, -420]].map((p) => lean(p, P.sh)), { w: 5 });
+        ink([[13, -430], [13, -422]].map((p) => lean(p, P.sh)), { w: 5 });
+        ink([[-58, -444], [-46, -434], [-42, -424]].map((p) => lean(p, P.sh)), { w: 2.4, smooth: true });
+        ink([[58, -444], [46, -434], [42, -424]].map((p) => lean(p, P.sh)), { w: 2.4, smooth: true });
+        // head
+        const HC = lean([0, -540], P.sh);
+        push(HC[0], HC[1] + P.hd, P.hd > 0 ? 1.03 : 1, P.ht + P.tilt);
+        face(mood);
+        pop();
+        // sleeves with cuffs and elbow folds, hands
+        for (const [i, a] of P.arms.entries()) {
+          const side = i === 0 ? -1 : 1;
+          const S = lean([side * 60, -442], P.sh);
+          const E = [a[0], a[1]], W = [a[2], a[3]];
+          const d = unit(E, W);
+          const Wc = [W[0] - d[0] * 15, W[1] - d[1] * 15];
+          shape(tube([S, E, Wc], 17, 13), C.violet, { w: 4.2 });
+          shape(tube([Wc, [W[0] + d[0] * 1, W[1] + d[1] * 1]], 14, 14), C.hood2, { w: 3.4, mis: 0.8 });
+          const de = unit(S, E);
+          const n = [-de[1] * side, de[0] * side];
+          ink([[E[0] + n[0] * 3 - de[0] * 10, E[1] + n[1] * 3 - de[1] * 10], [E[0] - n[0] * 4, E[1] - n[1] * 4], [E[0] + n[0] * 2 + d[0] * 9, E[1] + n[1] * 2 + d[1] * 9]], { w: 2.2, smooth: true });
+          ink([[S[0] + (E[0] - S[0]) * 0.45 - n[0] * 6, S[1] + (E[1] - S[1]) * 0.45 - n[1] * 6], [S[0] + (E[0] - S[0]) * 0.55 - n[0] * 9, S[1] + (E[1] - S[1]) * 0.55 - n[1] * 9]], { w: 2 });
+          const Hh = [W[0] + d[0] * 12, W[1] + d[1] * 12];
+          if (P.hand === "rest") {
+            const lift = poseName === "type" && (K + i) % 2 === 0 ? 7 : 0;
+            handRest(W[0] + side * 6, W[1] + 16, -side, lift);
+          } else {
+            handOpen(Hh[0], Hh[1], (Math.atan2(d[1], d[0]) * 180) / Math.PI + 90, side);
+          }
+        }
+        return HC[1] + P.hd;
+      }
+
+      function deskSet(o) {
+        const { pose = "type", mood = "calm", pile = 0, swirl = false, mug = false, plant = true } = o;
+        // stool
+        ink([[-34, -192], [-50, -2]], { w: 4 });
+        ink([[34, -192], [50, -2]], { w: 4 });
+        ink([[-44, -78], [44, -78]], { w: 3.4 });
+        shape(ell(0, -196, 54, 13), C.wood, { w: 4 });
+        const headY = person(pose, mood);
+        if (swirl) {
+          // stress swirl, spins one notch per trace
+          const P = [];
+          const turns = 3.6, n = 150, ph = K * 0.85;
+          for (let i = 0; i <= n; i++) {
+            const a = (i / n) * turns * 6.283 + ph;
+            const r = 70 * (1 - 0.7 * (i / n));
+            P.push([r * Math.cos(a), headY - 162 + 0.3 * r * Math.sin(a) + 70 * (i / n)]);
+          }
+          ink(P, { w: 3.6 });
+          ink([[-64, headY - 34], [-78, headY - 44]], { w: 3 });
+          ink([[-66, headY - 14], [-82, headY - 16]], { w: 3 });
+          ink([[64, headY - 34], [78, headY - 44]], { w: 3 });
+          ink([[66, headY - 14], [82, headY - 16]], { w: 3 });
+        }
+        // desk
+        ink([[-238, -278], [-241, -4]], { w: 4.4 });
+        ink([[-222, -278], [-223, -12]], { w: 3.6 });
+        ink([[238, -278], [241, -4]], { w: 4.4 });
+        ink([[222, -278], [223, -12]], { w: 3.6 });
+        ink([[-196, -278], [-197, -52]], { w: 3.4 });
+        ink([[196, -278], [197, -52]], { w: 3.4 });
+        shape([[-254, -306], [254, -306], [256, -278], [-256, -278]], C.wood, { w: 4.6 });
+        ink([[-246, -298], [246, -298]], { w: 2.2 });
+        // laptop, lid back toward us
+        shape(rrect(-90, -424, 90, -312, 9), C.lid, { w: 4.4, mis: 1.2 });
+        shape([[-112, -314], [112, -314], [116, -306], [-116, -306]], C.base, { w: 3.8, mis: 1 });
+        leaf(0, -364, 32, 12, C.green, { w: 3, stem: false });
+        if (plant) {
+          for (const [lx, ly, s, r] of [[-212, -362, 52, -24], [-192, -372, 62, 6], [-176, -352, 44, 34]]) leaf(lx, ly, s, r, C.green, { w: 3.6 });
+          shape([[-234, -354], [-170, -354], [-178, -306], [-226, -306]], C.pot, { w: 4.2 });
+          ink([[-236, -342], [-168, -342]], { w: 3.4 });
+        }
+        if (mug) {
+          ink(arc(220, -336, 14, 13, -80, 80), { w: 4 });
+          shape(rrect(176, -364, 220, -306, 6), C.mug, { w: 4.2 });
+          ink([[190, -378], [184, -394], [194, -410], [188, -428]], { w: 3, smooth: true });
+          ink([[206, -380], [212, -398], [204, -414], [210, -430]], { w: 3, smooth: true });
+        }
+        for (let i = 0; i < pile; i++) {
+          envelope(184 + (H(i, 4.4) - 0.5) * 16, -318 - i * 13, 82, (H(i, 8.8) - 0.5) * 12);
+        }
+      }
+
+      // small corner brand, same as the end mark
+      function cornerBrand() {
+        leaf(84, 80, 32, 8, C.green, { w: 3, stem: false });
+        text("SORREL", 112, 86, 26, C.dark, { w: 3.6, track: 0.34, tilt: 3 });
+      }
+
+      /* =====================================================================
+         Scenes, all keyed to the boil index K
+         ===================================================================== */
+      const KS = { split: 20, draft: 44, zero: 59, mark: 66 };
+
+      function sceneChaos(k) {
+        cornerBrand();
+        push(960, 1006, 1);
+        deskSet({ pose: "type", mood: "anxious", pile: Math.min(12, k + 1), swirl: k >= 10 });
+        pop();
+        // unread counter badge, hard-cut increments
+        if (k >= 1) {
+          const n = k >= 13 ? "212" : k >= 10 ? "166" : k >= 7 ? "131" : k >= 4 ? "97" : "48";
+          const label = n + " UNREAD";
+          const tw = textWidth(label, 34, 0.3);
+          const bw = tw + 124;
+          push(960, 196, 1, -1.5);
+          shape(rrect(-bw / 2, -40, bw / 2, 40, 16), C.red, { w: 4.2, mis: 1.4 });
+          push(-bw / 2 + 52, 0, 1);
+          ink(rrect(-22, -15, 22, 15, 3), { w: 3.4, color: "#fff", closed: true });
+          ink([[-19, -11], [0, 3], [19, -11]], { w: 3, color: "#fff" });
+          pop();
+          text(label, -bw / 2 + 92, 17, 34, "#fff", { w: 4, seed: 3 });
+          pop();
+        }
+        const label = (str, x, y, cap, color, rot, o) => { push(x, y, 1, rot); text(str, 0, 0, cap, color, o); pop(); };
+        if (k >= 4) label("Q3 PRICING REVIEW", 720, 432, 40, C.red, -3, { align: "right", seed: 11 });
+        if (k >= 7) {
+          label("INVOICE #4471", 1226, 478, 40, C.red, 2.5, { seed: 21 });
+          label("(OVERDUE)", 1272, 538, 32, C.orange, 4, { seed: 27 });
+        }
+        if (k >= 10) label("RE: RE: OFFSITE DATES", 680, 772, 38, C.red, 2, { align: "right", seed: 31 });
+        if (k >= 13) label("SOC 2 EVIDENCE DUE FRI", 1240, 842, 34, C.red, -2.5, { seed: 41 });
+      }
+
+      const TRAYS = [
+        { name: "VIP", color: C.vip, x: 1096, final: 4 },
+        { name: "TEAM", color: C.team, x: 1288, final: 17 },
+        { name: "BILLING", color: C.bill, x: 1480, final: 9 },
+        { name: "NEWS", color: C.news, x: 1672, final: 182 },
+      ];
+      const ORDER = [3, 1, 3, 0, 2, 3, 1, 3, 2, 1, 3, 0];
+      const PER = [0, 0, 0, 0];
+      ORDER.forEach((t) => PER[t]++);
+      const DESK2 = { x: 520, y: 1006, s: 0.92 };
+      function pileTop(i) {
+        // screen position of pile envelope i inside desk set 2
+        return [DESK2.x + DESK2.s * (184 + (H(i, 4.4) - 0.5) * 16), DESK2.y + DESK2.s * (-318 - i * 13)];
+      }
+
+      function sceneSplit(k) {
+        cornerBrand();
+        const j = k - KS.split; // 0..
+        const t0 = 1;           // first launch
+        const launched = Math.max(0, Math.min(12, j - t0 + 1));
+        const landed = [0, 0, 0, 0];
+        const flying = [];
+        ORDER.forEach((tr, n) => {
+          const kl = t0 + n;            // launch index
+          const step = j - kl;          // 0,1,2 in the air, 3 = landed
+          if (step >= 3) landed[tr]++;
+          else if (step >= 0) flying.push({ n, tr, step });
+        });
+        const done = j >= t0 + 12 + 2;
+        let pose = "type";
+        if (j >= 16) pose = ["up1", "up2", "up3", "cheerA", "cheerB", "cheerA", "cheerB", "cheerA"][Math.min(7, j - 16)];
+        push(DESK2.x, DESK2.y, DESK2.s);
+        deskSet({ pose, mood: j >= 16 ? "happy" : "calm", pile: 12 - launched, plant: true });
+        pop();
+
+        // sort rack
+        ink([[1000, 822], [998, 1004]], { w: 4.4 });
+        ink([[1016, 822], [1015, 996]], { w: 3.6 });
+        ink([[1772, 822], [1774, 1004]], { w: 4.4 });
+        ink([[1756, 822], [1755, 996]], { w: 3.6 });
+        for (const [i, T] of TRAYS.entries()) {
+          const x = T.x;
+          ink([[x - 70, 712], [x + 70, 712]], { w: 3.6 });
+          ink([[x - 70, 712], [x - 82, 738]], { w: 3.6 });
+          ink([[x + 70, 712], [x + 82, 738]], { w: 3.6 });
+          const inTray = Math.min(5, landed[i] + (landed[i] ? 1 : 0));
+          for (let e = 0; e < inTray; e++) {
+            push(x - 40 + e * 19, 722 - (e % 2) * 7, 1, -8 + e * 4);
+            shape(rrect(-30, -22, 30, 26, 3), C.paper, { w: 3, streak: false, mis: 0.5 });
+            ink([[-27, -19], [0, -2], [27, -19]], { w: 2.6 });
+            pop();
+          }
+          shape([[x - 86, 736], [x + 86, 736], [x + 81, 800], [x - 81, 800]], T.color, { w: 4.6 });
+          const cnt = landed[i] === 0 ? "0" : String(Math.round((T.final * landed[i]) / PER[i]));
+          text(cnt, x, 786, 36, "#fff", { align: "center", w: 4.8, seed: 50 + i });
+          text(T.name, x, 878, 32, T.color, { align: "center", seed: 60 + i, pen: "marker" });
+        }
+        shape([[984, 800], [1788, 800], [1790, 826], [982, 826]], C.wood, { w: 4.6 });
+
+        // flights: three positions per envelope on an arc, no in-betweens
+        for (const f of flying) {
+          const [sx, sy] = pileTop(11 - f.n);
+          const ex = TRAYS[f.tr].x, ey = 712;
+          const u = (f.step + 1) / 3.6;
+          const px = sx + (ex - sx) * u;
+          const py = sy + (ey - sy) * u - 70 * 4 * u * (1 - u);
+          envelope(px, py, 72, -20 + f.step * 38 + (f.n % 3) * 10);
+          // speed ticks behind the envelope, drawn per pose
+          ink([[px - 58, py + 6], [px - 86, py + 14]], { w: 3 });
+          ink([[px - 54, py + 22], [px - 76, py + 30]], { w: 3 });
+        }
+
+        // sorting rules, each written in when its first email lands
+        const firstLand = [0, 0, 0, 0].map((_, tr) => t0 + ORDER.indexOf(tr) + 3);
+        const RULES = [
+          [3, "HAS UNSUBSCRIBE LINK", "NEWS"],
+          [1, "@SORREL.APP", "TEAM"],
+          [0, "FROM @ACME.COM", "VIP"],
+          [2, "'INVOICE' IN SUBJECT", "BILLING"],
+        ];
+        let anyRule = false, nRules = 0;
+        RULES.forEach(([tr, rule, cat], r) => {
+          if (j < firstLand[tr]) return;
+          anyRule = true;
+          nRules = r + 1;
+          const y = 424 + r * 46;
+          const w1 = text(rule, 770, y, 25, INK, { seed: 300 + r * 11 });
+          text("→", 770 + w1 + 16, y, 25, INK, { seed: 301 + r * 11 });
+          text(cat, 770 + w1 + 16 + 17 + 18, y, 25, TRAYS[tr].color, { seed: 302 + r * 11, pen: "marker", w: 3.6 });
+        });
+        if (anyRule) {
+          const yb = 434 + (nRules - 1) * 46;
+          ink([[754, 394], [749, (394 + yb) / 2], [753, yb]], { w: 2.6, smooth: true });
+          ink([[1318, 430], [1372, 456], [1404, 512], [1410, 590]], { w: 3.2, smooth: true });
+          ink([[1394, 572], [1410, 594], [1426, 572]], { w: 3.2 });
+        }
+        text("SPLIT INBOX", 960, 262, 76, C.green, { align: "center", seed: 70, w: 8.4, track: 0.24 });
+        if (done) text("212 EMAILS SORTED IN 0.8 SEC", 960, 340, 32, INK, { align: "center", seed: 80 });
+      }
+
+      const BODY = [
+        ["HI", "MAYA", "—"],
+        ["THURSDAY", "AT", "2PM", "WORKS", "FOR", "US."],
+        ["I'LL", "BRING", "THE", "Q3", "PRICING", "DECK."],
+        ["—", "SAM"],
+      ];
+      function sceneDraft(k) {
+        cornerBrand();
+        const j = k - KS.draft;
+        push(470, 1006, 0.8);
+        deskSet({ pose: "type", mood: "calm", plant: true, mug: true });
+        pop();
+
+        text("DRAFTS REPLIES IN YOUR VOICE", 960, 214, 60, C.green, { align: "center", seed: 90, w: 7, track: 0.24 });
+        if (j >= 7) text("READY IN 2 SEC", 960, 284, 30, INK, { align: "center", seed: 92 });
+
+        // the draft
+        push(1240, 650, 1, -1.4);
+        shape(rrect(-440, -268, 440, 268, 8), "#f1efe9", { w: 3.6, streak: false, mis: 0 });
+        pop();
+        push(1228, 640, 1, -0.6);
+        shape(rrect(-440, -268, 440, 268, 8), C.paper, { w: 4.4, streak: false, mis: 0 });
+        text("TO:", -392, -192, 24, C.sub, { seed: 101 });
+        text("MAYA CHEN", -322, -192, 24, INK, { seed: 103 });
+        text("RE: OFFSITE DATES", -392, -144, 24, INK, { seed: 105 });
+        shape(rrect(232, -224, 392, -176, 22), C.team, { w: 3.6, mis: 1 });
+        text("TEAM", 312, -187, 22, "#fff", { align: "center", seed: 107 });
+        ink([[-392, -110], [392, -110]], { w: 2.6 });
+        // words arrive two per trace
+        const flat = [];
+        BODY.forEach((line, li) => line.forEach((wd) => flat.push([li, wd])));
+        const shown = Math.max(0, Math.min(flat.length, (j - 1) * 3));
+        const xs = [-392, -392, -392, -392];
+        const ys = [-46, 18, 82, 156];
+        for (let n = 0; n < shown; n++) {
+          const [li, wd] = flat[n];
+          xs[li] += text(wd, xs[li], ys[li], 30, INK, { seed: 120 + n * 5 }) + 30 * 0.78;
+        }
+        if (j >= 7) {
+          const pressed = j >= 9, sent = j >= 10;
+          push(318, 196, 1);
+          shape(rrect(-82, -30, 82, 30, 14), pressed ? shade(C.green, 0.78) : C.green, { w: 4, mis: 1 });
+          if (sent) {
+            ink([[-58, 0], [-49, 9], [-35, -9]], { w: 4.4, color: "#fff" });
+            text("SENT", 16, 13, 26, "#fff", { align: "center", seed: 131 });
+          } else {
+            text("SEND", 0, 13, 26, "#fff", { align: "center", seed: 130 });
+          }
+          pop();
+          if (sent) {
+            // confirmation line, bottom-left of the draft
+            shape(ell(-378, 196, 13, 13), C.green, { w: 3, mis: 0.6 });
+            ink([[-385, 196], [-380, 202], [-371, 190]], { w: 3, color: "#fff" });
+            text("SENT TO MAYA CHEN", -352, 206, 24, C.green, { seed: 133 });
+            // the reply leaves: three poses, no in-betweens
+            const step = j - 10;
+            if (step <= 2) {
+              const pos = [[352, 96], [420, -110], [492, -318]][step];
+              envelope(pos[0], pos[1], 70, -18 - step * 14);
+              ink([[pos[0] - 44, pos[1] + 30], [pos[0] - 62, pos[1] + 52]], { w: 3 });
+              ink([[pos[0] - 28, pos[1] + 38], [pos[0] - 42, pos[1] + 58]], { w: 3 });
+            }
+          }
+          if (j >= 8) {
+            push(382, 212, 1, 0);
+            shape([[0, 0], [0, 54], [13, 42], [23, 64], [33, 59], [23, 38], [41, 37]], C.paper, { w: 3.8, streak: false, mis: 0 });
+            pop();
+            if (pressed) {
+              ink([[408, 200], [420, 188]], { w: 3 });
+              ink([[412, 216], [430, 214]], { w: 3 });
+              ink([[404, 230], [416, 242]], { w: 3 });
+            }
+          }
+        }
+        pop();
+      }
+
+      function sceneZero(k) {
+        cornerBrand();
+        const j = k - KS.zero;
+        push(960, 1006, 1);
+        deskSet({ pose: j % 2 === 0 ? "cheerA" : "cheerB", mood: "happy", mug: true, plant: true });
+        const lift = j % 2 === 0 ? 0 : -8;
+        for (const sx of [-1, 1]) {
+          ink([[sx * 150, -600 + lift], [sx * 176, -612 + lift]], { w: 3.4 });
+          ink([[sx * 140, -632 + lift], [sx * 158, -654 + lift]], { w: 3.4 });
+          ink([[sx * 156, -574 + lift], [sx * 182, -572 + lift]], { w: 3.4 });
+        }
+        pop();
+        const label = "INBOX ZERO";
+        const tw = textWidth(label, 84, 0.24);
+        const x0 = 960 - (tw + 112) / 2;
+        shape(ell(x0 + 42, 252, 42, 42), C.green, { w: 4.4, mis: 1.6 });
+        ink([[x0 + 22, 254], [x0 + 37, 270], [x0 + 64, 234]], { w: 8, color: "#fff" });
+        text(label, x0 + 112, 294, 84, C.green, { seed: 140, w: 9.4, track: 0.24 });
+      }
+
+      function sceneMark(k) {
+        const j = k - KS.mark;
+        const word = "sorrel";
+        const size = 220;
+        const tw = textWidth(word, size, 0.12);
+        const total = 112 + 60 + tw;
+        const x0 = 960 - total / 2;
+        leaf(x0 + 50, 548, 150, 8, C.green, { w: 6.4 });
+        if (j >= 1) text(word, x0 + 172, 622, size, INK, { w: 19, track: 0.12, seed: 150, tilt: 3 });
+        if (j >= 1) text("AI EMAIL THAT SORTS ITSELF.", 960, 754, 32, C.sub, { align: "center", seed: 160 });
+      }
+
+      /* ---------- frame ---------- */
+      function render(t) {
+        K = Math.floor(t * FPS_BOIL + 1e-6);
+        ITEMS = [];
+        SID = 0;
+        TF = [1, 0, 0, 1, 0, 0];
+        if (K < KS.split) sceneChaos(K);
+        else if (K < KS.draft) sceneSplit(K);
+        else if (K < KS.zero) sceneDraft(K);
+        else if (K < KS.mark) sceneZero(K);
+        else sceneMark(K);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, 1920, 1080);
+        for (const it of ITEMS) (it.t === "ink" ? drawInk : drawFill)(it);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      render(0);
+      tl.to({ v: 0 }, { v: 1, duration: DUR, ease: "none", onUpdate: () => render(tl.time()) }, 0);
+      window.addEventListener("hf-seek", (e) => render(e.detail.time));
+      window.__lb = { render };
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

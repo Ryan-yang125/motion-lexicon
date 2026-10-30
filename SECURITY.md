@@ -1,19 +1,9 @@
 # Security Policy
 
-## Supported version
-
-Security fixes target the latest commit on the default branch and the current public deployment.
+Security fixes target the latest commit on the default branch and the current deployment at https://motionboard.app.
 
 ## Report a vulnerability
 
-Use the repository's **Security → Report a vulnerability** flow to send a private report. Include:
+Report privately through GitHub security advisories: **Security → Report a vulnerability** on https://github.com/krisyangdev/motionboard. Include the affected route, command or file, the impact, and steps to reproduce.
 
-- affected route, command, or package;
-- impact and realistic attack scenario;
-- reproduction steps or a minimal proof of concept;
-- affected versions or commit hashes;
-- any suggested mitigation.
-
-Keep vulnerability details private until a fix and disclosure plan are ready. The maintainers aim to acknowledge a complete report within three business days and will coordinate validation, remediation, and disclosure with the reporter.
-
-Public issues remain suitable for hardening ideas and defects without exploitable details.
+Please keep details private until a fix is released.

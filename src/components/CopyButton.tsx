@@ -1,35 +1,37 @@
-import { useTranslation } from "react-i18next";
-import { CopyButton as InteriorCopyButton } from "./interior/copy-button";
-import { buttonVariants, type ButtonProps } from "./ui/button";
+import { gsap } from '@/lib/gsap'
 
-type CopyButtonProps = Pick<ButtonProps, "className" | "variant" | "size" | "disabled"> & {
-  getText: () => string;
-  label: string;
-  copiedLabel?: string;
-  errorLabel?: string;
-};
+const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export function CopyButton({
-  getText,
-  label,
-  copiedLabel,
-  errorLabel,
-  className,
-  variant,
-  size,
-  disabled
-}: CopyButtonProps) {
-  const { t } = useTranslation();
+// Eight short strokes fly out of the element: the confirmation burst recipe.
+export function burst(el: HTMLElement) {
+  if (reduced()) return
+  const b = document.createElement('span')
+  b.className = 'burst'
+  b.innerHTML = '<i></i>'.repeat(8)
+  el.appendChild(b)
+  gsap.fromTo(
+    b.children,
+    { rotate: (i) => i * 45, x: 0, y: 0, opacity: 1, scaleY: 1 },
+    {
+      x: (i) => Math.sin((i * Math.PI) / 4) * 46,
+      y: (i) => -Math.cos((i * Math.PI) / 4) * 30,
+      scaleY: 0.3,
+      opacity: 0,
+      duration: 0.55,
+      ease: 'expo.out',
+      onComplete: () => b.remove(),
+    },
+  )
+}
 
-  return (
-    <InteriorCopyButton
-      value={getText}
-      label={label}
-      copiedLabel={copiedLabel ?? t("common.copied")}
-      errorLabel={errorLabel ?? t("common.copyFailed")}
-      timeout={2200}
-      disabled={disabled}
-      className={buttonVariants({ variant, size, className })}
-    />
-  );
+export async function writeClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    const ta = Object.assign(document.createElement('textarea'), { value: text })
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    ta.remove()
+  }
 }

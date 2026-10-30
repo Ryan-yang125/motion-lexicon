@@ -1,51 +1,22 @@
-name: Motion Grammar proposal
-description: Propose a Product Moment, Motion Primitive, related term, or definition improvement.
-title: "[Proposal]: "
-labels: [proposal]
+name: 配方建议
+description: 推荐一个宣传片里的镜头，或修正已有配方。
+title: "[配方]: "
+labels: [recipe]
 body:
-  - type: dropdown
-    id: kind
+  - type: input
+    id: film
     attributes:
-      label: Proposal type
-      options:
-        - Improve an existing definition
-        - Add a related term
-        - Add a canonical workspace
-        - Propose a Product Moment
-        - Improve a Motion Primitive
-        - Prepare a Motion Lexicon candidate
+      label: 原片和时间点
+      placeholder: Apple · iPhone 17 Pro 发布片 · 1:12–1:18
     validations:
       required: true
   - type: textarea
-    id: task
+    id: shot
     attributes:
-      label: User task
-      description: Explain the product state and interface problem this motion helps someone solve.
+      label: 镜头怎么动
     validations:
       required: true
-  - type: textarea
-    id: behavior
+  - type: input
+    id: name
     attributes:
-      label: Observable behavior
-      description: Describe trigger, state graph, primary actor, supporting actors, beats, direction, timing, interruption, and gesture behavior.
-    validations:
-      required: true
-  - type: textarea
-    id: mapping
-    attributes:
-      label: Canonical mapping
-      description: Name related Components or Primitives, or explain the need for a stable new canonical unit.
-    validations:
-      required: true
-  - type: textarea
-    id: accessibility
-    attributes:
-      label: Accessibility and reduced motion
-      description: Describe keyboard behavior and the meaningful reduced-motion state.
-    validations:
-      required: true
-  - type: textarea
-    id: references
-    attributes:
-      label: References and licenses
-      description: Link technical references and identify the license for any proposed asset.
+      label: 你会怎么叫它

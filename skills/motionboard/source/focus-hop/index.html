@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #ededf0;
+        --sub: #bcbcc4;
+        --mut: #9c9ca6;
+        --line: rgba(255, 255, 255, 0.08);
+        --panel: #151518;
+        --card: #1c1c21;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #08080a; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #08080a;
+        font-family: var(--font-ui); color: var(--ink); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      svg { display: block; flex: none; }
+
+      #wall {
+        z-index: 1;
+        background:
+          radial-gradient(ellipse 55% 60% at 12% 100%, rgba(120, 80, 255, 0.55) 0%, rgba(120, 80, 255, 0) 70%),
+          radial-gradient(ellipse 50% 55% at 92% 0%, rgba(40, 150, 255, 0.45) 0%, rgba(40, 150, 255, 0) 70%),
+          radial-gradient(ellipse 40% 45% at 60% 110%, rgba(255, 90, 120, 0.35) 0%, rgba(255, 90, 120, 0) 70%),
+          linear-gradient(160deg, #10101a 0%, #0a0a12 100%);
+      }
+      #cam { z-index: 2; transform-origin: 0 0; }
+
+      /* ---------- window ---------- */
+      #win {
+        position: absolute; left: 180px; top: 120px; width: 1560px; height: 840px;
+        border-radius: 14px; overflow: hidden; background: var(--panel); opacity: 0;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.5), 0 40px 100px rgba(0, 0, 0, 0.6), 0 90px 200px rgba(0, 0, 0, 0.5);
+      }
+      #win > * { position: absolute; }
+
+      /* sidebar */
+      #side { left: 0; top: 0; width: 232px; height: 840px; background: #121215; border-right: 1px solid var(--line); padding: 56px 12px 0; display: flex; flex-direction: column; }
+      .tl { position: absolute; top: 20px; width: 12px; height: 12px; border-radius: 50%; }
+      .nav { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+      .nav svg { color: var(--mut); }
+      .nav.on { background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+      .nav.on svg { color: var(--ink); }
+      .nav .ct { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--mut); }
+      .sl { margin: 18px 10px 6px; font-size: 12px; font-weight: 500; color: var(--mut); }
+      .usr { margin-top: auto; margin-bottom: 52px; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 10px; border-top: 1px solid var(--line); padding-top: 12px; height: 58px; }
+      .av { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; font-size: 11px; font-weight: 600; flex: none; }
+      .usr .nm { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 16px; white-space: nowrap; }
+      .usr .pl { font-size: 11.5px; color: var(--mut); line-height: 15px; white-space: nowrap; }
+
+      /* toolbar */
+      #tbar { left: 232px; top: 0; width: 1328px; height: 56px; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 28px; gap: 14px; background: #151518; }
+      #tbar .ttl { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-right: 18px; }
+      .inp { display: flex; align-items: center; gap: 9px; width: 460px; height: 34px; padding: 0 8px 0 12px; border-radius: 9px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); font-size: 13.5px; color: var(--mut); white-space: nowrap; }
+      .kb { display: inline-flex; align-items: center; justify-content: center; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: var(--sub); font-size: 11.5px; font-weight: 500; }
+      .btn { display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px; border-radius: 9px; border: 1px solid rgba(255, 255, 255, 0.14); font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+      .btn.pri { background: #f4f4f5; border-color: #f4f4f5; color: #111114; }
+
+      .sh { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+      .pill { display: flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 500; color: var(--sub); background: rgba(255, 255, 255, 0.06); white-space: nowrap; }
+      .pill.on { background: rgba(255, 255, 255, 0.14); color: var(--ink); }
+
+      /* shelf */
+      #shelf { left: 232px; top: 100px; width: 1328px; height: 178px; overflow: hidden; }
+      #shelf > * { position: absolute; }
+      #strip { left: 0; top: 0; width: 2000px; height: 178px; }
+      #strip > * { position: absolute; }
+      .sc { top: 8px; width: 156px; height: 162px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); }
+      .sc > * { position: absolute; white-space: nowrap; }
+      .sc .n { left: 16px; top: 88px; font-size: 14px; font-weight: 600; letter-spacing: -0.005em; }
+      .sc .a { left: 16px; top: 109px; font-size: 12px; color: var(--mut); }
+      .sc .r { left: 16px; top: 134px; display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--sub); }
+      #sf { left: 0; top: 4px; width: 164px; height: 170px; border-radius: 15px; border: 2px solid #ff9a2e; background: rgba(255, 154, 46, 0.15); opacity: 0; }
+
+      .tile { display: flex; align-items: center; justify-content: center; flex: none; color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+
+      /* grid cells */
+      .cell { width: 307px; height: 134px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); }
+      .cell > * { position: absolute; white-space: nowrap; }
+      .cell .cn { left: 72px; top: 15px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; line-height: 20px; }
+      .cell .cd { left: 72px; top: 39px; font-size: 12.5px; color: var(--mut); line-height: 17px; }
+      .cell .cl { left: 16px; right: 16px; top: 74px; height: 1px; background: var(--line); }
+      .cell .dl { left: 16px; top: 94px; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--sub); line-height: 20px; }
+      .cell .dl svg { color: var(--mut); }
+      .cell .ch { right: 16px; top: 91px; height: 26px; display: flex; align-items: center; gap: 5px; padding: 0 11px; border-radius: 7px; font-size: 12px; font-weight: 500; }
+      .cell .ch1 { background: rgba(255, 255, 255, 0.08); color: var(--ink); }
+      .cell .ch2 { background: rgba(48, 209, 88, 0.16); color: #4ade80; opacity: 0; }
+      #gf { left: 0; top: 0; width: 313px; height: 140px; border-radius: 15px; border: 2px solid #6e72ff; background: rgba(110, 114, 255, 0.15); opacity: 0; }
+
+      /* footer */
+      #foot { left: 0; top: 796px; width: 1560px; height: 44px; border-top: 1px solid var(--line); background: #121215; display: flex; align-items: center; justify-content: space-between; padding: 0 20px 0 18px; font-size: 13px; font-weight: 500; color: var(--sub); }
+      #foot .l { display: flex; align-items: center; gap: 9px; }
+      #foot .r { display: flex; align-items: center; gap: 12px; }
+      #foot .it { display: flex; align-items: center; gap: 7px; }
+      #foot .sep { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.12); }
+
+      /* cursor */
+      #cur { left: 0; top: 0; width: 24px; height: 28px; opacity: 0; z-index: 9; }
+      #rip { left: 0; top: 0; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.7); opacity: 0; z-index: 8; }
+
+      /* finish */
+      #vig { z-index: 4; pointer-events: none; background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.5) 100%); }
+      #end { z-index: 5; background: #09090b; opacity: 0; }
+      #endg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; gap: 40px; }
+      #mk { position: relative; width: 150px; height: 150px; }
+      .mt { position: absolute; width: 64px; height: 64px; border-radius: 16px; background: #222228; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); }
+      .mt i { display: block; width: 20px; height: 20px; border-radius: 6px; }
+      #mf { position: absolute; left: 0; top: 0; width: 76px; height: 76px; border-radius: 20px; border: 3px solid #6e72ff; background: rgba(110, 114, 255, 0.15); }
+      #wm { font-size: 76px; font-weight: 600; letter-spacing: -0.035em; color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.8" data-width="1920" data-height="1080">
+      <div id="wall" class="clip full" data-start="0" data-duration="10.8" data-track-index="0"></div>
+      <div id="cam" class="clip full" data-start="0" data-duration="10.8" data-track-index="1">
+        <div id="win" data-layout-allow-overlap></div>
+      </div>
+      <div id="vig" class="clip full" data-start="0" data-duration="10.8" data-track-index="2"></div>
+      <div id="end" class="clip full" data-start="0" data-duration="10.8" data-track-index="3">
+        <div id="endg">
+          <div id="mk">
+            <div class="mt" style="left:0;top:0"><i style="background:#6e72ff"></i></div>
+            <div class="mt" style="left:86px;top:0"><i style="background:#1ed760"></i></div>
+            <div class="mt" style="left:0;top:86px"><i style="background:#ff5a3c"></i></div>
+            <div class="mt" style="left:86px;top:86px"><i style="background:#ff3b8d"></i></div>
+            <div id="mf" data-layout-allow-overlap></div>
+          </div>
+          <div id="wm">Halyard</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const EXPO = "expo.out";
+
+      /* ---------- icons ---------- */
+      const G = {
+        search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+        compass: '<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
+        star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+        flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        sparkles: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/>',
+        briefcase: '<rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+        code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+        message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+        pen: '<path d="M12 19l7-7 3 3-7 7z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18z"/><path d="m2 2 7.6 7.6"/><circle cx="11" cy="11" r="2"/>',
+        music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+        cpu: '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/>',
+        wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+        download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        chevDown: '<path d="m6 9 6 6 6-6"/>',
+        chevL: '<path d="m15 18-6-6 6-6"/>',
+        chevR: '<path d="m9 18 6-6-6-6"/>',
+        panel: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
+        plus: '<path d="M5 12h14M12 5v14"/>',
+        circleCheck: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+        hash: '<line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/>',
+        fileText: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8M8 17h5"/>',
+        shapes: '<rect x="3" y="3" width="8" height="8" rx="1"/><circle cx="17.5" cy="6.5" r="3.5"/><path d="M3 21 7 14l4 7z"/>',
+        clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+        mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-10 6L2 7"/>',
+        gem: '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/>',
+        database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+        cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+        house: '<path d="M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+        globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+        box: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+        card: '<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>',
+        triangle: '<path d="M12 4 22 20H2z"/>',
+        listCheck: '<path d="M3 17l2 2 4-4"/><path d="M3 7l2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/>',
+        video: '<path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
+        record: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>',
+        table: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>',
+        bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+        bubble: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
+        phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+        corner: '<path d="M9 10 4 15l5 5"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>',
+      };
+      const svg = (g, s, sw) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.7) +
+        '" stroke-linecap="round" stroke-linejoin="round">' + G[g] + "</svg>";
+      const rgb = (c) => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
+      /* ---------- app icons (fictional products) ---------- */
+      let uid = 0;
+      const W = "#fff";
+      const ICON = {
+        ledger: () =>
+          '<rect x="16" y="13" width="32" height="38" rx="7" fill="#fff"/>' +
+          '<rect x="22" y="21" width="14" height="4" rx="2" fill="#b3a6ff"/><rect x="22" y="29" width="20" height="4" rx="2" fill="#b3a6ff"/>' +
+          '<rect x="22" y="39" width="20" height="5" rx="2.5" fill="#6c56f0"/><circle cx="39.5" cy="41.5" r="2" fill="#fff"/>',
+        ship: () =>
+          '<path d="M33 11 L49 38 H33 Z" fill="#16161a"/><path d="M29 19 V38 H15 Z" fill="#5b5b66"/>' +
+          '<path d="M12 42 H52 L45 53 H19 Z" fill="#16161a"/>',
+        edge: () =>
+          '<path d="M18 49 a9 9 0 0 1 -1 -18 a12 12 0 0 1 23 -4 a10 10 0 0 1 8 22 Z" fill="#fff"/>' +
+          '<path d="M14 42 q6 -5 12 0 t12 0 t12 0" fill="none" stroke="#f0701a" stroke-width="3.2" stroke-linecap="round" opacity=".85"/>',
+        dayfold: () =>
+          '<path d="M20 12 H37 L49 24 V46 a6 6 0 0 1 -6 6 H20 a6 6 0 0 1 -6 -6 V18 a6 6 0 0 1 6 -6 Z" fill="#fff"/>' +
+          '<path d="M37 12 V20 a4 4 0 0 0 4 4 H49 Z" fill="#ffc2bb"/>' +
+          '<path d="M23 36 l6 6 l11 -12" fill="none" stroke="#e23a35" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>',
+        parley: () =>
+          '<rect x="10" y="20" width="31" height="24" rx="7" fill="#fff"/>' +
+          '<path d="M45 29 L53 23.5 Q55 22.3 55 24.6 V39.4 Q55 41.7 53 40.5 L45 35 Z" fill="#fff" opacity=".9"/>' +
+          '<circle cx="19" cy="28" r="2.6" fill="#2368e8"/><rect x="17" y="34" width="16" height="4" rx="2" fill="#bcd5ff"/>',
+        spool: () =>
+          '<circle cx="32" cy="32" r="20" fill="#fff"/>' +
+          '<circle cx="32" cy="21.5" r="4.6" fill="#7d45e8"/><circle cx="41.1" cy="37.2" r="4.6" fill="#7d45e8"/><circle cx="22.9" cy="37.2" r="4.6" fill="#7d45e8"/>' +
+          '<circle cx="32" cy="32" r="3.2" fill="#a06bff"/>',
+        basin: () =>
+          '<rect x="13" y="13" width="18.5" height="18.5" rx="5.5" fill="#3a2a05"/><rect x="32.5" y="13" width="18.5" height="18.5" rx="9.25" fill="#fff"/>' +
+          '<rect x="13" y="32.5" width="18.5" height="18.5" rx="9.25" fill="#fff"/><rect x="32.5" y="32.5" width="18.5" height="18.5" rx="5.5" fill="#3a2a05"/>',
+        cart: () =>
+          '<path d="M24 28 V25 a8 8 0 0 1 16 0 V28" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>' +
+          '<path d="M16 28 H48 L50 49 a5 5 0 0 1 -5 5.5 H19 a5 5 0 0 1 -5 -5.5 Z" fill="#fff"/>' +
+          '<path d="M24 47 C23 38 30 34 41 35 C42 44 35 48 24 47 Z" fill="#4f9a24"/><path d="M26 45 L36 39" stroke="#d6f0c0" stroke-width="1.6" stroke-linecap="round"/>',
+        relay: () =>
+          '<rect x="11" y="13" width="42" height="29" rx="11" fill="#fff"/><path d="M21 40 L19 53 L34 41 Z" fill="#fff"/>' +
+          '<path d="M27 21.5 L37 27.5 L27 33.5" fill="none" stroke="#6674f0" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<rect x="40" y="25.5" width="6" height="4" rx="2" fill="#b4bcff"/>',
+        cinder: () =>
+          '<path d="M33 9 C36 20 49 25 49 39 A17 17 0 0 1 15 39 C15 30 21 28 23 19 C26 22 28 25 28 25 C31 20 31 15 33 9 Z" fill="#fff"/>' +
+          '<path d="M32 31 C36 37 41 39 41 45 A9 9 0 0 1 23 45 C23 39 28 37 32 31 Z" fill="#e41e3a"/>',
+        lintel: () =>
+          '<circle cx="32" cy="32" r="19" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="4.6"/>' +
+          '<circle cx="32" cy="32" r="19" fill="none" stroke="#fff" stroke-width="4.6" stroke-dasharray="89.6 119.4" transform="rotate(-90 32 32)" stroke-linecap="round"/>' +
+          '<path d="M32 32 L32 22.5 A9.5 9.5 0 1 1 22.5 32 Z" fill="#fff"/>',
+        cadence: () => {
+          const hs = [16, 28, 40, 24, 32];
+          return hs.map((h, i) => '<rect x="' + (11 + i * 9.4) + '" y="' + (32 - h / 2) + '" width="5.6" height="' + h + '" rx="2.8" fill="#fff"' + (i === 2 ? "" : ' opacity=".92"') + "/>").join("");
+        },
+        draft: () =>
+          '<rect x="12" y="12" width="26" height="26" rx="7" fill="#fff" opacity=".55"/>' +
+          '<circle cx="40" cy="40" r="13" fill="#fff"/><path d="M40 33 L46 44 H34 Z" fill="#ee4f1c" stroke="#ee4f1c" stroke-width="2" stroke-linejoin="round"/>',
+        quorum: () =>
+          '<path d="M20 12 H34 a8 8 0 0 1 8 8 V26 H26 a8 8 0 0 0 -8 8 V38 L12 44 V20 a8 8 0 0 1 8 -8 Z" fill="#fff" opacity=".55"/>' +
+          '<path d="M30 25 H47 a8 8 0 0 1 8 8 V43 a8 8 0 0 1 -8 8 H44 V55 L35 51 H30 a8 8 0 0 1 -8 -8 V33 a8 8 0 0 1 8 -8 Z" fill="#fff"/>' +
+          '<circle cx="31" cy="38" r="2.6" fill="#d6206f"/><circle cx="38.5" cy="38" r="2.6" fill="#d6206f"/><circle cx="46" cy="38" r="2.6" fill="#d6206f"/>',
+        folio: () =>
+          '<path d="M23 12 H37 L46 21 V47 a5 5 0 0 1 -5 5 H23 a5 5 0 0 1 -5 -5 V17 a5 5 0 0 1 5 -5 Z" fill="#1c1c21"/>' +
+          '<path d="M37 12 V19 a2 2 0 0 0 2 2 H46 Z" fill="#6a6a74"/>' +
+          '<rect x="24" y="28" width="16" height="3.4" rx="1.7" fill="#fff"/><rect x="24" y="35" width="16" height="3.4" rx="1.7" fill="#fff" opacity=".7"/><rect x="24" y="42" width="9" height="3.4" rx="1.7" fill="#fff" opacity=".7"/>',
+        manifest: () =>
+          '<g stroke="#1a74d0" stroke-width="2" stroke-linejoin="round">' +
+          '<path d="M32 11 L51 22 L32 33 L13 22 Z" fill="#fff"/><path d="M13 22 L32 33 V54 L13 43 Z" fill="#fff" fill-opacity=".78"/><path d="M51 22 L32 33 V54 L51 43 Z" fill="#fff" fill-opacity=".5"/></g>' +
+          '<path d="M23 20 L32 25 L41 20" fill="none" stroke="#1a74d0" stroke-opacity=".35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+        punch: () =>
+          '<rect x="27.5" y="9" width="9" height="6" rx="2.5" fill="#3a2a05"/><path d="M48 18 l4 -4" stroke="#3a2a05" stroke-width="4.4" stroke-linecap="round"/>' +
+          '<circle cx="32" cy="35" r="17" fill="none" stroke="#3a2a05" stroke-width="5.2"/>' +
+          '<path d="M32 35 V25" stroke="#3a2a05" stroke-width="4.4" stroke-linecap="round"/><path d="M32 35 L39 39" stroke="#3a2a05" stroke-width="4.4" stroke-linecap="round" opacity=".7"/>',
+        postern: () =>
+          '<rect x="10" y="17" width="40" height="29" rx="7" fill="#fff"/>' +
+          '<path d="M14 23 L30 35 L46 23" fill="none" stroke="#d92d2a" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<circle cx="49" cy="19" r="8" fill="#ffd23f"/><circle cx="49" cy="19" r="3" fill="#d92d2a"/>',
+        geode: () =>
+          '<path d="M21 13 H43 L54 27 L32 53 L10 27 Z" fill="#fff" fill-opacity=".62"/>' +
+          '<path d="M21 13 H43 L54 27 H10 Z" fill="#fff"/><path d="M10 27 H32 L32 53 Z" fill="#fff" fill-opacity=".82"/>' +
+          '<path d="M28 13 L22 27 M36 13 L42 27 M32 27 V53" stroke="#8a52ee" stroke-opacity=".4" stroke-width="2" stroke-linecap="round"/>',
+        sluice: () =>
+          '<path d="M16 17 V47 a16 6 0 0 0 32 0 V17 Z" fill="#fff" fill-opacity=".86"/>' +
+          '<path d="M16 29 a16 6 0 0 0 32 0 M16 39 a16 6 0 0 0 32 0" fill="none" stroke="#12a67f" stroke-width="2.8"/>' +
+          '<ellipse cx="32" cy="17" rx="16" ry="6" fill="#fff"/><ellipse cx="32" cy="17" rx="9" ry="2.6" fill="#12a67f" fill-opacity=".28"/>',
+        hearth: () =>
+          '<path d="M32 11 L52 28 V48 a5 5 0 0 1 -5 5 H17 a5 5 0 0 1 -5 -5 V28 Z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>' +
+          '<circle cx="32" cy="37" r="12" fill="#22d3ee" fill-opacity=".22"/><circle cx="32" cy="37" r="7.5" fill="#0e9fc4"/><circle cx="29.6" cy="34.6" r="2.4" fill="#fff" fill-opacity=".7"/>',
+        wire: () =>
+          '<path d="M32 33 L32 14 M32 33 L15 47 M32 33 L49 47" stroke="#fff" stroke-opacity=".75" stroke-width="3.6" stroke-linecap="round"/>' +
+          '<circle cx="32" cy="14" r="5.5" fill="#fff"/><circle cx="15" cy="47" r="5.5" fill="#fff"/><circle cx="49" cy="47" r="5.5" fill="#fff"/>' +
+          '<circle cx="32" cy="33" r="9" fill="#fff"/><circle cx="32" cy="33" r="3.6" fill="#6b82ad"/>',
+      };
+      const icon = (it, s) => {
+        const u = "ic" + uid++;
+        return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 64 64"><defs>' +
+          '<linearGradient id="' + u + 'b" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="' + it.c + '"/><stop offset="1" stop-color="' + it.c2 + '"/></linearGradient>' +
+          '<linearGradient id="' + u + 'h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset=".5" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+          '<linearGradient id="' + u + 's" x1="0" y1="0" x2="0" y2="1"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>' +
+          '<filter id="' + u + 'f" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.3" flood-color="#000" flood-opacity="' + (it.dark ? 0.1 : 0.26) + '"/></filter></defs>' +
+          '<rect width="64" height="64" rx="15" fill="url(#' + u + 'b)"/><rect width="64" height="64" rx="15" fill="url(#' + u + 's)"/><rect width="64" height="64" rx="15" fill="url(#' + u + 'h)"/>' +
+          '<g filter="url(#' + u + 'f)">' + ICON[it.g]() + "</g>" +
+          '<rect x=".75" y=".75" width="62.5" height="62.5" rx="14.3" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.5"/></svg>';
+      };
+
+      /* ---------- data ---------- */
+      const SHELF = [
+        { n: "Ledgerline", a: "Payments", g: "ledger", c: "#8f7bff", c2: "#6c56f0", r: "4.8", d: "21.3k" },
+        { n: "Shipyard", a: "Developer Tools", g: "ship", c: "#f4f4f5", c2: "#d4d4d8", dark: 1, r: "4.9", d: "33.8k" },
+        { n: "Edgewater", a: "Developer Tools", g: "edge", c: "#ff9a2e", c2: "#f0701a", r: "4.7", d: "14.2k" },
+        { n: "Dayfold", a: "Productivity", g: "dayfold", c: "#ff5c4d", c2: "#e23a35", r: "4.8", d: "29.6k" },
+        { n: "Parley", a: "Communication", g: "parley", c: "#3d8bff", c2: "#2368e8", r: "4.6", d: "44.1k" },
+        { n: "Spool", a: "Communication", g: "spool", c: "#a06bff", c2: "#7d45e8", r: "4.7", d: "18.9k" },
+        { n: "Basin", a: "Productivity", g: "basin", c: "#ffc02e", c2: "#f09c10", dark: 1, r: "4.6", d: "16.4k" },
+        { n: "Cartwell", a: "Commerce", g: "cart", c: "#7ac143", c2: "#4f9a24", r: "4.5", d: "11.7k" },
+        { n: "Relay", a: "Communication", g: "relay", c: "#8b97ff", c2: "#6674f0", r: "4.7", d: "37.2k" },
+        { n: "Cinder", a: "Developer Tools", g: "cinder", c: "#f22f46", c2: "#cc1630", r: "4.4", d: "8.3k" },
+      ];
+      const GRID = [
+        { n: "Lintel", t: "Create and triage issues", g: "lintel", c: "#6e72ff", c2: "#4a4fe0", d: "48.2k" },
+        { n: "Cadence", t: "Control playback and playlists", g: "cadence", c: "#1ed760", c2: "#14a847", d: "62.7k" },
+        { n: "Draftwork", t: "Search files and copy components", g: "draft", c: "#ff7a2f", c2: "#ee4f1c", d: "31.4k" },
+        { n: "Quorum", t: "Jump to channels and DMs", g: "quorum", c: "#ff3b8d", c2: "#d6206f", d: "54.9k" },
+        { n: "Folio", t: "Search pages and append notes", g: "folio", c: "#f4f4f5", c2: "#d4d4d8", dark: 1, d: "40.8k" },
+        { n: "Manifest", t: "Manage containers and images", g: "manifest", c: "#2d9bf0", c2: "#1a74d0", d: "22.6k" },
+        { n: "Punchcard", t: "Start timers from anywhere", g: "punch", c: "#ffd23f", c2: "#f4a916", dark: 1, d: "17.3k" },
+        { n: "Postern", t: "Search mail and draft replies", g: "postern", c: "#ff5148", c2: "#d92d2a", d: "38.1k" },
+        { n: "Geode", t: "Open notes and daily journal", g: "geode", c: "#b07cff", c2: "#8a52ee", d: "19.5k" },
+        { n: "Sluice", t: "Run queries and browse tables", g: "sluice", c: "#25d0a3", c2: "#12a67f", d: "12.4k" },
+        { n: "Hearth", t: "Toggle lights and scenes", g: "hearth", c: "#22d3ee", c2: "#0e9fc4", d: "15.7k" },
+        { n: "Wireway", t: "Connect and switch exit nodes", g: "wire", c: "#8fa3c8", c2: "#6b82ad", d: "9.8k" },
+      ];
+      GRID.forEach((it) => (it.rgb = rgb(it.c)));
+      SHELF.forEach((it) => (it.rgb = rgb(it.c)));
+
+      /* ---------- build window ---------- */
+      const win = document.getElementById("win");
+      let h = "";
+
+      // sidebar
+      const nav = (g, label, ct, on) =>
+        '<div class="nav' + (on ? " on" : "") + '">' + svg(g, 17, 1.7) + label + (ct ? '<span class="ct">' + ct + "</span>" : "") + "</div>";
+      h += '<div id="side"><i class="tl" style="left:20px;background:#ff5f57"></i><i class="tl" style="left:40px;background:#febc2e"></i><i class="tl" style="left:60px;background:#28c840"></i>' +
+        nav("compass", "Discover", "", true) + nav("flame", "Trending", "24") + nav("sparkles", "New &amp; Updated", "9") + nav("star", "Staff Picks", "12") +
+        '<div class="sl">Categories</div>' +
+        nav("briefcase", "Productivity", "48") + nav("code", "Developer Tools", "62") + nav("message", "Communication", "31") + nav("pen", "Design", "27") +
+        nav("music", "Media", "22") + nav("cpu", "System", "35") + nav("wallet", "Finance", "14") +
+        '<div class="sl">Library</div>' + nav("download", "Installed", "18") +
+        '<div class="usr"><span class="av" style="background:#c0337a">MC</span><div><div class="nm">Maya Chen</div><div class="pl">Halyard Pro</div></div></div></div>';
+
+      // toolbar
+      h += '<div id="tbar"><span class="ttl">Store</span>' +
+        '<div class="inp">' + svg("search", 16, 1.8) + '<span>Search 214 extensions…</span><span style="margin-left:auto" class="kb">⌘ K</span></div>' +
+        '<span style="margin-left:auto" class="btn">All Categories' + svg("chevDown", 14, 1.8) + "</span>" +
+        '<span class="btn pri">' + svg("plus", 14, 2) + "Submit Extension</span></div>";
+
+      // headers
+      h += '<div class="sh" style="left:260px;top:68px">Trending this week<span class="pill">Updated daily</span></div>';
+      h += '<div class="sh" style="left:260px;top:292px">All extensions<span class="pill on">Popular</span><span class="pill">Recent</span><span class="pill">Installed 18</span><span class="pill">Updates 3</span></div>';
+
+      // shelf
+      let sc = "";
+      SHELF.forEach((it, k) => {
+        sc += '<div class="sc" data-layout-allow-occlusion data-layout-allow-overflow style="left:' + (28 + k * 172) + 'px">' + icon(it, 56).replace('<svg ', '<svg style="left:16px;top:16px" ') +
+          '<span class="n" data-layout-allow-occlusion>' + it.n + '</span><span class="a" data-layout-allow-occlusion>' + it.a + '</span><span class="r" data-layout-allow-occlusion><svg width="12" height="12" viewBox="0 0 24 24" fill="#ffc02e" stroke="#ffc02e" stroke-width="1.5" stroke-linejoin="round">' + G.star + "</svg>" + it.r + " · " + it.d + "</span></div>";
+      });
+      h += '<div id="shelf" data-layout-allow-occlusion data-layout-allow-overflow><div id="strip" data-layout-allow-occlusion data-layout-allow-overflow>' + sc + '</div><div id="sf"></div></div>';
+
+      // grid
+      const CX = (i) => 260 + (i % 4) * 321;
+      const CY = (i) => 336 + Math.floor(i / 4) * 146;
+      GRID.forEach((it, i) => {
+        h += '<div class="cell" style="left:' + CX(i) + "px;top:" + CY(i) + 'px">' +
+          '<span style="left:16px;top:15px;display:block;position:absolute">' + icon(it, 44) + "</span>" +
+          '<span class="cn">' + it.n + '</span><span class="cd">' + it.t + '</span><span class="cl"></span>' +
+          '<span class="dl">' + svg("download", 13, 1.8) + it.d + " installs</span>" +
+          '<span class="ch ch1 k' + i + '">Install</span><span class="ch ch2 k' + i + '">' + svg("check", 13, 2.2) + "Installed</span></div>";
+      });
+      h += '<div id="gf"></div>';
+
+      // footer
+      h += '<div id="foot"><div class="l"><span class="tile" style="width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#2a2a31,#1c1c21);color:#ededf0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/></svg></span>Halyard Store</div>' +
+        '<div class="r"><span class="it">Open Details<span class="kb">↵</span></span><i class="sep"></i><span class="it">Actions<span class="kb">⌘</span><span class="kb">K</span></span></div></div>';
+
+      // cursor
+      h += '<div id="rip"></div>';
+      h += '<svg id="cur" width="24" height="28" viewBox="0 0 24 28"><path d="M3 2 L3 21 L8 16.6 L11.4 24 L14.6 22.6 L11.3 15.3 L18 15 Z" fill="#0b0b0d" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+      win.innerHTML = h;
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+      const cam = (cx, cy, s) => ({ x: 960 - s * (180 + cx), y: 540 - s * (120 + cy), scale: s });
+      gsap.set("#cam", { transformOrigin: "0 0", ...cam(780, 420, 1) });
+      gsap.set("#cur", { x: 0, y: 0 });
+
+      // window enters
+      tl.fromTo("#win", { opacity: 0, y: 26, scale: 0.965 }, { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: EXPO }, 0);
+
+      // ---- act 1: horizontal shelf. camera pushes in, frame stays, cards slide left ----
+      const shelfCam0 = cam(562, 262, 2.1);
+      const shelfCam1 = cam(562, 262, 2.2);
+      tl.fromTo("#cam", cam(780, 420, 1), { ...shelfCam0, duration: 0.8, ease: EXPO, immediateRender: false }, 0.5);
+      tl.fromTo("#cam", shelfCam0, { ...shelfCam1, duration: 2.6, ease: "none", immediateRender: false }, 1.3);
+
+      const sfPos = 28 + 2 * 172 - 4; // frame sits on slot 2
+      gsap.set("#sf", { x: sfPos });
+      const sfStyle = (it) => ({ borderColor: "rgb(" + it.rgb.join(",") + ")", backgroundColor: "rgba(" + it.rgb.join(",") + ",0.15)" });
+      gsap.set("#sf", sfStyle(SHELF[2]));
+      tl.fromTo("#sf", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 1.1);
+      for (let k = 0; k < 5; k++) {
+        const ts = 1.4 + 0.5 * k;
+        tl.fromTo("#strip", { x: -172 * k }, { x: -172 * (k + 1), duration: 0.25, ease: EXPO, immediateRender: false }, ts);
+        tl.fromTo("#sf", sfStyle(SHELF[2 + k]), { ...sfStyle(SHELF[3 + k]), duration: 0.25, ease: "power1.inOut", immediateRender: false }, ts);
+      }
+      tl.to("#sf", { opacity: 0, duration: 0.2, ease: "power1.out" }, 3.95);
+
+      // ---- act 2: camera drops to the grid, highlight hops one cell at a time ----
+      const PATH = [0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10];
+      const DWELL = [0.3, 0.26, 0.26, 0.3, 0.22, 0.22, 0.26, 0.34, 0.24, 0.24];
+      const HDUR = [0.2, 0.16, 0.14, 0.16, 0.18, 0.14, 0.14, 0.14, 0.18, 0.16, 0.14];
+      const JX = [0, 8, -6, 6, -8, 4, -4, 8, -2, 6, 0];
+      const JY = [0, -5, 4, -3, 5, -4, 3, -5, 2, 5, 0];
+      const H = [4.7];
+      DWELL.forEach((d, i) => H.push(H[i] + d));
+
+      tl.fromTo("#cam", shelfCam1, { ...cam(700, 450, 2), duration: 0.8, ease: EXPO, immediateRender: false }, 3.8);
+
+      const anchor = (idx, i) => ({ x: CX(idx) + 168 + JX[i], y: CY(idx) + 98 + JY[i] });
+      const gfx = (idx) => ({ x: CX(idx) - 3, y: CY(idx) - 3 });
+      const camX = (cx) => 960 - 2 * (180 + cx);
+      const camY = (cy) => 540 - 2 * (120 + cy);
+      const cxOf = (idx) => 700 + 0.4 * (CX(idx) + 153.5 - 413.5);
+
+      // cursor arrives
+      const a0 = anchor(PATH[0], 0);
+      tl.fromTo("#cur", { opacity: 0, x: a0.x + 170, y: a0.y + 130 }, { opacity: 1, x: a0.x, y: a0.y, duration: 0.55, ease: EXPO, immediateRender: false }, 4.2);
+
+      PATH.forEach((idx, i) => {
+        const it = GRID[idx];
+        const col = it.rgb.join(",");
+        const g = gfx(idx);
+        // highlight: hard jump, colour taken from the icon
+        tl.set("#gf", { x: g.x, y: g.y, opacity: 1, borderColor: "rgb(" + col + ")", backgroundColor: "rgba(" + col + ",0.15)", boxShadow: "0 0 36px rgba(" + col + ",0.22)" }, H[i]);
+        if (i > 0) {
+          // cursor crosses the cell boundary at the midpoint of its move
+          const a = anchor(idx, i);
+          const d = HDUR[i];
+          tl.fromTo("#cur", { x: anchor(PATH[i - 1], i - 1).x, y: anchor(PATH[i - 1], i - 1).y }, { x: a.x, y: a.y, duration: d, ease: "power2.inOut", immediateRender: false }, H[i] - d / 2);
+        }
+      });
+
+      // camera drift: horizontal follows the row at 40%, vertical sinks slowly
+      const rows = [[0, 3], [4, 7], [8, 10]];
+      rows.forEach(([s, e]) => {
+        const c0 = cxOf(PATH[s]), c1 = cxOf(PATH[e]);
+        tl.fromTo("#cam", { x: camX(c0) }, { x: camX(c1), duration: H[e] - H[s], ease: "none", immediateRender: false }, H[s]);
+      });
+      tl.fromTo("#cam", { y: camY(450) }, { y: camY(600), duration: H[10] - H[0], ease: "none", immediateRender: false }, H[0]);
+
+      // ---- select: cursor onto the Install chip, click, state flips on the same frame ----
+      const last = PATH[PATH.length - 1];
+      const chipPt = { x: CX(last) + 307 - 22, y: CY(last) + 108 };
+      const tSel = H[10] + 0.5;
+      tl.fromTo("#cur", { x: anchor(last, 10).x, y: anchor(last, 10).y }, { x: chipPt.x, y: chipPt.y, duration: 0.3, ease: EXPO, immediateRender: false }, tSel - 0.3);
+      tl.set("#rip", { x: chipPt.x, y: chipPt.y, scale: 0.3, opacity: 0.8 }, tSel);
+      tl.to("#rip", { scale: 1.7, opacity: 0, duration: 0.45, ease: "power2.out" }, tSel);
+      tl.fromTo("#gf", { scale: 1 }, { scale: 0.975, duration: 0.1, ease: "power2.out", immediateRender: false }, tSel);
+      tl.fromTo("#gf", { scale: 0.975 }, { scale: 1, duration: 0.3, ease: "back.out(2.4)", immediateRender: false }, tSel + 0.1);
+      tl.set(".ch1.k" + last, { opacity: 0 }, tSel);
+      tl.set(".ch2.k" + last, { opacity: 1 }, tSel);
+
+      // ---- act 3: pull back out to the whole window, then close on the mark ----
+      const tOut = tSel + 0.25;
+      tl.fromTo("#cam", { x: camX(cxOf(last)), y: camY(600), scale: 2 }, { ...cam(780, 420, 1), duration: 0.8, ease: EXPO, immediateRender: false }, tOut);
+      tl.to("#cur", { opacity: 0, duration: 0.2, ease: "power1.out" }, tOut + 0.1);
+
+      // end card: focus frame hops across four tiles, then rests
+      const MT = [[0, 0, "#6e72ff", "110,114,255"], [86, 0, "#1ed760", "30,215,96"], [86, 86, "#ff3b8d", "255,59,141"], [0, 86, "#ff5a3c", "255,90,60"]];
+      const tE = 8.5;
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, tE);
+      tl.set("#cam", { opacity: 0 }, tE + 0.55);
+      const mfAt = (i, t) =>
+        tl.set("#mf", { x: MT[i][0] - 6, y: MT[i][1] - 6, borderColor: "rgb(" + MT[i][3] + ")", backgroundColor: "rgba(" + MT[i][3] + ",0.15)" }, t);
+      gsap.set("#mf", { x: MT[0][0] - 6, y: MT[0][1] - 6, borderColor: "rgb(" + MT[0][3] + ")", backgroundColor: "rgba(" + MT[0][3] + ",0.15)" });
+      mfAt(1, tE + 0.55);
+      mfAt(2, tE + 0.78);
+      mfAt(3, tE + 1.0);
+      tl.fromTo("#endg", { y: 6 }, { y: 0, duration: 1.1, ease: EXPO, immediateRender: false }, tE);
+
+      tl.set({}, {}, 10.8);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

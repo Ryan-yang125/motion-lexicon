@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --font-ui: "Inter", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0a0a0b; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0a0a0b;
+        font-family: var(--font-ui); color: #18181b; -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .grow { flex: 1; }
+      .ic { flex: none; display: block; }
+      .ci { display: flex; flex: none; }
+
+      /* ---------- light studio scenes ---------- */
+      .studio {
+        overflow: hidden; perspective: 1700px; perspective-origin: 50% 50%;
+        background:
+          radial-gradient(ellipse 70% 60% at 68% 36%, #f4f4f5 0%, rgba(244,244,245,0) 70%),
+          linear-gradient(180deg, #d7d7d9 0%, #bdbdc0 100%);
+      }
+      .studio::after {
+        content: ""; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0) 52%, rgba(0,0,0,0.26) 100%);
+      }
+      .win {
+        position: absolute; left: 180px; top: 110px; width: 1560px; height: 860px;
+        border-radius: 12px; overflow: hidden; background: #f4f4f5;
+        box-shadow: 0 50px 120px rgba(20,20,24,0.34), 0 0 0 1px rgba(0,0,0,0.14);
+        font-size: 13px; color: #3f3f46; font-variant-numeric: tabular-nums;
+      }
+      .side { position: absolute; left: 0; top: 0; width: 232px; height: 860px; overflow: hidden; }
+      .panel {
+        position: absolute; left: 232px; top: 8px; width: 1320px; height: 844px; overflow: hidden;
+        background: #fff; border: 1px solid #e4e4e7; border-radius: 8px;
+      }
+      .tl { height: 44px; display: flex; align-items: center; gap: 8px; padding-left: 14px; }
+      .tl i { display: block; width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+      .ws { height: 32px; display: flex; align-items: center; padding: 0 8px 0 16px; margin-bottom: 8px; }
+      .wn { margin-left: 9px; margin-right: 3px; font-size: 13px; font-weight: 600; color: #18181b; }
+      .ws > .ic { color: #8b8f97; }
+      .ib { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #6c7078; flex: none; }
+      .si { display: flex; align-items: center; gap: 8px; height: 28px; margin: 0 8px; padding: 0 8px; border-radius: 6px; font-size: 13px; font-weight: 500; color: #3f3f46; white-space: nowrap; }
+      .si > .ic { color: #71717a; }
+      .si.on { background: rgba(0,0,0,0.06); color: #18181b; }
+      .si b { margin-left: auto; font-size: 11.5px; font-weight: 500; color: #8b8f97; }
+      .si b.pill { background: #18181b; color: #fff; border-radius: 9px; padding: 1px 6px; font-size: 11px; }
+      .sh { height: 28px; margin: 14px 8px 0; padding: 0 8px; display: flex; align-items: center; font-size: 12px; font-weight: 500; color: #8b8f97; }
+      .dotc { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+      .foot { position: absolute; left: 0; bottom: 0; width: 232px; height: 52px; display: flex; align-items: center; gap: 8px; padding: 0 14px; }
+
+      .ph { position: absolute; left: 0; top: 0; width: 1320px; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 14px 0 16px; border-bottom: 1px solid #ececee; background: #fff; z-index: 3; }
+      .crumb { font-size: 13px; color: #8b8f97; font-weight: 500; }
+      .crumb.cur { color: #18181b; font-weight: 600; }
+      .tabs { display: flex; gap: 4px; margin-left: 12px; }
+      .tab { height: 26px; padding: 0 10px; display: flex; align-items: center; gap: 6px; border-radius: 6px; font-size: 12.5px; font-weight: 500; color: #71717a; border: 1px solid transparent; }
+      .tab.on { background: #f4f4f5; border-color: #e4e4e7; color: #18181b; }
+      .tab em { font-style: normal; font-size: 11px; color: #8b8f97; }
+      .btn { height: 28px; padding: 0 11px 0 9px; display: flex; align-items: center; gap: 6px; border-radius: 6px; font-size: 12.5px; font-weight: 600; background: #18181b; color: #fff; white-space: nowrap; }
+      .btn.o { background: #fff; color: #27272a; border: 1px solid #d4d4d8; font-weight: 500; }
+      .kbd { font-family: var(--font-mono); font-size: 10.5px; padding: 1px 5px; border-radius: 4px; background: rgba(255,255,255,0.18); font-weight: 500; }
+      .chip { height: 26px; padding: 0 9px; display: flex; align-items: center; gap: 6px; border: 1px solid #e4e4e7; border-radius: 6px; font-size: 12px; font-weight: 500; color: #3f3f46; white-space: nowrap; background: #fff; }
+      .chip .mu { color: #8b8f97; font-weight: 400; }
+      .av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #fff; flex: none; box-shadow: 0 0 0 2px #fff; }
+      .av + .av { margin-left: -6px; }
+
+      /* logs explorer */
+      .qb { position: absolute; left: 0; top: 44px; width: 1040px; height: 60px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #ececee; background: #fff; z-index: 2; }
+      .qi { flex: 1; height: 36px; border: 1px solid #d4d4d8; border-radius: 8px; display: flex; align-items: center; gap: 9px; padding: 0 12px; font-family: var(--font-mono); font-size: 13px; color: #18181b; background: #fafafa; white-space: nowrap; box-shadow: 0 0 0 3px rgba(24,24,27,0.05); }
+      .qi .k { color: #71717a; } .qi .v { color: #18181b; font-weight: 600; } .qi .p { color: #a1a1aa; }
+      .hist { position: absolute; left: 0; top: 104px; width: 1040px; height: 196px; border-bottom: 1px solid #ececee; background: #fff; }
+      .hh { height: 38px; display: flex; align-items: center; gap: 10px; padding: 0 16px; font-size: 12.5px; color: #71717a; }
+      .hh b { font-size: 15px; font-weight: 600; color: #18181b; }
+      .lg { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: #71717a; }
+      .lg i { width: 8px; height: 8px; border-radius: 2px; display: block; }
+      .thead { position: absolute; left: 0; top: 300px; width: 1040px; height: 32px; display: flex; align-items: center; padding: 0 16px; background: #fafafa; border-bottom: 1px solid #ececee; font-size: 11.5px; font-weight: 500; color: #8b8f97; z-index: 2; }
+      .lrows { position: absolute; left: 0; top: 332px; width: 1040px; }
+      .lr { height: 34px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid #f4f4f5; font-size: 12.5px; white-space: nowrap; }
+      .lr.sel { background: #f4f4f5; box-shadow: inset 2px 0 0 #18181b; }
+      .c-t { width: 128px; font-family: var(--font-mono); font-size: 12px; color: #71717a; flex: none; }
+      .c-l { width: 72px; flex: none; }
+      .c-s { width: 132px; color: #3f3f46; font-weight: 500; flex: none; }
+      .c-m { flex: 1; font-family: var(--font-mono); font-size: 12px; color: #27272a; overflow: hidden; }
+      .c-r { width: 88px; font-family: var(--font-mono); font-size: 12px; color: #a1a1aa; text-align: right; flex: none; }
+      .lv { display: inline-block; height: 18px; line-height: 17px; padding: 0 7px; border-radius: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.02em; }
+      .lv.err { background: #18181b; color: #fff; }
+      .lv.warn { background: #d4d4d8; color: #27272a; }
+      .lv.info { border: 1px solid #d4d4d8; color: #71717a; line-height: 16px; }
+      .facets { position: absolute; left: 1040px; top: 44px; width: 280px; bottom: 0; border-left: 1px solid #ececee; background: #fafafa; padding: 14px 16px; overflow: hidden; }
+      .fh { font-size: 12px; font-weight: 600; color: #18181b; display: flex; align-items: center; margin: 12px 0 8px; }
+      .fh:first-child { margin-top: 0; }
+      .fr { display: flex; align-items: center; gap: 8px; height: 26px; font-size: 12.5px; color: #3f3f46; position: relative; }
+      .fr .bar { position: absolute; left: 0; bottom: 3px; height: 2px; background: #d4d4d8; border-radius: 1px; }
+      .fr .n { margin-left: auto; font-size: 11.5px; color: #8b8f97; }
+      .tip { position: absolute; z-index: 5; height: 52px; padding: 8px 12px; border-radius: 8px; background: #18181b; color: #f4f4f5; font-size: 12px; line-height: 18px; box-shadow: 0 10px 28px rgba(0,0,0,0.3); white-space: nowrap; }
+      .tip b { font-weight: 600; font-size: 13px; }
+      .tip span { color: #a1a1aa; }
+
+      /* trace view */
+      .sum { position: absolute; left: 0; top: 44px; width: 980px; height: 84px; display: flex; align-items: center; padding: 0 20px; gap: 0; border-bottom: 1px solid #ececee; background: #fff; }
+      .sttl { margin-right: auto; }
+      .sttl .t { font-size: 15px; font-weight: 600; color: #18181b; display: flex; align-items: center; gap: 8px; }
+      .sttl .s { margin-top: 5px; font-size: 12px; color: #71717a; font-family: var(--font-mono); }
+      .stat { padding: 0 22px; border-left: 1px solid #ececee; height: 48px; }
+      .stat .l { font-size: 11.5px; color: #8b8f97; }
+      .stat .v { margin-top: 3px; font-size: 21px; font-weight: 600; color: #18181b; letter-spacing: -0.01em; }
+      .stat .v small { font-size: 13px; font-weight: 500; color: #71717a; margin-left: 2px; }
+      .ruler { position: absolute; left: 0; top: 128px; width: 980px; height: 30px; display: flex; border-bottom: 1px solid #ececee; background: #fafafa; font-size: 11px; color: #8b8f97; }
+      .ruler .nm { width: 380px; padding: 0 20px; display: flex; align-items: center; font-weight: 500; }
+      .ruler .tk { position: absolute; top: 0; height: 30px; display: flex; align-items: center; padding-left: 6px; border-left: 1px solid #e4e4e7; font-family: var(--font-mono); font-size: 10.5px; }
+      .wf { position: absolute; left: 0; top: 158px; width: 980px; }
+      .wr { position: relative; height: 40px; display: flex; align-items: center; border-bottom: 1px solid #f4f4f5; font-size: 12.5px; }
+      .wr.sel { background: #f4f4f5; box-shadow: inset 2px 0 0 #18181b; }
+      .wr .nm { width: 380px; display: flex; align-items: center; gap: 7px; padding: 0 12px 0 20px; white-space: nowrap; color: #18181b; font-weight: 500; flex: none; }
+      .wr .nm .sv { color: #8b8f97; font-weight: 400; font-size: 11.5px; }
+      .wr .bx { position: absolute; left: 380px; top: 0; width: 580px; height: 40px; }
+      .wr .gl { position: absolute; top: 0; width: 1px; height: 40px; background: #f0f0f2; }
+      .wr .b { position: absolute; top: 12px; height: 16px; border-radius: 3px; background: #a1a1aa; transform-origin: 0 50%; }
+      .wr .b.dk { background: #18181b; }
+      .wr .b.md { background: #71717a; }
+      .wr .b.lt { background: #c9c9ce; }
+      .wr .d { position: absolute; top: 12px; height: 16px; line-height: 16px; font-family: var(--font-mono); font-size: 11px; color: #52525b; white-space: nowrap; }
+      .detail { position: absolute; left: 980px; top: 44px; width: 340px; bottom: 0; border-left: 1px solid #ececee; background: #fafafa; padding: 16px 18px; overflow: hidden; }
+      .detail .t { font-size: 15px; font-weight: 600; color: #18181b; display: flex; align-items: center; gap: 8px; }
+      .detail .s { margin-top: 5px; font-size: 12px; color: #71717a; }
+      .detail .h { margin: 18px 0 8px; font-size: 12px; font-weight: 600; color: #18181b; }
+      .kv { display: flex; height: 27px; align-items: center; font-family: var(--font-mono); font-size: 11.5px; border-bottom: 1px solid #f0f0f2; }
+      .kv .k { width: 150px; color: #8b8f97; flex: none; }
+      .kv .v { color: #18181b; white-space: nowrap; }
+      .ev { margin-top: 2px; padding: 9px 11px; border: 1px solid #e4e4e7; border-radius: 8px; background: #fff; font-size: 12px; color: #3f3f46; line-height: 17px; }
+      .ev b { font-weight: 600; color: #18181b; }
+
+      /* ---------- foreground balls ---------- */
+      .ball {
+        position: absolute; left: 0; top: 0; width: 2800px; height: 2800px; margin: -1400px 0 0 -1400px; border-radius: 50%;
+        background:
+          radial-gradient(ellipse 34% 17% at 63% 17%, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 100%),
+          radial-gradient(circle at 63% 30%, #5b5b61 0%, #36363b 20%, #19191c 46%, #09090a 74%, #030304 100%);
+        box-shadow:
+          inset -110px 140px 190px -70px rgba(214,214,222,0.46),
+          inset -26px 34px 60px -6px rgba(255,255,255,0.22),
+          inset 70px -90px 150px -50px rgba(150,150,162,0.20);
+        filter: blur(54px);
+      }
+      .sph {
+        position: absolute; left: 0; top: 0; border-radius: 50%;
+        background:
+          radial-gradient(ellipse 34% 17% at 63% 17%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%),
+          radial-gradient(circle at 63% 30%, #56565c 0%, #2c2c30 30%, #0e0e10 70%, #050506 100%);
+        box-shadow: inset -12px 16px 22px -8px rgba(214,214,222,0.4);
+      }
+
+      /* ---------- dark scene ---------- */
+      .dark { overflow: hidden; background: radial-gradient(ellipse 80% 70% at 50% 50%, #131315 0%, #060607 100%); }
+      .halo { position: absolute; border-radius: 50%; }
+      #num { position: absolute; left: 0; top: 262px; width: 1920px; height: 460px; display: flex; align-items: baseline; justify-content: center; font-weight: 600; color: #f4f4f5; }
+      #n { width: 640px; display: flex; justify-content: flex-end; font-size: 470px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: tabular-nums; }
+      #u { margin-left: 22px; width: 250px; font-size: 130px; line-height: 1; letter-spacing: -0.03em; color: #b4b4ba; font-weight: 500; }
+      #lbl { position: absolute; left: 0; top: 218px; width: 1920px; text-align: center; font-size: 32px; font-weight: 500; color: #d0d0d5; letter-spacing: -0.005em; }
+      #qpill { position: absolute; left: 560px; top: 752px; width: 800px; height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 22px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.09); font-family: var(--font-mono); font-size: 22px; color: #ffffff; white-space: nowrap; }
+      #qpill .k { color: #b4b4ba; } #qpill .p { color: #8a8a90; }
+      #specs { position: absolute; left: 360px; top: 876px; width: 1200px; height: 120px; display: flex; }
+      .sp { flex: 1; padding-left: 32px; border-left: 1px solid rgba(255,255,255,0.28); }
+      .sp:first-child { border-left: 0; padding-left: 0; }
+      .sp .v { font-size: 64px; line-height: 70px; font-weight: 600; color: #ffffff; letter-spacing: -0.03em; }
+      .sp .l { margin-top: 4px; font-size: 24px; color: #b4b4ba; }
+      #spark { position: absolute; left: 1384px; top: 754px; width: 190px; height: 56px; }
+
+      /* ---------- flash ---------- */
+      #glow { position: absolute; left: 0; top: 0; width: 5200px; height: 5200px; margin: -2600px 0 0 -2600px; border-radius: 50%; background: radial-gradient(circle closest-side, #ffffff 0%, #ffffff 42%, rgba(255,255,255,0.55) 66%, rgba(255,255,255,0) 100%); }
+      #plate { background: #ffffff; }
+
+      /* ---------- wordmark ---------- */
+      #lock { display: flex; align-items: center; justify-content: center; gap: 40px; }
+      #mk { position: relative; z-index: 2; width: 160px; height: 160px; flex: none; }
+      #wm { position: relative; z-index: 1; width: 640px; flex: none; font-size: 190px; line-height: 1; font-weight: 600; letter-spacing: -0.045em; color: #f4f4f5; white-space: nowrap; }
+      #tag { position: absolute; left: 0; top: 664px; width: 1920px; text-align: center; font-size: 30px; font-weight: 400; color: #8a8a90; letter-spacing: 0; }
+      #seed { position: absolute; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; background: radial-gradient(circle closest-side, #ffffff 0%, rgba(255,255,255,0.8) 16%, rgba(255,255,255,0.26) 50%, rgba(255,255,255,0) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+
+      <!-- scene 1: logs explorer, light studio -->
+      <div id="s1" class="clip full studio" data-start="0" data-duration="2.6" data-track-index="0">
+        <div id="sph1a" class="sph" data-layout-allow-overlap></div>
+        <div id="sph1b" class="sph" data-layout-allow-overlap></div>
+        <div id="tilt1" class="full" data-layout-allow-overlap>
+          <div id="cam1" class="full" data-layout-allow-overlap>
+            <div id="win1" class="win" data-layout-allow-overlap></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- scene 2: parameter, dark -->
+      <div id="s2" class="clip full dark" data-start="2.6" data-duration="2.5" data-track-index="0">
+        <div id="cam2" class="full" data-layout-allow-overlap>
+          <div id="h1" class="halo" data-layout-allow-overlap></div>
+          <div id="h2" class="halo" data-layout-allow-overlap></div>
+          <div id="ring" class="halo" data-layout-allow-overlap></div>
+          <div id="lbl">p99 query latency</div>
+          <div id="num" data-layout-allow-overlap><span id="n">412</span><span id="u">ms</span></div>
+          <div id="qpill" data-layout-allow-overlap></div>
+          <svg id="spark" viewBox="0 0 190 56"></svg>
+          <div id="specs" data-layout-allow-overlap></div>
+        </div>
+      </div>
+
+      <!-- scene 3: trace waterfall, light studio -->
+      <div id="s3" class="clip full studio" data-start="5.1" data-duration="2.3" data-track-index="0">
+        <div id="sph3a" class="sph" data-layout-allow-overlap></div>
+        <div id="tilt3" class="full" data-layout-allow-overlap>
+          <div id="cam3" class="full" data-layout-allow-overlap>
+            <div id="win3" class="win" data-layout-allow-overlap></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- scene 4: wordmark -->
+      <div id="s4" class="clip full dark" data-start="7.4" data-duration="3.6" data-track-index="0">
+        <div id="h4a" class="halo" data-layout-allow-overlap></div>
+        <div id="h4b" class="halo" data-layout-allow-overlap></div>
+        <div id="cam4" class="full" data-layout-allow-overlap>
+          <div id="lock" class="full" data-layout-allow-overlap>
+            <svg id="mk" viewBox="0 0 100 100"><g fill="#f4f4f5"><path d="M50 98L40.5 42L50 6L59.5 42Z"/><path d="M3 10H22L35 42V74Z"/><path d="M97 10H78L65 42V74Z"/></g></svg>
+            <div id="wm">Gannet</div>
+          </div>
+          <div id="tag">Search every event. In 38 ms.</div>
+        </div>
+      </div>
+
+      <!-- wipe balls -->
+      <div id="ov1" class="clip full" data-start="0" data-duration="3.0" data-track-index="5" style="z-index:5;pointer-events:none">
+        <div id="ball1" class="ball" data-layout-allow-overlap data-layout-ignore></div>
+      </div>
+      <div id="ov3" class="clip full" data-start="5.1" data-duration="3.0" data-track-index="5" style="z-index:5;pointer-events:none">
+        <div id="ball3" class="ball" data-layout-allow-overlap data-layout-ignore></div>
+      </div>
+
+      <div id="ov4" class="clip full" data-start="7.4" data-duration="1.3" data-track-index="7" style="z-index:8;pointer-events:none">
+        <div id="seed" data-layout-allow-overlap></div>
+      </div>
+
+      <!-- flash -->
+      <div id="fl" class="clip full" data-start="4.7" data-duration="1.2" data-track-index="6" style="z-index:6;pointer-events:none">
+        <div id="plate" class="full"></div>
+        <div id="glow" data-layout-allow-overlap></div>
+      </div>
+    </div>
+
+    <script>
+      const EXPO = "expo.out";
+      const FPS = 30;
+      const fr = (f) => f / FPS;
+
+      /* ---------- icons: 16px grid, 1.5 stroke ---------- */
+      const IC = {
+        search: '<circle cx="7" cy="7" r="4.25"/><path d="M10.2 10.2l3 3"/>',
+        compose: '<path d="M7 3H4.5A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5V9"/><path d="M11.2 2.8a1.2 1.2 0 0 1 1.7 1.7L8 9.4 5.8 10l.6-2.2z"/>',
+        chev: '<path d="M4.5 6.5L8 10l3.5-3.5"/>',
+        logs: '<path d="M3.5 4h9M3.5 8h9M3.5 12h5.5"/>',
+        dash: '<rect x="2.5" y="2.5" width="4.5" height="5" rx="1"/><rect x="9" y="2.5" width="4.5" height="3" rx="1"/><rect x="2.5" y="9.5" width="4.5" height="4" rx="1"/><rect x="9" y="7.5" width="4.5" height="6" rx="1"/>',
+        bell: '<path d="M4.2 11V7.2a3.8 3.8 0 0 1 7.6 0V11l1 1.5H3.2z"/><path d="M6.7 14h2.6"/>',
+        trace: '<path d="M2.5 4h6M5 8h7M7.5 12h6"/>',
+        svc: '<rect x="2.5" y="3" width="11" height="4" rx="1.2"/><rect x="2.5" y="9" width="11" height="4" rx="1.2"/><path d="M5 5h.01M5 11h.01"/>',
+        star: '<path d="M8 2.8l1.6 3.3 3.6.5-2.6 2.5.6 3.6L8 11l-3.2 1.7.6-3.6L2.8 6.6l3.6-.5z"/>',
+        bookmark: '<path d="M4.5 2.5h7v11L8 10.8 4.5 13.5z"/>',
+        clock: '<circle cx="8" cy="8" r="5.5"/><path d="M8 5v3.2l2 1.3"/>',
+        filter: '<path d="M2.5 4h11M4.5 8h7M6.5 12h3"/>',
+        play: '<path d="M5.5 3.8v8.4L12 8z"/>',
+        link: '<path d="M6.8 9.2a2.6 2.6 0 0 0 3.7 0l2-2a2.6 2.6 0 0 0-3.7-3.7l-.8.8"/><path d="M9.2 6.8a2.6 2.6 0 0 0-3.7 0l-2 2a2.6 2.6 0 0 0 3.7 3.7l.8-.8"/>',
+        help: '<circle cx="8" cy="8" r="5.75"/><path d="M6.4 6.4a1.7 1.7 0 1 1 2.4 1.5c-.5.3-.8.6-.8 1.2"/><path d="M8 11.4v.01"/>',
+        panel: '<rect x="2.5" y="3" width="11" height="10" rx="1.8"/><path d="M6.2 3v10"/>',
+        box: '<path d="M8 2l5 2.5v7L8 14 3 11.5v-7z"/><path d="M3 4.5L8 7l5-2.5M8 7v7"/>',
+        db: '<ellipse cx="8" cy="4.5" rx="4.8" ry="2"/><path d="M3.2 4.5v7c0 1.1 2.1 2 4.8 2s4.8-.9 4.8-2v-7"/><path d="M3.2 8c0 1.1 2.1 2 4.8 2s4.8-.9 4.8-2"/>',
+        alert: '<path d="M8 2.8l5.5 9.7h-11z"/><path d="M8 7v2.6M8 11.2v.01"/>',
+        cpu: '<rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6.5 2v2M9.5 2v2M6.5 12v2M9.5 12v2M2 6.5h2M2 9.5h2M12 6.5h2M12 9.5h2"/>',
+        users: '<circle cx="6.5" cy="5.5" r="2.2"/><path d="M2.5 13c.4-2.2 2-3.4 4-3.4s3.2.8 3.8 2.2"/>',
+        copy: '<rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V4a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"/>',
+      };
+      const ic = (n, s) => '<svg class="ic" viewBox="0 0 16 16" width="' + (s || 16) + '" height="' + (s || 16) + '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + IC[n] + "</svg>";
+      const cic = (n, c, s) => '<span class="ci" style="color:' + c + '">' + ic(n, s) + "</span>";
+
+      /* ---------- shared sidebar ---------- */
+      const si = (icon, text, badge, on, pill) => '<div class="si' + (on ? " on" : "") + '">' + icon + "<span>" + text + "</span>" + (badge ? "<b" + (pill ? ' class="pill"' : "") + ">" + badge + "</b>" : "") + "</div>";
+      function sidebar(active) {
+        let s = '<div class="tl"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>';
+        s += '<div class="ws"><span class="tile" style="display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;background:#18181b;color:#fff;font-size:11px;font-weight:700">A</span><span class="wn">Acme Corp</span>' + ic("chev", 12) + '<div class="grow"></div><div class="ib">' + ic("search") + '</div><div class="ib">' + ic("compose") + "</div></div>";
+        s += si(ic("logs"), "Logs", "", active === "logs");
+        s += si(ic("trace"), "Traces", "", active === "trace");
+        s += si(ic("dash"), "Dashboards");
+        s += si(ic("bell"), "Alerts", "3", false, true);
+        s += si(ic("svc"), "Services", "24");
+        s += '<div class="sh">Saved views</div>';
+        s += si(cic("bookmark", "#52525b"), "Checkout errors");
+        s += si(cic("bookmark", "#52525b"), "API latency by route");
+        s += si(cic("bookmark", "#52525b"), "Billing jobs");
+        s += si(cic("bookmark", "#52525b"), "Auth failures, 24h");
+        s += '<div class="sh">Environments</div>';
+        s += si('<span class="dotc" style="background:#18181b"></span>', "production", "11", true);
+        s += si('<span class="dotc" style="background:#a1a1aa"></span>', "staging");
+        s += si('<span class="dotc" style="background:#d4d4d8"></span>', "preview");
+        s += '<div class="sh">Team</div>';
+        s += si(cic("users", "#71717a"), "Platform");
+        s += si(cic("users", "#71717a"), "Payments");
+        s += si(cic("users", "#71717a"), "Growth");
+        s += '<div class="foot"><div class="ib">' + ic("help") + '</div><span style="font-size:12px;color:#8b8f97">Docs and shortcuts</span></div>';
+        return s;
+      }
+      const AV = { mc: ["MC", "#52525b"], lo: ["LO", "#3f3f46"], pr: ["PR", "#71717a"], nf: ["NF", "#18181b"] };
+      const avs = (ks) => ks.map((k) => '<span class="av" data-layout-ignore style="background:' + AV[k][1] + '">' + AV[k][0] + "</span>").join("");
+
+      /* ================= scene 1: logs explorer ================= */
+      const LOGS = [
+        ["14:32:08.412", "err", "checkout-api", "POST /v1/payments 502 upstream timeout after 3000ms host=psp-gateway", "9f3a21c"],
+        ["14:32:08.397", "warn", "payments-worker", "retry 2/5 charge=ch_8Kq2nV backoff=400ms reason=gateway_timeout", "9f3a21c"],
+        ["14:32:08.391", "err", "checkout-api", "ConnectionResetError: redis-cart-03 read ECONNRESET (cart=7c2e91)", "b41d07e"],
+        ["14:32:08.366", "info", "edge-router", "route /v1/checkout -> us-east-1b upstream_ms=14 cache=MISS", "e20c8a5"],
+        ["14:32:08.352", "err", "inventory-svc", "deadline exceeded: GetStock sku=TS-4471 elapsed=2000ms", "5a9f3d1"],
+        ["14:32:08.340", "warn", "checkout-api", "cart 7c2e91 exceeds soft limit items=148 limit=100", "b41d07e"],
+        ["14:32:08.318", "info", "auth-service", "token refresh ok user=u_3918 ttl=3600s scope=checkout:write", "0d7e66b"],
+        ["14:32:08.301", "err", "checkout-api", "POST /v1/payments 502 upstream timeout after 3000ms host=psp-gateway", "c83b190"],
+        ["14:32:08.287", "info", "search-indexer", "segment merged seg_0419 rows=12.4M took=212ms", "-"],
+        ["14:32:08.274", "warn", "edge-router", "upstream pool saturation 91% pool=pay-eu active=182/200", "e20c8a5"],
+        ["14:32:08.259", "err", "payments-worker", "idempotency key conflict key=ik_5d01f attempt=3 status=409", "9f3a21c"],
+        ["14:32:08.233", "info", "notifications", "email queued template=order_receipt id=em_2194 region=eu-west-1", "71f2c04"],
+        ["14:32:08.216", "err", "checkout-api", "TLS handshake timeout host=api.psp-gateway.net elapsed=5000ms", "3be8a62"],
+        ["14:32:08.201", "info", "edge-router", "route /v1/cart -> eu-west-1a upstream_ms=9 cache=HIT", "a6c4d93"],
+      ];
+      const LV = { err: "ERROR", warn: "WARN", info: "INFO" };
+      let rows = "";
+      LOGS.forEach((r, i) => {
+        rows += '<div class="lr l' + i + (i === 0 ? " sel" : "") + '"><span class="c-t">' + r[0] + '</span><span class="c-l"><span class="lv ' + r[1] + '">' + LV[r[1]] + '</span></span><span class="c-s">' + r[2] + '</span><span class="c-m">' + r[3] + '</span><span class="c-r">' + r[4] + "</span></div>";
+      });
+
+      // histogram, 72 buckets
+      const NB = 72, BW = 14, HX0 = 16, HY0 = 142; // baseline y inside .hist
+      let bars = "";
+      for (let i = 0; i < NB; i++) {
+        const info = 30 + 9 * Math.sin(i * 0.55) + 7 * Math.sin(i * 1.9 + 1);
+        const err = 3 + 2.5 * Math.pow(Math.sin(i * 0.9), 2) + 58 * Math.exp(-Math.pow((i - 51) / 3.6, 2));
+        const warn = 6 + 3 * Math.sin(i * 0.8 + 2) + 10 * Math.exp(-Math.pow((i - 50) / 5, 2));
+        const x = HX0 + i * BW;
+        let y = HY0;
+        bars += '<rect class="hb" x="' + x + '" y="' + (y - info) + '" width="10" height="' + info + '" rx="1.5" fill="#e4e4e7"/>';
+        y -= info;
+        bars += '<rect class="hb" x="' + x + '" y="' + (y - warn) + '" width="10" height="' + warn + '" rx="1.5" fill="#a1a1aa"/>';
+        y -= warn;
+        bars += '<rect class="hb" x="' + x + '" y="' + (y - err) + '" width="10" height="' + err + '" rx="1.5" fill="#18181b"/>';
+      }
+      const BR0 = HX0 + 44 * BW - 3, BR1 = HX0 + 58 * BW - 3;
+      const hist =
+        '<div class="hh"><b>2,481,903 events</b><span>Oct 29, 14:17 - 14:32</span><div class="grow"></div>' +
+        '<span class="lg"><i style="background:#18181b"></i>Error</span><span class="lg"><i style="background:#a1a1aa"></i>Warn</span><span class="lg"><i style="background:#e4e4e7"></i>Info</span></div>' +
+        '<svg width="1040" height="158" viewBox="0 0 1040 158" style="position:absolute;left:0;top:38px">' +
+        '<path d="M16 0H1024M16 52H1024M16 104H1024" stroke="#f1f1f3" stroke-width="1"/>' + bars +
+        '<rect x="' + BR0 + '" y="0" width="' + (BR1 - BR0) + '" height="144" fill="rgba(24,24,27,0.07)" stroke="#18181b" stroke-width="1"/>' +
+        '<rect x="' + (BR0 - 2) + '" y="62" width="4" height="20" rx="2" fill="#18181b"/><rect x="' + (BR1 - 2) + '" y="62" width="4" height="20" rx="2" fill="#18181b"/>' +
+        '<path d="M16 148H1024" stroke="#e4e4e7"/>' +
+        '<text x="16" y="157" font-size="10" fill="#a1a1aa" font-family="JetBrains Mono">14:17</text><text x="330" y="157" font-size="10" fill="#a1a1aa" font-family="JetBrains Mono">14:22</text><text x="640" y="157" font-size="10" fill="#a1a1aa" font-family="JetBrains Mono">14:27</text><text x="960" y="157" font-size="10" fill="#a1a1aa" font-family="JetBrains Mono">14:32</text>' +
+        "</svg>";
+      const TIPX = HX0 + 51 * BW + 5;
+
+      const facet = (n, v, w, dot) => '<div class="fr">' + (dot ? '<span class="dotc" style="background:' + dot + '"></span>' : "") + "<span>" + n + '</span><span class="n">' + v + '</span><i class="bar" style="width:' + w + 'px;left:' + (dot ? 16 : 0) + 'px"></i></div>';
+      const facets =
+        '<div class="fh">Level</div>' + facet("error", "38%", 70, "#18181b") + facet("warn", "17%", 30, "#a1a1aa") + facet("info", "45%", 82, "#e4e4e7") +
+        '<div class="fh">Service</div>' + facet("checkout-api", "41%", 76) + facet("payments-worker", "22%", 40) + facet("edge-router", "15%", 28) + facet("inventory-svc", "9%", 16) + facet("auth-service", "7%", 12) +
+        '<div class="fh">Region</div>' + facet("us-east-1", "52%", 96) + facet("eu-west-1", "31%", 56) + facet("ap-south-1", "17%", 30) +
+        '<div class="fh">Status code</div>' + facet("502", "44%", 80) + facet("409", "12%", 22) + facet("200", "37%", 68) + facet("504", "7%", 12);
+
+      const P1 =
+        '<div class="ph">' + ic("logs", 15) + '<span class="crumb">Explore</span><span class="crumb">/</span><span class="crumb cur">Logs</span><div class="tabs"><span class="tab on">Search</span><span class="tab">Patterns</span><span class="tab">Live tail</span></div><div class="grow"></div>' +
+        '<div class="chip">' + ic("clock", 13) + 'Last 15 minutes</div><div class="chip">' + ic("play", 12) + 'Live</div><div style="display:flex;padding:0 4px">' + avs(["mc", "lo", "pr"]) + '</div><div class="btn o">' + ic("bookmark", 14) + 'Save view</div><div class="btn">' + ic("bell", 14) + "Create alert</div></div>" +
+        '<div class="qb"><div class="qi">' + ic("search", 15) + '<span class="k">service</span><span class="p">:</span><span class="v">checkout-api</span><span class="k">level</span><span class="p">:</span><span class="v">error</span><span class="p">|</span><span class="k">stats</span><span class="v">count()</span><span class="k">by</span><span class="v">region</span></div><div class="chip">' + ic("filter", 13) + 'Filters <span class="mu">2</span></div><div class="btn">Run <span class="kbd">&#8984;&#8629;</span></div></div>' +
+        '<div class="hist">' + hist + '<div class="tip" id="tip1" style="left:' + (TIPX + 66) + 'px;top:34px""><b>14:31:00 - 14:31:15</b><br><span>8,214 errors</span> &nbsp;<span>2.1% of traffic</span></div></div>' +
+        '<div class="thead"><span class="c-t">Time</span><span class="c-l">Level</span><span class="c-s">Service</span><span class="c-m" style="font-family:var(--font-ui);font-size:11.5px;color:#8b8f97">Message</span><span class="c-r" style="font-family:var(--font-ui);font-size:11.5px">Trace</span></div>' +
+        '<div class="lrows">' + rows + "</div>" +
+        '<div class="facets">' + facets + "</div>";
+      document.getElementById("win1").innerHTML = '<div class="side">' + sidebar("logs") + '</div><div class="panel" data-layout-allow-overlap>' + P1 + "</div>";
+
+      /* ================= scene 3: trace waterfall ================= */
+      const TOT = 3040, BXW = 580, SC = BXW / TOT;
+      const SPANS = [
+        [0, "POST /v1/checkout", "checkout-api", "box", 0, 3040, "md"],
+        [1, "auth.verify_token", "auth-service", "users", 4, 38, "lt"],
+        [1, "cart.load", "redis-cart-03", "db", 40, 92, "lt"],
+        [1, "inventory.reserve", "inventory-svc", "box", 95, 410, "md"],
+        [2, "SELECT stock WHERE sku", "postgres", "db", 110, 340, "lt"],
+        [1, "pricing.quote", "pricing-svc", "box", 415, 520, "md"],
+        [1, "fraud.score", "risk-engine", "cpu", 540, 760, "lt"],
+        [1, "payments.charge", "payments-worker", "box", 530, 3040, "md"],
+        [2, "psp.authorize", "psp-gateway", "alert", 560, 3000, "dk"],
+        [2, "idempotency.lookup", "payments-worker", "db", 565, 590, "lt"],
+        [1, "notify.enqueue", "notifications", "box", 3010, 3036, "lt"],
+      ];
+      const durTxt = (a, b) => { const d = b - a; return d >= 1000 ? (d / 1000).toFixed(2) + " s" : d + " ms"; };
+      let wf = "", grid = "";
+      [0, 0.5, 1, 1.5, 2, 2.5, 3].forEach((s) => { grid += '<i class="gl" style="left:' + (s * 1000 * SC) + 'px"></i>'; });
+      SPANS.forEach((sp, i) => {
+        const left = Math.round(sp[4] * SC), w = Math.max(3, Math.round((sp[5] - sp[4]) * SC));
+        const dleft = left + w + 8;
+        const lab = dleft > 520 ? '<span class="d" style="left:' + (left - 70) + 'px;color:' + (sp[6] === "dk" || sp[6] === "md" ? "#fff" : "#52525b") + '">' + durTxt(sp[4], sp[5]) + "</span>" : '<span class="d" style="left:' + dleft + 'px">' + durTxt(sp[4], sp[5]) + "</span>";
+        wf += '<div class="wr w' + i + (i === 8 ? " sel" : "") + '"><div class="nm" style="padding-left:' + (20 + sp[0] * 18) + 'px">' + cic(sp[3], sp[6] === "dk" ? "#18181b" : "#8b8f97", 14) + "<span>" + sp[1] + '</span><span class="sv">' + sp[2] + '</span></div><div class="bx">' + grid + '<i class="b ' + sp[6] + '" style="left:' + left + "px;width:" + w + 'px"></i>' + lab + "</div></div>";
+      });
+      let rl = '<div class="nm">Span</div><div style="position:absolute;left:380px;top:0;width:580px;height:30px">';
+      [0, 0.5, 1, 1.5, 2, 2.5, 3].forEach((s) => { rl += '<span class="tk" style="left:' + (s * 1000 * SC) + 'px">' + (s === 0 ? "0" : s + " s") + "</span>"; });
+      rl += "</div>";
+      const kv = (k, v) => '<div class="kv"><span class="k">' + k + '</span><span class="v">' + v + "</span></div>";
+      const P3 =
+        '<div class="ph">' + ic("trace", 15) + '<span class="crumb">Traces</span><span class="crumb">/</span><span class="crumb cur" style="font-family:var(--font-mono);font-size:12.5px">9f3a21c4e8b07d52</span><div class="tabs"><span class="tab on">Waterfall</span><span class="tab">Flame graph</span><span class="tab">Logs <em>38</em></span><span class="tab">Metrics</span></div><div class="grow"></div>' +
+        '<div class="btn o">' + ic("copy", 14) + 'Copy link</div><div class="btn">' + ic("logs", 14) + "Open in logs</div></div>" +
+        '<div class="sum"><div class="sttl"><div class="t">POST /v1/checkout<span class="lv err">502</span></div><div class="s">us-east-1b &nbsp;/&nbsp; Oct 29, 14:32:05 GMT &nbsp;/&nbsp; user u_3918</div></div>' +
+        '<div class="stat"><div class="l">Duration</div><div class="v">3.04<small>s</small></div></div><div class="stat"><div class="l">Spans</div><div class="v">38</div></div><div class="stat"><div class="l">Services</div><div class="v">6</div></div><div class="stat"><div class="l">Errors</div><div class="v">2</div></div></div>' +
+        '<div class="ruler">' + rl + "</div>" +
+        '<div class="wf">' + wf + "</div>" +
+        '<div class="detail"><div class="t">' + cic("alert", "#18181b", 16) + 'psp.authorize<span class="lv err">ERROR</span></div><div class="s">psp-gateway &nbsp;/&nbsp; 2.44 s &nbsp;/&nbsp; starts at 560 ms</div>' +
+        '<div class="h">Attributes</div>' + kv("http.method", "POST") + kv("http.route", "/v1/payments") + kv("http.status_code", "502") + kv("net.peer.name", "api.psp-gateway.net") + kv("retry.count", "2") + kv("timeout.ms", "3000") + kv("region", "us-east-1") +
+        '<div class="h">Events</div><div class="ev"><b>exception</b> &nbsp;+2.44 s<br>upstream timeout after 3000ms, connection closed by peer</div><div class="ev" style="margin-top:8px"><b>retry</b> &nbsp;+0.40 s<br>attempt 2 of 5 scheduled by payments-worker</div></div>';
+      document.getElementById("win3").innerHTML = '<div class="side">' + sidebar("trace") + '</div><div class="panel" data-layout-allow-overlap>' + P3 + "</div>";
+
+      /* ================= scene 2 content ================= */
+      document.getElementById("qpill").innerHTML = '<span class="p">&gt;</span><span class="k">service</span>:checkout-api <span class="p">|</span> <span class="k">p99(</span>duration<span class="k">)</span>';
+      document.getElementById("specs").innerHTML =
+        '<div class="sp"><div class="v">4.2B</div><div class="l">events indexed</div></div><div class="sp"><div class="v">11</div><div class="l">regions</div></div><div class="sp"><div class="v">99.99%</div><div class="l">query availability</div></div>';
+      // sparkline
+      (function () {
+        let d = "";
+        for (let i = 0; i <= 38; i++) {
+          const y = 36 - 18 * Math.sin(i * 0.5) * Math.exp(-i / 30) - 6 * Math.sin(i * 1.7) - i * 0.15;
+          d += (i ? "L" : "M") + (i * 5).toFixed(1) + " " + y.toFixed(1);
+        }
+        document.getElementById("spark").innerHTML = '<path d="' + d + '" fill="none" stroke="#f4f4f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      })();
+
+      /* ================= timeline ================= */
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) { tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at); }
+
+      // static placement
+      gsap.set("#sph1a", { x: 1500, y: 770, width: 150, height: 150 });
+      gsap.set("#sph1b", { x: 1740, y: 210, width: 70, height: 70 });
+      gsap.set("#sph1a", { filter: "blur(14px)" });
+      gsap.set("#sph1b", { filter: "blur(7px)" });
+      gsap.set("#sph3a", { x: 1650, y: 820, width: 190, height: 190, filter: "blur(18px)" });
+      gsap.set("#h1", { x: 360, y: 60, width: 1000, height: 1000, background: "radial-gradient(circle closest-side, rgba(255,255,255,0.10), rgba(255,255,255,0))" });
+      gsap.set("#h2", { x: 1000, y: 360, width: 900, height: 900, background: "radial-gradient(circle closest-side, rgba(255,255,255,0.06), rgba(255,255,255,0))" });
+      gsap.set("#ring", { x: 560, y: 130, width: 800, height: 800, border: "1px solid rgba(255,255,255,0.12)", filter: "blur(1.5px)" });
+      gsap.set("#h4a", { x: 360, y: 200, width: 1200, height: 700, background: "radial-gradient(ellipse closest-side, rgba(255,255,255,0.10), rgba(255,255,255,0))" });
+      gsap.set("#h4b", { x: 700, y: 360, width: 500, height: 360, background: "radial-gradient(ellipse closest-side, rgba(255,255,255,0.12), rgba(255,255,255,0))" });
+      gsap.set("#seed", { x: 960, y: 540 });
+      gsap.set("#glow", { x: 960, y: 540 });
+      gsap.set("#ball1", { x: -420, y: 700, scale: 0.42 });
+      gsap.set("#ball3", { x: -500, y: 800, scale: 0.38 });
+
+      /* ----- scene 1 (0 - 2.6): light studio, logs explorer; camera moves right ----- */
+      const O1 = "880px 420px";
+      gsap.set("#cam1", { transformOrigin: O1 });
+      gsap.set("#tilt1", { transformOrigin: "960px 540px" });
+      tl.set("#win1", { opacity: 0 }, 0);
+      tl.to("#win1", { opacity: 1, duration: 0.7, ease: "power2.out" }, 0);
+      F("#cam1", { scale: 1.26, x: 70, y: 110 }, { scale: 1.36, x: -60, y: 90, duration: 2.6, ease: "none" }, 0);
+      F("#tilt1", { rotationY: 9, rotationX: -3, rotation: -1 }, { rotationY: 6, rotationX: -2, rotation: -0.5, duration: 2.6, ease: "none" }, 0);
+      tl.set(".lr", { opacity: 0 }, 0);
+      tl.to(".lr", { opacity: 1, duration: 0.45, ease: EXPO, stagger: 0.035 }, 0.12);
+      tl.set(".hb", { opacity: 0 }, 0);
+      tl.to(".hb", { opacity: 1, duration: 0.4, ease: "power1.out", stagger: 0.008 }, 0.1);
+      tl.set("#tip1", { opacity: 0, y: 8 }, 0);
+      tl.to("#tip1", { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 0.95);
+      tl.set(".l1", { background: "#f4f4f5" }, 1.35);
+      tl.set(".l0", { background: "transparent", boxShadow: "none" }, 1.35);
+      // spheres drift left a little faster than the window (parallax)
+      F("#sph1a", { x: 1500 }, { x: 1430, duration: 2.6, ease: "none" }, 0);
+      F("#sph1b", { x: 1740 }, { x: 1690, duration: 2.6, ease: "none" }, 0);
+
+      /* ----- wipe 1: big defocused matte ball from the left foreground ----- */
+      const W1 = fr(72);           // wipe starts, frame 72
+      F("#ball1", { x: -420, y: 700, scale: 0.42 }, { x: -380, y: 690, scale: 0.45, duration: W1, ease: "none" }, 0);
+      tl.to("#ball1", { x: 960, y: 540, scale: 1, duration: fr(7), ease: EXPO }, W1);               // 7 frames, fast then slow
+      tl.to("#ball1", { x: 3700, y: 520, scale: 1.08, duration: fr(8), ease: "power2.in" }, W1 + fr(7)); // exits right
+      // swap frame = 78 (2.6 s): s1 ends, s2 begins (clip boundaries)
+
+      /* ----- scene 2 (2.6 - 5.1): dark, big parameter ----- */
+      tl.set("#lbl", { opacity: 0 }, 0);
+      tl.to("#lbl", { opacity: 1, duration: 0.5, ease: "power2.out" }, 2.6);
+      tl.set("#n", { opacity: 0 }, 0);
+      tl.to("#n", { opacity: 1, duration: 0.1, ease: "none" }, 2.6);
+      // count 412 -> 38, one value per frame from 2.75
+      (function () {
+        const f0 = 82, N = 36;
+        for (let k = 0; k <= N; k++) {
+          const p = 1 - Math.pow(1 - k / N, 4);
+          tl.set("#n", { textContent: String(Math.round(412 + (38 - 412) * p)) }, (f0 + k) / FPS);
+        }
+      })();
+      tl.set("#u", { opacity: 0 }, 0);
+      tl.to("#u", { opacity: 1, duration: 0.5, ease: "power2.out" }, 2.6);
+      tl.set(["#qpill", "#spark"], { opacity: 0, y: 14 }, 0);
+      tl.to(["#qpill", "#spark"], { opacity: 1, y: 0, duration: 0.8, ease: EXPO, stagger: 0.08 }, 3.25);
+      tl.set(".sp", { opacity: 0, y: 12 }, 0);
+      tl.to(".sp", { opacity: 1, y: 0, duration: 0.8, ease: EXPO, stagger: 0.1 }, 3.5);
+      F("#ring", { scale: 0.86 }, { scale: 1.0, duration: 2.5, ease: "none" }, 2.6);
+      F("#cam2", { scale: 1.0 }, { scale: 1.05, duration: 2.5, ease: "none" }, 2.6);
+      gsap.set("#cam2", { transformOrigin: "960px 540px" });
+
+      /* ----- flash 1: radial glow, 8 frames linear to full white, 9 frames back ----- */
+      const F2 = fr(153);                 // full-white frame = 5.1 s, s2 -> s3 swap
+      tl.set("#plate", { opacity: 0 }, 0);
+      tl.set("#glow", { scale: 0.05, opacity: 0 }, 0);
+      tl.set("#glow", { opacity: 1 }, F2 - fr(8));
+      tl.to("#glow", { scale: 1.5, duration: fr(8), ease: "none" }, F2 - fr(8));
+      tl.set("#plate", { opacity: 1 }, F2 - fr(1));           // white fully covers the frame before the swap
+      tl.set("#glow", { opacity: 0 }, F2);
+      tl.to("#plate", { opacity: 0, duration: fr(9), ease: "power3.out" }, F2);   // 9 frames, cubic-bezier(.33,1,.68,1)
+
+      /* ----- scene 3 (5.1 - 7.4): trace waterfall, tilt the other way ----- */
+      gsap.set("#cam3", { transformOrigin: "1140px 470px" });
+      gsap.set("#tilt3", { transformOrigin: "960px 540px" });
+      F("#cam3", { scale: 1.42, x: 70, y: -10 }, { scale: 1.5, x: -50, y: -30, duration: 2.3, ease: "none" }, 5.1);
+      F("#tilt3", { rotationY: -10, rotationX: 3, rotation: 1.1 }, { rotationY: -6, rotationX: 2, rotation: 0.6, duration: 2.3, ease: "none" }, 5.1);
+      tl.set(".wr .b", { scaleX: 0 }, 0);
+      tl.to(".wr .b", { scaleX: 1, duration: 0.7, ease: EXPO, stagger: 0.07 }, 5.18);
+      tl.set(".wr .d", { opacity: 0 }, 0);
+      tl.to(".wr .d", { opacity: 1, duration: 0.4, ease: "power1.out", stagger: 0.07 }, 5.4);
+      F("#sph3a", { x: 1650 }, { x: 1590, duration: 2.3, ease: "none" }, 5.1);
+
+      /* ----- wipe 2 ----- */
+      const W2 = fr(216);          // 7.2 s, swap frame 222 = 7.4 s
+      F("#ball3", { x: -500, y: 800, scale: 0.38 }, { x: -470, y: 790, scale: 0.4, duration: W2 - 5.1, ease: "none" }, 5.1);
+      tl.to("#ball3", { x: 960, y: 540, scale: 1, duration: fr(7), ease: EXPO }, W2);
+      tl.to("#ball3", { x: 3700, y: 560, scale: 1.08, duration: fr(8), ease: "power2.in" }, W2 + fr(7));
+
+      /* ----- scene 4 (7.4 - 10.4): glow seed -> mark -> wordmark ----- */
+      const WM_W = 640, GAP = 40, MK_W = 160;
+      const DX = (WM_W + GAP) / 2, EX = (WM_W - (MK_W + GAP)) / 2;   // mark centred on screen; word starts behind the mark
+      gsap.set("#cam4", { transformOrigin: "960px 540px" });
+      tl.set("#mk", { x: DX, opacity: 0, filter: "blur(26px)" }, 0);
+      tl.set("#wm", { x: EX, opacity: 0, clipPath: "inset(-60px -60px -60px " + (MK_W / 2) + "px)", filter: "blur(12px)" }, 0);
+      tl.set("#seed", { scale: 0.5, opacity: 0 }, 0);
+      tl.set("#tag", { opacity: 0, y: 12 }, 0);
+      tl.set(["#h4a", "#h4b"], { opacity: 0 }, 0);
+      tl.to(["#h4a", "#h4b"], { opacity: 1, duration: 1.4, ease: "power2.out" }, 7.55);
+      // seed glow tightens into the mark
+      tl.to("#seed", { opacity: 1, scale: 0.9, duration: 0.12, ease: "none" }, 7.4);
+      tl.to("#mk", { opacity: 1, duration: 0.3, ease: "none" }, 7.5);
+      tl.to("#mk", { filter: "blur(0px)", duration: 0.7, ease: EXPO }, 7.5);
+      tl.to("#seed", { opacity: 0, scale: 1.4, duration: 0.6, ease: "power2.out" }, 7.7);
+      // mark slides left, word is pulled out from behind it
+      tl.to("#mk", { x: 0, duration: 1.3, ease: EXPO }, 7.8);
+      tl.to("#wm", { x: 0, duration: 1.3, ease: EXPO }, 7.8);
+      tl.to("#wm", { clipPath: "inset(-60px -60px -60px " + (-GAP) + "px)", duration: 1.3, ease: EXPO }, 7.8);
+      tl.to("#wm", { opacity: 1, duration: 0.4, ease: "power1.out" }, 7.8);
+      tl.to("#wm", { filter: "blur(0px)", duration: 1.25, ease: EXPO }, 7.8);
+      tl.to("#tag", { opacity: 1, y: 0, duration: 0.8, ease: EXPO }, 8.2);
+      F("#cam4", { scale: 1.0 }, { scale: 1.05, duration: 3.6, ease: "none" }, 7.4);
+
+      tl.set({}, {}, 11);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

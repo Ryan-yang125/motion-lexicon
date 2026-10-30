@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #04060b; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #04060b; font-family: "Inter", sans-serif; }
+      #stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #gl { display: block; width: 1920px; height: 1080px; }
+
+      /* canvas text faces: the weights the backdrop canvas draws, so the fonts get bundled */
+      #faces { position: absolute; left: 0; top: 0; width: 1920px; opacity: 0; pointer-events: none; }
+      #faces span { display: block; font-family: "Inter", sans-serif; font-size: 20px; line-height: 1.2; white-space: nowrap; }
+      #faces .w4 { font-weight: 400; }
+      #faces .w5 { font-weight: 500; }
+      #faces .w6 { font-weight: 600; }
+
+      #lock { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 540px; }
+      #word {
+        position: absolute; left: 782px; top: 442px; height: 196px;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 180px; line-height: 196px;
+        letter-spacing: -0.035em; color: #eef1f7; white-space: nowrap; opacity: 0;
+      }
+      #sub {
+        position: absolute; left: 0; top: 694px; width: 1920px; text-align: center;
+        font-family: "Inter", sans-serif; font-weight: 400; font-size: 28px; line-height: 1.3;
+        letter-spacing: -0.01em; color: #8790a3; opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip" data-start="0" data-duration="10" data-track-index="0">
+        <canvas id="gl" width="3840" height="2160"></canvas>
+      </div>
+      <div id="faces" aria-hidden="true">
+        <span class="w4">Inter regular</span><span class="w5">Inter medium</span><span class="w6">Inter semibold</span>
+      </div>
+      <div id="lock" class="clip" data-start="0" data-duration="10" data-track-index="1" data-layout-allow-overlap>
+        <div id="word">Lucent</div>
+        <div id="sub">Lucent OS 4 &mdash; developer beta today</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+      tl.set("#word", { opacity: 0, x: -18, filter: "blur(10px)" }, 0);
+      tl.to("#word", { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.9, ease: EXPO }, 7.42);
+      tl.set("#sub", { opacity: 0, y: 10 }, 0);
+      tl.to("#sub", { opacity: 1, y: 0, duration: 0.8, ease: EXPO }, 7.8);
+      tl.set("#lock", { scale: 1 }, 0);
+      tl.to("#lock", { scale: 1.03, duration: 2.65, ease: "sine.inOut" }, 7.35);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script>
+      (() => {
+        /* ================= time helpers ================= */
+        const clamp01 = (x) => Math.min(1, Math.max(0, x));
+        const seg = (t, a, b) => clamp01((t - a) / (b - a));
+        const lerp = (a, b, k) => a + (b - a) * k;
+        const sineIO = (k) => -(Math.cos(Math.PI * k) - 1) / 2;
+        const smooth = (k) => k * k * (3 - 2 * k);
+        function bez(x1, y1, x2, y2) {
+          const bx = (t) => 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t;
+          const by = (t) => 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t;
+          return (x) => {
+            if (x <= 0) return 0;
+            if (x >= 1) return 1;
+            let lo = 0, hi = 1;
+            for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (bx(m) < x) lo = m; else hi = m; }
+            return by((lo + hi) / 2);
+          };
+        }
+        const eStretch = bez(0.65, 0, 0.35, 1);   // stretch
+        const eBack = bez(0.34, 1.56, 0.64, 1);   // break rebound
+        const eRing = bez(0.16, 1, 0.3, 1);       // ring contraction
+
+        /* ================= constants ================= */
+        const DUR = 10;
+        const F = 540 / Math.tan((15 * Math.PI) / 180); // focal length: 1 unit = 1 px at z = 0
+        const BGZ = -520;                                 // backdrop plane
+        const KS = (F - BGZ) / F;                         // backdrop units per screen px (fixed camera)
+        const BGW = 2800, BGH = 1580;                     // backdrop world size
+        const TS = 1.5;                                   // texture px per backdrop unit
+        const TW = Math.round(BGW * TS), TH = Math.round(BGH * TS);
+        const BX = 310;                                   // logo bead offset left of centre
+        const LR = 86;                                    // logo bead radius
+        const DS = 1.3;                                   // droplet scale once upright
+        const PY = -288;                                  // droplet origin once upright
+        const NSP = 18;
+        const ZB = 0.5;                                  // glass depth relative to width
+        const FLAT = 1 / ZB;
+
+        /* ================= backdrop canvas ================= */
+        const baseC = document.createElement("canvas"); baseC.width = TW; baseC.height = TH;
+        const bgC = document.createElement("canvas"); bgC.width = TW; bgC.height = TH;
+        const bctx = bgC.getContext("2d");
+
+        function drawBase() {
+          const x = baseC.getContext("2d");
+          x.setTransform(1, 0, 0, 1, 0, 0);
+          x.fillStyle = "#04060b";
+          x.fillRect(0, 0, TW, TH);
+          x.setTransform(TS, 0, 0, TS, TW / 2, TH / 2); // backdrop units, y down
+          // deep navy pool, slightly below centre
+          let g = x.createRadialGradient(0, 160, 0, 0, 160, 1250);
+          g.addColorStop(0, "rgba(24,48,102,0.62)");
+          g.addColorStop(0.45, "rgba(14,28,62,0.42)");
+          g.addColorStop(1, "rgba(4,6,11,0)");
+          x.fillStyle = g; x.fillRect(-BGW / 2, -BGH / 2, BGW, BGH);
+          // soft grey light sweep, upper left
+          x.save(); x.translate(-520, -560); x.rotate(-0.26); x.scale(3.4, 0.42);
+          g = x.createRadialGradient(0, 0, 0, 0, 0, 430);
+          g.addColorStop(0, "rgba(150,162,194,0.20)"); g.addColorStop(1, "rgba(150,162,194,0)");
+          x.fillStyle = g; x.fillRect(-500, -500, 1000, 1000); x.restore();
+          // faint counter sweep, lower right
+          x.save(); x.translate(760, 520); x.rotate(-0.3); x.scale(3.0, 0.38);
+          g = x.createRadialGradient(0, 0, 0, 0, 0, 420);
+          g.addColorStop(0, "rgba(70,105,190,0.16)"); g.addColorStop(1, "rgba(70,105,190,0)");
+          x.fillStyle = g; x.fillRect(-500, -500, 1000, 1000); x.restore();
+
+          // a brighter soft band and two thin light lines behind the subject, for the glass to bend
+          x.save(); x.translate(40, -40); x.rotate(-0.36);
+          g = x.createLinearGradient(0, -240, 0, 240);
+          g.addColorStop(0, "rgba(90,125,215,0)"); g.addColorStop(0.5, "rgba(95,135,225,0.26)"); g.addColorStop(1, "rgba(90,125,215,0)");
+          x.fillStyle = g; x.fillRect(-1600, -240, 3200, 480);
+          [[-62, 0.5, 2.6], [30, 0.32, 1.8], [96, 0.22, 1.4]].forEach(([off, a, w]) => {
+            const lg = x.createLinearGradient(-1300, 0, 1300, 0);
+            lg.addColorStop(0, "rgba(185,205,255,0)"); lg.addColorStop(0.5, "rgba(185,205,255," + a + ")"); lg.addColorStop(1, "rgba(185,205,255,0)");
+            x.shadowColor = "rgba(150,180,255," + a + ")"; x.shadowBlur = 14 * TS;
+            x.fillStyle = lg; x.fillRect(-1300, off - w / 2, 2600, w);
+          });
+          x.shadowBlur = 0; x.restore();
+
+          // grid on its own layer, masked to fade towards the edges
+          const gc = document.createElement("canvas"); gc.width = TW; gc.height = TH;
+          const gx = gc.getContext("2d");
+          gx.setTransform(TS, 0, 0, TS, TW / 2, TH / 2);
+          const step = 56;
+          for (let i = -26; i <= 26; i++) {
+            const major = i % 4 === 0;
+            gx.strokeStyle = major ? "rgba(150,175,230,0.2)" : "rgba(150,175,230,0.095)";
+            gx.lineWidth = major ? 1.3 : 1.0;
+            gx.beginPath(); gx.moveTo(i * step, -BGH / 2); gx.lineTo(i * step, BGH / 2); gx.stroke();
+          }
+          for (let j = -15; j <= 15; j++) {
+            const major = j % 4 === 0;
+            gx.strokeStyle = major ? "rgba(150,175,230,0.2)" : "rgba(150,175,230,0.095)";
+            gx.lineWidth = major ? 1.3 : 1.0;
+            gx.beginPath(); gx.moveTo(-BGW / 2, j * step); gx.lineTo(BGW / 2, j * step); gx.stroke();
+          }
+          // crosshair marks on a few major intersections
+          gx.strokeStyle = "rgba(190,205,240,0.42)"; gx.lineWidth = 1.4;
+          [[-8, -4], [8, -4], [-8, 4], [8, 4], [-16, 0], [16, 0], [0, -8], [0, 8], [-12, -8], [12, 8]].forEach(([i, j]) => {
+            const cx = i * step, cy = j * step;
+            gx.beginPath(); gx.moveTo(cx - 7, cy); gx.lineTo(cx + 7, cy); gx.moveTo(cx, cy - 7); gx.lineTo(cx, cy + 7); gx.stroke();
+          });
+          gx.setTransform(1, 0, 0, 1, 0, 0);
+          gx.globalCompositeOperation = "destination-in";
+          const m = gx.createRadialGradient(TW / 2, TH / 2 + 60 * TS, 0, TW / 2, TH / 2 + 60 * TS, 1250 * TS);
+          m.addColorStop(0, "rgba(0,0,0,1)"); m.addColorStop(0.55, "rgba(0,0,0,0.75)"); m.addColorStop(1, "rgba(0,0,0,0)");
+          gx.fillStyle = m; gx.fillRect(0, 0, TW, TH);
+          x.setTransform(1, 0, 0, 1, 0, 0);
+          x.drawImage(gc, 0, 0);
+        }
+
+        /* ---- notifications: the noise outside the ring ---- */
+        const ICONS = {
+          chat: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+          cal: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
+          mail: "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM22 6l-10 7L2 6",
+          build: "M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9a9 9 0 0 1-9 9",
+          bill: "M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
+          task: "M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11",
+          photo: "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21",
+        };
+        const ICONP = {};
+        const NOTES = [
+          { x: -900, y: -420, ic: "chat", c: ["#7c5cff", "#5a3be0"], app: "Relay", time: "now", ti: "Maya Chen", bo: "Can you look at the Q3 pricing deck before 4?" },
+          { x: -930, y: -60, ic: "build", c: ["#ff6a5c", "#d63d32"], app: "Builds", time: "1m ago", ti: "main failed: web-app #4182", bo: "2 tests failed in checkout.spec.ts" },
+          { x: -870, y: 300, ic: "mail", c: ["#3d8bff", "#2363d6"], app: "Inbox", time: "2m ago", ti: "Liam Ortiz", bo: "Re: Contract redlines v3 (2 attachments)" },
+          { x: -500, y: -520, ic: "cal", c: ["#ff9f2e", "#e07a0c"], app: "Calendar", time: "in 5 min", ti: "Design crit", bo: "Room 4B, with Priya, Noah and 4 others" },
+          { x: 470, y: -505, ic: "task", c: ["#38c08a", "#1f9a69"], app: "Tracker", time: "now", ti: "ENG-2141 assigned to you", bo: "Fix WebSocket reconnect on chat nav" },
+          { x: 560, y: -250, ic: "chat", c: ["#7c5cff", "#5a3be0"], app: "Relay", time: "3m ago", ti: "#launch", bo: "Priya: staging is green, shipping at 3:30" },
+          { x: 600, y: 90, ic: "bill", c: ["#2fb5c9", "#1a8ea0"], app: "Ledger", time: "8m ago", ti: "Invoice INV-2291", bo: "$12,480.00 due tomorrow from Northwind" },
+          { x: 520, y: 400, ic: "photo", c: ["#f05ca0", "#c93a7b"], app: "Photos", time: "12m ago", ti: "Noah Kim shared 24 photos", bo: "Offsite, Day 2" },
+          { x: -520, y: 470, ic: "cal", c: ["#ff9f2e", "#e07a0c"], app: "Calendar", time: "now", ti: "1:1 with Jordan moved", bo: "Thursday, 4:30 PM to 5:00 PM" },
+          { x: 120, y: 505, ic: "mail", c: ["#3d8bff", "#2363d6"], app: "Inbox", time: "4m ago", ti: "Ava Patel", bo: "Quick question about the hiring plan" },
+        ];
+        const CW = 420, CH = 88;
+        function rr(x, a, b, w, h, r) { x.beginPath(); x.roundRect(a, b, w, h, r); }
+        function drawCard(x, n) {
+          const a = n.x, b = n.y;
+          rr(x, a, b, CW, CH, 20);
+          x.fillStyle = "rgba(30,35,48,0.94)"; x.fill();
+          x.strokeStyle = "rgba(255,255,255,0.10)"; x.lineWidth = 1; x.stroke();
+          const g = x.createLinearGradient(a + 18, b + 20, a + 18, b + 68);
+          g.addColorStop(0, n.c[0]); g.addColorStop(1, n.c[1]);
+          rr(x, a + 18, b + 22, 44, 44, 11); x.fillStyle = g; x.fill();
+          x.save(); x.translate(a + 28, b + 32); x.scale(1, 1);
+          x.strokeStyle = "#ffffff"; x.lineWidth = 2; x.lineCap = "round"; x.lineJoin = "round";
+          x.stroke(ICONP[n.ic] || (ICONP[n.ic] = new Path2D(n.ic in ICONS ? ICONS[n.ic] : "")));
+          x.restore();
+          x.textBaseline = "alphabetic"; x.letterSpacing = "0px";
+          x.font = "500 14px Inter, sans-serif"; x.fillStyle = "rgba(235,239,248,0.50)";
+          x.fillText(n.app.toUpperCase(), a + 76, b + 30);
+          x.textAlign = "right"; x.font = "400 14px Inter, sans-serif"; x.fillText(n.time, a + CW - 18, b + 30); x.textAlign = "left";
+          x.font = "600 17px Inter, sans-serif"; x.fillStyle = "rgba(244,246,252,0.95)";
+          x.fillText(n.ti, a + 76, b + 53);
+          x.font = "400 16px Inter, sans-serif"; x.fillStyle = "rgba(235,239,248,0.62)";
+          let bo = n.bo;
+          while (x.measureText(bo).width > CW - 96 && bo.length > 4) bo = bo.slice(0, -2);
+          if (bo !== n.bo) bo = bo.trimEnd() + "…";
+          x.fillText(bo, a + 76, b + 75);
+        }
+        const MOON = new Path2D("M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z");
+        function drawFocus(x, k) {
+          x.save();
+          x.globalAlpha = k;
+          x.translate(0, 12 * (1 - k));
+          x.textAlign = "center"; x.textBaseline = "alphabetic";
+          // label
+          x.font = "500 22px Inter, sans-serif"; x.letterSpacing = "0px";
+          const lw = x.measureText("Focus").width;
+          x.save(); x.translate(-lw / 2 - 18, -96); x.scale(0.9, 0.9);
+          x.strokeStyle = "#6fa6ff"; x.lineWidth = 2.2; x.lineJoin = "round"; x.stroke(MOON); x.restore();
+          x.fillStyle = "#6fa6ff"; x.fillText("Focus", 16, -77);
+          x.font = "600 56px Inter, sans-serif"; x.letterSpacing = "-1.6px"; x.fillStyle = "#f2f4f9";
+          x.fillText("Quiet until 5:00 PM", 0, -2);
+          x.font = "400 22px Inter, sans-serif"; x.letterSpacing = "-0.1px"; x.fillStyle = "rgba(225,231,243,0.58)";
+          x.fillText("142 notifications held.", 0, 52);
+          x.fillText("3 people can still reach you.", 0, 82);
+          x.restore();
+        }
+
+        let lastKey = "";
+        function updateBackdrop(notesA, blur, focusA) {
+          const key = notesA.toFixed(3) + "|" + blur.toFixed(2) + "|" + focusA.toFixed(3);
+          if (key === lastKey) return false;
+          lastKey = key;
+          bctx.setTransform(1, 0, 0, 1, 0, 0);
+          bctx.filter = "none"; bctx.globalAlpha = 1;
+          bctx.drawImage(baseC, 0, 0);
+          const s = TS * KS;
+          if (notesA > 0.001) {
+            bctx.save();
+            bctx.setTransform(s, 0, 0, s, TW / 2, TH / 2);
+            bctx.globalAlpha = notesA;
+            if (blur > 0.05) bctx.filter = "blur(" + (blur * s).toFixed(2) + "px)";
+            NOTES.forEach((n) => drawCard(bctx, n));
+            bctx.restore();
+            bctx.filter = "none";
+          }
+          if (focusA > 0.001) {
+            bctx.save();
+            bctx.setTransform(s, 0, 0, s, TW / 2, TH / 2);
+            drawFocus(bctx, focusA);
+            bctx.restore();
+          }
+          return true;
+        }
+
+        /* ================= WebGL ================= */
+        const canvas = document.getElementById("gl");
+        const gl = canvas.getContext("webgl2", { antialias: false, preserveDrawingBuffer: true, alpha: false, premultipliedAlpha: false });
+
+        const VS = `#version 300 es
+        in vec2 a; void main(){ gl_Position = vec4(a, 0.0, 1.0); }`;
+
+        const FS = `#version 300 es
+        precision highp float;
+        out vec4 o;
+        uniform vec2 uRes;
+        uniform vec3 uCam;
+        uniform float uF;
+        uniform sampler2D uBg;
+        uniform vec2 uBgW;
+        uniform float uBgZ;
+        uniform int uFam;
+        uniform vec3 uP;
+        uniform mat3 uM;
+        uniform float uZs;
+        uniform vec4 uBead;   // y, r, sx, sy
+        uniform vec4 uBody;   // yA, rA, yB, rB
+        uniform float uBodyOn;
+        uniform float uK;
+        uniform vec4 uThr;    // top, yU, yL, radius
+        uniform vec3 uRc;
+        uniform vec4 uRing;   // R, r, flat, wobble
+        uniform float uSp[${NSP}];
+        uniform float uSpOn;
+        uniform float uTime;
+        uniform vec3 uLook;   // dispersion, iridescence, rim
+        uniform float uEW;    // rim width in cos(theta)
+        uniform vec4 uG1;     // caustic line: x, y0, y1, intensity (screen px, y up)
+        uniform vec4 uG2;
+        uniform vec4 uFlash;  // break flash: x, y, intensity
+        uniform float uFade;
+        uniform float uFrame;
+
+        float smin(float a, float b, float k){ float h = max(k - abs(a - b), 0.0) / k; return min(a, b) - h * h * k * 0.25; }
+        float sdCapsule(vec3 p, vec3 a, vec3 b, float r){ vec3 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-4), 0.0, 1.0); return length(pa - ba * h) - r; }
+        float sdRoundCone(vec3 p, vec3 a, vec3 b, float r1, float r2){
+          vec3 ba = b - a; float l2 = dot(ba, ba); float rr = r1 - r2; float a2 = l2 - rr * rr; float il2 = 1.0 / l2;
+          vec3 pa = p - a; float y = dot(pa, ba); float z = y - l2;
+          vec3 xv = pa * l2 - ba * y; float x2 = dot(xv, xv);
+          float y2 = y * y * l2; float z2 = z * z * l2;
+          float k = sign(rr) * rr * rr * x2;
+          if (sign(z) * a2 * z2 > k) return sqrt(x2 + z2) * il2 - r2;
+          if (sign(y) * a2 * y2 < k) return sqrt(x2 + y2) * il2 - r1;
+          return (sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
+        }
+
+        float mapDrop(vec3 pw){
+          vec3 p = transpose(uM) * (pw - uP);
+          p.z /= uZs;
+          vec3 pb = p - vec3(0.0, uBead.x, 0.0);
+          pb.x /= uBead.z; pb.y /= uBead.w; pb.z /= uBead.z;
+          float d = (length(pb) - uBead.y) * min(uBead.z, uBead.w);
+          if (uBodyOn > 0.5) {
+            float dc = sdRoundCone(p, vec3(0.0, uBody.x, 0.0), vec3(0.0, uBody.z, 0.0), uBody.y, uBody.w);
+            d = smin(d, dc, uK);
+          }
+          if (uThr.w > 0.0) {
+            float t1 = sdCapsule(p, vec3(0.0, uThr.x, 0.0), vec3(0.0, uThr.y, 0.0), uThr.w);
+            float t2 = sdCapsule(p, vec3(0.0, uThr.z, 0.0), vec3(0.0, uBody.x + uBody.y * 0.3, 0.0), uThr.w);
+            d = smin(d, min(t1, t2), 9.0);
+          }
+          return d * min(uZs, 1.0);
+        }
+
+        float mapRing(vec3 pw){
+          vec3 p = pw - uRc;
+          float l = length(p.xy);
+          float an = atan(p.y, p.x);
+          float R = uRing.x + uRing.w * (0.6 * sin(3.0 * an + uTime * 2.1) + 0.4 * sin(5.0 * an - uTime * 3.3));
+          vec2 q = vec2(l - R, p.z * uRing.z);
+          float d = (length(q) - uRing.y) / uRing.z;
+          if (uSpOn > 0.5 && d < 200.0) {
+            vec3 pp = vec3(p.xy, p.z * 2.4);
+            for (int i = 0; i < ${NSP}; i++) {
+              float L = uSp[i];
+              if (L < 1.0) continue;
+              float fi = float(i);
+              float ai = (fi + 0.42 * sin(fi * 12.9898)) * 6.2831853 / ${NSP}.0;
+              vec2 dir = vec2(cos(ai), sin(ai));
+              vec3 A = vec3(dir * (R + uRing.y * 0.15), 0.0);
+              vec3 B = vec3(dir * (R + uRing.y + L), 0.0);
+              float ds = sdRoundCone(pp, A, B, uRing.y * 0.5, 0.7) / 2.4;
+              d = smin(d, ds, 14.0);
+            }
+          }
+          return d * 0.9;
+        }
+
+        float map(vec3 p){ return uFam == 0 ? mapDrop(p) : mapRing(p); }
+
+        vec3 nrm(vec3 p){
+          const vec2 e = vec2(0.5, -0.5);
+          return normalize(e.xyy * map(p + e.xyy) + e.yyx * map(p + e.yyx) + e.yxy * map(p + e.yxy) + e.xxx * map(p + e.xxx));
+        }
+
+        vec3 bgAt(vec3 ro, vec3 rd){
+          rd.z = min(rd.z, -0.08);
+          float t = (uBgZ - ro.z) / rd.z;
+          vec2 w = ro.xy + rd.xy * t;
+          vec2 uv = w / uBgW + 0.5;
+          return texture(uBg, uv).rgb;
+        }
+
+        vec2 bgW(vec3 ro, vec3 rd){
+          rd.z = min(rd.z, -0.08);
+          float t = (uBgZ - ro.z) / rd.z;
+          return ro.xy + rd.xy * t;
+        }
+        // refracted sample, deviation from the straight-through point softly limited
+        vec3 bgDev(vec3 q, vec3 r2, vec2 w0){
+          vec2 dv = bgW(q, r2) - w0;
+          float L = length(dv);
+          dv *= 320.0 / max(320.0, L);
+          return texture(uBg, (w0 + dv) / uBgW + 0.5).rgb;
+        }
+
+        float pane(vec2 q, vec2 c, vec2 h){ vec2 d = abs(q - c) - h; return 1.0 - smoothstep(-0.06, 0.1, max(d.x, d.y)); }
+
+        vec3 env(vec3 d){
+          vec3 L1 = normalize(vec3(-0.5, 0.8, 0.45));
+          float k1 = pow(max(dot(d, L1), 0.0), 40.0) * 1.5;
+          float strip = exp(-pow((d.y - 0.62) * 7.0, 2.0)) * smoothstep(-0.2, 0.5, d.z) * 0.32;
+          vec3 L2 = normalize(vec3(0.75, -0.35, 0.3));
+          float k2 = pow(max(dot(d, L2), 0.0), 30.0) * 0.45;
+          float sky = 0.05 + 0.32 * smoothstep(-0.3, 0.95, d.y);
+          float side = 0.22 * pow(1.0 - abs(d.z), 3.0);
+          float win = (pane(d.xy, vec2(-0.47, 0.52), vec2(0.12, 0.13)) + pane(d.xy, vec2(-0.2, 0.52), vec2(0.12, 0.13))
+                     + pane(d.xy, vec2(-0.47, 0.22), vec2(0.12, 0.13)) + pane(d.xy, vec2(-0.2, 0.22), vec2(0.12, 0.13))) * smoothstep(0.0, 0.35, d.z);
+          k1 += win * 0.6;
+          return vec3(0.86, 0.9, 1.0) * (k1 + strip) + vec3(0.5, 0.62, 0.92) * k2 + vec3(0.62, 0.68, 0.8) * (sky + side) * 0.6 + vec3(0.015, 0.022, 0.04);
+        }
+
+        float lineGlow(vec2 s, vec4 g){
+          if (g.w <= 0.0) return 0.0;
+          float y0 = min(g.y, g.z), y1 = max(g.y, g.z);
+          float dx = abs(s.x - g.x);
+          float dy = max(0.0, max(y0 - s.y, s.y - y1));
+          float d = length(vec2(dx, dy));
+          return g.w * (exp(-d / 1.1) * 1.3 + exp(-d / 7.0) * 0.32 + exp(-d / 26.0) * 0.08);
+        }
+
+        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+
+        void main(){
+          vec2 s = gl_FragCoord.xy / uRes * vec2(1920.0, 1080.0) - vec2(960.0, 540.0);
+          vec3 ro = uCam;
+          vec3 rd = normalize(vec3(s, -uF));
+          vec3 bg0 = bgAt(ro, rd);
+          vec2 w0 = bgW(ro, rd);
+          vec3 col = bg0;
+
+          float t = (430.0 - ro.z) / rd.z;
+          float tEnd = (-430.0 - ro.z) / rd.z;
+          bool hit = false;
+          for (int i = 0; i < 220; i++) {
+            float d = map(ro + rd * t);
+            if (d < 0.12) { hit = true; break; }
+            t += d * 0.85;
+            if (t > tEnd) break;
+          }
+
+          if (hit) {
+            vec3 p = ro + rd * t;
+            vec3 n = nrm(p);
+            float ct = clamp(dot(-rd, n), 0.0, 1.0);
+            float fr = 0.04 + 0.96 * pow(1.0 - ct, 5.0);
+            float ior = 1.47;
+            vec3 r1 = refract(rd, n, 1.0 / ior);
+            // march through the glass to the exit surface
+            vec3 dir = r1;
+            vec3 q = p;
+            vec3 n2 = n;
+            float len = 0.0;
+            for (int b = 0; b < 3; b++) {
+              q += dir * 1.5; len += 1.5;
+              for (int i = 0; i < 72; i++) {
+                float d = -map(q);
+                if (d < 0.35) break;
+                float st = max(d * 0.9, 0.7);
+                q += dir * st; len += st;
+              }
+              n2 = nrm(q);
+              vec3 tst = refract(dir, -n2, ior);
+              if (dot(tst, tst) > 1e-4 || b == 2) break;
+              dir = reflect(dir, -n2);
+            }
+            vec3 trans;
+            for (int c = 0; c < 3; c++) {
+              float ic = ior + (float(c) - 1.0) * uLook.x;
+              vec3 r2 = refract(dir, -n2, ic);
+              if (dot(r2, r2) < 1e-4) r2 = reflect(dir, -n2);
+              trans[c] = bgDev(q, r2, w0)[c];
+            }
+            trans *= exp(-len * vec3(0.0012, 0.0009, 0.0005)) * vec3(0.9, 0.94, 1.0);
+            trans = mix(trans, bg0 * 0.85, smoothstep(0.55, 0.05, ct) * 0.5);
+            vec3 rdir = reflect(rd, n);
+            vec3 refl = env(rdir) + bgAt(p, rdir) * smoothstep(0.0, -0.35, rdir.z) * 0.95;
+            col = trans * (1.0 - fr) + refl * fr * 1.7;
+            vec3 wd = rdir;
+            float winS = (pane(wd.xy, vec2(-0.47, 0.52), vec2(0.12, 0.13)) + pane(wd.xy, vec2(-0.2, 0.52), vec2(0.12, 0.13)) + pane(wd.xy, vec2(-0.47, 0.22), vec2(0.12, 0.13)) + pane(wd.xy, vec2(-0.2, 0.22), vec2(0.12, 0.13))) * smoothstep(0.0, 0.35, wd.z);
+            col += vec3(0.82, 0.88, 1.0) * winS * 0.1;
+            vec2 nn = normalize(n.xy + vec2(1e-5));
+            float side = 0.16 + 1.25 * pow(max(0.0, dot(nn, normalize(vec2(-0.55, 0.83)))), 1.5) + 0.45 * max(0.0, dot(nn, normalize(vec2(0.72, -0.69))));
+            float edge = (pow(smoothstep(uEW, 0.0, ct), 1.4) * 3.0 + pow(1.0 - ct, 3.0) * 0.32) * side * uLook.z;
+            col += edge * vec3(0.93, 0.96, 1.0);
+            float an = atan(n.y, n.x);
+            vec3 ir = 0.5 + 0.5 * cos(6.2831853 * (vec3(0.0, 0.33, 0.67) + (1.0 - ct) * 1.7 + an * 0.16));
+            col += uLook.y * pow(1.0 - ct, 2.0) * ir * 1.0;
+          }
+
+          // caustic along the thinning neck, and a glint at the break
+          col += vec3(0.86, 0.93, 1.0) * (lineGlow(s, uG1) + lineGlow(s, uG2));
+          if (uFlash.z > 0.0) {
+            vec2 dq = s - uFlash.xy;
+            float r = length(dq);
+            float fl = exp(-r / 5.0) * 1.6 + exp(-r / 34.0) * 0.45 + exp(-abs(dq.y) / 1.6) * exp(-abs(dq.x) / 110.0) * 0.7 + exp(-abs(dq.x) / 1.6) * exp(-abs(dq.y) / 60.0) * 0.35;
+            col += vec3(0.9, 0.95, 1.0) * fl * uFlash.z;
+          }
+
+          vec2 vv = s / vec2(960.0, 540.0);
+          col *= 1.0 - 0.3 * pow(clamp(length(vv * vec2(0.85, 1.0)) / 1.3, 0.0, 1.0), 2.2);
+          col *= uFade;
+          col += (hash(gl_FragCoord.xy + uFrame * 17.13) - 0.5) * (2.2 / 255.0);
+          o = vec4(col, 1.0);
+        }`;
+
+        function sh(type, src) {
+          const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+          if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+          return s;
+        }
+        const prog = gl.createProgram();
+        gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS));
+        gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+        gl.useProgram(prog);
+        const vb = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+        const aLoc = gl.getAttribLocation(prog, "a");
+        gl.enableVertexAttribArray(aLoc);
+        gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0);
+        const U = {};
+        ["uRes", "uCam", "uF", "uBg", "uBgW", "uBgZ", "uFam", "uP", "uM", "uZs", "uBead", "uBody", "uBodyOn", "uK", "uThr", "uRc", "uRing", "uSp", "uSpOn", "uTime", "uLook", "uEW", "uG1", "uG2", "uFlash", "uFade", "uFrame"].forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
+
+        const tex = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+        drawBase();
+
+        /* ================= motion specification ================= */
+        const T = {
+          slide: [0, 1.2],      // arc slide, camera follows and eases back
+          rise: [1.2, 2.2],     // rotate upright + stretch (1s)
+          neck: [2.2, 2.45],    // neck thins to a line and breaks (0.25s)
+          brk: 2.41,
+          hold: [2.45, 3.45],   // bead hovers (1s)
+          burst: [3.45, 3.75],  // bead opens into a ring
+          ring: [3.75, 4.55],   // ring contracts (0.8s)
+          settle: [4.55, 6.75], // jitter + spikes outside the ring
+          gather: [6.75, 7.35], // ring collapses into the logo bead
+          push: [7.35, 10],
+        };
+
+        // spike personalities (fixed numbers, no randomness)
+        const SP = Array.from({ length: NSP }, (_, i) => {
+          const h = (v) => { const s = Math.sin(v) * 43758.5453; return s - Math.floor(s); };
+          return { L: 90 + 150 * h(i * 3.17 + 1.3), f: 1.1 + 1.4 * h(i * 7.31 + 2.1), ph: h(i * 1.91 + 5.7) };
+        });
+
+        function rotM(ry, rz) {
+          const cb = Math.cos(ry), sb = Math.sin(ry), cz = Math.cos(rz), sz = Math.sin(rz);
+          // R = Rz * Ry (tilt about the long axis, then roll), column-major
+          return new Float32Array([cz * cb, sz * cb, -sb, -sz, cz, 0, cz * sb, sz * sb, cb]);
+        }
+
+        // droplet geometry as a function of time (local units, y up)
+        function drop(t) {
+          const k1 = eStretch(seg(t, T.rise[0], T.rise[1]));
+          let beadY = lerp(190, 175, k1), beadR = lerp(150, 70, k1);
+          let yA = lerp(190, -70, k1), rA = lerp(150, 150, k1);
+          let yB = lerp(-190, -700, k1), rB = lerp(150, 270, k1);
+          let K = lerp(24, 70, k1);
+          const u2 = seg(t, 2.05, T.neck[1]);
+          const f2 = u2 * u2;
+          yA -= 250 * f2; rA = lerp(rA, 120, u2); yB -= 420 * f2; K = lerp(K, 46, u2);
+          if (t > T.neck[1]) {
+            const d = t - T.neck[1];
+            yA -= 2600 * d + 2600 * d * d; yB -= 2600 * d + 2600 * d * d;
+          }
+          const sc = lerp(1, DS, k1); // the droplet grows as it stands up
+          return { beadY: beadY * sc, beadR: beadR * sc, yA: yA * sc, rA: rA * sc, yB: yB * sc, rB: rB * sc, K: K * sc };
+        }
+
+        function frameState(t) {
+          const s = { t };
+          // camera: arc to the right while easing back, then fixed
+          const c = 1 - Math.pow(1 - seg(t, T.slide[0], T.slide[1]), 1.6);
+          const ca = ((101.5 - 11.5 * c) * Math.PI) / 180;
+          let camZ = F - 200 * (1 - c);
+          if (t > T.push[0]) camZ = F / (1 + 0.03 * sineIO(seg(t, T.push[0], T.push[1])));
+          s.cam = [1500 * Math.cos(ca), 1500 * Math.sin(ca) - 1500, camZ];
+          s.fade = sineIO(seg(t, 0, 0.45));
+          s.frame = Math.round(t * 30);
+
+          // backdrop overlay
+          let notes = 0.92 * seg(t, 3.45, 3.62);
+          notes = lerp(notes, 0.2, sineIO(seg(t, 4.5, 5.3)));
+          notes *= 1 - sineIO(seg(t, 6.5, 6.8));
+          s.notes = notes;
+          s.blur = 3.5 * sineIO(seg(t, 4.5, 5.3));
+          s.focus = sineIO(seg(t, 4.35, 4.95)) * (1 - sineIO(seg(t, 6.45, 6.75)));
+
+          s.g1 = [0, 0, 0, 0]; s.g2 = [0, 0, 0, 0]; s.flash = [0, 0, 0, 0];
+          if (t < T.burst[0]) {
+            s.fam = 0;
+            // slab slides along an arc
+            const oa = ((130 - 38 * c) * Math.PI) / 180;
+            const ax = 800 * Math.cos(oa), ay = 800 * Math.sin(oa) - 720;
+            const kp = eStretch(seg(t, T.rise[0], T.rise[1]));
+            const drift = 7 * sineIO(seg(t, T.hold[0], T.hold[1]));
+            s.P = [lerp(ax, 0, kp), lerp(ay, PY, kp) + drift, 0];
+            const kr = eStretch(seg(t, 1.15, 1.95));
+            const ry = lerp(54, 0, kr) * (Math.PI / 180);
+            const rz = lerp(lerp(-68, -52, c), 0, kr) * (Math.PI / 180);
+            s.M = rotM(ry, rz);
+            s.zs = lerp(0.085, ZB, eStretch(seg(t, 1.4, 2.2)));
+            const g = drop(t);
+            // bead stretch at the neck and rebound after the break
+            let sy = 1 + 0.08 * Math.pow(seg(t, T.neck[0], T.brk), 2);
+            if (t > T.brk) sy = 1.08 - 0.08 * eBack(seg(t, T.brk, T.brk + 0.5));
+            const sw = 1 + 0.05 * Math.sin(Math.PI * seg(t, T.brk, T.brk + 0.42));
+            const sxv = 1 / Math.sqrt(sy);
+            s.bead = [g.beadY, g.beadR * sw, sxv, sy];
+            s.body = [g.yA, g.rA, g.yB, g.rB];
+            s.bodyOn = t < 3.0 ? 1 : 0;
+            s.K = g.K;
+            // thread: one line that thins, then two stubs that retract
+            const top = g.beadY - g.beadR * 0.5;
+            if (t < 2.12) s.thr = [0, 0, 0, 0];
+            else if (t <= T.brk) {
+              const bot = g.yA + g.rA * 0.3;
+              const mid = (top + bot) / 2;
+              const r = lerp(18, 1.6, smooth(seg(t, 2.12, T.brk)));
+              s.thr = [top, mid - 0.01, mid, r];
+              const gi = smooth(seg(t, 2.16, 2.36));
+              s.g1 = [s.P[0], s.P[1] + g.beadY - g.beadR * 0.98, s.P[1] + g.yA + g.rA * 0.98, gi];
+            } else {
+              const gb = drop(T.brk);
+              const midB = (gb.beadY - gb.beadR * 0.5 + gb.yA + gb.rA * 0.3) / 2;
+              const ku = 1 - Math.pow(1 - seg(t, T.brk, T.brk + 0.16), 3);
+              const kl = seg(t, T.brk, T.brk + 0.22);
+              const yU = lerp(midB, top, ku);
+              const lowLen = (midB - (gb.yA + gb.rA * 0.3)) * (1 - kl);
+              const yL = g.yA + g.rA * 0.3 + lowLen;
+              const r = 1.6 + 2.4 * seg(t, T.brk, T.brk + 0.16);
+              s.thr = [top, yU, yL, kl >= 1 ? 0 : r];
+              const gf = 1 - seg(t, T.brk, T.brk + 0.2);
+              s.g1 = [s.P[0], s.P[1] + g.beadY - g.beadR, s.P[1] + yU, gf];
+              s.g2 = [s.P[0], s.P[1] + g.yA + g.rA, s.P[1] + yL, kl >= 1 ? 0 : gf];
+              const fk = seg(t, T.brk, T.brk + 0.14);
+              s.flash = [s.P[0], s.P[1] + midB, fk >= 1 ? 0 : Math.pow(1 - fk, 2), 0];
+            }
+            s.look = [0.016, 0, 1.15];
+            s.ew = lerp(0.5, 0.32, eStretch(seg(t, 1.3, 2.1)));
+          } else {
+            s.fam = 1;
+            const ue = seg(t, T.burst[0], T.burst[1]);
+            const uc = eRing(seg(t, T.ring[0], T.ring[1]));
+            const kg = eStretch(seg(t, T.gather[0], T.gather[1]));
+            const g0 = drop(T.burst[0]);
+            let R = 1000 * ue * ue * ue;
+            let r = lerp(g0.beadR, 120, ue * ue);
+            const flat = FLAT;
+            let cy = lerp(PY + 7 + g0.beadY, 0, smooth(ue));
+            if (t >= T.ring[0]) { R = lerp(1000, 350, uc); r = lerp(120, 34, uc); }
+            // settle jitter
+            const ds = t - T.settle[0];
+            let wob = 0;
+            if (ds > 0) {
+              R += 5 * Math.sin(2 * Math.PI * 5.5 * ds) * Math.exp(-2.4 * ds);
+              wob = 3.2 * Math.exp(-1.2 * ds) * (1 - kg);
+            }
+            let cx = 0;
+            if (t >= T.gather[0]) {
+              R = lerp(R, 0, kg); r = lerp(34, LR, kg); cx = lerp(0, -BX, kg);
+            }
+            r *= 1 + 0.05 * Math.sin(Math.PI * seg(t, T.gather[1], T.gather[1] + 0.42));
+            s.rc = [cx, cy, 0];
+            s.ring = [R, r, flat, wob];
+            const env = smooth(seg(t, 4.42, 4.68)) * (1 - 0.72 * sineIO(seg(t, 4.95, 6.4))) * (1 - smooth(seg(t, 6.5, 6.8)));
+            s.sp = SP.map((q) => env * q.L * Math.pow(Math.max(0, Math.sin(2 * Math.PI * (q.f * (t - 4.42) + q.ph))), 2));
+            s.spOn = env > 0.002 ? 1 : 0;
+            const ir = smooth(ue) * lerp(1, 0.4, kg);
+            s.look = [lerp(0.014, 0.12, smooth(ue)) * lerp(1, 0.35, kg), ir * 1.3, 1.15];
+            s.ew = lerp(0.32, 0.5, kg);
+          }
+          return s;
+        }
+
+        const ZERO_SP = new Float32Array(NSP);
+        const I3 = new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+        let texReady = false;
+
+        function renderAt(t) {
+          t = Math.max(0, Math.min(DUR, t));
+          const s = frameState(t);
+          if (updateBackdrop(s.notes, s.blur, s.focus) || !texReady) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bgC);
+            texReady = true;
+          }
+          gl.viewport(0, 0, canvas.width, canvas.height);
+          gl.uniform2f(U.uRes, canvas.width, canvas.height);
+          gl.uniform3fv(U.uCam, s.cam);
+          gl.uniform1f(U.uF, F);
+          gl.uniform1i(U.uBg, 0);
+          gl.uniform2f(U.uBgW, BGW, BGH);
+          gl.uniform1f(U.uBgZ, BGZ);
+          gl.uniform1i(U.uFam, s.fam);
+          gl.uniform1f(U.uTime, t);
+          gl.uniform1f(U.uFade, s.fade);
+          gl.uniform1f(U.uFrame, s.frame);
+          gl.uniform3fv(U.uLook, s.look);
+          gl.uniform1f(U.uEW, s.ew);
+          gl.uniform4fv(U.uG1, s.g1);
+          gl.uniform4fv(U.uG2, s.g2);
+          gl.uniform4fv(U.uFlash, s.flash);
+          if (s.fam === 0) {
+            gl.uniform3fv(U.uP, s.P);
+            gl.uniformMatrix3fv(U.uM, false, s.M);
+            gl.uniform1f(U.uZs, s.zs);
+            gl.uniform4fv(U.uBead, s.bead);
+            gl.uniform4fv(U.uBody, s.body);
+            gl.uniform1f(U.uBodyOn, s.bodyOn);
+            gl.uniform1f(U.uK, s.K);
+            gl.uniform4fv(U.uThr, s.thr);
+            gl.uniform1fv(U.uSp, ZERO_SP);
+            gl.uniform1f(U.uSpOn, 0);
+          } else {
+            gl.uniformMatrix3fv(U.uM, false, I3);
+            gl.uniform1f(U.uZs, 1);
+            gl.uniform3fv(U.uRc, s.rc);
+            gl.uniform4fv(U.uRing, s.ring);
+            gl.uniform1fv(U.uSp, new Float32Array(s.sp));
+            gl.uniform1f(U.uSpOn, s.spOn);
+          }
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+
+        window.__gds = { renderAt, frameState, T };
+        window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+        renderAt(window.__hfThreeTime || 0);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { lastKey = ""; renderAt(window.__hfThreeTime || 0); });
+      })();
+    </script>
+  </body>
+</html>

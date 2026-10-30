@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --base: #050506;
+        --wbg: #0b0b0d;
+        --side: #0f0f12;
+        --card: #111114;
+        --line: #232328;
+        --line2: #1a1a1e;
+        --tx: #ededf0;
+        --sub: #a3a3ad;
+        --mut: #878791;
+        --acc: #4c8dff;
+        --ok: #3fb96a;
+        --warn: #e5a33a;
+        --err: #f0524f;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--base); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--base);
+        font-family: var(--font-ui); color: var(--tx); -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .a { position: absolute; }
+      svg { display: block; flex: none; }
+
+      /* ---------- backdrop: near black, one raking light from the upper left ---------- */
+      #bg {
+        background:
+          radial-gradient(ellipse 70% 80% at 0% 0%, rgba(150, 170, 210, 0.13) 0%, rgba(150, 170, 210, 0) 70%),
+          radial-gradient(ellipse 50% 45% at 52% 55%, rgba(76, 141, 255, 0.07) 0%, rgba(76, 141, 255, 0) 70%),
+          var(--base);
+      }
+
+      /* ---------- depth of field: four copies of the same scene, blurred in screen space ---------- */
+      #dof { --ang: 168; --c: 600; --w: 120; }
+      .lay { overflow: hidden; }
+      .L1 { filter: blur(2.6px); }
+      .L2 { filter: blur(6px); }
+      .L3 { filter: blur(11px); }
+      .L0 {
+        -webkit-mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 60px), #000 calc(var(--c) * 1px - var(--w) * 1px), #000 calc(var(--c) * 1px + var(--w) * 1px), transparent calc(var(--c) * 1px + var(--w) * 1px + 60px));
+        mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 60px), #000 calc(var(--c) * 1px - var(--w) * 1px), #000 calc(var(--c) * 1px + var(--w) * 1px), transparent calc(var(--c) * 1px + var(--w) * 1px + 60px));
+      }
+      .L1 {
+        -webkit-mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 160px), #000 calc(var(--c) * 1px - var(--w) * 1px - 90px), #000 calc(var(--c) * 1px + var(--w) * 1px + 90px), transparent calc(var(--c) * 1px + var(--w) * 1px + 160px));
+        mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 160px), #000 calc(var(--c) * 1px - var(--w) * 1px - 90px), #000 calc(var(--c) * 1px + var(--w) * 1px + 90px), transparent calc(var(--c) * 1px + var(--w) * 1px + 160px));
+      }
+      .L2 {
+        -webkit-mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 300px), #000 calc(var(--c) * 1px - var(--w) * 1px - 210px), #000 calc(var(--c) * 1px + var(--w) * 1px + 210px), transparent calc(var(--c) * 1px + var(--w) * 1px + 300px));
+        mask-image: linear-gradient(calc(var(--ang) * 1deg), transparent calc(var(--c) * 1px - var(--w) * 1px - 300px), #000 calc(var(--c) * 1px - var(--w) * 1px - 210px), #000 calc(var(--c) * 1px + var(--w) * 1px + 210px), transparent calc(var(--c) * 1px + var(--w) * 1px + 300px));
+      }
+      .stage { perspective: 2000px; perspective-origin: 960px 540px; }
+      .rot { transform-style: flat; }
+      .cam { position: absolute; left: 0; top: 0; width: 1536px; height: 880px; }
+
+      /* ---------- the app window ---------- */
+      .win {
+        position: absolute; left: 0; top: 0; width: 1536px; height: 880px; border-radius: 12px; overflow: hidden; background: var(--wbg);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.11), 0 30px 80px rgba(0, 0, 0, 0.7), 0 80px 200px rgba(0, 0, 0, 0.6);
+      }
+      .sheen {
+        position: absolute; left: 0; top: 0; width: 1536px; height: 880px; pointer-events: none; z-index: 30;
+        background: linear-gradient(112deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 26%, rgba(255, 255, 255, 0) 52%, rgba(255, 255, 255, 0.028) 60%, rgba(255, 255, 255, 0) 70%);
+      }
+      .pxg {
+        position: absolute; left: 0; top: 0; width: 1536px; height: 880px; pointer-events: none; z-index: 31; opacity: 1;
+        background-image:
+          repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0, rgba(0, 0, 0, 0.2) 0.22px, rgba(0, 0, 0, 0) 0.22px, rgba(0, 0, 0, 0) 1px),
+          repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0, rgba(0, 0, 0, 0.2) 0.22px, rgba(0, 0, 0, 0) 0.22px, rgba(0, 0, 0, 0) 1px);
+      }
+      .tl { position: absolute; top: 18px; width: 12px; height: 12px; border-radius: 50%; }
+
+      /* sidebar */
+      .side { position: absolute; left: 0; top: 0; width: 232px; height: 880px; background: var(--side); border-right: 1px solid var(--line); }
+      .team { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--tx); white-space: nowrap; }
+      .team .cv { color: var(--mut); margin-left: auto; }
+      .nav { display: flex; align-items: center; gap: 10px; width: 208px; height: 30px; padding: 0 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+      .nav svg { color: var(--mut); }
+      .nav.on { background: rgba(255, 255, 255, 0.06); color: var(--tx); }
+      .nav.on svg { color: var(--tx); }
+      .nav .ct { margin-left: auto; font-size: 11.5px; color: var(--mut); font-weight: 500; }
+      .nav .bd { margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: rgba(240, 82, 79, 0.16); color: #ff7b78; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+      .sh { font-size: 11.5px; font-weight: 500; color: var(--mut); display: flex; align-items: center; justify-content: space-between; width: 196px; }
+      .pj { display: flex; align-items: center; gap: 10px; width: 208px; height: 30px; padding: 0 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+      .pj.on { color: var(--tx); }
+      .pj i { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 10px; font-weight: 700; color: #fff; flex: none; }
+      .pj .sd { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; }
+      .use { background: var(--card); border: 1px solid var(--line); border-radius: 9px; }
+      .ul { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--sub); white-space: nowrap; }
+      .ul b { font-weight: 500; color: var(--tx); }
+      .ub { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+      .ub i { display: block; height: 4px; border-radius: 2px; background: var(--acc); }
+      .av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 600; flex: none; }
+
+      /* top bar */
+      .top { position: absolute; left: 232px; top: 0; width: 1304px; height: 48px; border-bottom: 1px solid var(--line); background: var(--wbg); }
+      .crumb { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+      .crumb .sl { color: #3e3e46; }
+      .crumb .cur { color: var(--tx); }
+      .srch { display: flex; align-items: center; gap: 8px; width: 248px; height: 30px; padding: 0 6px 0 10px; border: 1px solid var(--line); border-radius: 7px; background: #0e0e11; font-size: 13px; color: var(--mut); white-space: nowrap; }
+      .kb { display: inline-flex; align-items: center; justify-content: center; height: 20px; min-width: 20px; padding: 0 5px; border-radius: 5px; border: 1px solid var(--line); background: #16161a; color: var(--sub); font-size: 11.5px; font-weight: 500; }
+      .srch .kbs { margin-left: auto; display: flex; gap: 3px; }
+      .ib { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 7px; color: var(--sub); }
+
+      /* page header */
+      .h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.018em; white-space: nowrap; }
+      .meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--sub); white-space: nowrap; }
+      .meta span { display: flex; align-items: center; gap: 6px; }
+      .meta svg { color: var(--mut); }
+      .meta u { text-decoration: none; color: var(--tx); }
+      .btn { display: flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px; border-radius: 8px; font-size: 13px; font-weight: 500; white-space: nowrap; }
+      .btn.out { border: 1px solid #2c2c33; background: #121216; color: var(--tx); }
+      .btn.out svg { color: var(--sub); }
+      .btn.pri { background: #ededf0; color: #0b0b0d; font-weight: 600; padding: 0 6px 0 13px; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 4px 14px rgba(0, 0, 0, 0.4); }
+      .btn.pri .kk { display: flex; gap: 3px; margin-left: 4px; }
+      .btn.pri .kb { background: rgba(11, 11, 13, 0.07); border-color: rgba(11, 11, 13, 0.14); color: #3a3a42; font-weight: 600; }
+      .btn.ico { width: 34px; padding: 0; justify-content: center; }
+
+      .fb { display: flex; align-items: center; gap: 8px; }
+      .chip { display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: #0e0e11; font-size: 12.5px; font-weight: 500; color: var(--tx); white-space: nowrap; }
+      .chip svg { color: var(--mut); }
+      .live { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--sub); white-space: nowrap; }
+      .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(63, 185, 106, 0.18); }
+
+      /* cards */
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+      .kl { font-size: 12.5px; font-weight: 500; color: var(--sub); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+      .kv { font-variant-numeric: tabular-nums; font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.02em; white-space: nowrap; }
+      .kv small { font-size: 14px; font-weight: 500; color: var(--sub); letter-spacing: 0; margin-left: 3px; }
+      .dl { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+      .dl.g { color: var(--ok); }
+      .dl .vs { color: var(--mut); font-weight: 400; margin-left: 4px; }
+      .ct2 { font-size: 14px; font-weight: 600; white-space: nowrap; }
+      .ct2 span { font-weight: 400; color: var(--mut); margin-left: 6px; }
+      .seg { display: flex; height: 28px; padding: 2px; border: 1px solid var(--line); border-radius: 7px; background: #0e0e11; }
+      .seg span { display: flex; align-items: center; padding: 0 9px; border-radius: 5px; font-size: 12px; font-weight: 500; color: var(--mut); }
+      .seg span.on { background: #23232a; color: var(--tx); }
+      .lg { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--sub); white-space: nowrap; }
+      .lg span { display: flex; align-items: center; gap: 6px; }
+      .lg i { width: 10px; height: 2px; border-radius: 1px; }
+      .ax { font-variant-numeric: tabular-nums; font-size: 11px; color: var(--mut); white-space: nowrap; font-weight: 500; }
+      .tip { background: #1a1a1f; border: 1px solid #2e2e36; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+      .tip .tt { font-size: 11.5px; color: var(--sub); font-weight: 500; }
+      .tr { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--sub); white-space: nowrap; height: 20px; }
+      .tr b { margin-left: auto; font-weight: 600; color: var(--tx); }
+      .tr i { width: 8px; height: 8px; border-radius: 2px; }
+      .dep { display: flex; align-items: center; gap: 6px; height: 22px; padding: 0 7px; border-radius: 6px; background: rgba(76, 141, 255, 0.14); border: 1px solid rgba(76, 141, 255, 0.35); color: #9cc0ff; font-size: 11px; font-family: var(--font-mono); font-weight: 500; white-space: nowrap; }
+
+      /* routes table */
+      .rh { display: flex; align-items: center; height: 26px; font-size: 11.5px; color: var(--mut); font-weight: 500; white-space: nowrap; }
+      .rr { font-variant-numeric: tabular-nums; display: flex; align-items: center; height: 27px; font-size: 12.5px; color: var(--tx); white-space: nowrap; }
+      .rr .rt { font-family: var(--font-mono); font-size: 12px; color: var(--tx); width: 150px; overflow: hidden; text-overflow: ellipsis; }
+      .rr .n { width: 60px; text-align: right; color: var(--sub); }
+      .rr .p { width: 62px; text-align: right; }
+      .rr .bar { width: 44px; height: 4px; margin-left: 12px; border-radius: 2px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+      .rr .bar i { display: block; height: 4px; border-radius: 2px; background: var(--acc); }
+      .rr .e { width: 50px; text-align: right; color: var(--sub); }
+
+      /* deployments table */
+      .dh { display: flex; align-items: center; height: 30px; font-size: 11.5px; color: var(--mut); font-weight: 500; white-space: nowrap; border-bottom: 1px solid var(--line2); }
+      .dr { display: flex; align-items: center; height: 40px; font-size: 13px; color: var(--tx); white-space: nowrap; border-bottom: 1px solid var(--line2); }
+      .dr .msg { font-weight: 500; margin-left: 10px; }
+      .br { display: flex; align-items: center; gap: 5px; height: 22px; padding: 0 7px; margin-left: 10px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--sub); font-size: 11.5px; font-family: var(--font-mono); }
+      .br svg { color: var(--mut); }
+      .hash { margin-left: 10px; font-family: var(--font-mono); font-size: 11.5px; color: var(--mut); }
+      .st { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; }
+      .st i { width: 8px; height: 8px; border-radius: 50%; }
+      .env { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--sub); }
+      .cur2 { height: 20px; padding: 0 6px; border-radius: 5px; background: rgba(76, 141, 255, 0.14); color: #9cc0ff; font-size: 11px; font-weight: 600; display: flex; align-items: center; }
+      .du { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--sub); }
+      .du svg { color: var(--mut); }
+      .ag { font-size: 12.5px; color: var(--sub); }
+
+      /* ---------- finish ---------- */
+      #light {
+        z-index: 3; pointer-events: none;
+        background: linear-gradient(118deg, rgba(210, 222, 255, 0.10) 0%, rgba(210, 222, 255, 0.03) 30%, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, 0.22) 100%);
+      }
+      #grain {
+        z-index: 4; pointer-events: none; opacity: 0.075;
+        background-size: 256px 256px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      #vig { z-index: 5; pointer-events: none; background: radial-gradient(ellipse 75% 75% at 46% 46%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.62) 100%); }
+      #end { z-index: 6; opacity: 0; }
+      #lockup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; gap: 34px; padding-bottom: 12px; }
+      #lockup .wm { font-size: 150px; line-height: 170px; font-weight: 600; letter-spacing: -0.05em; color: #f2f2f5; padding-bottom: 10px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.5" data-width="1920" data-height="1080">
+      <div id="bg" class="clip full" data-start="0" data-duration="10.5" data-track-index="0"></div>
+
+      <div id="dof" class="clip full" data-start="0" data-duration="10.5" data-track-index="1" data-layout-allow-overlap>
+        <div class="lay full L3" data-layout-ignore><div class="stage full"><div class="rot full"><div class="cam"><div class="win"></div></div></div></div></div>
+        <div class="lay full L2" data-layout-ignore><div class="stage full"><div class="rot full"><div class="cam"><div class="win"></div></div></div></div></div>
+        <div class="lay full L1" data-layout-ignore><div class="stage full"><div class="rot full"><div class="cam"><div class="win"></div></div></div></div></div>
+        <div class="lay full L0" data-layout-allow-occlusion><div class="stage full"><div class="rot full"><div class="cam"><div class="win"></div></div></div></div></div>
+      </div>
+
+      <div id="light" data-layout-ignore class="clip full" data-start="0" data-duration="10.5" data-track-index="2"></div>
+      <div id="grain" data-layout-ignore class="clip full" data-start="0" data-duration="10.5" data-track-index="3"></div>
+      <div id="vig" data-layout-ignore class="clip full" data-start="0" data-duration="10.5" data-track-index="4"></div>
+
+      <div id="end" class="clip full" data-start="0" data-duration="10.5" data-track-index="5">
+        <div id="lockup" data-layout-allow-overlap>
+          <div id="mark">
+            <svg width="132" height="132" viewBox="0 0 100 100">
+              <rect width="100" height="100" rx="24" fill="#4c8dff"/>
+              <g fill="none" stroke="#fff" stroke-width="7.5" stroke-linecap="round">
+                <path d="M26 30a24 24 0 0 0 48 0"/>
+                <path d="M37 30a13 13 0 0 0 26 0" opacity="0.85"/>
+              </g>
+              <circle cx="50" cy="30" r="4.6" fill="#fff"/>
+              <path d="M20 74h60" stroke="#fff" stroke-width="7.5" stroke-linecap="round" opacity="0.55"/>
+            </svg>
+          </div>
+          <div id="wm" class="wm">Fathom</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const EXPO = "expo.out";
+      const EIO = "power3.inOut";
+
+      /* ---------- icons (lucide-style, 24 grid) ---------- */
+      const ICON = {
+        dash: '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+        rocket: '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
+        term: '<polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/>',
+        trace: '<path d="M8 6h10"/><path d="M6 12h9"/><path d="M11 18h7"/>',
+        chart: '<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>',
+        bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+        pulse: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+        gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+        sliders: '<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+        plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+        chD: '<path d="m6 9 6 6 6-6"/>',
+        chUD: '<path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>',
+        search: '<circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.3-4.3"/>',
+        help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+        globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+        branch: '<line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+        clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+        upR: '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+        undo: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+        cal: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+        filter: '<path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/>',
+        dl: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+        more: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+        max: '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/>',
+        down: '<polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/>',
+        up: '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+        server: '<rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/>',
+        side: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>'
+      };
+      const ic = (n, s, sw) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.5) +
+        '" stroke-linecap="round" stroke-linejoin="round">' + ICON[n] + "</svg>";
+      const MARK = (s) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#4c8dff"/>' +
+        '<g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path d="M26 30a24 24 0 0 0 48 0"/><path d="M37 30a13 13 0 0 0 26 0" opacity="0.85"/></g>' +
+        '<circle cx="50" cy="30" r="5.5" fill="#fff"/><path d="M20 74h60" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity="0.55"/></svg>';
+
+      const P = {
+        maya: ["Maya Chen", "MC", "#d9577f"],
+        liam: ["Liam Ortiz", "LO", "#3b82c4"],
+        priya: ["Priya Nair", "PN", "#8b5cf6"],
+        sofia: ["Sofia Reyes", "SR", "#1fa5a5"],
+        dana: ["Dana Whitfield", "DW", "#e8803a"],
+        alex: ["Alex Rivera", "AR", "#4b5563"]
+      };
+      const av = (k, s, f) => '<span class="av" style="width:' + s + "px;height:" + s + "px;font-size:" + f + "px;background:" + P[k][2] + '">' + P[k][1] + "</span>";
+      const at = (x, y, inner, extra) => '<div class="a' + (extra ? " " + extra : "") + '" style="left:' + x + "px;top:" + y + 'px">' + inner + "</div>";
+
+      const S = [];
+      S.push('<div class="sheen"></div><div class="pxg"></div>');
+
+      /* ---------- sidebar ---------- */
+      S.push('<div class="side">');
+      S.push('<i class="tl" style="left:18px;background:#ff5f57"></i><i class="tl" style="left:38px;background:#febc2e"></i><i class="tl" style="left:58px;background:#28c840"></i>');
+      S.push(at(196, 15, '<span style="color:#6e6e78">' + ic("side", 17) + "</span>"));
+      S.push('<div class="a team" style="left:16px;top:56px;width:200px">' + MARK(22) + 'Northwind<span class="cv">' + ic("chUD", 15) + "</span></div>");
+      const NAV = [
+        ["dash", "Overview", "", true], ["rocket", "Deployments", '<span class="ct">128</span>'], ["term", "Logs"], ["trace", "Traces"],
+        ["chart", "Metrics"], ["bell", "Alerts", '<span class="bd">2</span>'], ["pulse", "Uptime"], ["gauge", "Usage"], ["sliders", "Settings"]
+      ];
+      NAV.forEach((n, i) => {
+        S.push('<div class="a nav' + (n[3] ? " on" : "") + '" style="left:12px;top:' + (98 + i * 32) + 'px">' + ic(n[0], 16) + n[1] + (n[2] || "") + "</div>");
+      });
+      S.push('<div class="a sh" style="left:22px;top:404px">Projects<span>' + ic("plus", 14) + "</span></div>");
+      const PJ = [
+        ["S", "#4c8dff", "storefront-web", "#3fb96a", true], ["C", "#2f9e77", "checkout-api", "#3fb96a"], ["A", "#8b5cf6", "auth-service", "#3fb96a"],
+        ["I", "#e8803a", "search-indexer", "#e5a33a"], ["D", "#4b5563", "docs-site", "#3fb96a"]
+      ];
+      PJ.forEach((p, i) => {
+        S.push('<div class="a pj' + (p[4] ? " on" : "") + '" style="left:12px;top:' + (426 + i * 32) + 'px"><i style="background:' + p[1] + '">' + p[0] + "</i>" + p[2] + '<span class="sd" style="background:' + p[3] + '"></span></div>');
+      });
+      S.push('<div class="a use" style="left:12px;top:716px;width:208px;height:108px">' +
+        at(12, 11, '<div class="ul" style="width:182px"><b>Pro plan</b><span>Resets Nov 1</span></div>') +
+        at(12, 38, '<div class="ul" style="width:182px"><span>Invocations</span><span>1.24M / 2M</span></div>') +
+        at(12, 57, '<div class="ub" style="width:182px"><i style="width:62%"></i></div>') +
+        at(12, 70, '<div class="ul" style="width:182px"><span>Bandwidth</span><span>318 / 1,000 GB</span></div>') +
+        at(12, 89, '<div class="ub" style="width:182px"><i style="width:32%"></i></div>') + "</div>");
+      S.push('<div class="a" style="left:0;top:838px;width:232px;height:1px;background:var(--line)"></div>');
+      S.push(at(16, 848, av("alex", 24, 9.5)) + '<div class="a" style="left:48px;top:852px;font-size:13px;font-weight:500;color:var(--tx)">Alex Rivera</div>');
+      S.push(at(196, 851, '<span style="color:#6e6e78">' + ic("more", 17) + "</span>"));
+      S.push("</div>");
+
+      /* ---------- top bar ---------- */
+      S.push('<div class="top">');
+      S.push(at(24, 15, '<div class="crumb">Projects<span class="sl">/</span>storefront-web<span class="sl">/</span><span class="cur">Overview</span></div>'));
+      S.push(at(946, 9, '<div class="srch">' + ic("search", 15) + 'Search logs, traces, routes…<span class="kbs"><span class="kb">⌘</span><span class="kb">K</span></span></div>'));
+      S.push(at(1206, 9, '<div class="ib" style="position:relative">' + ic("bell", 17) + '<i style="position:absolute;right:6px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px var(--wbg)"></i></div>'));
+      S.push(at(1240, 9, '<div class="ib">' + ic("help", 17) + "</div>"));
+      S.push("</div>");
+
+      /* ---------- main: x 264..1504 ---------- */
+      const MX = 264;
+      S.push(at(MX, 66, '<div class="h1">storefront-web</div>'));
+      S.push(at(MX, 104, '<div class="meta"><span>' + ic("globe", 14) + '<u>storefront.northwind.co</u></span><span>' + ic("branch", 14) + 'main</span><span>' + ic("server", 14) + 'iad1, sfo1, fra1</span><span>' + ic("clock", 14) + "Deployed 4m ago by Maya Chen</span></div>"));
+      // header actions, right aligned to 1504
+      S.push('<div class="a" style="right:32px;top:70px;display:flex;gap:8px">' +
+        '<div class="btn out">' + ic("upR", 15) + "Visit</div>" +
+        '<div class="btn out">' + ic("undo", 15) + "Instant Rollback</div>" +
+        '<div class="btn pri">Promote to Production<span class="kk"><span class="kb">⌘</span><span class="kb">↵</span></span></div>' +
+        '<div class="btn out ico">' + ic("more", 16) + "</div></div>");
+
+      // filter bar
+      S.push(at(MX, 142, '<div class="fb"><div class="chip">' + ic("cal", 14) + 'Last 24 hours' + ic("chD", 14) + '</div><div class="chip">' + ic("globe", 14) + 'Production' + ic("chD", 14) +
+        '</div><div class="chip">' + ic("filter", 14) + 'Filter</div><div class="chip" style="color:var(--sub)">Compare to previous period</div></div>'));
+      S.push('<div class="a" style="right:32px;top:142px;display:flex;align-items:center;gap:14px"><div class="live"><i></i>Live · updated 12s ago</div><div class="chip">' + ic("dl", 14) + "Export</div></div>");
+
+      // stat cards
+      const spark = (vals, col, w, h) => {
+        const mx = Math.max(...vals), mn = Math.min(...vals);
+        const pts = vals.map((v, i) => (i * w / (vals.length - 1)).toFixed(1) + "," + (h - 3 - (v - mn) / (mx - mn) * (h - 6)).toFixed(1)).join(" ");
+        return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + " " + h + '"><polyline points="' + pts + '" fill="none" stroke="' + col + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+      };
+      const STATS = [
+        ["Requests", "2.41M", "", '<span class="dl g">' + ic("up", 13, 2) + "8.2%</span>", [3, 4, 3.6, 5, 4.8, 5.6, 5.1, 6.2, 5.9, 6.8, 6.4, 7.3]],
+        ["p95 latency", "182", "ms", '<span class="dl g">' + ic("down", 13, 2) + "31%</span>", [7, 7.4, 6.9, 7.6, 7.2, 7.5, 6.8, 4.2, 4.0, 4.3, 3.9, 4.1]],
+        ["Error rate", "0.08", "%", '<span class="dl g">' + ic("down", 13, 2) + "0.04 pp</span>", [4, 4.6, 4.2, 5.1, 4.4, 4.8, 3.6, 2.4, 2.6, 2.2, 2.5, 2.3]],
+        ["Cold starts", "1.9", "%", '<span class="dl" style="color:var(--sub)">' + ic("up", 13, 2) + "0.2 pp</span>", [3, 3.2, 2.9, 3.4, 3.1, 3.3, 3.6, 3.4, 3.7, 3.5, 3.8, 3.6]]
+      ];
+      STATS.forEach((s, i) => {
+        S.push('<div class="a card" style="left:' + (MX + i * 314) + 'px;top:188px;width:298px;height:86px">' +
+          at(16, 14, '<div class="kl">' + s[0] + "</div>") +
+          at(16, 38, '<div class="kv">' + s[1] + (s[2] ? "<small>" + s[2] + "</small>" : "") + "</div>") +
+          at(16 + (s[2] ? 108 : 96), 48, s[3] + "") +
+          at(196, 34, spark(s[4], i === 1 ? "#4c8dff" : "#5a5a64", 86, 34)) + "</div>");
+      });
+
+      /* ---------- latency chart card: x 264, y 290, 812 x 290 ---------- */
+      const CX = MX, CY = 290, CW = 812, CH = 290;
+      const PL = 52, PR = 792, PT = 72, PB = 244;
+      const N = 32;
+      const xOf = (i) => PL + i * (PR - PL) / (N - 1);
+      const yOf = (v) => PT + (PB - PT) * (1 - v / 500);
+      const DEP = 20.5, HOV = 22;
+      const p95 = [], p50 = [], p99 = [];
+      for (let i = 0; i < N; i++) {
+        const pre = i < DEP;
+        p95.push(pre ? 262 + 20 * Math.sin(i * 1.7) + 13 * Math.sin(i * 0.63 + 1) : 178 + 7 * Math.sin(i * 1.9) + 5 * Math.sin(i * 0.7));
+        p50.push(pre ? 84 + 6 * Math.sin(i * 1.3 + 0.4) : 62 + 3 * Math.sin(i * 1.1));
+        p99.push(pre ? 404 + 26 * Math.sin(i * 1.1) + 14 * Math.sin(i * 0.37) : 300 + 12 * Math.sin(i * 1.4));
+      }
+      p95[21] = 214; p50[21] = 70; p99[21] = 338;
+      // smooth curve through points (Catmull-Rom to Bezier)
+      const curve = (vals) => {
+        const pts = vals.map((v, i) => [xOf(i), yOf(v)]);
+        let d = "M" + pts[0][0].toFixed(2) + " " + pts[0][1].toFixed(2);
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+          const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+          const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+          d += " C" + c1[0].toFixed(2) + " " + c1[1].toFixed(2) + " " + c2[0].toFixed(2) + " " + c2[1].toFixed(2) + " " + p2[0].toFixed(2) + " " + p2[1].toFixed(2);
+        }
+        return d;
+      };
+      let C = "";
+      const GPOS = C.length;
+      C += at(18, 16, '<div class="ct2">Latency<span>All routes · Edge + Serverless</span></div>');
+      C += at(18, 42, '<div class="lg"><span><i style="background:#6e6e78"></i>p50</span><span><i style="background:#4c8dff"></i>p95</span><span><i style="background:repeating-linear-gradient(90deg,#8a8a94 0 3px,transparent 3px 5px)"></i>p99</span></div>');
+      C += '<div class="a" style="right:14px;top:14px;display:flex;gap:8px"><div class="seg"><span>1h</span><span class="on">24h</span><span>7d</span><span>30d</span></div><div class="ib" style="width:28px;height:28px;border:1px solid var(--line);border-radius:7px">' + ic("max", 14) + "</div></div>";
+      let G = '<svg class="a" style="left:0;top:0" width="' + CW + '" height="' + CH + '" viewBox="0 0 ' + CW + " " + CH + '">';
+      G += '<defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c8dff" stop-opacity="0.22"/><stop offset="1" stop-color="#4c8dff" stop-opacity="0"/></linearGradient></defs>';
+      [0, 100, 200, 300, 400, 500].forEach((v) => {
+        const y = yOf(v);
+        G += '<line x1="' + PL + '" x2="' + PR + '" y1="' + y + '" y2="' + y + '" stroke="#1f1f24" stroke-width="1"' + (v ? ' stroke-dasharray="2 4"' : "") + "/>";
+      });
+      const d95 = curve(p95);
+      G += '<path d="' + d95 + " L" + PR + " " + PB + " L" + PL + " " + PB + ' Z" fill="url(#fa)"/>';
+      G += '<path d="' + curve(p99) + '" fill="none" stroke="#7a7a84" stroke-width="1.4" stroke-dasharray="4 4"/>';
+      G += '<path d="' + curve(p50) + '" fill="none" stroke="#5c5c66" stroke-width="1.6"/>';
+      // deploy marker
+      const dx = xOf(DEP);
+      G += '<line x1="' + dx + '" x2="' + dx + '" y1="' + (PT - 4) + '" y2="' + PB + '" stroke="#4c8dff" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.8"/>';
+      // hover crosshair
+      const hx = xOf(HOV), hy = yOf(p95[HOV]);
+      G += '<line x1="' + hx + '" x2="' + hx + '" y1="' + PT + '" y2="' + PB + '" stroke="#3a3a44" stroke-width="1"/>';
+      G += '<path d="' + d95 + '" fill="none" stroke="#4c8dff" stroke-width="2" stroke-linejoin="round"/>';
+      for (let i = 0; i < N; i++) {
+        G += '<circle cx="' + xOf(i).toFixed(2) + '" cy="' + yOf(p95[i]).toFixed(2) + '" r="2.4" fill="#111114" stroke="#4c8dff" stroke-width="1.4"/>';
+      }
+      G += '<circle cx="' + hx + '" cy="' + hy + '" r="8" fill="#4c8dff" opacity="0.18"/><circle cx="' + hx + '" cy="' + hy + '" r="4" fill="#4c8dff" stroke="#fff" stroke-width="1.6"/>';
+      G += '<circle cx="' + hx + '" cy="' + yOf(p50[HOV]) + '" r="3" fill="#111114" stroke="#8a8a94" stroke-width="1.4"/>';
+      G += "</svg>";
+      C = G + C;
+      // axes
+      [0, 100, 200, 300, 400, 500].forEach((v) => { C += '<div class="a ax" style="left:12px;width:32px;text-align:right;top:' + (yOf(v) - 7) + 'px">' + (v ? v : "0") + "</div>"; });
+      C += '<div class="a ax" style="left:12px;top:' + (PT - 26) + 'px;display:none"></div>';
+      ["10:00", "13:00", "16:00", "19:00", "22:00", "01:00", "04:00", "07:00", "09:40"].forEach((t, i, arr) => {
+        C += '<div class="a ax" style="left:' + (PL + i * (PR - PL) / (arr.length - 1) - 18) + 'px;width:36px;text-align:center;top:' + (PB + 10) + 'px">' + t + "</div>";
+      });
+      C += '<div class="a" style="right:' + (CW - dx + 6) + 'px;top:' + (PT - 2) + 'px">' + ('<div class="dep">' + ic("rocket", 12, 1.6) + "dpl_8Fk2aQ · #4128</div>") + "</div>";
+      // tooltip
+      C += '<div class="a tip" style="left:' + (hx + 16) + "px;top:" + (hy - 128) + 'px;width:150px;height:118px">' +
+        at(11, 9, '<div class="tt">Today, 06:50</div>') +
+        at(11, 30, '<div class="tr" style="width:128px"><i style="background:#4c8dff"></i>p95<b>176 ms</b></div>') +
+        at(11, 50, '<div class="tr" style="width:128px"><i style="background:#6e6e78"></i>p50<b>61 ms</b></div>') +
+        at(11, 70, '<div class="tr" style="width:128px"><i style="background:#8a8a94;opacity:.6"></i>p99<b>302 ms</b></div>') +
+        '<div class="a" style="left:11px;top:93px;width:128px;height:1px;background:#2e2e36"></div>' +
+        at(11, 96, '<div class="tr" style="width:128px">Requests<b>98.4K</b></div>') + "</div>";
+      S.push('<div class="a card" style="left:' + CX + "px;top:" + CY + "px;width:" + CW + "px;height:" + CH + 'px">' + C + "</div>");
+
+      /* ---------- top routes card: x 1092, y 290, 412 x 290 ---------- */
+      const RT = [
+        ["/api/cart", "612K", 41, "0.01%"], ["/products/[slug]", "540K", 88, "0%"], ["/api/search", "402K", 164, "0.03%"],
+        ["/api/auth/session", "311K", 22, "0%"], ["/", "233K", 74, "0%"], ["/checkout", "188K", 212, "0.12%"],
+        ["/api/inventory", "97K", 119, "0.05%"], ["/account/orders", "64K", 238, "0.21%"]
+      ];
+      let R = at(16, 16, '<div class="ct2">Top routes<span>by requests</span></div>');
+      R += '<div class="a" style="right:14px;top:14px"><div class="seg"><span class="on">Requests</span><span>p95</span><span>Errors</span></div></div>';
+      R += at(16, 50, '<div class="rh"><span style="width:150px">Route</span><span style="width:60px;text-align:right">Req</span><span style="width:62px;text-align:right">p95</span><span style="width:56px"></span><span style="width:50px;text-align:right">Err</span></div>');
+      RT.forEach((r, i) => {
+        R += at(16, 78 + i * 26, '<div class="rr"><span class="rt">' + r[0] + '</span><span class="n">' + r[1] + '</span><span class="p">' + r[2] + ' ms</span><span class="bar"><i style="width:' + Math.round(r[2] / 240 * 100) + '%"></i></span><span class="e">' + r[3] + "</span></div>");
+      });
+      S.push('<div class="a card" style="left:1092px;top:290px;width:412px;height:290px">' + R + "</div>");
+
+      /* ---------- deployments: x 264, y 596, 1240 x 268 ---------- */
+      const DC = [16, 640, 780, 960, 1060, 1196];
+      const DEPL = [
+        ["maya", "Fix WebSocket reconnect on chat nav", "maya/ws-reconnect", "8f2k1c9", ["#3fb96a", "Ready"], "Production", true, "48s", "4m ago"],
+        ["liam", "Cache cart totals at the edge", "liam/edge-cart", "a41d0e2", ["#3fb96a", "Ready"], "Preview", false, "52s", "38m ago"],
+        ["priya", "Bump next to 15.1.3", "deps/next-15.1.3", "c07be5f", ["#e5a33a", "Building"], "Preview", false, "21s", "41m ago"],
+        ["sofia", "Update onboarding empty state", "sofia/onboarding-empty", "5d9a3b1", ["#3fb96a", "Ready"], "Preview", false, "46s", "2h ago"],
+        ["dana", "Revert analytics batching", "dana/revert-batching", "e2f8710", ["#f0524f", "Error"], "Preview", false, "12s", "3h ago"]
+      ];
+      let D = at(16, 14, '<div class="ct2">Deployments<span>128 this month</span></div>');
+      D += '<div class="a" style="right:16px;top:15px;font-size:12.5px;font-weight:500;color:var(--sub);display:flex;align-items:center;gap:4px">View all' + ic("upR", 13) + "</div>";
+      D += '<div class="a dh" style="left:0;top:44px;width:1240px">' +
+        '<span style="position:absolute;left:' + DC[0] + 'px">Commit</span><span style="position:absolute;left:' + DC[1] + 'px">Status</span><span style="position:absolute;left:' + DC[2] + 'px">Environment</span>' +
+        '<span style="position:absolute;left:' + DC[3] + 'px">Duration</span><span style="position:absolute;left:' + DC[4] + 'px">Created</span></div>';
+      DEPL.forEach((r, i) => {
+        D += '<div class="a dr" style="left:0;top:' + (74 + i * 40) + 'px;width:1240px' + (i === 4 ? ";border-bottom:0" : "") + '">' +
+          '<span class="a" style="left:' + DC[0] + 'px;top:9px;display:flex;align-items:center">' + av(r[0], 22, 9) + '<span class="msg">' + r[1] + '</span><span class="br">' + ic("branch", 12) + r[2] + '</span><span class="hash">' + r[3] + "</span></span>" +
+          '<span class="a st" style="left:' + DC[1] + 'px;top:12px"><i style="background:' + r[4][0] + ";box-shadow:0 0 0 3px " + r[4][0] + '2a"></i>' + r[4][1] + "</span>" +
+          '<span class="a env" style="left:' + DC[2] + 'px;top:10px">' + r[5] + (r[6] ? '<span class="cur2">Current</span>' : "") + "</span>" +
+          '<span class="a du" style="left:' + DC[3] + 'px;top:12px">' + ic("clock", 13) + r[7] + "</span>" +
+          '<span class="a ag" style="left:' + DC[4] + 'px;top:12px">' + r[8] + " by " + P[r[0]][0].split(" ")[0] + "</span>" +
+          '<span class="a" style="left:' + DC[5] + 'px;top:10px;color:#6e6e78">' + ic("more", 17) + "</span></div>";
+      });
+      S.push('<div class="a card" style="left:' + MX + 'px;top:596px;width:1240px;height:268px;overflow:hidden">' + D + "</div>");
+
+      const WIN = S.join("");
+      document.querySelectorAll(".win").forEach((w) => { w.innerHTML = WIN; });
+
+      /* ---------- camera ---------- */
+      // .cam origin is the window top-left; window point (px,py) lands at frame centre at scale s
+      const Z = (px, py, s) => ({ x: 960 - s * px, y: 540 - s * py, scale: s });
+      const FULL = Z(768, 440, 1);
+      // window-space anchors
+      const CH_A0 = Z(CX + 520, CY + 158, 4.2);
+      const CH_A1 = Z(CX + 595, CY + 150, 4.2);
+      const ROW_B0 = Z(MX + 150, 596 + 74 + 20, 4.2);
+      const ROW_B1 = Z(MX + 230, 596 + 74 + 20, 4.2);
+      const BTN_C0 = Z(1300, 92, 4.0);
+      const BTN_C1 = Z(1360, 87, 4.0);
+
+      // gradient line length for an angle, to keep the focus band through frame centre
+      const gl = (a) => { const r = a * Math.PI / 180; return Math.abs(1920 * Math.sin(r)) + Math.abs(1080 * Math.cos(r)); };
+      const band = (a, off, w) => ({ "--ang": a, "--c": gl(a) / 2 + (off || 0), "--w": w });
+
+      gsap.set(".cam", Object.assign({ transformOrigin: "0px 0px" }, CH_A0));
+      gsap.set(".rot", { transformOrigin: "960px 540px", rotationX: 26, rotationY: 0, rotation: -4 });
+      gsap.set("#dof", band(176, 0, 125));
+      gsap.set([".L0", ".L1", ".L2"], { opacity: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, atT) { tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), atT); }
+
+      // grain re-rolled every 3 frames
+      for (let f = 0; f < 315; f += 3) {
+        tl.set("#grain", { backgroundPosition: ((f * 97) % 256) + "px " + ((f * 61 + 37 * (f % 5)) % 256) + "px" }, f / 30);
+      }
+
+      /* shot A: chart curve and points (0 - 1.7) */
+      F(".cam", CH_A0, Object.assign({ duration: 1.7, ease: "none" }, CH_A1), 0);
+      F(".L2", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0.05);
+      F(".L1", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0.18);
+      F(".L0", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.3);
+
+      /* shot B: deployment row (1.7 - 3.3) */
+      tl.set(".rot", { rotationX: 25, rotationY: 0, rotation: -3 }, 1.7);
+      F("#dof", band(177, 170, 100), Object.assign({ duration: 0.5, ease: "power2.out" }, band(177, 0, 100)), 1.7);
+      F(".cam", ROW_B0, Object.assign({ duration: 1.6, ease: "none" }, ROW_B1), 1.7);
+
+      /* shot C: primary button and shortcut (3.3 - 4.8) */
+      tl.set(".rot", { rotationX: 25, rotationY: 0, rotation: -4 }, 3.3);
+      F("#dof", band(176, -160, 110), Object.assign({ duration: 0.5, ease: "power2.out" }, band(176, 0, 110)), 3.3);
+      F(".cam", BTN_C0, Object.assign({ duration: 1.5, ease: "none" }, BTN_C1), 3.3);
+
+      /* pull-out to the whole window (4.8 - 6.0) */
+      F(".cam", BTN_C1, Object.assign({ duration: 1.2, ease: EXPO }, FULL), 4.8);
+      F(".rot", { rotationX: 25, rotationY: 0, rotation: -4 }, { rotationX: 11, rotationY: -1, rotation: -1.5, duration: 1.2, ease: EXPO }, 4.8);
+      F("#dof", band(176, 0, 110), Object.assign({ duration: 1.2, ease: EXPO }, band(178, 30, 560)), 4.8);
+      F(".pxg", { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power1.out" }, 4.8);
+
+      /* settle: slow residual drift (6.0 - 8.1) */
+      F(".rot", { rotationX: 11, rotationY: -1, rotation: -1.5 }, { rotationX: 9.5, rotationY: -4, rotation: -1, duration: 2.4, ease: "none" }, 6.0);
+      F(".cam", FULL, Object.assign({ duration: 2.4, ease: "none" }, Z(768, 440, 1.03)), 6.0);
+
+      /* close: rack focus out of the window, wordmark in focus (8.1 - 10) */
+      tl.to(".L0", { opacity: 0, duration: 0.4, ease: "power2.in" }, 7.9);
+      tl.to(".L1", { opacity: 0, duration: 0.4, ease: "power2.in" }, 8.02);
+      tl.to(".L2", { opacity: 0, duration: 0.4, ease: "power2.in" }, 8.14);
+      tl.to("#dof", { opacity: 0.32, duration: 0.6, ease: "power2.inOut" }, 8.0);
+      F("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 8.25);
+      F("#lockup", { scale: 1.06, filter: "blur(10px)" }, { scale: 1, filter: "blur(0px)", duration: 0.8, ease: EXPO }, 8.25);
+      tl.to("#lockup", { scale: 0.98, duration: 1.45, ease: "none" }, 9.05);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

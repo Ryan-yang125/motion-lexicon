@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0b0c;
+        --light: #ecebe7;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 1920px; height: 1080px; background: var(--bg); font-family: "Inter", sans-serif; }
+      #stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #gl { display: block; width: 1920px; height: 1080px; }
+      #lockup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #wordclip {
+        position: absolute; left: 0; top: 0; height: 200px; width: 600px;
+        overflow: hidden;
+      }
+      #word {
+        position: absolute; left: 0; top: 0;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 103px; line-height: 200px;
+        letter-spacing: -0.03em; color: var(--light); white-space: nowrap;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip" data-start="0" data-duration="10" data-track-index="0">
+        <canvas id="gl" width="1920" height="1080"></canvas>
+      </div>
+      <div id="lockup" class="clip" data-start="0" data-duration="10" data-track-index="1">
+        <div id="wordclip"><div id="word">Cairn</div></div>
+      </div>
+    </div>
+
+    <script>
+      /* lockup geometry shared by the DOM wordmark and the WebGL mark (output px, origin top-left) */
+      window.LOCK = {
+        markCx: 0, markCy: 540, markH: 150,
+        asmH: 300,                 // assembled size before the mark steps aside
+        lockAt: 6.55, lockDur: 0.9,
+        wordLeft: 0, wordCapH: 0,
+      };
+      (function () {
+        const L = window.LOCK;
+        const markW = L.markH * Math.sqrt(2) / (2 * Math.sqrt(2 / 3));   // hex width / height = 0.866
+        // brand spec: cap height = the mark's vertical edge (H/2); clear space = two slab bands
+        const gap = 40;            // + 5px side bearing of "C" = 45px of ink clear space
+        const wordW = 248;         // box start to ink end of "Cairn" at 103px, -0.03em
+        const total = markW + gap + wordW;
+        const left = 960 - total / 2;
+        L.markW = markW;
+        L.markCx = left + markW / 2;
+        L.wordLeft = left + markW + gap;
+      })();
+
+      const wc = document.getElementById("wordclip");
+      const w = document.getElementById("word");
+      // Inter metrics: ascent 0.96875em, descent 0.2421875em, cap height 0.727em
+      const FS = 103, CAP = 0.727 * FS, LH = 200;
+      const capTopInBox = (LH - 1.2109375 * FS) / 2 + (0.96875 - 0.727) * FS;
+      wc.style.left = (window.LOCK.wordLeft - 6) + "px";
+      wc.style.top = (window.LOCK.markCy - CAP / 2 - capTopInBox) + "px";
+      w.style.left = "6px";
+
+      const tl = gsap.timeline({ paused: true });
+      // wordmark: uncovered by the mark as it steps aside. The clip edge rides the mark's right
+      // edge (same expo.out, same interval), so the letters never cross the mark.
+      const LK = window.LOCK;
+      const R0 = 960 + LK.asmH * 0.8660254 / 2;
+      const R1 = LK.markCx + LK.markW / 2;
+      const X0 = R0 - R1;
+      tl.fromTo("#wordclip", { clipPath: `inset(0px 0px 0px ${X0.toFixed(2)}px)` }, { clipPath: "inset(0px 0px 0px 0px)", duration: LK.lockDur, ease: "expo.out" }, LK.lockAt);
+      tl.fromTo("#word", { opacity: 0, x: -36 }, { opacity: 1, x: 0, duration: LK.lockDur, ease: "expo.out" }, LK.lockAt);
+      tl.to("#word", { opacity: 1, duration: 0.01 }, 9.98);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      THREE.ColorManagement.enabled = false; // all colours below are display values
+
+      /* ================= time helpers ================= */
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+      const seg = (t, a, b) => clamp01((t - a) / (b - a));
+      const EXPO_END = 1 - Math.pow(2, -10);
+      const expoOut = (k) => (k >= 1 ? 1 : (1 - Math.pow(2, -10 * k)) / EXPO_END);
+      const smooth = (k) => k * k * (3 - 2 * k);
+
+      /* ================= renderer ================= */
+      const OW = 1920, OH = 1080, SS = 2;
+      const RW = OW * SS, RH = OH * SS;
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1);
+      renderer.setSize(OW, OH, false);
+      renderer.outputColorSpace = THREE.LinearSRGBColorSpace; // shader values are display values
+      renderer.autoClear = false;
+
+      const BG = new THREE.Color(0x0b0b0c);
+      // three greys of the mark (display values): top, left, right sit at k = 1, 0.55, 0
+      const LIGHT = new THREE.Vector3(236, 235, 231).divideScalar(255);
+      const DARK = new THREE.Vector3(92, 91, 88).divideScalar(255);
+
+      // k = dot(L, n) + K0. L is solved so the isometric pose lands exactly on k = 1 / 0.55 / 0;
+      // K0 keeps L mostly sideways, so faces separate strongly while the stone turns
+      const K0 = 0.42;
+      const vT = 1.0 - K0, vL = 0.55 - K0, vR = 0.0 - K0;
+      const Lc = (vT + vL + vR) / Math.sqrt(3);
+      const La = (vR - vL) / Math.SQRT2;
+      const Lb = (vT - (vL + vR) / 2) / (Math.sqrt(2 / 3) * 1.5);
+      const LIGHT_DIR = new THREE.Vector3(La, Lb, Lc);
+
+      /* ================= scene ================= */
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-OW / 2, OW / 2, OH / 2, -OH / 2, -4000, 4000);
+      camera.position.set(0, 0, 2000);
+      camera.lookAt(0, 0, 0);
+
+      const vert = /* glsl */ `
+        varying vec3 vObj;
+        varying vec3 vNView;
+        varying vec3 vAx; varying vec3 vAy; varying vec3 vAz;
+        varying vec2 vScreen;
+        void main() {
+          vObj = position;
+          vNView = normalize(normalMatrix * normal);
+          vAx = normalize(normalMatrix * vec3(1.0, 0.0, 0.0));
+          vAy = normalize(normalMatrix * vec3(0.0, 1.0, 0.0));
+          vAz = normalize(normalMatrix * vec3(0.0, 0.0, 1.0));
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vScreen = mv.xy;
+          gl_Position = projectionMatrix * mv;
+        }`;
+      const frag = /* glsl */ `
+        uniform vec3 uL; uniform float uK0; uniform vec3 uLight; uniform vec3 uDark; uniform vec3 uBg;
+        uniform vec3 uHalf;       // slab half extents (object units)
+        uniform float uPx;        // output px per object unit
+        uniform float uEdge;      // 0 = flat logo, 1 = bevel + face gradient
+        uniform float uFade;
+        uniform float uInnerTop; uniform float uInnerBot;
+        uniform vec2 uCenter; uniform float uSize;
+        // contact shade: the part of a seam face that lies under / over the neighbouring slab
+        uniform float uContact; uniform float uGap; uniform float uSlabH;
+        uniform mat4 uToUp; uniform float uHasUp; uniform mat4 uToDn; uniform float uHasDn;
+        varying vec3 vObj; varying vec3 vNView;
+        varying vec3 vAx; varying vec3 vAy; varying vec3 vAz;
+        varying vec2 vScreen;
+        vec3 tone(float k) { return mix(uDark, uLight, k); }
+        void main() {
+          float k = clamp(dot(uL, normalize(vNView)) + uK0, -0.4, 1.06);
+          // soft studio falloff across each face while in motion
+          float grad = (vScreen.y - uCenter.y) / uSize * 0.10 - (vScreen.x - uCenter.x) / uSize * 0.05;
+          k += uEdge * grad;
+          vec3 col = tone(k);
+
+          // which face are we on, and how far from its nearest edge
+          vec3 d = uHalf - abs(vObj);
+          vec3 sg = sign(vObj);
+          float edge; vec3 nb; bool onY = false; float sy = sg.y;
+          if (d.x <= d.y && d.x <= d.z) {
+            if (d.y < d.z) { edge = d.y; nb = sg.x * vAx + sg.y * vAy; } else { edge = d.z; nb = sg.x * vAx + sg.z * vAz; }
+          } else if (d.y <= d.z) {
+            onY = true;
+            if (d.x < d.z) { edge = d.x; nb = sg.y * vAy + sg.x * vAx; } else { edge = d.z; nb = sg.y * vAy + sg.z * vAz; }
+          } else {
+            if (d.x < d.y) { edge = d.x; nb = sg.z * vAz + sg.x * vAx; } else { edge = d.y; nb = sg.z * vAz + sg.y * vAy; }
+          }
+          float ePx = edge * uPx;
+          float band = 1.0 - smoothstep(2.0, 3.2, ePx);
+          float kb = clamp(dot(uL, normalize(nb)) + uK0 + 0.25, -0.4, 1.1);
+          col = mix(col, tone(kb), band * uEdge);
+
+          // seam faces read as background, so the stack prints as clean cuts
+          if (onY) {
+            float inner = sy > 0.0 ? uInnerTop : uInnerBot;
+            if (uContact > 0.0) {
+              bool up = sy > 0.0;
+              vec3 q = ((up ? uToUp : uToDn) * vec4(vObj, 1.0)).xyz;
+              float dy0 = up ? (-0.5 * uSlabH - q.y) : (q.y - 0.5 * uSlabH);
+              float aa = 1.0 / uPx + 0.3 * max(dy0 - uGap, 0.0);   // shade edge softens with distance
+              float inside = (1.0 - smoothstep(0.5 - aa, 0.5 + aa, abs(q.x))) * (1.0 - smoothstep(0.5 - aa, 0.5 + aa, abs(q.z)));
+              float near = 1.0 - smoothstep(uGap + 0.01, uGap + 0.4, dy0);
+              inner = max(inner, uContact * (up ? uHasUp : uHasDn) * inside * near);
+            }
+            col = mix(col, uBg, inner);
+          }
+          col = mix(uBg, col, uFade);
+          gl_FragColor = vec4(col, 1.0);
+        }`;
+
+      // the Cairn stone: a unit cube cut into three equal slabs
+      const GAP = 0.05;
+      const SLAB_H = (1 - 2 * GAP) / 3;
+      const SLAB_Y = [-(SLAB_H + GAP), 0, SLAB_H + GAP];
+      const DIAG = 0.26;   // per-slab offset along the object diagonal (1,1,1) = the final view axis
+
+      function makeStone() {
+        const group = new THREE.Group();
+        const slabs = [];
+        for (let i = 0; i < 3; i++) {
+          const mat = new THREE.ShaderMaterial({
+            vertexShader: vert, fragmentShader: frag,
+            uniforms: {
+              uL: { value: LIGHT_DIR }, uK0: { value: K0 }, uLight: { value: LIGHT }, uDark: { value: DARK },
+              uBg: { value: new THREE.Vector3(BG.r, BG.g, BG.b) },
+              uHalf: { value: new THREE.Vector3(0.5, SLAB_H / 2, 0.5) },
+              uPx: { value: 100 }, uEdge: { value: 0 }, uFade: { value: 1 },
+              uInnerTop: { value: i < 2 ? 1 : 0 }, uInnerBot: { value: i > 0 ? 1 : 0 },
+              uCenter: { value: new THREE.Vector2() }, uSize: { value: 300 },
+              uContact: { value: 0 }, uGap: { value: GAP }, uSlabH: { value: SLAB_H },
+              uToUp: { value: new THREE.Matrix4() }, uHasUp: { value: i < 2 ? 1 : 0 },
+              uToDn: { value: new THREE.Matrix4() }, uHasDn: { value: i > 0 ? 1 : 0 },
+            },
+          });
+          const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, SLAB_H, 1), mat);
+          const pivot = new THREE.Group();     // slab pivot: own flight transform
+          pivot.add(mesh);
+          group.add(pivot);
+          slabs.push({ pivot, mesh, mat, homeY: SLAB_Y[i] });
+        }
+        scene.add(group);
+        return { group, slabs };
+      }
+      const stone = makeStone();
+
+      /* ================= poses ================= */
+      const ALPHA = Math.atan(1 / Math.SQRT2);  // 35.264°
+      const Q_ISO = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), ALPHA)
+        .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 4));
+      const HEX_H = 2 * Math.sqrt(2 / 3);        // hexagon height for a unit cube
+      const HEX_W = Math.SQRT2;
+
+      // main spin: tilted axis given in view space, ~1.6 turns total
+      const SPIN_AXIS_VIEW = new THREE.Vector3(0.62, 0.74, 0.26).normalize();
+      const SPIN_AXIS_OBJ = SPIN_AXIS_VIEW.clone().applyQuaternion(Q_ISO.clone().invert());
+      const SPIN_TURNS = 1.62;
+      const Q_TILT = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(-0.3, 0.2, 1).normalize(), 0.75);
+      const Q_I = new THREE.Quaternion();
+
+      // timeline (seconds)
+      const T = {
+        spin: [0.2, 2.7],
+        fadeIn: [0.2, 0.42],
+        cut: 5.0,
+        frag0: 5.14, fragDur: 0.8, fragStep: 0.08,
+        lock: [window.LOCK.lockAt, window.LOCK.lockAt + window.LOCK.lockDur],
+      };
+      const MAIN_H0 = 324, MAIN_H1 = 432;  // hexagon height in px: 30% -> 40% of frame
+      const ASM_H = window.LOCK.asmH;
+
+      // flight of each slab in the fragment variant (bottom, middle, top)
+      const FLIGHT = [
+        // each slab enters from outside the frame on its own side of the stack
+        { from: new THREE.Vector3(-1250, -760, 0), axis: new THREE.Vector3(0.3, 0.2, 1), ang: 1.35, scale: 1.3 },
+        { from: new THREE.Vector3(1420, 120, 0), axis: new THREE.Vector3(-0.2, 1, 0.4), ang: -1.5, scale: 1.25 },
+        { from: new THREE.Vector3(260, 980, 0), axis: new THREE.Vector3(1, 0.1, -0.5), ang: 1.45, scale: 1.3 },
+      ].map((f) => ({ ...f, q: new THREE.Quaternion().setFromAxisAngle(f.axis.normalize(), f.ang) }));
+
+      const tmpQ = new THREE.Quaternion();
+      function poseAt(t) {
+        // returns everything that drives the frame at time t
+        const P = { slabs: [] };
+        if (t < T.cut) {
+          const k = seg(t, T.spin[0], T.spin[1]);
+          const e = expoOut(k);
+          const theta = SPIN_TURNS * Math.PI * 2 * (1 - e);
+          const q = Q_ISO.clone()
+            .multiply(tmpQ.setFromAxisAngle(SPIN_AXIS_OBJ, theta))
+            .multiply(new THREE.Quaternion().slerpQuaternions(Q_TILT, Q_I, e));
+          const hexH = MAIN_H0 + (MAIN_H1 - MAIN_H0) * e;
+          P.q = q; P.pos = [0, 0]; P.scale = hexH / HEX_H;
+          P.fade = smooth(seg(t, T.fadeIn[0], T.fadeIn[1]));
+          // bevel / gradient live while moving, gone by the time the stone stops
+          P.edge = 1 - smooth(seg(k, 0.55, 0.96));
+          // the slabs really sit staggered along the iso view axis: only the final angle lines them up
+          const seam = smooth(seg(k, 0.62, 0.92));
+          for (let i = 0; i < 3; i++) P.slabs.push({ off: [0, 0], diag: (i - 1) * DIAG, q: Q_I, s: 1, edge: P.edge, innerTop: i < 2 ? seam : 0, innerBot: i > 0 ? seam : 0 });
+          return P;
+        }
+        // shot 2: three slabs fly in and stack, then the mark steps aside for the wordmark
+        const L = window.LOCK;
+        const kl = expoOut(seg(t, T.lock[0], T.lock[1]));
+        const hexH = ASM_H + (L.markH - ASM_H) * kl;
+        const cx = (L.markCx - 960) * kl;
+        const cy = -(L.markCy - 540) * kl;
+        P.q = Q_ISO; P.pos = [cx, cy]; P.scale = hexH / HEX_H; P.fade = 1; P.edge = 0;
+        const es = [0, 1, 2].map((i) => expoOut(seg(t, T.frag0 + i * T.fragStep, T.frag0 + i * T.fragStep + T.fragDur)));
+        for (let i = 0; i < 3; i++) {
+          const e = es[i];
+          const f = FLIGHT[i];
+          const live = 1 - smooth(seg(e, 0.8, 0.995));
+          P.slabs.push({
+            off: [f.from.x * (1 - e), f.from.y * (1 - e)],
+            q: new THREE.Quaternion().slerpQuaternions(f.q, Q_I, e),
+            s: 1 + (f.scale - 1) * (1 - e),
+            edge: live,
+            vis: t >= T.frag0 + i * T.fragStep,
+            // seams come from the contact shade: dark only where a neighbour actually covers
+            innerTop: 0, innerBot: 0, contact: 1,
+          });
+        }
+        return P;
+      }
+
+      function applyPose(P) {
+        stone.group.quaternion.copy(P.q);
+        stone.group.position.set(P.pos[0], P.pos[1], 0);
+        stone.group.scale.setScalar(P.scale);
+        stone.slabs.forEach((sl, i) => {
+          const sp = P.slabs[i];
+          // flight offset is in screen space: undo the group rotation/scale for it
+          const off = new THREE.Vector3(sp.off[0], sp.off[1], 0).divideScalar(P.scale).applyQuaternion(P.q.clone().invert());
+          const dg = sp.diag || 0;
+          sl.pivot.position.set(off.x + dg, off.y + sl.homeY + dg, off.z + dg);
+          sl.pivot.quaternion.copy(sp.q);
+          sl.pivot.scale.setScalar(sp.s);
+          sl.pivot.visible = sp.vis !== false;
+          const u = sl.mat.uniforms;
+          u.uPx.value = P.scale * sp.s * SS;
+          u.uEdge.value = sp.edge;
+          u.uFade.value = P.fade;
+          u.uInnerTop.value = sp.innerTop;
+          u.uInnerBot.value = sp.innerBot;
+          u.uCenter.value.set(P.pos[0], P.pos[1]);
+          u.uSize.value = P.scale * HEX_H;
+          u.uContact.value = sp.contact || 0;
+        });
+        if (P.slabs.some((sp) => sp.contact)) {
+          stone.group.updateMatrixWorld(true);
+          const inv = new THREE.Matrix4();
+          stone.slabs.forEach((sl, i) => {
+            const u = sl.mat.uniforms;
+            if (i < 2) u.uToUp.value.copy(inv.copy(stone.slabs[i + 1].mesh.matrixWorld).invert().multiply(sl.mesh.matrixWorld));
+            if (i > 0) u.uToDn.value.copy(inv.copy(stone.slabs[i - 1].mesh.matrixWorld).invert().multiply(sl.mesh.matrixWorld));
+          });
+        }
+      }
+
+      /* ================= motion blur by sub-frame accumulation ================= */
+      const msaa = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType, samples: 4, colorSpace: THREE.LinearSRGBColorSpace });
+      const acc = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.FloatType, colorSpace: THREE.LinearSRGBColorSpace });
+      const fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      const quad = new THREE.PlaneGeometry(2, 2);
+      const fsVert = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+      const addMat = new THREE.ShaderMaterial({
+        uniforms: { tSrc: { value: msaa.texture }, w: { value: 1 } },
+        vertexShader: fsVert,
+        fragmentShader: `uniform sampler2D tSrc; uniform float w; varying vec2 vUv; void main(){ gl_FragColor = vec4(texture2D(tSrc, vUv).rgb * w, 1.0); }`,
+        blending: THREE.AdditiveBlending, depthTest: false, depthWrite: false, transparent: true,
+      });
+      const addScene = new THREE.Scene(); addScene.add(new THREE.Mesh(quad, addMat));
+      const outMat = new THREE.ShaderMaterial({
+        uniforms: { tSrc: { value: acc.texture }, texel: { value: new THREE.Vector2(1 / RW, 1 / RH) } },
+        vertexShader: fsVert,
+        fragmentShader: `uniform sampler2D tSrc; uniform vec2 texel; varying vec2 vUv;
+          void main(){
+            vec3 c = texture2D(tSrc, vUv + texel * vec2(-0.5, -0.5)).rgb
+                   + texture2D(tSrc, vUv + texel * vec2( 0.5, -0.5)).rgb
+                   + texture2D(tSrc, vUv + texel * vec2(-0.5,  0.5)).rgb
+                   + texture2D(tSrc, vUv + texel * vec2( 0.5,  0.5)).rgb;
+            gl_FragColor = vec4(c * 0.25, 1.0);
+          }`,
+        depthTest: false, depthWrite: false,
+      });
+      const outScene = new THREE.Scene(); outScene.add(new THREE.Mesh(quad, outMat));
+
+      // screen positions of the stone's corners, to size the blur
+      const CORNERS = [];
+      for (const x of [-0.5, 0.5]) for (const y of [-0.5, 0.5]) for (const z of [-0.5, 0.5]) CORNERS.push(new THREE.Vector3(x, y, z));
+      function cornerScreen(t) {
+        const P = poseAt(t);
+        applyPose(P);
+        stone.group.updateMatrixWorld(true);
+        const pts = [];
+        for (const sl of stone.slabs) for (const c of CORNERS) {
+          const v = c.clone(); v.y *= SLAB_H;
+          pts.push(v.applyMatrix4(sl.mesh.matrixWorld));
+        }
+        return pts;
+      }
+      const FPS = 30, SHUTTER = 0.5 / FPS;   // 180° shutter
+      function blurSamples(t) {
+        const a = cornerScreen(t - SHUTTER / 2), b = cornerScreen(t + SHUTTER / 2);
+        let m = 0;
+        for (let i = 0; i < a.length; i++) m = Math.max(m, Math.hypot(a[i].x - b[i].x, a[i].y - b[i].y));
+        if (m < 0.75) return 1;
+        return Math.min(32, Math.ceil(m / 1.5));
+      }
+
+      const BG_ARR = [BG.r, BG.g, BG.b];
+      function renderAt(t) {
+        const n = blurSamples(t);
+        renderer.setRenderTarget(acc);
+        renderer.setClearColor(0x000000, 1);
+        renderer.clear();
+        for (let i = 0; i < n; i++) {
+          const ts = n === 1 ? t : t - SHUTTER / 2 + SHUTTER * ((i + 0.5) / n);
+          applyPose(poseAt(ts));
+          renderer.setRenderTarget(msaa);
+          renderer.setClearColor(BG, 1);
+          renderer.clear();
+          renderer.render(scene, camera);
+          addMat.uniforms.w.value = 1 / n;
+          renderer.setRenderTarget(acc);
+          renderer.render(addScene, fsCam);
+        }
+        renderer.setRenderTarget(null);
+        renderer.clear();
+        renderer.render(outScene, fsCam);
+      }
+
+      window.__rl = { renderAt, T, poseAt, blurSamples };
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>

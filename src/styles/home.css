@@ -1,0 +1,112 @@
+/* Home: hero film with editor timeline, then the recipe shelves. Tokens and primitives come from base.css. */
+
+/* ---------- hero ---------- */
+.hero { padding-block: 28px 20px; }
+.hero-h { margin: 0 0 24px; max-width: 17em; font-size: clamp(28px, 8.4vw, 34px); line-height: 1.04; font-weight: 600; letter-spacing: -.035em; text-wrap: balance; }
+@media (min-width: 640px) { .hero-h { font-size: clamp(34px, min(5.2vw, 8svh), 72px); line-height: 1.02; } }
+
+.hero-stage { --tl-h: 64px; --gap: 12px; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "view" "tl" "shot"; align-content: start; row-gap: var(--gap); }
+.hero-frame { grid-area: view; width: 100%; }
+.hero-poster { z-index: 0; }
+.hero-vid { z-index: 1; opacity: 0; }
+.hero-vid.is-on { opacity: 1; }
+.hero-play { position: absolute; z-index: 2; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; }
+.hero-play svg { width: 22px; height: 22px; margin-left: 2px; }
+
+/* timeline: one block per segment, width proportional to duration */
+.hero-tl { grid-area: tl; display: flex; gap: 4px; height: var(--tl-h); margin: 0; padding: 0; list-style: none; }
+.tl-item { flex: 1 1 0; min-width: 0; }
+.tl-block { position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; width: 100%; height: 100%; padding: 9px 12px 8px; border: 0; border-radius: 8px; overflow: hidden; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink-3); text-align: left; cursor: pointer; transition: color .2s, background .2s; }
+.tl-block::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--accent); opacity: 0; transition: opacity .2s; }
+.tl-block:hover { background: var(--raise); color: var(--ink-2); }
+.tl-block[aria-current="true"] { background: var(--raise); color: var(--ink); }
+.tl-block[aria-current="true"]::before { opacity: 1; }
+.tl-block > :not(.tl-fill) { position: relative; max-width: 100%; }
+.tl-block .mono { color: inherit; }
+.tl-fill { position: absolute; inset: 0; background: rgba(255, 255, 255, .08); transform: scaleX(0); transform-origin: left; pointer-events: none; }
+.tl-pos, .tl-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tl-name { font-size: 13px; font-weight: 500; letter-spacing: -.01em; }
+.tl-n { display: none; }
+
+/* current shot: under the timeline; overlays the film on large screens */
+.hero-shot { grid-area: shot; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding-top: 4px; }
+.shot-info { display: grid; gap: 2px; min-width: 0; }
+.shot-name { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -.02em; }
+.shot-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+@media (max-width: 639px) {
+  .hero-stage { margin-inline: -16px; }
+  .hero-frame { border-radius: 0; box-shadow: none; }
+  .hero-tl, .hero-shot { margin-inline: 16px; }
+  .hero-tl { height: 44px; }
+  .tl-block { align-items: center; justify-content: center; padding: 0; }
+  .tl-pos, .tl-name { display: none; }
+  .tl-n { display: inline; }
+}
+
+/* large screens: H1, film and timeline fit one viewport. 370px is the H1, timeline, shot row and spacing. */
+@media (min-width: 900px) {
+  .hero-h { margin-inline: auto; text-align: center; }
+  .hero-stage { justify-items: center; --vw: min(100%, max(640px, calc((100svh - var(--nav) - 370px) * 16 / 9))); }
+  .hero-frame, .hero-tl, .hero-shot { width: var(--vw); }
+  .shot-name { font-size: 22px; }
+}
+
+/* ---------- recipes ---------- */
+.recipes { --bar: 56px; scroll-margin-top: calc(var(--nav) + env(safe-area-inset-top, 0px)); padding-bottom: 40px; }
+
+.chips { position: sticky; top: calc(var(--nav) + env(safe-area-inset-top, 0px)); z-index: 20; height: var(--bar); background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: saturate(1.6) blur(18px); -webkit-backdrop-filter: saturate(1.6) blur(18px); border-bottom: 1px solid var(--line); }
+.chips-in { position: relative; display: flex; align-items: center; gap: 4px; height: 100%; overflow-x: auto; scrollbar-width: none; }
+.chips-in::-webkit-scrollbar { display: none; }
+.chip { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--ink-2); transition: color .2s, background .2s; }
+.chip .mono { color: var(--ink-3); }
+.chip:hover { color: var(--ink); }
+.chip[aria-current="true"] { color: var(--ink); background: var(--raise); box-shadow: inset 0 0 0 1px var(--line-2); }
+.chip[aria-current="true"] .mono { color: var(--ink-2); }
+
+.shelf { padding-top: 40px; scroll-margin-top: calc(var(--nav) + env(safe-area-inset-top, 0px) + var(--bar)); }
+.shelf-h { display: flex; align-items: baseline; gap: 10px; margin: 0 0 18px; font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -.025em; }
+
+/* ---------- tile grid ---------- */
+.tiles { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px 16px; }
+@media (min-width: 560px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.tile { position: relative; min-width: 0; scroll-margin-top: calc(var(--nav) + env(safe-area-inset-top, 0px) + 72px); }
+.tile-frame { transition: box-shadow .25s; }
+.tile-vid { opacity: 0; transition: opacity .2s; }
+.tile.is-live .tile-vid { opacity: 1; }
+.tile:hover .tile-frame, .tile:focus-within .tile-frame { box-shadow: inset 0 0 0 1px var(--line-2); }
+.tile.is-live .tile-frame { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent); }
+
+.tile-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; }
+.tile-text { display: grid; gap: 1px; min-width: 0; }
+.tile-title { font-size: 14.5px; line-height: 1.35; font-weight: 500; letter-spacing: -.01em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* the title link covers the whole tile; action buttons sit above it */
+.tile-title::after { content: ""; position: absolute; inset: 0; border-radius: var(--r); }
+.tile-title:focus-visible { outline: none; }
+.tile-title:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tile-like { position: relative; z-index: 2; flex: none; }
+.tile-like .act-mini-like, .tile-like .act-like { min-height: 0; height: 32px; padding: 0 4px; background: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; color: var(--ink-3); }
+.tile-like .act-mini-like:hover, .tile-like .act-like:hover { background: none; color: var(--ink); }
+.tile-like [data-liked] { color: var(--heart); }
+
+.tile-actions { position: absolute; z-index: 2; top: 8px; right: 8px; display: flex; gap: 2px; padding: 2px; border-radius: 10px; background: color-mix(in srgb, #000 55%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); opacity: 0; transition: opacity .18s; }
+.tile:hover .tile-actions, .tile:focus-within .tile-actions { opacity: 1; }
+@media (hover: none) { .tile-actions { opacity: 1; } }
+
+/* ---------- skill install ---------- */
+.skill { padding-top: 72px; }
+.skill-h { margin: 0 0 18px; font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -.025em; }
+.skill-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.skill-box { display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; padding: 0 4px 0 16px; border-radius: var(--r); background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); }
+.skill-box code { min-width: 0; font: 14px/1.4 var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+.skill-box .btn { flex: none; color: var(--ink-2); box-shadow: none; }
+.skill-box .btn:hover { color: var(--ink); }
+@media (max-width: 640px) {
+  .skill { padding-top: 56px; }
+  .skill-box { width: 100%; }
+  .skill-box code { flex: 1; font-size: 13px; padding-block: 10px; }
+  .skill-row > .btn { width: 100%; }
+}

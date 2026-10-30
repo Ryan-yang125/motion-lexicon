@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #17181b;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #d9d9db; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #d9d9db; font-family: var(--font-ui); -webkit-font-smoothing: antialiased; }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      svg { display: block; flex: none; }
+      #gl { display: block; width: 1920px; height: 1080px; }
+
+      /* ---------- slogan: lies along the queue ---------- */
+      #sloganWrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 3; pointer-events: none; }
+      #slogan {
+        position: absolute; left: 960px; top: 215px; width: 1400px; height: 90px;
+        margin-left: -700px; margin-top: -45px;
+        display: flex; align-items: center; justify-content: center; gap: 0.3em;
+        font-size: 64px; font-weight: 500; letter-spacing: -0.025em; line-height: 1;
+        color: #15161a;
+        transform: rotate(-11deg);
+        transform-origin: 50% 50%;
+      }
+      #slogan span { display: block; opacity: 0; }
+
+      /* ---------- end ---------- */
+      #endBg { z-index: 6; background: #e8e8ea; opacity: 0; }
+      #lockup { z-index: 7; display: flex; align-items: center; justify-content: center; gap: 26px; opacity: 0; }
+      #mk { width: 124px; height: 136px; opacity: 0; overflow: visible; }
+      #wm { font-size: 120px; font-weight: 600; letter-spacing: -0.045em; line-height: 1; color: var(--ink); }
+      #wmClip { overflow: hidden; padding: 6px 4px 18px 0; margin-bottom: -12px; }
+      #wm { opacity: 0; display: block; }
+      #flash { z-index: 9; background: #ffffff; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.8" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip full" data-start="0" data-duration="10.8" data-track-index="0" style="z-index:1">
+        <canvas id="gl" width="1920" height="1080"></canvas>
+      </div>
+
+      <div id="sloganWrap" class="clip" data-start="0" data-duration="10.8" data-track-index="1">
+        <div id="slogan"><span>Every</span><span>write</span><span>lands</span><span>in</span><span>order.</span></div>
+      </div>
+
+      <div id="endBg" class="clip full" data-start="0" data-duration="10.8" data-track-index="3"></div>
+      <div id="lockup" class="clip full" data-start="0" data-duration="10.8" data-track-index="4">
+<svg id="mk" viewBox="0 0 120 132" fill="none">
+          <defs>
+            <linearGradient id="gTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b6c73"/><stop offset="1" stop-color="#43444a"/></linearGradient>
+            <linearGradient id="gLeft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#37383d"/><stop offset="1" stop-color="#27282c"/></linearGradient>
+            <linearGradient id="gRight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1d20"/><stop offset="1" stop-color="#101113"/></linearGradient>
+          </defs>
+          <path d="M60 6 112 36 60 66 8 36z" fill="url(#gTop)" />
+          <path d="M8 36 60 66V126L8 96z" fill="url(#gLeft)" />
+          <path d="M112 36 60 66V126L112 96z" fill="url(#gRight)" />
+          <path d="M8 36 60 6 112 36" stroke="rgba(255,255,255,0.62)" stroke-width="1.6" stroke-linejoin="round" />
+          <path d="M8 36 60 66 112 36" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-linejoin="round" />
+          <path d="M60 66V126" stroke="rgba(255,255,255,0.10)" stroke-width="1" />
+          <path d="M50.66 101.71 L34.00 103.20 L17.34 82.49 L17.34 60.29 L34.00 58.80 L50.66 79.51 Z" transform="translate(0 2)" stroke="rgba(0,0,0,0.55)" stroke-width="5.2" stroke-linejoin="round" />
+          <path d="M50.66 101.71 L34.00 103.20 L17.34 82.49 L17.34 60.29 L34.00 58.80 L50.66 79.51 Z" transform="translate(0 -1.2)" stroke="rgba(255,255,255,0.22)" stroke-width="4.2" stroke-linejoin="round" />
+          <path id="ring" d="M50.66 101.71 L34.00 103.20 L17.34 82.49 L17.34 60.29 L34.00 58.80 L50.66 79.51 Z" pathLength="1" stroke="#ff5a1f" stroke-width="3.6" stroke-linejoin="round" stroke-dasharray="1" stroke-dashoffset="0" />
+        </svg>
+        <div id="wmClip"><span id="wm">Basalt</span></div>
+      </div>
+      <div id="flash" class="clip full" data-start="0" data-duration="10.8" data-track-index="5"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const EXPO = "expo.out";
+
+      /* slogan words follow the wave 2 sweep (left to right) */
+      const W0 = 2.78, WD = 0.1;
+      document.querySelectorAll("#slogan span").forEach((el, i) => {
+        tl.set(el, { opacity: 0, y: 14, filter: "blur(8px)" }, 0);
+        tl.to(el, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: EXPO }, W0 + i * WD);
+      });
+      tl.to("#slogan", { opacity: 0, duration: 0.45, ease: "power2.in" }, 5.9);
+
+      /* flash, then collapse to the wordmark */
+            tl.set("#endBg", { opacity: 0 }, 0);
+      tl.set("#lockup", { opacity: 1 }, 0);
+      tl.set("#mk", { opacity: 0, scale: 0.86, y: 6 }, 0);
+      tl.set("#ring", { strokeDashoffset: 1 }, 0);
+      tl.set("#wm", { opacity: 0, x: -26 }, 0);
+      tl.set("#flash", { opacity: 1 }, 0);
+      tl.to("#flash", { opacity: 0, duration: 0.7, ease: "power2.out" }, 0.05);
+      tl.to("#flash", { opacity: 1, duration: 0.2, ease: "power2.in" }, 7.42);
+      tl.to("#endBg", { opacity: 1, duration: 0.01 }, 7.66);
+      tl.to("#flash", { opacity: 0, duration: 0.7, ease: "power2.out" }, 7.7);
+      tl.to("#mk", { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: EXPO }, 8.2);
+      tl.to("#ring", { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 8.55);
+      tl.to("#wm", { opacity: 1, x: 0, duration: 0.9, ease: EXPO }, 8.32);
+      tl.to("#lockup", { scale: 1.04, duration: 2.6, ease: "none" }, 8.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+
+      /* ================= helpers ================= */
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+      const seg = (t, a, b) => clamp01((t - a) / (b - a));
+      const lerp = (a, b, k) => a + (b - a) * k;
+      // cubic-bezier(0.65, 0, 0.35, 1)
+      function bezier(x1, y1, x2, y2) {
+        const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+        const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+        const sx = (s) => ((ax * s + bx) * s + cx) * s;
+        const sy = (s) => ((ay * s + by) * s + cy) * s;
+        const dx = (s) => (3 * ax * s + 2 * bx) * s + cx;
+        return (x) => {
+          if (x <= 0) return 0;
+          if (x >= 1) return 1;
+          let s = x;
+          for (let i = 0; i < 8; i++) { const e = sx(s) - x; const d = dx(s); if (Math.abs(e) < 1e-6 || Math.abs(d) < 1e-6) break; s -= e / d; }
+          return sy(clamp01(s));
+        };
+      }
+      const flipEase = bezier(0.65, 0, 0.35, 1);
+      const power3In = (k) => k * k * k;
+      const power2InOut = (k) => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      const halton = (i, b) => { let f = 1, r = 0; while (i > 0) { f /= b; r += f * (i % b); i = Math.floor(i / b); } return r; };
+
+      /* ================= renderer ================= */
+      const OW = 1920, OH = 1080;
+      const NS = 56; // lens + light + pixel jitter samples per frame
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1);
+      renderer.setSize(OW, OH, false);
+      renderer.toneMapping = THREE.NeutralToneMapping;
+      renderer.toneMappingExposure = 1.0;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFShadowMap;
+      renderer.shadowMap.autoUpdate = false;
+      renderer.autoClear = true;
+
+      const useFloat = renderer.extensions.has("EXT_color_buffer_float") && renderer.extensions.has("EXT_float32_blendable");
+      const rtType = useFloat ? THREE.FloatType : THREE.HalfFloatType;
+      const rtScene = new THREE.WebGLRenderTarget(OW, OH, { type: THREE.HalfFloatType, depthBuffer: true, samples: 0 });
+      const rtAcc = new THREE.WebGLRenderTarget(OW, OH, { type: rtType, depthBuffer: false });
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(24, OW / OH, 0.1, 400);
+
+      /* ================= studio backdrop (shader gradient, float precision) ================= */
+      const bgMat = new THREE.ShaderMaterial({
+        depthTest: false, depthWrite: false,
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.9999, 1.0); }`,
+        fragmentShader: `varying vec2 vUv; uniform float uLift;
+          vec3 lin(vec3 c){ return pow(c, vec3(2.2)); }
+          void main(){
+            vec2 p = vUv;
+            float h = smoothstep(0.02, 0.98, p.x * 0.88 + (1.0 - p.y) * 0.12);
+            vec3 c0 = vec3(0.5, 0.5, 0.52);
+            vec3 c1 = vec3(0.925, 0.925, 0.94);
+            vec3 col = mix(c0, c1, h);
+            vec2 q = (p - vec2(0.9, 0.42)) * vec2(1.15, 1.0);
+            col += vec3(0.075) * exp(-dot(q, q) * 3.2);
+            col *= mix(1.0, 0.8, smoothstep(0.55, 1.0, p.y));
+            col = mix(col, col * 1.06, smoothstep(0.7, 0.0, p.y));
+            col += uLift;
+            gl_FragColor = vec4(lin(col), 1.0);
+          }`,
+        uniforms: { uLift: { value: 0 } },
+      });
+      const bgMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMat);
+      bgMesh.frustumCulled = false; bgMesh.renderOrder = -1000;
+      scene.add(bgMesh);
+
+      /* ================= environment (soft studio boxes for the matte reflections) ================= */
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      function softTex(soft) {
+        const c = document.createElement("canvas"); c.width = c.height = 256;
+        const g = c.getContext("2d"); const img = g.createImageData(256, 256);
+        for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+          const u = Math.abs(x / 255 * 2 - 1), v = Math.abs(y / 255 * 2 - 1);
+          const f = (a) => { const e = clamp01((1 - a) / soft); return e * e * (3 - 2 * e); };
+          const val = Math.round(255 * f(u) * f(v)); const k = (y * 256 + x) * 4;
+          img.data[k] = img.data[k + 1] = img.data[k + 2] = val; img.data[k + 3] = 255;
+        }
+        g.putImageData(img, 0, 0);
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+      }
+      const SOFT = { hard: softTex(0.05), med: softTex(0.35), soft: softTex(0.9) };
+      function makeEnv(panels) {
+        const s = new THREE.Scene(); s.background = new THREE.Color(0x000000);
+        for (const p of panels) {
+          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(...p.c).multiplyScalar(p.i), map: SOFT[p.soft], side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(p.w, p.h), m);
+          mesh.position.set(...p.p); mesh.lookAt(0, 0, 0); if (p.rot) mesh.rotateZ(p.rot); s.add(mesh);
+        }
+        return pmrem.fromScene(s, 0, 0.1, 100).texture;
+      }
+      const W = [1, 1, 1];
+      scene.environment = makeEnv([
+        { p: [1, 11, 2], w: 18, h: 12, i: 6.2, c: W, soft: "soft" },          // top softbox
+        { p: [12, 4, 6], w: 5, h: 12, i: 1.2, c: [1, 0.99, 0.98], soft: "med" }, // right strip
+        { p: [-11, 3, 7], w: 9, h: 11, i: 1.25, c: W, soft: "soft" },         // left fill (kept low: the shadow side stays dark)
+        { p: [0, -7, 5], w: 26, h: 14, i: 0.8, c: W, soft: "soft" },          // floor bounce
+        { p: [0, 3, 14], w: 22, h: 10, i: 0.85, c: W, soft: "soft" },         // front fill
+        { p: [3, 9, 8], w: 22, h: 0.7, i: 9, c: W, soft: "hard" },            // thin rim strip: catches the bevels
+        { p: [-9, 7, 6], w: 0.7, h: 14, i: 5, c: W, soft: "hard" },           // thin rim strip, left
+      ]);
+      scene.environmentIntensity = 1.7;
+
+      /* ================= key light (area light by jittering the position per sample) ================= */
+      const key = new THREE.DirectionalLight(0xffffff, 3.6);
+      key.castShadow = true;
+      key.shadow.mapSize.set(2048, 2048);
+      key.shadow.camera.left = -18; key.shadow.camera.right = 18; key.shadow.camera.top = 18; key.shadow.camera.bottom = -18;
+      key.shadow.camera.near = 1; key.shadow.camera.far = 50;
+      key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02;
+      scene.add(key); scene.add(key.target);
+
+      /* ================= cubes ================= */
+      const CS = 1.45;       // cube edge
+      const GAP = 2.2;       // spacing along the queue
+      const CY = 1.32;       // hover height
+      const I0 = -9, I1 = 26;
+      const K = 7;           // hero cube: wears the accent ring, gets the final push
+      const BEVEL = 0.07;
+
+      const mulberry = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      function mkCanvas() { const c = document.createElement("canvas"); c.width = c.height = 512; return c; }
+      function hexPath(g, R) { g.beginPath(); for (let k = 0; k < 6; k++) { const a = Math.PI / 6 + k * Math.PI / 3; const x = 256 + R * Math.cos(a), y = 256 + R * Math.sin(a); k ? g.lineTo(x, y) : g.moveTo(x, y); } g.closePath(); }
+      const HEX_R = 150, GROOVE_W = 26;
+
+      // roughness: matte base with low-frequency blotches plus fine grain
+      function roughCanvas(seed, groove) {
+        const rnd = mulberry(seed), c = mkCanvas(), g = c.getContext("2d");
+        g.fillStyle = "rgb(176,176,176)"; g.fillRect(0, 0, 512, 512);
+        for (let n = 0; n < 90; n++) {
+          const x = rnd() * 512, y = rnd() * 512, r = 30 + rnd() * 110, v = rnd() < 0.5 ? 255 : 80;
+          const rg = g.createRadialGradient(x, y, 0, x, y, r);
+          rg.addColorStop(0, `rgba(${v},${v},${v},${0.10 + rnd() * 0.10})`); rg.addColorStop(1, `rgba(${v},${v},${v},0)`);
+          g.fillStyle = rg; g.fillRect(0, 0, 512, 512);
+        }
+        if (groove) { g.lineJoin = "round"; g.strokeStyle = "rgb(236,236,236)"; g.lineWidth = GROOVE_W - 4; hexPath(g, HEX_R); g.stroke(); }
+        const img = g.getImageData(0, 0, 512, 512);
+        for (let i = 0; i < 512 * 512; i++) { const n = (rnd() - 0.5) * 34; img.data[i * 4] += n; img.data[i * 4 + 1] += n; img.data[i * 4 + 2] += n; }
+        g.putImageData(img, 0, 0);
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; t.anisotropy = 8; return t;
+      }
+      // shallow hexagonal groove as a normal map computed from a blurred height field
+      function grooveNormal() {
+        const h = mkCanvas(), hg = h.getContext("2d");
+        hg.fillStyle = "#000"; hg.fillRect(0, 0, 512, 512);
+        hg.filter = "blur(4px)"; hg.lineJoin = "round"; hg.strokeStyle = "#fff"; hg.lineWidth = GROOVE_W; hexPath(hg, HEX_R); hg.stroke(); hg.filter = "none";
+        const d = hg.getImageData(0, 0, 512, 512).data;
+        const c = mkCanvas(), g = c.getContext("2d"), out = g.createImageData(512, 512);
+        const D = (x, y) => d[((Math.min(511, Math.max(0, y)) * 512) + Math.min(511, Math.max(0, x))) * 4] / 255;
+        const K2 = 7.0;
+        for (let y = 0; y < 512; y++) for (let x = 0; x < 512; x++) {
+          const dx = (D(x + 1, y) - D(x - 1, y)) * K2, dy = (D(x, y + 1) - D(x, y - 1)) * K2;
+          // depth d (high = deep): height = -d, canvas y points down while tangent v points up
+          let nx = dx, ny = -dy, nz = 1; const l = Math.hypot(nx, ny, nz); nx /= l; ny /= l; nz /= l;
+          const k = (y * 512 + x) * 4;
+          out.data[k] = (nx * 0.5 + 0.5) * 255; out.data[k + 1] = (ny * 0.5 + 0.5) * 255; out.data[k + 2] = (nz * 0.5 + 0.5) * 255; out.data[k + 3] = 255;
+        }
+        g.putImageData(out, 0, 0);
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; t.anisotropy = 8; return t;
+      }
+      // colour map for the groove floor (slightly darker) and the accent ring
+      function ringColor(base, ring) {
+        const c = mkCanvas(), g = c.getContext("2d");
+        g.fillStyle = base; g.fillRect(0, 0, 512, 512);
+        g.lineJoin = "round"; g.strokeStyle = ring; g.lineWidth = GROOVE_W - 8; hexPath(g, HEX_R); g.stroke();
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+      }
+      function ringEmissive() {
+        const c = mkCanvas(), g = c.getContext("2d");
+        g.fillStyle = "#000"; g.fillRect(0, 0, 512, 512);
+        g.lineJoin = "round"; g.strokeStyle = "#ff5a1f"; g.lineWidth = GROOVE_W - 10; hexPath(g, HEX_R); g.stroke();
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+      }
+
+      // bevel highlight: thin bright line on the rounded edges, strongest on the edges that face the top light
+      function bevelPatch(mat, fade) {
+        mat.onBeforeCompile = (sh) => {
+          sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vObj; varying vec3 vWN; varying float vMy;")
+            .replace("#include <begin_vertex>", "#include <begin_vertex>\nvObj = position; vWN = normalize(mat3(modelMatrix) * normal); vMy = (modelMatrix * vec4(position, 1.0)).y;");
+          sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vObj; varying vec3 vWN; varying float vMy;")
+            .replace("#include <roughnessmap_fragment>", `#include <roughnessmap_fragment>
+              vec3 bd = vec3(${(CS / 2).toFixed(4)}) - abs(vObj);
+              float bm1 = min(bd.x, min(bd.y, bd.z)); float bmx = max(bd.x, max(bd.y, bd.z));
+              float bm2 = bd.x + bd.y + bd.z - bm1 - bmx;
+              float edgeE = 1.0 - smoothstep(0.0, ${(BEVEL * 1.1).toFixed(4)}, bm2);
+              roughnessFactor = mix(roughnessFactor, 0.2, edgeE);`)
+            .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+              totalEmissiveRadiance += vec3(1.0, 0.99, 0.97) * edgeE * (0.03 + 0.7 * smoothstep(0.1, 0.9, vWN.y) + 0.12 * max(vWN.z, 0.0));`);
+          if (fade) sh.fragmentShader = sh.fragmentShader.replace("#include <opaque_fragment>", "diffuseColor.a = 0.2 * smoothstep(-2.2, 0.0, vMy);\n#include <opaque_fragment>");
+        };
+      }
+      const BASE = 0x5a5b60;
+      const plainMat = new THREE.MeshPhysicalMaterial({ color: BASE, metalness: 0, roughness: 1, roughnessMap: roughCanvas(11, false), specularIntensity: 0.9 });
+      bevelPatch(plainMat, false);
+      const grooveN = grooveNormal();
+      const hexMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff, map: ringColor("#5a5b60", "#2d2e32"), metalness: 0, roughness: 1, roughnessMap: roughCanvas(23, true),
+        normalMap: grooveN, normalScale: new THREE.Vector2(2.2, 2.2), specularIntensity: 0.9,
+      });
+      bevelPatch(hexMat, false);
+      const accentMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff, map: ringColor("#5a5b60", "#8a2c0e"), metalness: 0, roughness: 1, roughnessMap: roughCanvas(23, true),
+        normalMap: grooveN, normalScale: new THREE.Vector2(2.2, 2.2), specularIntensity: 0.9,
+        emissive: 0xffffff, emissiveMap: ringEmissive(), emissiveIntensity: 0.9,
+      });
+      bevelPatch(accentMat, false);
+      const mirrorMat = new THREE.MeshPhysicalMaterial({ color: BASE, metalness: 0, roughness: 0.7, transparent: true, depthWrite: false });
+      bevelPatch(mirrorMat, true);
+
+      const geo = new RoundedBoxGeometry(CS, CS, CS, 6, BEVEL);
+      const cubes = [], mirrors = [];
+      const mirrorGroup = new THREE.Group(); mirrorGroup.scale.y = -1; mirrorGroup.renderOrder = 1; scene.add(mirrorGroup);
+      for (let i = I0; i <= I1; i++) {
+        // box face order: +x, -x, +y, -y, +z, -z. The ring sits on the -x face: it travels bottom -> top during pass 2 and lands on the front during pass 3.
+        const mats = [plainMat, i === K ? accentMat : hexMat, plainMat, plainMat, plainMat, plainMat];
+        const m = new THREE.Mesh(geo, mats); m.castShadow = true; m.receiveShadow = true; scene.add(m);
+        const r = new THREE.Mesh(geo, mirrorMat); r.renderOrder = 1; mirrorGroup.add(r);
+        cubes.push(m); mirrors.push(r);
+      }
+      const shadowFloor = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.ShadowMaterial({ color: 0x14151a, opacity: 0.3, depthWrite: false }));
+      shadowFloor.rotation.x = -Math.PI / 2; shadowFloor.receiveShadow = true; shadowFloor.renderOrder = 2; scene.add(shadowFloor);
+
+      /* ================= arrow (a real object in the scene, so the depth of field blurs it) ================= */
+      const arrowShape = new THREE.Shape();
+      arrowShape.moveTo(0.95, 0); arrowShape.lineTo(-0.62, 0.58); arrowShape.lineTo(-0.26, 0); arrowShape.lineTo(-0.62, -0.58); arrowShape.closePath();
+      const arrowGeo = new THREE.ExtrudeGeometry(arrowShape, { depth: 0.07, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.025, bevelSegments: 3 });
+      arrowGeo.translate(0, 0, -0.035);
+      const arrow = new THREE.Mesh(arrowGeo, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, emissive: 0xffffff, emissiveIntensity: 0.45 }));
+      arrow.castShadow = true; scene.add(arrow);
+      const trailTex = (() => { const c = document.createElement("canvas"); c.width = 256; c.height = 4; const g = c.getContext("2d"); const lg = g.createLinearGradient(0, 0, 256, 0); lg.addColorStop(0, "#000"); lg.addColorStop(1, "#fff"); g.fillStyle = lg; g.fillRect(0, 0, 256, 4); return new THREE.CanvasTexture(c); })();
+      const TRAIL = 6;
+      const trail = new THREE.Mesh(new THREE.PlaneGeometry(TRAIL, 0.045), new THREE.MeshBasicMaterial({ color: 0xffffff, alphaMap: trailTex, transparent: true, depthWrite: false, opacity: 0.95 }));
+      trail.renderOrder = 3; scene.add(trail);
+      const AR0 = 0.95, AR1 = 2.45;
+      function arrowPos(t) {
+        const u = power2InOut(seg(t, AR0, AR1));
+        return new THREE.Vector3(lerp(-12, 27, u), 2.95 + 0.32 * u + 0.1 * Math.sin(Math.PI * u), -0.2);
+      }
+      function placeArrow(t) {
+        const on = t > AR0 - 0.02 && t < AR1 + 0.02;
+        arrow.visible = trail.visible = on;
+        if (!on) return;
+        const a = arrowPos(t), b = arrowPos(t + 0.02);
+        const ang = Math.atan2(b.y - a.y, b.x - a.x);
+        arrow.position.copy(a); arrow.scale.setScalar(0.8); arrow.rotation.set(0.35, -0.12, ang);
+        const k = seg(t, AR0, AR0 + 0.5);
+        trail.visible = k > 0;
+        trail.scale.x = 0.15 + 0.85 * k;
+        const len = TRAIL * trail.scale.x;
+        trail.position.set(a.x - Math.cos(ang) * (0.5 + len / 2), a.y - Math.sin(ang) * (0.5 + len / 2), a.z);
+        trail.rotation.set(0, 0, ang);
+      }
+
+      /* ================= choreography (pure function of t) ================= */
+      const ROLL = -0.1;
+      const PAN = 2.03;                         // world units / s, about 15% of the frame width per second
+      const AXU = new THREE.Vector3(0, 0, 1);   // flip axis in pass 1 and 2 (view axis, squares turn in plane)
+      const AXX = new THREE.Vector3(1, 0, 0);   // flip axis in pass 3 (along the queue, top rolls toward the lens)
+      const WAVES = [
+        { t0: 0.34, i0: -5, dt: 0.10, dir: 1, axis: AXU, sign: 1, ang: Math.PI / 2, dur: 0.6, hop: 0.10 },  // pass 1: plain 90 degree flips
+        { t0: 2.5, i0: -3, dt: 0.10, dir: 1, axis: AXU, sign: 1, ang: Math.PI, dur: 0.72, hop: 0.8 },      // pass 2: high jump with a double flip, carries the slogan
+        { t0: 3.75, i0: 18, dt: 0.07, dir: -1, axis: AXX, sign: 1, ang: Math.PI / 2, dur: 0.6, hop: 0.22 }, // pass 3: returns right to left and rolls the ring face toward the lens
+      ];
+      const trackC = (t) => new THREE.Vector3(-8 + PAN * t, 3.9, 13.5);
+      const trackT = (t) => new THREE.Vector3(0.5 + PAN * t, 1.15, 0);
+      const heroP = new THREE.Vector3(K * GAP, CY, 0);
+      const PUSH0 = 6.2, PUSH1 = 7.5;
+
+      const qa = new THREE.Quaternion(), qb = new THREE.Quaternion();
+      function cubeXform(i, t) {
+        const q = new THREE.Quaternion();
+        let hop = 0;
+        for (const w of WAVES) {
+          const s = w.t0 + (w.dir > 0 ? i - w.i0 : w.i0 - i) * w.dt;
+          const p = flipEase((t - s) / w.dur);
+          if (p > 0) {
+            qb.setFromAxisAngle(w.axis, w.sign * p * w.ang);
+            q.premultiply(qb);
+            if (p < 1) hop += Math.sin(Math.PI * p) * w.hop;
+          }
+        }
+        return { q, hop };
+      }
+
+      function cameraState(t) {
+        const e = Math.pow(seg(t, PUSH0, PUSH1), 2);
+        const C0 = trackC(t), T0 = trackT(t);
+        const Cf = new THREE.Vector3(heroP.x, heroP.y + 0.02, CS / 2 + 1.28);
+        const Tf = heroP.clone();
+        const o0 = C0.clone().sub(Tf), of = Cf.clone().sub(Tf);
+        const dir = o0.clone().normalize().lerp(of.clone().normalize(), e).normalize();
+        const mag = o0.length() * Math.pow(of.length() / o0.length(), e);
+        const C = Tf.clone().addScaledVector(dir, mag), T = T0.clone().lerp(Tf, e);
+        const k = clamp01(e / 0.3);
+        const fAnchor = T0.clone().lerp(new THREE.Vector3(heroP.x, heroP.y, CS / 2), k * k * (3 - 2 * k));
+        return { C, T, fd: fAnchor.distanceTo(C), e };
+      }
+
+      /* ================= final resolve: tone map + vignette + grain ================= */
+      const fsScene = new THREE.Scene();
+      const fsCam = new THREE.Camera();
+      const accMat = new THREE.ShaderMaterial({
+        depthTest: false, depthWrite: false, transparent: true, blending: THREE.AdditiveBlending,
+        uniforms: { tSrc: { value: null }, w: { value: 1 / NS } },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+        fragmentShader: `uniform sampler2D tSrc; uniform float w; varying vec2 vUv; void main(){ gl_FragColor = vec4(texture2D(tSrc, vUv).rgb * w, 1.0); }`,
+      });
+      const accMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), accMat); accMesh.frustumCulled = false;
+      const finalMat = new THREE.ShaderMaterial({
+        depthTest: false, depthWrite: false,
+        uniforms: { tSrc: { value: null }, frame: { value: 0 }, grain: { value: 0.02 }, vig: { value: 0.3 }, bright: { value: 0 } },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+        fragmentShader: `uniform sampler2D tSrc; uniform float frame; uniform float grain; uniform float vig; uniform float bright; varying vec2 vUv;
+          float h12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+          void main(){
+            vec3 c = texture2D(tSrc, vUv).rgb;
+            vec2 q = vUv - 0.5; q.x *= 1.777;
+            c *= 1.0 - vig * smoothstep(0.38, 1.1, length(q));
+            c += vec3(bright);
+            gl_FragColor = vec4(c, 1.0);
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+            vec2 px = floor(gl_FragCoord.xy);
+            float n = (h12(px + frame * 17.31) + h12(px * 1.37 + frame * 3.7 + 11.0)) - 1.0;
+            gl_FragColor.rgb += n * grain * (0.5 + 0.5 * gl_FragColor.rgb);
+          }`,
+      });
+      const finalMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), finalMat); finalMesh.frustumCulled = false;
+      fsScene.add(finalMesh);
+      const accScene = new THREE.Scene(); accScene.add(accMesh);
+
+      /* ================= render ================= */
+      const AP = 0.30;     // lens radius (world units), sets the depth-of-field blur
+      const LR = 2.4;      // key light radius, sets the shadow softness
+      const tmpR = new THREE.Vector3(), tmpU = new THREE.Vector3(), tmpF = new THREE.Vector3(), tmpP = new THREE.Vector3();
+
+      function renderAt(t) {
+        const cs = cameraState(t);
+        for (let n = 0; n < cubes.length; n++) {
+          const i = I0 + n;
+          const { q, hop } = cubeXform(i, t);
+          cubes[n].position.set(i * GAP, CY + hop, 0); cubes[n].quaternion.copy(q);
+          mirrors[n].position.copy(cubes[n].position); mirrors[n].quaternion.copy(q);
+        }
+        placeArrow(t);
+        const fr = Math.round(t * 30);
+        const rot0 = fr * 0.913;
+        camera.position.copy(cs.C); camera.lookAt(cs.T); camera.updateMatrixWorld();
+        const axis = tmpF.copy(cs.T).sub(cs.C).normalize();
+        const focus = cs.C.clone().addScaledVector(axis, cs.fd);
+        tmpR.setFromMatrixColumn(camera.matrixWorld, 0); tmpU.setFromMatrixColumn(camera.matrixWorld, 1);
+        const baseC = cs.C.clone(); const roll = ROLL * (1 - cs.e);
+        const lightBase = new THREE.Vector3(cs.T.x + 4.5, 15, 7.5);
+        key.target.position.set(cs.T.x + 1.5, 0, 0); key.target.updateMatrixWorld();
+
+        renderer.setRenderTarget(rtAcc); renderer.setClearColor(0x000000, 1); renderer.clear();
+        for (let k = 0; k < NS; k++) {
+          const r = Math.sqrt((k + 0.5) / NS), a = k * 2.399963 + rot0;
+          const ox = r * Math.cos(a) * AP, oy = r * Math.sin(a) * AP;
+          camera.position.copy(baseC).addScaledVector(tmpR, ox).addScaledVector(tmpU, oy);
+          camera.lookAt(focus); camera.rotateZ(roll);
+          camera.setViewOffset(OW, OH, halton(k + 1 + fr * 3, 2) - 0.5, halton(k + 1 + fr * 3, 3) - 0.5, OW, OH);
+          // light jitter, independent sequence
+          const lr = Math.sqrt(halton(k + 1, 5)), la = halton(k + 1, 7) * Math.PI * 2 + rot0 * 0.5;
+          key.position.copy(lightBase).add(tmpP.set(Math.cos(la) * lr * LR, 0, Math.sin(la) * lr * LR * 0.6));
+          renderer.shadowMap.needsUpdate = true;
+          renderer.setRenderTarget(rtScene); renderer.setClearColor(0x808080, 1); renderer.clear();
+          renderer.render(scene, camera);
+          accMat.uniforms.tSrc.value = rtScene.texture;
+          renderer.setRenderTarget(rtAcc); renderer.autoClear = false;
+          renderer.render(accScene, fsCam);
+          renderer.autoClear = true;
+        }
+        camera.clearViewOffset();
+        renderer.setRenderTarget(null);
+        finalMat.uniforms.tSrc.value = rtAcc.texture;
+        finalMat.uniforms.frame.value = fr;
+        renderer.render(fsScene, fsCam);
+      }
+
+      window.__dw = { renderAt };
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>

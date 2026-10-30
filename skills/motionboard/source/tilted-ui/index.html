@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --base: #070708;
+        --ink: #ececee;
+        --muted: #8b8b92;
+        --accent: #ff6a3d;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--base); }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--base);
+        font-family: var(--font-ui);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        font-variant-numeric: tabular-nums;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      svg { display: block; flex: none; }
+
+      /* ---------- backdrop ---------- */
+      #bg { overflow: hidden; z-index: 1; opacity: 0; }
+      #bands { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .band {
+        position: absolute;
+        width: 3200px;
+        transform: rotate(-25deg);
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+      }
+
+      /* ---------- 3D stage ---------- */
+      #stage { z-index: 2; overflow: hidden; perspective: 1200px; perspective-origin: 50% 50%; }
+      .fr { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-style: preserve-3d; }
+
+      #panel {
+        --fy: 28;
+        --fh: 168;
+        position: absolute;
+        left: 530px;
+        top: 280px;
+        width: 760px;
+        height: 500px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(28, 28, 30, 0.78);
+        box-shadow: 0 50px 120px rgba(0, 0, 0, 0.6), 0 12px 32px rgba(0, 0, 0, 0.4);
+      }
+      #panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        pointer-events: none;
+      }
+      .layer { position: absolute; left: 0; top: 0; width: 760px; height: 500px; }
+
+      /* depth of field in three steps: sharp inside the band, light blur next to it, heavy blur beyond.
+         neighbouring masks cross-fade over the same span so the layers always sum to full coverage */
+      .layer.sharp {
+        -webkit-mask-image: linear-gradient(to bottom,
+          transparent 0,
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 60px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 60px),
+          transparent 100%);
+        mask-image: linear-gradient(to bottom,
+          transparent 0,
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 60px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 60px),
+          transparent 100%);
+      }
+      .layer.mid {
+        filter: blur(4px);
+        -webkit-mask-image: linear-gradient(to bottom,
+          transparent 0,
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 200px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 140px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 60px),
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 60px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 140px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 200px),
+          transparent 100%);
+        mask-image: linear-gradient(to bottom,
+          transparent 0,
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 200px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 140px),
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 60px),
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 60px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 140px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 200px),
+          transparent 100%);
+      }
+      .layer.far {
+        filter: blur(13px);
+        -webkit-mask-image: linear-gradient(to bottom,
+          #000 0,
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 200px),
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 140px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 140px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 200px),
+          #000 100%);
+        mask-image: linear-gradient(to bottom,
+          #000 0,
+          #000 calc(var(--fy) * 1px - var(--fh) * 0.5px - 200px),
+          transparent calc(var(--fy) * 1px - var(--fh) * 0.5px - 140px),
+          transparent calc(var(--fy) * 1px + var(--fh) * 0.5px + 140px),
+          #000 calc(var(--fy) * 1px + var(--fh) * 0.5px + 200px),
+          #000 100%);
+      }
+
+      /* search row: 56px tall, vertical centre 28 */
+      .search { position: absolute; left: 0; top: 0; width: 760px; height: 56px; display: flex; align-items: center; padding-left: 20px; }
+      .search::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(255,255,255,0.07); }
+      .sic { width: 20px; height: 20px; color: var(--muted); flex: none; }
+      .qtxt { position: relative; margin-left: 14px; font-size: 17px; font-weight: 400; line-height: 56px; white-space: pre; color: var(--ink); }
+      .q { opacity: 0; }
+      .ph { position: absolute; left: 5px; top: 0; color: rgba(255,255,255,0.34); }
+      .k { display: inline-block; position: relative; width: 0; height: 22px; vertical-align: middle; opacity: 0; }
+      .k::after { content: ""; position: absolute; left: 1px; top: 0; width: 2px; height: 22px; border-radius: 1px; background: var(--ink); }
+      .askai {
+        position: absolute; right: 16px; top: 14px; height: 28px; display: flex; align-items: center; gap: 7px;
+        padding: 0 6px 0 9px; border-radius: 7px; background: rgba(255,255,255,0.06);
+        font-size: 12.5px; font-weight: 500; color: #b5b5bb;
+      }
+      .askai .sp { color: var(--accent); }
+      .kb {
+        display: inline-flex; align-items: center; justify-content: center; height: 20px; min-width: 20px; padding: 0 5px;
+        border-radius: 5px; background: rgba(255,255,255,0.10); color: #b5b5bb; font-size: 12px; font-weight: 500;
+      }
+
+      /* result list: group header 28px, row 40px */
+      .gh { position: absolute; left: 8px; width: 744px; height: 28px; padding: 0 12px; display: flex; align-items: center; font-size: 12px; font-weight: 500; color: var(--muted); }
+      .row { position: absolute; left: 8px; width: 744px; height: 40px; display: flex; align-items: center; padding: 0 12px 0 10px; border-radius: 8px; }
+      .res { opacity: 0; }
+      .tile { display: flex; align-items: center; justify-content: center; flex: none; color: #fff; }
+      .tt { margin-left: 12px; font-size: 14px; font-weight: 500; color: var(--ink); white-space: pre; }
+      .st { margin-left: 8px; font-size: 13px; font-weight: 400; color: var(--muted); white-space: pre; }
+      .tg { margin-left: auto; font-size: 12.5px; color: var(--muted); white-space: pre; }
+      .hl {
+        position: absolute; left: 8px; top: 90px; width: 744px; height: 40px;
+        border-radius: 8px; background: rgba(255,255,255,0.09); opacity: 0;
+      }
+
+      /* answer */
+      .ln { position: absolute; left: 0; width: 760px; display: flex; align-items: center; white-space: pre; }
+      .ap { opacity: 0; }
+      .c { opacity: 0; }
+      .ah { margin-left: 12px; font-size: 14.5px; font-weight: 600; color: var(--ink); }
+      .am { margin-left: 10px; font-size: 12.5px; color: var(--muted); }
+      .lead { margin-left: 58px; font-size: 13.5px; color: #c9c9cf; }
+      .av { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; font-size: 10px; font-weight: 600; flex: none; }
+      .ic { margin-left: 12px; flex: 1; min-width: 0; display: flex; flex-direction: column; }
+      .it { font-size: 14px; line-height: 18px; font-weight: 500; color: var(--ink); white-space: pre; }
+      .is { margin-top: 1px; font-size: 12px; line-height: 16px; color: var(--muted); white-space: pre; }
+      .dc { display: flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 6px; background: rgba(255,255,255,0.06); font-size: 12px; font-weight: 500; color: #b5b5bb; flex: none; }
+      .src { margin-left: 8px; font-size: 12.5px; color: var(--muted); }
+      .fu { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 7px; font-size: 12.5px; font-weight: 500; color: #d4d4d9; margin-right: 8px; }
+      .fu svg { color: var(--muted); }
+
+      /* footer action bar */
+      .foot {
+        position: absolute; left: 0; bottom: 0; width: 760px; height: 44px;
+        display: flex; align-items: center; justify-content: space-between; padding: 0 14px;
+      }
+      .foot::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgba(255,255,255,0.07); }
+      .fl { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 500; color: #b5b5bb; }
+      .fr2 { display: flex; align-items: center; gap: 0; font-size: 12.5px; font-weight: 500; color: #d4d4d9; }
+      .stk { display: inline-grid; }
+      .fa { grid-area: 1 / 1; display: flex; align-items: center; justify-content: flex-end; gap: 8px; white-space: pre; }
+      .fa2 { opacity: 0; }
+      .fsep { width: 1px; height: 16px; background: rgba(255,255,255,0.12); margin: 0 12px; }
+      .fb { display: flex; align-items: center; gap: 4px; }
+      .fb .lab { margin-right: 4px; }
+
+      /* ---------- finish ---------- */
+      #grain {
+        z-index: 3; pointer-events: none; opacity: 0.08;
+        background-size: 256px 256px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+      #vig {
+        z-index: 4; pointer-events: none;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%);
+      }
+      #mark {
+        position: absolute; right: 88px; bottom: 64px; z-index: 5; opacity: 0;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 28px; letter-spacing: -0.01em; color: var(--ink);
+      }
+      #mark .mk { display: flex; align-items: center; gap: 12px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="bg" class="clip full" data-start="0" data-duration="10" data-track-index="0">
+        <div id="bands">
+          <div class="band" style="left:-934px; top:-217px; height:240px; opacity:0.07; filter:blur(60px);"></div>
+          <div class="band" style="left:-779px; top:143px; height:120px; opacity:0.12; filter:blur(40px);"></div>
+          <div class="band" style="left:-640px; top:390px; height:300px; opacity:0.08; filter:blur(80px);"></div>
+          <div class="band" style="left:-489px; top:793px; height:150px; opacity:0.14; filter:blur(50px);"></div>
+          <div class="band" style="left:-338px; top:1095px; height:200px; opacity:0.10; filter:blur(70px);"></div>
+        </div>
+      </div>
+
+      <div id="stage" class="clip full" data-start="0" data-duration="10" data-track-index="1">
+        <div id="tx" class="fr">
+          <div id="ty" class="fr">
+            <div id="tz" class="fr">
+              <div id="pan" class="fr">
+                <div id="follow" class="fr">
+                  <div id="panel" data-layout-allow-overlap></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="grain" class="clip full" data-start="0" data-duration="10" data-track-index="2"></div>
+      <div id="vig" class="clip full" data-start="0" data-duration="10" data-track-index="3"></div>
+      <div id="mark" class="clip" data-start="0" data-duration="10" data-track-index="4">
+        <span class="mk">
+          <svg width="30" height="30" viewBox="0 0 30 30"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8f5a"/><stop offset="1" stop-color="#ff4f6a"/></linearGradient></defs><rect width="30" height="30" rx="8" fill="url(#mg)"/><g transform="translate(5.5 5.5) scale(0.8)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/></g></svg>
+          Sable
+        </span>
+      </div>
+    </div>
+
+    <script>
+      const ORANGE = "#ff6a3d";
+      const EXPO = "expo.out";
+
+      /* ---------- icons (lucide-style, 24 grid) ---------- */
+      const G = {
+        search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+        spark: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/>',
+        hash: '<line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/>',
+        doc: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8M8 17h5"/>',
+        file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>',
+        circleCheck: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+        calendar: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+        video: '<path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
+        pr: '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/>',
+        clipboard: '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+        edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        folder: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+        moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+        smile: '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+        copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+        send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+      };
+      const svg = (g, s, sw) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.8) +
+        '" stroke-linecap="round" stroke-linejoin="round">' + G[g] + "</svg>";
+      const tile = (bg, g, o) => {
+        o = o || {};
+        const s = o.s || 24, gs = o.g || 14;
+        return '<span class="tile' + (o.cls ? " " + o.cls : "") + '" style="width:' + s + "px;height:" + s + "px;border-radius:" + (o.r || 6) + "px;background:" + bg +
+          (o.c ? ";color:" + o.c : "") + (o.bd ? ";box-shadow:inset 0 0 0 1px " + o.bd : "") + '">' + svg(g, gs, 1.8) + "</span>";
+      };
+
+      const SABLE = "linear-gradient(135deg,#ff8f5a,#ff4f6a)";
+      const SLACK = "#4a154b";
+      const LINEAR = "#5e6ad2";
+      const NOTION = "#ececee";
+
+      /* ---------- people ---------- */
+      const P = {
+        daniel: ["DK", "#8b5cf6"],
+        priya: ["PN", "#2f9e77"],
+        sofia: ["SR", "#d6498b"],
+        liam: ["LO", "#3b82c4"],
+      };
+      const avatar = (k) => '<span class="av ap a{L}" data-layout-ignore style="background:' + P[k][1] + '">' + P[k][0] + "</span>";
+
+      /* ---------- search ---------- */
+      const SEARCH = "summarize today’s standup and list action items";
+      const CHARS = [...SEARCH];
+      const T_TYPE0 = 1.4;
+
+      /* ---------- list data: group header 28px, row 40px, list starts at y = 62 ---------- */
+      const HOME = [
+        ["h", "Suggestions"],
+        ["r", tile(SABLE, "clipboard"), "Clipboard History", "Sable", "Command"],
+        ["r", tile("#3a3a40", "edit", { bd: "rgba(255,255,255,0.10)" }), "Quick Note", "Sable", "Command"],
+        ["r", tile("#5b6472", "folder"), "Search Files", "Files", "Command"],
+        ["h", "Commands"],
+        ["r", tile("#6e56cf", "moon"), "Toggle Dark Mode", "System", "Command"],
+        ["r", tile("#f5a524", "smile"), "Emoji &amp; Symbols", "Sable", "Command"],
+        ["h", "Recent"],
+        ["r", tile(NOTION, "doc", { c: "#111" }), "Weekly Sync Notes", "Notion", "Page"],
+        ["r", tile("#5b6472", "file"), "Brand Guidelines v3.pdf", "Downloads", "File"],
+      ];
+      const RES = [
+        ["h", "Suggestions"],
+        ["r", tile(SLACK, "hash"), "Search #eng-standup", "Slack", "Command"],
+        ["r", tile(NOTION, "doc", { c: "#111" }), "Standup Notes", "Notion", "Page"],
+        ["r", tile(SABLE, "spark"), "Summarize Standup", "Sable AI", "AI Command"],
+        ["h", "Commands"],
+        ["r", tile(LINEAR, "circleCheck"), "Create Issues from Notes", "Linear", "Command"],
+        ["r", tile("#3b82f6", "calendar"), "Today’s Meetings", "Calendar", "Command"],
+        ["h", "Recent"],
+        ["r", tile("#2d8cff", "video"), "Daily Standup Recording", "Zoom", "Recording"],
+        ["r", tile("#2d333b", "pr", { bd: "rgba(255,255,255,0.14)" }), "Fix WebSocket reconnect on chat nav", "#4128", "Pull Request"],
+      ];
+
+      function listHTML(items, cls, numbered) {
+        let y = 62, k = 0, n = 0, h = "";
+        items.forEach((it) => {
+          const ek = numbered ? " e" + k : "";
+          if (it[0] === "h") {
+            h += '<div class="gh ' + cls + ek + '" style="top:' + y + 'px">' + it[1] + "</div>";
+            y += 28;
+          } else {
+            n++;
+            h += '<div class="row ' + cls + ek + (numbered ? " r" + n : "") + '" style="top:' + y + 'px">' + it[1] +
+              '<span class="tt">' + it[2] + '</span><span class="st">' + it[3] + '</span><span class="tg">' + it[4] + "</span></div>";
+            y += 40;
+          }
+          k++;
+        });
+        return h;
+      }
+
+      /* ---------- answer lines ---------- */
+      const ITEMS = [
+        ["daniel", "Review WebSocket reconnect PR #4128", "Daniel Kim · ENG-2141", "Today", true],
+        ["priya", "Fix flaky checkout e2e on staging", "Priya Nair · ENG-2152", "Thu, Oct 29"],
+        ["sofia", "Update onboarding copy in Figma", "Sofia Reyes · DES-318", "Fri, Oct 30"],
+        ["liam", "Book Acme renewal call for next week", "Liam Ortiz · GRO-207", "Mon, Nov 2"],
+      ];
+      const TITLE = "Standup summary";
+      const LEAD = "Checkout e2e is green; reconnect fix in review. Action items:";
+      const typed = (text, line) => [...text].map((c, j) => '<span class="c a' + line + "c" + j + '">' + c + "</span>").join("");
+
+      const LINE_TOP = [64, 100, 132, 180, 228, 276, 324];
+      const LINE_FY = [82, 116, 156, 204, 252, 300, 340];
+      const LINE_TEXT = [TITLE, LEAD, ITEMS[0][1], ITEMS[1][1], ITEMS[2][1], ITEMS[3][1], null];
+
+      function answerHTML() {
+        let h = "";
+        h += '<div class="ln" style="top:64px;height:36px;padding-left:20px">' +
+          tile(SABLE, "spark", { s: 26, g: 15, r: 7, cls: "ap a0" }) + '<b class="ah">' + typed(TITLE, 0) + "</b>" +
+          '<span class="am ap a0">Wed, Oct 28 · 6 attendees</span></div>';
+        h += '<div class="ln" style="top:100px;height:32px"><span class="lead">' + typed(LEAD, 1) + "</span></div>";
+        ITEMS.forEach((it, i) => {
+          const L = i + 2;
+          h += '<div class="ln" style="top:' + LINE_TOP[L] + 'px;height:48px;padding:0 20px">' +
+            avatar(it[0]).replace("{L}", L) +
+            '<div class="ic"><span class="it">' + typed(it[1], L) + '</span><span class="is ap a' + L + '">' + it[2] + "</span></div>" +
+            '<span class="dc ap a' + L + '"' + (it[4] ? ' style="color:' + ORANGE + '"' : "") + ">" + svg("calendar", 12, 1.8) + it[3] + "</span></div>";
+        });
+        h += '<div class="ln" style="top:324px;height:32px;padding-left:20px">' +
+          tile(SLACK, "hash", { s: 18, g: 11, r: 5, cls: "ap a6" }) + '<span class="src ap a6">From #eng-standup · 9:30 AM</span></div>';
+        h += '<div class="ln" style="top:364px;height:28px;padding-left:20px">' +
+          '<span class="fu ap a7">' + svg("circleCheck", 14, 1.8) + "Create 4 issues</span>" +
+          '<span class="fu ap a7">' + svg("send", 14, 1.8) + "Post to #eng-standup</span>" +
+          '<span class="fu ap a7">' + svg("copy", 14, 1.8) + "Copy</span></div>";
+        return h;
+      }
+
+      function layerHTML() {
+        let q = '<i class="k k0"></i>';
+        CHARS.forEach((c, i) => { q += '<span class="q q' + i + '">' + c + '</span><i class="k k' + (i + 1) + '"></i>'; });
+        let h = '<div class="search"><div class="sic">' + svg("search", 20, 1.8) + '</div><div class="qtxt"><span class="ph">Ask anything or search…</span>' + q + "</div>" +
+          '<div class="askai"><span class="sp">' + svg("spark", 14, 1.8) + '</span>Ask AI<span class="kb">Tab</span></div></div>';
+        h += '<div class="hl"></div>';
+        h += listHTML(HOME, "home", false);
+        h += listHTML(RES, "res", true);
+        h += answerHTML();
+        h += '<div class="foot"><span class="fl">' + tile(SABLE, "spark", { s: 20, g: 12, r: 6 }) + "Sable</span>" +
+          '<span class="fr2"><span class="stk"><span class="fa fa1">Open Command<span class="kb">↵</span></span><span class="fa fa2">Open in Linear<span class="kb">↵</span></span></span>' +
+          '<i class="fsep"></i><span class="fb"><span class="lab">Actions</span><span class="kb">⌘</span><span class="kb">K</span></span></span></div>';
+        return h;
+      }
+      const html = layerHTML();
+      document.getElementById("panel").innerHTML = '<div class="layer far">' + html + '</div><div class="layer mid">' + html + '</div><div class="layer sharp">' + html + "</div>";
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+
+      // initial camera pose
+      gsap.set("#tx", { rotationX: 18 });
+      gsap.set("#ty", { rotationY: -16 });
+      gsap.set("#tz", { rotation: 5 });
+      gsap.set("#panel", { scale: 2.3 });
+
+      // backdrop: fade in, bands drift ~15% of frame width
+      tl.fromTo("#bg", { opacity: 0.55 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, 0);
+      tl.fromTo("#bands", { x: 0 }, { x: -288, duration: 9, ease: "none" }, 0);
+
+      // grain: tile offset chosen per frame from the frame index
+      // re-rolled every 3 frames: reads as film grain and keeps the encode small
+      for (let f = 0; f < 300; f += 3) {
+        const ox = (f * 97) % 256;
+        const oy = (f * 61 + 37 * (f % 5)) % 256;
+        tl.set("#grain", { backgroundPosition: ox + "px " + oy + "px" }, f / 30);
+      }
+
+      // panel slide-in and linear camera pan
+      tl.fromTo("#panel", { x: 140, y: 90, opacity: 1 }, { x: 0, y: 0, opacity: 1, duration: 1.0, ease: EXPO }, 0);
+      tl.fromTo("#pan", { x: 110, y: 30 }, { x: -150, y: -30, duration: 8.0, ease: "none" }, 0);
+
+      // focus band follows one shared position (panel y of the line being operated)
+      let curFy = 28; // search row centre
+      // the camera rides with the focus band so the in-focus line stays near 40% of frame height
+      const followY = (fy) => 345 - (fy - 42) * 2.3 * 0.97;
+      gsap.set("#follow", { y: followY(28) });
+      function focusTo(y, at, dur, ease = EXPO) {
+        tl.fromTo("#panel", { "--fy": curFy }, { "--fy": y, duration: dur, ease, immediateRender: false }, at);
+        tl.fromTo("#follow", { y: followY(curFy) }, { y: followY(y), duration: dur, ease, immediateRender: false }, at);
+        curFy = y;
+      }
+
+      // caret blink: 1 s period, on for the first half, determined by time
+      function blink(sel, t0, t1) {
+        for (let k = 0; t0 + 0.5 * k < t1 - 0.001; k++) {
+          tl.set(sel, { opacity: k % 2 === 0 ? 1 : 0 }, t0 + 0.5 * k);
+        }
+      }
+
+      // search typing: letters ~30 ms, a short beat after each word
+      const times = [];
+      let tt = T_TYPE0;
+      CHARS.forEach((c, i) => { times.push(tt); tt += c === " " ? 0.075 : 0.026 + ((i * 5) % 4) * 0.005; });
+      blink(".k0", 0.5, times[0]);
+      tl.set(".ph", { opacity: 0 }, times[0]);
+      times.forEach((t, i) => {
+        tl.set(".q" + i, { opacity: 1 }, t);
+        tl.set(".k" + i, { opacity: 0 }, t);
+        tl.set(".k" + (i + 1), { opacity: 1 }, t);
+      });
+      const tLast = times[times.length - 1];
+      blink(".k" + CHARS.length, tLast, 6.5);
+      tl.set(".k" + CHARS.length, { opacity: 0 }, 6.5);
+
+      // home list gives way to the results
+      tl.to(".home", { opacity: 0, duration: 0.2, ease: "power1.out" }, 3.3);
+      for (let k = 0; k < RES.length; k++) {
+        tl.fromTo(".e" + k, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 3.5 + 0.05 * k);
+      }
+
+      // highlight block: appears on row 1 (centre y 110), hops to row 2 (150) then row 3 (190)
+      tl.fromTo(".hl", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 4.4);
+      focusTo(110, 4.4, 0.35);
+
+      tl.fromTo(".hl", { y: 0 }, { y: 40, duration: 0.22, ease: EXPO, immediateRender: false }, 5.1);
+      focusTo(150, 5.1, 0.22);
+
+      tl.fromTo(".hl", { y: 40 }, { y: 80, duration: 0.22, ease: EXPO, immediateRender: false }, 5.82);
+      focusTo(190, 5.82, 0.22);
+
+      // select: press, rebound, type label turns orange on the same frame
+      tl.fromTo(".r3, .hl", { scale: 1 }, { scale: 0.98, duration: 0.12, ease: "power2.out", immediateRender: false }, 6.3);
+      tl.fromTo(".r3, .hl", { scale: 0.98 }, { scale: 1, duration: 0.18, ease: "back.out(2)", immediateRender: false }, 6.42);
+      tl.set(".r3 .tg", { color: ORANGE }, 6.3);
+
+      // content switch: list fades, footer action changes, the answer streams in line by line
+      tl.to(".res, .hl", { opacity: 0, duration: 0.25, ease: "power1.out" }, 6.5);
+      tl.set(".fa1", { opacity: 0 }, 6.5);
+      tl.set(".fa2", { opacity: 1 }, 6.5);
+      const LINE_T0 = 6.72, LINE_STEP = 0.18, CHAR_DUR = 0.3;
+      // up to the first answer line: a reframe that rides under the list fade-out and ends as line 2 begins
+      focusTo(LINE_FY[0], 6.3, 0.6, "power3.inOut");
+      LINE_TEXT.forEach((text, i) => {
+        const s = LINE_T0 + LINE_STEP * i;
+        if (i > 0) focusTo(LINE_FY[i], s, LINE_STEP);
+        if (i !== 1) tl.set(".ap.a" + i, { opacity: 1 }, s); // line 1 (the lead) has no .ap element
+        if (text) {
+          const chars = [...text];
+          chars.forEach((c, j) => {
+            tl.set(".a" + i + "c" + j, { opacity: 1 }, s + (j / chars.length) * CHAR_DUR);
+          });
+        }
+      });
+      tl.set(".ap.a7", { opacity: 1 }, LINE_T0 + LINE_STEP * 6 + 0.1);
+
+      // finish: tilt halves, zoom 2.3 -> 1.5, focus band widens to the whole panel, recentre the pan
+      tl.fromTo("#tx", { rotationX: 18 }, { rotationX: 9, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#ty", { rotationY: -16 }, { rotationY: -8, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#tz", { rotation: 5 }, { rotation: 2.5, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#panel", { scale: 2.3 }, { scale: 1.5, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#pan", { x: -150, y: -30 }, { x: 40, y: 10, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#follow", { y: followY(curFy) }, { y: 0, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#panel", { "--fy": curFy, "--fh": 168 }, { "--fy": 250, "--fh": 1000, duration: 0.9, ease: EXPO, immediateRender: false }, 8.0);
+      tl.fromTo("#mark", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: EXPO }, 8.3);
+
+      tl.set({}, {}, 9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

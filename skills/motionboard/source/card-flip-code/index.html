@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0e0f12; }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: radial-gradient(ellipse 1500px 1000px at 35% 12%, #3a3d4a 0%, #1c1e26 55%, #0f1014 100%);
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 13px;
+        color: #09090b;
+        -webkit-font-smoothing: antialiased;
+        font-variant-numeric: tabular-nums;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .ic { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+      .sp { flex: 1; }
+      .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+      #zoom { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 540px; }
+
+      /* ---------------- window ---------------- */
+      #win {
+        position: absolute; left: 120px; top: 60px; width: 1680px; height: 960px; border-radius: 12px; overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14), 0 50px 120px rgba(0, 0, 0, 0.6);
+      }
+      #win > * { position: absolute; }
+
+      #chrome { left: 0; top: 0; width: 1680px; height: 40px; display: flex; align-items: center; background: #ececee; border-bottom: 1px solid #d9d9dd; padding: 0 14px; color: #71717a; }
+      #chrome .l { width: 250px; display: flex; align-items: center; gap: 14px; }
+      #chrome .lights { display: flex; gap: 8px; margin-right: 6px; }
+      #chrome .lights i { display: block; width: 12px; height: 12px; border-radius: 6px; }
+      #chrome .url { width: 460px; height: 26px; border-radius: 7px; background: #ffffff; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 12.5px; color: #09090b; }
+      #chrome .url .d { color: #71717a; margin-left: -6px; }
+      #chrome .r { width: 250px; display: flex; justify-content: flex-end; gap: 14px; }
+
+      /* app bar */
+      #bar { left: 0; top: 40px; width: 1680px; height: 48px; display: flex; align-items: center; gap: 10px; padding: 0 16px; background: #ffffff; border-bottom: 1px solid #e4e4e7; }
+      #bar .logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
+      #bar .logo svg { width: 22px; height: 22px; display: block; }
+      #bar .div { color: #d4d4d8; font-size: 16px; margin: 0 2px; }
+      #bar .ws { display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 8px 0 6px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+      #bar .ws .tile { width: 20px; height: 20px; border-radius: 5px; background: #2563eb; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+      #bar .ws .ic { width: 12px; height: 12px; color: #71717a; }
+      #bar .crumb { font-size: 13px; color: #71717a; }
+      #bar .find { position: absolute; left: 660px; top: 9px; width: 360px; height: 30px; border-radius: 8px; border: 1px solid #e4e4e7; background: #fafafa; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 10px; font-size: 13px; color: #71717a; }
+      #bar .find .k { margin-left: auto; height: 18px; padding: 0 6px; border-radius: 4px; border: 1px solid #e4e4e7; background: #fff; font-size: 11px; display: flex; align-items: center; color: #71717a; }
+      #bar .nv { font-size: 13px; font-weight: 500; color: #52525b; padding: 0 8px; }
+      .gbtn { display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px; border: 1px solid #e4e4e7; background: #fff; font-size: 13px; font-weight: 500; color: #09090b; }
+      .gbtn .ic { width: 14px; height: 14px; color: #71717a; }
+      .bbtn { display: flex; align-items: center; gap: 6px; height: 30px; padding: 0 14px; border-radius: 8px; background: #18181b; font-size: 13px; font-weight: 500; color: #fafafa; }
+      .av { width: 26px; height: 26px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; color: #fff; flex: none; }
+
+      /* sidebar */
+      #side { left: 0; top: 88px; width: 248px; height: 872px; background: #fafafa; border-right: 1px solid #e4e4e7; }
+      .srch { position: absolute; left: 8px; top: 12px; width: 232px; height: 28px; display: flex; align-items: center; gap: 7px; padding: 0 8px; border: 1px solid #e4e4e7; border-radius: 6px; background: #fff; font-size: 12.5px; color: #71717a; }
+      .srch .ic { width: 13px; height: 13px; }
+      .srch .k { margin-left: auto; font-size: 11px; }
+      .gl { position: absolute; left: 16px; height: 28px; display: flex; align-items: center; font-size: 11.5px; font-weight: 600; color: #71717a; }
+      .si { position: absolute; left: 8px; width: 232px; height: 30px; display: flex; align-items: center; gap: 8px; padding: 0 8px; border-radius: 6px; font-size: 13px; color: #52525b; }
+      .si .ic { width: 15px; height: 15px; color: #71717a; }
+      .si .n { margin-left: auto; font-size: 11.5px; color: #a1a1aa; }
+      .si .new { margin-left: auto; height: 16px; padding: 0 6px; border-radius: 8px; background: #dbeafe; color: #1d4ed8; font-size: 10.5px; font-weight: 600; display: flex; align-items: center; }
+      #sfoot { position: absolute; left: 0; bottom: 0; width: 247px; height: 92px; border-top: 1px solid #e4e4e7; padding: 14px 16px; background: #fafafa; }
+      #sfoot .a { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; }
+      #sfoot .a span:last-child { color: #71717a; font-weight: 400; }
+      #sfoot .bar { margin-top: 8px; height: 4px; border-radius: 2px; background: #e4e4e7; }
+      #sfoot .bar i { display: block; width: 30%; height: 4px; border-radius: 2px; background: #18181b; }
+      #sfoot .b { margin-top: 10px; font-size: 11.5px; color: #71717a; }
+
+      /* stage */
+      #stagebg { left: 248px; top: 88px; width: 1144px; height: 872px; background: #f6f6f7; }
+      #sh { left: 248px; top: 88px; width: 1144px; height: 52px; background: #fff; border-bottom: 1px solid #e4e4e7; }
+      #sh > * { position: absolute; }
+      #sh .tt { left: 20px; top: 0; height: 52px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; opacity: 0; }
+      #sh .tt .ic { color: #71717a; width: 16px; height: 16px; }
+      #sh .tt .chip { height: 22px; padding: 0 8px; border-radius: 6px; border: 1px solid #e4e4e7; font-size: 11.5px; font-weight: 500; color: #52525b; display: flex; align-items: center; gap: 6px; margin-left: 4px; }
+      #sh .tt .chip i { display: block; width: 6px; height: 6px; border-radius: 3px; background: #16a34a; }
+      #seg { left: 496px; top: 12px; width: 152px; height: 28px; padding: 2px; border-radius: 8px; background: #f0f0f1; display: flex; }
+      #seg > span { position: relative; z-index: 1; width: 74px; height: 24px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12.5px; font-weight: 500; }
+      #seg .ic { width: 14px; height: 14px; }
+      #pill { position: absolute; left: 2px; top: 2px; width: 74px; height: 24px; border-radius: 6px; background: #ffffff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04); z-index: 0; }
+      #sh .rt { right: 20px; top: 0; height: 52px; display: flex; align-items: center; gap: 12px; color: #71717a; }
+      #sh .dev { display: flex; gap: 2px; padding: 2px; border-radius: 8px; background: #f0f0f1; }
+      #sh .dev span { width: 30px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+      #sh .dev span.on { background: #fff; color: #09090b; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); }
+      #sh .zt { font-size: 12.5px; display: flex; align-items: center; gap: 4px; }
+
+      /* 3D stage */
+      #p3d { left: 0; top: 0; width: 1680px; height: 960px; perspective: 2400px; perspective-origin: 820px 500px; pointer-events: none; }
+      #fshadow { position: absolute; left: 350px; top: 160px; width: 940px; height: 680px; border-radius: 12px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06), 0 30px 60px -24px rgba(9, 9, 11, 0.28); }
+      .flip { position: absolute; left: 350px; top: 160px; width: 940px; height: 680px; transform-style: preserve-3d; opacity: 0; }
+      .face { position: absolute; left: 0; top: 0; width: 940px; height: 680px; border-radius: 12px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+      .face.back { transform: rotateY(180deg); background: #0d1117; }
+      .face.front { background-color: #ffffff; background-image: radial-gradient(#d4d4d8 1px, transparent 1.2px); background-size: 20px 20px; background-position: 10px 10px; display: flex; align-items: center; justify-content: center; }
+      .sh { position: absolute; left: 0; top: 0; width: 940px; height: 680px; background: #000; opacity: 0; z-index: 5; }
+      .dimlab { position: absolute; right: 14px; bottom: 10px; font-size: 11px; color: #a1a1aa; font-family: "JetBrains Mono", monospace; }
+      .modelab { position: absolute; left: 14px; bottom: 10px; display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #a1a1aa; }
+      .modelab .ic { width: 12px; height: 12px; }
+
+      /* shadcn-style preview components */
+      .card { zoom: 1.2; background: #fff; border: 1px solid #e4e4e7; border-radius: 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); color: #09090b; }
+      .card .hd { padding: 24px 24px 0; }
+      .card .ct { padding: 20px 24px 24px; }
+      .card .ttl { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 24px; }
+      .card .mut { font-size: 14px; color: #71717a; line-height: 20px; }
+      .btn { height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 500; }
+      .btn .ic { width: 16px; height: 16px; }
+      .btn.pri { background: #18181b; color: #fafafa; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+      .btn.out { background: #fff; color: #09090b; border: 1px solid #e4e4e7; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
+      .inp { height: 36px; border-radius: 8px; border: 1px solid #e4e4e7; background: #fff; padding: 0 12px; display: flex; align-items: center; font-size: 14px; color: #a1a1aa; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); }
+      .lab { font-size: 14px; font-weight: 500; line-height: 14px; }
+      .toggle { position: relative; width: 40px; height: 22px; border-radius: 11px; background: #18181b; flex: none; }
+      .toggle.off { background: #e4e4e7; }
+      .toggle i { position: absolute; top: 2px; left: 20px; width: 18px; height: 18px; border-radius: 9px; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); }
+      .toggle.off i { left: 2px; }
+
+      .pr .rowb { display: flex; align-items: center; justify-content: space-between; }
+      .pr h3 { font-size: 14px; font-weight: 500; }
+      .badge { height: 22px; padding: 0 10px; border-radius: 6px; background: #f4f4f5; color: #18181b; font-size: 12px; font-weight: 500; display: flex; align-items: center; }
+      .pr .price { margin-top: 6px; font-size: 36px; line-height: 40px; font-weight: 600; letter-spacing: -0.03em; }
+      .pr .price span { font-size: 14px; font-weight: 400; letter-spacing: 0; color: #71717a; margin-left: 2px; }
+      .pr ul { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+      .pr li { display: flex; align-items: center; gap: 8px; }
+      .pr li .ic { color: #2563eb; width: 16px; height: 16px; stroke-width: 2; }
+
+      .si2 .gap { display: flex; flex-direction: column; gap: 16px; }
+      .si2 .fld { display: flex; flex-direction: column; gap: 8px; }
+      .si2 .sep { text-align: center; font-size: 12px; color: #71717a; }
+      .si2 .fh { display: flex; align-items: center; justify-content: space-between; }
+      .si2 .fh a { font-size: 12px; color: #09090b; text-decoration: underline; }
+
+      .ns .row { display: flex; align-items: center; justify-content: space-between; }
+      .ns .rows { display: flex; flex-direction: column; gap: 20px; }
+      .ns .rl { font-size: 14px; font-weight: 500; line-height: 20px; }
+      .ns .rh { font-size: 12px; color: #71717a; line-height: 16px; }
+
+      /* code face */
+      .ctabs { position: absolute; left: 0; top: 0; width: 940px; height: 38px; display: flex; align-items: stretch; background: #010409; border-bottom: 1px solid #21262d; font-size: 12.5px; color: #8b949e; }
+      .ctab { display: flex; align-items: center; gap: 7px; padding: 0 16px; border-right: 1px solid #21262d; }
+      .ctab.on { background: #0d1117; color: #e6edf3; box-shadow: inset 0 -2px 0 #388bfd; }
+      .ctab .ic { width: 14px; height: 14px; color: #58a6ff; }
+      .ctab.on .ic { color: #58a6ff; }
+      .cr { margin-left: auto; display: flex; align-items: center; gap: 8px; padding-right: 12px; }
+      .cmd { height: 24px; padding: 0 8px 0 10px; border-radius: 6px; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: #c9d1d9; }
+      .cmd .ic { width: 13px; height: 13px; color: #8b949e; }
+      .cmd b { color: #8b949e; font-weight: 400; }
+      .ccode { position: absolute; left: 0; top: 44px; width: 940px; }
+      .cl { display: flex; height: 19px; font-family: "JetBrains Mono", monospace; font-size: 13.5px; line-height: 19px; }
+      .cl .g { width: 52px; flex: none; text-align: right; padding-right: 20px; color: #6e7681; }
+      .cl .t { white-space: pre; color: #c9d1d9; }
+      .sk { color: #ff7b72; }
+      .s { color: #a5d6ff; }
+      .tg { color: #7ee787; }
+      .at { color: #79c0ff; }
+      .fn { color: #d2a8ff; }
+      .cstat { position: absolute; left: 0; bottom: 0; width: 940px; height: 26px; display: flex; align-items: center; gap: 16px; padding: 0 14px; background: #161b22; border-top: 1px solid #21262d; font-size: 11.5px; color: #8b949e; }
+      .cstat .ok { display: flex; align-items: center; gap: 5px; color: #7ee787; }
+      .cstat .ic { width: 12px; height: 12px; }
+
+      /* prompt bar */
+      #prompt { left: 480px; top: 874px; width: 680px; height: 52px; border-radius: 26px; background: #18181b; border: 1px solid #27272a; box-shadow: 0 12px 32px rgba(9, 9, 11, 0.28); display: flex; align-items: center; gap: 10px; padding: 0 10px 0 18px; color: #a1a1aa; font-size: 14px; }
+      #prompt .chip { height: 28px; padding: 0 10px 0 12px; border-radius: 14px; background: #27272a; color: #d4d4d8; font-size: 12.5px; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+      #prompt .chip .ic { width: 12px; height: 12px; }
+      #prompt .send { width: 34px; height: 34px; border-radius: 17px; background: #fafafa; color: #18181b; display: flex; align-items: center; justify-content: center; }
+
+      /* props panel */
+      #prop { left: 1392px; top: 88px; width: 288px; height: 872px; background: #fff; border-left: 1px solid #e4e4e7; overflow: hidden; }
+      #prop > * { position: absolute; }
+      .phd { left: 0; top: 0; width: 288px; height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid #e4e4e7; font-size: 13px; font-weight: 600; }
+      .phd span { font-weight: 400; font-size: 12px; color: #71717a; }
+      .phd .ic { width: 13px; height: 13px; color: #71717a; }
+      .pv { left: 0; top: 44px; width: 288px; height: 828px; opacity: 0; display: flex; flex-direction: column; }
+      .ps { border-bottom: 1px solid #e4e4e7; padding-bottom: 6px; }
+      .psh { height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 16px; font-size: 12.5px; font-weight: 600; }
+      .psh .ic { width: 13px; height: 13px; color: #71717a; }
+      .pr2 { height: 38px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: #3f3f46; font-size: 13px; }
+      .ctl { width: 132px; height: 28px; border-radius: 6px; border: 1px solid #e4e4e7; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: #09090b; background: #fff; }
+      .ctl .ic { width: 13px; height: 13px; color: #71717a; }
+      .sw2 { position: relative; width: 32px; height: 18px; border-radius: 9px; background: #18181b; flex: none; }
+      .sw2.off { background: #e4e4e7; }
+      .sw2 i { position: absolute; top: 2px; left: 16px; width: 14px; height: 14px; border-radius: 7px; background: #fff; }
+      .sw2.off i { left: 2px; }
+      .chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 16px 8px; }
+      .chips span { height: 22px; padding: 0 8px; border-radius: 6px; background: #f4f4f5; border: 1px solid #e4e4e7; font-family: "JetBrains Mono", monospace; font-size: 11px; color: #3f3f46; display: flex; align-items: center; }
+      .hist { padding: 4px 16px 0; display: flex; flex-direction: column; gap: 12px; }
+      .hist .h { display: flex; gap: 10px; align-items: flex-start; }
+      .hist .av { width: 22px; height: 22px; border-radius: 11px; font-size: 9.5px; margin-top: 1px; }
+      .hist .x { font-size: 12.5px; line-height: 17px; color: #3f3f46; }
+      .hist .x b { font-weight: 600; color: #09090b; }
+      .hist .x em { display: block; font-style: normal; font-size: 11.5px; color: #a1a1aa; }
+      .pcmd { margin: 4px 16px 0; height: 32px; border-radius: 6px; background: #18181b; color: #e4e4e7; display: flex; align-items: center; gap: 8px; padding: 0 10px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; }
+      .pcmd .ic { width: 13px; height: 13px; margin-left: auto; color: #a1a1aa; }
+
+      /* cursor */
+      #cur { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; z-index: 30; }
+      #cur svg { position: absolute; left: -5px; top: -3px; width: 24px; height: 24px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4)); }
+
+      /* ending */
+      #vig { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(ellipse 1200px 800px at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.42) 100%); pointer-events: none; }
+      #veil { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #0b0b0d; opacity: 0; }
+      #wm { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; gap: 26px; opacity: 0; }
+      #wm svg { width: 84px; height: 84px; display: block; }
+      #wm span { font-size: 96px; font-weight: 600; letter-spacing: -0.05em; color: #f5f5f7; line-height: 1; padding-bottom: 8px; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="pylon-d" viewBox="0 0 72 72">
+          <rect x="1" y="1" width="70" height="70" rx="19" fill="#0b0b0d" />
+          <path d="M31 14h10l11 40H20z" fill="#f5f5f7" />
+          <path d="M27.2 28h17.6l2.2 8H25z" fill="#0b0b0d" />
+          <rect x="15" y="54" width="42" height="5" rx="2.5" fill="#f5f5f7" />
+        </symbol>
+        <symbol id="pylon-l" viewBox="0 0 72 72">
+          <rect x="1" y="1" width="70" height="70" rx="19" fill="#f5f5f7" />
+          <path d="M31 14h10l11 40H20z" fill="#0b0b0d" />
+          <path d="M27.2 28h17.6l2.2 8H25z" fill="#f5f5f7" />
+          <rect x="15" y="54" width="42" height="5" rx="2.5" fill="#0b0b0d" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5" /><path d="m21 21-4.3-4.3" /></symbol>
+        <symbol id="i-cd" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-cr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0" /><circle cx="12" cy="12" r="3" /></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6" /></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="14" height="14" rx="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" /></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></symbol>
+        <symbol id="i-tablet" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" /><path d="M12 18h.01" /></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" /><path d="M12 18h.01" /></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4M9 18c-4.51 2-5-2-7-2" /></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+        <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z" /><circle cx="7.5" cy="7.5" r="1" /></symbol>
+        <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+        <symbol id="i-table" viewBox="0 0 24 24"><path d="M12 3v18M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 9h18M3 15h18" /></symbol>
+        <symbol id="i-command" viewBox="0 0 24 24"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" /></symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3" /></symbol>
+        <symbol id="i-pie" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z" /></symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /></symbol>
+        <symbol id="i-input" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2" /><path d="M7 12h.01M11 12h.01M15 12h.01" /></symbol>
+        <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></symbol>
+        <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18" /></symbol>
+        <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z" /></symbol>
+        <symbol id="i-clip" viewBox="0 0 24 24"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" /></symbol>
+        <symbol id="i-send" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7M12 19V5" /></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5" /></symbol>
+        <symbol id="i-arr" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></symbol>
+        <symbol id="i-arl" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M19 12H5" /></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" /></symbol>
+        <symbol id="i-bell2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" /></symbol>
+        <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" /></symbol>
+        <symbol id="i-react" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.6" /><ellipse cx="12" cy="12" rx="10" ry="4" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" /></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></symbol>
+        <symbol id="i-git" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" /><circle cx="6" cy="18" r="2.5" /><circle cx="18" cy="9" r="2.5" /><path d="M6 8.5v7M18 11.5c0 4-6 3-12 5" /></symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="11" data-track-index="0" data-layout-allow-overlap>
+        <div id="veil"></div>
+
+        <div id="zoom">
+          <div id="cam" data-layout-allow-overlap>
+            <div id="win" data-layout-allow-overlap data-layout-ignore>
+              <!-- browser bar -->
+              <div id="chrome">
+                <div class="l">
+                  <div class="lights"><i style="background: #ff5f57"></i><i style="background: #febc2e"></i><i style="background: #28c840"></i></div>
+                  <svg class="ic"><use href="#i-sidebar" /></svg>
+                  <svg class="ic"><use href="#i-arl" /></svg>
+                  <svg class="ic"><use href="#i-arr" /></svg>
+                </div>
+                <div class="sp" style="display: flex; justify-content: center">
+                  <div class="url"><svg class="ic" style="width: 12px; height: 12px"><use href="#i-lock" /></svg><span>pylon.dev</span><span class="d">/acme-design/library</span></div>
+                </div>
+                <div class="r"><svg class="ic"><use href="#i-refresh" /></svg><svg class="ic"><use href="#i-plus" /></svg><svg class="ic"><use href="#i-sidebar" /></svg></div>
+              </div>
+
+              <!-- app bar -->
+              <div id="bar">
+                <div class="logo"><svg viewBox="0 0 72 72"><use href="#pylon-d" /></svg>Pylon</div>
+                <span class="div">/</span>
+                <div class="ws"><div class="tile">A</div>Acme Design<svg class="ic"><use href="#i-cd" /></svg></div>
+                <span class="div">/</span>
+                <span class="crumb">Library</span>
+                <div class="find"><svg class="ic" style="width: 14px; height: 14px"><use href="#i-search" /></svg>Search components, blocks, templates<span class="k mono">⌘K</span></div>
+                <span class="sp"></span>
+                <span class="nv">Docs</span>
+                <span class="nv">Changelog</span>
+                <svg class="ic" style="color: #71717a; margin: 0 6px"><use href="#i-bell" /></svg>
+                <div class="gbtn"><svg class="ic"><use href="#i-git" /></svg>Fork</div>
+                <div class="gbtn">Share</div>
+                <div class="bbtn">Deploy</div>
+                <div class="av" style="background: #0ea5e9; margin-left: 4px">MC</div>
+              </div>
+
+              <div id="side">
+                <div class="srch"><svg class="ic"><use href="#i-search" /></svg>Filter library<span class="k mono">F</span></div>
+                <div id="sfoot">
+                  <div class="a"><span>Generations</span><span>148 / 500</span></div>
+                  <div class="bar"><i></i></div>
+                  <div class="b">Team plan · renews Nov 12</div>
+                </div>
+              </div>
+
+              <div id="stagebg"></div>
+              <div id="sh">
+                <div class="tt t1"><svg class="ic"><use href="#i-tag" /></svg>Pricing card<span class="chip"><i></i>Published</span></div>
+                <div class="tt t2"><svg class="ic"><use href="#i-lock" /></svg>Sign in form<span class="chip"><i></i>Published</span></div>
+                <div class="tt t3"><svg class="ic"><use href="#i-bell" /></svg>Notification settings<span class="chip"><i></i>Published</span></div>
+                <div id="seg">
+                  <div id="pill"></div>
+                  <span class="segP" style="color: #09090b"><svg class="ic"><use href="#i-eye" /></svg>Preview</span>
+                  <span class="segC" style="color: #71717a"><svg class="ic"><use href="#i-code" /></svg>Code</span>
+                </div>
+                <div class="rt">
+                  <div class="dev"><span class="on"><svg class="ic"><use href="#i-monitor" /></svg></span><span><svg class="ic"><use href="#i-tablet" /></svg></span><span><svg class="ic"><use href="#i-phone" /></svg></span></div>
+                  <div class="zt">100%<svg class="ic" style="width: 12px; height: 12px"><use href="#i-cd" /></svg></div>
+                </div>
+              </div>
+
+              <div id="prop">
+                <div class="phd">Customize<span class="sp"></span><span>Reset</span><svg class="ic"><use href="#i-undo" /></svg></div>
+              </div>
+
+              <!-- 3D cards -->
+              <div id="p3d" data-layout-allow-overlap>
+                <div id="fshadow"></div>
+
+                <div class="flip" id="f1" data-layout-allow-overlap>
+                  <div class="face front">
+                    <div class="card pr" style="width: 400px; border-color: #2563eb; box-shadow: 0 12px 32px -8px rgba(37, 99, 235, 0.28), 0 2px 4px rgba(0, 0, 0, 0.06)">
+                      <div class="hd" style="display: flex; flex-direction: column; gap: 6px">
+                        <div class="rowb"><h3>Pro</h3><span class="badge">Most popular</span></div>
+                        <p class="price">$24<span>/month</span></p>
+                      </div>
+                      <div class="ct">
+                        <div class="btn pri">Start 14-day trial</div>
+                        <ul>
+                          <li><svg class="ic"><use href="#i-check" /></svg>Unlimited projects</li>
+                          <li><svg class="ic"><use href="#i-check" /></svg>100k AI generations / mo</li>
+                          <li><svg class="ic"><use href="#i-check" /></svg>Custom domains</li>
+                          <li><svg class="ic"><use href="#i-check" /></svg>Priority support</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="modelab"><svg class="ic"><use href="#i-sun" /></svg>Light · Zinc</div>
+                    <div class="dimlab">400 × 436</div>
+                    <div class="sh"></div>
+                  </div>
+                  <div class="face back" id="b1"><div class="sh"></div></div>
+                </div>
+
+                <div class="flip" id="f2" data-layout-allow-overlap>
+                  <div class="face front">
+                    <div class="card si2" style="width: 400px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08)">
+                      <div class="hd" style="display: flex; flex-direction: column; gap: 6px">
+                        <div class="ttl">Welcome back</div>
+                        <p class="mut" style="font-size: 14px">Sign in to your Acme workspace</p>
+                      </div>
+                      <div class="ct gap" style="padding-top: 24px">
+                        <div class="btn out"><svg class="ic"><use href="#i-github" /></svg>Continue with GitHub</div>
+                        <p class="sep">or continue with email</p>
+                        <div class="fld"><div class="lab">Email</div><div class="inp">m@example.com</div></div>
+                        <div class="fld">
+                          <div class="fh"><div class="lab">Password</div><a>Forgot password?</a></div>
+                          <div class="inp"></div>
+                        </div>
+                        <div class="btn pri">Sign in</div>
+                      </div>
+                    </div>
+                    <div class="modelab"><svg class="ic"><use href="#i-sun" /></svg>Light · Zinc</div>
+                    <div class="dimlab">400 × 482</div>
+                    <div class="sh"></div>
+                  </div>
+                  <div class="face back" id="b2"><div class="sh"></div></div>
+                </div>
+
+                <div class="flip" id="f3" data-layout-allow-overlap>
+                  <div class="face front">
+                    <div class="card ns" style="width: 440px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08)">
+                      <div class="hd"><div class="ttl">Notifications</div></div>
+                      <div class="ct">
+                        <div class="rows" style="margin-top: 4px">
+                          <div class="row"><div><div class="rl">Mentions</div><div class="rh">When someone @mentions you</div></div><div class="toggle"><i></i></div></div>
+                          <div class="row"><div><div class="rl">Deploys</div><div class="rh">Production deploy succeeds or fails</div></div><div class="toggle"><i></i></div></div>
+                          <div class="row"><div><div class="rl">Weekly digest</div><div class="rh">Team activity summary every Monday</div></div><div class="toggle off"><i></i></div></div>
+                          <div class="btn pri" style="margin-top: 4px">Save preferences</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modelab"><svg class="ic"><use href="#i-sun" /></svg>Light · Zinc</div>
+                    <div class="dimlab">440 × 360</div>
+                    <div class="sh"></div>
+                  </div>
+                  <div class="face back" id="b3"><div class="sh"></div></div>
+                </div>
+              </div>
+
+              <div id="prompt">
+                <svg class="ic"><use href="#i-sparkle" /></svg>
+                <span>Ask Pylon to change this component…</span>
+                <span class="sp"></span>
+                <div class="chip">Pylon 1.5<svg class="ic"><use href="#i-cd" /></svg></div>
+                <svg class="ic"><use href="#i-clip" /></svg>
+                <div class="send"><svg class="ic" style="width: 16px; height: 16px; stroke-width: 2"><use href="#i-send" /></svg></div>
+              </div>
+
+              <div id="cur">
+                <svg viewBox="0 0 24 24"><path d="M5 3l14 7.5-6.2 1.8L10 19z" fill="#111111" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" /></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="vig"></div>
+
+        <div id="wm">
+          <svg viewBox="0 0 72 72"><use href="#pylon-l" /></svg>
+          <span>pylon</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const EIO = "power3.inOut"; // cubic-bezier(0.65, 0, 0.35, 1)
+      const EXPO = "expo.out";
+
+      /* ---------- data ---------- */
+      const ic = (id, st) => '<svg class="ic"' + (st ? ' style="' + st + '"' : "") + '><use href="#' + id + '" /></svg>';
+
+      // sidebar: [group, items[icon, name, extra]]
+      const LIB = [
+        ["Marketing", [["i-tag", "Pricing card", "12"], ["i-layout", "Hero section", "8"], ["i-chat", "Testimonials", "6"]]],
+        ["Auth", [["i-lock", "Sign in form", "9"], ["i-user", "Sign up form", "7"], ["i-input", "OTP input", "4"]]],
+        ["Settings", [["i-bell", "Notification settings", "5"], ["i-user", "Profile form", "6"], ["i-card", "Billing portal", "new"]]],
+        ["Dashboard", [["i-table", "Data table", "14"], ["i-grid", "Stat cards", "10"], ["i-command", "Command menu", "3"]]],
+        ["Layout", [["i-sidebar", "Sidebar nav", "11"], ["i-layout", "Navbar", "9"]]],
+        ["Charts", [["i-chart", "Area chart", "8"], ["i-chart", "Bar chart", "7"]]],
+      ];
+      (function buildSide() {
+        const side = document.getElementById("side");
+        let y = 52; // relative to sidebar top (window y 140)
+        let html = "";
+        LIB.forEach((g, gi) => {
+          if (gi > 0) y += 8;
+          html += '<div class="gl" style="top:' + y + 'px">' + g[0] + "</div>";
+          y += 28;
+          g[1].forEach((it) => {
+            const right = it[2] === "new" ? '<span class="new">New</span>' : '<span class="n">' + it[2] + "</span>";
+            html += '<div class="si" id="si' + it[1].replace(/\s/g, "") + '" style="top:' + y + 'px">' + ic(it[0]) + "<span>" + it[1] + "</span>" + right + "</div>";
+            y += 30;
+          });
+        });
+        side.insertAdjacentHTML("beforeend", html);
+      })();
+
+      // customize panel variants
+      const PANELS = [
+        {
+          secs: [
+            ["Content", "i-tag", [["in", "Plan name", "Pro"], ["in", "Price", "$24"], ["sel", "Billing", "Monthly"]]],
+            ["Options", "i-sliders", [["sw", "Popular badge", 1], ["sw", "Highlight border", 1], ["sw", "Trial button", 1], ["sw", "Annual toggle", 0]]],
+          ],
+          deps: ["badge", "button", "card"],
+          cmd: "npx pylon add pricing-card",
+          hist: [["MC", "#0ea5e9", "Maya Chen", "Highlighted the Pro plan border", "2h ago"], ["LO", "#ec4899", "Liam Ortiz", "Added 100k generations row", "Yesterday"], ["AI", "#18181b", "Pylon", "Generated from prompt", "Oct 24"]],
+        },
+        {
+          secs: [
+            ["Providers", "i-lock", [["sw", "GitHub", 1], ["sw", "Google", 0], ["sw", "Magic link", 0]]],
+            ["Fields", "i-input", [["sw", "Email", 1], ["sw", "Password", 1], ["sw", "Forgot link", 1], ["sel", "Validation", "Zod"]]],
+          ],
+          deps: ["button", "card", "input", "label"],
+          cmd: "npx pylon add sign-in-form",
+          hist: [["SP", "#8b5cf6", "Sofia Petrov", "Swapped Google for GitHub", "3h ago"], ["MC", "#0ea5e9", "Maya Chen", "Added forgot password link", "Oct 26"], ["AI", "#18181b", "Pylon", "Generated from prompt", "Oct 22"]],
+        },
+        {
+          secs: [
+            ["Rows", "i-bell", [["in", "Row count", "3"], ["sel", "Control", "Switch"], ["sw", "Descriptions", 1]]],
+            ["Behavior", "i-sliders", [["sw", "Autosave", 0], ["sw", "Save button", 1], ["sel", "Layout", "Card"]]],
+          ],
+          deps: ["button", "card", "switch"],
+          cmd: "npx pylon add notifications",
+          hist: [["LO", "#ec4899", "Liam Ortiz", "Added weekly digest row", "1h ago"], ["DK", "#16a34a", "Dev Kapoor", "Changed copy for deploy alerts", "Oct 27"], ["AI", "#18181b", "Pylon", "Generated from prompt", "Oct 20"]],
+        },
+      ];
+      (function buildPanels() {
+        const prop = document.getElementById("prop");
+        let html = "";
+        PANELS.forEach((p, i) => {
+          let h = '<div class="pv pv' + (i + 1) + '">';
+          p.secs.forEach((s) => {
+            h += '<div class="ps"><div class="psh">' + ic("i-cd") + s[0] + "</div>";
+            s[2].forEach((r) => {
+              let c = "";
+              if (r[0] === "in") c = '<div class="ctl">' + r[2] + "</div>";
+              else if (r[0] === "sel") c = '<div class="ctl">' + r[2] + ic("i-cd") + "</div>";
+              else c = '<div class="sw2' + (r[2] ? "" : " off") + '"><i></i></div>';
+              h += '<div class="pr2"><span>' + r[1] + "</span>" + c + "</div>";
+            });
+            h += "</div>";
+          });
+          h += '<div class="ps"><div class="psh">' + ic("i-cd") + "Dependencies</div><div class=\"chips\">" + p.deps.map((d) => "<span>" + d + "</span>").join("") + "</div></div>";
+          h += '<div class="ps" style="border-bottom:0"><div class="psh">' + ic("i-cd") + "Install</div><div class=\"pcmd\">" + p.cmd + ic("i-copy") + "</div></div>";
+          h += '<div class="ps" style="border-top:1px solid #e4e4e7;margin-top:10px;border-bottom:0"><div class="psh">' + ic("i-cd") + 'History</div><div class="hist">';
+          p.hist.forEach((e) => {
+            h += '<div class="h"><div class="av" style="background:' + e[1] + '">' + e[0] + '</div><div class="x"><b>' + e[2] + "</b> " + e[3] + "<em>" + e[4] + "</em></div></div>";
+          });
+          h += "</div></div></div>";
+          html += h;
+        });
+        prop.insertAdjacentHTML("beforeend", html);
+      })();
+
+      // code: one source per component, same content as the front face
+      const CODE = [
+        {
+          file: "pricing-card.tsx",
+          slug: "pricing-card",
+          tabs: ["ui/button.tsx", "ui/badge.tsx"],
+          lines: [
+            'import { Check } from "lucide-react"',
+            'import { Badge } from "@/components/ui/badge"',
+            'import { Button } from "@/components/ui/button"',
+            'import { Card, CardContent, CardHeader } from "@/components/ui/card"',
+            "",
+            'const features = ["Unlimited projects", "100k AI generations / mo", "Custom domains", "Priority support"]',
+            "",
+            "export function PricingCard() {",
+            "  return (",
+            '    <Card className="w-[400px] border-blue-600 shadow-lg">',
+            '      <CardHeader className="gap-1.5">',
+            '        <div className="flex items-center justify-between">',
+            '          <h3 className="text-sm font-medium">Pro</h3>',
+            '          <Badge variant="secondary">Most popular</Badge>',
+            "        </div>",
+            '        <p className="text-4xl font-semibold">',
+            '          $24<span className="text-sm text-muted-foreground">/month</span>',
+            "        </p>",
+            "      </CardHeader>",
+            '      <CardContent className="space-y-5">',
+            '        <Button className="w-full">Start 14-day trial</Button>',
+            '        <ul className="space-y-2.5 text-sm">',
+            "          {features.map((f) => (",
+            '            <li key={f} className="flex items-center gap-2">',
+            '              <Check className="size-4 text-blue-600" />{f}',
+            "            </li>",
+            "          ))}",
+            "        </ul>",
+            "      </CardContent>",
+            "    </Card>",
+            "  )",
+            "}",
+          ],
+        },
+        {
+          file: "sign-in-form.tsx",
+          slug: "sign-in-form",
+          tabs: ["ui/input.tsx", "ui/label.tsx"],
+          lines: [
+            'import { Github } from "lucide-react"',
+            'import { Button } from "@/components/ui/button"',
+            'import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"',
+            'import { Input } from "@/components/ui/input"',
+            'import { Label } from "@/components/ui/label"',
+            "",
+            "export function SignInForm() {",
+            "  return (",
+            '    <Card className="w-[400px]">',
+            "      <CardHeader>",
+            "        <CardTitle>Welcome back</CardTitle>",
+            '        <p className="text-sm text-muted-foreground">Sign in to your Acme workspace</p>',
+            "      </CardHeader>",
+            '      <CardContent className="grid gap-4">',
+            '        <Button variant="outline"><Github /> Continue with GitHub</Button>',
+            '        <p className="text-center text-xs text-muted-foreground">or continue with email</p>',
+            '        <div className="grid gap-2">',
+            '          <Label htmlFor="email">Email</Label>',
+            '          <Input id="email" type="email" placeholder="m@example.com" />',
+            "        </div>",
+            '        <div className="grid gap-2">',
+            '          <div className="flex items-center justify-between">',
+            '            <Label htmlFor="password">Password</Label>',
+            '            <a href="/reset" className="text-xs underline">Forgot password?</a>',
+            "          </div>",
+            '          <Input id="password" type="password" />',
+            "        </div>",
+            '        <Button type="submit">Sign in</Button>',
+            "      </CardContent>",
+            "    </Card>",
+            "  )",
+            "}",
+          ],
+        },
+        {
+          file: "notification-settings.tsx",
+          slug: "notifications",
+          tabs: ["ui/switch.tsx", "ui/card.tsx"],
+          lines: [
+            'import { Button } from "@/components/ui/button"',
+            'import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"',
+            'import { Switch } from "@/components/ui/switch"',
+            "",
+            "const settings = [",
+            '  { id: "mentions", label: "Mentions", hint: "When someone @mentions you", on: true },',
+            '  { id: "deploys", label: "Deploys", hint: "Production deploy succeeds or fails", on: true },',
+            '  { id: "digest", label: "Weekly digest", hint: "Team activity summary every Monday", on: false },',
+            "]",
+            "",
+            "export function NotificationSettings() {",
+            "  return (",
+            '    <Card className="w-[440px]">',
+            "      <CardHeader>",
+            "        <CardTitle>Notifications</CardTitle>",
+            "      </CardHeader>",
+            '      <CardContent className="space-y-5">',
+            "        {settings.map((s) => (",
+            '          <div key={s.id} className="flex items-center justify-between">',
+            "            <div>",
+            '              <p className="text-sm font-medium">{s.label}</p>',
+            '              <p className="text-xs text-muted-foreground">{s.hint}</p>',
+            "            </div>",
+            "            <Switch defaultChecked={s.on} />",
+            "          </div>",
+            "        ))}",
+            '        <Button className="w-full">Save preferences</Button>',
+            "      </CardContent>",
+            "    </Card>",
+            "  )",
+            "}",
+          ],
+        },
+      ];
+
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const TOK = /("[^"]*")|(<\/?[A-Za-z][A-Za-z0-9]*)|\b(import|from|export|function|return|const)\b|([A-Za-z_][\w-]*)(?==)|([A-Za-z_]\w*)(?=\()|(\s+|[\s\S])/g;
+      function hl(line) {
+        let out = "";
+        let m;
+        TOK.lastIndex = 0;
+        while ((m = TOK.exec(line))) {
+          const t = esc(m[0]);
+          if (m[1]) out += '<span class="s">' + t + "</span>";
+          else if (m[2]) out += '<span class="tg">' + t + "</span>";
+          else if (m[3]) out += '<span class="sk">' + t + "</span>";
+          else if (m[4]) out += '<span class="at">' + t + "</span>";
+          else if (m[5]) out += '<span class="fn">' + t + "</span>";
+          else out += t;
+        }
+        return out;
+      }
+      CODE.forEach((c, i) => {
+        const back = document.getElementById("b" + (i + 1));
+        let h = '<div class="ctabs"><div class="ctab on">' + ic("i-react") + c.file + "</div>";
+        c.tabs.forEach((t) => (h += '<div class="ctab">' + ic("i-react", "color:#8b949e") + t + "</div>"));
+        h += '<div class="cr"><div class="cmd"><b>$</b>npx pylon add ' + c.slug + ic("i-copy") + "</div></div></div>";
+        h += '<div class="ccode">';
+        c.lines.forEach((l, k) => {
+          h += '<div class="cl"><span class="g">' + (k + 1) + '</span><span class="t">' + hl(l) + "</span></div>";
+        });
+        h += "</div>";
+        h += '<div class="cstat"><span class="ok">' + ic("i-check") + "No errors</span><span>TSX</span><span>Prettier</span><span>Tailwind CSS</span><span class=\"sp\"></span><span>Ln " + c.lines.length + ", Col 2</span><span>Spaces: 2</span><span>UTF-8</span></div>";
+        back.insertAdjacentHTML("afterbegin", h);
+      });
+
+      /* ---------- timeline ---------- */
+      gsap.set("#cam", { scale: 1 });
+      gsap.set("#cur", { x: 1190, y: 330, opacity: 0 });
+      gsap.set("#zoom", { opacity: 0 });
+      gsap.set("#f1", { opacity: 1 });
+      gsap.set(".t1", { opacity: 1 });
+      gsap.set(".pv1", { opacity: 1 });
+      gsap.set("#siPricingcard", { backgroundColor: "#ececee", color: "#09090b", fontWeight: 500 });
+
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      const fr = (t) => Math.round(t * 30) / 30;
+      const ease = gsap.parseEase(EIO);
+
+      let cur = { x: 1190, y: 330 };
+      function mvC(t, dur, x, y, ex, ey) {
+        F("#cur", { x: cur.x }, { x: x, duration: dur, ease: ex || EXPO }, t);
+        F("#cur", { y: cur.y }, { y: y, duration: dur * 1.18, ease: ey || "power2.out" }, t);
+        cur = { x: x, y: y };
+      }
+      function press(t) {
+        F("#cur", { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.out" }, t);
+      }
+      function release(t) {
+        F("#cur", { scale: 0.86 }, { scale: 1, duration: 0.18, ease: "back.out(2)" }, t);
+      }
+
+      /* the Preview / Code switch: pill slides, labels recolor on the same frame */
+      function seg(t, toCode) {
+        t = fr(t);
+        F("#pill", { x: toCode ? 0 : 74 }, { x: toCode ? 74 : 0, duration: 0.2, ease: EXPO }, t);
+        tl.set(".segP", { color: toCode ? "#71717a" : "#09090b" }, t);
+        tl.set(".segC", { color: toCode ? "#09090b" : "#71717a" }, t);
+      }
+
+      /* one 180 degree turn. Card, shadow and shading all read the same eased angle, one value per frame */
+      function flip(t, n, from, to, dur) {
+        t = fr(t);
+        F("#f" + n, { rotateY: from }, { rotateY: to, duration: dur, ease: EIO }, t);
+        const N = Math.round(dur * 30);
+        let ps = { sx: 1, sh: 0 };
+        for (let k = 1; k <= N; k++) {
+          const th = Math.PI * ease(k / N);
+          const cs = { sx: 0.04 + 0.96 * Math.abs(Math.cos(th)), sh: 0.2 * Math.sin(th) };
+          const ta = t + (k - 1) / 30;
+          F("#fshadow", { scaleX: ps.sx }, { scaleX: cs.sx, duration: 1 / 30, ease: "none" }, ta);
+          F("#f" + n + " .sh", { opacity: ps.sh }, { opacity: cs.sh, duration: 1 / 30, ease: "none" }, ta);
+          ps = cs;
+        }
+      }
+
+      /* switching component: same position, same frame: card, title, panel and sidebar row change together */
+      let at = 1;
+      function swap(t, n) {
+        t = fr(t);
+        tl.set("#f" + at, { opacity: 0 }, t);
+        tl.set("#f" + n, { opacity: 1 }, t);
+        tl.set(".t" + at, { opacity: 0 }, t);
+        tl.set(".t" + n, { opacity: 1 }, t);
+        tl.set(".pv" + at, { opacity: 0 }, t);
+        tl.set(".pv" + n, { opacity: 1 }, t);
+        const ids = ["", "#siPricingcard", "#siSigninform", "#siNotificationsettings"];
+        tl.set(ids[at], { backgroundColor: "rgba(236,236,238,0)", color: "#52525b", fontWeight: 400 }, t);
+        tl.set(ids[n], { backgroundColor: "#ececee", color: "#09090b", fontWeight: 500 }, t);
+        at = n;
+      }
+
+      // camera: slow push for the whole film
+      F("#zoom", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      F("#cam", { scale: 1 }, { scale: 1.05, duration: 9.4, ease: "none" }, 0);
+
+      // 1. pricing card: preview to code and back
+      F("#cur", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.1);
+      mvC(0.15, 0.8, 864, 119);
+      press(0.98);
+      release(1.1);
+      seg(1.0, true);
+      flip(1.03, 1, 0, 180, 0.8);
+      mvC(2.45, 0.35, 789, 119, "power2.out", "power2.out");
+      press(2.8);
+      release(2.92);
+      seg(2.85, false);
+      flip(2.88, 1, 180, 360, 0.8);
+
+      // 2. sign in form
+      mvC(3.1, 0.7, 126, 311);
+      press(3.83);
+      release(3.95);
+      swap(3.88, 2);
+      mvC(4.0, 0.5, 864, 119);
+      press(4.5);
+      release(4.62);
+      seg(4.53, true);
+      flip(4.56, 2, 0, 180, 0.8);
+      mvC(5.8, 0.35, 789, 119, "power2.out", "power2.out");
+      press(6.2);
+      release(6.32);
+      seg(6.23, false);
+      flip(6.26, 2, 180, 360, 0.8);
+
+      // 3. notification settings
+      mvC(6.4, 0.6, 150, 437);
+      press(6.98);
+      release(7.1);
+      swap(7.03, 3);
+      mvC(7.12, 0.5, 864, 119);
+      press(7.65);
+      release(7.77);
+      seg(7.68, true);
+      flip(7.71, 3, 0, 180, 0.8);
+      mvC(8.7, 0.5, 900, 150, "power2.out", "power2.out");
+      tl.to("#cur", { opacity: 0, duration: 0.25, ease: "power2.out" }, 8.75);
+
+      // 4. close: the window leaves, the wordmark stays
+      tl.to("#zoom", { opacity: 0, scale: 0.94, duration: 0.7, ease: EIO }, 9.4);
+      tl.to("#veil", { opacity: 0.92, duration: 0.7, ease: EIO }, 9.4);
+      F("#wm", { opacity: 0, y: 14, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EXPO }, 9.85);
+      F("#wm", { scale: 1 }, { scale: 1.04, duration: 1.15, ease: "none" }, 10.0);
+
+      tl.set({}, {}, 11);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

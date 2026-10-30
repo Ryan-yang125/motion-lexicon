@@ -1,1 +1,0 @@
-I don’t see a CSV in the workspace. Please upload it (or paste its contents), and I’ll add the sortable revenue column and monthly total.

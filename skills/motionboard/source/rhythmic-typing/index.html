@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #09090c;
+        --ink: #f2f2f4;
+        --muted: #70707c;
+        --accent: #3ddc97;
+        --font-ui: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+        --font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+        font-family: var(--font-mono);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+      /* ---------- typing scene ---------- */
+      #scene { z-index: 2; }
+      #type { transform-origin: 240px 500px; }
+      #label {
+        position: absolute; left: 240px; top: 392px;
+        font-size: 28px; line-height: 32px; font-weight: 500; letter-spacing: 0.12em;
+        color: var(--muted); opacity: 0; white-space: nowrap;
+      }
+      #line { position: absolute; left: 240px; top: 462px; width: 1200px; height: 78px; }
+      #line .ch {
+        position: absolute; top: 0; height: 78px; width: 33.6px;
+        font-size: 56px; line-height: 78px; font-weight: 400; color: var(--ink);
+        opacity: 0; white-space: pre;
+      }
+      #line .ch.pf { color: var(--muted); }
+      #line .ch.ok { color: var(--accent); display: flex; align-items: center; }
+      #line .ch svg { display: block; }
+      #cur {
+        position: absolute; left: 0; top: 6px; width: 33.6px; height: 66px;
+        background: var(--ink); opacity: 0;
+      }
+
+      /* ---------- feature rail ---------- */
+      #rail {
+        left: 1380px; width: 540px; z-index: 1; overflow: hidden; opacity: 0;
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+      }
+      #railList { position: absolute; left: 0; top: 120px; width: 540px; }
+      #railList div {
+        height: 84px; line-height: 84px; font-size: 44px; font-weight: 400; color: var(--ink); white-space: nowrap;
+      }
+
+      /* ---------- wordmark ---------- */
+      #final { z-index: 3; transform-origin: 960px 520px; }
+      #wm { position: absolute; left: 690px; top: 410px; width: 700px; height: 170px; }
+      #wm .ch {
+        position: absolute; top: 0; height: 170px; width: 90px;
+        font-size: 150px; line-height: 170px; font-weight: 500; color: var(--ink); letter-spacing: -0.02em;
+        opacity: 0; white-space: pre;
+      }
+      #cur2 {
+        position: absolute; left: 0; top: 22px; width: 90px; height: 126px;
+        background: var(--ink); opacity: 0;
+      }
+      #tag {
+        position: absolute; left: 0; top: 640px; width: 1920px; text-align: center;
+        font-family: var(--font-ui); font-size: 30px; line-height: 38px; font-weight: 400; letter-spacing: -0.005em;
+        color: #8d8d99; opacity: 0;
+      }
+
+      #vig {
+        z-index: 4; pointer-events: none;
+        background: radial-gradient(ellipse at 40% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.45) 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="railwrap" class="clip full" data-start="0" data-duration="11" data-track-index="0">
+        <div id="rail" class="full">
+          <div id="railList"></div>
+        </div>
+      </div>
+
+      <div id="scene" class="clip full" data-start="0" data-duration="11" data-track-index="1">
+        <div id="type" class="full" data-layout-allow-overlap>
+          <div id="label">TALON 2.4 / AGENT</div>
+          <div id="line" data-layout-allow-overlap>
+            <div id="cur"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="final" class="clip full" data-start="0" data-duration="11" data-track-index="2">
+        <div id="wm" data-layout-allow-overlap>
+          <div id="cur2"></div>
+        </div>
+        <div id="tag">Agent mode for your terminal. Available now.</div>
+      </div>
+
+      <div id="vig" class="clip full" data-start="0" data-duration="11" data-track-index="3"></div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const q = (t) => Math.round(t * 30) / 30;
+
+      /* ---------- one character = one span with a fixed cell; appear / disappear are tl.set times ---------- */
+      function mk(host, html, idx, cw, cls) {
+        const el = document.createElement("span");
+        el.className = "ch" + (cls ? " " + cls : "");
+        el.style.left = idx * cw + "px";
+        el.innerHTML = html;
+        host.appendChild(el);
+        return el;
+      }
+
+      /* ops: {w: wait s} | {type: "text", g: [gaps s], cls} | {raw: html, cls, g: s} | {del: n, dg: s}
+         returns the end time and the keystroke list the cursor follows */
+      function run(host, cw, ks, t0, ops) {
+        let t = t0;
+        const st = (host._st = host._st || []);
+        const key = () => ks.push({ t: q(t), x: st.length * cw });
+        for (const o of ops) {
+          if (o.w !== undefined) { t += o.w; continue; }
+          if (o.type !== undefined) {
+            [...o.type].forEach((ch, i) => {
+              t += o.g[i % o.g.length];
+              const el = mk(host, ch === " " ? "&nbsp;" : ch, st.length, cw, o.cls);
+              tl.set(el, { opacity: 1 }, q(t));
+              st.push(el);
+              key();
+            });
+          }
+          if (o.raw !== undefined) {
+            t += o.g;
+            const el = mk(host, o.raw, st.length, cw, o.cls);
+            tl.set(el, { opacity: 1 }, q(t));
+            st.push(el);
+            key();
+          }
+          if (o.del !== undefined) {
+            for (let i = 0; i < o.del; i++) {
+              t += o.dg;
+              const el = st.pop();
+              tl.set(el, { opacity: 0 }, q(t));
+              key();
+            }
+          }
+        }
+        return t;
+      }
+
+      /* cursor: solid on every keystroke, then 0.5s on / 0.5s off until the next keystroke */
+      function cursor(el, ks, tEnd, keepOn) {
+        ks.forEach((k, i) => {
+          const next = i + 1 < ks.length ? ks[i + 1].t : tEnd;
+          tl.set(el, { opacity: 1, x: k.x }, k.t);
+          let on = false;
+          for (let b = k.t + 0.5; b < next - 1e-6; b += 0.5) {
+            tl.set(el, { opacity: on ? 1 : 0 }, q(b));
+            on = !on;
+          }
+        });
+        if (!keepOn) tl.set(el, { opacity: 0 }, q(tEnd));
+      }
+
+      /* ---------- typing schedule (fixed numbers, no randomness) ---------- */
+      const CW = 33.6;
+      const line = document.getElementById("line");
+      const ksA = [{ t: 0, x: 0 }];
+      const CHECK = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3ddc97" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+
+      let tA = run(line, CW, ksA, 0, [
+        { w: 0.15 },
+        { type: "> ", g: [0, 0], cls: "pf" },
+        { w: 0.35 },
+        { type: "add ", g: [0.09, 0.07, 0.1, 0.06] },
+        { w: 0.3 },
+        { type: "bakcoff", g: [0.07, 0.05, 0.09, 0.05, 0.07, 0.06, 0.06] },
+        { w: 0.5 },
+        { del: 5, dg: 0.04 },
+        { w: 0.12 },
+        { type: "ckoff", g: [0.09, 0.07, 0.08, 0.06, 0.08] },
+        { w: 0.35 },
+        { type: " to webhook", g: [0.05, 0.06, 0.04, 0.07, 0.05, 0.05, 0.08, 0.04, 0.05, 0.06, 0.05] },
+        { w: 0.3 },
+        { type: " retries", g: [0.08, 0.06, 0.05, 0.07, 0.05, 0.05, 0.06, 0.07] },
+      ]);
+      const tAEnd = tA;
+      const holdA = 0.7;
+      const nA = 2 + 4 + 7 + 11 + 8; // 32 characters on the line
+      let tDel = tA + holdA;
+      tA = run(line, CW, ksA, tDel, [
+        { del: nA, dg: 0.022 },
+        { w: 0.5 },
+        { raw: CHECK, cls: "ok", g: 0.05 },
+        { type: " ", g: [0.03] },
+        { type: "214 tests", g: [0.07, 0.05, 0.09, 0.05, 0.06, 0.07, 0.05, 0.06, 0.07] },
+        { w: 0.2 },
+        { type: " passing", g: [0.08, 0.05, 0.06, 0.07, 0.05, 0.06, 0.05, 0.07] },
+      ]);
+      const tStatusEnd = tA;
+      const nB = 2 + 9 + 8;
+      const tDel2 = tA + 0.4;
+      tA = run(line, CW, ksA, tDel2, [{ del: nB, dg: 0.015 }]);
+      const tScene = q(tA + 0.08);
+      cursor(document.getElementById("cur"), ksA, tScene);
+
+      /* label follows the line */
+      tl.set("#label", { opacity: 1 }, 0.15);
+      tl.set("#label", { opacity: 0 }, tDel2);
+
+      /* ---------- wordmark ---------- */
+      const wm = document.getElementById("wm");
+      const ksC = [{ t: tScene, x: 0 }];
+      const tW = run(wm, 90, ksC, tScene, [
+        { type: "talon", g: [0.1, 0.07, 0.09, 0.08, 0.11] },
+      ]);
+      const tTag = q(tW + 0.45);
+      cursor(document.getElementById("cur2"), ksC, q(tW + 0.45), true);
+      tl.set("#cur2", { backgroundColor: "#3ddc97", opacity: 1 }, tTag);
+      tl.set("#tag", { opacity: 1 }, tTag);
+
+      /* ---------- feature rail: 15% opacity list drifting up behind the line ---------- */
+      const feats = [
+        "parallel tool calls", "mcp server auth", "background agents", "diff review mode", "sandboxed shell",
+        "repo-wide rename", "context pinning", "session replay", "inline approvals", "git worktrees",
+        "test watch mode", "slash commands", "plan before edit", "checkpoint restore", "cost per task",
+      ];
+      document.getElementById("railList").innerHTML = feats.map((f) => "<div>" + f + "</div>").join("");
+      tl.set("#rail", { opacity: 0.13 }, 0.9);
+      tl.fromTo("#railList", { y: 0 }, { y: -380, duration: tStatusEnd - 0.9, ease: "none" }, 0.9);
+      tl.to("#rail", { opacity: 0, duration: 0.3, ease: "power1.out" }, tDel2 - 0.1);
+
+      /* ---------- slow residual drift ---------- */
+      tl.fromTo("#type", { scale: 1 }, { scale: 1.04, duration: tScene, ease: "none" }, 0);
+      tl.fromTo("#final", { scale: 1 }, { scale: 1.035, duration: 11 - tScene, ease: "none" }, tScene);
+
+      console.log("times", { tAEnd, tDel, tStatusEnd, tDel2, tScene, tW, tTag });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"}}</script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1920px; height: 1080px; background: #000; font-family: "Inter", sans-serif; }
+      #stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #gl { display: block; width: 1920px; height: 1080px; }
+      #mark { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #word {
+        position: absolute; left: 0; width: 1920px; top: 452px; text-align: center;
+        font-family: "Inter", sans-serif; font-weight: 600; font-size: 40px; line-height: 1;
+        letter-spacing: -0.015em; color: #fbf7f2; opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="stage" data-hold class="clip" data-start="0" data-duration="10" data-track-index="0">
+        <canvas id="gl" width="1920" height="1080"></canvas>
+      </div>
+      <div id="mark" class="clip" data-start="0" data-duration="10" data-track-index="1" data-layout-allow-overlap>
+        <div id="word">Strata Pro</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#word", { opacity: 0, y: 10, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power2.out" }, 6.4);
+      tl.to("#word", { opacity: 1, duration: 0.01 }, 9.9);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+      import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+      import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+      import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+      import { buildPhone, canvasTex, TEX } from "./strata.js";
+      import { buildInternals } from "./internals.js";
+
+      /* ================= time helpers ================= */
+      const clamp01 = (x) => Math.min(1, Math.max(0, x));
+      const seg = (t, a, b) => clamp01((t - a) / (b - a));
+      const lerp = (a, b, k) => a + (b - a) * k;
+      const power2InOut = (k) => (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k));
+      const sineInOut = (k) => -(Math.cos(Math.PI * k) - 1) / 2;
+      const sineOut = (k) => Math.sin((k * Math.PI) / 2);
+      // expo.out with a 4-frame run-up (of 36): velocity starts at zero, then the expo tail takes over
+      const PULL_RAMP = 4 / 36;
+      const pullEase = (k) => {
+        const g = k < PULL_RAMP ? (k * k) / (2 * PULL_RAMP) : k - PULL_RAMP / 2;
+        return expoOut(g / (1 - PULL_RAMP / 2));
+      };
+
+      /* ================= renderer ================= */
+      const OW = 1920, OH = 1080, SS = 2;
+      const RW = OW * SS, RH = OH * SS;
+      const canvas = document.getElementById("gl");
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(1);
+      renderer.setSize(OW, OH, false);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.transmissionResolutionScale = 2;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const camera = new THREE.PerspectiveCamera(24, OW / OH, 0.3, 400);
+
+      /* ================= environments ================= */
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      function softTex(soft) {
+        return canvasTex(256, 256, (g, w, h) => {
+          const img = g.createImageData(w, h);
+          for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+            const u = Math.abs(x / (w - 1) * 2 - 1), v = Math.abs(y / (h - 1) * 2 - 1);
+            const f = (a) => { const e = clamp01((1 - a) / soft); return e * e * (3 - 2 * e); };
+            const val = Math.round(255 * f(u) * f(v));
+            const k = (y * w + x) * 4;
+            img.data[k] = img.data[k + 1] = img.data[k + 2] = val; img.data[k + 3] = 255;
+          }
+          g.putImageData(img, 0, 0);
+        }, true);
+      }
+      const SOFT = { hard: softTex(0.06), med: softTex(0.35), soft: softTex(0.9) };
+      function makeEnv(panels) {
+        const s = new THREE.Scene();
+        s.background = new THREE.Color(0x000000);
+        for (const p of panels) {
+          const m = new THREE.MeshBasicMaterial({ color: new THREE.Color(...p.c).multiplyScalar(p.i), map: SOFT[p.soft || "hard"], side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(p.w, p.h), m);
+          mesh.position.set(...p.p);
+          mesh.lookAt(0, 0, 0);
+          if (p.rot) mesh.rotateZ(p.rot);
+          s.add(mesh);
+        }
+        return pmrem.fromScene(s, 0, 0.1, 100).texture;
+      }
+      const WHITE = [1, 1, 1];
+      const COOL = [0.84, 0.92, 1.0];
+      // internals: cool white top light, one big soft box overhead in front, a hard top strip, dim side strips
+      const ENV_INT = makeEnv([
+        { p: [0, 7, 10], w: 12, h: 7, i: 1.3, c: COOL, soft: "soft" },
+        { p: [0, 12, 3], w: 16, h: 1.4, i: 4.5, c: COOL, soft: "med" },
+        { p: [-12, 2, 4], w: 1.0, h: 12, i: 1.2, c: COOL, soft: "med" },
+        { p: [12, 4, 4], w: 1.0, h: 12, i: 0.8, c: COOL, soft: "med" },
+      ]);
+      // shell: frontal key studio (from light-reveal line-up) plus the rim strip
+      const ENV_SHELL = makeEnv([
+        { p: [-4, 5, 15], w: 22, h: 16, i: 3.0, c: WHITE, soft: "soft" },
+        { p: [9, -5, 12], w: 10, h: 10, i: 0.5, c: WHITE, soft: "soft" },
+        { p: [-13, 0, 3], w: 1.2, h: 16, i: 5, c: WHITE, soft: "med" },
+        { p: [13, 0, 3], w: 1.2, h: 16, i: 3, c: [1, 0.98, 0.96], soft: "med" },
+        { p: [0, 13, 4], w: 16, h: 1.2, i: 4, c: WHITE, soft: "med" },
+        { p: [7, 9, -6], w: 1.2, h: 16, i: 6, c: [1, 0.97, 0.94], rot: 0.9 },
+      ]);
+
+      /* ================= scenes ================= */
+      const sceneI = new THREE.Scene();
+      sceneI.background = new THREE.Color(0x000000);
+      sceneI.environment = ENV_INT;
+      const INT = buildInternals();
+      // per-shot dimming of the camera optics (trim metal and coated glass), so shot B keeps the eye on the SoC
+      const LENS_MATS = ["trim", "sapphire", "coatA", "coatB"].map((k) => { const m = INT.MAT[k]; return { m, env: m.envMapIntensity, spec: m.specularIntensity, rough: m.roughness }; });
+      function setLensDim(d) { for (const L of LENS_MATS) { L.m.envMapIntensity = L.env * d; L.m.specularIntensity = L.spec * d; L.m.roughness = L.m === INT.MAT.trim ? L.rough + 0.14 * (1 - d) : L.rough; } }
+      sceneI.add(INT.group);
+      const SOC = INT.SOC;
+      const spot = new THREE.SpotLight(0xdde8ff, 900, 0, 0.42, 1.0, 2);
+      spot.castShadow = true;
+      spot.shadow.mapSize.set(4096, 4096);
+      spot.shadow.bias = -0.00015;
+      spot.shadow.normalBias = 0.004;
+      spot.shadow.radius = 4;
+      spot.shadow.camera.near = 4; spot.shadow.camera.far = 30;
+      sceneI.add(spot, spot.target);
+
+      const sceneS = new THREE.Scene();
+      sceneS.background = new THREE.Color(0x000000);
+      sceneS.environment = ENV_SHELL;
+      sceneS.environmentIntensity = 1.72;
+      const phone = buildPhone("orange");
+      phone.userData.M.glass.aoMap = TEX.glassDiag;
+      sceneS.add(phone);
+
+      /* ================= render targets ================= */
+      const rtOpts = { type: THREE.HalfFloatType, samples: 4, colorSpace: THREE.LinearSRGBColorSpace };
+      const rtI = new THREE.WebGLRenderTarget(RW, RH, rtOpts);
+      rtI.depthTexture = new THREE.DepthTexture(RW, RH);
+      rtI.depthTexture.type = THREE.UnsignedIntType;
+      const rtS = new THREE.WebGLRenderTarget(RW, RH, rtOpts);
+      const rtD = new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType });
+
+      const fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      const quad = (mat) => { const s = new THREE.Scene(); s.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat)); return s; };
+      const FSV = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+
+      // depth of field for the macro shots: scatter-as-gather on the internals layer
+      const dofMat = new THREE.ShaderMaterial({
+        uniforms: { tC: { value: rtI.texture }, tZ: { value: rtI.depthTexture }, near: { value: 0.3 }, far: { value: 400 }, focus: { value: 5 }, coc: { value: 0 }, maxR: { value: 26 }, texel: { value: new THREE.Vector2(1 / RW, 1 / RH) } },
+        vertexShader: FSV,
+        fragmentShader: `uniform sampler2D tC; uniform sampler2D tZ; uniform float near; uniform float far; uniform float focus; uniform float coc; uniform float maxR; uniform vec2 texel; varying vec2 vUv;
+          float viewZ(vec2 uv){ float d = texture2D(tZ, uv).x; return near * far / (far - d * (far - near)); }
+          float cocAt(vec2 uv){ float z = viewZ(uv); return min(maxR, coc * abs(1.0 - focus / z)); }
+          void main(){
+            vec3 base = texture2D(tC, vUv).rgb;
+            float c0 = cocAt(vUv);
+            if (maxR * coc < 0.01) { gl_FragColor = vec4(base, 1.0); return; }
+            vec3 acc = base; float wsum = 1.0;
+            const int N = 128;
+            for (int i = 0; i < N; i++) {
+              float fi = float(i) + 0.5;
+              float r = maxR * sqrt(fi / float(N));
+              float a = fi * 2.39996323;
+              vec2 o = vec2(cos(a), sin(a)) * r;
+              vec2 uv = vUv + o * texel;
+              float cs = cocAt(uv);
+              // a sample contributes if its own blur reaches this pixel; background samples do not bleed over a sharp foreground
+              float reach = clamp(cs - r + 1.0, 0.0, 1.0);
+              float behind = clamp(c0 - r + 1.0, 0.0, 1.0);
+              // lens bokeh: discs with a brighter rim and faint onion rings; bright defocused points dominate their disc
+              vec3 sc = texture2D(tC, uv).rgb;
+              float ls = dot(sc, vec3(0.2126, 0.7152, 0.0722));
+              float rel = clamp(r / max(cs, 1.0), 0.0, 1.0);
+              float ring = (1.0 + 0.9 * smoothstep(0.7, 0.97, rel)) * (1.0 + 0.1 * sin(rel * 24.0));
+              float hl = 1.0 + 2.0 * min(max(ls - 1.0, 0.0), 2.0) * smoothstep(2.0, 8.0, cs);
+              float w = max(reach * ring * hl, behind * step(viewZ(uv), viewZ(vUv) + 0.05));
+              acc += sc * w; wsum += w;
+            }
+            gl_FragColor = vec4(acc / wsum, 1.0);
+          }`,
+        depthTest: false, depthWrite: false,
+      });
+      const dofScene = quad(dofMat);
+
+      const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(RW, RH, { type: THREE.HalfFloatType }));
+      composer.renderToScreen = false;
+      composer.setPixelRatio(SS);
+      const combine = new ShaderPass({
+        uniforms: {
+          tDiffuse: { value: null }, tI: { value: null }, tS: { value: null },
+          wI: { value: 1 }, wS: { value: 0 }, tint: { value: new THREE.Vector3(1.0, 0.42, 0.16) }, warm: { value: 0 },
+          gc: { value: new THREE.Vector2(0.5, 0.5) }, gr: { value: 0.2 }, aspect: { value: OW / OH }, nd: { value: 0 },
+        },
+        vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+        fragmentShader: `uniform sampler2D tI; uniform sampler2D tS; uniform float wI; uniform float wS; uniform vec3 tint; uniform float warm; uniform vec2 gc; uniform float gr; uniform float aspect; uniform float nd; varying vec2 vUv;
+          void main(){
+            vec3 I = texture2D(tI, vUv).rgb;
+            // graduated ND over the top of frame (shot B): holds the camera-module highlights below the SoC
+            float band = nd * smoothstep(0.56, 0.9, vUv.y);
+            I *= (1.0 - band) / (1.0 + 1.5 * band * dot(I, vec3(0.2126, 0.7152, 0.0722)));
+            vec3 S = texture2D(tS, vUv).rgb;
+            vec2 d = vUv - gc; d.x *= aspect;
+            float m = exp(-dot(d, d) / (gr * gr));
+            float lum = dot(I, vec3(0.2126, 0.7152, 0.0722));
+            // accent seeps in from the chip's light first: tint by the glow mask, then add a soft halo
+            vec3 Iw = mix(I, lum * tint * 1.6, clamp(warm * (0.25 + 0.75 * m), 0.0, 1.0));
+            vec3 halo = tint * warm * m * 0.22;
+            // the shell's brightest edges arrive first (the camera-bar lip reads as an orange line before the body fills in)
+            float ls = dot(S, vec3(0.2126, 0.7152, 0.0722));
+            float lead = ls / (ls + 0.25);
+            float wSp = clamp(wS + 1.6 * wS * (1.0 - wS) * (lead - 0.35), 0.0, 1.0);
+            vec3 c = wI * (Iw + halo) + wSp * S;
+            c = clamp(c, vec3(0.0), vec3(64.0));
+            gl_FragColor = vec4(c, 1.0);
+          }`,
+      });
+      combine.uniforms.tS.value = rtS.texture; // ShaderPass clones uniform textures; bind the live target after construction
+      composer.addPass(combine);
+      const bloom = new UnrealBloomPass(new THREE.Vector2(RW, RH), 0.32, 0.4, 1.4);
+      composer.addPass(bloom);
+      composer.addPass(new OutputPass());
+      composer.setPixelRatio(SS);
+
+      const finalMat = new THREE.ShaderMaterial({
+        uniforms: { tSrc: { value: null }, texel: { value: new THREE.Vector2(1 / RW, 1 / RH) }, frame: { value: 0 }, grain: { value: 0.022 }, vig: { value: 0.3 }, vc: { value: new THREE.Vector2(0.5, 0.5) }, vr: { value: new THREE.Vector2(0.35, 1.05) }, fade: { value: 1 }, zb: { value: 0 }, zc: { value: new THREE.Vector2(0.5, 0.5) }, ca: { value: 0 } },
+        vertexShader: FSV,
+        fragmentShader: `uniform sampler2D tSrc; uniform vec2 texel; uniform float frame; uniform float grain; uniform float vig; uniform vec2 vc; uniform vec2 vr; uniform float fade; uniform float zb; uniform vec2 zc; uniform float ca; varying vec2 vUv;
+          vec3 ss(vec2 uv){
+            return 0.25 * (texture2D(tSrc, uv + texel * vec2(-0.75, -0.75)).rgb + texture2D(tSrc, uv + texel * vec2(0.75, -0.75)).rgb
+                         + texture2D(tSrc, uv + texel * vec2(-0.75, 0.75)).rgb + texture2D(tSrc, uv + texel * vec2(0.75, 0.75)).rgb);
+          }
+          float h12(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+          void main(){
+            // lateral chromatic aberration: red pushed out, blue pulled in, growing toward the frame edge
+            vec2 o = (vUv - 0.5) * ca;
+            vec3 c = ca > 0.0 ? vec3(ss(vUv + o).r, ss(vUv).g, ss(vUv - o).b) : ss(vUv);
+            // shutter blur for the pull-out: radial samples across the zoom covered during half a frame
+            if (zb > 0.0005) {
+              vec3 acc = vec3(0.0);
+              for (int i = 0; i < 40; i++) {
+                float s = (float(i) + 0.5) / 40.0 - 0.5;
+                acc += texture2D(tSrc, zc + (vUv - zc) * exp(zb * s)).rgb;
+              }
+              c = acc / 40.0;
+            }
+            vec2 q = vUv - vc; q.x *= 1.777;
+            c *= 1.0 - vig * smoothstep(vr.x, vr.y, length(q));
+            c *= fade;
+            vec2 px = floor(gl_FragCoord.xy);
+            float n = (h12(px + frame * 17.31) + h12(px * 1.37 + frame * 3.7 + 11.0)) - 1.0;
+            float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+            c += n * grain * (0.35 + 0.65 * sqrt(clamp(lum, 0.0, 1.0)));
+            gl_FragColor = vec4(c, 1.0);
+          }`,
+        depthTest: false, depthWrite: false,
+      });
+      const finalScene = quad(finalMat);
+
+      /* ================= direction ================= */
+      // phone height at 1x = 70% of frame: visible height 15 / 0.7 at the back plane
+      const FOV = 24;
+      const D1 = (15 / 0.7) / 2 / Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+      const T = {
+        fadeIn: [0.0, 0.7],
+        cutB: 2.1,
+        cutC: 4.3,
+        drift: [4.3, 5.5], // internals slow move 1.2s
+        warm: [4.85, 5.65], // accent seeps into the chip glow
+        diss: [5.5, 6.0], // shell 0 -> 1, power2.inOut
+        intTo30: [5.5, 5.8], // internals 1 -> 0.3, then held at 0.3 for 0.2s
+        ghostOut: [6.0, 6.18], // internals 0.3 -> 0 as the pull starts
+        pull: [6.0, 7.2], // 5x -> 1x, expo.out
+        settle: [7.2, 10.0],
+      };
+
+      const tmpV = new THREE.Vector3();
+      function aim(target, dir, dist, fov) {
+        camera.fov = fov; camera.updateProjectionMatrix();
+        camera.position.copy(target).addScaledVector(tmpV.copy(dir).normalize(), dist);
+        camera.up.set(0, 1, 0);
+        camera.lookAt(target);
+      }
+
+      function frameState(t) {
+        const S = { ca: 0.0008, bloom: [0.32, 0.4, 1.4], wI: 1, wS: 0, warm: 0, dof: 0, focus: 5, vig: 0.3, vr: [0.35, 1.05], vc: [0.5, 0.5], envRot: 0, fade: 1, spotTarget: [SOC.x, SOC.y, 0], spotPos: [SOC.x - 1.2, SOC.y + 6.5, 9.5], spotI: 900 };
+        if (t < T.cutB) {
+          // shot A: SoC macro, oblique, slow glide; top light sweeps across the lid
+          const k = seg(t, 0, T.cutB);
+          const target = new THREE.Vector3(SOC.x - 0.12 + 0.24 * k, SOC.y + 0.05, SOC.zTop);
+          aim(target, new THREE.Vector3(0.22, -0.66, 0.72), 5.6 - 0.35 * k, FOV);
+          S.dof = 1; S.focus = camera.position.distanceTo(target); S.coc = 150; S.maxR = 34; S.envI = 0.45; S.spotI = 520;
+          S.spotPos = [SOC.x + 0.6, SOC.y + 9.5, 3.2]; S.spotTarget = [SOC.x, SOC.y - 0.3, 0];
+          S.envRot = -1.0 + 1.15 * sineInOut(k);
+          S.fade = sineInOut(seg(t, T.fadeIn[0], T.fadeIn[1]));
+          S.vig = 0.55; S.vr = [0.25, 1.0];
+          S.ca = 0.0017; S.bloom = [0.45, 0.5, 1.2];
+          return S;
+        }
+        if (t < T.cutC) {
+          // shot B: board, camera modules and flexes, lateral track
+          const k = seg(t, T.cutB, T.cutC);
+          const target = new THREE.Vector3(lerp(1.2, -0.6, k), 3.75, 0.1);
+          aim(target, new THREE.Vector3(-0.32, -0.62, 0.72), 12.5 - 0.6 * k, FOV);
+          S.dof = 1; S.focus = camera.position.distanceTo(new THREE.Vector3(target.x, 4.7, 0.2)); S.coc = 90; S.maxR = 26; S.envI = 0.45;
+          S.envRot = 1.1 - 0.35 * k;
+          S.spotTarget = [0.2, 2.8, 0]; S.spotPos = [0.8, 12.5, 3.6]; S.spotI = 720;
+          S.lensDim = 0.35; S.nd = 0.5;
+          S.vig = 0.5; S.vr = [0.3, 1.0];
+          S.ca = 0.0017; S.bloom = [0.34, 0.45, 1.7];
+          return S;
+        }
+        // shot C: frontal, one fixed camera for the dissolve, then pull out
+        const kd = sineOut(seg(t, T.drift[0], T.drift[1]));
+        const driftX = -0.18 * (1 - kd); // ~2% frame width per second, easing to rest
+        const kp = pullEase(seg(t, T.pull[0], T.pull[1]));
+        // log-zoom travelled during a 180-degree shutter (half a frame), for the radial motion blur
+        const kpPrev = pullEase(seg(t - 0.5 / 30, T.pull[0], T.pull[1]));
+        S.zb = Math.log(5) * (kp - kpPrev);
+        const settle = 1 + 0.025 * sineInOut(seg(t, T.settle[0], T.settle[1]));
+        const zoom = Math.pow(5, 1 - kp) * settle;
+        const cx = lerp(SOC.x + driftX, 0, kp), cy = lerp(SOC.y + 0.05, 0, kp);
+        const target = new THREE.Vector3(cx, cy, 0.4);
+        aim(target, new THREE.Vector3(0, 0, 1), D1 / zoom, FOV);
+        S.warm = power2InOut(seg(t, T.warm[0], T.warm[1]));
+        const sI = power2InOut(seg(t, T.intTo30[0], T.intTo30[1]));
+        S.wI = lerp(1, 0.3, sI) * (1 - power2InOut(seg(t, T.ghostOut[0], T.ghostOut[1])));
+        S.wS = power2InOut(seg(t, T.diss[0], T.diss[1]));
+        // vignette: the light pool closes in on the chip while inside, relaxes on the shell, closes in again as the camera pulls out
+        const kq = sineInOut(seg(t, T.drift[0], T.diss[0] + 0.1));
+        const inV = { s: lerp(0.6, 0.94, kq), a: lerp(0.5, 0.2, kq), b: lerp(1.2, 0.82, kq) };
+        const shV = { s: 0.5, a: 0.42, b: 1.15 };
+        const w = S.wS;
+        S.vig = lerp(lerp(inV.s, shV.s, w), 0.6, kp);
+        S.vr = [lerp(lerp(inV.a, shV.a, w), 0.26, kp), lerp(lerp(inV.b, shV.b, w), 0.62, kp)];
+        S.envRot = 0;
+        return S;
+      }
+
+      const socWorld = new THREE.Vector3();
+      function renderAt(t) {
+        const S = frameState(t);
+        sceneI.environmentRotation.set(0, S.envRot, 0);
+        sceneI.environmentIntensity = S.envI ?? 1;
+        spot.position.set(...S.spotPos);
+        spot.target.position.set(...S.spotTarget);
+        spot.target.updateMatrixWorld();
+        spot.intensity = S.spotI;
+        spot.angle = S.spotAngle ?? 0.42;
+        setLensDim(S.lensDim ?? 1);
+
+        // internals pass
+        if (S.wI > 0.0005) {
+          renderer.setRenderTarget(rtI);
+          renderer.clear();
+          renderer.render(sceneI, camera);
+        }
+        let tI = rtI.texture;
+        if (S.dof && S.wI > 0.0005) {
+          dofMat.uniforms.focus.value = S.focus;
+          dofMat.uniforms.coc.value = S.coc;
+          dofMat.uniforms.maxR.value = S.maxR;
+          renderer.setRenderTarget(rtD);
+          renderer.render(dofScene, fsCam);
+          tI = rtD.texture;
+        }
+        // shell pass
+        if (S.wS > 0.0005) {
+          renderer.setRenderTarget(rtS);
+          renderer.clear();
+          renderer.render(sceneS, camera);
+        }
+        renderer.setRenderTarget(null);
+
+        socWorld.set(SOC.x, SOC.y, SOC.zTop).project(camera);
+        combine.uniforms.tI.value = tI;
+        combine.uniforms.wI.value = S.wI > 0.0005 ? S.wI : 0;
+        combine.uniforms.wS.value = S.wS > 0.0005 ? S.wS : 0;
+        combine.uniforms.warm.value = S.warm;
+        combine.uniforms.nd.value = S.nd ?? 0;
+        combine.uniforms.gc.value.set(socWorld.x * 0.5 + 0.5, socWorld.y * 0.5 + 0.5);
+        bloom.strength = S.bloom[0]; bloom.radius = S.bloom[1]; bloom.threshold = S.bloom[2];
+        composer.render();
+
+        finalMat.uniforms.tSrc.value = composer.readBuffer.texture;
+        finalMat.uniforms.frame.value = Math.round(t * 30);
+        finalMat.uniforms.vig.value = S.vig;
+        finalMat.uniforms.vr.value.set(...S.vr);
+        const vcK = t >= T.cutC ? S.wS : 0;
+        finalMat.uniforms.vc.value.set(lerp(socWorld.x * 0.5 + 0.5, 0.5, vcK), lerp(socWorld.y * 0.5 + 0.5, 0.5, vcK));
+        finalMat.uniforms.fade.value = S.fade;
+        finalMat.uniforms.ca.value = S.ca;
+        finalMat.uniforms.zb.value = S.zb || 0;
+        finalMat.uniforms.zc.value.set(socWorld.x * 0.5 + 0.5, socWorld.y * 0.5 + 0.5);
+        renderer.setRenderTarget(null);
+        renderer.render(finalScene, fsCam);
+      }
+
+      window.__xr = { renderAt, T, INT, camera };
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      renderAt(window.__hfThreeTime || 0);
+    </script>
+  </body>
+</html>

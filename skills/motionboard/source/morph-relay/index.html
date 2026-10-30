@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --page: #fafafa;
+        --ink: #111111;
+        --muted: #8a8a8a;
+        --line: #e5e5e5;
+        --font-ui: "Inter", system-ui, sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--page); }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        /* soft top light instead of a flat fill */
+        background: radial-gradient(ellipse 80% 70% at 50% 32%, #ffffff 0%, #f6f6f6 55%, #e9e9e9 100%);
+        font-family: var(--font-ui);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        overflow: hidden;
+      }
+      #stage, #grp, #final { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #grp > * { position: absolute; }
+      .ic { display: block; flex: none; }
+
+      /* ---------- font classes (fonts must be declared in CSS rules) ---------- */
+      .f-inter { font-family: "Inter", sans-serif; }
+      .f-mono { font-family: "JetBrains Mono", monospace; }
+      .f-play { font-family: "Playfair Display", serif; }
+      .f-archivo { font-family: "Archivo Black", sans-serif; }
+      .f-oswald { font-family: "Oswald", sans-serif; }
+      .f-garamond { font-family: "EB Garamond", serif; }
+      .f-league { font-family: "League Gothic", sans-serif; }
+
+      /* ---------- main shape ---------- */
+      #morph {
+        left: 960px; top: 540px;
+        width: 960px; height: 3px;
+        border-radius: 1.5px;
+        background: #111111;
+        border: 1px solid rgba(229, 229, 229, 0);
+        box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+        overflow: hidden;
+      }
+      #tbar {
+        position: absolute; left: 0; top: 0; right: 0; height: 44px;
+        background: #ebe6dc; border-bottom: 1px solid rgba(29, 22, 18, 0.10);
+        opacity: 0; color: #8a8378;
+      }
+      #tbar i.d { position: absolute; top: 16px; width: 12px; height: 12px; border-radius: 50%; }
+      #tbar i.d:nth-child(1) { left: 18px; background: #ff5f57; }
+      #tbar i.d:nth-child(2) { left: 38px; background: #febc2e; }
+      #tbar i.d:nth-child(3) { left: 58px; background: #28c840; }
+      #tbar .tb { position: absolute; top: 12px; }
+      #tbar .url {
+        position: absolute; left: 380px; top: 8px; width: 678px; height: 28px; border-radius: 8px;
+        background: rgba(29, 22, 18, 0.06); display: flex; align-items: center; justify-content: center; gap: 7px;
+        font-size: 13px; font-weight: 500; color: #3d362e;
+      }
+      #tbar .url .ic { color: #8a8378; }
+
+      /* ---------- headline / input ---------- */
+      #title {
+        left: 960px; top: 540px;
+        font-size: 64px; line-height: 77px; font-weight: 600; color: #111111;
+        white-space: nowrap;
+      }
+      #title span { display: inline-block; opacity: 0; margin-right: 0.26em; }
+      #title span:last-child { margin-right: 0; }
+      #av {
+        left: 516px; top: 518px; width: 44px; height: 44px; border-radius: 50%; background: #c8663b; opacity: 0;
+        display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: #ffffff;
+      }
+      .rbtn { top: 514px; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; }
+      #bAtt { left: 1286px; background: #2c2c2c; color: #d8d8d8; }
+      #bSend { left: 1350px; background: #ffffff; color: #111111; }
+      #typed {
+        left: 592px; top: 520px; height: 40px;
+        display: flex; align-items: center;
+        font-size: 26px; line-height: 40px; font-weight: 500; color: #ffffff; white-space: nowrap;
+      }
+      #typed .ch { display: none; }
+      #cur { display: block; width: 2px; height: 30px; margin-left: 3px; background: #ffffff; opacity: 0; }
+      #hint { left: 592px; top: 608px; font-size: 22px; line-height: 30px; font-weight: 400; color: #111111; opacity: 0; white-space: nowrap; }
+
+      /* ---------- generated page: coffee roaster storefront ---------- */
+      #win { left: 241px; top: 131px; width: 1438px; height: 818px; border-radius: 17px; overflow: hidden; }
+      #page { position: absolute; left: 0; top: 44px; width: 1438px; height: 774px; font-family: "Inter", sans-serif; color: #1d1612; }
+      #page > * { position: absolute; opacity: 0; }
+
+      #pbar {
+        left: 0; top: 0; width: 1438px; height: 32px; background: #1d1612; color: #efe4d2;
+        display: flex; align-items: center; justify-content: center; gap: 26px; font-size: 12px; font-weight: 500;
+      }
+      #pbar span { display: flex; align-items: center; gap: 7px; }
+      #pbar u { display: block; width: 1px; height: 12px; background: rgba(239, 228, 210, 0.3); }
+
+      #pnav { left: 0; top: 32px; width: 1438px; height: 60px; padding: 0 64px; display: flex; align-items: center; border-bottom: 1px solid #e2d8c6; }
+      .logo { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+      .logo svg { display: block; }
+      #pnav .links { display: flex; gap: 30px; margin-left: 52px; font-size: 14px; font-weight: 500; color: #4a3f35; }
+      #pnav .links span { display: flex; align-items: center; gap: 3px; }
+      #pnav .nr { margin-left: auto; display: flex; align-items: center; gap: 20px; font-size: 14px; font-weight: 500; color: #1d1612; }
+      .cart { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px 0 14px; border-radius: 18px; background: #1d1612; color: #f6f1e8; font-size: 13.5px; font-weight: 500; }
+      .cart b { min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #d4572a; color: #fff; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+
+      #ph1 { left: 64px; top: 124px; font-family: "Playfair Display", serif; font-size: 54px; line-height: 60px; font-weight: 500; letter-spacing: -0.02em; white-space: nowrap; }
+      #psub { left: 64px; top: 258px; width: 610px; font-size: 16px; line-height: 25px; color: #5b4e42; }
+      #pbtn { left: 64px; top: 322px; display: flex; gap: 10px; }
+      .b1 { height: 44px; padding: 0 20px; border-radius: 8px; background: #1d1612; color: #f6f1e8; font-size: 14.5px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+      .b2 { height: 44px; padding: 0 20px; border-radius: 8px; border: 1px solid #cfc3ae; color: #1d1612; font-size: 14.5px; font-weight: 500; display: flex; align-items: center; }
+      #prate { left: 64px; top: 380px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #5b4e42; }
+      #prate .avs { display: flex; }
+      #prate .avs span { width: 24px; height: 24px; border-radius: 12px; margin-left: -7px; border: 2px solid #f6f1e8; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; color: #fff; }
+      #prate .avs span:first-child { margin-left: 0; }
+      #prate .st { display: flex; gap: 2px; color: #d4572a; }
+      #prate b { color: #1d1612; font-weight: 600; }
+
+      #phero { left: 740px; top: 112px; width: 634px; height: 280px; border-radius: 14px; background: #e8d6bd; overflow: hidden; }
+      #phero > * { position: absolute; }
+      #phero .tt { left: 0; top: 224px; width: 634px; height: 56px; background: #dcc7a6; }
+      #phero .sh { left: 56px; top: 236px; width: 176px; height: 12px; border-radius: 50%; background: rgba(60, 35, 15, 0.22); filter: blur(4px); }
+      #phero .info { left: 290px; top: 18px; width: 320px; }
+      .chip { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px; border-radius: 12px; background: #1d1612; color: #f6f1e8; font-size: 11.5px; font-weight: 500; }
+      .chip i { display: block; width: 6px; height: 6px; border-radius: 3px; background: #7bd88f; }
+      .info h3 { margin-top: 12px; font-size: 25px; line-height: 30px; font-weight: 600; letter-spacing: -0.02em; }
+      .info .s1 { margin-top: 2px; font-size: 13px; line-height: 18px; color: #5b4e42; }
+      .info .fl { margin-top: 12px; display: flex; gap: 6px; }
+      .info .fl span { height: 26px; padding: 0 11px; border-radius: 13px; border: 1px solid #c9b79b; font-size: 12px; font-weight: 500; display: flex; align-items: center; }
+      .info .rd { margin-top: 12px; font-size: 12px; line-height: 16px; color: #6d5e4f; }
+      .info .pr { margin-top: 12px; display: flex; align-items: baseline; gap: 8px; font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+      .info .pr small { font-size: 13px; font-weight: 400; color: #6d5e4f; letter-spacing: 0; }
+      .info .bt { margin-top: 10px; display: flex; gap: 8px; }
+      .info .bt .a { height: 40px; padding: 0 18px; border-radius: 8px; background: #d4572a; color: #fff; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+      .info .bt .b { height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid #c9b79b; font-size: 13px; font-weight: 500; display: flex; align-items: center; }
+
+      #phead { left: 64px; top: 414px; width: 1310px; height: 28px; display: flex; align-items: center; }
+      #phead h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-right: 22px; }
+      #phead .tabs { display: flex; gap: 6px; }
+      #phead .tabs span { height: 28px; padding: 0 12px; border-radius: 14px; font-size: 12.5px; font-weight: 500; color: #5b4e42; display: flex; align-items: center; }
+      #phead .tabs span.on { background: #1d1612; color: #f6f1e8; }
+      #phead .all { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+
+      #pprods { left: 64px; top: 452px; width: 1310px; height: 241px; display: flex; gap: 20px; opacity: 1; }
+      .pp { position: relative; flex: 1; opacity: 0; }
+      .pp .im { position: relative; height: 138px; border-radius: 10px; overflow: hidden; }
+      .pp .im .sh { position: absolute; left: 50%; bottom: 3px; width: 92px; margin-left: -46px; height: 8px; border-radius: 50%; background: rgba(40, 24, 10, 0.2); filter: blur(3px); }
+      .pp .im .cp { position: absolute; left: 10px; top: 10px; height: 22px; padding: 0 9px; border-radius: 11px; background: #ffffff; font-size: 11px; font-weight: 600; display: flex; align-items: center; }
+      .pp .nm { margin-top: 10px; font-size: 14.5px; line-height: 20px; font-weight: 600; letter-spacing: -0.01em; }
+      .pp .or { font-size: 12px; line-height: 17px; color: #7a6c5d; }
+      .pp .fl { font-size: 12.5px; line-height: 18px; color: #4a3f35; }
+      .pp .pr { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+      .pp .pr small { font-size: 12px; font-weight: 400; color: #7a6c5d; }
+      .pp .pr .ad { margin-left: auto; width: 28px; height: 28px; border-radius: 14px; border: 1px solid #cfc3ae; display: flex; align-items: center; justify-content: center; }
+
+      #pcards { left: 0; top: 700px; width: 1438px; height: 74px; padding: 0 64px; display: flex; align-items: center; background: #efe7d8; border-top: 1px solid #e2d8c6; }
+      .pc { flex: 1; display: flex; align-items: center; gap: 12px; }
+      .pc .ico { width: 36px; height: 36px; border-radius: 18px; background: #f6f1e8; border: 1px solid #ddd1bc; display: flex; align-items: center; justify-content: center; color: #1d1612; flex: none; }
+      .pc b { display: block; font-size: 13px; line-height: 17px; font-weight: 600; }
+      .pc span.t2 { display: block; font-size: 12px; line-height: 16px; color: #7a6c5d; }
+
+      /* ---------- bag packaging (base size 140 x 188, scaled by wrapper) ---------- */
+      .bw { position: relative; }
+      .bag {
+        position: absolute; left: 0; top: 0; width: 140px; height: 188px; transform-origin: 0 0; overflow: hidden;
+        border-radius: 5px 5px 7px 7px; color: var(--t);
+        background:
+          linear-gradient(90deg, rgba(0,0,0,0.24) 0, rgba(0,0,0,0) 6%, rgba(255,255,255,0.08) 38%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.26) 100%),
+          var(--c);
+        font-family: "Inter", sans-serif;
+      }
+      .bag .seal { position: absolute; left: 0; top: 0; width: 140px; height: 20px; border-bottom: 1px solid rgba(0,0,0,0.25); background: repeating-linear-gradient(180deg, rgba(0,0,0,0.16) 0 1px, rgba(255,255,255,0.06) 1px 3px); }
+      .bag .tear { position: absolute; left: 8px; right: 8px; top: 27px; height: 0; border-top: 1px dashed currentColor; opacity: 0.35; }
+      .bag .valve { position: absolute; right: 12px; top: 35px; width: 11px; height: 11px; border-radius: 50%; background: rgba(0,0,0,0.2); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.3); }
+      .bag .bd { position: absolute; left: 0; right: 0; top: 42px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+      .bag .bd svg { width: 17px; height: 17px; display: block; }
+      .bag .bd b { font-size: 9px; line-height: 10px; font-weight: 700; letter-spacing: 0.16em; }
+      .bag .bd em { font-style: normal; font-size: 5px; line-height: 6px; letter-spacing: 0.22em; opacity: 0.75; }
+      .bag .lbl { position: absolute; left: 12px; right: 12px; top: 90px; height: 72px; padding: 7px 8px 0; border-radius: 2px; background: var(--l); color: var(--k); }
+      .bag .lbl small { display: block; font-size: 5.5px; line-height: 7px; letter-spacing: 0.2em; font-weight: 600; opacity: 0.7; }
+      .bag .lbl strong { display: block; margin-top: 2px; font-size: 18px; line-height: 19px; font-weight: 700; letter-spacing: -0.03em; }
+      .bag .lbl .sb { display: block; margin-top: 1px; font-size: 7.5px; line-height: 9px; opacity: 0.8; }
+      .bag .lbl .rs { display: flex; gap: 2px; margin-top: 6px; }
+      .bag .lbl .rs i { display: block; width: 14px; height: 3px; border-radius: 1px; background: currentColor; opacity: 0.18; }
+      .bag .lbl .rs i.on { opacity: 0.9; }
+      .bag .lbl .nt { display: block; margin-top: 4px; font-size: 5.5px; line-height: 7px; letter-spacing: 0.03em; opacity: 0.75; }
+      .bag .wt { position: absolute; left: 12px; right: 12px; top: 169px; display: flex; justify-content: space-between; font-size: 5.5px; letter-spacing: 0.12em; font-weight: 600; opacity: 0.85; }
+
+      /* ---------- gallery ---------- */
+      #grid { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .cell { position: absolute; width: 374px; height: 247px; opacity: 0; }
+      .card { position: absolute; left: 0; top: 0; width: 374px; height: 213px; border-radius: 5px; overflow: hidden; box-shadow: 0 8px 21px rgba(0, 0, 0, 0.12); }
+      .lab, #mainlab { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; font-weight: 500; color: #6f6f6f; white-space: nowrap; }
+      .lab { position: absolute; left: 0; top: 227px; }
+      #mainlab { position: absolute; left: 566px; top: 644px; opacity: 0; }
+      .lab i, #mainlab i { display: block; width: 16px; height: 16px; border-radius: 5px; }
+      .thumb { position: relative; width: 100%; height: 100%; overflow: hidden; }
+      .thumb div { position: absolute; white-space: nowrap; }
+      .thumb b { font-weight: 600; }
+
+      /* ---------- wordmark ---------- */
+      #final { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      #endpill { position: absolute; left: 960px; top: 512px; width: 440px; height: 3px; border-radius: 1.5px; background: #111111; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+      #wm { font-family: "Inter", sans-serif; font-size: 54px; line-height: 64px; font-weight: 600; letter-spacing: -0.02em; color: #ffffff; opacity: 0; }
+      #wmsub { position: absolute; left: 0; width: 1920px; top: 604px; text-align: center; font-family: "Inter", sans-serif; font-size: 26px; line-height: 34px; font-weight: 400; color: #6f6f6f; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" class="clip" data-start="0" data-duration="11" data-track-index="0">
+        <div id="grid"></div>
+
+        <div id="grp">
+          <div id="morph">
+            <div id="tbar"></div>
+          </div>
+
+          <div id="title"><span>What</span><span>do you</span><span>want to</span><span>build?</span></div>
+          <div id="av">M</div>
+          <div id="bAtt" class="rbtn"></div>
+          <div id="bSend" class="rbtn"></div>
+          <div id="typed"><i id="cur"></i></div>
+          <div id="hint">Try: a booking site for a yoga studio</div>
+
+          <div id="win">
+            <div id="page"></div>
+          </div>
+        </div>
+
+        <div id="mainlab"><i style="background: #d4572a"></i><span>Coffee roaster storefront</span></div>
+      </div>
+
+      <div id="final" class="clip" data-start="0" data-duration="11" data-track-index="1">
+        <div id="endpill"><div id="wm">Kiln</div></div>
+        <div id="wmsub">Describe it. Ship it.</div>
+      </div>
+    </div>
+
+    <script>
+      const EIO = "power3.inOut"; // cubic-bezier(0.65, 0, 0.35, 1)
+      const EXPO = "expo.out"; // cubic-bezier(0.16, 1, 0.3, 1)
+      const BACK = "back.out(1.7)"; // cubic-bezier(0.34, 1.56, 0.64, 1)
+      const $ = (id) => document.getElementById(id);
+
+      /* ---------- icons (lucide-style, 1.5px stroke) ---------- */
+      const IC = {
+        search: '<circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/>',
+        user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5v-1a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v1"/>',
+        bag: '<path d="M5.5 7h13l1 13.5h-15z"/><path d="M8.5 9.5V6.5a3.5 3.5 0 0 1 7 0v3"/>',
+        chev: '<path d="m6 9 6 6 6-6"/>',
+        arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+        up: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>',
+        plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+        truck: '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+        flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        repeat: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+        pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+        lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+        left: '<path d="m15 18-6-6 6-6"/>',
+        right: '<path d="m9 18 6-6-6-6"/>',
+        reload: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
+        share: '<path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/>',
+        check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+        cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+        star: '<path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2 6.3 20.3l1.2-6.4L2.8 9.5l6.4-.8z" fill="currentColor" stroke="none"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20v-1a5 5 0 0 0-3-4.6"/>',
+      };
+      const ic = (n, s, extra) =>
+        '<svg class="ic" viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="' +
+        ((1.5 * 24) / s).toFixed(2) + '" stroke-linecap="round" stroke-linejoin="round"' + (extra ? ' style="' + extra + '"' : "") + ">" + IC[n] + "</svg>";
+
+      /* ---------- bag packaging ---------- */
+      const BEAN = '<svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="12.5" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="14" cy="14" rx="5" ry="7.6" transform="rotate(30 14 14)" fill="currentColor"/><path d="M10.6 19.6c3-3 4-6 7-11" fill="none" style="stroke:var(--c)" stroke-width="1.4" stroke-linecap="round"/></svg>';
+      function bag(o, s) {
+        return (
+          '<div class="bw" style="width:' + 140 * s + "px;height:" + 188 * s + 'px">' +
+          '<div class="bag" style="--c:' + o.c + ";--t:" + o.t + ";--l:" + o.l + ";--k:" + o.k + ";transform:scale(" + s + ')">' +
+          '<div class="seal"></div><i class="tear"></i><i class="valve"></i>' +
+          '<div class="bd">' + BEAN + "<b>ALDER &amp; ASH</b><em>COFFEE ROASTERS</em></div>" +
+          '<div class="lbl"><small>' + o.origin + "</small><strong>" + o.name + '</strong><span class="sb">' + o.sub + "</span>" +
+          '<div class="rs">' + [1, 2, 3, 4].map((n) => '<i class="' + (n <= o.roast ? "on" : "") + '"></i>').join("") + "</div>" +
+          '<span class="nt">' + o.notes + "</span></div>" +
+          '<div class="wt"><span>WHOLE BEAN</span><span>12 OZ (340 g)</span></div>' +
+          "</div></div>"
+        );
+      }
+      const BAGS = {
+        guji: { c: "#c4532c", t: "#fbeee0", l: "#f7eedd", k: "#2a1a12", origin: "ETHIOPIA", name: "Guji", sub: "Hambela, washed", notes: "Blueberry, jasmine, honey", roast: 1 },
+        huila: { c: "#2e4a3b", t: "#eef1e6", l: "#f1ecdc", k: "#1f2e25", origin: "COLOMBIA", name: "Huila", sub: "Pink Bourbon, anaerobic", notes: "Raspberry, hibiscus, brown sugar", roast: 2 },
+        antigua: { c: "#263e5a", t: "#e9eef5", l: "#efe9dc", k: "#1c2c40", origin: "GUATEMALA", name: "Antigua", sub: "Caturra, washed", notes: "Cocoa, orange zest, almond", roast: 3 },
+        nyeri: { c: "#dfa93f", t: "#2b1d0c", l: "#fbf3de", k: "#2b1d0c", origin: "KENYA", name: "Nyeri", sub: "AA, washed", notes: "Blackcurrant, grapefruit, cane sugar", roast: 2 },
+        house: { c: "#1f1914", t: "#efe4d2", l: "#e9dcc4", k: "#1f1914", origin: "BLEND", name: "House", sub: "Brazil and Sumatra", notes: "Dark chocolate, toasted hazelnut", roast: 4 },
+      };
+
+      /* ---------- build the generated page ---------- */
+      const LOGO =
+        '<svg width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="14" fill="#1d1612"/><ellipse cx="14" cy="14" rx="5" ry="8" transform="rotate(30 14 14)" fill="#f6f1e8"/><path d="M10.4 19.8c3.1-3 4.2-6.2 7.2-11.6" fill="none" stroke="#1d1612" stroke-width="1.5" stroke-linecap="round"/></svg>';
+      const stars = (s) => Array(5).fill(ic("star", s)).join("");
+      const products = [
+        { bag: BAGS.huila, bg: "#dde3d6", chip: "Limited", name: "Huila Pink Bourbon", origin: "Colombia · Anaerobic washed", fl: "Raspberry, hibiscus, brown sugar", price: "$24.00" },
+        { bag: BAGS.antigua, bg: "#dbe2ea", chip: "Staff pick", name: "Antigua Caturra", origin: "Guatemala · Washed", fl: "Cocoa, orange zest, almond", price: "$19.00" },
+        { bag: BAGS.nyeri, bg: "#f0e2bd", chip: "Light roast", name: "Nyeri AA", origin: "Kenya · Washed", fl: "Blackcurrant, grapefruit, cane sugar", price: "$23.00" },
+        { bag: BAGS.house, bg: "#e9dfd0", chip: "Bestseller", name: "Alder House Blend", origin: "Brazil and Sumatra · Dark roast", fl: "Dark chocolate, toasted hazelnut", price: "$17.00" },
+      ];
+      $("page").innerHTML =
+        '<div id="pbar"><span>' + ic("truck", 14) + "Free shipping on orders over $40</span><u></u><span>" + ic("flame", 14) + "Roasted to order every Tuesday and Friday</span></div>" +
+        '<div id="pnav"><div class="logo">' + LOGO + 'Alder &amp; Ash</div><div class="links"><span>Shop' + ic("chev", 14) + "</span><span>Subscriptions</span><span>Wholesale</span><span>Visit</span></div>" +
+        '<div class="nr">' + ic("search", 19) + ic("user", 19) + '<div class="cart">' + ic("bag", 16) + "Cart<b>2</b></div></div></div>" +
+        '<div id="ph1">Small-batch coffee,<br />roasted to order.</div>' +
+        '<div id="psub">Single-origin beans from farms we visit every year. Roasted in Portland on Tuesdays and Fridays, and at your door within two days.</div>' +
+        '<div id="pbtn"><span class="b1">Shop coffee' + ic("arrow", 16) + '</span><span class="b2">Build a subscription</span></div>' +
+        '<div id="prate"><div class="avs"><span data-layout-ignore style="background:#c8663b">AK</span><span data-layout-ignore style="background:#4a7a64">JL</span><span data-layout-ignore style="background:#5b6fa8">MR</span></div><div class="st">' + stars(13) + "</div><span><b>4.9</b> from 2,300+ reviews</span></div>" +
+        '<div id="phero"><div class="tt"></div><div class="sh"></div>' +
+        '<div style="left:62px;top:26px">' + bag(BAGS.guji, 1.15) + "</div>" +
+        '<div class="info"><span class="chip"><i></i>New harvest</span><h3>Ethiopia Guji Hambela</h3>' +
+        '<div class="s1">Washed · 1,950 to 2,200 m · Light roast</div>' +
+        '<div class="fl"><span>Blueberry</span><span>Jasmine</span><span>Honey</span></div>' +
+        '<div class="rd">Roasted Oct 27. Ships Monday.</div>' +
+        '<div class="pr">$26.00<small>12 oz · 340 g</small></div>' +
+        '<div class="bt"><span class="a" data-layout-ignore>' + ic("bag", 16) + 'Add to cart</span><span class="b">Subscribe, save 10%</span></div></div></div>' +
+        '<div id="phead"><h2>Fresh this week</h2><div class="tabs"><span class="on">All</span><span>Single origin</span><span>Blends</span><span>Decaf</span></div><span class="all">Shop all coffee' + ic("arrow", 15) + "</span></div>" +
+        '<div id="pprods">' +
+        products
+          .map(
+            (p) =>
+              '<div class="pp"><div class="im" style="background:' + p.bg + '"><span class="cp">' + p.chip + '</span><div class="sh"></div><div style="position:absolute;left:50%;bottom:7px;width:95px;height:128px;margin-left:-48px">' + bag(p.bag, 0.68) + "</div></div>" +
+              '<div class="nm">' + p.name + '</div><div class="or">' + p.origin + '</div><div class="fl">' + p.fl + "</div>" +
+              '<div class="pr">' + p.price + "<small>12 oz</small><span class=\"ad\">" + ic("plus", 15) + "</span></div></div>"
+          )
+          .join("") +
+        "</div>" +
+        '<div id="pcards">' +
+        [
+          ["truck", "Free shipping over $40", "Ships from Portland within 48 hours"],
+          ["flame", "Roasted to order", "Every Tuesday and Friday"],
+          ["repeat", "Subscriptions", "Save 10%, skip or pause anytime"],
+          ["pin", "Visit the roastery", "2417 SE Division St · Open 7am to 5pm"],
+        ]
+          .map((r) => '<div class="pc"><span class="ico">' + ic(r[0], 17) + '</span><div><b>' + r[1] + '</b><span class="t2">' + r[2] + "</span></div></div>")
+          .join("") +
+        "</div>";
+
+      /* ---------- browser chrome ---------- */
+      $("tbar").innerHTML =
+        '<i class="d"></i><i class="d"></i><i class="d"></i>' +
+        '<span class="tb" style="left:100px">' + ic("left", 20) + "</span>" +
+        '<span class="tb" style="left:130px;opacity:.5">' + ic("right", 20) + "</span>" +
+        '<span class="tb" style="left:162px;top:14px">' + ic("reload", 16) + "</span>" +
+        '<div class="url">' + ic("lock", 12) + "alderandash.coffee</div>" +
+        '<span class="tb" style="left:1330px;top:13px">' + ic("share", 18) + "</span>" +
+        '<span class="tb" style="left:1368px;top:13px">' + ic("plus", 18) + "</span>";
+
+      /* ---------- prompt box icons and typed text ---------- */
+      $("bAtt").innerHTML = ic("plus", 26);
+      $("bSend").innerHTML = ic("up", 26, "stroke-width:1.9");
+      const PROMPT = "a landing page for a coffee roaster in Portland";
+      $("typed").insertAdjacentHTML(
+        "afterbegin",
+        PROMPT.split("").map((ch) => '<span class="ch">' + (ch === " " ? "&nbsp;" : ch) + "</span>").join("")
+      );
+      // typing cadence: even steps with a longer pause after each word, spread over 2.4 - 3.95 s
+      const weights = PROMPT.split("").map((ch, i) => (i === 0 ? 0 : 1 + (PROMPT[i - 1] === " " ? 1.6 : 0)));
+      const wTotal = weights.reduce((a, b) => a + b, 0);
+      let acc = 0;
+      const typeAt = weights.map((w, i) => {
+        acc += w;
+        return Math.max(2.4, 2.4 + 1.55 * (acc / wTotal) + (((i * 7) % 5) - 2) * 0.004);
+      });
+
+      /* ---------- gallery thumbnails: eleven real-looking site types, 374 x 213 ---------- */
+      const P = (x, y, w, h, s, t) =>
+        '<div style="left:' + x + "px;top:" + y + "px;" + (w ? "width:" + w + "px;" : "") + (h ? "height:" + h + "px;" : "") + (s || "") + '">' + (t || "") + "</div>";
+      const W = "white-space:normal;";
+      const sp = (s, t) => '<span style="' + s + '">' + t + "</span>";
+
+      // 1. SaaS homepage
+      const t1 =
+        P(0, 0, 374, 22, "border-bottom:1px solid #eee") +
+        P(14, 7, 0, 0, "font-size:8px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:4px", sp("width:9px;height:9px;border-radius:3px;background:#5b5bd6;display:block", "") + "Orbit") +
+        P(72, 8, 0, 0, "font-size:6px;color:#666;display:flex;gap:11px", "<span>Product</span><span>Customers</span><span>Pricing</span><span>Docs</span>") +
+        P(290, 6, 0, 0, "font-size:6px;display:flex;align-items:center;gap:9px", sp("color:#666", "Log in") + sp("background:#111;color:#fff;padding:4px 7px;border-radius:4px;font-weight:500", "Get started")) +
+        P(122, 30, 0, 0, "font-size:5.5px;border:1px solid #e5e5ea;border-radius:8px;padding:2px 7px;color:#555", sp("color:#5b5bd6;font-weight:600", "New") + "&nbsp; Funnels 2.0 is live &rarr;") +
+        P(0, 44, 374, 0, "text-align:center;font-size:19px;line-height:21px;font-weight:600;letter-spacing:-.04em", "Product analytics<br>your team will use") +
+        P(0, 90, 374, 0, "text-align:center;font-size:6.5px;line-height:9px;color:#6b6b76", "Track events, funnels and retention without writing SQL.<br>Set up in ten minutes.") +
+        P(0, 107, 374, 0, "display:flex;justify-content:center;gap:6px;font-size:6.5px;font-weight:500", sp("background:#5b5bd6;color:#fff;padding:5px 10px;border-radius:5px", "Start for free") + sp("border:1px solid #e0e0e6;padding:5px 10px;border-radius:5px", "Book a demo")) +
+        P(46, 130, 282, 100, "border:1px solid #e6e6ea;border-radius:6px 6px 0 0;background:#fff;box-shadow:0 6px 18px rgba(20,20,60,.08);overflow:hidden",
+          P(0, 0, 50, 100, "background:#f7f7f9;border-right:1px solid #ececf0;padding:7px 7px;font-size:5px;color:#777;line-height:11px", sp("display:block;color:#111;font-weight:600", "Overview") + "Events<br>Funnels<br>Retention<br>Users<br>Dashboards") +
+          P(58, 6, 0, 0, "font-size:6.5px;font-weight:600", "Overview " + sp("color:#999;font-weight:400", "Last 30 days")) +
+          [["Active users", "24,812", "+12.4%"], ["Conversion", "3.8%", "+0.6%"], ["Retention", "41.2%", "+2.1%"]]
+            .map((k, i) => P(58 + i * 72, 18, 66, 28, "border:1px solid #ececf0;border-radius:4px;padding:4px 5px;font-size:4.5px;color:#888;line-height:7px", k[0] + "<br>" + sp("font-size:9px;line-height:10px;color:#111;font-weight:600;letter-spacing:-.02em", k[1]) + " " + sp("color:#16a34a", k[2])))
+            .join("") +
+          P(58, 52, 208, 46, "", '<svg width="208" height="46" viewBox="0 0 208 46"><path d="M0 36 C20 30 30 34 50 26 S85 28 105 18 S150 22 170 10 S198 8 208 4 L208 46 L0 46Z" fill="rgba(91,91,214,.09)"/><path d="M0 36 C20 30 30 34 50 26 S85 28 105 18 S150 22 170 10 S198 8 208 4" fill="none" stroke="#5b5bd6" stroke-width="1.5"/></svg>'));
+
+      // 2. Designer portfolio
+      const tile = (x, bg, fg, word, cap, sub) =>
+        P(x, 112, 108, 70, "background:" + bg + ";color:" + fg + ";overflow:hidden", P(9, 8, 0, 0, "font-size:5px;letter-spacing:.1em;opacity:.7", cap) + P(9, 28, 0, 0, "font-size:19px;line-height:20px;font-weight:500;letter-spacing:-.02em", word) + P(9, 56, 0, 0, "font-size:5px;opacity:.7", sub)) +
+        P(x, 186, 0, 0, "font-size:6px;color:#111;font-weight:500;font-family:Inter,sans-serif", word) + P(x, 195, 0, 0, "font-size:5px;color:#8a8a85;font-family:Inter,sans-serif", cap.replace(/^\d+\s/, ""));
+      const t2 =
+        P(16, 10, 0, 0, "font-size:11px;font-weight:500;letter-spacing:-.01em", "Lena Park") +
+        P(220, 12, 0, 0, "font-size:6px;color:#555;display:flex;gap:12px;align-items:center", "<span>Work</span><span>Journal</span><span>About</span>" + sp("display:flex;align-items:center;gap:4px;color:#111", sp("width:5px;height:5px;border-radius:3px;background:#2fa34f;display:block", "") + "Available Dec")) +
+        P(16, 34, 0, 0, "font-size:26px;line-height:27px;letter-spacing:-.025em;font-weight:500", "Designer of calm,<br>useful software.") +
+        P(238, 40, 120, 0, W + "font-size:6px;line-height:9px;color:#555", "Product designer based in Lisbon. Currently leading design at Fieldnote, previously Stripe and Airbnb.") +
+        P(16, 96, 0, 0, "font-size:5.5px;letter-spacing:.08em;color:#8a8a85;font-weight:500", "SELECTED WORK, 2023 TO 2026") +
+        tile(16, "#e7ddcb", "#2b2418", "Fieldnote", "01 Mobile app", "Notes, 2026") +
+        tile(133, "#1f3a34", "#e9efe6", "Arbor", "02 Brand and web", "Plant care, 2025") +
+        tile(250, "#e8573c", "#fff2ec", "Parcel", "03 Dashboard", "Logistics, 2024");
+
+      // 3. Restaurant reservations
+      const slot = (t, on) => sp("display:inline-block;padding:3px 5px;border-radius:3px;margin-right:3px;border:1px solid " + (on ? "#14231d;background:#14231d;color:#f0e8d6" : "#d9d0bd"), t);
+      const t3 =
+        P(0, 0, 374, 22, "border-bottom:1px solid rgba(240,232,214,.14)") +
+        P(14, 8, 0, 0, "font-size:6px;color:#cfc7b2;display:flex;gap:11px", "<span>Menu</span><span>Wine</span><span>Private dining</span>") +
+        P(0, 5, 374, 0, "text-align:center;font-size:10px;font-style:italic;color:#f0e8d6", "Osteria Lume") +
+        P(300, 6, 0, 0, "font-size:6px;color:#c9a45c;border:1px solid #c9a45c;padding:3px 8px;border-radius:10px", "Reserve") +
+        P(16, 40, 0, 0, "font-size:21px;line-height:23px;color:#f0e8d6;letter-spacing:-.01em", "Wood-fired Italian<br><i>in Brooklyn.</i>") +
+        P(16, 92, 150, 0, W + "font-size:6.5px;line-height:9.5px;color:#b9b19c", "Handmade pasta, a 40-bottle natural wine list and a corner room on Court Street.") +
+        P(16, 128, 0, 0, "font-size:6.5px;font-weight:600;background:#c9a45c;color:#14231d;padding:5px 10px;border-radius:3px", "Reserve a table") +
+        P(226, 32, 132, 124, "background:#f0e8d6;border-radius:5px;color:#14231d;box-shadow:0 8px 20px rgba(0,0,0,.3)",
+          P(10, 9, 0, 0, "font-size:7px;font-weight:700", "Reserve a table") +
+          P(10, 24, 112, 15, "border:1px solid #d9d0bd;border-radius:3px;background:#fbf7ec;font-size:6px;padding:4px 6px", "Fri, Nov 7") +
+          P(10, 43, 112, 15, "border:1px solid #d9d0bd;border-radius:3px;background:#fbf7ec;font-size:6px;padding:4px 6px", "2 guests") +
+          P(10, 65, 0, 0, "font-size:5px;color:#7a735f;letter-spacing:.06em", "AVAILABLE TIMES") +
+          P(10, 75, 0, 0, "font-size:6px", slot("6:00", 0) + slot("6:30", 0) + slot("7:00", 0)) +
+          P(10, 88, 0, 0, "font-size:6px", slot("7:30", 1) + slot("8:00", 0) + slot("8:30", 0)) +
+          P(10, 104, 112, 14, "background:#14231d;color:#f0e8d6;border-radius:3px;font-size:6.5px;font-weight:600;text-align:center;line-height:14px", "Find a table")) +
+        P(0, 172, 374, 41, "border-top:1px solid rgba(240,232,214,.14);background:rgba(0,0,0,.14)") +
+        P(16, 181, 0, 0, "font-size:5px;color:#c9a45c;letter-spacing:.1em", "HOURS") + P(16, 190, 0, 0, "font-size:6px;color:#e6dec9", "Tue to Sun, 5 to 11pm") +
+        P(140, 181, 0, 0, "font-size:5px;color:#c9a45c;letter-spacing:.1em", "ADDRESS") + P(140, 190, 0, 0, "font-size:6px;color:#e6dec9", "184 Court St, Brooklyn") +
+        P(262, 181, 0, 0, "font-size:5px;color:#c9a45c;letter-spacing:.1em", "PRESS") + P(262, 190, 0, 0, "font-size:6px;color:#e6dec9;font-style:italic", "The New York Times, Eater");
+
+      // 4. Podcast
+      const ep = (y, n, t, d) =>
+        P(16, y, 342, 0, "border-top:1px solid rgba(17,17,17,.2)") +
+        P(16, y + 6, 0, 0, "font-size:6px;font-weight:700", n) + P(40, y + 6, 0, 0, "font-size:6.5px;font-weight:700", t) + P(318, y + 6, 0, 0, "font-size:6px;opacity:.7", d);
+      const t4 =
+        P(16, 9, 0, 0, "font-size:8px;letter-spacing:.04em", "THE LONG GAME") +
+        P(216, 10, 0, 0, "font-size:6px;font-family:Inter,sans-serif;font-weight:600;display:flex;gap:12px;align-items:center", "<span>Episodes</span><span>Hosts</span><span>Newsletter</span>" + sp("background:#111;color:#f5d547;padding:3px 8px;border-radius:10px", "Subscribe")) +
+        P(16, 30, 104, 104, "background:#111;color:#f5d547;overflow:hidden",
+          P(8, 8, 0, 0, "font-size:5px;letter-spacing:.1em;font-family:Inter,sans-serif;font-weight:600", "A PODCAST ABOUT HIRING") +
+          P(8, 24, 0, 0, "font-size:24px;line-height:23px;letter-spacing:-.01em", "THE<br>LONG<br>GAME") +
+          P(8, 90, 0, 0, "font-size:5px;font-family:Inter,sans-serif;color:#f4e9b0", "with Maya Chen")) +
+        P(134, 32, 0, 0, "font-size:5.5px;letter-spacing:.1em;font-family:Inter,sans-serif;font-weight:700", "LATEST EPISODE") +
+        P(134, 44, 0, 0, "font-size:14px;line-height:16px;letter-spacing:-.01em", "Why most startups<br>fail at hiring") +
+        P(134, 80, 0, 0, "font-size:6px;font-family:Inter,sans-serif;font-weight:500", "Ep. 142 &middot; 54 min &middot; Nov 4, 2026") +
+        P(134, 94, 22, 22, "background:#111;border-radius:50%") + P(142, 101, 0, 0, "width:0;height:0;border-left:7px solid #f5d547;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent") +
+        P(164, 103, 190, 3, "background:rgba(17,17,17,.2);border-radius:2px", P(0, 0, 62, 3, "background:#111;border-radius:2px")) +
+        P(134, 122, 0, 0, "font-size:5.5px;font-family:Inter,sans-serif;font-weight:600;display:flex;gap:5px", sp("border:1px solid #111;border-radius:8px;padding:2px 6px", "Spotify") + sp("border:1px solid #111;border-radius:8px;padding:2px 6px", "Apple Podcasts") + sp("border:1px solid #111;border-radius:8px;padding:2px 6px", "YouTube")) +
+        ep(146, "141", "How Figma prices seats, with Dylan Field", "48 min") +
+        ep(164, "140", "The first ten hires nobody tells you about", "61 min") +
+        ep(182, "139", "Founder mode, one year later", "39 min") +
+        ep(200, "138", "Interviewing for curiosity", "52 min");
+
+      // 5. Event registration
+      const spk = (x, c, i, n, r) =>
+        P(x, 162, 20, 20, "border-radius:50%;background:" + c + ";color:#0b1530;font-size:7px;font-weight:600;font-family:Inter,sans-serif;text-align:center;line-height:20px", i) +
+        P(x + 25, 164, 0, 0, "font-size:6px;font-family:Inter,sans-serif;font-weight:600;color:#fff", n) + P(x + 25, 173, 0, 0, "font-size:5px;font-family:Inter,sans-serif;color:#8d9ac0", r);
+      const t5 =
+        P(0, 0, 374, 22, "border-bottom:1px solid rgba(255,255,255,.1)") +
+        P(14, 5, 0, 0, "font-size:11px;letter-spacing:.12em;color:#fff;display:flex;gap:4px;align-items:center", sp("width:7px;height:7px;background:#c6f432;display:block;transform:rotate(45deg)", "") + "STRATA") +
+        P(120, 8, 0, 0, "font-size:6px;letter-spacing:.08em;color:#aab4d4;display:flex;gap:12px", "<span>AGENDA</span><span>SPEAKERS</span><span>VENUE</span><span>SPONSORS</span>") +
+        P(310, 6, 0, 0, "font-size:6px;letter-spacing:.08em;background:#c6f432;color:#0b1530;padding:3px 9px;border-radius:2px;font-weight:500", "REGISTER") +
+        P(16, 34, 0, 0, "font-size:7px;letter-spacing:.18em;color:#c6f432", "MARCH 18 TO 20, 2027") +
+        P(16, 46, 0, 0, "font-size:41px;line-height:40px;letter-spacing:.005em;color:#fff;font-weight:600", "STRATA<br>SUMMIT 2027") +
+        P(16, 130, 0, 0, "font-size:6px;font-family:Inter,sans-serif;color:#aab4d4", "The data and AI conference &middot; Moscone Center, San Francisco") +
+        P(262, 36, 96, 70, "border:1px solid rgba(255,255,255,.14);border-radius:4px;background:rgba(255,255,255,.04)",
+          P(8, 7, 0, 0, "font-size:5.5px;letter-spacing:.14em;color:#c6f432", "EARLY BIRD ENDS IN") +
+          P(8, 18, 0, 0, "font-size:22px;line-height:24px;color:#fff", "12 <span style='font-size:8px;color:#aab4d4'>days</span>") +
+          P(8, 46, 0, 0, "font-size:11px;color:#fff", "$299 " + sp("font-size:7px;color:#8d9ac0;text-decoration:line-through", "$449"))) +
+        P(262, 112, 96, 16, "background:#c6f432;color:#0b1530;font-size:7px;letter-spacing:.08em;font-weight:500;text-align:center;line-height:16px;border-radius:2px", "GET TICKETS") +
+        P(0, 142, 374, 71, "background:#0f1b3c;border-top:1px solid rgba(255,255,255,.08)") +
+        P(16, 148, 0, 0, "font-size:5.5px;letter-spacing:.16em;color:#c6f432", "KEYNOTE SPEAKERS") +
+        spk(16, "#c6f432", "PS", "Priya Shah", "CTO, Meridian") +
+        spk(104, "#7fd1ff", "DO", "Daniel Okafor", "VP Data, Stripe") +
+        spk(204, "#ffb35c", "EV", "Elena Voss", "Research, DeepMind") +
+        spk(300, "#ff8fb1", "TN", "Tom Nguyen", "Founder, Lattice") +
+        P(16, 195, 0, 0, "font-size:5.5px;font-family:Inter,sans-serif;color:#8d9ac0", "+ 84 more speakers announced");
+
+      // 6. Developer docs
+      const nav6 = (y, t, on) => P(8, y, 74, 11, "font-size:5.5px;line-height:11px;padding:0 5px;border-radius:3px;" + (on ? "background:#eef0ff;color:#4f46e5;font-weight:600" : "color:#555"), t);
+      const t6 =
+        P(0, 0, 374, 24, "border-bottom:1px solid #e8e8ec") +
+        P(12, 7, 0, 0, "font-size:8px;font-weight:700;display:flex;align-items:center;gap:4px", sp("width:9px;height:9px;border-radius:2px;background:#4f46e5;display:block", "") + "Nimbus " + sp("font-weight:400;color:#888", "Docs")) +
+        P(112, 5, 150, 14, "border:1px solid #e1e1e6;border-radius:4px;background:#f8f8fa;font-size:6px;color:#888;line-height:12px;padding:0 6px", "Search documentation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style='border:1px solid #ddd;border-radius:2px;padding:0 2px;font-size:5px'>&#8984;K</span>") +
+        P(286, 9, 0, 0, "font-size:6px;color:#555;display:flex;gap:10px", "<span>Guides</span><span>API</span><span>v2.4</span>") +
+        P(0, 24, 90, 189, "border-right:1px solid #eee;background:#fafafb") +
+        P(8, 31, 0, 0, "font-size:5px;color:#999;font-weight:600;letter-spacing:.06em", "GETTING STARTED") +
+        nav6(41, "Introduction") + nav6(53, "Quickstart", 1) + nav6(65, "Authentication") +
+        P(8, 83, 0, 0, "font-size:5px;color:#999;font-weight:600;letter-spacing:.06em", "GUIDES") +
+        nav6(93, "Webhooks") + nav6(105, "Pagination") + nav6(117, "Error handling") +
+        P(8, 135, 0, 0, "font-size:5px;color:#999;font-weight:600;letter-spacing:.06em", "API REFERENCE") +
+        nav6(145, "Events") + nav6(157, "Customers") + nav6(169, "Invoices") +
+        P(104, 33, 0, 0, "font-size:5.5px;color:#888", "Guides &rsaquo; Getting started") +
+        P(104, 44, 0, 0, "font-size:15px;font-weight:700;letter-spacing:-.02em", "Quickstart") +
+        P(104, 66, 190, 0, W + "font-size:6px;line-height:9px;color:#555", "Send your first event in under five minutes. You will need an API key from the dashboard.") +
+        P(104, 90, 0, 0, "font-size:9px;font-weight:600", "1. Install the SDK") +
+        P(104, 106, 190, 52, "background:#0d1117;border-radius:5px;padding:7px 9px;font-size:5.5px;line-height:9px;color:#e6edf3;white-space:pre", "<span class='f-mono'><span style='color:#7d8590'>$</span> npm install @nimbus/sdk<br><br><span style='color:#ff7b72'>import</span> { Nimbus } <span style='color:#ff7b72'>from</span> <span style='color:#a5d6ff'>'@nimbus/sdk'</span><br><span style='color:#ff7b72'>const</span> nimbus = <span style='color:#ff7b72'>new</span> Nimbus({ apiKey })</span>") +
+        P(104, 168, 0, 0, "font-size:9px;font-weight:600", "2. Track an event") +
+        P(104, 183, 190, 0, W + "font-size:6px;line-height:9px;color:#555", "Call <span class='f-mono' style='background:#f1f1f4;padding:1px 3px;border-radius:2px;font-size:5.5px'>nimbus.track()</span> with a name and properties.") +
+        P(306, 33, 0, 0, "font-size:5px;color:#999;font-weight:600;letter-spacing:.06em", "ON THIS PAGE") +
+        P(306, 44, 0, 0, "font-size:5.8px;line-height:12px;color:#777;border-left:1px solid #e5e5ea;padding-left:7px", sp("color:#4f46e5;font-weight:600", "Install the SDK") + "<br>Track an event<br>Verify in dashboard<br>Next steps");
+
+      // 7. Online store (ceramics)
+      const mug = (x, y, c) =>
+        P(x, y, 38, 32, "", P(0, 0, 28, 32, "background:" + c + ";border-radius:3px 3px 12px 12px") + P(24, 7, 12, 15, "border:3.5px solid " + c + ";border-left:none;border-radius:0 9px 9px 0") + P(0, 0, 28, 6, "background:rgba(0,0,0,.26);border-radius:50%") + P(5, 8, 3, 20, "background:rgba(255,255,255,.22);border-radius:2px"));
+      const prod = (x, y, c, n, p) =>
+        P(x, y, 80, 74, "background:#ece3d5;border-radius:3px", mug(21, 26, c)) +
+        P(x, y + 79, 0, 0, "font-size:5.5px;font-weight:500;color:#2b2118", n) + P(x, y + 88, 0, 0, "font-size:5.5px;color:#7a6c5d", p);
+      const t7 =
+        P(0, 0, 374, 12, "background:#2b2118;color:#efe4d2;font-size:5.5px;text-align:center;line-height:12px", "Free shipping on orders over $75") +
+        P(14, 19, 0, 0, "font-size:10px;font-weight:700;letter-spacing:-.03em", "clay&amp;co") +
+        P(86, 22, 0, 0, "font-size:6px;color:#4a3f35;display:flex;gap:11px", "<span>Shop</span><span style='font-weight:700;color:#111'>Mugs</span><span>Plates</span><span>Vases</span><span>Studio</span>") +
+        P(318, 19, 0, 0, "display:flex;gap:9px;align-items:center;font-size:6px;color:#2b2118", ic("search", 9) + ic("user", 9) + ic("bag", 9) + "1") +
+        P(0, 36, 374, 0, "border-top:1px solid #e3d8c6") +
+        P(14, 44, 0, 0, "font-size:14px;font-weight:600;letter-spacing:-.02em", "Mugs") + P(48, 49, 0, 0, "font-size:6px;color:#8a7d6c", "24 products") +
+        P(262, 47, 0, 0, "font-size:6px;color:#4a3f35;display:flex;gap:10px", "<span>Glaze</span><span>Size</span><span>Sort: Featured</span>") +
+        prod(14, 66, "#c8573a", "Stoneware mug, rust", "$28") + prod(102, 66, "#2e5d6e", "Stoneware mug, lagoon", "$28") + prod(190, 66, "#dccaa2", "Tall latte mug, oat", "$32") + prod(278, 66, "#3a3a3a", "Espresso cup, charcoal", "$24") +
+        prod(14, 170, "#a9b48c", "Stoneware mug, sage", "$28") + prod(102, 170, "#e0a24a", "Stoneware mug, honey", "$28") + prod(190, 170, "#6b4a3a", "Tall latte mug, clay", "$32") + prod(278, 170, "#d9847a", "Espresso cup, blush", "$24");
+
+      // 8. App download page
+      const badge = (x, a, b) => P(x, 126, 62, 20, "background:#0b0b0d;border-radius:4px;color:#fff", P(8, 3, 0, 0, "font-size:3.8px;opacity:.8", a) + P(8, 9, 0, 0, "font-size:7px;font-weight:600;letter-spacing:-.01em", b));
+      const habit = (y, t, done) =>
+        P(6, y, 82, 17, "border:1px solid #eceff5;border-radius:4px;background:#fff", P(5, 4, 8, 8, "border-radius:50%;border:1px solid " + (done ? "#2f6bff;background:#2f6bff" : "#c9d1e0")) + P(18, 4, 0, 0, "font-size:5.5px;font-weight:500;" + (done ? "color:#999;text-decoration:line-through" : "color:#111"), t));
+      const t8 =
+        P(14, 8, 0, 0, "font-size:9px;font-weight:700;letter-spacing:-.03em;display:flex;align-items:center;gap:4px", sp("width:10px;height:10px;border-radius:3px;background:#2f6bff;display:block", "") + "Tally") +
+        P(70, 10, 0, 0, "font-size:6px;color:#4b5775;display:flex;gap:8px", "<span>Features</span><span>Pricing</span><span>Stories</span><span>Blog</span>") +
+        P(190, 6, 0, 0, "font-size:6px;background:#0b0b0d;color:#fff;padding:4px 8px;border-radius:10px;font-weight:500", "Download") +
+        P(14, 42, 0, 0, "font-size:22px;line-height:24px;font-weight:700;letter-spacing:-.04em;color:#0e1b3d", "Build habits<br>that stick.") +
+        P(14, 94, 160, 0, W + "font-size:6.5px;line-height:9.5px;color:#4b5775", "Tally turns small daily actions into streaks you will actually keep. Free on iPhone and Android.") +
+        badge(14, "Download on the", "App Store") + badge(82, "GET IT ON", "Google Play") +
+        P(14, 156, 0, 0, "font-size:6px;color:#0e1b3d;display:flex;align-items:center;gap:4px", sp("color:#f5a524;display:flex;gap:1px", [1, 2, 3, 4, 5].map(() => ic("star", 7)).join("")) + "<b>4.8</b> &middot; 120K ratings") +
+        P(14, 170, 0, 0, "font-size:5.5px;color:#7a86a3", "Editors&apos; Choice &middot; App Store, 2026") +
+        P(236, 22, 104, 200, "background:#0b0b0d;border-radius:17px;padding:3px", "") +
+        P(239, 25, 98, 194, "background:#f7f9fd;border-radius:14px;overflow:hidden",
+          P(0, 0, 98, 14, "font-size:5px;font-weight:600;padding:4px 10px;color:#111", "9:41") +
+          P(8, 16, 0, 0, "font-size:11px;font-weight:700;letter-spacing:-.03em", "Today") + P(8, 30, 0, 0, "font-size:5px;color:#8a93a8", "Thursday, November 5") +
+          P(58, 14, 32, 32, "", '<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="none" stroke="#dfe7fb" stroke-width="3.5"/><circle cx="16" cy="16" r="12" fill="none" stroke="#2f6bff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="52 76" transform="rotate(-90 16 16)"/></svg>') +
+          P(58, 26, 32, 0, "font-size:7px;font-weight:700;text-align:center", "2/4") +
+          habit(52, "Meditate 10 min", 1) + habit(73, "Read 20 pages", 1) + habit(94, "Run 5 km", 0) + habit(115, "Drink water 6/8", 0) + habit(136, "Journal", 0) +
+          P(6, 162, 86, 22, "border-radius:6px;background:#2f6bff;color:#fff;font-size:6px;font-weight:600;text-align:center;line-height:22px", "12 day streak"));
+
+      // 9. Newsletter
+      const post = (x, y, d, t, e) =>
+        P(x, y, 0, 0, "font-size:5.5px;letter-spacing:.08em;color:#b3261e;font-family:Inter,sans-serif;font-weight:600", d) +
+        P(x, y + 9, 108, 0, W + "font-size:11px;line-height:12px;font-weight:600;letter-spacing:-.01em;color:#1c1712", t) +
+        P(x, y + 36, 108, 0, W + "font-size:6px;line-height:8px;color:#6e6455;font-family:Inter,sans-serif", e);
+      const t9 =
+        P(0, 0, 374, 20, "border-bottom:1px solid #e6dccb") +
+        P(14, 5, 0, 0, "font-size:6px;font-family:Inter,sans-serif;color:#6e6455;display:flex;gap:11px", "<span>Archive</span><span>About</span><span>Podcast</span>") +
+        P(290, 4, 0, 0, "font-size:6px;font-family:Inter,sans-serif;color:#1c1712;font-weight:500", "Sign in") +
+        P(0, 28, 374, 0, "text-align:center;font-size:27px;line-height:28px;letter-spacing:-.02em;font-style:italic;font-weight:500;color:#1c1712", "The Margin Note") +
+        P(0, 60, 374, 0, "text-align:center;font-size:8px;color:#4a4034", "Weekly essays on design, money and attention.") +
+        P(88, 76, 138, 16, "border:1px solid #d9cdb8;border-radius:3px;background:#fffdf8;font-family:Inter,sans-serif;font-size:6px;color:#9a8f7c;line-height:14px;padding:0 7px", "you@example.com") +
+        P(230, 76, 56, 16, "background:#b3261e;color:#fff;border-radius:3px;font-family:Inter,sans-serif;font-size:6px;font-weight:600;text-align:center;line-height:16px", "Subscribe") +
+        P(0, 97, 374, 0, "text-align:center;font-family:Inter,sans-serif;font-size:5.5px;color:#8a7f6c", "Join 48,000 readers &middot; Free, every Sunday") +
+        P(14, 112, 346, 0, "border-top:1px solid #1c1712") +
+        P(14, 117, 0, 0, "font-family:Inter,sans-serif;font-size:5.5px;letter-spacing:.14em;font-weight:600;color:#1c1712", "LATEST POSTS") +
+        post(14, 130, "NOV 2", "The case for boring software", "Why the best tools disappear, and what that means for how we judge them.") +
+        post(133, 130, "OCT 26", "Pricing is a story you tell", "Three rewrites of a pricing page and what each one taught us.") +
+        post(252, 130, "OCT 19", "Notes on slow attention", "A month without a feed: what came back and what did not.");
+
+      // 10. Architecture studio
+      const t10 =
+        P(14, 9, 0, 0, "font-size:8px;letter-spacing:.3em;font-weight:500", "HALDEN") +
+        P(204, 10, 0, 0, "font-size:5.5px;letter-spacing:.14em;color:#555;display:flex;gap:13px", "<span>PROJECTS</span><span>STUDIO</span><span>JOURNAL</span><span>CONTACT</span>") +
+        P(14, 28, 346, 112, "background:#d3dadd;overflow:hidden",
+          P(0, 92, 346, 20, "background:#8d8a82") +
+          P(34, 34, 196, 8, "background:#a9825a") +
+          P(40, 42, 180, 50, "background:#b9b5ac") +
+          [0, 1, 2, 3, 4, 5].map((i) => P(48 + i * 29, 48, 22, 14, "background:#33454d") + P(48 + i * 29, 70, 22, 14, "background:#33454d")).join("") +
+          P(232, 16, 62, 76, "background:#8f8b82") +
+          [0, 1, 2].map((i) => P(240 + i * 17, 22, 8, 64, "background:#2b3a40")).join("") +
+          P(300, 52, 40, 40, "background:#cfc9bd") + P(308, 60, 24, 18, "background:#33454d")) +
+        P(14, 146, 0, 0, "font-size:7.5px;font-weight:500;letter-spacing:.02em", "Cedar House") + P(14, 156, 0, 0, "font-size:5.5px;color:#6b6b66", "Hudson Valley, New York &middot; 2026") +
+        P(330, 148, 0, 0, "font-size:6px;color:#6b6b66", "01 / 12") +
+        [["Lakeside Pavilion", "Lake Placid, NY", "2025"], ["Mill Street Lofts", "Kingston, NY", "2024"], ["Harbor Library", "Portland, ME", "2023"]]
+          .map((r, i) => P(14 + i * 118, 174, 110, 0, "border-top:1px solid #1a1a1a") + P(14 + i * 118, 180, 0, 0, "font-size:6.5px;font-weight:500", r[0]) + P(14 + i * 118, 190, 0, 0, "font-size:5.5px;color:#6b6b66", r[1] + " &middot; " + r[2]))
+          .join("");
+
+      // 11. Fitness studio
+      const cls = (y, tm, n, c, sp2) =>
+        P(0, y, 124, 20, "border-top:1px solid #2a2a2a") +
+        P(8, y + 5, 0, 0, "font-size:8px;font-family:Inter,sans-serif;font-weight:600;color:#fff", tm) +
+        P(46, y + 3, 0, 0, "font-size:9px;letter-spacing:.04em;color:#fff", n) + P(46, y + 12, 0, 0, "font-size:5px;font-family:Inter,sans-serif;color:#888", c + " &middot; " + sp2) +
+        P(94, y + 5, 24, 11, "border:1px solid #ff5a1f;color:#ff5a1f;font-size:5.5px;font-family:Inter,sans-serif;font-weight:600;text-align:center;line-height:9px;border-radius:2px", "Book");
+      const t11 =
+        P(0, 0, 374, 22, "border-bottom:1px solid #222") +
+        P(14, 4, 0, 0, "font-size:14px;letter-spacing:.06em;color:#fff;display:flex;gap:4px;align-items:center", sp("width:8px;height:8px;background:#ff5a1f;display:block", "") + "FOUNDRY") +
+        P(100, 8, 0, 0, "font-size:6px;font-family:Inter,sans-serif;color:#aaa;display:flex;gap:12px;font-weight:500", "<span>Classes</span><span>Schedule</span><span>Coaches</span><span>Pricing</span>") +
+        P(304, 5, 0, 0, "font-size:6px;font-family:Inter,sans-serif;font-weight:600;background:#ff5a1f;color:#0c0c0c;padding:4px 8px;border-radius:2px", "Free trial") +
+        P(16, 36, 0, 0, "font-size:7px;font-family:Inter,sans-serif;letter-spacing:.14em;color:#ff5a1f;font-weight:600", "SMALL-GROUP STRENGTH COACHING") +
+        P(16, 46, 0, 0, "font-size:40px;line-height:38px;letter-spacing:.005em;color:#fff", "BUILT FOR<br>REAL STRENGTH.") +
+        P(16, 136, 150, 0, W + "font-size:6.5px;font-family:Inter,sans-serif;line-height:9.5px;color:#a8a8a8", "Programmed classes, certified coaches and a floor that never feels crowded. Three studios in Austin.") +
+        P(16, 168, 0, 0, "font-size:7px;font-family:Inter,sans-serif;font-weight:600;background:#ff5a1f;color:#0c0c0c;padding:6px 11px;border-radius:2px", "Book a free class") +
+        P(16, 192, 0, 0, "font-size:6px;font-family:Inter,sans-serif;color:#888;display:flex;gap:14px", "<span><b style='color:#fff'>4.9</b> Google</span><span><b style='color:#fff'>12</b> coaches</span><span><b style='color:#fff'>3</b> studios</span>") +
+        P(234, 34, 124, 168, "background:#171717;border:1px solid #2a2a2a;border-radius:4px;overflow:hidden",
+          P(8, 7, 0, 0, "font-size:7px;font-family:Inter,sans-serif;font-weight:600;color:#fff", "Today's classes") + P(8, 17, 0, 0, "font-size:5px;font-family:Inter,sans-serif;color:#888", "Foundry East &middot; Thursday") +
+          cls(30, "6:00", "STRENGTH 45", "Coach Dan", "3 spots") + cls(52, "7:30", "HIIT 30", "Coach Mia", "5 spots") + cls(74, "12:15", "MOBILITY", "Coach Sam", "8 spots") +
+          cls(96, "5:30", "POWERLIFTING", "Coach Dan", "2 spots") + cls(118, "6:45", "STRENGTH 60", "Coach Lee", "4 spots") + cls(140, "8:00", "CORE 20", "Coach Mia", "9 spots"));
+
+      const works = [
+        { bg: "#ffffff", font: "f-inter", fav: "#5b5bd6", name: "SaaS homepage", html: t1 },
+        { bg: "#fafaf7", font: "f-garamond", fav: "#111111", name: "Designer portfolio", html: t2 },
+        { bg: "#14231d", font: "f-play", fav: "#c9a45c", name: "Restaurant reservations", html: t3 },
+        { bg: "#f5d547", font: "f-archivo", fav: "#111111", name: "Podcast site", html: t4 },
+        { bg: "#0b1530", font: "f-oswald", fav: "#c6f432", name: "Conference registration", html: t5 },
+        { bg: "#ffffff", font: "f-inter", fav: "#4f46e5", name: "Developer docs", html: t6 },
+        { bg: "#f6f0e8", font: "f-inter", fav: "#c8573a", name: "Online store", html: t7 },
+        { bg: "#e9f0fb", font: "f-inter", fav: "#2f6bff", name: "App download page", html: t8 },
+        { bg: "#f7f1e6", font: "f-garamond", fav: "#b3261e", name: "Newsletter landing", html: t9 },
+        { bg: "#efeeea", font: "f-inter", fav: "#8f8b82", name: "Architecture studio", html: t10 },
+        { bg: "#0c0c0c", font: "f-league", fav: "#ff5a1f", name: "Fitness studio", html: t11 },
+      ];
+
+      /* ---------- gallery cells (11 cards around the main card at column 1, row 1) ---------- */
+      const GRID_LEFT = 152, GRID_TOP = 130, PITCH_X = 414, PITCH_Y = 287;
+      const cells = [];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 4; c++) {
+          if (c === 1 && r === 1) continue;
+          cells.push({ c, r, d: Math.hypot(c - 1, r - 1), idx: cells.length });
+        }
+      }
+      cells.sort((a, b) => a.d - b.d || a.idx - b.idx);
+      const gridEl = $("grid");
+      cells.forEach((cell, rank) => {
+        const w = works[rank];
+        const el = document.createElement("div");
+        el.className = "cell";
+        el.id = "cell" + rank;
+        el.style.left = GRID_LEFT + cell.c * PITCH_X + "px";
+        el.style.top = GRID_TOP + cell.r * PITCH_Y + "px";
+        el.innerHTML =
+          '<div class="card"><div class="thumb ' + w.font + '" style="background:' + w.bg + '">' + w.html + "</div></div>" +
+          '<div class="lab"><i style="background:' + w.fav + '"></i><span>' + w.name + "</span></div>";
+        gridEl.appendChild(el);
+      });
+
+      /* ---------- static start state ---------- */
+      gsap.set("#morph", { xPercent: -50, yPercent: -50, scaleX: 0 });
+      gsap.set("#title", { xPercent: -50, yPercent: -50, transformOrigin: "0% 50%" });
+      gsap.set("#endpill", { xPercent: -50, yPercent: -50, scaleX: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      // fromTo with explicit start values; start state of untouched elements lives in CSS.
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+
+      /* 1. headline, word groups rise in (0.2 - 0.9) */
+      [0, 1, 2, 3].forEach((i) => {
+        F("#title span:nth-child(" + (i + 1) + ")", { opacity: 0, y: 19 }, { opacity: 1, y: 0, duration: 0.4, ease: EXPO }, 0.2 + i * 0.1);
+      });
+
+      /* 2. line expands from the title centre (1.1 - 1.3) */
+      F("#morph", { scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: EIO }, 1.1);
+
+      /* 3. line thickens into a capsule, headline turns white (1.3 - 1.6) */
+      F("#morph", { height: 3, borderRadius: 1.5 }, { height: 96, borderRadius: 48, duration: 0.3, ease: EXPO }, 1.3);
+      F("#title", { color: "#111111" }, { color: "#ffffff", duration: 0.04, ease: "none" }, 1.33);
+
+      /* 4. capsule becomes the input box (1.7 - 2.1) */
+      F("#morph", { width: 960, height: 96, borderRadius: 48 }, { width: 920, height: 88, borderRadius: 44, duration: 0.4, ease: EIO }, 1.7);
+      F("#title", { xPercent: -50, x: 0, scale: 1 }, { xPercent: 0, x: -368, scale: 26 / 64, duration: 0.4, ease: EIO }, 1.7);
+      F(["#av", "#bAtt", "#bSend"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: EIO }, 1.8);
+      F("#hint", { opacity: 0 }, { opacity: 0.2, duration: 0.3, ease: EIO }, 2.1);
+
+      /* 5. text cleared, then typed (2.3 - 4.0) */
+      F("#title", { opacity: 1 }, { opacity: 0, duration: 0.001, ease: "none" }, 2.3);
+      typeAt.forEach((t, i) => {
+        tl.set("#typed .ch:nth-child(" + (i + 1) + ")", { display: "block" }, t);
+      });
+      [2.3, 2.8, 3.3, 3.8, 4.3].forEach((t, i) => {
+        tl.set("#cur", { opacity: i % 2 === 0 ? 1 : 0 }, t);
+      });
+
+      /* 6. send pressed (4.2) */
+      F("#bSend", { scale: 1 }, { scale: 0.9, duration: 0.06, ease: "power2.out" }, 4.14);
+      F("#bSend", { scale: 0.9 }, { scale: 1, duration: 0.2, ease: BACK }, 4.2);
+      tl.to("#hint", { opacity: 0, duration: 0.25, ease: EIO }, 4.2);
+
+      /* 7. input box morphs into a browser window (4.4 - 5.3) */
+      F(["#typed", "#av", "#bAtt", "#bSend"], { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "none" }, 4.4);
+      F(
+        "#morph",
+        { width: 920, height: 88, borderRadius: 44 },
+        { width: 1440, height: 820, borderRadius: 18, duration: 0.75, ease: EIO },
+        4.55
+      );
+      // colour flips early, while the shape is still small, so the growth never passes through a large mid-grey slab
+      F(
+        "#morph",
+        { backgroundColor: "#111111", borderColor: "rgba(229,229,229,0)", boxShadow: "0px 0px 0px 0px rgba(0,0,0,0)" },
+        { backgroundColor: "#f6f1e8", borderColor: "rgba(29,22,18,0.10)", boxShadow: "0px 30px 80px 0px rgba(0,0,0,0.12)", duration: 0.3, ease: EXPO },
+        4.55
+      );
+      F("#tbar", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: EIO }, 4.85);
+
+      /* 8. generated page blocks (5.2 - 6.2) */
+      const blocks = [
+        ["#pbar", 5.00],
+        ["#pnav", 5.00],
+        ["#ph1", 5.06],
+        ["#phero", 5.10],
+        ["#psub", 5.12],
+        ["#pbtn", 5.18],
+        ["#prate", 5.22],
+        ["#phead", 5.26],
+        ["#pprods .pp:nth-child(1)", 5.30],
+        ["#pprods .pp:nth-child(2)", 5.35],
+        ["#pprods .pp:nth-child(3)", 5.40],
+        ["#pprods .pp:nth-child(4)", 5.45],
+        ["#pcards", 5.50],
+      ];
+      blocks.forEach(([sel, at]) => {
+        F(sel, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, at);
+      });
+
+      /* 9. slow push-in (6.2 - 7.0) */
+      F("#stage", { scale: 1 }, { scale: 1.03, duration: 0.8, ease: "none" }, 6.2);
+
+      /* 10. window shrinks to a gallery card (7.0 - 7.8) */
+      F("#grp", { scale: 1, x: 0, y: 0 }, { scale: 0.26, x: -207, y: -16.5, duration: 0.8, ease: EXPO }, 7.0);
+      tl.to("#tbar", { opacity: 0, duration: 0.3, ease: EIO }, 7.0);
+      F("#mainlab", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: EIO }, 7.3);
+
+      /* 11. the other eleven cards appear around it (7.6 - 8.6) */
+      cells.forEach((_, rank) => {
+        F("#cell" + rank, { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.5, ease: EXPO }, 7.6 + rank * 0.04);
+      });
+      F("#stage", { scale: 1.03, x: 0, y: 0 }, { scale: 1.08, x: -24, y: -14, duration: 1.0, ease: "none" }, 7.6);
+
+      /* 12. bookend: gallery leaves, the opening line returns and thickens into the wordmark pill (8.8 - 9.9) */
+      F("#stage", { opacity: 1, scale: 1.08 }, { opacity: 0, scale: 1.02, duration: 0.5, ease: EIO }, 8.8);
+      F("#endpill", { scaleX: 0 }, { scaleX: 1, duration: 0.2, ease: EIO }, 9.15);
+      F("#endpill", { height: 3, borderRadius: 1.5 }, { height: 112, borderRadius: 56, duration: 0.3, ease: EXPO }, 9.35);
+      F("#wm", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: EXPO }, 9.42);
+      F("#wmsub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 9.65);
+      // residual drift on the hold
+      F("#endpill", { scale: 1 }, { scale: 1.025, duration: 1.4, ease: "none" }, 9.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

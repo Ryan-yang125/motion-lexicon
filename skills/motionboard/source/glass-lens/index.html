@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "PF"; font-weight: 400; src: local("PingFang SC"), local("PingFangSC-Regular"); }
+      @font-face { font-family: "PF"; font-weight: 500; src: local("PingFangSC-Medium"), local("PingFang SC Medium"), local("PingFang SC"); }
+      @font-face { font-family: "PF"; font-weight: 600; src: local("PingFangSC-Semibold"), local("PingFang SC Semibold"), local("PingFang SC"); }
+      @font-face { font-family: "Song"; font-weight: 400; src: local("Songti SC"), local("STSongti-SC-Regular"); }
+
+      :root {
+        --bg: #e9eaee;
+        --ink: #111114;
+        --sec: #8e8e93;
+        --sep: #e8e8ec;
+        --acc: #ff3b5c;
+        --font-ui: "Inter", "PF", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: radial-gradient(1300px 900px at 50% 38%, #f6f7f9 0%, #e8e9ed 62%, #dddfe5 100%);
+        font-family: var(--font-ui); color: var(--ink); -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .ic { display: block; flex: none; }
+
+      /* ---------- device ---------- */
+      #stage { z-index: 1; overflow: hidden; }
+      #cam { overflow: visible; }
+      #phone {
+        position: absolute; left: 747px; top: 91px; width: 426px; height: 898px; border-radius: 68px;
+        background: linear-gradient(145deg, #4a4b51 0%, #1b1c20 38%, #34353b 100%);
+        box-shadow: 0 50px 90px rgba(30, 35, 60, 0.26), 0 10px 22px rgba(30, 35, 60, 0.2), inset 0 0 0 1.5px rgba(255, 255, 255, 0.14);
+      }
+      .btn { position: absolute; width: 4px; border-radius: 2px; background: #2b2c31; }
+      #bez { position: absolute; left: 5px; top: 5px; width: 416px; height: 888px; border-radius: 63px; background: #000; }
+      #screen { position: absolute; left: 12px; top: 12px; width: 402px; height: 874px; border-radius: 56px; overflow: hidden; background: #fff; }
+      #island { position: absolute; left: 151px; top: 23px; width: 124px; height: 36px; border-radius: 18px; background: #000; z-index: 3; }
+      #mainc { position: absolute; left: 0; top: 0; width: 402px; height: 874px; overflow: hidden; }
+
+      /* ---------- app ---------- */
+      .scr { position: absolute; left: 0; top: 0; width: 402px; height: 874px; overflow: hidden; background: #fff; z-index: 0; }
+      .dock { position: absolute; left: 0; top: 0; width: 402px; height: 874px; z-index: 1; }
+      .scrNew { z-index: 2; }
+      .scrNP { z-index: 3; }
+      .sbar { position: absolute; left: 0; top: 0; width: 402px; height: 54px; z-index: 5; color: var(--ink); }
+      .sbar.bgw { background: #fff; }
+      .sbar.lt { color: #fff; }
+      .sbt { position: absolute; left: 50px; top: 17px; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+      .sbr { position: absolute; right: 34px; top: 20px; display: flex; align-items: center; gap: 6px; }
+      .sbr svg { display: block; }
+
+      .art { position: relative; flex: none; overflow: hidden; display: flex; align-items: flex-end; box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12); }
+      .art b { display: block; padding: 0 0 0.45em 0.55em; font-weight: 700; line-height: 1.02; letter-spacing: -0.03em; white-space: pre; }
+
+      .hs, .lc { position: absolute; left: 0; top: 0; width: 402px; padding-top: 54px; }
+      .hhead { height: 64px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+      .hhead h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; }
+      .avt { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(140deg, #ff9a6b, #c64ad8); color: #fff; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+      .shead { display: flex; align-items: center; gap: 2px; padding: 0 20px; height: 40px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-top: 10px; }
+      .shead .ic { color: var(--sec); margin-top: 2px; }
+      .shead .sa { margin-left: auto; font-size: 15px; font-weight: 500; color: var(--acc); letter-spacing: 0; }
+      .cards { display: flex; gap: 12px; padding: 4px 0 0 20px; }
+      .card { width: 236px; flex: none; }
+      .card .eb { font-size: 11px; font-weight: 600; letter-spacing: 0.03em; color: var(--sec); text-transform: uppercase; line-height: 14px; }
+      .card .ct { font-size: 16px; font-weight: 500; line-height: 21px; margin-top: 1px; }
+      .card .cs { font-size: 16px; color: var(--sec); line-height: 21px; margin-bottom: 9px; white-space: nowrap; }
+      .rp { display: flex; gap: 12px; padding: 4px 0 0 20px; }
+      .rpi { width: 112px; flex: none; }
+      .rpi b { display: block; font-size: 13.5px; font-weight: 500; margin-top: 7px; line-height: 17px; white-space: nowrap; }
+      .rpi span { display: block; font-size: 13px; color: var(--sec); line-height: 17px; }
+      .srow { height: 58px; margin: 0 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--sep); }
+      .srow .tx { flex: 1; min-width: 0; }
+      .srow .tx b { display: block; font-size: 16px; font-weight: 400; line-height: 20px; }
+      .srow .tx span { display: block; font-size: 14px; color: var(--sec); line-height: 18px; }
+      .srow .ic { color: var(--sec); }
+      .fadeb { position: absolute; left: 0; top: 690px; width: 402px; height: 184px; background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.96) 62%); z-index: 1; }
+
+      .lhead { height: 64px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+      .lhead h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.025em; }
+      .plusBtn { width: 40px; height: 40px; border-radius: 50%; background: #f1f1f4; color: var(--acc); display: flex; align-items: center; justify-content: center; }
+      .lrow { height: 48px; margin-left: 20px; padding-right: 20px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--sep); font-size: 20px; letter-spacing: -0.01em; }
+      .lrow .ci { color: var(--acc); }
+      .lrow .chev { margin-left: auto; color: #c4c4c9; }
+      .grid2 { display: flex; flex-wrap: wrap; gap: 14px 14px; padding: 6px 20px 0; }
+      .gi { width: 171px; }
+      .gi b { display: block; font-size: 15px; font-weight: 500; margin-top: 7px; line-height: 19px; }
+      .gi span { display: block; font-size: 14px; color: var(--sec); line-height: 18px; }
+      .rip { position: absolute; left: 342px; top: 66px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 59, 92, 0.22); opacity: 0; z-index: 3; }
+
+      /* dock */
+      .minip { position: absolute; left: 16px; top: 726px; width: 370px; height: 56px; border-radius: 28px; background: rgba(250, 250, 252, 0.88); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); box-shadow: 0 6px 20px rgba(20, 25, 50, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 0 0 0.5px rgba(0, 0, 0, 0.07); display: flex; align-items: center; padding: 0 10px 0 8px; gap: 10px; z-index: 2; }
+      .minip .mt { flex: 1; }
+      .minip .mt b { display: block; font-size: 14px; font-weight: 600; line-height: 17px; }
+      .minip .mt span { display: block; font-size: 12.5px; color: var(--sec); line-height: 16px; }
+      .minip .mi { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; color: var(--ink); }
+      .tabbar { position: absolute; left: 16px; top: 792px; width: 296px; height: 64px; border-radius: 32px; background: rgba(247, 247, 249, 0.84); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); box-shadow: 0 6px 20px rgba(20, 25, 50, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.85), 0 0 0 0.5px rgba(0, 0, 0, 0.07); z-index: 2; }
+      .srch { position: absolute; left: 322px; top: 792px; width: 64px; height: 64px; border-radius: 32px; background: rgba(247, 247, 249, 0.84); -webkit-backdrop-filter: blur(22px) saturate(1.5); backdrop-filter: blur(22px) saturate(1.5); box-shadow: 0 6px 20px rgba(20, 25, 50, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.85), 0 0 0 0.5px rgba(0, 0, 0, 0.07); display: flex; align-items: center; justify-content: center; color: #55555b; z-index: 2; }
+      .tb { position: absolute; top: 4px; width: 72px; height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #6f6f75; font-size: 10px; font-weight: 500; letter-spacing: 0.01em; }
+      .tb0 { color: #ff3b5c; }
+      .hl { position: absolute; top: 4px; width: 72px; height: 56px; border-radius: 28px; background: rgba(120, 120, 128, 0.15); }
+      .hlH { left: 4px; }
+      .hlL { left: 220px; opacity: 0; }
+
+      /* new playlist sheet */
+      .scrNew { background: #f2f2f7; }
+      .nhead { position: absolute; left: 0; top: 56px; width: 402px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+      .nhead b { font-weight: 600; }
+      .nhead .cx { position: absolute; left: 20px; color: var(--acc); }
+      .nhead .crt { position: absolute; right: 20px; color: var(--acc); font-weight: 600; }
+      .ph { position: absolute; left: 135px; top: 124px; width: 132px; height: 132px; border-radius: 16px; background: linear-gradient(150deg, #ff8e6d, #8a3fd9); display: flex; align-items: center; justify-content: center; color: #fff; }
+      .ncard { position: absolute; left: 16px; width: 370px; border-radius: 12px; background: #fff; }
+      .c1 { top: 284px; height: 52px; padding: 0 16px; display: flex; align-items: center; font-size: 17px; }
+      .c2 { top: 348px; height: 116px; padding: 14px 16px; font-size: 15px; line-height: 22px; letter-spacing: -0.005em; }
+      .ln { white-space: nowrap; }
+      .cr { display: inline-block; width: 0; height: 19px; vertical-align: -4px; position: relative; opacity: 0; }
+      .cr::after { content: ""; position: absolute; left: -1px; top: 0; width: 2px; height: 19px; border-radius: 1px; background: #0a84ff; }
+      .c3 { top: 484px; height: 156px; }
+      .c4 { top: 660px; height: 52px; padding: 0 16px; display: flex; align-items: center; gap: 10px; font-size: 17px; color: var(--acc); }
+      .nr { position: relative; height: 52px; padding: 0 16px; display: flex; align-items: center; font-size: 17px; }
+      .nr + .nr::before { content: ""; position: absolute; left: 16px; right: 0; top: 0; height: 1px; background: var(--sep); }
+      .tgl { position: absolute; right: 16px; top: 10.5px; width: 51px; height: 31px; border-radius: 16px; background: #e4e4e9; }
+      .tgl.on { background: #34c759; }
+      .tgk { position: absolute; left: 2px; top: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), 0 0 0 0.5px rgba(0, 0, 0, 0.06); }
+      .tgl.on .tgk { left: 22px; }
+
+      /* now playing */
+      .scrNP { background: linear-gradient(180deg, #4f2b82 0%, #2e1a58 52%, #1b1036 100%); color: #fff; }
+      .np { position: absolute; }
+      .circ { position: absolute; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); display: flex; align-items: center; justify-content: center; }
+      .track { position: absolute; left: 30px; top: 574px; width: 342px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.26); }
+      .fill { position: absolute; left: 30px; top: 574px; width: 342px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.9); transform-origin: 0 50%; }
+      .thumb { position: absolute; top: 570px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35); }
+      .odo { position: absolute; top: 590px; width: 48px; height: 16px; overflow: hidden; font-size: 12px; font-weight: 500; color: rgba(255, 255, 255, 0.62); font-variant-numeric: tabular-nums; }
+      .odin span { display: block; height: 16px; line-height: 16px; }
+      .vtrack { position: absolute; left: 60px; top: 748px; width: 282px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.26); }
+      .vfill { position: absolute; left: 60px; top: 748px; width: 176px; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.85); }
+
+      /* ---------- glass lens ---------- */
+      .lens { position: absolute; left: 0; top: 0; z-index: 20; opacity: 0; box-shadow: 0 10px 26px rgba(15, 20, 50, 0.3), 0 2px 6px rgba(0, 0, 0, 0.16), 0 0 0 0.5px rgba(255, 255, 255, 0.35); }
+      .lclip { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; background: #fff; }
+      .zl { position: absolute; left: 0; top: 0; width: 100%; height: 100%; filter: saturate(1.2) contrast(1.03); }
+      .zs { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .zin { position: absolute; left: 0; top: 0; overflow: hidden; }
+      .lsheen {
+        position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
+        background:
+          radial-gradient(120% 150% at 28% -10%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 48%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 42%, rgba(255, 255, 255, 0.12));
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.95),
+          inset 0 -1px 1px rgba(255, 255, 255, 0.55),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+          inset 0 12px 16px -12px rgba(255, 255, 255, 0.75),
+          inset 0 -12px 18px -8px rgba(255, 255, 255, 0.5),
+          inset 3px 0 6px -3px rgba(255, 90, 140, 0.35),
+          inset -3px 0 6px -3px rgba(70, 150, 255, 0.4);
+      }
+      .lrim {
+        position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; padding: 1.2px;
+        background: conic-gradient(from 25deg, rgba(255, 70, 120, 0.7), rgba(255, 190, 60, 0.5), rgba(80, 230, 160, 0.55), rgba(60, 150, 255, 0.7), rgba(180, 90, 255, 0.6), rgba(255, 70, 120, 0.7));
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+      }
+
+      /* ---------- finale ---------- */
+      #final { z-index: 2; opacity: 0; }
+      .fwm { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); font-weight: 600; font-size: 250px; line-height: 1; letter-spacing: -0.05em; color: #101114; padding-bottom: 14px; opacity: 0; }
+      #vig { z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, rgba(30, 35, 60, 0) 58%, rgba(30, 35, 60, 0.12) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.8" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="10.8" data-track-index="0">
+        <div id="cam" class="full" data-layout-allow-overlap>
+          <div id="phone" data-layout-allow-overlap>
+            <div class="btn" style="left:-3px;top:132px;height:30px"></div>
+            <div class="btn" style="left:-3px;top:190px;height:58px"></div>
+            <div class="btn" style="left:-3px;top:262px;height:58px"></div>
+            <div class="btn" style="right:-3px;top:224px;height:96px"></div>
+            <div id="bez"></div>
+            <div id="screen" data-layout-allow-overlap data-layout-ignore></div>
+            <div id="island"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="final" class="clip full" data-start="0" data-duration="10.8" data-track-index="1">
+        <div id="finalc" class="full" data-layout-allow-overlap></div>
+      </div>
+
+      <div id="vig" class="clip full" data-start="0" data-duration="10.8" data-track-index="2"></div>
+    </div>
+
+    <script>
+      const EXPO = "expo.out";
+      const SW = 402, SH = 874;
+      const ACC = "#ff3b5c", MUTE = "#6f6f75";
+
+      /* ---------- icons (24px grid, lucide style) ---------- */
+      const ICN = {
+        home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/>',
+        grid: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>',
+        radio: '<circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2"/>',
+        music: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+        play: '<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>',
+        pause: '<rect x="5.5" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" stroke="none"/><rect x="14" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" stroke="none"/>',
+        next: '<path d="M3 5.5v13l9-6.5zM12 5.5v13l9-6.5z" fill="currentColor"/>',
+        prev: '<path d="M21 5.5v13l-9-6.5zM12 5.5v13l-9-6.5z" fill="currentColor"/>',
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        chev: '<path d="m9 6 6 6-6 6"/>',
+        down: '<path d="m6 9 6 6 6-6"/>',
+        dots: '<circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/>',
+        star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+        listm: '<path d="M3 6h11M3 11h11M3 16h6"/><path d="M19 15V5l-3.5 1"/><circle cx="17" cy="17" r="2.5"/>',
+        mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+        album: '<rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><circle cx="12" cy="12" r="4"/>',
+        user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20c.8-3.6 3.8-5.5 7.5-5.5s6.7 1.9 7.5 5.5"/>',
+        tag: '<path d="M4 4h8l8 8-8 8-8-8z"/><circle cx="8.5" cy="8.5" r="1"/>',
+        dl: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v8M8.5 12.5 12 16l3.5-3.5"/>',
+        quote: '<path d="M4 5h16v11H9.5L4 20z"/><path d="M8 9.5h8M8 12.5h5"/>',
+        airplay: '<path d="M5 17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-1"/><path d="m12 15 5 6H7z"/>',
+        queue: '<path d="M4 6h16M4 12h16M4 18h9"/><path d="m16 15 5 3-5 3z" fill="currentColor"/>',
+        spl: '<path d="M11 5 6 9H3v6h3l5 4z"/>',
+        sph: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6a8 8 0 0 1 0 12"/>',
+        cam: '<path d="M4 8h3l1.5-2.5h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+      };
+      const I = (n, s, sw) => '<svg class="ic" viewBox="0 0 24 24" width="' + (s || 22) + '" height="' + (s || 22) + '" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.7) + '" stroke-linecap="round" stroke-linejoin="round">' + ICN[n] + "</svg>";
+
+      const SIG = '<svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>';
+      const WIFI = '<svg width="17" height="12" viewBox="0 0 17 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 4.2a10 10 0 0 1 14 0"/><path d="M4.2 7a6 6 0 0 1 8.6 0"/><circle cx="8.5" cy="10" r="1" fill="currentColor" stroke="none"/></svg>';
+      const BATT = '<svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="23" height="12" rx="3.8" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.6" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2z" fill="currentColor" opacity=".45"/></svg>';
+      const sbar = (c) => '<div class="sbar ' + (c || "") + '"><span class="sbt">9:41</span><span class="sbr">' + SIG + WIFI + BATT + "</span></div>";
+
+      /* ---------- album art (typeset covers) ---------- */
+      const ART = {
+        chill: ["radial-gradient(120% 90% at 15% 8%, #ffd2a3 0%, rgba(255,210,163,0) 55%), linear-gradient(160deg,#ff7d6e 0%,#8a3fd9 100%)", "#fff", "Chill\nMix"],
+        neon: ["radial-gradient(80% 50% at 50% 104%, rgba(255,160,120,.95), rgba(255,160,120,0) 70%), linear-gradient(180deg,#1c1245 0%,#5a2190 55%,#d0508f 100%)", "#fff", "Midnight\nTransit"],
+        glass: ["linear-gradient(135deg,#dcf4f0,#82d2c6 50%,#2a7f8c)", "#0d3a40", "Glass-\nhouse"],
+        slow: ["linear-gradient(200deg,#f7e4c6,#e39e6b 58%,#8d3c2e)", "#fff", "Slow\nFade"],
+        tidal: ["linear-gradient(160deg,#0f2d52,#1f6fb5 60%,#9bd4ff)", "#fff", "Tidal\nHours"],
+        orch: ["linear-gradient(150deg,#f7d84a,#b8d94a 50%,#3f9a52)", "#1b3a12", "Orchard\nLight"],
+        moon: ["linear-gradient(180deg,#f4efe4,#e9e1cf)", "#1a1a1a", "Paper\nMoon"],
+        stat: ["repeating-linear-gradient(90deg,#1d1d20 0 10px,#2b2b30 10px 20px)", "#fff", "Static\nBloom"],
+        dry: ["linear-gradient(170deg,#ffb86b,#ff6a4d 60%,#9c2f3b)", "#fff", "Dry\nSeason"],
+        open: ["linear-gradient(160deg,#cfe8ff,#6aa7ff 55%,#2b4fd6)", "#fff", "Open\nWater"],
+      };
+      const art = (k, s, r) => {
+        const a = ART[k];
+        return '<div class="art" style="width:' + s + "px;height:" + s + "px;border-radius:" + r + "px;background:" + a[0] + ";color:" + a[1] + '">' + (s >= 80 ? '<b style="font-size:' + Math.round(s * 0.125) + 'px">' + a[2] + "</b>" : "") + "</div>";
+      };
+
+      /* ---------- Home (Listen Now) ---------- */
+      const card = (k, eb, t, sub) => '<div class="card"><div class="eb">' + eb + '</div><div class="ct">' + t + '</div><div class="cs">' + sub + "</div>" + art(k, 236, 12) + "</div>";
+      const SONGS = [
+        ["glass", "Glasshouse", "Kiro & Ode"], ["slow", "Slow Fade", "Mara Bell"], ["tidal", "Tidal Hours", "The Wren Set"],
+        ["orch", "Orchard Light", "Jonah Reyes"], ["moon", "Paper Moon", "Ida Vance"], ["stat", "Static Bloom", "Halden"],
+      ];
+      const srow = (s) => '<div class="srow">' + art(s[0], 46, 6) + '<div class="tx"><b>' + s[1] + "</b><span>" + s[2] + "</span></div>" + I("dots", 20, 1.7) + "</div>";
+      const homeHTML = () =>
+        '<div class="hs">' +
+        '<div class="hhead"><h1>Listen Now</h1><div class="avt">AK</div></div>' +
+        '<div class="shead">Top Picks for You' + I("chev", 20, 2) + "</div>" +
+        '<div class="cards">' + card("chill", "Made for You", "Chill Mix", "Kiro, Ode, Mara Bell and more") + card("neon", "New Release", "Neon Hours", "Lena Park") + card("glass", "Updated Today", "Glasshouse Sessions", "Kiro & Ode") + "</div>" +
+        '<div class="shead" style="margin-top:14px">Recently Played' + I("chev", 20, 2) + "</div>" +
+        '<div class="rp"><div class="rpi">' + art("neon", 112, 10) + "<b>Neon Hours</b><span>Lena Park</span></div>" +
+        '<div class="rpi">' + art("dry", 112, 10) + "<b>Dry Season</b><span>Cass Moreno</span></div>" +
+        '<div class="rpi">' + art("open", 112, 10) + "<b>Open Water</b><span>Halden</span></div>" +
+        '<div class="rpi">' + art("slow", 112, 10) + "<b>Slow Fade</b><span>Mara Bell</span></div></div>" +
+        '<div class="shead" style="margin-top:16px">Songs for You<span class="sa">See All</span></div>' +
+        SONGS.map(srow).join("") +
+        "</div>" + '<div class="fadeb"></div>' + sbar("bgw");
+
+      /* ---------- Library ---------- */
+      const LIBR = [["listm", "Playlists"], ["mic", "Artists"], ["album", "Albums"], ["music", "Songs"], ["user", "Made for You"], ["tag", "Genres"], ["dl", "Downloaded"]];
+      const gi = (k, t, a) => '<div class="gi">' + art(k, 171, 10) + "<b>" + t + "</b><span>" + a + "</span></div>";
+      const libHTML = () =>
+        '<div class="lc"><div class="lhead"><h1>Library</h1><div class="plusBtn">' + I("plus", 22, 2) + "</div></div>" +
+        LIBR.map((r) => '<div class="lrow"><span class="ci" style="display:flex">' + I(r[0], 24, 1.6) + "</span>" + r[1] + '<span class="chev">' + I("chev", 20, 2) + "</span></div>").join("") +
+        '<div class="shead" style="margin-top:14px">Recently Added</div>' +
+        '<div class="grid2">' + gi("neon", "Neon Hours", "Lena Park") + gi("glass", "Glasshouse", "Kiro &amp; Ode") + gi("tidal", "Tidal Hours", "The Wren Set") + gi("dry", "Dry Season", "Cass Moreno") + "</div></div>" +
+        '<div class="fadeb"></div><div class="rip"></div>' + sbar("bgw");
+
+      /* ---------- New Playlist sheet ---------- */
+      const nrow = (label, on, cls) => '<div class="nr"><span>' + label + '</span><div class="tgl ' + (on ? "on " : "") + (cls ? "tgA" : "") + '"><div class="tgk ' + (cls ? "tgkA" : "") + '"></div></div></div>';
+      const newHTML = () =>
+        sbar("") +
+        '<div class="nhead"><span class="cx">Cancel</span><b>New Playlist</b><span class="crt">Create</span></div>' +
+        '<div class="ph">' + I("cam", 34, 1.5) + "</div>" +
+        '<div class="ncard c1">Night Drive Essentials</div>' +
+        '<div class="ncard c2">' +
+        '<div class="ln">Late night drives,<i class="cr cr1"></i> slow synths and rain</div>' +
+        '<div class="ln">on the windshield.<i class="cr cr2"></i> New tracks every</div>' +
+        '<div class="ln">Friday, picked by the Reverb<i class="cr cr3"></i> editors</div>' +
+        '<div class="ln">in Brooklyn.</div></div>' +
+        '<div class="ncard c3">' + nrow("Public Playlist", false, true) + nrow("Allow Collaboration", false, false) + nrow("Show on Profile", true, false) + "</div>" +
+        '<div class="ncard c4">' + I("plus", 20, 2) + "Add Music</div>";
+
+      /* ---------- Now Playing ---------- */
+      const EL = ["0:41", "0:57", "1:13", "1:29", "1:45", "2:01", "2:21", "2:41"];
+      const RE = ["-3:02", "-2:46", "-2:30", "-2:14", "-1:58", "-1:42", "-1:22", "-1:02"];
+      const odo = (cls, arr, pos) => '<div class="odo" style="' + pos + '"><div class="odin ' + cls + '">' + arr.map((s) => "<span>" + s + "</span>").join("") + "</div></div>";
+      const X0 = 30 + 342 * (41 / 223), X1 = 30 + 342 * (161 / 223), TY = 576.5;
+      const npHTML = () =>
+        sbar("lt") +
+        '<div class="np" style="left:0;top:62px;width:402px;text-align:center"><div style="font-size:11px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.6)">PLAYING FROM LIBRARY</div><div style="font-size:14px;font-weight:600;margin-top:2px">Night Drive Essentials</div></div>' +
+        '<div class="circ" style="left:24px;top:62px">' + I("down", 20, 2) + "</div>" +
+        '<div class="circ" style="right:24px;top:62px">' + I("dots", 20, 1.7) + "</div>" +
+        '<div class="np" style="left:30px;top:116px;box-shadow:0 22px 40px rgba(10,5,30,.45);border-radius:14px">' + art("neon", 342, 14) + "</div>" +
+        '<div class="np" style="left:30px;top:482px"><div style="font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:27px">Midnight Transit</div><div style="font-size:20px;color:rgba(255,255,255,.62);line-height:26px;margin-top:1px">Lena Park</div></div>' +
+        '<div class="circ" style="right:76px;top:488px">' + I("star", 17, 1.8) + "</div>" +
+        '<div class="circ" style="right:30px;top:488px">' + I("dots", 18, 1.7) + "</div>" +
+        '<div class="track"></div><div class="fill" style="transform:scaleX(' + (41 / 223).toFixed(4) + ')"></div>' +
+        '<div class="thumb" style="left:' + (X0 - 6) + 'px"></div>' +
+        odo("elLab", EL, "left:30px") + odo("reLab", RE, "right:30px;text-align:right") +
+        '<div class="np" style="left:110px;top:644px;margin-left:-19px;color:#fff">' + I("prev", 38, 1) + "</div>" +
+        '<div class="np" style="left:201px;top:644px;margin-left:-19px;color:#fff">' + I("pause", 40, 1) + "</div>" +
+        '<div class="np" style="left:292px;top:644px;margin-left:-19px;color:#fff">' + I("next", 38, 1) + "</div>" +
+        '<div class="np" style="left:30px;top:739px;color:rgba(255,255,255,.65)">' + I("spl", 22, 1.6) + "</div>" +
+        '<div class="vtrack"></div><div class="vfill"></div>' +
+        '<div class="np" style="left:350px;top:739px;color:rgba(255,255,255,.65)">' + I("sph", 22, 1.6) + "</div>" +
+        '<div class="np" style="left:90px;top:818px;color:rgba(255,255,255,.7)">' + I("quote", 24, 1.6) + "</div>" +
+        '<div class="np" style="left:189px;top:818px;color:rgba(255,255,255,.7)">' + I("airplay", 24, 1.6) + "</div>" +
+        '<div class="np" style="left:288px;top:818px;color:rgba(255,255,255,.7)">' + I("queue", 24, 1.6) + "</div>";
+
+      /* ---------- dock ---------- */
+      const TABS = [["home", "Home"], ["grid", "New"], ["radio", "Radio"], ["music", "Library"]];
+      const dockHTML = () =>
+        '<div class="minip">' + art("neon", 40, 8) + '<div class="mt"><b>Midnight Transit</b><span>Lena Park</span></div><span class="mi">' + I("play", 22, 1.6) + '</span><span class="mi">' + I("next", 22, 1.6) + "</span></div>" +
+        '<div class="tabbar"><div class="hl hlH"></div><div class="hl hlL"></div>' +
+        TABS.map((t, i) => '<div class="tb tb' + i + '" style="left:' + (4 + 72 * i) + 'px">' + I(t[0], 24, 1.7) + "<span>" + t[1] + "</span></div>").join("") + "</div>" +
+        '<div class="srch">' + I("search", 24, 1.8) + "</div>";
+
+      const SRC =
+        '<div class="scr scrHome">' + homeHTML() + "</div>" +
+        '<div class="scr scrLib">' + libHTML() + "</div>" +
+        '<div class="dock">' + dockHTML() + "</div>" +
+        '<div class="scr scrNew">' + newHTML() + "</div>" +
+        '<div class="scr scrNP">' + npHTML() + "</div>";
+
+      /* ---------- lens: same content copy, scaled and clipped, with edge falloff ---------- */
+      function lensHTML(id, w, h, r, src, sw, sh) {
+        const inner = '<div class="zin" style="width:' + sw + "px;height:" + sh + 'px">' + src + "</div>";
+        return '<div class="lens" id="' + id + '" style="width:' + w + "px;height:" + h + "px;border-radius:" + r + 'px">' +
+          '<div class="lclip" style="border-radius:' + r + 'px">' +
+          '<div class="zl zmask"><div class="zs zC">' + inner + "</div></div></div>" +
+          '<div class="lsheen" style="border-radius:' + r + 'px"></div><div class="lrim" style="border-radius:' + r + 'px"></div></div>';
+      }
+      document.getElementById("screen").innerHTML =
+        '<div id="mainc">' + SRC + "</div>" +
+        lensHTML("lensT", 72, 56, 28, SRC, SW, SH) +
+        lensHTML("lensL", 132, 58, 29, SRC, SW, SH) +
+        lensHTML("lensG", 64, 40, 20, SRC, SW, SH) +
+        lensHTML("lensK", 64, 38, 19, SRC, SW, SH);
+
+      const FW = '<div class="fwm fw" data-layout-allow-occlusion>Reverb</div>';
+      document.getElementById("finalc").innerHTML = FW + lensHTML("lensF", 440, 262, 131, FW, 1920, 1080);
+
+      /* ---------- timeline helpers ---------- */
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      const val = (f) => (typeof f === "function" ? f() : f);
+
+      // glass moves and the copy beneath it moves in the same tween: same ease, same duration, same frame
+      function moveLens(id, from, to, dur, ease, at) {
+        F("#" + id, { x: from.x, y: from.y }, { x: to.x, y: to.y, duration: dur, ease: ease }, at);
+        F("#" + id + " .zin", { x: () => -val(from.x), y: () => -val(from.y) }, { x: () => -val(to.x), y: () => -val(to.y), duration: dur, ease: ease }, at);
+      }
+      function placeLens(id, x, y) {
+        gsap.set("#" + id, { x: x, y: y });
+        gsap.set("#" + id + " .zin", { x: -x, y: -y });
+      }
+      function zoomLens(id, k0, k1, dur, at) {
+        F("#" + id + " .zC", { scale: k0 }, { scale: k1, duration: dur, ease: EXPO }, at);
+      }
+      function popLens(id, s0, s1, at) {
+        F("#" + id, { opacity: 0, scale: s0 }, { opacity: 1, scale: s1, duration: 0.28, ease: EXPO }, at);
+      }
+      function dropLens(id, s, at) {
+        tl.to("#" + id, { opacity: 0, scale: s, duration: 0.26, ease: "power2.out" }, at);
+      }
+
+      // camera: scale about frame centre, x/y chosen so the target point (stage coords) lands at centre
+      let cs = 1.06, cx = 0, cy = 0;
+      function cam(at, dur, s, px, py, ease) {
+        const tx = (960 - px) * s, ty = (540 - py) * s;
+        F("#cam", { scale: cs, x: cx, y: cy }, { scale: s, x: tx, y: ty, duration: dur, ease: ease || EXPO }, at);
+        cs = s; cx = tx; cy = ty;
+      }
+      const stg = (sx, sy) => [759 + sx, 103 + sy];
+
+      gsap.set("#cam", { transformOrigin: "960px 540px" });
+      gsap.set(".scrLib", { opacity: 0 });
+      gsap.set(".scrNew", { y: SH });
+      gsap.set(".scrNP", { y: SH });
+      gsap.set("#lensF", { opacity: 1 });
+      gsap.set("#lensF .zC", { scale: 1.28 });
+
+      /* ===== 0 - 0.9: the phone rises in ===== */
+      F("#phone", { opacity: 0, y: 56 }, { opacity: 1, y: 0, duration: 0.9, ease: EXPO }, 0);
+      cam(0, 0.95, 1.09, 960, 540, "none");
+
+      /* ===== 0.95 - 2.5: tab bar. Glass lens slides Home -> Library; Library appears the same frame ===== */
+      F(".hs", { y: 0 }, { y: -170, duration: 2.2, ease: "none" }, 0.3);
+      cam(0.95, 0.9, 1.75, ...stg(201, 812));
+
+      placeLens("lensT", 20, 796);
+      tl.to(".hlH", { opacity: 0, duration: 0.12, ease: "power1.out" }, 1.45);
+      popLens("lensT", 0.85, 1.12, 1.45);
+      zoomLens("lensT", 1, 1.55, 0.3, 1.45);
+      moveLens("lensT", { x: 20, y: 796 }, { x: 236, y: 796 }, 0.7, EXPO, 1.6);
+      cam(1.85, 0.6, 1.8, ...stg(201, 812), "none");
+
+      // arrival: lens lets go, selection and screen change on one frame
+      tl.set(".tb0", { color: MUTE }, 2.25);
+      tl.set(".tb3", { color: ACC }, 2.25);
+      tl.set(".hlL", { opacity: 1 }, 2.25);
+      tl.set(".scrHome", { opacity: 0 }, 2.25);
+      F(".scrLib", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 2.25);
+      F(".lc", { y: 14 }, { y: 0, duration: 0.6, ease: EXPO }, 2.25);
+      tl.to("#lensT .zC", { scale: 1, duration: 0.3, ease: "power2.out" }, 2.25);
+      dropLens("lensT", 1.0, 2.25);
+
+      /* ===== 2.45 - 3.6: pull back, tap the plus button, sheet slides up ===== */
+      cam(2.45, 0.75, 1.15, ...stg(201, 437));
+      tl.to(".plusBtn", { scale: 0.86, duration: 0.1, ease: "power2.out" }, 3.0);
+      tl.to(".plusBtn", { scale: 1, duration: 0.3, ease: EXPO }, 3.1);
+      tl.set(".rip", { opacity: 0.8, scale: 0.7 }, 3.0);
+      tl.to(".rip", { opacity: 0, scale: 1.9, duration: 0.5, ease: "power2.out" }, 3.0);
+      F(".scrNew", { y: SH }, { y: 0, duration: 0.65, ease: EXPO }, 3.1);
+
+      /* ===== 3.6 - 5.4: text loupe follows the insertion caret, 0.4s per hop ===== */
+      cam(3.6, 0.8, 2.3, ...stg(201, 410));
+      const caretPos = (i) => {
+        const el = document.querySelector("#mainc .cr" + i);
+        let e = el, x = 0, y = 0;
+        while (e && e.id !== "screen") { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
+        return { x: x, y: y + el.offsetHeight / 2 };
+      };
+      const LW = 132, LH = 58;
+      const lp = (i) => ({ x: () => caretPos(i).x - LW / 2, y: () => caretPos(i).y - LH / 2 });
+      tl.set(".cr1", { opacity: 1 }, 4.05);
+      F("#lensL", { x: lp(1).x, y: lp(1).y }, { x: lp(1).x, y: lp(1).y, duration: 0.001 }, 4.05);
+      F("#lensL .zin", { x: () => -lp(1).x(), y: () => -lp(1).y() }, { x: () => -lp(1).x(), y: () => -lp(1).y(), duration: 0.001 }, 4.05);
+      popLens("lensL", 0.7, 1.0, 4.05);
+      zoomLens("lensL", 1, 1.7, 0.35, 4.05);
+      tl.set(".cr1", { opacity: 0 }, 4.45);
+      tl.set(".cr2", { opacity: 1 }, 4.45);
+      moveLens("lensL", lp(1), lp(2), 0.4, EXPO, 4.45);
+      tl.set(".cr2", { opacity: 0 }, 4.85);
+      tl.set(".cr3", { opacity: 1 }, 4.85);
+      moveLens("lensL", lp(2), lp(3), 0.4, EXPO, 4.85);
+      tl.set(".cr3", { opacity: 0 }, 5.3);
+      dropLens("lensL", 0.85, 5.3);
+
+      /* ===== 5.1 - 6.1: toggle. Glass appears only while the thumb is dragged ===== */
+      cam(5.1, 0.7, 2.9, ...stg(262, 500));
+      placeLens("lensG", 302.5, 490);
+      popLens("lensG", 0.7, 1.15, 5.45);
+      zoomLens("lensG", 1, 1.5, 0.3, 5.45);
+      moveLens("lensG", { x: 302.5, y: 490 }, { x: 322.5, y: 490 }, 0.4, EXPO, 5.55);
+      F(".tgkA", { x: 0 }, { x: 20, duration: 0.4, ease: EXPO }, 5.55);
+      tl.to(".tgA", { backgroundColor: "#34c759", duration: 0.18, ease: "power1.out" }, 5.65);
+      dropLens("lensG", 1.0, 6.0);
+
+      /* ===== 6.0 - 7.0: Create -> Now Playing slides up, camera backs out ===== */
+      cam(6.0, 0.8, 1.1, ...stg(201, 437));
+      tl.to(".crt", { opacity: 0.35, duration: 0.08, ease: "power1.out" }, 6.05);
+      tl.to(".crt", { opacity: 1, duration: 0.2, ease: "power1.out" }, 6.15);
+      F(".scrNP", { y: SH }, { y: 0, duration: 0.75, ease: EXPO }, 6.2);
+
+      /* ===== 6.95 - 8.4: scrubber. Glass knob drags the timeline, elapsed and remaining time step with it ===== */
+      cam(6.95, 0.8, 2.2, ...stg(201, 576));
+      const KY = TY - 19;
+      placeLens("lensK", X0 - 32, KY);
+      popLens("lensK", 0.7, 1.15, 7.2);
+      zoomLens("lensK", 1, 1.6, 0.3, 7.2);
+      const T0 = 7.35, D = 1.1;
+      moveLens("lensK", { x: X0 - 32, y: KY }, { x: X1 - 32, y: KY }, D, EXPO, T0);
+      F(".thumb", { x: 0 }, { x: X1 - X0, duration: D, ease: EXPO }, T0);
+      F(".fill", { scaleX: 41 / 223 }, { scaleX: 161 / 223, duration: D, ease: EXPO }, T0);
+      for (let i = 1; i <= 7; i++) {
+        const p = -Math.log2(1 - i / 8 / 1.001) / 10;
+        tl.set(".elLab", { y: -16 * i }, T0 + D * p);
+        tl.set(".reLab", { y: -16 * i }, T0 + D * p);
+      }
+
+      /* ===== 8.1 - 10.8: push into the glass, the product wordmark replaces the phone, glass stays ===== */
+      cam(8.1, 0.7, 6.0, ...stg(X1, TY));
+      tl.to("#stage", { opacity: 0, duration: 0.35, ease: "power1.out" }, 8.6);
+      F("#final", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" }, 8.6);
+      F(".fw", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 8.7);
+
+      const FX0 = 960 - 220, FX1 = 960 - 220 + 150, FY = 540 - 131;
+      placeLens("lensF", FX0, FY);
+      moveLens("lensF", { x: FX0, y: FY }, { x: FX1, y: FY }, 2.1, "none", 8.7);
+
+      tl.set({}, {}, 10.8);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

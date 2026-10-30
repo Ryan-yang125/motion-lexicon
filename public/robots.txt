@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://motionboard.app/sitemap.xml

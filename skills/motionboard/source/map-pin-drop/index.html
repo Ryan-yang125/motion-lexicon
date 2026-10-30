@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="geo.js"></script>
+    <style>
+      :root {
+        --land: #7667f6;
+        --water: #5d4bea;
+        --navy: #0f1f3d;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+        --font-city: "Oswald", "League Gothic", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--water); }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--water);
+        font-family: var(--font-ui); color: #fff; -webkit-font-smoothing: antialiased;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .a { position: absolute; left: 0; top: 0; }
+      svg { display: block; overflow: visible; }
+
+      /* ---------- map ---------- */
+      #map { position: absolute; left: 0; top: 0; }
+      .rd { fill: none; stroke: #fff; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+      .hwy { stroke-width: 2.4px; }
+      .maj { stroke-width: 1.5px; }
+      .loc { stroke-width: 1px; }
+      .sl { stroke-width: 1.3px; }
+
+      /* ---------- pins ---------- */
+      .pin { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .drop { position: absolute; left: -50px; top: -128px; width: 100px; height: 128px; }
+      .shadow { position: absolute; left: -24px; top: -7px; width: 48px; height: 14px; border-radius: 50%; background: rgba(15, 20, 70, 0.32); filter: blur(2px); }
+      .tag { position: absolute; left: -200px; top: 22px; width: 400px; display: flex; justify-content: center; }
+      .tag span { font-size: 34px; line-height: 42px; font-weight: 600; letter-spacing: -0.035em; color: #fff; }
+      .small { position: absolute; left: -200px; top: 10px; width: 400px; text-align: center; font-family: var(--font-city); font-weight: 600; font-size: 28px; line-height: 34px; letter-spacing: 0.01em; text-transform: uppercase; color: #fff; }
+      .burst { position: absolute; left: 0; top: -80px; width: 0; height: 0; }
+      .fr { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .fi { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .ln { position: absolute; left: 0; top: -2.5px; height: 5px; border-radius: 3px; background: #fff; }
+      .dt { position: absolute; border-radius: 50%; background: #fff; }
+      .sq { position: absolute; background: #fff; border-radius: 2px; }
+      .sq.nv { background: var(--navy); }
+      .rg { position: absolute; left: 0; top: 0; }
+
+      /* network pins (country view) */
+      .np { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .np svg { position: absolute; left: -12px; top: -30px; }
+
+      /* ---------- city names ---------- */
+      .big { position: absolute; left: 0; top: 0; transform-origin: 100% 100%; white-space: nowrap; }
+      .big .bt { font-family: var(--font-city); font-weight: 600; font-size: 168px; line-height: 168px; letter-spacing: -0.005em; text-transform: uppercase; color: rgba(255, 255, 255, 0.43); }
+
+      /* ---------- end card ---------- */
+      #end { background: var(--water); }
+      #endIn, #miniWrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #lock { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .mrg { fill: none; stroke: #fff; stroke-width: 2.5; }
+      #stats { position: absolute; left: 998px; top: 624px; display: flex; gap: 64px; }
+      .st b { display: block; font-size: 54px; line-height: 62px; font-weight: 650; letter-spacing: -0.04em; color: #fff; }
+      .st span { display: block; margin-top: 4px; font-size: 28px; line-height: 34px; font-weight: 500; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.72); }
+      #lpin { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      #lpin svg { position: absolute; left: -50px; top: -128px; }
+      #wm { position: absolute; left: 10px; top: 10px; font-size: 150px; line-height: 180px; font-weight: 700; letter-spacing: -0.055em; color: #fff; }
+      #wmask { position: absolute; left: 1116px; top: 314px; width: 720px; height: 200px; overflow: hidden; }
+      #wsub { position: absolute; left: 998px; width: 800px; top: 532px; font-size: 34px; line-height: 44px; font-weight: 500; letter-spacing: -0.015em; color: rgba(255, 255, 255, 0.78); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="11" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="8.6" data-track-index="0" data-layout-allow-overlap>
+        <svg id="map" width="1920" height="1080" viewBox="0 0 1920 1080">
+          <rect x="0" y="0" width="1920" height="1080" fill="var(--water)" />
+          <g id="world">
+            <g id="nat"><path id="natLand" fill="var(--land)" fill-rule="evenodd" /><path id="mLakes" fill="var(--water)" fill-rule="evenodd" /><path id="natLines" class="rd sl" /></g>
+            <g id="c-sf" class="city"></g>
+            <g id="c-chi" class="city"></g>
+            <g id="mid">
+              <path id="mRivB" class="rd" style="stroke: var(--water); stroke-width: 1.2px" />
+              <path id="mRivA" class="rd" style="stroke: var(--water); stroke-width: 2.2px" />
+              <path id="mCty" class="rd" style="stroke-width: 0.8px" />
+              <path id="mInter" class="rd" style="stroke-width: 1.3px" />
+              <path id="mDots" class="rd" style="stroke-width: 4px" />
+            </g>
+          </g>
+        </svg>
+
+        <div id="net" class="full" data-layout-allow-overlap></div>
+
+        <svg id="ovl" class="a" width="1920" height="1080" viewBox="0 0 1920 1080">
+          <path id="route" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          <circle id="head" r="11" fill="#fff" />
+        </svg>
+
+        <div id="bigA" class="big" data-layout-allow-overflow><div class="bt" data-layout-ignore>San Francisco</div></div>
+        <div id="bigB" class="big" data-layout-allow-overflow><div class="bt" data-layout-ignore>Chicago</div></div>
+
+        <div id="pinA" class="pin" data-layout-allow-overlap>
+          <div class="shadow"></div>
+          <div class="burst"></div>
+          <div class="drop"><svg width="100" height="128" viewBox="0 0 100 128"><use href="#pinShape" /></svg></div>
+          <div class="tag"><span>Waypost</span></div>
+        </div>
+        <div id="dotA" class="pin"><div class="small">San Francisco</div></div>
+        <div id="pinB" class="pin" data-layout-allow-overlap>
+          <div class="shadow"></div>
+          <div class="burst"></div>
+          <div class="drop"><svg width="100" height="128" viewBox="0 0 100 128"><use href="#pinShape" /></svg></div>
+          <div class="tag"><span>Waypost</span></div>
+        </div>
+        <div id="dotB" class="pin"><div class="small">Chicago</div></div>
+      </div>
+
+      <div id="end" class="clip full" data-start="8.6" data-duration="2.4" data-track-index="1" data-layout-allow-overlap>
+        <div id="endIn" data-layout-allow-overlap>
+          <div id="miniWrap" data-layout-allow-overlap>
+            <svg id="mini" width="1920" height="1080" viewBox="0 0 1920 1080">
+              <g transform="translate(118 287) scale(0.46)"><path id="miniLand" fill="var(--land)" fill-rule="evenodd" /><path id="miniLines" class="rd" style="stroke-width: 1px; stroke-opacity: 0.22" /></g>
+              <g id="miniDots"></g>
+              <g id="miniRings"></g>
+              <g id="mpin"><g id="mpinIn"><use href="#pinShape" transform="translate(-50 -128)" /></g></g>
+            </svg>
+          </div>
+          <div id="wsub">Same-day delivery, now live in Chicago.</div>
+          <div id="stats">
+            <div class="st"><b>21</b><span>US cities</span></div>
+            <div class="st"><b>94 min</b><span>median delivery</span></div>
+            <div class="st"><b>$0</b><span>delivery over $35</span></div>
+          </div>
+          <div id="lock" data-layout-allow-overlap>
+            <div id="wmask"><div id="wm">Waypost</div></div>
+          </div>
+        </div>
+        <div id="lpin"><svg width="100" height="128" viewBox="0 0 100 128"><use href="#pinShape" /></svg></div>
+      </div>
+
+      <svg width="0" height="0" style="position: absolute">
+        <defs>
+          <path id="pinShape" fill="var(--navy)" fill-rule="evenodd" d="M50 2C24.6 2 4 22.4 4 47.6c0 32.4 37.6 70.5 43.2 76a4 4 0 0 0 5.6 0C58.4 118.1 96 80 96 47.6 96 22.4 75.4 2 50 2Zm0 27.6a18 18 0 1 1 0 36a18 18 0 0 1 0-36Z" />
+          <path id="npShape" d="M12 0C5.4 0 0 5.2 0 11.6c0 8.2 9.6 17.4 11 18.6a1.5 1.5 0 0 0 2 0C14.4 29 24 19.8 24 11.6 24 5.2 18.6 0 12 0Zm0 7a4.6 4.6 0 1 1 0 9.2a4.6 4.6 0 0 1 0-9.2Z" fill-rule="evenodd" />
+        </defs>
+      </svg>
+    </div>
+
+    <script>
+      /* ---------- easing ---------- */
+      function bez(x1, y1, x2, y2) {
+        const cx = (t, a, b) => ((1 - 3 * b + 3 * a) * t + (3 * b - 6 * a)) * t * t + 3 * a * t;
+        return (p) => {
+          if (p <= 0) return 0;
+          if (p >= 1) return 1;
+          let lo = 0, hi = 1, t = p;
+          for (let i = 0; i < 40; i++) { t = (lo + hi) / 2; if (cx(t, x1, x2) < p) lo = t; else hi = t; }
+          return cx(t, y1, y2);
+        };
+      }
+      const BACK = bez(0.34, 1.56, 0.64, 1);
+      const OUT = bez(0.16, 1, 0.3, 1);
+      const IO = bez(0.65, 0, 0.35, 1);
+      const EXPO = "expo.out";
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+      const lerp = (a, b, u) => a + (b - a) * u;
+      const ss = (a, b, v) => { const u = clamp((v - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
+      const prog = (t, t0, d) => clamp((t - t0) / d, 0, 1);
+
+      /* ---------- geography ---------- */
+      const G = window.GEO;
+      document.getElementById("natLand").setAttribute("d", G.nat);
+      document.getElementById("natLines").setAttribute("d", G.natLines);
+      const MIDP = { mLakes: G.mid.lakes, mRivA: G.mid.rivA, mRivB: G.mid.rivB, mCty: G.mid.cty, mInter: G.mid.inter, mDots: G.mid.dots };
+      const MID = {};
+      for (const k in MIDP) { MID[k] = document.getElementById(k); MID[k].setAttribute("d", MIDP[k]); }
+      document.getElementById("miniLand").setAttribute("d", G.nat);
+      document.getElementById("miniLines").setAttribute("d", G.natLines);
+      const LAY = {};
+      ["sf", "chi"].forEach((k) => {
+        const L = G[k];
+        const g = document.getElementById("c-" + k);
+        g.setAttribute("transform", "translate(" + L.c[0] + " " + L.c[1] + ") scale(" + 1 / G.K + ")");
+        g.innerHTML =
+          '<path d="' + L.box + '" fill="var(--water)"/>' +
+          '<path d="' + L.land + '" fill="var(--land)" fill-rule="evenodd"/>' +
+          '<path d="' + L.water + '" fill="var(--water)" fill-rule="evenodd"/>' +
+          '<path class="rd loc" d="' + L.local + '"/>' +
+          '<path class="rd maj" d="' + L.major + '"/>' +
+          '<path class="rd hwy" d="' + L.hwy + '"/>';
+        const p = g.querySelectorAll("path");
+        LAY[k] = { g: g, loc: p[3], maj: p[4], hwy: p[5] };
+      });
+      const SF = G.sf.c, CHI = G.chi.c;
+      const KM = G.kmPerPx;
+      const ZS = (1920 * KM) / 26; /* San Francisco framed ~26 km wide */
+      const ZC = (1920 * KM) / 23; /* Chicago framed ~23 km wide */
+      const A1 = [880, 500], A2 = [870, 520];
+
+      /* ---------- timing ---------- */
+      const DROP_A = 0.5, TZO = 3.9, DZO = 1.0, TR = 5.0, DR = 0.8, TZI = 5.85, DZI = 1.1, DROP_B = 7.0, TDIVE = 8.05, TCUT = 8.6, DUR = 11;
+      const PUSH = 0.04, PS = 1.45;
+
+      /* camera: world point f appears at screen point a with zoom Z */
+      const scr = (w, c) => [(w[0] - c.f[0]) * c.Z + c.a[0], (w[1] - c.f[1]) * c.Z + c.a[1]];
+      function camHold(t) { return { Z: 1 + 0.02 * (t - TZO - DZO), f: [960, 540], a: [960, 540] }; }
+      const DIVE = (t) => { const u = prog(t, TDIVE, TCUT - TDIVE); return u * u * u; };
+      function camAt(t) {
+        if (t < TZO) return { Z: ZS * (1 + PUSH * t), f: SF, a: A1, pin: 1 };
+        if (t < TZO + DZO) {
+          const u = IO((t - TZO) / DZO);
+          const Z0 = ZS * (1 + PUSH * TZO);
+          return { Z: Math.exp(lerp(Math.log(Z0), 0, u)), f: SF, a: [lerp(A1[0], SF[0], u), lerp(A1[1], SF[1], u)], u: u };
+        }
+        if (t < TZI) return camHold(t);
+        const h = camHold(TZI), S0 = scr(CHI, h);
+        if (t < TZI + DZI) {
+          const u = IO((t - TZI) / DZI);
+          return { Z: Math.exp(lerp(Math.log(h.Z), Math.log(ZC), u)), f: CHI, a: [lerp(S0[0], A2[0], u), lerp(S0[1], A2[1], u)], u: u };
+        }
+        const d = DIVE(t);
+        const push = ZC * (1 + PUSH * (t - TZI - DZI)) * (1 + 1.2 * d);
+        const ps = 1 + 7.5 * d;
+        return { Z: push, f: CHI, a: [lerp(A2[0], 960, d), lerp(A2[1], 540 + 80 * PS * ps, d)], ps: ps };
+      }
+
+      /* ---------- route (SF -> Chicago, gentle northern arc) ---------- */
+      const RP = (() => {
+        const mx = (SF[0] + CHI[0]) / 2, my = (SF[1] + CHI[1]) / 2;
+        const dx = CHI[0] - SF[0], dy = CHI[1] - SF[1], L = Math.hypot(dx, dy);
+        const c = [mx + (dy / L) * 0.22 * L, my - (dx / L) * 0.22 * L];
+        const pts = [];
+        for (let i = 0; i <= 160; i++) {
+          const s = i / 160, q = 1 - s;
+          pts.push([q * q * SF[0] + 2 * q * s * c[0] + s * s * CHI[0], q * q * SF[1] + 2 * q * s * c[1] + s * s * CHI[1]]);
+        }
+        return pts;
+      })();
+
+      /* ---------- network pins: live Waypost cities ---------- */
+      const NET = ["Seattle", "Portland", "Los Angeles", "San Diego", "Phoenix", "Salt Lake City", "Denver", "Austin", "Dallas", "Houston", "Minneapolis", "Nashville", "Atlanta", "Miami", "Detroit", "Washington", "Philadelphia", "New York", "Boston"];
+      const netEl = document.getElementById("net");
+      netEl.innerHTML = NET.map((n, i) => '<div class="np" id="np' + i + '"><svg width="24" height="31" viewBox="0 0 24 31"><use href="#npShape" fill="#4a37d6" /></svg></div>').join("");
+      const npEls = NET.map((n, i) => document.getElementById("np" + i));
+
+      const el = (id) => document.getElementById(id);
+      const dotA = el("dotA"), pinA = el("pinA"), pinB = el("pinB"), dotB = el("dotB"), bigA = el("bigA"), bigB = el("bigB");
+      const route = el("route"), head = el("head"), world = el("world");
+      const natLines = el("natLines");
+      const tr = (x, y, s) => "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) scale(" + s.toFixed(4) + ")";
+
+      function render(t) {
+        const c = camAt(t);
+        world.setAttribute("transform", "translate(" + c.a[0] + " " + c.a[1] + ") scale(" + c.Z + ") translate(" + -c.f[0] + " " + -c.f[1] + ")");
+        const lz = Math.log(c.Z);
+        const o = (a, b) => ss(Math.log(a), Math.log(b), lz);
+        natLines.style.opacity = (0.32 * (1 - o(3, 12))).toFixed(3);
+        MID.mRivA.style.opacity = (0.95 * (1 - o(14, 35))).toFixed(3);
+        MID.mRivB.style.opacity = (0.8 * o(1.3, 2.6) * (1 - o(14, 35))).toFixed(3);
+        MID.mCty.style.opacity = (0.15 * o(2, 4.5) * (1 - o(25, 70))).toFixed(3);
+        MID.mInter.style.opacity = ((0.16 + 0.3 * o(1.2, 4)) * (1 - o(25, 70))).toFixed(3);
+        MID.mDots.style.opacity = ((0.22 + 0.28 * o(1.5, 4)) * (1 - o(12, 35))).toFixed(3);
+        ["sf", "chi"].forEach((k) => {
+          const L = LAY[k];
+          L.g.style.opacity = ss(Math.log(2.5), Math.log(9), lz).toFixed(3);
+          L.hwy.style.opacity = (0.6 * ss(Math.log(8), Math.log(40), lz)).toFixed(3);
+          L.maj.style.opacity = (0.4 * ss(Math.log(25), Math.log(110), lz)).toFixed(3);
+          L.loc.style.opacity = (0.17 * ss(Math.log(70), Math.log(220), lz)).toFixed(3);
+        });
+
+        /* pins follow the camera */
+        const pa = scr(SF, c);
+        let sa = PS;
+        if (t >= TZO) sa = t < TZO + DZO ? lerp(PS, 0.38, c.u) : 0.38;
+        pinA.style.transform = tr(pa[0], pa[1], sa);
+        dotA.style.transform = tr(pa[0], pa[1], 1);
+        const pb = scr(CHI, c);
+        pinB.style.transform = tr(pb[0], pb[1], PS * (c.ps || 1));
+        dotB.style.transform = tr(pb[0], pb[1], 1);
+        const nz = 1 - ss(Math.log(1.6), Math.log(4), lz);
+        npEls.forEach((e, i) => {
+          const p = scr(G.cities[NET[i]], c);
+          e.style.transform = tr(p[0], p[1], 1);
+          e.style.visibility = nz < 0.01 ? "hidden" : "visible";
+        });
+        netEl.style.opacity = nz.toFixed(3);
+
+        /* big city names locked to the map push */
+        const kA = c.Z / ZS;
+        bigA.style.transform = "translate(" + (pa[0] + 900 * kA).toFixed(2) + "px," + (pa[1] + 430 * kA).toFixed(2) + "px) translate(-100%,-100%) scale(" + kA.toFixed(4) + ")";
+        const kB = c.Z / ZC;
+        bigB.style.transform = "translate(" + (pb[0] + 905 * kB).toFixed(2) + "px," + (pb[1] + 410 * kB).toFixed(2) + "px) translate(-100%,-100%) scale(" + kB.toFixed(4) + ")";
+
+        /* route: drawn in screen space so the stroke stays 5px at every zoom */
+        const rs = IO(prog(t, TR, DR));
+        if (rs <= 0) { route.setAttribute("d", ""); head.setAttribute("cx", -100); head.setAttribute("cy", -100); }
+        else {
+          const n = rs * 160, k = Math.floor(n);
+          const sp = [];
+          for (let i = 0; i <= k; i++) sp.push(scr(RP[i], c));
+          let hp = sp[k];
+          if (k < 160) {
+            const p0 = RP[k], p1 = RP[k + 1], f = n - k;
+            hp = scr([lerp(p0[0], p1[0], f), lerp(p0[1], p1[1], f)], c);
+            sp.push(hp);
+          }
+          /* push-in: the tail retracts toward the landing point, leaving a short stub */
+          let maxLen = 1e9;
+          if (t >= TZI) { const u = t < TZI + DZI ? c.u : 1; maxLen = 170 + 3200 * Math.pow(1 - u, 3); }
+          const keep = [sp[sp.length - 1]];
+          let acc = 0;
+          for (let i = sp.length - 2; i >= 0; i--) {
+            const a = keep[keep.length - 1], b = sp[i], seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
+            if (acc + seg >= maxLen) { const f = (maxLen - acc) / seg; keep.push([lerp(a[0], b[0], f), lerp(a[1], b[1], f)]); break; }
+            acc += seg; keep.push(b);
+          }
+          let d = "";
+          for (let i = keep.length - 1; i >= 0; i--) d += (i === keep.length - 1 ? "M" : "L") + keep[i][0].toFixed(1) + " " + keep[i][1].toFixed(1);
+          route.setAttribute("d", d);
+          head.setAttribute("cx", hp[0].toFixed(1));
+          head.setAttribute("cy", hp[1].toFixed(1));
+        }
+      }
+
+      /* ---------- bursts ---------- */
+      function buildBurst(pin, frs) {
+        pin.querySelector(".burst").innerHTML = frs.map((f, i) => {
+          let inner = "";
+          if (f.k === "ln") inner = '<div class="ln" style="width:' + f.w + 'px"></div>';
+          else if (f.k === "dt") inner = '<div class="dt" style="left:' + -f.w / 2 + "px;top:" + -f.w / 2 + "px;width:" + f.w + "px;height:" + f.w + 'px"></div>';
+          else if (f.k === "rg") inner = '<svg class="rg" width="0" height="0"><circle cx="0" cy="0" r="20" fill="none" stroke="#fff" stroke-width="3"/></svg>';
+          else inner = '<div class="sq' + (f.nv ? " nv" : "") + '" style="left:' + -f.w / 2 + "px;top:" + -f.w / 2 + "px;width:" + f.w + "px;height:" + f.w + 'px"></div>';
+          return '<div class="fr" style="transform:rotate(' + f.a + 'deg)"><div class="fi">' + inner + "</div></div>";
+        }).join("");
+      }
+      const FR_A = [
+        { k: "ln", a: -94, w: 46, r0: 64, r1: 168 },
+        { k: "dt", a: -58, w: 12, r0: 60, r1: 150 },
+        { k: "sq", a: -22, w: 13, r0: 62, r1: 158, nv: 1 },
+        { k: "ln", a: 12, w: 54, r0: 66, r1: 182 },
+        { k: "dt", a: 52, w: 9, r0: 58, r1: 132 },
+        { k: "ln", a: 148, w: 40, r0: 64, r1: 160 },
+        { k: "sq", a: 184, w: 12, r0: 60, r1: 150 },
+        { k: "ln", a: -142, w: 50, r0: 66, r1: 176 },
+        { k: "dt", a: -118, w: 10, r0: 58, r1: 140 },
+      ];
+      const FR_B = [
+        { k: "ln", a: -100, w: 54, r0: 64, r1: 196 },
+        { k: "sq", a: -68, w: 15, r0: 62, r1: 170 },
+        { k: "dt", a: -36, w: 13, r0: 60, r1: 176 },
+        { k: "ln", a: -4, w: 60, r0: 66, r1: 206 },
+        { k: "sq", a: 34, w: 13, r0: 60, r1: 160, nv: 1 },
+        { k: "dt", a: 136, w: 10, r0: 58, r1: 150 },
+        { k: "ln", a: 166, w: 48, r0: 66, r1: 192 },
+        { k: "sq", a: -164, w: 12, r0: 60, r1: 166, nv: 1 },
+        { k: "ln", a: -134, w: 44, r0: 64, r1: 186 },
+        { k: "rg", a: -16, w: 20, r0: 0, r1: 0 },
+      ];
+      buildBurst(pinA, FR_A);
+      buildBurst(pinB, FR_B);
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(".drop", { y: -360 });
+      gsap.set(".shadow", { scale: 0.3, transformOrigin: "50% 50%" });
+      gsap.set(".tag", { y: 14 });
+      gsap.set(".small", { y: 8 });
+      gsap.set(".big .bt", { y: 60 });
+
+      const HIDE = [".drop", ".shadow", ".tag", ".small", ".big .bt", ".fr", "#head", "#route", ".np", "#wm", "#wsub", ".st", "#miniWrap", "#mpinIn", ".mrg"];
+      gsap.set(HIDE, { opacity: 0 });
+      tl.set(HIDE, { opacity: 0 }, 0);
+
+      function pinDrop(sel, t, frs) {
+        tl.set(sel + " .drop", { opacity: 1 }, t);
+        tl.to(sel + " .drop", { y: 0, duration: 0.3, ease: BACK }, t);
+        tl.set(sel + " .shadow", { opacity: 1 }, t);
+        tl.to(sel + " .shadow", { scale: 1, duration: 0.3, ease: BACK }, t);
+        const hit = t + 0.13;
+        const frEls = document.querySelectorAll(sel + " .fr");
+        frs.forEach((f, i) => {
+          const fr = frEls[i], fi = fr.querySelector(".fi"), shape = fi.firstChild;
+          tl.set(fr, { opacity: 1 }, hit);
+          if (f.k === "rg") {
+            const cc = shape.querySelector("circle");
+            tl.set(cc, { attr: { r: 48 } }, hit);
+            tl.to(cc, { attr: { r: 150 }, duration: 0.6, ease: OUT }, hit);
+            tl.to(fr, { opacity: 0, duration: 0.3, ease: "power1.in" }, hit + 0.3);
+            return;
+          }
+          tl.set(fi, { x: f.r0 }, hit);
+          tl.to(fi, { x: f.r1 * 0.8, duration: 0.6, ease: OUT }, hit);
+          if (f.k === "ln") {
+            tl.set(shape, { scaleX: 0.25, transformOrigin: "0% 50%" }, hit);
+            tl.to(shape, { scaleX: 1, duration: 0.22, ease: "power2.out" }, hit);
+            tl.to(shape, { scaleX: 0.3, x: f.w * 0.7, duration: 0.38, ease: "power2.in" }, hit + 0.22);
+          } else if (f.k === "sq") {
+            tl.set(shape, { rotation: 20, scale: 0.4 }, hit);
+            tl.to(shape, { rotation: 110, scale: 1, duration: 0.6, ease: OUT }, hit);
+          } else {
+            tl.set(shape, { scale: 0.3 }, hit);
+            tl.to(shape, { scale: 1, duration: 0.3, ease: OUT }, hit);
+          }
+          tl.to(fr, { opacity: 0, duration: 0.22, ease: "power1.in" }, hit + 0.42);
+        });
+        tl.to(sel + " .tag", { opacity: 1, y: 0, duration: 0.6, ease: EXPO }, t + 0.24);
+      }
+
+      /* driver: camera, layers, pins, route */
+      render(0);
+      tl.to({ v: 0 }, { v: 1, duration: DUR, ease: "none", onUpdate: () => render(tl.time()) }, 0);
+
+      /* 1. San Francisco: name rises, pin drops, burst (0 - 3.9) */
+      tl.to("#bigA .bt", { opacity: 1, y: 0, duration: 1.0, ease: EXPO }, 0.12);
+      pinDrop("#pinA", DROP_A, FR_A);
+
+      /* 2. pull out to the country (3.9 - 4.9) */
+      tl.to("#bigA .bt", { opacity: 0, duration: 0.3, ease: "power2.in" }, TZO);
+      tl.to("#pinA .tag", { opacity: 0, duration: 0.2, ease: "power2.in" }, TZO);
+      tl.to("#pinA .shadow", { opacity: 0, duration: 0.2 }, TZO);
+      npEls.forEach((e, i) => {
+        const at = 4.45 + i * 0.022;
+        const sv = e.querySelector("svg");
+        tl.set(sv, { scale: 0, transformOrigin: "12px 30px" }, 0);
+        tl.to(e, { opacity: 1, duration: 0.1 }, at);
+        tl.to(sv, { scale: 1, duration: 0.35, ease: BACK }, at);
+      });
+      tl.to("#dotA .small", { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 4.7);
+
+      /* 3. route line to Chicago (5.0 - 5.8) */
+      tl.set("#route", { opacity: 1 }, TR);
+      tl.set("#head", { opacity: 1 }, TR);
+      tl.to("#dotB .small", { opacity: 1, y: 0, duration: 0.35, ease: EXPO }, TR + DR - 0.15);
+
+      /* 4. push in to Chicago, second pin (5.85 - 8.4) */
+      tl.to("#dotA .small", { opacity: 0, duration: 0.25, ease: "power2.in" }, TZI);
+      tl.to("#dotB .small", { opacity: 0, duration: 0.25, ease: "power2.in" }, TZI + 0.3);
+      tl.to("#head", { opacity: 0, duration: 0.15 }, DROP_B + 0.1);
+      tl.to("#route", { opacity: 0, duration: 0.6, ease: "power1.inOut" }, DROP_B + 0.2);
+      pinDrop("#pinB", DROP_B, FR_B);
+      tl.to("#bigB .bt", { opacity: 1, y: 0, duration: 1.0, ease: EXPO }, DROP_B - 0.05);
+
+      /* 5. dive into the pin, cut (8.4 - 8.95) */
+      tl.to(["#bigB .bt", "#pinB .tag", "#pinB .shadow"], { opacity: 0, duration: 0.2, ease: "power2.in" }, TDIVE);
+
+      /* 6. end card (8.95 - 11) */
+      /* mini network map: every live city, Chicago newest */
+      const MS = 0.46, MT = [118, 287];
+      const mp = (w) => [MT[0] + w[0] * MS, MT[1] + w[1] * MS];
+      const MCITIES = ["San Francisco"].concat(NET);
+      el("miniDots").innerHTML = MCITIES.map((n) => { const p = mp(G.cities[n]); return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="0" fill="#fff"/>'; }).join("");
+      const MC = mp(CHI);
+      el("miniRings").innerHTML = [0, 1, 2].map(() => '<circle class="mrg" cx="' + MC[0].toFixed(1) + '" cy="' + MC[1].toFixed(1) + '" r="6"/>').join("");
+      el("mpin").setAttribute("transform", "translate(" + MC[0].toFixed(1) + " " + MC[1].toFixed(1) + ")");
+      gsap.set("#mpinIn", { scale: 0.36, y: -70, svgOrigin: "0 0" });
+
+      const LP0 = [960, 540 + 80 * PS * 8.5], LP1 = [1052, 504];
+      gsap.set("#lpin", { x: LP0[0], y: LP0[1], scale: PS * 8.5, transformOrigin: "0px 0px" });
+      gsap.set("#wm", { x: -110 });
+      gsap.set("#wsub", { y: 14 });
+      gsap.set(".st", { y: 16 });
+      gsap.set("#miniWrap", { x: -50 });
+      gsap.set("#endIn", { transformOrigin: "50% 50%" });
+      tl.to("#lpin", { x: LP1[0], y: LP1[1], scale: 1.2, duration: 0.9, ease: EXPO }, TCUT);
+      tl.to("#miniWrap", { opacity: 1, x: 0, duration: 1.0, ease: EXPO }, TCUT + 0.08);
+      el("miniDots").querySelectorAll("circle").forEach((cc, i) => {
+        tl.to(cc, { attr: { r: 6.5 }, duration: 0.35, ease: BACK }, TCUT + 0.22 + i * 0.022);
+      });
+      tl.set("#mpinIn", { opacity: 1 }, TCUT + 0.6);
+      tl.to("#mpinIn", { y: 0, duration: 0.3, ease: BACK }, TCUT + 0.6);
+      el("miniRings").querySelectorAll("circle").forEach((cc, i) => {
+        const at = TCUT + 0.75 + i * 0.6;
+        tl.set(cc, { opacity: 0.9, attr: { r: 8 } }, at);
+        tl.to(cc, { attr: { r: 52 }, duration: 1.0, ease: OUT }, at);
+        tl.to(cc, { opacity: 0, duration: 1.0, ease: "power1.in" }, at);
+      });
+      tl.to("#wm", { opacity: 1, x: 0, duration: 0.9, ease: EXPO }, TCUT + 0.12);
+      tl.to("#wsub", { opacity: 1, y: 0, duration: 0.7, ease: EXPO }, TCUT + 0.18);
+      tl.to(".st", { opacity: 1, y: 0, duration: 0.7, ease: EXPO, stagger: 0.04 }, TCUT + 0.18);
+      tl.to("#endIn", { scale: 1.02, duration: DUR - TCUT, ease: "none" }, TCUT);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

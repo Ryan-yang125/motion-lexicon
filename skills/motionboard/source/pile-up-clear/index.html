@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #17171c;
+        --sub: #5d5d69;
+        --mut: #8e8e9a;
+        --line: #e7e7ec;
+        --line2: #f1f1f4;
+        --brand: #2f55e4;
+        --red: #e5484d;
+        --green: #2fb36a;
+        --side: #f7f7f9;
+        --font-ui: "Inter", -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #dfe3f3; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #dfe3f3;
+        font-family: var(--font-ui); color: var(--ink); -webkit-font-smoothing: antialiased;
+        font-variant-numeric: tabular-nums;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .a { position: absolute; }
+      svg { display: block; flex: none; }
+
+      /* ---------- desktop ---------- */
+      #wall {
+        opacity: 0;
+        background:
+          radial-gradient(ellipse 60% 70% at 6% 100%, rgba(255, 196, 170, 0.9) 0%, rgba(255, 196, 170, 0) 70%),
+          radial-gradient(ellipse 55% 65% at 98% 6%, rgba(120, 150, 255, 0.95) 0%, rgba(120, 150, 255, 0) 70%),
+          radial-gradient(ellipse 50% 55% at 62% 106%, rgba(190, 170, 255, 0.7) 0%, rgba(190, 170, 255, 0) 70%),
+          linear-gradient(150deg, #d4dbf6 0%, #e6def2 100%);
+      }
+      #menubar {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 30px; opacity: 0; z-index: 2;
+        background: rgba(238, 240, 252, 0.6); font-size: 13.5px; font-weight: 500; color: #1d1d24; white-space: nowrap;
+        display: flex; align-items: center; justify-content: space-between; padding: 0 22px;
+      }
+      #menubar .l, #menubar .r { display: flex; align-items: center; gap: 22px; }
+      #menubar .l b { font-weight: 700; }
+
+      /* ---------- window ---------- */
+      #win {
+        position: absolute; left: 150px; top: 62px; width: 1600px; height: 900px;
+        border-radius: 12px; overflow: hidden; background: #fff; opacity: 0.4;
+        box-shadow: 0 0 0 1px rgba(20, 20, 40, 0.14), 0 2px 6px rgba(20, 20, 40, 0.1), 0 30px 70px rgba(30, 30, 80, 0.24), 0 80px 160px rgba(30, 30, 80, 0.2);
+      }
+      .tl { position: absolute; top: 19px; width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.16); }
+
+      /* sidebar */
+      #side { position: absolute; left: 0; top: 0; width: 232px; height: 900px; background: var(--side); border-right: 1px solid var(--line); }
+      .acct { display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+      .acct .ch { color: var(--mut); }
+      .compose { display: flex; align-items: center; gap: 8px; width: 200px; height: 34px; padding: 0 10px 0 12px; border-radius: 8px; background: var(--brand); color: #fff; font-size: 13px; font-weight: 600; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(20, 40, 120, 0.2); }
+      .compose kbd { margin-left: auto; font-family: var(--font-ui); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.2); }
+      .nav { display: flex; align-items: center; gap: 10px; width: 216px; height: 30px; padding: 0 10px; border-radius: 7px; font-size: 13px; font-weight: 500; color: #33333b; white-space: nowrap; }
+      .nav > svg { color: #74747f; }
+      .nav.on { background: #e9ebf4; color: var(--ink); }
+      .nav.on > svg { color: var(--brand); }
+      .nav .n { margin-left: auto; font-size: 12px; color: var(--mut); font-weight: 500; }
+      .nav .badge { margin-left: auto; min-width: 22px; height: 18px; padding: 0 6px; border-radius: 9px; background: var(--red); color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+      .shd { font-size: 11.5px; font-weight: 600; color: var(--mut); letter-spacing: 0.01em; }
+      .lab { display: flex; align-items: center; gap: 10px; width: 216px; height: 28px; padding: 0 10px 0 12px; font-size: 13px; color: #33333b; white-space: nowrap; }
+      .lab i { width: 9px; height: 9px; border-radius: 3px; }
+      .lab .n { margin-left: auto; font-size: 12px; color: var(--mut); }
+
+      /* main header */
+      #head { position: absolute; left: 232px; top: 0; width: 1368px; height: 60px; border-bottom: 1px solid var(--line); background: #fff; z-index: 3; }
+      .ttl { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; }
+      .tabs { display: flex; align-items: center; gap: 24px; height: 60px; }
+      .tab { position: relative; display: flex; align-items: center; gap: 7px; height: 60px; font-size: 13.5px; font-weight: 500; color: var(--sub); white-space: nowrap; }
+      .tab .n { font-size: 12px; color: var(--mut); font-weight: 500; }
+      .tab.on { color: var(--ink); font-weight: 600; }
+      .tab.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); border-radius: 2px; }
+      .tab .cn { min-width: 24px; height: 18px; padding: 0 6px; border-radius: 9px; background: #fde4e4; color: #c62f34; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+      .search { display: flex; align-items: center; gap: 8px; width: 240px; height: 32px; padding: 0 8px 0 10px; border: 1px solid #e2e2e8; border-radius: 8px; font-size: 13px; color: var(--mut); background: #fafafb; }
+      .search kbd { margin-left: auto; font-family: var(--font-ui); font-size: 11px; color: var(--sub); border: 1px solid #dedee5; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: #fff; }
+      .ibtn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; color: #6a6a76; }
+      #selbar { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 6px 0 12px; border-radius: 8px; background: #eef2fe; color: #1d3bb5; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; }
+      #selbar .sb { display: flex; align-items: center; gap: 5px; height: 24px; padding: 0 8px; border-radius: 6px; background: #fff; color: #33333b; font-weight: 500; font-size: 12px; box-shadow: 0 0 0 1px #d9e0fb; }
+      #selbar kbd { font-family: var(--font-ui); font-size: 10.5px; color: var(--mut); }
+
+      /* list */
+      #list { position: absolute; left: 232px; top: 60px; width: 1368px; height: 840px; overflow: hidden; background: #fff; }
+      #stack { position: absolute; left: 0; top: 0; width: 1368px; }
+      .row { position: relative; display: flex; align-items: center; height: 52px; padding: 0 26px 0 16px; border-bottom: 1px solid var(--line2); white-space: nowrap; }
+      .row > * { position: relative; z-index: 1; }
+      .row .sel { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #eef2fe; opacity: 0; z-index: 0; }
+      .row .sel::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--brand); }
+      .row .fl { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #fff1f0; opacity: 0; z-index: 0; }
+      .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand); margin-right: 12px; flex: none; }
+      .dot.r { background: transparent; }
+      .av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 600; flex: none; }
+      .av.sq { border-radius: 7px; }
+      .row .av { width: 28px; height: 28px; font-size: 11px; margin-right: 14px; }
+      .from { width: 176px; flex: none; font-size: 13.5px; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
+      .from .c { font-weight: 500; color: var(--mut); margin-left: 4px; font-size: 12px; }
+      .body { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 13.5px; }
+      .body b { font-weight: 600; color: var(--ink); }
+      .body .pv { color: var(--mut); margin-left: 10px; }
+      .row.rd .from, .row.rd .body b { font-weight: 500; color: #46464f; }
+      .chip { display: inline-block; height: 20px; line-height: 20px; padding: 0 7px; border-radius: 5px; font-size: 11.5px; font-weight: 600; margin-right: 9px; vertical-align: 1px; }
+      .meta { display: flex; align-items: center; gap: 12px; margin-left: 24px; color: var(--mut); }
+      .time { width: 64px; text-align: right; font-size: 12.5px; color: var(--mut); font-weight: 500; }
+      .row:not(.rd) .time { color: var(--ink); font-weight: 600; }
+
+      /* inbox zero */
+      #zero { position: absolute; left: 232px; top: 60px; width: 1368px; height: 840px; overflow: hidden; opacity: 0; background: #1d2a63; }
+      #zimg { position: absolute; left: 0; top: 0; width: 1368px; height: 840px; }
+      #ztxt { position: absolute; left: 0; top: 150px; width: 1368px; display: flex; flex-direction: column; align-items: center; color: #fff; }
+      #ztxt .h { display: flex; align-items: center; gap: 14px; font-size: 36px; line-height: 44px; font-weight: 600; letter-spacing: -0.025em; }
+      #ztxt .s { margin-top: 10px; font-size: 15px; line-height: 22px; color: rgba(255, 255, 255, 0.78); font-weight: 500; }
+      #ztxt .nx { margin-top: 26px; display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); font-size: 13px; font-weight: 500; color: rgba(255, 255, 255, 0.92); white-space: nowrap; }
+      #ztxt .nx span { color: rgba(255, 255, 255, 0.6); }
+
+      /* ---------- notifications ---------- */
+      #notifs { z-index: 6; }
+      .nt {
+        position: absolute; left: 1488px; top: 46px; width: 400px; height: 78px; border-radius: 16px; opacity: 0;
+        background: rgba(246, 246, 249, 0.97); display: flex; align-items: flex-start; gap: 12px; padding: 13px 14px 0 13px;
+        box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.14), 0 10px 30px rgba(20, 20, 60, 0.2), 0 2px 6px rgba(20, 20, 60, 0.08);
+      }
+      .nt .ai { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 9px; flex: none; color: #fff; font-weight: 700; font-size: 16px; margin-top: 2px; }
+      .nt .tx { flex: 1; min-width: 0; }
+      .nt .t1 { display: flex; align-items: center; font-size: 13px; line-height: 17px; font-weight: 600; color: #1b1b21; white-space: nowrap; }
+      .nt .t1 span { margin-left: auto; font-size: 12px; font-weight: 400; color: #8a8a94; }
+      .nt .t2 { font-size: 13px; line-height: 17px; color: #2d2d35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+      .nt .t3 { font-size: 12px; line-height: 16px; color: #7a7a85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+
+      /* ---------- keyboard hint and toast ---------- */
+      #hud {
+        position: absolute; left: 818px; top: 866px; height: 52px; padding: 0 10px 0 10px; border-radius: 14px; opacity: 0; z-index: 7;
+        background: #17171d; display: flex; align-items: center; gap: 8px; white-space: nowrap; color: #fff; font-size: 14px; font-weight: 500;
+        box-shadow: 0 16px 40px rgba(15, 15, 40, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+      }
+      #hud .lbl { color: rgba(255, 255, 255, 0.72); margin: 0 10px 0 4px; }
+      #hud .sep { width: 1px; height: 20px; background: rgba(255, 255, 255, 0.14); margin: 0 6px 0 0; }
+      .key { position: relative; width: 34px; height: 34px; }
+      .key .k { position: absolute; left: 0; top: 0; width: 34px; height: 32px; border-radius: 8px; background: #2c2c35; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 2px 0 #050508; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; }
+      .key .kd { position: absolute; left: 0; top: 2px; width: 34px; height: 32px; border-radius: 8px; background: var(--brand); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #fff; opacity: 0; }
+      #toast {
+        position: absolute; left: 406px; top: 872px; height: 42px; padding: 0 8px 0 12px; border-radius: 10px; opacity: 0; z-index: 7;
+        display: flex; align-items: center; gap: 10px; white-space: nowrap;
+        background: #17171d; color: #fff; font-size: 13.5px; font-weight: 500;
+        box-shadow: 0 12px 30px rgba(15, 15, 40, 0.32), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+      }
+      #toast .sp { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.18); }
+      #toast .un { color: #b9c6ff; font-weight: 600; }
+      #toast kbd { font-family: var(--font-ui); font-size: 11px; color: #a9a9b6; background: rgba(255, 255, 255, 0.1); border-radius: 4px; padding: 2px 6px; }
+
+      /* ---------- finish ---------- */
+      #vig { pointer-events: none; z-index: 5; background: radial-gradient(ellipse at 50% 48%, rgba(20, 20, 50, 0) 62%, rgba(20, 20, 50, 0.16) 100%); }
+      #end { opacity: 0; z-index: 4; background: #f7f7fa; }
+      #lockup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; gap: 40px; padding-bottom: 60px; }
+      #lockup .wm { font-size: 184px; line-height: 200px; font-weight: 600; letter-spacing: -0.055em; color: var(--ink); padding-bottom: 14px; }
+      #wsub { position: absolute; left: 0; width: 1920px; top: 664px; text-align: center; font-size: 30px; line-height: 40px; font-weight: 500; color: #8a8a96; letter-spacing: -0.01em; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.8" data-width="1920" data-height="1080">
+      <div id="scene" class="clip full" data-start="0" data-duration="10.8" data-track-index="0">
+        <div id="drift" class="full" data-layout-allow-overlap>
+          <div id="wall" class="full"></div>
+          <div id="menubar">
+            <div class="l">
+              <svg width="14" height="16" viewBox="0 0 24 24" fill="#1d1d24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+              <b>Cobalt</b><span>File</span><span>Edit</span><span>View</span><span>Go</span><span>Message</span><span>Window</span><span>Help</span>
+            </div>
+            <div class="r">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1d1d24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
+              <svg width="22" height="17" viewBox="0 0 26 24" fill="none" stroke="#1d1d24" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="6" width="19" height="12" rx="3"/><path d="M24 10v4"/><rect x="4.5" y="8.5" width="12" height="7" rx="1.2" fill="#1d1d24" stroke="none"/></svg>
+              <span>Wed Nov 4&nbsp;&nbsp;10:46 AM</span>
+            </div>
+          </div>
+
+          <div id="win" data-layout-allow-overlap data-layout-ignore></div>
+          <div id="notifs" class="full" data-layout-allow-overlap data-layout-allow-occlusion data-layout-ignore></div>
+          <div id="hud"></div>
+          <div id="toast"></div>
+        </div>
+      </div>
+
+      <div id="vig" class="clip full" data-start="0" data-duration="10.8" data-track-index="1"></div>
+
+      <div id="end" class="clip full" data-start="0" data-duration="10.8" data-track-index="2">
+        <div id="lockup" data-layout-allow-overlap>
+          <div id="mark">
+            <svg width="172" height="172" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="mg" x1="0" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#3a62f0"/><stop offset="1" stop-color="#2140c4"/></linearGradient>
+                <clipPath id="mc"><rect width="100" height="100" rx="23"/></clipPath>
+              </defs>
+              <rect width="100" height="100" rx="23" fill="url(#mg)"/>
+              <g clip-path="url(#mc)">
+                <circle cx="50" cy="62" r="20" fill="#fff"/>
+                <rect x="0" y="62" width="100" height="40" fill="url(#mg)"/>
+                <rect x="20" y="66" width="60" height="5" rx="2.5" fill="#fff" opacity="0.92"/>
+                <rect x="31" y="76" width="38" height="5" rx="2.5" fill="#fff" opacity="0.55"/>
+              </g>
+            </svg>
+          </div>
+          <div id="wm" class="wm">cobalt</div>
+        </div>
+        <div id="wsub">Inbox Zero, every day</div>
+      </div>
+    </div>
+
+    <script>
+      const EXPO = "expo.out";
+
+      /* ---------- icons (lucide-style) ---------- */
+      const ICON = {
+        inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+        star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+        file: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/>',
+        cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+        alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+        chD: '<path d="m6 9 6 6 6-6"/>',
+        pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        clip: '<path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
+        sliders: '<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+        archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>',
+        filter: '<path d="M22 3H2l8 9.5V19l4 2v-8.5z"/>',
+        hash: '<path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/>',
+        bubble: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 21l1.9-4.6A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>',
+        tri: '<path d="M12 4 21 20H3z"/>',
+        git: '<circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7"/><path d="M18 10.5c0 4-6 3-11 6"/>',
+        checkC: '<circle cx="12" cy="12" r="10" fill="#2fb36a" stroke="none"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff"/>'
+      };
+      const ic = (n, s, sw, st) =>
+        '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.5) +
+        '" stroke-linecap="round" stroke-linejoin="round"' + (st ? ' style="' + st + '"' : "") + ">" + ICON[n] + "</svg>";
+
+      const CHIP = {
+        Urgent: ["#fde4e4", "#c62f34"],
+        Customer: ["#dcf2ef", "#0f6b63"],
+        Hiring: ["#ece6fb", "#5b3cc4"],
+        Legal: ["#ececf0", "#4a4a55"],
+        Invoice: ["#fdf0d5", "#8a5a00"],
+        Product: ["#e3ebfd", "#1d3bb5"]
+      };
+      const chip = (k) => '<span class="chip" style="background:' + CHIP[k][0] + ";color:" + CHIP[k][1] + '">' + k + "</span>";
+
+      /* ---------- mail: [from, initials, colour, square?, subject, preview, time, chip, attachment, count] ---------- */
+      const INIT = [
+        ["Dana Whitfield", "DW", "#e8803a", 0, "Offsite venue shortlist", "Three options in Sonoma, all hold 40 people. Prices in the sheet, holds expire Nov 12.", "8:12 AM", "", 1],
+        ["Ravi Patel", "RP", "#2fa763", 0, "Re: Onboarding checklist v3", "Looks good. One nit on step 4: SSO setup should come before inviting the team.", "8:31 AM", "", 0, 3],
+        ["Figma", "F", "#1e1e1e", 1, "Sofia commented on Checkout redesign", "“Can we try the order summary at 360 wide? It wraps on 13-inch screens.”", "8:47 AM", "Product", 0],
+        ["Maya Chen", "MC", "#d9577f", 0, "Q4 roadmap: final review", "Deck attached. I need sign-off on the three bets by Thursday so eng can staff them.", "9:02 AM", "", 1]
+      ];
+      const NEW = [
+        ["Stripe", "S", "#635bff", 1, "Payout of $48,210.00 failed", "Your bank declined the transfer to Chase ••••6411. Update your payout account to retry.", "9:14 AM", "Urgent", 0],
+        ["Liam Ortiz", "LO", "#3b82f6", 0, "Pricing page copy, round 2", "Swapped the annual toggle to default on and tightened the Pro tier bullets. Thoughts?", "9:21 AM", "", 0],
+        ["Linear", "L", "#5e6ad2", 1, "ENG-2141 assigned to you", "Fix WebSocket reconnect on chat nav · Priority: High · Cycle 42", "9:26 AM", "", 0],
+        ["Priya Nair", "PN", "#8b5cf6", 0, "Interview loop: Senior Product Designer", "Can you take the 2:30 portfolio review? Candidate packet is in Greenhouse.", "9:33 AM", "Hiring", 0],
+        ["Northgate Legal", "NL", "#4b5563", 1, "MSA redlines (v4)", "Section 9.2 indemnity is still open. We accepted your changes to 11.1 and 14.3.", "9:40 AM", "Legal", 1],
+        ["GitHub", "G", "#1f2328", 1, "Review requested: cobalt/web#882", "feat: split inbox keyboard navigation · +412 −96 · 3 files changed", "9:44 AM", "", 0],
+        ["Alex Rivera", "AR", "#0ea5e9", 0, "Board deck numbers", "The ARR slide is a month behind. Can you check against the October close?", "9:51 AM", "Urgent", 0, 2],
+        ["Acme Corp", "AC", "#d97706", 1, "Renewal: 120 seats", "We'd like to move to annual billing before the renewal on Dec 1. Who should I talk to?", "9:55 AM", "Customer", 0],
+        ["Hana Kim", "HK", "#ec4899", 0, "Invitation: Brand sync", "Thu Nov 5 · 12:30 – 1:30 PM (EST) · Studio B · Maya, Sofia, you", "10:02 AM", "", 0],
+        ["AWS Billing", "AW", "#232f3e", 1, "Your October invoice is available", "Amount due: $12,904.37 · Account 4471-2290-1183 · Due Nov 20", "10:05 AM", "Invoice", 1],
+        ["Jordan Lee", "JL", "#14b8a6", 0, "Re: Launch thread", "Draft 3 is in the doc. Cut it to six posts and moved the GIF to the top.", "10:09 AM", "", 0, 4],
+        ["Zendesk", "Z", "#03363d", 1, "Ticket #48213 escalated", "Northgate reports sync stuck at 92% on a 40 GB mailbox since Monday.", "10:12 AM", "Urgent", 0],
+        ["Sofia Reyes", "SR", "#1fa5a5", 0, "Empty state illustrations", "Exported all six at 2x. The dusk one is my favorite for Inbox Zero.", "10:16 AM", "Product", 1],
+        ["Greenhouse", "GH", "#24a47f", 1, "4 new applicants: Staff Engineer, Sync", "2 referrals · 1 from Stripe · 1 from Linear · Review by Friday", "10:19 AM", "Hiring", 0],
+        ["Ben Carter", "BC", "#f97316", 0, "Lunch Thursday?", "Tacos on 3rd at 12:15? I'll grab a table by the window.", "10:22 AM", "", 0],
+        ["Notion", "N", "#191919", 1, "Weekly digest: Product wiki", "12 pages edited by 5 people · Q4 bets, Pricing FAQ, Sync architecture", "10:25 AM", "", 0],
+        ["Maya Chen", "MC", "#d9577f", 0, "Re: Q4 roadmap: final review", "Bumping this. I need your call on scope before the 2 PM staffing meeting.", "10:29 AM", "Urgent", 0, 2],
+        ["Gusto", "GU", "#f45d48", 1, "Payroll runs in 2 days", "Approve the Nov 13 payroll for 38 employees by 5 PM PT tomorrow.", "10:33 AM", "Invoice", 0],
+        ["Vercel", "V", "#000000", 1, "Deployment failed: cobalt-web", "Build error in app/inbox/page.tsx · main · 3f9c2e1 · 41s ago", "10:37 AM", "Urgent", 0],
+        ["Dana Whitfield", "DW", "#e8803a", 0, "Re: Offsite venue shortlist", "Hillside needs a $5,000 deposit by Friday to hold Dec 10–12.", "10:40 AM", "", 0, 2],
+        ["Ravi Patel", "RP", "#2fa763", 0, "Call notes · Acme", "They want SCIM before they renew. Can we commit to a date on Thursday's call?", "10:43 AM", "Customer", 1],
+        ["Liam Ortiz", "LO", "#3b82f6", 0, "Re: Pricing page copy, round 2", "Ping. Legal wants final copy by end of day to review the refund terms.", "10:46 AM", "Urgent", 0, 3]
+      ];
+
+      function rowHtml(m, id, read) {
+        return '<div class="row' + (read ? " rd" : "") + '"' + (id ? ' id="' + id + '"' : "") + '>' +
+          '<i class="sel"></i><i class="fl"></i>' +
+          '<span class="dot' + (read ? " r" : "") + '"></span>' +
+          '<span class="av' + (m[3] ? " sq" : "") + '" style="background:' + m[2] + '">' + m[1] + "</span>" +
+          '<span class="from">' + m[0] + (m[9] ? '<span class="c">' + m[9] + "</span>" : "") + "</span>" +
+          '<span class="body">' + (m[7] ? chip(m[7]) : "") + "<b>" + m[4] + '</b><span class="pv">' + m[5] + "</span></span>" +
+          '<span class="meta">' + (m[8] ? ic("clip", 15, 1.6) : "") + '<span class="time">' + m[6] + "</span></span></div>";
+      }
+
+      /* ---------- window ---------- */
+      const W = [];
+      W.push('<div id="side">');
+      W.push('<i class="tl" style="left:18px;background:#ff5f57"></i><i class="tl" style="left:38px;background:#febc2e"></i><i class="tl" style="left:58px;background:#28c840"></i>');
+      W.push('<div class="a acct" style="left:18px;top:52px"><span class="av sq" style="width:24px;height:24px;font-size:11px;border-radius:6px;background:#2f55e4">N</span>Northwind<span class="ch">' + ic("chD", 14, 1.8) + "</span></div>");
+      W.push('<div class="a compose" style="left:16px;top:92px">' + ic("pen", 15, 1.8) + "Compose<kbd>C</kbd></div>");
+      const nav = (y, icon, label, right, on) => '<div class="a nav' + (on ? " on" : "") + '" style="left:8px;top:' + y + 'px">' + ic(icon, 17, 1.6) + label + (right || "") + "</div>";
+      W.push(nav(146, "inbox", "Inbox", '<span id="cSide" class="badge">4</span>', true));
+      W.push(nav(178, "star", "Starred", '<span class="n">7</span>'));
+      W.push(nav(210, "clock", "Snoozed", '<span class="n">3</span>'));
+      W.push(nav(242, "check", "Done"));
+      W.push(nav(274, "send", "Sent"));
+      W.push(nav(306, "file", "Drafts", '<span class="n">2</span>'));
+      W.push(nav(338, "cal", "Scheduled", '<span class="n">1</span>'));
+      W.push(nav(370, "alert", "Spam"));
+      W.push('<div class="a shd" style="left:22px;top:424px">Labels</div>');
+      const lab = (y, c, l, n) => '<div class="a lab" style="left:8px;top:' + y + 'px"><i style="background:' + c + '"></i>' + l + '<span class="n">' + n + "</span></div>";
+      W.push(lab(446, "#e5484d", "Urgent", 9), lab(474, "#14a090", "Customers", 14), lab(502, "#7c5ce6", "Hiring", 6), lab(530, "#8b8b96", "Legal", 2), lab(558, "#d99a14", "Invoices", 5), lab(586, "#3b6af0", "Product", 11));
+      W.push('<div class="a" style="left:0;top:846px;width:232px;height:1px;background:var(--line)"></div>');
+      W.push('<div class="a" style="left:16px;top:858px;display:flex;align-items:center;gap:10px;white-space:nowrap"><span class="av" style="width:28px;height:28px;font-size:11px;background:#0ea5e9">AR</span><span style="font-size:13px;font-weight:600">Alex Rivera</span></div>');
+      W.push('<div class="a" style="left:200px;top:863px;color:#74747f">' + ic("sliders", 17, 1.5) + "</div>");
+      W.push("</div>");
+
+      /* header */
+      W.push('<div id="head">');
+      W.push('<div class="a ttl" style="left:26px;top:16px">Inbox</div>');
+      W.push('<div class="a tabs" style="left:114px;top:0">' +
+        '<div class="tab on">Important<span id="cTab" class="cn">4</span></div>' +
+        '<div class="tab">Other<span class="n">48</span></div>' +
+        '<div class="tab">Team<span class="n">12</span></div>' +
+        '<div class="tab">Calendar<span class="n">6</span></div>' +
+        '<div class="tab">Notifications<span class="n">31</span></div></div>');
+      W.push('<div id="selbar" class="a" style="left:690px;top:14px"><span id="selN">26 selected</span>' +
+        '<span class="sb">' + ic("check", 13, 2) + "Done <kbd>E</kbd></span>" +
+        '<span class="sb">' + ic("clock", 13, 1.8) + "Snooze <kbd>H</kbd></span>" +
+        '<span class="sb">' + ic("archive", 13, 1.8) + "Archive</span></div>");
+      W.push('<div class="a ibtn" style="left:1048px;top:14px">' + ic("filter", 17, 1.5) + "</div>");
+      W.push('<div class="a search" style="left:1096px;top:14px">' + ic("search", 15, 1.7) + "Search<kbd>/</kbd></div>");
+      W.push("</div>");
+
+      /* list: newest at the top; arrivals are hidden until their beat */
+      W.push('<div id="list"><div id="stack" data-layout-allow-overflow>');
+      for (let k = NEW.length - 1; k >= 0; k--) W.push(rowHtml(NEW[k], "n" + k, false));
+      for (let k = INIT.length - 1; k >= 0; k--) W.push(rowHtml(INIT[k], "", k < 2));
+      W.push("</div></div>");
+
+      /* inbox zero: dusk landscape */
+      function ridge(base, amp, f, ph, step, bottom) {
+        let d = "M0 " + bottom;
+        for (let x = 0; x <= 1368; x += step) {
+          const n = 0.55 * Math.sin(x * f + ph) + 0.3 * Math.sin(x * f * 2.3 + ph * 1.7) + 0.15 * Math.abs(Math.sin(x * f * 5.1 + ph * 0.6));
+          d += " L" + x + " " + (base - amp * (0.5 + 0.5 * n)).toFixed(1);
+        }
+        return d + " L1368 " + bottom + " Z";
+      }
+      const HZ = 590;
+      const stars = [[120, 60], [260, 120], [410, 44], [530, 96], [790, 70], [940, 30], [1050, 112], [1190, 54], [1290, 140], [330, 190], [1120, 210], [690, 132]];
+      let Z = '<div id="zero"><svg id="zimg" viewBox="0 0 1368 840" width="1368" height="840">' +
+        "<defs>" +
+        '<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0" stop-color="#18235a"/><stop offset="0.38" stop-color="#3a4b98"/><stop offset="0.6" stop-color="#8f8ac0"/><stop offset="0.66" stop-color="#d6a9b6"/><stop offset="0.71" stop-color="#f4c6a8"/><stop offset="0.75" stop-color="#f8dcc0"/></linearGradient>' +
+        '<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff2de" stop-opacity="0.95"/><stop offset="0.25" stop-color="#ffd9b8" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd9b8" stop-opacity="0"/></radialGradient>' +
+        '<linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8c0b3"/><stop offset="0.3" stop-color="#9c8fbd"/><stop offset="1" stop-color="#232c63"/></linearGradient>' +
+        '<clipPath id="lk"><rect x="0" y="' + HZ + '" width="1368" height="260"/></clipPath>' +
+        "</defs>" +
+        '<rect width="1368" height="' + (HZ + 1) + '" fill="url(#sky)"/>';
+      stars.forEach((s, i) => { Z += '<circle cx="' + s[0] + '" cy="' + s[1] + '" r="' + (i % 3 === 0 ? 1.6 : 1.1) + '" fill="#fff" opacity="' + (0.35 + (i % 4) * 0.12) + '"/>'; });
+      Z += '<g id="sun"><circle cx="884" cy="' + (HZ - 20) + '" r="230" fill="url(#glow)"/><circle cx="884" cy="' + (HZ - 20) + '" r="40" fill="#fff4e4"/></g>';
+      const RF = ridge(HZ - 40, 150, 0.0042, 1.2, 12, HZ + 1);
+      const RM = ridge(HZ - 6, 130, 0.0061, 3.9, 10, HZ + 1);
+      const RN = ridge(HZ + 2, 92, 0.0083, 0.4, 8, HZ + 1);
+      Z += '<path d="' + RF + '" fill="#a59cc8" opacity="0.9"/>';
+      Z += '<path d="' + RM + '" fill="#6f6ea9"/>';
+      Z += '<path d="' + RN + '" fill="#3f4685"/>';
+      Z += '<rect x="0" y="' + HZ + '" width="1368" height="250" fill="url(#lake)"/>';
+      Z += '<g clip-path="url(#lk)" opacity="0.32"><g transform="translate(0 ' + (2 * HZ) + ') scale(1 -1)"><path d="' + RM + '" fill="#4d4f8f"/><path d="' + RN + '" fill="#2a3170"/></g></g>';
+      [[884, 598, 84, 0.55], [876, 609, 52, 0.42], [892, 621, 70, 0.34], [880, 636, 34, 0.3], [890, 652, 48, 0.22], [882, 671, 22, 0.18]].forEach((r) => {
+        Z += '<rect x="' + (r[0] - r[2] / 2) + '" y="' + r[1] + '" width="' + r[2] + '" height="2" rx="1" fill="#ffe8cf" opacity="' + r[3] + '"/>';
+      });
+      Z += '<path d="M0 840 L0 742 C 140 724 260 732 380 760 C 470 780 520 812 560 840 Z" fill="#141a45"/>';
+      Z += '<path d="M1368 840 L1368 720 C 1250 716 1150 742 1060 780 C 1010 800 980 820 960 840 Z" fill="#141a45"/>';
+      Z += "</svg>";
+      Z += '<div id="ztxt"><div class="h">' + ic("checkC", 40, 2.4) + 'Inbox Zero</div>' +
+        '<div class="s">You’re all caught up · 26 conversations done before 11 AM</div>' +
+        '<div class="nx">' + ic("cal", 15, 1.7) + "Next up · Brand sync<span>12:30 PM</span></div></div>";
+      Z += "</div>";
+      W.push(Z);
+      document.getElementById("win").insertAdjacentHTML("beforeend", W.join(""));
+
+      /* ---------- notifications ---------- */
+      const appI = (bg, inner, fg) => '<span class="ai" style="background:' + bg + ";color:" + (fg || "#fff") + '">' + inner + "</span>";
+      const NT = [
+        [appI("#4a154b", ic("hash", 20, 2.2)), "Slack", "#launch-q4", "Maya Chen: who’s owning the changelog for Thursday?"],
+        [appI("#fff", '<span style="display:flex;flex-direction:column;align-items:center;line-height:1"><span style="font-size:8px;font-weight:700;color:#e5484d">WED</span><span style="font-size:17px;font-weight:600;color:#1b1b21;margin-top:1px">4</span></span>'), "Calendar", "Pricing review in 5 min", "10:50 – 11:30 AM · Room 4B · Liam, Priya"],
+        [appI("#5e6ad2", ic("alert", 20, 2)), "Linear", "ENG-2156 raised to Urgent", "Sync stuck at 92% on large mailboxes"],
+        [appI("#1f2328", ic("git", 19, 1.9)), "GitHub", "Review requested", "cobalt/web#882 · feat: split inbox keyboard nav"],
+        [appI("#635bff", "S"), "Stripe", "Payout failed", "$48,210.00 to Chase ••••6411 was declined"],
+        [appI("#34c759", ic("bubble", 20, 2)), "Messages", "Ben Carter", "Running 10 late, start without me"],
+        [appI("#000", ic("tri", 17, 2)), "Vercel", "Deployment failed", "cobalt-web · main · Build error in inbox/page.tsx"],
+        [appI("#4a154b", ic("hash", 20, 2.2)), "Slack", "Priya Nair", "Can you cover the 2:30 portfolio review?"]
+      ];
+      document.getElementById("notifs").insertAdjacentHTML("beforeend", NT.map((n, i) =>
+        '<div class="nt" id="nt' + i + '">' + n[0] + '<div class="tx"><div class="t1">' + n[1] + '<span>now</span></div><div class="t2"><b style="font-weight:600">' + n[2] + '</b></div><div class="t3">' + n[3] + "</div></div></div>").join(""));
+
+      /* ---------- hud + toast ---------- */
+      const key = (id, t) => '<span class="key"><span class="k">' + t + '</span><span class="kd" id="' + id + '">' + t + "</span></span>";
+      document.getElementById("hud").innerHTML = key("kCmd", "⌘") + key("kA", "A") + '<span class="lbl">Select all</span><span class="sep"></span>' + key("kE", "E") + '<span class="lbl">Mark done</span>';
+      document.getElementById("toast").innerHTML = ic("checkC", 18, 2) + "Marked 26 conversations done" + '<span class="sp"></span><span class="un">Undo</span><kbd>Z</kbd>';
+
+      /* ---------- timeline ---------- */
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      const RH = 52, N = NEW.length;
+      gsap.set("#stack", { y: -N * RH });
+      gsap.set("#drift", { transformOrigin: "50% 12%" });
+
+      /* 1. desktop and window arrive (0 – 0.8) */
+      F(["#wall", "#menubar"], { opacity: 0.6 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+      F("#win", { opacity: 0.4, y: 46, scale: 0.965 }, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: EXPO }, 0);
+      F("#drift", { scale: 1 }, { scale: 1.035, duration: 8.4, ease: "none" }, 0);
+
+      /* 2. mail piles up, slow then fast (0.9 – 5.32) */
+      const GAP = [0.62, 0.56, 0.5, 0.44, 0.38, 0.32, 0.27, 0.22, 0.18, 0.15, 0.12, 0.1, 0.09, 0.08, 0.07, 0.06, 0.06, 0.05, 0.05, 0.05, 0.05];
+      const CNT = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+      const T = [0.9];
+      GAP.forEach((g) => T.push(+(T[T.length - 1] + g).toFixed(3)));
+      const cSide = document.getElementById("cSide"), cTab = document.getElementById("cTab");
+      T.forEach((t, k) => {
+        const gap = k < GAP.length ? GAP[k] : 0.3;
+        const dur = Math.min(0.36, gap * 1.6);
+        F("#stack", { y: -(N - k) * RH }, { y: -(N - k - 1) * RH, duration: dur, ease: EXPO }, t);
+        F("#n" + k, { opacity: 0 }, { opacity: 1, duration: Math.min(0.14, dur * 0.6), ease: "power2.out" }, t);
+        if (NEW[k][7] === "Urgent") {
+          tl.set("#n" + k + " .fl", { opacity: 1 }, t);
+          tl.to("#n" + k + " .fl", { opacity: 0, duration: 0.9, ease: "power2.out" }, t + 0.05);
+        }
+        tl.set(cSide, { textContent: String(CNT[k]) }, t);
+        tl.set(cTab, { textContent: String(CNT[k]) }, t);
+        F([cSide, cTab], { scale: 1.15 }, { scale: 1, duration: 0.1, ease: "power2.out" }, t);
+      });
+
+      /* 3. notifications stack over the window edge (2.75 – 5.1) */
+      const NTT = [2.75, 3.3, 3.75, 4.1, 4.4, 4.65, 4.88, 5.1];
+      NTT.forEach((t, i) => {
+        F("#nt" + i, { opacity: 0, scale: 1.08, x: 30 }, { opacity: 1, scale: 1, x: 0, duration: 0.22, ease: EXPO }, t);
+        for (let j = 0; j < i; j++) {
+          const span = NTT[i] - (i > 0 ? NTT[i - 1] : 0);
+          F("#nt" + j, { y: (i - j - 1) * 88 }, { y: (i - j) * 88, duration: Math.min(0.34, span * 1.4), ease: EXPO }, t);
+        }
+      });
+
+      /* 4. ⌘A selects everything; selection and key press on the same frame (5.5 – 5.85) */
+      F("#hud", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, ease: EXPO }, 5.45);
+      const SEL = 5.85;
+      tl.set(["#kCmd", "#kA"], { opacity: 1 }, SEL);
+      tl.set(".row .sel", { opacity: 1 }, SEL);
+      tl.set("#selbar", { opacity: 1 }, SEL);
+      tl.set(["#kCmd", "#kA"], { opacity: 0 }, SEL + 0.2);
+
+      /* 5. E clears everything in one frame (6.45) */
+      const CLR = 6.45;
+      tl.set("#kE", { opacity: 1 }, CLR);
+      tl.set(["#list", "#notifs", "#selbar", "#cSide"], { opacity: 0 }, CLR);
+      tl.set("#cTab", { display: "none" }, CLR);
+      tl.set("#zero", { opacity: 1 }, CLR);
+      F("#zimg", { scale: 1.07 }, { scale: 1, duration: 1.8, ease: EXPO }, CLR);
+      F("#sun", { y: 16 }, { y: 0, duration: 1.9, ease: EXPO }, CLR);
+      F("#ztxt", { y: 14 }, { y: 0, duration: 0.7, ease: EXPO }, CLR);
+      tl.set("#toast", { opacity: 1 }, CLR);
+      F("#toast", { y: 8 }, { y: 0, duration: 0.35, ease: EXPO }, CLR);
+      tl.set("#kE", { opacity: 0 }, CLR + 0.2);
+      tl.to("#hud", { opacity: 0, y: 6, duration: 0.3, ease: "power2.in" }, CLR + 0.3);
+      tl.to("#toast", { opacity: 0, y: 4, duration: 0.3, ease: "power2.in" }, 7.75);
+
+      /* 6. window leaves, the wordmark takes the frame (8.4 – 10.4) */
+      tl.to("#scene", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 8.4);
+      F("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 8.4);
+      F("#mark", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: EXPO }, 8.7);
+      F("#wm", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.6, ease: EXPO }, 8.8);
+      F("#wsub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: EXPO }, 9.1);
+      F("#lockup", { scale: 1 }, { scale: 1.03, duration: 1.7, ease: "none" }, 8.7);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

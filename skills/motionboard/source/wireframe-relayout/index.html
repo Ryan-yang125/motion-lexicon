@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0c0d10; }
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: radial-gradient(ellipse 1500px 1000px at 30% 15%, #3a3f55 0%, #1c1f2a 55%, #0f1014 100%);
+        font-family: "Inter", system-ui, sans-serif; font-size: 13px; color: #e5e5e7;
+        -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
+      }
+      .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      .ic { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+      .sp { flex: 1; }
+      #zoom { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+
+      /* ---------------- window ---------------- */
+      #win {
+        position: absolute; left: 0; top: 0; width: 1440px; height: 810px; border-radius: 12px; overflow: hidden;
+        background: #1c1c1e; display: flex; flex-direction: column;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 50px 120px rgba(0, 0, 0, 0.6);
+      }
+      #tb { position: relative; height: 46px; flex: none; background: #1c1c1e; border-bottom: 1px solid #2c2c2e; color: #8e8e93; }
+      #tbl { position: absolute; left: 16px; top: 0; height: 46px; display: flex; align-items: center; gap: 12px; }
+      .lights { display: flex; gap: 8px; margin-right: 10px; }
+      .lights i { display: block; width: 12px; height: 12px; border-radius: 6px; }
+      #tbl .nm { display: flex; align-items: center; gap: 6px; color: #8e8e93; font-size: 13px; }
+      #tbl .nm b { font-weight: 600; color: #f2f2f4; }
+      .gb { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #8e8e93; }
+      .draft { height: 20px; padding: 0 7px; border-radius: 10px; background: #2a2a2d; color: #aeaeb2; font-size: 11.5px; font-weight: 500; display: flex; align-items: center; }
+      #tbc { position: absolute; left: 440px; top: 0; width: 560px; height: 46px; display: flex; align-items: center; justify-content: center; gap: 14px; }
+      .dev { display: flex; gap: 2px; padding: 2px; border-radius: 8px; background: #141416; }
+      .dev span { width: 32px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+      .dev span.on { background: #2e2e31; color: #f2f2f4; }
+      .zm { display: flex; align-items: center; gap: 4px; font-size: 12.5px; color: #d1d1d6; }
+      #tbr { position: absolute; right: 16px; top: 0; height: 46px; display: flex; align-items: center; gap: 8px; }
+      .avs { display: flex; margin-right: 6px; }
+      .av { width: 22px; height: 22px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 600; color: #fff; box-shadow: 0 0 0 2px #1c1c1e; margin-left: -6px; }
+      .avs .av:first-child { margin-left: 0; }
+      .btn2 { width: 86px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; font-size: 13px; background: #2a2a2d; color: #e5e5e7; }
+      #pub { width: 84px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; background: #0a84ff; color: #ffffff; }
+
+      #body { flex: 1; display: flex; min-height: 0; }
+
+      /* ---------------- layers ---------------- */
+      #lp { width: 224px; flex: none; background: #1c1c1e; border-right: 1px solid #2c2c2e; display: flex; flex-direction: column; }
+      .lt { height: 40px; flex: none; display: flex; align-items: center; gap: 18px; padding: 0 16px; border-bottom: 1px solid #2c2c2e; font-size: 12.5px; font-weight: 500; color: #8e8e93; }
+      .lt .on { color: #f2f2f4; }
+      .ls { height: 40px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: #8e8e93; font-size: 12.5px; }
+      .ls .box { flex: 1; height: 26px; border-radius: 6px; background: #141416; display: flex; align-items: center; gap: 6px; padding: 0 8px; }
+      .ls .ic { width: 14px; height: 14px; }
+      .tree { padding: 2px 6px 0; }
+      .ly { position: relative; height: 28px; display: flex; align-items: center; gap: 5px; border-radius: 6px; font-size: 12.5px; color: #d1d1d6; padding-right: 8px; }
+      .ly .ic { width: 14px; height: 14px; color: #8e8e93; }
+      .ly .ch { width: 12px; height: 12px; }
+      .ly.sel { background: rgba(10, 132, 255, 0.26); color: #ffffff; }
+      .ly.sel .ic { color: #9fcbff; }
+      .ly .rt { margin-left: auto; display: flex; align-items: center; gap: 6px; color: #8e8e93; font-size: 11.5px; }
+      .ly .rt .ic { width: 13px; height: 13px; }
+      .l1 { padding-left: 4px; } .l2 { padding-left: 20px; } .l3 { padding-left: 36px; } .l4 { padding-left: 52px; }
+      .lh { margin: 10px 0 2px; padding: 0 10px; height: 24px; display: flex; align-items: center; font-size: 11.5px; font-weight: 600; color: #8e8e93; border-top: 1px solid #2c2c2e; padding-top: 10px; height: 34px; }
+      #ly3, #ly4 { opacity: 0.42; }
+      .eon { opacity: 0; }
+
+      /* ---------------- canvas ---------------- */
+      #canvas { position: relative; flex: 1; min-width: 0; background-color: #141416; background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px); background-size: 22px 22px; overflow: hidden; }
+      #flabel { position: absolute; left: 28px; top: 12px; display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #8e8e93; }
+      #flabel .ic { width: 13px; height: 13px; }
+      #flabel b { font-weight: 500; color: #d1d1d6; }
+      #artboard { position: absolute; left: 28px; top: 36px; width: 1200px; height: 960px; transform: scale(0.74); transform-origin: 0 0; }
+      #site { position: absolute; left: 0; top: 0; width: 1200px; height: 960px; overflow: hidden; background: #0a0a0c; color: #f4f4f5; box-shadow: 0 0 0 1.4px rgba(255, 255, 255, 0.1), 0 40px 90px rgba(0, 0, 0, 0.5); font-size: 14px; }
+
+      /* site: nav */
+      #nav { position: absolute; left: 0; top: 0; width: 1200px; height: 52px; display: flex; align-items: center; padding: 0 48px; border-bottom: 1px solid #1c1c20; }
+      .logo { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; }
+      .logo svg { width: 22px; height: 22px; display: block; }
+      #nav .lk { display: flex; gap: 26px; margin-left: 38px; font-size: 13.5px; font-weight: 500; color: #a1a1aa; }
+      #nav .lk span { display: flex; align-items: center; gap: 3px; }
+      #nav .lk .ic { width: 12px; height: 12px; }
+      #nav .rt { display: flex; align-items: center; gap: 20px; font-size: 13.5px; font-weight: 500; color: #a1a1aa; }
+      .wbtn { display: inline-flex; align-items: center; height: 30px; padding: 0 13px; border-radius: 7px; background: #f4f4f5; color: #0a0a0c; font-size: 13.5px; font-weight: 600; }
+      /* site: hero */
+      #hero { position: absolute; left: 0; top: 52px; width: 1200px; height: 236px; display: flex; flex-direction: column; align-items: center; padding-top: 30px; text-align: center; background: radial-gradient(520px 200px at 50% 0, rgba(139, 124, 246, 0.2), transparent 72%); }
+      .badge { display: inline-flex; align-items: center; gap: 8px; height: 26px; padding: 0 10px 0 4px; border-radius: 13px; border: 1px solid #27272a; background: #101013; font-size: 12.5px; font-weight: 500; color: #e4e4e7; }
+      .badge em { font-style: normal; height: 18px; padding: 0 7px; border-radius: 9px; background: rgba(139, 124, 246, 0.2); color: #b4a9ff; font-size: 11.5px; font-weight: 600; display: flex; align-items: center; }
+      .badge .ic { width: 12px; height: 12px; color: #a1a1aa; }
+      #h1 { margin-top: 14px; font-size: 46px; line-height: 50px; font-weight: 600; letter-spacing: -0.035em; }
+      #sub { margin-top: 10px; width: 620px; font-size: 15px; line-height: 22px; color: #a1a1aa; }
+      .cta { margin-top: 18px; display: flex; gap: 10px; }
+      .cta .p { height: 36px; padding: 0 16px; border-radius: 8px; background: #7c6cf0; color: #fff; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+      .cta .s { height: 36px; padding: 0 16px; border-radius: 8px; border: 1px solid #2e2e33; color: #f4f4f5; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; }
+      .cta .ic { width: 14px; height: 14px; }
+      /* site: logos */
+      #logos { position: absolute; left: 0; top: 288px; width: 1200px; height: 52px; display: flex; align-items: center; justify-content: center; gap: 42px; color: #71717a; font-size: 12.5px; border-top: 1px solid #1c1c20; }
+      #logos b { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: #8a8a93; }
+      #logos b.i { font-style: italic; font-weight: 500; }
+      #logos b.w { font-weight: 800; letter-spacing: 0.04em; font-size: 14px; }
+      /* site: features */
+      #feat { position: absolute; left: 0; top: 340px; width: 1200px; height: 556px; border-top: 1px solid #1c1c20; }
+      #sh { position: absolute; left: 48px; top: 28px; width: 1104px; height: 40px; display: flex; align-items: center; }
+      #sh h2 { font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.03em; }
+      #sh .lnk { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 500; color: #b4a9ff; }
+      #sh .lnk .ic { width: 14px; height: 14px; }
+      #next { position: absolute; left: 0; top: 896px; width: 1200px; height: 64px; border-top: 1px solid #1c1c20; padding: 30px 48px 0; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: #d4d4d8; }
+      #blocks { position: absolute; left: 48px; top: 92px; width: 1104px; height: 420px; }
+
+      /* cells: one element per block, position and size are tweened */
+      .cell { position: absolute; overflow: hidden; background: rgb(16, 16, 19); border-radius: 14px; }
+      #cell1 { left: 0; top: 0; width: 544px; height: 420px; }
+      #cell2 { left: 560px; top: 0; width: 544px; height: 420px; }
+      #cell3 { left: 0; top: 0; width: 544px; height: 420px; opacity: 0; }
+      #cell4 { left: 560px; top: 0; width: 544px; height: 420px; opacity: 0; }
+      .ol { position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09); z-index: 2; pointer-events: none; }
+      .k0, .k1 { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+      .k1 { opacity: 0; }
+      .wl { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 3; opacity: 0; }
+      .wl .tag { position: absolute; left: 12px; top: 10px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #4da3ff; }
+      .wl .tag .ic { width: 16px; height: 16px; stroke-width: 1.6; }
+      .wl .szw { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; }
+      .wl .sz { position: absolute; height: 22px; padding: 0 9px; border-radius: 4px; background: #0a84ff; color: #fff; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; }
+      .wl .s1 { opacity: 0; }
+
+      /* cell 1, layout 1: inbox list */
+      .ib { height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid #1f1f23; }
+      .ib b { font-size: 14px; font-weight: 600; }
+      .cnt { height: 18px; padding: 0 6px; border-radius: 9px; background: #232328; color: #d4d4d8; font-size: 11px; font-weight: 600; display: flex; align-items: center; }
+      .chip { height: 22px; padding: 0 9px; border-radius: 6px; font-size: 12px; font-weight: 500; color: #a1a1aa; display: flex; align-items: center; }
+      .chip.on { background: #232328; color: #f4f4f5; }
+      .ib .ic { width: 15px; height: 15px; color: #8a8a93; }
+      .mr { position: relative; height: 54px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #1a1a1e; }
+      .mr.on { background: rgba(124, 108, 240, 0.12); }
+      .mr .ub { position: absolute; left: 6px; top: 24px; width: 6px; height: 6px; border-radius: 3px; background: #8b7cf6; }
+      .pa { width: 28px; height: 28px; border-radius: 14px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 600; color: #fff; }
+      .mr .tx { flex: 1; min-width: 0; }
+      .mr .l1t { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #f4f4f5; }
+      .mr .l1t i { margin-left: auto; font-style: normal; font-size: 11.5px; font-weight: 400; color: #71717a; }
+      .mr .l2t { margin-top: 2px; font-size: 12.5px; color: #8a8a93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 420px; }
+      .mr .l2t b { font-weight: 500; color: #d4d4d8; }
+      .tg { height: 16px; padding: 0 6px; border-radius: 4px; font-size: 10.5px; font-weight: 600; display: flex; align-items: center; }
+      .t-am { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+      .t-rd { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .t-bl { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+      .t-gn { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+      .t-vi { background: rgba(167, 139, 250, 0.16); color: #a78bfa; }
+
+      /* cell 2, layout 1: copy */
+      .cp { position: absolute; left: 36px; top: 36px; right: 36px; display: flex; flex-direction: column; align-items: flex-start; }
+      .pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(139, 124, 246, 0.14); color: #b4a9ff; font-size: 12px; font-weight: 600; }
+      .pill .ic { width: 13px; height: 13px; }
+      .cp h3 { margin-top: 16px; font-size: 30px; line-height: 36px; font-weight: 600; letter-spacing: -0.03em; }
+      .cp p { margin-top: 10px; font-size: 14.5px; line-height: 22px; color: #a1a1aa; }
+      .cp ul { margin-top: 16px; list-style: none; width: 100%; }
+      .cp li { height: 26px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #e4e4e7; }
+      .cp li .ic { width: 16px; height: 16px; color: #8b7cf6; }
+      .cp .bt { margin-top: 20px; display: flex; gap: 10px; }
+      .cp .bt .p { height: 38px; padding: 0 16px; border-radius: 8px; background: #7c6cf0; color: #fff; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+      .cp .bt .s { height: 38px; padding: 0 16px; border-radius: 8px; border: 1px solid #2e2e33; color: #f4f4f5; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; }
+      .cp .bt .ic { width: 14px; height: 14px; }
+
+      /* layout 2 contents */
+      .kp { position: absolute; left: 16px; top: 14px; right: 16px; bottom: 12px; }
+      .kh { height: 22px; display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: #f4f4f5; }
+      .kh .ic { width: 16px; height: 16px; color: #8b7cf6; }
+      .kh .mu { font-size: 12px; font-weight: 400; color: #8a8a93; }
+      .kh .vl { font-size: 12.5px; font-weight: 500; color: #b4a9ff; }
+      .qt { margin-top: 8px; height: 26px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #8a8a93; white-space: nowrap; overflow: hidden; }
+      .qt .pa { width: 20px; height: 20px; border-radius: 10px; font-size: 8.5px; }
+      .qt b { font-weight: 500; color: #d4d4d8; }
+      .dr { margin-top: 8px; height: 72px; padding: 9px 12px; border-radius: 8px; background: #0b0b0e; box-shadow: inset 0 0 0 1px #232328; font-size: 13px; line-height: 18px; color: #e4e4e7; }
+      .br { margin-top: 8px; height: 28px; display: flex; align-items: center; gap: 8px; }
+      .b1 { height: 28px; padding: 0 12px; border-radius: 6px; background: #7c6cf0; color: #fff; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+      .b1 span { font-size: 11px; font-weight: 500; opacity: 0.75; }
+      .b2 { height: 28px; padding: 0 11px; border-radius: 6px; box-shadow: inset 0 0 0 1px #2e2e33; color: #d4d4d8; font-size: 12.5px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+      .b2 .ic { width: 13px; height: 13px; }
+      .big { margin-top: 6px; display: flex; align-items: center; gap: 10px; height: 38px; font-size: 32px; font-weight: 600; letter-spacing: -0.035em; }
+      .dl { height: 20px; padding: 0 7px; border-radius: 10px; background: rgba(34, 197, 94, 0.14); color: #4ade80; font-size: 11.5px; font-weight: 600; letter-spacing: 0; display: flex; align-items: center; gap: 3px; }
+      .dl .ic { width: 11px; height: 11px; stroke-width: 2; }
+      .big small { font-size: 12px; font-weight: 400; letter-spacing: 0; color: #8a8a93; }
+      .ax { display: flex; justify-content: space-between; margin-top: 3px; font-size: 10.5px; color: #71717a; }
+      .gr { margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .ti { height: 68px; border-radius: 8px; background: #0d0d10; box-shadow: inset 0 0 0 1px #1f1f23; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; font-size: 11.5px; font-weight: 500; color: #d4d4d8; }
+      .ti i { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; color: #fff; }
+      .ti .ic { width: 15px; height: 15px; }
+      .fl { margin-top: 12px; height: 84px; display: flex; align-items: center; }
+      .nd { flex: 1; height: 84px; padding: 10px; border-radius: 8px; background: #0d0d10; box-shadow: inset 0 0 0 1px #1f1f23; }
+      .nd i { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; }
+      .nd .ic { width: 14px; height: 14px; }
+      .nd .t { margin-top: 6px; font-size: 12.5px; font-weight: 600; color: #f4f4f5; white-space: nowrap; }
+      .nd .u { margin-top: 1px; font-size: 11.5px; color: #8a8a93; white-space: nowrap; }
+      .cn { width: 22px; flex: none; display: flex; align-items: center; justify-content: center; color: #52525b; }
+      .cn .ic { width: 14px; height: 14px; }
+      .ft { margin-top: 12px; height: 18px; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8a8a93; }
+      .ft .ic { width: 14px; height: 14px; color: #4ade80; }
+      .tgl { width: 28px; height: 16px; border-radius: 8px; background: #22c55e; position: relative; }
+      .tgl i { position: absolute; right: 2px; top: 2px; width: 12px; height: 12px; border-radius: 6px; background: #fff; }
+
+      /* selection overlay in the editor */
+      #sel { position: absolute; left: 0; top: 340px; width: 1200px; height: 556px; box-shadow: inset 0 0 0 1.5px #0a84ff; pointer-events: none; }
+      .hd { position: absolute; width: 10px; height: 10px; background: #fff; border: 1.5px solid #0a84ff; border-radius: 2px; }
+      #selsz { position: absolute; left: 540px; top: 906px; height: 22px; padding: 0 9px; border-radius: 4px; background: #0a84ff; color: #fff; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; white-space: nowrap; }
+      #gaps { position: absolute; left: 0; top: 0; width: 1104px; height: 420px; opacity: 0; }
+      #gaps i { position: absolute; background: rgba(242, 78, 144, 0.16); box-shadow: inset 0 0 0 1px rgba(242, 78, 144, 0.5); }
+      #gaps b { position: absolute; width: 26px; height: 18px; margin: -9px 0 0 -13px; border-radius: 3px; background: #f24e90; color: #fff; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+
+      /* floating toolbar */
+      #ftb { position: absolute; left: 293px; top: 730px; width: 358px; height: 32px; border-radius: 9px; background: #232326; box-shadow: 0 0 0 1px #3a3a3d, 0 8px 24px rgba(0, 0, 0, 0.45); display: flex; align-items: center; padding: 0 8px; color: #aeaeb2; }
+      #ftb .t { width: 34px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+      #ftb .t.on { background: #0a84ff; color: #fff; }
+      #ftb .sep { width: 1px; height: 16px; background: #3a3a3d; margin: 0 8px; }
+      #wfbtn { position: relative; width: 104px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: #d1d1d6; }
+      #wfbg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 6px; background: rgba(10, 132, 255, 0.28); opacity: 0; box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.7); }
+      #wfbtn > * { position: relative; }
+      #tip { position: absolute; left: 736px; top: 746px; height: 24px; padding: 0 8px; border-radius: 6px; background: #0a0a0b; box-shadow: 0 0 0 1px #3a3a3d, 0 6px 16px rgba(0, 0, 0, 0.5); display: flex; align-items: center; gap: 8px; font-size: 12px; color: #f2f2f4; opacity: 0; z-index: 10; }
+      #tip kbd { font-family: "JetBrains Mono", monospace; font-size: 10.5px; height: 16px; padding: 0 5px; border-radius: 4px; background: #2a2a2d; color: #aeaeb2; display: flex; align-items: center; }
+      #toast { position: absolute; left: 240px; top: 760px; height: 36px; padding: 0 12px; border-radius: 8px; background: #2a2a2d; box-shadow: 0 0 0 1px #3a3a3d, 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #f2f2f4; opacity: 0; z-index: 10; }
+      #toast .ic { width: 15px; height: 15px; color: #34c759; }
+      #toast .mu { color: #8e8e93; }
+      #toast .u { color: #5eb0ff; font-weight: 500; margin-left: 6px; }
+
+      /* ---------------- properties ---------------- */
+      #rp { width: 272px; flex: none; background: #1c1c1e; border-left: 1px solid #2c2c2e; display: flex; flex-direction: column; }
+      .rt2 { height: 44px; flex: none; display: flex; align-items: center; gap: 18px; padding: 0 16px; border-bottom: 1px solid #2c2c2e; font-size: 12.5px; font-weight: 500; color: #8e8e93; }
+      .rt2 .on { color: #f2f2f4; }
+      .rs { height: 44px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid #2c2c2e; color: #8e8e93; }
+      .rs b { font-size: 13px; font-weight: 600; color: #f2f2f4; }
+      .rs .tgx { height: 18px; padding: 0 6px; border-radius: 4px; background: #2a2a2d; color: #aeaeb2; font-size: 11px; font-weight: 500; display: flex; align-items: center; }
+      .rg { flex: none; border-top: 1px solid #2c2c2e; }
+      .rg.f { border-top: 0; }
+      .rh { height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px; font-size: 12.5px; font-weight: 600; color: #f2f2f4; }
+      .rh .ic { width: 14px; height: 14px; color: #8e8e93; }
+      .rr { position: relative; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px; color: #d1d1d6; }
+      .rr .lab { font-size: 13px; }
+      .fd { flex: 1; height: 28px; border-radius: 6px; background: #2a2a2d; display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 12.5px; color: #e5e5e7; }
+      .fd em { font-style: normal; width: 12px; color: #8e8e93; font-size: 11.5px; }
+      .fd .ic { width: 13px; height: 13px; color: #8e8e93; }
+      .fd .u { margin-left: auto; color: #8e8e93; }
+      .seg { position: relative; width: 128px; height: 28px; border-radius: 7px; background: #141416; padding: 2px; display: flex; margin-left: auto; }
+      .seg span { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; }
+      .seg .ic { width: 13px; height: 13px; }
+      #segThumb { position: absolute; left: 2px; top: 2px; width: 62px; height: 24px; border-radius: 5px; background: #3a3a3d; }
+      .sgS { color: #f2f2f4; }
+      .sgG { color: #8e8e93; }
+      .var { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 8px; padding: 0 16px; }
+      #gridRow { opacity: 0; }
+      .ib2 { width: 28px; height: 28px; border-radius: 6px; background: #2a2a2d; color: #aeaeb2; display: flex; align-items: center; justify-content: center; }
+      .ib2.on { background: #3a3a3d; color: #f2f2f4; }
+      .sw { width: 20px; height: 20px; border-radius: 5px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); flex: none; }
+      .rfoot { margin-top: auto; height: 40px; flex: none; border-top: 1px solid #2c2c2e; display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 12px; color: #8e8e93; }
+      .rfoot i { display: block; width: 6px; height: 6px; border-radius: 3px; background: #34c759; }
+
+      /* ---------------- cursor ---------------- */
+      #cur { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; z-index: 20; }
+      #cur svg { position: absolute; left: -5px; top: -3px; width: 24px; height: 24px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4)); }
+
+      /* ---------------- ending ---------------- */
+      #veil { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #09090b; opacity: 0; }
+      #fin { position: absolute; left: 834px; top: 498px; width: 252px; height: 84px; border-radius: 18px; background: #0a84ff; color: #fff; font-size: 39px; font-weight: 600; letter-spacing: -0.02em; opacity: 0; }
+      #fin span { position: absolute; left: 0; top: 0; width: 252px; height: 84px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+      #fin .pd { opacity: 0; }
+      #fin .ic { width: 34px; height: 34px; stroke-width: 2.2; }
+      #fring { position: absolute; left: 834px; top: 498px; width: 252px; height: 84px; border-radius: 18px; box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.9); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="i-ptr" viewBox="0 0 24 24"><path d="M4.04 4.69a.5.5 0 0 1 .65-.65l16 6.5a.5.5 0 0 1-.06.95l-6.12 1.58a2 2 0 0 0-1.44 1.43l-1.58 6.13a.5.5 0 0 1-.95.06z" /></symbol>
+        <symbol id="i-frame" viewBox="0 0 24 24"><path d="M22 6H2M22 18H2M6 2v20M18 2v20" /></symbol>
+        <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16" /></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21" /></symbol>
+        <symbol id="i-square" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5" /></symbol>
+        <symbol id="i-msg" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></symbol>
+        <symbol id="i-tpl" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="1" /><rect x="3" y="14" width="9" height="7" rx="1" /><rect x="16" y="14" width="5" height="7" rx="1" /></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0" /><circle cx="12" cy="12" r="3" /></symbol>
+        <symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M10.7 5.1A9.7 9.7 0 0 1 12 5c4.5 0 8.3 2.9 10 7a10.6 10.6 0 0 1-1.7 2.7M6.6 6.6A10.7 10.7 0 0 0 2 12c1.7 4.1 5.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M2 2l20 20M9.9 9.9a3 3 0 0 0 4.2 4.2" /></symbol>
+        <symbol id="i-cd" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-cr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+        <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" /></symbol>
+        <symbol id="i-redo" viewBox="0 0 24 24"><path d="M21 7v6h-6M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" /></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></symbol>
+        <symbol id="i-tablet" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" /><path d="M12 18h.01" /></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" /><path d="M12 18h.01" /></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" /></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5" /><path d="m21 21-4.3-4.3" /></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14" /></symbol>
+        <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 3v4M17 5h4" /></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" /><path d="M12 6v6l4 2" /></symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z" /></symbol>
+        <symbol id="i-hash" viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18" /></symbol>
+        <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0" /></symbol>
+        <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8" /></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6" /></symbol>
+        <symbol id="i-checkc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" /><path d="m9 12 2 2 4-4" /></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8" /></symbol>
+        <symbol id="i-branch" viewBox="0 0 24 24"><path d="M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6M18 9a9 9 0 0 1-9 9" /></symbol>
+        <symbol id="i-arr" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></symbol>
+        <symbol id="i-ard" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7" /></symbol>
+        <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></symbol>
+        <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" /></symbol>
+        <symbol id="i-corner" viewBox="0 0 24 24"><path d="M4 20V12a8 8 0 0 1 8-8h8" /></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" /><path d="M2.5 12h19M12 2.5a14.5 14.5 0 0 1 4 9.5 14.5 14.5 0 0 1-4 9.5 14.5 14.5 0 0 1-4-9.5 14.5 14.5 0 0 1 4-9.5z" /></symbol>
+        <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /></symbol>
+        <symbol id="i-cols" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M12 3v18" /></symbol>
+        <symbol id="i-rows" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 12h18" /></symbol>
+        <symbol id="i-stack" viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5" /><rect x="13" y="4" width="8" height="16" rx="1.5" /></symbol>
+        <symbol id="i-align" viewBox="0 0 24 24"><path d="M17 10H3M21 6H3M21 14H3M17 18H3" /></symbol>
+        <symbol id="i-comp" viewBox="0 0 24 24"><path d="M5.5 8.5 9 12l-3.5 3.5L2 12zM12 2l3.5 3.5L12 9 8.5 5.5zM18.5 8.5 22 12l-3.5 3.5L15 12zM12 15l3.5 3.5L12 22l-3.5-3.5z" /></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12" /></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M8 16H3v5" /></symbol>
+        <symbol id="i-ud" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5M7 9l5-5 5 5" /></symbol>
+        <symbol id="i-plinth" viewBox="0 0 72 72">
+          <rect x="1" y="1" width="70" height="70" rx="19" fill="#f5f5f7" />
+          <rect x="17" y="18" width="38" height="9" rx="3" fill="#0b0b0d" />
+          <rect x="29" y="27" width="14" height="19" fill="#0b0b0d" />
+          <rect x="13" y="46" width="46" height="9" rx="3" fill="#0b0b0d" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10.5" data-width="1920" data-height="1080">
+      <div id="stage" class="clip full" data-start="0" data-duration="10.5" data-track-index="0" data-layout-allow-overlap>
+        <div id="veil"></div>
+
+        <div id="zoom">
+          <div id="cam" data-layout-allow-overlap>
+            <div id="win" data-layout-allow-overlap data-layout-ignore>
+              <!-- top bar -->
+              <div id="tb">
+                <div id="tbl">
+                  <div class="lights"><i style="background: #ff5f57"></i><i style="background: #febc2e"></i><i style="background: #28c840"></i></div>
+                  <svg class="ic" style="width: 22px; height: 22px"><use href="#i-plinth" /></svg>
+                  <span class="nm"><b>Tern</b><svg class="ic" style="width: 12px; height: 12px"><use href="#i-cr" /></svg>Marketing site<svg class="ic" style="width: 12px; height: 12px"><use href="#i-cd" /></svg></span>
+                  <span class="draft">Draft</span>
+                  <span class="gb"><svg class="ic"><use href="#i-undo" /></svg></span>
+                  <span class="gb" style="margin-left: -8px"><svg class="ic"><use href="#i-redo" /></svg></span>
+                </div>
+                <div id="tbc">
+                  <div class="dev"><span class="on"><svg class="ic"><use href="#i-monitor" /></svg></span><span><svg class="ic"><use href="#i-tablet" /></svg></span><span><svg class="ic"><use href="#i-phone" /></svg></span></div>
+                  <div class="zm">Desktop 1200<svg class="ic" style="width: 12px; height: 12px"><use href="#i-cd" /></svg></div>
+                  <div class="zm" style="margin-left: 10px">74%<svg class="ic" style="width: 12px; height: 12px"><use href="#i-cd" /></svg></div>
+                </div>
+                <div id="tbr">
+                  <div class="avs"><div class="av" style="background: #0ea5e9">MC</div><div class="av" style="background: #ec4899">LO</div><div class="av" style="background: #52525b">+3</div></div>
+                  <div class="btn2"><svg class="ic" style="width: 14px; height: 14px"><use href="#i-play" /></svg>Preview</div>
+                  <div id="pub">Publish</div>
+                </div>
+              </div>
+
+              <div id="body">
+                <!-- layers -->
+                <div id="lp">
+                  <div class="lt"><span class="on">Layers</span><span>Assets</span><span>Pages</span></div>
+                  <div class="ls"><div class="box"><svg class="ic"><use href="#i-search" /></svg>Filter layers</div><svg class="ic"><use href="#i-plus" /></svg></div>
+                  <div class="tree">
+                    <div class="ly l1"><svg class="ic ch"><use href="#i-cd" /></svg><svg class="ic"><use href="#i-file" /></svg>Home</div>
+                    <div class="ly l2"><svg class="ic ch"><use href="#i-cd" /></svg><svg class="ic"><use href="#i-monitor" /></svg>Desktop<span class="rt">1200</span></div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Nav</div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Hero</div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Logos</div>
+                    <div class="ly l3 sel"><svg class="ic ch"><use href="#i-cd" /></svg><svg class="ic"><use href="#i-frame" /></svg>Features</div>
+                    <div class="ly l4"><svg class="ic"><use href="#i-type" /></svg>Heading</div>
+                    <div class="ly l4"><svg class="ic"><use href="#i-square" /></svg>Cell 1</div>
+                    <div class="ly l4"><svg class="ic"><use href="#i-square" /></svg>Cell 2</div>
+                    <div class="ly l4" id="ly3"><svg class="ic"><use href="#i-square" /></svg>Cell 3<span class="rt"><svg class="ic eoff"><use href="#i-eyeoff" /></svg></span></div>
+                    <div class="ly l4" id="ly4"><svg class="ic"><use href="#i-square" /></svg>Cell 4<span class="rt"><svg class="ic eoff"><use href="#i-eyeoff" /></svg></span></div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Pricing</div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Testimonials</div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>FAQ</div>
+                    <div class="ly l3"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-frame" /></svg>Footer</div>
+                    <div class="ly l2"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-tablet" /></svg>Tablet<span class="rt">810</span></div>
+                    <div class="ly l2"><svg class="ic ch"><use href="#i-cr" /></svg><svg class="ic"><use href="#i-phone" /></svg>Phone<span class="rt">390</span></div>
+                    <div class="lh">Components</div>
+                    <div class="ly l2"><svg class="ic" style="color: #b4a9ff"><use href="#i-comp" /></svg>Button / Primary</div>
+                    <div class="ly l2"><svg class="ic" style="color: #b4a9ff"><use href="#i-comp" /></svg>Card / Feature</div>
+                    <div class="ly l2"><svg class="ic" style="color: #b4a9ff"><use href="#i-comp" /></svg>Nav / Link</div>
+                    <div class="ly l2"><svg class="ic" style="color: #b4a9ff"><use href="#i-comp" /></svg>Badge / Tag</div>
+                  </div>
+                </div>
+
+                <!-- canvas -->
+                <div id="canvas">
+                  <div id="flabel"><svg class="ic"><use href="#i-monitor" /></svg><b>Home</b>Desktop, 1200</div>
+                  <div id="artboard" data-layout-allow-overlap>
+                    <div id="site">
+                      <div id="nav">
+                        <div class="logo"><svg viewBox="0 0 22 22"><rect width="22" height="22" rx="6" fill="#7c6cf0" /><path d="M5.5 7.5h11M11 7.5v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none" /></svg>Tern</div>
+                        <div class="lk"><span>Product<svg class="ic"><use href="#i-cd" /></svg></span><span>Solutions<svg class="ic"><use href="#i-cd" /></svg></span><span>Pricing</span><span>Customers</span><span>Docs</span></div>
+                        <div class="sp"></div>
+                        <div class="rt"><span>Sign in</span><span class="wbtn">Start free trial</span></div>
+                      </div>
+                      <div id="hero">
+                        <div class="badge"><em>New</em>Tern AI now drafts replies in 40 languages<svg class="ic"><use href="#i-arr" /></svg></div>
+                        <div id="h1">Customer support, without the backlog.</div>
+                        <div id="sub">Tern brings email, chat and social DMs into one shared inbox, drafts replies with AI, and routes every conversation to the right teammate.</div>
+                        <div class="cta"><span class="p">Start free trial<svg class="ic"><use href="#i-arr" /></svg></span><span class="s">Book a demo</span></div>
+                      </div>
+                      <div id="logos">Trusted by support teams at<b>Northwind</b><b class="i">Lumen</b><b class="w">FOUNDRY</b><b>Parcel</b><b class="i">Stacklane</b><b>Quill</b></div>
+
+                      <div id="feat" data-layout-allow-overlap>
+                        <div id="sh"><h2>One inbox for every customer conversation</h2><span class="sp"></span><span class="lnk">Explore all features<svg class="ic"><use href="#i-arr" /></svg></span></div>
+
+                        <div id="blocks" data-layout-allow-overlap>
+                          <!-- Cell 1 -->
+                          <div class="cell" id="cell1" data-layout-allow-overlap>
+                            <div class="k0">
+                              <div class="ib"><b>Inbox</b><span class="cnt">24</span><span class="chip on" style="margin-left: 8px">Open</span><span class="chip">Mine</span><span class="chip">Unassigned</span><span class="sp"></span><svg class="ic"><use href="#i-search" /></svg><svg class="ic"><use href="#i-sliders" /></svg></div>
+                              <div class="mr on"><i class="ub"></i><div class="pa" style="background: #0ea5e9">MC</div><div class="tx"><div class="l1t">Maya Chen<span class="tg t-am">Billing</span><i>2m</i></div><div class="l2t"><b>Refund for order #48213</b> &nbsp;Hi, the package arrived damaged and I'd like a refund</div></div></div>
+                              <div class="mr"><i class="ub"></i><div class="pa" style="background: #ec4899">LO</div><div class="tx"><div class="l1t">Liam Ortiz<span class="tg t-rd">Bug</span><i>9m</i></div><div class="l2t"><b>Can't connect Shopify store</b> &nbsp;I followed the setup guide but the sync keeps failing</div></div></div>
+                              <div class="mr"><i class="ub"></i><div class="pa" style="background: #14b8a6">PN</div><div class="tx"><div class="l1t">Priya Nair<span class="tg t-am">Billing</span><i>24m</i></div><div class="l2t"><b>Invoice INV-2207 missing VAT ID</b> &nbsp;Could you reissue the invoice with our VAT number</div></div></div>
+                              <div class="mr"><div class="pa" style="background: #f59e0b">NB</div><div class="tx"><div class="l1t">Noah Becker<span class="tg t-bl">Feedback</span><i>1h</i></div><div class="l2t"><b>Feature request: bulk tagging</b> &nbsp;We handle about 300 tickets a day and tagging one by one</div></div></div>
+                              <div class="mr"><div class="pa" style="background: #8b5cf6">SR</div><div class="tx"><div class="l1t">Sofia Rossi<span class="tg t-gn">Sales</span><i>2h</i></div><div class="l2t"><b>Upgrade to Scale plan</b> &nbsp;We're hitting the seat limit on Team, what's the price</div></div></div>
+                              <div class="mr"><div class="pa" style="background: #64748b">JW</div><div class="tx"><div class="l1t">Jonas Weber<span class="tg t-rd">Bug</span><i>3h</i></div><div class="l2t"><b>SSO login loop on Okta</b> &nbsp;After the last release users get redirected back to the login</div></div></div>
+                              <div class="mr"><div class="pa" style="background: #ef4444">AT</div><div class="tx"><div class="l1t">Aiko Tanaka<span class="tg t-vi">Legal</span><i>5h</i></div><div class="l2t"><b>Data export for GDPR request</b> &nbsp;Please send a full export of the conversations we have</div></div></div>
+                            </div>
+                            <div class="k1">
+                              <div class="kp">
+                                <div class="kh"><svg class="ic"><use href="#i-spark" /></svg>Suggested reply<span class="tg t-vi">Draft</span><span class="sp"></span><span class="mu">94% match &middot; &#8984;&#8629; to insert</span></div>
+                                <div class="qt"><div class="pa" style="background: #0ea5e9">MC</div><b>Maya Chen</b>The package arrived damaged and I'd like a refund for order #48213.</div>
+                                <div class="dr">Hi Maya, I'm sorry your order arrived damaged. I've issued a full refund of $84.00 to your Visa ending 4242, and you should see it within 3&ndash;5 business days. No need to send the item back.</div>
+                                <div class="br"><div class="b1">Insert reply<span>&#8984;&#8629;</span></div><div class="b2">Edit</div><div class="b2"><svg class="ic"><use href="#i-refresh" /></svg>Regenerate</div><span class="sp"></span><div class="b2">Friendly<svg class="ic"><use href="#i-ud" /></svg></div></div>
+                              </div>
+                            </div>
+                            <div class="ol"></div>
+                            <div class="wl"><div class="tag"><svg class="ic"><use href="#i-square" /></svg>Cell 1</div><div class="szw"><span class="sz s0">544 &times; 420</span><span class="sz s1">640 &times; 202</span></div></div>
+                          </div>
+
+                          <!-- Cell 2 -->
+                          <div class="cell" id="cell2" data-layout-allow-overlap>
+                            <div class="k0">
+                              <div class="cp">
+                                <span class="pill"><svg class="ic"><use href="#i-inbox" /></svg>Shared inbox</span>
+                                <h3>Every channel lands in one queue</h3>
+                                <p>Email, live chat, WhatsApp and social DMs arrive as a single conversation list and get routed to the right teammate by rules you control.</p>
+                                <ul>
+                                  <li><svg class="ic"><use href="#i-checkc" /></svg>Auto-assign by language, plan or topic</li>
+                                  <li><svg class="ic"><use href="#i-checkc" /></svg>Collision detection while teammates reply</li>
+                                  <li><svg class="ic"><use href="#i-checkc" /></svg>Saved replies with variables and macros</li>
+                                </ul>
+                                <div class="bt"><span class="p">Start free trial<svg class="ic"><use href="#i-arr" /></svg></span><span class="s">Book a demo</span></div>
+                              </div>
+                            </div>
+                            <div class="k1">
+                              <div class="kp">
+                                <div class="kh"><svg class="ic"><use href="#i-clock" /></svg>Median first response<span class="sp"></span><span class="mu">Last 7 days</span><svg class="ic" style="width: 12px; height: 12px; color: #8a8a93"><use href="#i-cd" /></svg></div>
+                                <div class="big">1m 42s<span class="dl"><svg class="ic"><use href="#i-ard" /></svg>38%</span><small>vs last week</small></div>
+                                <svg width="416" height="82" viewBox="0 0 416 82" style="display: block; margin-top: 4px">
+                                  <defs><linearGradient id="gm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b7cf6" stop-opacity="0.3" /><stop offset="1" stop-color="#8b7cf6" stop-opacity="0" /></linearGradient></defs>
+                                  <g stroke="#1f1f23" stroke-width="1"><line x1="0" y1="20.5" x2="416" y2="20.5" /><line x1="0" y1="41.5" x2="416" y2="41.5" /><line x1="0" y1="62.5" x2="416" y2="62.5" /></g>
+                                  <path d="M0 14L69 22L138 18L207 34L276 40L345 52L408 60L408 82L0 82Z" fill="url(#gm)" />
+                                  <path id="spark" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0" d="M0 14L69 22L138 18L207 34L276 40L345 52L408 60" fill="none" stroke="#8b7cf6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                                  <circle cx="408" cy="60" r="3.5" fill="#0d0d10" stroke="#8b7cf6" stroke-width="2" />
+                                </svg>
+                                <div class="ax"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                              </div>
+                            </div>
+                            <div class="ol"></div>
+                            <div class="wl"><div class="tag"><svg class="ic"><use href="#i-square" /></svg>Cell 2</div><div class="szw"><span class="sz s0">544 &times; 420</span><span class="sz s1">448 &times; 202</span></div></div>
+                          </div>
+
+                          <!-- Cell 3 -->
+                          <div class="cell" id="cell3" data-layout-allow-overlap>
+                            <div class="k1">
+                              <div class="kp">
+                                <div class="kh"><svg class="ic"><use href="#i-grid" /></svg>Connects to your stack<span class="sp"></span><span class="vl">42 apps</span></div>
+                                <div class="gr">
+                                  <div class="ti"><i style="background: #611f69"><svg class="ic"><use href="#i-hash" /></svg></i>Slack</div>
+                                  <div class="ti"><i style="background: #ea4335"><svg class="ic"><use href="#i-mail" /></svg></i>Gmail</div>
+                                  <div class="ti"><i style="background: #5e8e3e"><svg class="ic"><use href="#i-bag" /></svg></i>Shopify</div>
+                                  <div class="ti"><i style="background: #635bff"><svg class="ic"><use href="#i-card" /></svg></i>Stripe</div>
+                                  <div class="ti"><i style="background: #f2683c"><svg class="ic"><use href="#i-users" /></svg></i>HubSpot</div>
+                                  <div class="ti"><i style="background: #3f3f46"><svg class="ic"><use href="#i-file" /></svg></i>Notion</div>
+                                  <div class="ti"><i style="background: #27272a"><svg class="ic"><use href="#i-code" /></svg></i>GitHub</div>
+                                  <div class="ti"><i style="background: #5e6ad2"><svg class="ic"><use href="#i-checkc" /></svg></i>Linear</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="ol"></div>
+                            <div class="wl"><div class="tag"><svg class="ic"><use href="#i-square" /></svg>Cell 3</div><div class="szw"><span class="sz s0">544 &times; 420</span><span class="sz s1">448 &times; 202</span></div></div>
+                          </div>
+
+                          <!-- Cell 4 -->
+                          <div class="cell" id="cell4" data-layout-allow-overlap>
+                            <div class="k1">
+                              <div class="kp">
+                                <div class="kh"><svg class="ic"><use href="#i-zap" /></svg>Workflow &middot; Refund requests<span class="sp"></span><span class="mu">Active</span><div class="tgl"><i></i></div></div>
+                                <div class="fl">
+                                  <div class="nd"><i style="background: #8b7cf6"><svg class="ic"><use href="#i-inbox" /></svg></i><div class="t">New conversation</div><div class="u">Channel: Email</div></div>
+                                  <div class="cn"><svg class="ic"><use href="#i-arr" /></svg></div>
+                                  <div class="nd"><i style="background: #d97706"><svg class="ic"><use href="#i-branch" /></svg></i><div class="t">Topic is Billing</div><div class="u">Contains "refund"</div></div>
+                                  <div class="cn"><svg class="ic"><use href="#i-arr" /></svg></div>
+                                  <div class="nd"><i style="background: #2563eb"><svg class="ic"><use href="#i-user" /></svg></i><div class="t">Assign to</div><div class="u">Priya Nair</div></div>
+                                  <div class="cn"><svg class="ic"><use href="#i-arr" /></svg></div>
+                                  <div class="nd"><i style="background: #16a34a"><svg class="ic"><use href="#i-hash" /></svg></i><div class="t">Post to Slack</div><div class="u">#support-billing</div></div>
+                                </div>
+                                <div class="ft"><svg class="ic"><use href="#i-check" /></svg>1,284 runs this week &middot; 99.6% succeeded<span class="sp"></span>Last run 2m ago</div>
+                              </div>
+                            </div>
+                            <div class="ol"></div>
+                            <div class="wl"><div class="tag"><svg class="ic"><use href="#i-square" /></svg>Cell 4</div><div class="szw"><span class="sz s0">544 &times; 420</span><span class="sz s1">640 &times; 202</span></div></div>
+                          </div>
+
+                          <!-- spacing guides -->
+                          <div id="gaps">
+                            <i style="left: 640px; top: 0; width: 16px; height: 202px"></i>
+                            <i style="left: 0; top: 202px; width: 1104px; height: 16px"></i>
+                            <i style="left: 448px; top: 218px; width: 16px; height: 202px"></i>
+                            <b style="left: 648px; top: 101px">16</b>
+                            <b style="left: 552px; top: 210px">16</b>
+                            <b style="left: 456px; top: 319px">16</b>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="next">Plans that scale with your team</div>
+                    </div>
+
+                    <!-- selection frame -->
+                    <div id="sel">
+                      <span class="hd" style="left: -5px; top: -5px"></span><span class="hd" style="left: 595px; top: -5px"></span><span class="hd" style="right: -5px; top: -5px"></span>
+                      <span class="hd" style="left: -5px; top: 273px"></span><span class="hd" style="right: -5px; top: 273px"></span>
+                      <span class="hd" style="left: -5px; bottom: -5px"></span><span class="hd" style="left: 595px; bottom: -5px"></span><span class="hd" style="right: -5px; bottom: -5px"></span>
+                    </div>
+                    <div id="selsz">1200 &times; 556</div>
+                  </div>
+
+                  <!-- floating toolbar -->
+                  <div id="ftb">
+                    <span class="t on"><svg class="ic"><use href="#i-ptr" /></svg></span>
+                    <span class="t"><svg class="ic"><use href="#i-frame" /></svg></span>
+                    <span class="t"><svg class="ic"><use href="#i-type" /></svg></span>
+                    <span class="t"><svg class="ic"><use href="#i-image" /></svg></span>
+                    <span class="t"><svg class="ic"><use href="#i-square" /></svg></span>
+                    <span class="sep"></span>
+                    <div id="wfbtn"><div id="wfbg"></div><svg class="ic" style="width: 15px; height: 15px"><use href="#i-tpl" /></svg><span>Wireframe</span></div>
+                    <span class="sep"></span>
+                    <span class="t"><svg class="ic"><use href="#i-msg" /></svg></span>
+                  </div>
+                </div>
+
+                <!-- properties -->
+                <div id="rp">
+                  <div class="rt2"><span class="on">Design</span><span>Interact</span><span>Code</span></div>
+                  <div class="rs"><svg class="ic"><use href="#i-frame" /></svg><b>Features</b><span class="tgx">Section</span><span class="sp"></span><svg class="ic"><use href="#i-eye" /></svg><svg class="ic"><use href="#i-lock" /></svg></div>
+                  <div class="rg f" style="height: 124px">
+                    <div class="rh">Size &amp; position</div>
+                    <div class="rr"><div class="fd"><em>X</em>0</div><div class="fd"><em>Y</em>340</div></div>
+                    <div class="rr"><div class="fd"><em>W</em>1200<span class="u">Fixed</span></div><div class="fd"><em>H</em>556<span class="u">Fixed</span></div></div>
+                  </div>
+                  <div class="rg" style="height: 244px">
+                    <div class="rh"><svg class="ic"><use href="#i-cd" /></svg>Layout</div>
+                    <div class="rr"><span class="lab">Type</span>
+                      <div class="seg"><div id="segThumb"></div><span class="sgS"><svg class="ic"><use href="#i-stack" /></svg>Stack</span><span class="sgG"><svg class="ic"><use href="#i-grid" /></svg>Grid</span></div>
+                    </div>
+                    <div class="rr" style="padding: 0">
+                      <div class="var" id="dirRow"><span class="lab">Direction</span><span class="sp"></span><div class="ib2 on"><svg class="ic"><use href="#i-arr" /></svg></div><div class="ib2"><svg class="ic"><use href="#i-ard" /></svg></div></div>
+                      <div class="var" id="gridRow"><span class="lab">Grid</span><span class="sp"></span><div class="fd" style="flex: none; width: 76px"><svg class="ic"><use href="#i-cols" /></svg>2</div><div class="fd" style="flex: none; width: 76px"><svg class="ic"><use href="#i-rows" /></svg>2</div></div>
+                    </div>
+                    <div class="rr"><span class="lab">Gap</span><span class="sp"></span><div class="fd" style="flex: none; width: 120px"><svg class="ic"><use href="#i-sliders" /></svg>16</div></div>
+                    <div class="rr"><span class="lab">Padding</span><span class="sp"></span><div class="fd" style="flex: none; width: 120px"><svg class="ic"><use href="#i-corner" /></svg>48</div></div>
+                    <div class="rr"><span class="lab">Align</span><span class="sp"></span><div class="ib2 on"><svg class="ic"><use href="#i-align" /></svg></div><div class="ib2"><svg class="ic"><use href="#i-align" /></svg></div><div class="ib2"><svg class="ic"><use href="#i-align" /></svg></div></div>
+                  </div>
+                  <div class="rg" style="height: 84px">
+                    <div class="rh"><svg class="ic"><use href="#i-cd" /></svg>Fill</div>
+                    <div class="rr"><div class="sw" style="background: #0a0a0c"></div><div class="fd" style="margin-left: 2px">0A0A0C<span class="u">100%</span></div></div>
+                  </div>
+                  <div class="rg" style="height: 37px"><div class="rh"><svg class="ic"><use href="#i-cr" /></svg>Border</div></div>
+                  <div class="rg" style="height: 37px"><div class="rh"><svg class="ic"><use href="#i-cr" /></svg>Effects</div></div>
+                  <div class="rg" style="height: 37px"><div class="rh"><svg class="ic"><use href="#i-cr" /></svg>Appear</div></div>
+                  <div class="rg" style="height: 37px"><div class="rh"><svg class="ic"><use href="#i-cr" /></svg>Accessibility</div></div>
+                  <div class="rfoot"><i></i>Saved<span class="sp"></span>Version 27</div>
+                </div>
+              </div>
+
+              <div id="tip">Wireframe<kbd>W</kbd></div>
+              <div id="toast"><svg class="ic"><use href="#i-check" /></svg>Layout set to Grid<span class="mu">2 &times; 2</span><span class="u">Undo</span></div>
+            </div>
+
+            <div id="cur">
+              <svg viewBox="0 0 24 24"><path d="M5 3l14 7.5-6.2 1.8L10 19z" fill="#111111" stroke="#ffffff" stroke-width="1.6" stroke-linejoin="round" /></svg>
+            </div>
+          </div>
+        </div>
+
+        <div id="fring"></div>
+        <div id="fin"><span class="pb">Publish</span><span class="pd"><svg class="ic" viewBox="0 0 24 24"><use href="#i-check" /></svg>Published</span></div>
+      </div>
+    </div>
+
+    <script>
+      const EIO = "power3.inOut"; // cubic-bezier(0.65, 0, 0.35, 1)
+      const EXPO = "expo.out"; // cubic-bezier(0.16, 1, 0.3, 1)
+
+      const cam = (s, cx, cy) => ({ scale: s, x: 960 - s * cx, y: 540 - s * cy });
+      const W0 = cam(1.26, 720, 405);
+      const W1 = cam(1.3, 720, 405);
+      const MID = cam(1.6, 696, 470);
+      const MID2 = cam(1.65, 696, 470);
+      const W2 = cam(1.3, 720, 405);
+      const W3 = cam(1.34, 720, 405);
+
+      gsap.set("#cam", W0);
+      gsap.set("#zoom", { opacity: 0 });
+      gsap.set("#cur", { x: 1010, y: 640, opacity: 0 });
+      gsap.set("#segThumb", { x: 0 });
+
+      const tl = gsap.timeline({ paused: true });
+      function F(target, from, to, at) {
+        tl.fromTo(target, from, Object.assign({ immediateRender: false }, to), at);
+      }
+      const fr = (t) => Math.round(t * 30) / 30;
+
+      /* ---------- camera: wide, push in for the re-layout, pull back, slow drift ---------- */
+      F("#zoom", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      F("#cam", W0, Object.assign({ duration: 3.4, ease: "none" }, W1), 0);
+      F("#cam", W1, Object.assign({ duration: 1.1, ease: EXPO }, MID), 3.4);
+      F("#cam", MID, Object.assign({ duration: 1.3, ease: "none" }, MID2), 4.5);
+      F("#cam", MID2, Object.assign({ duration: 0.8, ease: EXPO }, W2), 5.8);
+      F("#cam", W2, Object.assign({ duration: 3.9, ease: "none" }, W3), 6.6);
+
+      /* ---------- cursor helpers ---------- */
+      let cur = { x: 1010, y: 640 };
+      function mvC(t, dur, x, y, ex, ey) {
+        F("#cur", { x: cur.x }, { x: x, duration: dur, ease: ex || EXPO }, t);
+        F("#cur", { y: cur.y }, { y: y, duration: dur * 1.15, ease: ey || "power2.out" }, t);
+        cur = { x: x, y: y };
+      }
+      function press(t) { F("#cur", { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.out" }, t); }
+      function release(t) { F("#cur", { scale: 0.86 }, { scale: 1, duration: 0.18, ease: "back.out(2)" }, t); }
+
+      /* ---------- block geometry: the same four elements, two layouts ---------- */
+      const L1 = [[0, 0, 544, 420], [560, 0, 544, 420], [0, 0, 544, 420], [560, 0, 544, 420]];
+      const L2 = [[0, 0, 640, 202], [656, 0, 448, 202], [0, 218, 448, 202], [464, 218, 640, 202]];
+      const FILL = "rgb(16,16,19)";
+      const WFILL = "rgba(10,132,255,0.07)";
+      const STROKE_N = "inset 0 0 0 1px rgba(255,255,255,0.09)";
+      const STROKE_W = "inset 0 0 0 1.5px rgba(10,132,255,1)";
+      const cell = (i) => "#cell" + i;
+
+      /* 1. cursor to the Wireframe toggle, tooltip, click (0.25 - 1.6) */
+      F("#cur", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.25);
+      mvC(0.3, 0.95, 810, 799);
+      F("#tip", { opacity: 0, y: 4 }, { opacity: 1, y: 0, duration: 0.14, ease: "power2.out" }, 1.2);
+      press(1.52);
+      release(1.66);
+      tl.to("#tip", { opacity: 0, duration: 0.12, ease: "power2.out" }, 1.6);
+
+      /* 2. wireframe mode: content drops out, only 1px blue frames stay (1.6 - 2.1) */
+      F("#wfbg", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 1.6);
+      tl.set("#wfbtn", { color: "#8ec5ff" }, 1.6);
+      tl.to(["#cell1 .k0", "#cell2 .k0"], { opacity: 0, duration: 0.3, ease: "power2.out" }, 1.6);
+      [1, 2].forEach((i) => {
+        F(cell(i), { backgroundColor: FILL, borderRadius: 14 }, { backgroundColor: WFILL, borderRadius: 2, duration: 0.5, ease: "power2.out" }, 1.6);
+        F(cell(i) + " .ol", { boxShadow: STROKE_N }, { boxShadow: STROKE_W, duration: 0.5, ease: "power2.out" }, 1.6);
+      });
+      tl.to(["#nav", "#hero", "#logos", "#sh", "#next"], { opacity: 0.2, duration: 0.5, ease: "power2.out" }, 1.6);
+      F(["#cell1 .wl", "#cell2 .wl"], { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 2.0);
+
+      /* 3. cursor to Layout > Type, hover, click Grid (1.8 - 3.4) */
+      mvC(1.8, 0.8, 1412, 322);
+      press(3.3);
+      release(3.44);
+
+      /* 4. same frame as the click: control, layer rows and all four frames start to move (3.4 - 4.2) */
+      F("#segThumb", { x: 0 }, { x: 62, duration: 0.14, ease: EXPO }, 3.4);
+      tl.set(".sgS", { color: "#8e8e93" }, 3.4);
+      tl.set(".sgG", { color: "#f2f2f4" }, 3.4);
+      tl.set("#dirRow", { opacity: 0 }, 3.4);
+      tl.set("#gridRow", { opacity: 1 }, 3.4);
+      tl.set(["#ly3", "#ly4"], { opacity: 1 }, 3.4);
+      tl.set(["#ly3 .rt", "#ly4 .rt"], { opacity: 0 }, 3.4);
+      tl.set([cell(3), cell(4)], { opacity: 1, backgroundColor: WFILL, borderRadius: 2 }, 3.4);
+      tl.set([cell(3) + " .ol", cell(4) + " .ol"], { boxShadow: STROKE_W }, 3.4);
+      tl.to(["#cell1 .wl", "#cell2 .wl"], { opacity: 0, duration: 0.1, ease: "power2.out" }, 3.4);
+      tl.set(".s0", { opacity: 0 }, 3.4);
+      tl.set(".s1", { opacity: 1 }, 3.4);
+      for (let i = 0; i < 4; i++) {
+        const a = L1[i];
+        const b = L2[i];
+        // CSS left/top of #cell1..4 equal L1, so x/y carry the offset from L1 to L2
+        F(cell(i + 1), { x: 0, y: 0, width: a[2], height: a[3] }, { x: b[0] - a[0], y: b[1] - a[1], width: b[2], height: b[3], duration: 0.8, ease: EIO }, 3.4);
+      }
+      F("#toast", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, ease: EXPO }, 3.6);
+      tl.to("#toast", { opacity: 0, duration: 0.25, ease: "power2.out" }, 5.7);
+      tl.to("#cur", { opacity: 0, duration: 0.15, ease: "power2.out" }, 3.75);
+
+      /* 5. layout lands: new frame sizes and spacing guides appear (4.25 - 4.85) */
+      F([cell(1) + " .wl", cell(2) + " .wl", cell(3) + " .wl", cell(4) + " .wl"], { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 4.25);
+      F("#gaps", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 4.3);
+
+      /* 6. cursor back to the Wireframe toggle, click to turn it off (4.3 - 4.9) */
+      tl.set("#cur", { x: 930, y: 835 }, 4.25);
+      cur = { x: 930, y: 835 };
+      F("#cur", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 4.3);
+      mvC(4.3, 0.5, 810, 799);
+      press(4.84);
+      release(4.98);
+
+      /* 7. wireframe off: each cell fills in turn, 0.3s each, 0.15s apart (4.9 - 5.65) */
+      tl.to("#wfbg", { opacity: 0, duration: 0.1, ease: "power2.out" }, 4.9);
+      tl.set("#wfbtn", { color: "#d1d1d6" }, 4.9);
+      tl.to(["#gaps", cell(1) + " .wl", cell(2) + " .wl", cell(3) + " .wl", cell(4) + " .wl"], { opacity: 0, duration: 0.15, ease: "power2.out" }, 4.85);
+      tl.to(["#nav", "#hero", "#logos", "#sh", "#next"], { opacity: 1, duration: 0.4, ease: "power2.out" }, 4.9);
+      for (let i = 1; i <= 4; i++) {
+        const st = 4.9 + (i - 1) * 0.15;
+        F(cell(i), { backgroundColor: WFILL, borderRadius: 2 }, { backgroundColor: FILL, borderRadius: 14, duration: 0.35, ease: EXPO }, st);
+        F(cell(i) + " .ol", { boxShadow: STROKE_W }, { boxShadow: STROKE_N, duration: 0.35, ease: EXPO }, st);
+        F(cell(i) + " .k1", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: EXPO }, st);
+      }
+      F("#spark", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.out" }, 5.05);
+      mvC(5.0, 0.4, 900, 832, "power2.out", "power2.out");
+      tl.to("#cur", { opacity: 0, duration: 0.15, ease: "power2.out" }, 5.15);
+
+      /* 8. ending: cursor to Publish, click, the toolbar button is the one element left (5.95 - 10.5) */
+      tl.set("#cur", { x: 1120, y: 330 }, 5.95);
+      cur = { x: 1120, y: 330 };
+      F("#cur", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 6.0);
+      mvC(6.0, 0.8, 1408, 31);
+      F("#pub", { scale: 1 }, { scale: 0.95, duration: 0.06, ease: "power2.out" }, 7.0);
+      F("#pub", { scale: 0.95 }, { scale: 1, duration: 0.18, ease: "back.out(2)" }, 7.06);
+      press(7.0);
+      release(7.14);
+      tl.to("#cur", { opacity: 0, duration: 0.2, ease: "power2.out" }, 7.3);
+
+      // the camera is a straight drift from 6.6 to 10.5, so its scale at the click frame is known
+      const tc = 7.08;
+      const sc = 1.3 + 0.04 * ((tc - 6.6) / 3.9);
+      const fx = sc * (1382 - 720); // Publish button centre relative to the frame centre, on screen
+      const fy = sc * (23 - 405);
+      tl.set("#fin", { x: fx, y: fy, scale: sc / 3, opacity: 1 }, tc);
+      tl.to("#fin", { x: 0, y: 0, scale: 1.5, duration: 1.0, ease: EIO }, tc);
+      tl.to("#fin", { scale: 1.58, duration: 2.4, ease: "none" }, 8.1);
+      tl.to("#zoom", { opacity: 0, scale: 0.94, duration: 0.7, ease: EIO }, 7.1);
+      F("#veil", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: EIO }, 7.1);
+      // click on the big button: the label turns into Published on the same frame as the ring
+      tl.set("#fin .pb", { opacity: 0 }, 8.3);
+      tl.set("#fin .pd", { opacity: 1 }, 8.3);
+      tl.set("#fring", { opacity: 0.9, scale: 1.56 }, 8.3);
+      tl.to("#fring", { opacity: 0, scale: 1.95, duration: 0.7, ease: "power2.out" }, 8.3);
+
+      tl.set({}, {}, 10.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

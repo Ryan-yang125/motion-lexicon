@@ -1,1 +1,0 @@
-In React, implement a selectable project card that opens a side inspector. Preserve the selected card identity, support Escape, and keep motion interruption-safe.
