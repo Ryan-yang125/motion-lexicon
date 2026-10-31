@@ -40,7 +40,8 @@
   .hero-tl, .hero-shot { margin-inline: 16px; }
   .hero-tl { height: 44px; }
   .tl-block { align-items: center; justify-content: center; padding: 0; }
-  .tl-pos, .tl-name { display: none; }
+  /* hidden from view, kept in the button's accessible name */
+  .tl-block .tl-pos, .tl-block .tl-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .tl-n { display: inline; }
 }
 
@@ -109,4 +110,12 @@
   .skill-box { width: 100%; }
   .skill-box code { flex: 1; font-size: 13px; padding-block: 10px; }
   .skill-row > .btn { width: 100%; }
+}
+
+/* ---------- touch targets ---------- */
+@media (pointer: coarse) {
+  .tile-actions { padding: 0; gap: 0; }
+  /* padding and negative margin enlarge the link without moving the text */
+  .tile-title { padding-block: 12px; margin-block: -12px; }
+  .tile-like .act-mini-like, .tile-like .act-like { height: 44px; margin-block: -6px; }
 }

@@ -1,9 +1,9 @@
-// Typed access to the recipe data. terms.json holds the source data with the Chinese copy; en.json
-// holds the English copy, keyed by slug. Both end up in term.text[locale].
+// Typed access to the recipe data. scripts/recipes.mjs generates src/data/gen/ from terms.json (Chinese
+// copy) and en.json (English copy): index.json is bundled with every page, the long text of one recipe
+// is a separate chunk that only the recipe page loads (loadText).
 // Adding a film: an entry in both files, then media/<video>.mp4, <video>-s.mp4, <video>.jpg (uploaded to R2)
 // and the runnable HyperFrames folder in skills/motionboard/source/<video>/ (copied to public/source at build).
-import raw from './terms.json'
-import enRaw from './en.json'
+import raw from './gen/index.json'
 import { MEDIA_URL, type Locale } from '@/site'
 
 export type Category = 'A' | 'B' | 'C' | 'D' | 'E'
@@ -13,10 +13,8 @@ export type Position = 'open' | 'reveal' | 'feature' | 'bridge' | 'close'
 
 export type Sample = { t: string; id: string; at: string; s?: number; u?: string }
 
-/** Copy for one recipe in one locale */
+/** Long copy for one recipe in one locale */
 export type RecipeText = {
-  /** one-line concept */
-  def: string
   why: string
   /** [label, value]; value may contain <code> markup */
   spec: [string, string][]
@@ -27,7 +25,7 @@ export type RecipeText = {
   vs: [string, string][]
 }
 
-type RawTerm = {
+export type Term = {
   n: number
   slug: string
   cat: Category
@@ -37,16 +35,11 @@ type RawTerm = {
   star: boolean
   samples: Sample[]
   video: string
-  zh1: string
-  why: string
-  spec: [string, string][]
-  prompt: string
-  says: string[]
-  /** [Chinese name of the other recipe, how they differ] */
-  vs: [string, string][]
+  /** length of the preview film in seconds */
+  dur: number
+  /** one-line concept */
+  def: Record<Locale, string>
 }
-
-export type Term = RawTerm & { text: Record<Locale, RecipeText> }
 
 /** A playable source: a YouTube range, or an external page (Arion lives on X). */
 export type Source = {
@@ -62,31 +55,26 @@ export type Source = {
 
 export const POSITION_ORDER: Position[] = ['open', 'reveal', 'feature', 'bridge', 'close']
 
-const en = enRaw as unknown as Record<string, RecipeText>
-const rawTerms = raw as unknown as RawTerm[]
-const slugByZh = Object.fromEntries(rawTerms.map((t) => [t.zh, t.slug]))
-
-const zhText = (t: RawTerm): RecipeText => ({
-  def: t.zh1,
-  why: t.why,
-  spec: t.spec,
-  prompt: t.prompt,
-  says: t.says,
-  // a source reference to a recipe that is not on the site is dropped
-  vs: t.vs.flatMap(([zh, text]) => (slugByZh[zh] ? [[slugByZh[zh], text] as [string, string]] : [])),
-})
-
-export const terms: Term[] = rawTerms.map((t) => ({ ...t, text: { en: en[t.slug], zh: zhText(t) } }))
+export const terms = raw as unknown as Term[]
 export const bySlug: Record<string, Term> = Object.fromEntries(terms.map((t) => [t.slug, t]))
 
 /** Site order: by position in a film, then by number */
 export const order = [...terms].sort((a, b) => POSITION_ORDER.indexOf(a.pos) - POSITION_ORDER.indexOf(b.pos) || a.n - b.n)
 export const byPos = (p: Position) => order.filter((t) => t.pos === p)
 
+const textFiles = import.meta.glob<RecipeText>('./gen/text/*.json', { import: 'default' })
+export const loadText = (slug: string, locale: Locale) => textFiles[`./gen/text/${slug}.${locale}.json`]()
+
 export const num = (t: Term) => String(t.n).padStart(2, '0')
-/** full film, small grid preview, poster */
-export const media = (t: Term, kind: 'mp4' | 'small' | 'jpg') =>
-  kind === 'small' ? `${MEDIA_URL}/${t.video}-s.mp4` : `${MEDIA_URL}/${t.video}.${kind}`
+const MEDIA_FILE = {
+  mp4: '.mp4', // 1080p film
+  mobile: '-m.mp4', // 720p film for narrow screens
+  small: '-s.mp4', // 360p loop for grid tiles
+  jpg: '.jpg', // 1920px poster
+  jpgSmall: '-m.jpg', // 960px poster
+}
+export type MediaKind = keyof typeof MEDIA_FILE
+export const media = (t: Pick<Term, 'video'>, kind: MediaKind) => `${MEDIA_URL}/${t.video}${MEDIA_FILE[kind]}`
 export const recipePath = (t: Term) => `/recipes/${t.slug}/`
 export const recipeFile = (t: Term) => `/r/${t.slug}.md`
 /** Display name in the given locale */

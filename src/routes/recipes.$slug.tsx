@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { RecipePage } from '@/components/recipe/RecipePage'
-import { loadTerm, recipeHead } from '@/lib/seo'
+import { loadRecipe, recipeHead } from '@/lib/seo'
 
 export const Route = createFileRoute('/recipes/$slug')({
-  loader: loadTerm,
-  head: ({ loaderData: t }) => (t ? recipeHead('en', t) : {}),
+  loader: loadRecipe('en'),
+  head: ({ loaderData }) => (loaderData ? recipeHead('en', loaderData.term) : {}),
   component: RecipeRoute,
 })
 
 function RecipeRoute() {
-  const term = Route.useLoaderData()
-  return <RecipePage key={term.slug} term={term} />
+  const { term, text } = Route.useLoaderData()
+  return <RecipePage key={term.slug} term={term} text={text} />
 }

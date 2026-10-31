@@ -75,7 +75,8 @@
       ]
     ],
     "video": "light-reveal",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 2,
@@ -145,7 +146,8 @@
       ]
     ],
     "video": "device-focus",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 10.0
   },
   {
     "n": 3,
@@ -229,7 +231,8 @@
       ]
     ],
     "video": "macro-pull-out",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 10.5
   },
   {
     "n": 4,
@@ -295,7 +298,8 @@
       ]
     ],
     "video": "x-ray-dissolve",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 10.0
   },
   {
     "n": 5,
@@ -371,7 +375,8 @@
       ]
     ],
     "video": "text-object-interleave",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 11.0
   },
   {
     "n": 6,
@@ -435,7 +440,8 @@
       ]
     ],
     "video": "dispense-lineup",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.5
   },
   {
     "n": 7,
@@ -507,7 +513,8 @@
       ]
     ],
     "video": "rotate-to-lockup",
-    "pos": "close"
+    "pos": "close",
+    "dur": 10.0
   },
   {
     "n": 8,
@@ -573,7 +580,8 @@
       ]
     ],
     "video": "outline-to-solid",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 11.0
   },
   {
     "n": 9,
@@ -651,7 +659,8 @@
       ]
     ],
     "video": "converge-to-mark",
-    "pos": "close"
+    "pos": "close",
+    "dur": 10.6
   },
   {
     "n": 10,
@@ -733,7 +742,8 @@
       ]
     ],
     "video": "tilted-ui",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 10.0
   },
   {
     "n": 11,
@@ -809,7 +819,8 @@
       ]
     ],
     "video": "zoom-to-cursor",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 12,
@@ -885,7 +896,8 @@
       ]
     ],
     "video": "morph-relay",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 13,
@@ -949,7 +961,8 @@
       ]
     ],
     "video": "wireframe-relayout",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.5
   },
   {
     "n": 14,
@@ -1015,7 +1028,8 @@
       ]
     ],
     "video": "showcase-wall",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 15,
@@ -1079,7 +1093,8 @@
       ]
     ],
     "video": "card-flip-code",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 16,
@@ -1155,7 +1170,8 @@
       ]
     ],
     "video": "control-driven",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 17,
@@ -1219,7 +1235,8 @@
       ]
     ],
     "video": "locked-reskin",
-    "pos": "bridge"
+    "pos": "bridge",
+    "dur": 11.0
   },
   {
     "n": 18,
@@ -1295,7 +1312,8 @@
       ]
     ],
     "video": "multiplayer-cursors",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.5
   },
   {
     "n": 19,
@@ -1365,7 +1383,8 @@
       ]
     ],
     "video": "focus-hop",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.8
   },
   {
     "n": 20,
@@ -1429,7 +1448,8 @@
       ]
     ],
     "video": "dock-arrival",
-    "pos": "reveal"
+    "pos": "reveal",
+    "dur": 11.0
   },
   {
     "n": 21,
@@ -1499,7 +1519,8 @@
       ]
     ],
     "video": "pile-up-clear",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.8
   },
   {
     "n": 22,
@@ -1575,7 +1596,8 @@
       ]
     ],
     "video": "word-highlight",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 23,
@@ -1657,7 +1679,8 @@
       ]
     ],
     "video": "rhythmic-typing",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 24,
@@ -1721,7 +1744,8 @@
       ]
     ],
     "video": "prompt-carousel",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 25,
@@ -1797,7 +1821,8 @@
       ]
     ],
     "video": "scattered-spec",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 26,
@@ -1879,7 +1904,8 @@
       ]
     ],
     "video": "mark-to-wordmark",
-    "pos": "close"
+    "pos": "close",
+    "dur": 9.4
   },
   {
     "n": 27,
@@ -1939,7 +1965,8 @@
       ]
     ],
     "video": "chromatic-stretch",
-    "pos": "close"
+    "pos": "close",
+    "dur": 10.5
   },
   {
     "n": 28,
@@ -2015,7 +2042,8 @@
       ]
     ],
     "video": "glass-lens",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 10.8
   },
   {
     "n": 29,
@@ -2081,7 +2109,8 @@
       ]
     ],
     "video": "glass-droplet-split",
-    "pos": "bridge"
+    "pos": "bridge",
+    "dur": 10.0
   },
   {
     "n": 30,
@@ -2153,7 +2182,8 @@
       ]
     ],
     "video": "branching-growth",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 31,
@@ -2219,7 +2249,8 @@
       ]
     ],
     "video": "iris-montage",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 32,
@@ -2289,7 +2320,8 @@
       ]
     ],
     "video": "map-pin-drop",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 33,
@@ -2359,7 +2391,8 @@
       ]
     ],
     "video": "dot-matrix-glyph",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   },
   {
     "n": 34,
@@ -2429,7 +2462,8 @@
       ]
     ],
     "video": "line-boil",
-    "pos": "open"
+    "pos": "open",
+    "dur": 11.0
   },
   {
     "n": 35,
@@ -2493,7 +2527,8 @@
       ]
     ],
     "video": "domino-wave",
-    "pos": "bridge"
+    "pos": "bridge",
+    "dur": 10.8
   },
   {
     "n": 36,
@@ -2569,7 +2604,8 @@
       ]
     ],
     "video": "match-cut",
-    "pos": "bridge"
+    "pos": "bridge",
+    "dur": 10.0
   },
   {
     "n": 37,
@@ -2645,7 +2681,8 @@
       ]
     ],
     "video": "foreground-wipe-flash",
-    "pos": "bridge"
+    "pos": "bridge",
+    "dur": 11.0
   },
   {
     "n": 38,
@@ -2721,6 +2758,7 @@
       ]
     ],
     "video": "confirmation-burst",
-    "pos": "feature"
+    "pos": "feature",
+    "dur": 11.0
   }
 ]

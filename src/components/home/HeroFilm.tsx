@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Play } from 'lucide-react'
 import { CopyAction } from '@/components/actions'
-import { HERO } from '@/data/hero'
+import { HERO, type HeroSegment } from '@/data/hero'
 import { bySlug, termName } from '@/data/terms'
 import { gsap, useGSAP } from '@/lib/gsap'
 import { PageLink, useLocale, useStrings } from '@/lib/locale'
@@ -10,7 +10,8 @@ import { BRAND } from '@/site'
 const SEGS = HERO.map((s) => ({ ...s, term: bySlug[s.slug], dur: s.end - s.start }))
 // One <video> per distinct src, stacked; cutting between segments toggles which one is visible.
 const SRCS = [...new Set(HERO.map((s) => s.src))]
-const posterFor = (src: string) => HERO.find((s) => s.src === src)!.poster
+// Phones play the 720p copy of the film; segment times are the same in both.
+const filmOf = (seg: HeroSegment) => (matchMedia('(max-width: 767px)').matches ? seg.mobile : seg.src)
 
 const pendingSeek = new WeakMap<HTMLVideoElement, number>()
 
@@ -30,12 +31,13 @@ function seek(v: HTMLVideoElement, t: number) {
   }
 }
 
-function prepare(v: HTMLVideoElement, src: string, start: number) {
-  if (v.getAttribute('src') !== src) {
+function prepare(v: HTMLVideoElement, seg: HeroSegment) {
+  const film = filmOf(seg)
+  if (v.getAttribute('src') !== film) {
     v.preload = 'auto'
-    v.src = src
+    v.src = film
   }
-  seek(v, start)
+  seek(v, seg.start)
 }
 
 export function HeroFilm() {
@@ -94,8 +96,8 @@ export function HeroFilm() {
     if (!armed) return
     const seg = SEGS[index]
     const next = SEGS[(index + 1) % SEGS.length]
-    prepare(vids.current.get(seg.src)!, seg.src, seg.start)
-    if (next.src !== seg.src) prepare(vids.current.get(next.src)!, next.src, next.start)
+    prepare(vids.current.get(seg.src)!, seg)
+    if (next.src !== seg.src) prepare(vids.current.get(next.src)!, next)
     vids.current.forEach((el, src) => {
       if (src !== seg.src) el.pause()
     })
@@ -162,7 +164,17 @@ export function HeroFilm() {
         <h1 className="hero-h">{BRAND.headline[locale]}</h1>
         <div className="hero-stage">
           <div className="frame hero-frame">
-            <img className="hero-poster" src={SEGS[0].poster} alt="" width={1920} height={1080} fetchPriority="high" decoding="async" />
+            <img
+              className="hero-poster"
+              src={SEGS[0].poster}
+              srcSet={`${SEGS[0].posterSmall} 960w, ${SEGS[0].poster} 1920w`}
+              sizes="(min-width: 900px) 1200px, 100vw"
+              alt=""
+              width={1920}
+              height={1080}
+              fetchPriority="high"
+              decoding="async"
+            />
             {SRCS.map((src) => (
               <video
                 key={src}
@@ -174,7 +186,6 @@ export function HeroFilm() {
                 muted
                 playsInline
                 preload="none"
-                poster={posterFor(src)}
                 aria-hidden="true"
                 tabIndex={-1}
                 onPlaying={() => setShown(true)}
@@ -193,12 +204,11 @@ export function HeroFilm() {
                   type="button"
                   className="tl-block"
                   aria-current={i === index ? 'true' : undefined}
-                  aria-label={`${s.positions[seg.term.pos]}: ${termName(seg.term, locale)}`}
                   onClick={() => select(i)}
                 >
                   <span className="tl-fill" ref={(el) => void (fills.current[i] = el)} />
-                  <span className="tl-n mono">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="tl-pos mono">{s.positions[seg.term.pos]}</span>
+                  <span className="tl-n mono">{String(i + 1).padStart(2, '0')}</span>{' '}
+                  <span className="tl-pos mono">{s.positions[seg.term.pos]}</span>{' '}
                   <span className="tl-name">{termName(seg.term, locale)}</span>
                 </button>
               </li>

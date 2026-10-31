@@ -96,6 +96,9 @@ a.clip { padding: 16px 18px; }
 .rc-vs a:hover { text-decoration-color: var(--ink); }
 .rc-file { display: inline-flex; align-items: center; min-height: 44px; justify-self: start; color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 4px; }
 .rc-file:hover { color: var(--ink); text-decoration-color: var(--ink); }
+@media (pointer: coarse) {
+  .rc-vs a { min-height: 44px; margin-block: -8px; }
+}
 @media (max-width: 640px) {
   .rc-head { margin-top: 20px; }
   .rc-head p { font-size: 16px; }

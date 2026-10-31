@@ -7,7 +7,7 @@ export function SourceClip({ source: s, selected, onSelect }: { source: Source; 
   const { recipe } = useStrings()
   const label = (
     <span className="clip-head">
-      <span className="clip-t">{s.title}</span>
+      <span className="clip-t">{s.title}</span>{' '}
       <span className="clip-at mono">
         {s.range}
         {s.note ? ` · ${s.note}` : ''}
@@ -26,8 +26,8 @@ export function SourceClip({ source: s, selected, onSelect }: { source: Source; 
 
   return (
     <div className={selected ? 'clip is-selected' : 'clip'}>
-      <button type="button" className="clip-btn" aria-pressed={selected} aria-label={recipe.compareWith(s.title, s.range)} onClick={onSelect}>
-        {label}
+      <button type="button" className="clip-btn" aria-pressed={selected} onClick={onSelect}>
+        {label}{' '}
         <span className="clip-go">
           <Play aria-hidden="true" fill="currentColor" />
           {selected ? recipe.showing : recipe.compare}

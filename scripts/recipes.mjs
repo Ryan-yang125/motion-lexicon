@@ -3,6 +3,8 @@
 // Two variants of the same recipe text, switched by `skill` in recipeMd():
 //   web   public/r/<slug>.md, public/r/index.md, public/llms.txt (source files fetched with curl, gitignored)
 //   skill skills/motionboard/recipes/<slug>.md and index.md (source files by relative path, committed)
+// Also writes src/data/gen/ (gitignored): index.json for every page, text/<slug>.<locale>.json for the
+// recipe page only, so the long copy stays out of the shared client chunk.
 // Also copies skills/motionboard/source to public/source (served by the site) and rewrites the recipe
 // tables in README.md and README_CN.md between the recipes:start and recipes:end markers.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync, existsSync, cpSync } from 'node:fs'
@@ -41,6 +43,33 @@ const order = [...terms].sort(
   (a, b) => POSITION_ORDER.indexOf(a.pos) - POSITION_ORDER.indexOf(b.pos) || a.n - b.n,
 )
 const bySlug = Object.fromEntries(terms.map((t) => [t.slug, t]))
+
+// Client data: the index fields with the one-line def, and one text file per recipe and locale.
+const GEN_DIR = join(ROOT, 'src/data/gen')
+const slugByZh = Object.fromEntries(terms.map((t) => [t.zh, t.slug]))
+rmSync(GEN_DIR, { recursive: true, force: true })
+mkdirSync(join(GEN_DIR, 'text'), { recursive: true })
+const gen = (file, data) => writeFileSync(join(GEN_DIR, file), JSON.stringify(data))
+gen(
+  'index.json',
+  terms.map((t) => {
+    if (!en[t.slug]) throw new Error(`no en.json entry for "${t.slug}"`)
+    const { n, slug, cat, pos, zh, en: name, star, samples, video, dur, zh1 } = t
+    return { n, slug, cat, pos, zh, en: name, star, samples, video, dur, def: { en: en[t.slug].def, zh: zh1 } }
+  }),
+)
+for (const t of terms) {
+  const { def, ...enText } = en[t.slug]
+  gen(`text/${t.slug}.en.json`, enText)
+  gen(`text/${t.slug}.zh.json`, {
+    why: t.why,
+    spec: t.spec,
+    prompt: t.prompt,
+    says: t.says,
+    // a source reference to a recipe that is not on the site is dropped
+    vs: t.vs.flatMap(([zh, text]) => (slugByZh[zh] ? [[slugByZh[zh], text]] : [])),
+  })
+}
 
 const encodePath = (p) => p.split('/').map(encodeURIComponent).join('/')
 const mdUrl = (slug) => `${SITE}/r/${slug}.md`

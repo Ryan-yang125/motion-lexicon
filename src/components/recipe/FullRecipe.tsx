@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Check, ChevronDown, Copy } from 'lucide-react'
-import { bySlug, recipeFile, termName, type Term } from '@/data/terms'
+import { bySlug, recipeFile, termName, type RecipeText, type Term } from '@/data/terms'
 import { PageLink, useLocale, useStrings } from '@/lib/locale'
 
 function PromptCopy({ text }: { text: string }) {
@@ -23,10 +23,9 @@ function PromptCopy({ text }: { text: string }) {
 }
 
 // Closed by default; the content stays in the DOM so it is in the prerendered HTML.
-export function FullRecipe({ term: t }: { term: Term }) {
+export function FullRecipe({ term: t, text }: { term: Term; text: RecipeText }) {
   const locale = useLocale()
   const { full } = useStrings()
-  const text = t.text[locale]
   return (
     <details className="rc-full" data-rv>
       <summary>

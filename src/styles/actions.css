@@ -39,3 +39,9 @@
 @media (max-width: 560px) {
   .act-copy-btn { flex: 1; min-width: 0; }
 }
+
+/* touch: compact controls reach 44px (the tile like button is sized in home.css) */
+@media (pointer: coarse) {
+  .act-mini, .act-mini-like { height: 44px; min-width: 44px; }
+  .act-mini::after, .act-mini-like::after { inset: 0; }
+}

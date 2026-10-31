@@ -71,12 +71,14 @@ export function CopyAction({ term, compact }: { term: Term; compact?: boolean })
 export function LikeButton({ slug, compact }: { slug: string; compact?: boolean }) {
   const { liked, likes, toggle } = useLike(slug)
   const { actions } = useStrings()
+  const count = formatCount(likes)
   return (
     <button
       type="button"
       className={compact ? 'act-like act-mini-like' : 'act-like'}
       aria-pressed={liked}
-      aria-label={liked ? actions.unlike : actions.like}
+      // starts with the visible count so the accessible name contains the visible text
+      aria-label={`${count} ${liked ? actions.unlike : actions.like}`}
       data-liked={liked || undefined}
       onClick={(e) => {
         if (compact) isolate(e)
@@ -84,7 +86,7 @@ export function LikeButton({ slug, compact }: { slug: string; compact?: boolean 
       }}
     >
       <Heart aria-hidden fill={liked ? 'currentColor' : 'none'} />
-      <span className="act-count">{formatCount(likes)}</span>
+      <span className="act-count">{count}</span>
     </button>
   )
 }

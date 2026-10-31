@@ -23,4 +23,5 @@ media/
 public/source
 public/r/
 public/llms.txt
+src/data/gen/
 *.tsbuildinfo

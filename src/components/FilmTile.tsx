@@ -131,7 +131,7 @@ export function FilmTile({ term, eager = false }: { term: Term; eager?: boolean 
       onBlur={onBlur}
     >
       <div className="frame tile-frame" ref={frame}>
-        <img src={media(term, 'jpg')} alt="" width={1920} height={1080} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        <img src={media(term, 'jpgSmall')} alt="" width={960} height={540} loading={eager ? 'eager' : 'lazy'} decoding="async" />
         <video ref={video} className="tile-vid" muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} onPlaying={() => setLive(true)} />
       </div>
       <div className="tile-actions">

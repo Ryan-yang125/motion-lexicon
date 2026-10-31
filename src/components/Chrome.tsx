@@ -47,7 +47,7 @@ export function Nav() {
           <GitHubMark />
         </a>
         {/* full page load: the document language changes with the locale */}
-        <a href={switchPath(pathname, other)} className="nav-lang" hrefLang={HTML_LANG[other]} lang={HTML_LANG[other]} aria-label={s.lang.aria}>
+        <a href={switchPath(pathname, other)} className="nav-lang" hrefLang={HTML_LANG[other]} lang={HTML_LANG[other]} aria-label={`${s.lang.label} · ${s.lang.aria}`}>
           {s.lang.label}
         </a>
       </nav>

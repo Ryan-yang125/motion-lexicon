@@ -6,7 +6,7 @@ import { FullRecipe } from '@/components/recipe/FullRecipe'
 import { Compare } from '@/components/recipe/Compare'
 import { Player } from '@/components/recipe/Player'
 import { SourceClip } from '@/components/recipe/SourceClip'
-import { byPos, order, sources, termName, type Term } from '@/data/terms'
+import { byPos, order, sources, termName, type RecipeText, type Term } from '@/data/terms'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { PageLink, useGoToRecipe, useLocale, useStrings } from '@/lib/locale'
 import { useStat } from '@/lib/stats'
@@ -14,7 +14,7 @@ import { useStat } from '@/lib/stats'
 const typing = (el: EventTarget | null) =>
   el instanceof HTMLElement && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))
 
-export function RecipePage({ term: t }: { term: Term }) {
+export function RecipePage({ term: t, text }: { term: Term; text: RecipeText }) {
   const root = useRef<HTMLDivElement>(null)
   const goTo = useGoToRecipe()
   const locale = useLocale()
@@ -96,7 +96,7 @@ export function RecipePage({ term: t }: { term: Term }) {
       <div className="rc-col">
         <header className="rc-head">
           <h1 style={{ viewTransitionName: 'title' }}>{termName(t, locale)}</h1>
-          <p>{t.text[locale].def}</p>
+          <p>{t.def[locale]}</p>
         </header>
 
         <div className="rc-actions">
@@ -121,7 +121,7 @@ export function RecipePage({ term: t }: { term: Term }) {
         )}
 
         <section className="rc-sec">
-          <FullRecipe term={t} />
+          <FullRecipe term={t} text={text} />
         </section>
 
       </div>
