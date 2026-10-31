@@ -49,7 +49,7 @@ ln -s ~/motionboard/skills/motionboard ~/.codex/skills/motionboard
 | 用 match-cut 配方，从我的 logo 切到应用界面。 | Agent 用你的品牌和界面做出这一个镜头，渲染后对照预览片检查。 |
 | 给这个落地页做「斜拍景深界面」镜头。 | Agent 把配方里的 GSAP 时间线移植到你的网站，做成首屏动效。 |
 
-你也可以在 [motionboard.app](https://motionboard.app/zh/) 复制单个配方的指令，粘贴给 Claude Code，不需要安装。
+[motionboard.app](https://motionboard.app/zh/) 每个配方页都有复制按钮，复制的是一句给 Agent 的英文指令：先安装这个 skill，再做这个镜头。
 
 ## 配方
 

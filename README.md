@@ -26,6 +26,8 @@ Or hand the link to your agent:
 
 > Install this skill: https://github.com/krisyangdev/motionboard
 
+Agents installing for a user: run `npx skills add krisyangdev/motionboard -g -y` (global, no prompts). If the skill is not available in the current session yet, read `SKILL.md` at the path the command prints (usually `~/.agents/skills/motionboard/`) and follow it.
+
 In Claude Code, add it as a plugin:
 
 ```sh
@@ -49,7 +51,7 @@ ln -s ~/motionboard/skills/motionboard ~/.codex/skills/motionboard
 | Use the match-cut recipe to go from my logo to the app. | The agent builds that one shot with your brand and UI, renders it, and checks it against the preview. |
 | Make the Tilted UI with Depth of Field shot for this landing page. | The agent ports the recipe's GSAP timeline into your site as a hero animation. |
 
-You can also copy one recipe's instruction from [motionboard.app](https://motionboard.app) and paste it into Claude Code. It needs no install.
+Each recipe page on [motionboard.app](https://motionboard.app) has a copy button that gives your agent one line: install this skill, then make that shot.
 
 ## Recipes
 

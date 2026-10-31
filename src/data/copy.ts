@@ -1,13 +1,8 @@
-// The text a visitor pastes into their own agent. It points at the recipe file, which carries
-// the full source; the agent must fetch it raw because summarising fetchers drop code.
-// Video or website is left to the visitor's own words; the recipe file covers both.
+// The text a visitor pastes into their own agent. Agent-facing text is always English.
+// The agent installs the skill by following the repo README, which owns the install steps.
 import type { Term } from './terms'
-import { recipeFile } from './terms'
-import type { Locale } from '@/site'
+import { GITHUB_URL } from '@/site'
 
-export function copyText(t: Term, origin: string, locale: Locale) {
-  if (locale === 'zh') {
-    return `按这个动效配方，给我的产品做「${t.zh}」镜头：${origin}${recipeFile(t)}\n先用 curl 读完整个文件，里面有完整源码和精确时间。`
-  }
-  return `Make the "${t.en}" shot for my product, following this motion recipe: ${origin}${recipeFile(t)}\nRead the whole file with curl first. It contains the full source code and the exact timing.`
+export function copyText(t: Term) {
+  return `Install the Motionboard skill from ${GITHUB_URL}, then use it to make the "${t.en}" shot for my product.`
 }

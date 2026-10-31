@@ -4,7 +4,7 @@ import { copyText } from '@/data/copy'
 import type { Term } from '@/data/terms'
 import { useLike, trackCopy, trackWish } from '@/lib/stats'
 import { useSaved } from '@/lib/saved'
-import { useLocale, useStrings } from '@/lib/locale'
+import { useStrings } from '@/lib/locale'
 import { burst, writeClipboard } from '@/components/CopyButton'
 
 // A link bar above a film frame: your product link becomes a shot. Drawn on lucide's 24px grid.
@@ -31,14 +31,13 @@ export function CopyAction({ term, compact }: { term: Term; compact?: boolean })
   const ref = useRef<HTMLButtonElement>(null)
   const timer = useRef<number>(0)
   const [done, setDone] = useState(false)
-  const locale = useLocale()
   const { actions } = useStrings()
 
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
   async function copy(e: MouseEvent) {
     if (compact) isolate(e)
-    await writeClipboard(copyText(term, location.origin, locale))
+    await writeClipboard(copyText(term))
     if (ref.current) burst(ref.current)
     trackCopy(term.slug)
     setDone(true)
