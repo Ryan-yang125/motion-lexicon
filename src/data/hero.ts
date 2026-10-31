@@ -1,25 +1,23 @@
 // The launch film on the home page, cut into the recipes it is made of.
 // One film (Motionboard's own launch film, made with the recipes below); each segment is a
-// time range of it, taken from the film's segments.json.
+// time range of it, taken from the film's segments.json. Both encodes have a keyframe at every
+// segment start, so jumping to a segment shows its first frame at once.
 import { MEDIA_URL } from '@/site'
 
-export type HeroSegment = {
-  slug: string
+export const HERO_FILM = {
   /** 1080p film; phones play `mobile` (720p), same timeline */
-  src: string
-  mobile: string
-  /** 1920px poster; `posterSmall` is the 960px one */
-  poster: string
-  posterSmall: string
-  start: number
-  end: number
+  src: `${MEDIA_URL}/hero-film.mp4`,
+  mobile: `${MEDIA_URL}/hero-film-m.mp4`,
+  /** the film's first frame, so the film takes over the poster without a visible cut */
+  poster: `${MEDIA_URL}/hero-start.jpg`,
+  posterSmall: `${MEDIA_URL}/hero-start-m.jpg`,
+  /** share image */
+  cover: `${MEDIA_URL}/hero-film.jpg`,
 }
 
-const src = `${MEDIA_URL}/hero-film.mp4`
-const mobile = `${MEDIA_URL}/hero-film-m.mp4`
-const poster = `${MEDIA_URL}/hero-film.jpg`
-const posterSmall = `${MEDIA_URL}/hero-film-m.jpg`
-const seg = (slug: string, start: number, end: number): HeroSegment => ({ slug, src, mobile, poster, posterSmall, start, end })
+export type HeroSegment = { slug: string; start: number; end: number }
+
+const seg = (slug: string, start: number, end: number): HeroSegment => ({ slug, start, end })
 
 export const HERO: HeroSegment[] = [
   seg('rhythmic-typing', 0, 2.8),

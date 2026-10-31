@@ -1,7 +1,7 @@
 // Recipe route loader and head tags per page and locale: localized title and description,
 // canonical URL of the page's own locale, and hreflang links to both versions.
 import { notFound } from '@tanstack/react-router'
-import { HERO } from '@/data/hero'
+import { HERO_FILM } from '@/data/hero'
 import { bySlug, loadText, media, recipePath, termName, type Term } from '@/data/terms'
 import { OG_LOCALE, STRINGS } from '@/i18n'
 import { absolute, BRAND, SITE_URL, type Locale } from '@/site'
@@ -34,7 +34,7 @@ export const loadRecipe =
 export function homeHead(locale: Locale) {
   const line = BRAND.line[locale]
   const url = pageUrl(locale, '/')
-  const image = absolute(HERO[0].poster)
+  const image = absolute(HERO_FILM.cover)
   return {
     meta: [
       { title: `${BRAND.name} · ${BRAND.headline[locale]}` },

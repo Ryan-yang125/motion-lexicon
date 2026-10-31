@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { Play } from 'lucide-react'
 import { CopyAction } from '@/components/actions'
-import { HERO, type HeroSegment } from '@/data/hero'
+import { HERO, HERO_FILM } from '@/data/hero'
 import { bySlug, termName } from '@/data/terms'
 import { gsap, useGSAP } from '@/lib/gsap'
 import { PageLink, useLocale, useStrings } from '@/lib/locale'
 import { BRAND } from '@/site'
 
 const SEGS = HERO.map((s) => ({ ...s, term: bySlug[s.slug], dur: s.end - s.start }))
-// One <video> per distinct src, stacked; cutting between segments toggles which one is visible.
-const SRCS = [...new Set(HERO.map((s) => s.src))]
-// Phones play the 720p copy of the film; segment times are the same in both.
-const filmOf = (seg: HeroSegment) => (matchMedia('(max-width: 767px)').matches ? seg.mobile : seg.src)
 
 const pendingSeek = new WeakMap<HTMLVideoElement, number>()
 
@@ -31,18 +27,9 @@ function seek(v: HTMLVideoElement, t: number) {
   }
 }
 
-function prepare(v: HTMLVideoElement, seg: HeroSegment) {
-  const film = filmOf(seg)
-  if (v.getAttribute('src') !== film) {
-    v.preload = 'auto'
-    v.src = film
-  }
-  seek(v, seg.start)
-}
-
 export function HeroFilm() {
   const root = useRef<HTMLElement>(null)
-  const vids = useRef(new Map<string, HTMLVideoElement>())
+  const video = useRef<HTMLVideoElement>(null)
   const fills = useRef<(HTMLElement | null)[]>([])
   const [index, setIndex] = useState(0)
   const [inView, setInView] = useState(false)
@@ -91,16 +78,9 @@ export function HeroFilm() {
     if (live) setArmed(true)
   }, [live])
 
-  // Current segment seeks to its start; the next one (if it has another src) is loaded and pre-seeked.
+  // The current segment seeks to its start.
   useEffect(() => {
-    if (!armed) return
-    const seg = SEGS[index]
-    const next = SEGS[(index + 1) % SEGS.length]
-    prepare(vids.current.get(seg.src)!, seg)
-    if (next.src !== seg.src) prepare(vids.current.get(next.src)!, next)
-    vids.current.forEach((el, src) => {
-      if (src !== seg.src) el.pause()
-    })
+    if (armed) seek(video.current!, SEGS[index].start)
   }, [index, armed])
 
   useEffect(() => {
@@ -113,7 +93,7 @@ export function HeroFilm() {
   useEffect(() => {
     if (!armed) return
     const seg = SEGS[index]
-    const v = vids.current.get(seg.src)!
+    const v = video.current!
     if (!live) {
       v.pause()
       return
@@ -151,11 +131,9 @@ export function HeroFilm() {
       setIndex(i)
       return
     }
-    const v = vids.current.get(SEGS[i].src)
-    if (v) {
-      v.currentTime = SEGS[i].start
-      v.play().catch(() => {})
-    }
+    const v = video.current!
+    v.currentTime = SEGS[i].start
+    v.play().catch(() => {})
   }
 
   return (
@@ -166,8 +144,8 @@ export function HeroFilm() {
           <div className="frame hero-frame">
             <img
               className="hero-poster"
-              src={SEGS[0].poster}
-              srcSet={`${SEGS[0].posterSmall} 960w, ${SEGS[0].poster} 1920w`}
+              src={HERO_FILM.poster}
+              srcSet={`${HERO_FILM.posterSmall} 960w, ${HERO_FILM.poster} 1920w`}
               sizes="(min-width: 900px) 1200px, 100vw"
               alt=""
               width={1920}
@@ -175,22 +153,20 @@ export function HeroFilm() {
               fetchPriority="high"
               decoding="async"
             />
-            {SRCS.map((src) => (
-              <video
-                key={src}
-                ref={(el) => {
-                  if (el) vids.current.set(src, el)
-                  else vids.current.delete(src)
-                }}
-                className={shown && cur.src === src ? 'hero-vid is-on' : 'hero-vid'}
-                muted
-                playsInline
-                preload="none"
-                aria-hidden="true"
-                tabIndex={-1}
-                onPlaying={() => setShown(true)}
-              />
-            ))}
+            {/* Sources are in the markup so the download starts with the page, before the script runs. */}
+            <video
+              ref={video}
+              className={shown ? 'hero-vid is-on' : 'hero-vid'}
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              tabIndex={-1}
+              onPlaying={() => setShown(true)}
+            >
+              <source src={HERO_FILM.mobile} type="video/mp4" media="(max-width: 767px)" />
+              <source src={HERO_FILM.src} type="video/mp4" />
+            </video>
             {reduced && !started && (
               <button type="button" className="btn icon hero-play" aria-label={s.hero.play} onClick={() => setStarted(true)}>
                 <Play fill="currentColor" />
