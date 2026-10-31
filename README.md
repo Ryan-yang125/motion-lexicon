@@ -26,6 +26,13 @@ Or hand the link to your agent:
 
 > Install this skill: https://github.com/krisyangdev/motionboard
 
+In Claude Code, add it as a plugin:
+
+```sh
+/plugin marketplace add krisyangdev/motionboard
+/plugin install motionboard@motionboard
+```
+
 Manual install for Claude Code and Codex:
 
 ```sh

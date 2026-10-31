@@ -1,0 +1,19 @@
+{
+  "name": "motionboard",
+  "version": "1.0.0",
+  "description": "Shot language from Apple and Linear launch films, rebuilt in HyperFrames (HTML + GSAP). 38 recipes and a skill for making product launch films.",
+  "author": {
+    "name": "Kris Yang",
+    "url": "https://github.com/krisyangdev"
+  },
+  "homepage": "https://motionboard.app",
+  "repository": "https://github.com/krisyangdev/motionboard",
+  "license": "MIT",
+  "keywords": [
+    "launch-video",
+    "motion-design",
+    "hyperframes",
+    "gsap",
+    "product-video"
+  ]
+}

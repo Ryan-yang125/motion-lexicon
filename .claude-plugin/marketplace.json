@@ -1,0 +1,18 @@
+{
+  "name": "motionboard",
+  "owner": {
+    "name": "Kris Yang",
+    "url": "https://github.com/krisyangdev"
+  },
+  "plugins": [
+    {
+      "name": "motionboard",
+      "source": "./",
+      "description": "Make product launch films and single shots from 38 recipes rebuilt in HyperFrames (HTML + GSAP rendered to MP4) from Apple, Linear, Claude, Cursor and Stripe launch films.",
+      "homepage": "https://motionboard.app",
+      "license": "MIT",
+      "skills": ["./skills/motionboard"]
+    }
+  ],
+  "description": "Motionboard launch film recipes and skill."
+}

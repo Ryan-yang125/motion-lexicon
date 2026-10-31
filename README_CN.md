@@ -26,6 +26,13 @@ npx skills add krisyangdev/motionboard
 
 > Install this skill: https://github.com/krisyangdev/motionboard
 
+在 Claude Code 中作为插件安装：
+
+```sh
+/plugin marketplace add krisyangdev/motionboard
+/plugin install motionboard@motionboard
+```
+
 在 Claude Code 和 Codex 中手动安装：
 
 ```sh

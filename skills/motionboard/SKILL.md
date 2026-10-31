@@ -1,5 +1,6 @@
 ---
 name: motionboard
+license: MIT
 description: Make product launch films and single shots in the style of Apple and Linear launch films, from 38 recipes (HyperFrames, HTML + GSAP rendered to MP4). Use when the user asks for a product launch film, promo video, product reveal, feature video or app trailer; wants to recreate a specific shot from a launch film; asks for Apple-style or Linear-style motion, either as a video or as a hero animation on a website; or names a shot from the recipe index (Match Cut, Tilted UI with Depth of Field, Auto Zoom, Morph Relay, Light Reveal and the rest). Also applies to requests in Chinese such as 做宣传片, 产品发布视频, 苹果风动效, 复刻某个镜头.
 ---
 
@@ -53,6 +54,8 @@ npm run render -- --quality delivery # the final
 Equivalent: `npx --yes hyperframes@<version> preview | check | render`. `npx --yes hyperframes@<version> snapshot --at <seconds,...> --against <preview.mp4>` writes frames of the composition and a side-by-side sheet against the preview. If the user's agent has the `hyperframes` skills, use them for anything beyond these commands. The "skills out of date" notice HyperFrames prints can be ignored.
 
 Check, render and the quality check need network access: HyperFrames fetches Google Fonts (Inter and others) and GSAP from a CDN, and the preview film downloads from `media.motionboard.app`.
+
+Network use, all of it on the user's machine: `npx --yes hyperframes@<version>` downloads the HyperFrames CLI from npm, `npm install` fetches the project's dependencies, HyperFrames fetches fonts and GSAP at render time, and the quality check downloads one preview MP4 from `media.motionboard.app`. The skill runs no other network calls, no telemetry and no background processes.
 
 ### Reading `npm run check`
 
